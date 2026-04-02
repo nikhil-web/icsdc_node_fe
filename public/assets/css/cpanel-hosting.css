@@ -1,0 +1,374 @@
+/* ══════════════════════════════════════
+   CPANEL HOSTING PAGE — SCOPED STYLES
+   All classes prefixed cp-* to prevent
+   any collision with style.css,
+   components.css, or other page styles.
+   Zero overrides.
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.cp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0fdfa;
+    color: #0f766e;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(15, 118, 110, 0.18);
+}
+
+/* ══════════════════════════════════════
+   HERO VISUAL — TEAL TINT
+══════════════════════════════════════ */
+.cp-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #ccfbf1 0%, #f0fdfa 55%, #f8fffe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(15, 118, 110, 0.13), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.cp-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 65% 30%, rgba(15, 118, 110, 0.08) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(20, 184, 166, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.cp-hero-visual svg {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ══════════════════════════════════════
+   HERO BADGES
+══════════════════════════════════════ */
+.cp-top-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--white);
+    border: 1px solid rgba(15, 118, 110, 0.16);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0f766e;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 16px rgba(15, 118, 110, 0.12);
+    z-index: 2;
+    animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
+}
+
+.cp-status-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--white);
+    border: 1px solid rgba(15, 118, 110, 0.12);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(15, 118, 110, 0.12);
+    z-index: 2;
+    animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
+}
+
+.cp-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    flex-shrink: 0;
+}
+
+.cp-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+.cp-bs {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+/* ══════════════════════════════════════
+   PLANS GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.cp-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.cp-plan-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 24px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+}
+
+.cp-plan-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(15, 118, 110, 0.28);
+}
+
+.cp-plan-card.cp-plan-popular {
+    border-color: #0f766e;
+    border-width: 2px;
+}
+
+/* Most Popular badge */
+.cp-plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0f766e;
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: var(--radius-xl);
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(15, 118, 110, 0.32);
+}
+
+.cp-plan-name {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #0f766e;
+    margin-bottom: 8px;
+}
+
+.cp-plan-price {
+    font-size: 32px;
+    font-weight: 800;
+    color: #0f766e;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+
+.cp-plan-price span {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0;
+}
+
+.cp-plan-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Feature list — checkmark bullets */
+.cp-plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cp-plan-features li {
+    font-size: 13px;
+    color: var(--text-dark);
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.cp-plan-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #0f766e;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* Plan CTA buttons */
+.cp-plan-btn {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    margin-top: auto;
+    transition: background var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 44px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.cp-plan-btn-outline {
+    background: transparent;
+    color: #0f766e;
+    border: 2px solid #0f766e;
+}
+
+.cp-plan-btn-outline:hover {
+    background: #f0fdfa;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(15, 118, 110, 0.14);
+}
+
+.cp-plan-btn-primary {
+    background: #0f766e;
+    color: var(--white);
+    border: 2px solid #0f766e;
+}
+
+.cp-plan-btn-primary:hover {
+    background: #0d6460;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(15, 118, 110, 0.28);
+}
+
+/* ══════════════════════════════════════
+   FEATURES GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.cp-features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   WHY ICSDC GRID — 2 COLUMNS
+══════════════════════════════════════ */
+.cp-why-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   WHO CAN USE GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.cp-who-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   BUILT-IN FEATURES GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.cp-builtin-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+
+/* 1024px — 2 columns for most grids */
+@media (max-width: 1024px) {
+    .cp-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cp-features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cp-who-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cp-builtin-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 640px — single column */
+@media (max-width: 640px) {
+    .cp-plans-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cp-features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cp-why-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cp-who-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cp-builtin-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cp-hero-visual {
+        max-width: 100%;
+    }
+
+    .cp-top-badge {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+}

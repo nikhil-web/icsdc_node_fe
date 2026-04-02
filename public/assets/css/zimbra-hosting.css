@@ -1,0 +1,272 @@
+    .zimbra-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #d4380d 0%, #ff6b35 100%);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 50px;
+      margin-bottom: 14px;
+    }
+
+    .zimbra-hero-visual {
+      width: 100%;
+      max-width: 560px;
+      aspect-ratio: 4/3;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #fff1ee 0%, #fff7f5 55%, #fef3f0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(212, 56, 13, .12), 0 4px 16px rgba(0, 0, 0, .06);
+      animation: heroImageFloat 8s ease-in-out 1s infinite;
+    }
+
+    .zimbra-hero-visual svg {
+      width: 72%;
+      height: 72%;
+    }
+
+    .zimbra-top-badge {
+      position: absolute;
+      top: 22px;
+      left: 22px;
+      background: #fff;
+      border: 1px solid rgba(212, 56, 13, .2);
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #d4380d;
+      box-shadow: 0 4px 16px rgba(212, 56, 13, .12);
+      animation: cloud-badge-float 6s ease-in-out .2s infinite;
+    }
+
+    .zimbra-status-badge {
+      position: absolute;
+      bottom: 22px;
+      right: 22px;
+      background: #fff;
+      border: 1px solid rgba(212, 56, 13, .12);
+      border-radius: 12px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 24px rgba(212, 56, 13, .1);
+      animation: cloud-badge-float 5s ease-in-out .8s infinite;
+    }
+
+    .zimbra-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, .5);
+    }
+
+    .zimbra-bt {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .zimbra-bs {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* Feature badge list */
+    .zimbra-features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    @media(max-width:900px) {
+      .zimbra-features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:580px) {
+      .zimbra-features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .zimbra-feat-badge {
+      background: #fff;
+      border: 1px solid rgba(212, 56, 13, .1);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+      transition: all .2s;
+    }
+
+    .zimbra-feat-badge:hover {
+      border-color: rgba(212, 56, 13, .25);
+      box-shadow: var(--shadow-card);
+      transform: translateY(-2px);
+    }
+
+    .zimbra-feat-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #d4380d;
+      flex-shrink: 0;
+    }
+
+    /* Comparison table */
+    .zimbra-compare {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 32px;
+    }
+
+    .zimbra-compare th {
+      background: var(--blue);
+      color: #fff;
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .zimbra-compare th:first-child {
+      border-radius: 12px 0 0 0;
+    }
+
+    .zimbra-compare th:last-child {
+      border-radius: 0 12px 0 0;
+    }
+
+    .zimbra-compare td {
+      padding: 12px 20px;
+      font-size: 13.5px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .zimbra-compare tr:nth-child(even) td {
+      background: var(--bg-light);
+    }
+
+    .zimbra-compare tr:last-child td:first-child {
+      border-radius: 0 0 0 12px;
+    }
+
+    .zimbra-compare tr:last-child td:last-child {
+      border-radius: 0 0 12px 0;
+    }
+
+    .zimbra-check {
+      color: #22c55e;
+      font-weight: 700;
+    }
+
+    .zimbra-cross {
+      color: #ef4444;
+      font-weight: 700;
+    }
+
+    /* Migration steps */
+    .zimbra-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 36px;
+    }
+
+    @media(max-width:860px) {
+      .zimbra-steps {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media(max-width:580px) {
+      .zimbra-steps {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .zimbra-step {
+      background: #fff;
+      border: 1px solid rgba(26, 86, 219, .1);
+      border-radius: 14px;
+      padding: 24px 20px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+    }
+
+    .zimbra-step-num {
+      width: 36px;
+      height: 36px;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 15px;
+      margin-bottom: 14px;
+    }
+
+    .zimbra-step h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .zimbra-step p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .zimbra-step-arrow {
+      position: absolute;
+      top: 50%;
+      right: -14px;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      background: #eff6ff;
+      border: 1px solid rgba(26, 86, 219, .15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--blue);
+      z-index: 1;
+    }
+
+    @media(max-width:860px) {
+      .zimbra-step-arrow {
+        display: none;
+      }
+    }
+  
+
+.zimbra-compare-wrap {
+  overflow-x: auto;
+}

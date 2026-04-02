@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Managed VPS Hosting India | Fully Managed VPS | ICSDC</title>
+  <meta name="description"
+    content="Fully managed VPS hosting with 24/7 expert management, proactive monitoring, advanced security and guaranteed uptime. Start from &#8377;999/mo. Free migration included.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/managed-vps-hosting.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="mvps-eyebrow">&#128295; Managed VPS Hosting</div>
+        <h1 class="hero-title">Fully Managed VPS &mdash; Powerful Infrastructure, Zero Hassle</h1>
+        <p class="hero-sub">Starting at &#8377;999/month</p>
+        <p class="hero-desc">Get a high-performance, fully managed VPS environment with our expert team handling all
+          updates, security patches, monitoring, and optimizations &mdash; so you can focus entirely on growing your
+          business.</p>
+        <div class="hero-btns">
+          <button class="btn-primary">Get Managed VPS &rarr;</button>
+          <button class="btn-outline">View Plans</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="mvps-hero-visual">
+          <div class="mvps-top-badge">&#128295; Managed VPS</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#eef2ff" stroke="rgba(99,102,241,0.15)"
+              stroke-width="1" />
+
+            <!-- Server rack -->
+            <rect x="40" y="30" width="130" height="160" rx="8" fill="white" stroke="rgba(79,70,229,0.20)"
+              stroke-width="1.5" />
+
+            <!-- Server unit 1 -->
+            <rect x="50" y="42" width="110" height="22" rx="4" fill="#eef2ff" stroke="rgba(99,102,241,0.25)"
+              stroke-width="1" />
+            <circle cx="62" cy="53" r="4" fill="#4f46e5" />
+            <circle cx="74" cy="53" r="3" fill="#a5b4fc" />
+            <rect x="84" y="49" width="50" height="8" rx="2" fill="#c7d2fe" />
+            <circle cx="148" cy="53" r="3" fill="#22c55e" />
+
+            <!-- Server unit 2 -->
+            <rect x="50" y="70" width="110" height="22" rx="4" fill="#eef2ff" stroke="rgba(99,102,241,0.25)"
+              stroke-width="1" />
+            <circle cx="62" cy="81" r="4" fill="#4f46e5" />
+            <circle cx="74" cy="81" r="3" fill="#a5b4fc" />
+            <rect x="84" y="77" width="50" height="8" rx="2" fill="#c7d2fe" />
+            <circle cx="148" cy="81" r="3" fill="#22c55e" />
+
+            <!-- Server unit 3 -->
+            <rect x="50" y="98" width="110" height="22" rx="4" fill="#eef2ff" stroke="rgba(99,102,241,0.25)"
+              stroke-width="1" />
+            <circle cx="62" cy="109" r="4" fill="#6366f1" />
+            <circle cx="74" cy="109" r="3" fill="#a5b4fc" />
+            <rect x="84" y="105" width="50" height="8" rx="2" fill="#c7d2fe" />
+            <circle cx="148" cy="109" r="3" fill="#22c55e" />
+
+            <!-- Server unit 4 -->
+            <rect x="50" y="126" width="110" height="22" rx="4" fill="#eef2ff" stroke="rgba(99,102,241,0.25)"
+              stroke-width="1" />
+            <circle cx="62" cy="137" r="4" fill="#6366f1" />
+            <circle cx="74" cy="137" r="3" fill="#a5b4fc" />
+            <rect x="84" y="133" width="50" height="8" rx="2" fill="#c7d2fe" />
+            <circle cx="148" cy="137" r="3" fill="#fbbf24" />
+
+            <!-- Server unit 5 -->
+            <rect x="50" y="154" width="110" height="22" rx="4" fill="#eef2ff" stroke="rgba(99,102,241,0.25)"
+              stroke-width="1" />
+            <circle cx="62" cy="165" r="4" fill="#4f46e5" />
+            <circle cx="74" cy="165" r="3" fill="#a5b4fc" />
+            <rect x="84" y="161" width="50" height="8" rx="2" fill="#c7d2fe" />
+            <circle cx="148" cy="165" r="3" fill="#22c55e" />
+
+            <!-- Management dashboard panel -->
+            <rect x="185" y="30" width="100" height="100" rx="8" fill="white" stroke="rgba(79,70,229,0.20)"
+              stroke-width="1.5" />
+            <rect x="185" y="30" width="100" height="20" rx="8" fill="#4f46e5" />
+            <rect x="185" y="42" width="100" height="8" rx="0" fill="#4f46e5" />
+            <text x="235" y="44" font-size="7" fill="white" text-anchor="middle" font-weight="600">DASHBOARD</text>
+
+            <!-- Dashboard metrics -->
+            <rect x="193" y="58" width="38" height="28" rx="4" fill="#eef2ff" />
+            <text x="212" y="70" font-size="6" fill="#4f46e5" text-anchor="middle" font-weight="700">CPU</text>
+            <text x="212" y="80" font-size="9" fill="#4f46e5" text-anchor="middle" font-weight="800">42%</text>
+
+            <rect x="237" y="58" width="38" height="28" rx="4" fill="#eef2ff" />
+            <text x="256" y="70" font-size="6" fill="#6366f1" text-anchor="middle" font-weight="700">RAM</text>
+            <text x="256" y="80" font-size="9" fill="#6366f1" text-anchor="middle" font-weight="800">68%</text>
+
+            <rect x="193" y="92" width="38" height="28" rx="4" fill="#eef2ff" />
+            <text x="212" y="104" font-size="6" fill="#4f46e5" text-anchor="middle" font-weight="700">DISK</text>
+            <text x="212" y="114" font-size="9" fill="#4f46e5" text-anchor="middle" font-weight="800">35%</text>
+
+            <rect x="237" y="92" width="38" height="28" rx="4" fill="#dcfce7" />
+            <text x="256" y="104" font-size="6" fill="#16a34a" text-anchor="middle" font-weight="700">UP</text>
+            <text x="256" y="114" font-size="7" fill="#16a34a" text-anchor="middle" font-weight="800">99.9%</text>
+
+            <!-- Status bar below dashboard -->
+            <rect x="185" y="140" width="100" height="50" rx="8" fill="white" stroke="rgba(79,70,229,0.20)"
+              stroke-width="1.5" />
+            <text x="235" y="155" font-size="6" fill="#6b7280" text-anchor="middle">MANAGED SERVICES</text>
+            <circle cx="197" cy="165" r="3" fill="#22c55e" />
+            <text x="203" y="168" font-size="6" fill="#374151">Security Patching</text>
+            <circle cx="197" cy="178" r="3" fill="#22c55e" />
+            <text x="203" y="181" font-size="6" fill="#374151">Auto Backups</text>
+
+            <!-- Connection lines from rack to dashboard -->
+            <line x1="180" y1="53" x2="185" y2="53" stroke="rgba(79,70,229,0.40)" stroke-width="1.5"
+              stroke-dasharray="3 2" />
+            <line x1="180" y1="81" x2="185" y2="81" stroke="rgba(99,102,241,0.35)" stroke-width="1.5"
+              stroke-dasharray="3 2" />
+            <line x1="180" y1="109" x2="185" y2="109" stroke="rgba(99,102,241,0.30)" stroke-width="1"
+              stroke-dasharray="3 2" />
+
+            <!-- Floating pulse on server 1 -->
+            <circle cx="62" cy="53" r="8" stroke="rgba(79,70,229,0.25)" stroke-width="1" fill="none">
+              <animate attributeName="r" values="4;10;4" dur="2.8s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.7;0;0.7" dur="2.8s" repeatCount="indefinite" />
+            </circle>
+
+            <!-- Small decorative dots -->
+            <circle cx="42" cy="22" r="3" fill="#a5b4fc" opacity="0.55" />
+            <circle cx="258" cy="22" r="3" fill="#a5b4fc" opacity="0.55" />
+            <circle cx="42" cy="198" r="3" fill="#c7d2fe" opacity="0.45" />
+            <circle cx="258" cy="198" r="3" fill="#c7d2fe" opacity="0.45" />
+          </svg>
+          <div class="mvps-status-badge">
+            <div class="mvps-dot"></div>
+            <div>
+              <div class="mvps-bt">99.9% Uptime</div>
+              <div class="mvps-bs">Fully Managed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — WHY US (4 PILLARS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>High-Performance NVMe VPS</h3>
+          <p>Dedicated vCPU and NVMe SSD resources deliver blazing-fast performance for demanding applications and
+            databases.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>24/7 Managed Security</h3>
+          <p>Proactive monitoring, security patches, firewall management, malware scanning &mdash; all handled by our
+            certified server experts.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <rect x="2" y="2" width="20" height="8" rx="2" />
+              <rect x="2" y="14" width="20" height="8" rx="2" />
+              <circle cx="6" cy="6" r="1.5" />
+              <circle cx="6" cy="18" r="1.5" />
+            </svg></div>
+          <h3>Full Root Access + Expert Management</h3>
+          <p>Keep complete control with root access while our team handles every management task in the background.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Dedicated VPS Engineers</h3>
+          <p>A team of certified VPS specialists available round-the-clock to resolve issues, apply updates, and
+            optimize your server performance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — PRICING PLANS ════ -->
+  <section id="mvps-plans" class="section cloud-pricing-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">PRICING PLANS</span>
+      <h2 class="title" data-animate="fade-up">Managed VPS Plans Built for Every Scale</h2>
+      <p class="subtitle" data-animate="fade-up">Transparent pricing with all management included &mdash; no hidden
+        fees, no server headaches. Just reliable, fully managed VPS hosting.</p>
+
+      <div class="mvps-plans-grid" data-stagger>
+
+        <!-- VPS Starter -->
+        <div class="mvps-plan-card">
+          <div class="mvps-plan-name">VPS Starter</div>
+          <div class="mvps-plan-price">&#8377;999<span>/mo</span></div>
+          <p class="mvps-plan-tagline">Fully managed VPS for startups and small projects</p>
+          <ul class="mvps-plan-features">
+            <li>2 vCPU / 2 GB RAM</li>
+            <li>40 GB NVMe SSD</li>
+            <li>500 GB Bandwidth</li>
+            <li>OS Management &amp; Updates</li>
+            <li>Basic Security Monitoring</li>
+            <li>Weekly Backups</li>
+            <li>99.9% Uptime SLA</li>
+            <li>24/7 Managed Support</li>
+          </ul>
+          <button class="mvps-plan-btn">Get Started &rarr;</button>
+        </div>
+
+        <!-- VPS Business (Featured) -->
+        <div class="mvps-plan-card mvps-plan-featured">
+          <div class="mvps-plan-badge">Most Popular</div>
+          <div class="mvps-plan-name">VPS Business</div>
+          <div class="mvps-plan-price">&#8377;2,499<span>/mo</span></div>
+          <p class="mvps-plan-tagline">Full-featured managed VPS for growing businesses</p>
+          <ul class="mvps-plan-features">
+            <li>4 vCPU / 8 GB RAM</li>
+            <li>80 GB NVMe SSD</li>
+            <li>1 TB Bandwidth</li>
+            <li>Advanced Security + Firewall</li>
+            <li>Daily Automated Backups</li>
+            <li>DDoS Protection</li>
+            <li>Performance Tuning</li>
+            <li>Priority 24/7 Support</li>
+          </ul>
+          <button class="mvps-plan-btn mvps-plan-btn-featured">Get Started &rarr;</button>
+        </div>
+
+        <!-- VPS Enterprise -->
+        <div class="mvps-plan-card">
+          <div class="mvps-plan-name">VPS Enterprise</div>
+          <div class="mvps-plan-price">&#8377;4,999<span>/mo</span></div>
+          <p class="mvps-plan-tagline">Enterprise-grade managed VPS for critical workloads</p>
+          <ul class="mvps-plan-features">
+            <li>8 vCPU / 16 GB RAM</li>
+            <li>200 GB NVMe SSD</li>
+            <li>Unlimited Bandwidth</li>
+            <li>Enterprise Security Suite</li>
+            <li>Real-time Backups</li>
+            <li>Dedicated Account Manager</li>
+            <li>SLA-backed 99.99% Uptime</li>
+            <li>Free Migration &amp; Setup</li>
+          </ul>
+          <button class="mvps-plan-btn">Contact Sales &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — CORE FEATURES ════ -->
+  <section id="mvps-features" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">FEATURES</span>
+      <h2 class="title" data-animate="fade-up">Managed VPS Features That Work While You Don&rsquo;t</h2>
+      <p class="subtitle" data-animate="fade-up">Every managed VPS includes enterprise-grade features that keep your
+        server fast, secure, and always online &mdash; without any server management on your part.</p>
+
+      <div class="mvps-features-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14M12 2v2M12 20v2M2 12h2M20 12h2M6.34 6.34l-1.41-1.42M19.07 19.07l-1.41-1.41M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+            </svg></div>
+          <h3>Proactive 24/7 Server Monitoring</h3>
+          <p>Our engineers monitor your VPS health, performance, and uptime around the clock &mdash; detecting and
+            resolving issues before they impact you.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Advanced Security Management</h3>
+          <p>Continuous security hardening, firewall rules, intrusion detection, malware scans, and CVE patching &mdash;
+            all managed for you.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+            </svg></div>
+          <h3>Automated Backups &amp; Recovery</h3>
+          <p>Regular automated backups with multiple restore points. Recover your entire VPS environment quickly and
+            safely from any point in time.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>NVMe SSD Storage</h3>
+          <p>Ultra-fast NVMe solid-state storage delivers 10&times; faster I/O compared to traditional HDDs &mdash;
+            perfect for databases and high-traffic apps.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="8" rx="2" />
+              <rect x="2" y="14" width="20" height="8" rx="2" />
+              <circle cx="6" cy="6" r="1.5" />
+              <circle cx="6" cy="18" r="1.5" />
+            </svg></div>
+          <h3>OS Updates &amp; Patch Management</h3>
+          <p>We keep your operating system, packages, and software up to date with security patches applied on schedule
+            without disrupting uptime.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg></div>
+          <h3>Real-Time Performance Dashboard</h3>
+          <p>Full visibility into your VPS metrics &mdash; CPU, memory, disk, and network &mdash; via an easy-to-use
+            management dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band">
+    <div class="cloud-cta-inner">
+      <h2>Get Your Managed VPS Set Up Today</h2>
+      <p>Our engineers deploy and configure your VPS from scratch &mdash; and manage it every day after that. Zero
+        effort on your side.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Deploy Managed VPS &rarr;</button>
+        <button class="cloud-cta-btn-outline">View Plans</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — WHAT WE MANAGE ════ -->
+  <section id="mvps-what-we-manage" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">FULLY MANAGED</span>
+      <h2 class="title" data-animate="fade-up">Everything Your VPS Needs, Managed by Our Experts</h2>
+      <p class="subtitle" data-animate="fade-up">From initial setup to daily operations, our team takes complete
+        ownership of your VPS management so your team never has to worry about server administration.</p>
+
+      <div class="cloud-power-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="8" rx="2" />
+              <rect x="2" y="14" width="20" height="8" rx="2" />
+              <circle cx="6" cy="6" r="1.5" />
+              <circle cx="6" cy="18" r="1.5" />
+            </svg></div>
+          <h3>Server Setup &amp; Configuration</h3>
+          <p>Complete OS installation, server hardening, web stack configuration (LAMP/LEMP), and application
+            environment setup done for you.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Security Patches &amp; Hardening</h3>
+          <p>Regular CVE scanning, security patches, kernel updates, SSH hardening, and firewall rules applied on a
+            schedule without downtime.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14M12 2v2M12 20v2M2 12h2M20 12h2M6.34 6.34l-1.41-1.42M19.07 19.07l-1.41-1.41M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+            </svg></div>
+          <h3>24/7 Monitoring &amp; Alerting</h3>
+          <p>Proactive health checks, uptime monitoring, resource usage tracking, and immediate incident response by our
+            NOC team.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+            </svg></div>
+          <h3>Backup &amp; Disaster Recovery</h3>
+          <p>Automated backup schedules, offsite backup storage, and tested recovery procedures to protect your data
+            against any failure scenario.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>Performance Tuning &amp; Optimization</h3>
+          <p>Database optimization, caching layer configuration (Redis/Memcached), PHP-FPM tuning, and web server
+            optimization for maximum throughput.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg></div>
+          <h3>Software Updates &amp; Package Management</h3>
+          <p>All server software, control panels, and packages kept current with tested upgrades that maintain stability
+            and security.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — WHY MANAGED VPS ════ -->
+  <section id="mvps-why-managed" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHY MANAGED VPS</span>
+      <h2 class="title" data-animate="fade-up">Why Choose Managed VPS Over Unmanaged?</h2>
+      <p class="subtitle" data-animate="fade-up">Unmanaged VPS gives you hardware &mdash; managed VPS gives you
+        everything. Our team handles the complexity so you get VPS power without the operational burden.</p>
+
+      <div class="cloud-power-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="6" />
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+            </svg></div>
+          <h3>No Server Administration Skills Needed</h3>
+          <p>Run powerful VPS infrastructure without needing to hire a sysadmin or learn complex server management
+            commands.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+            </svg></div>
+          <h3>Lower Total Cost of Ownership</h3>
+          <p>Save on hiring, training, and retaining dedicated server engineers &mdash; our team manages it all at a
+            fraction of the cost.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>Stronger Security Posture</h3>
+          <p>Professionally managed security with zero-day patch deployment, active threat monitoring, and
+            enterprise-level hardening beyond DIY.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg></div>
+          <h3>Focus on Your Core Business</h3>
+          <p>Free your development and operations team from server maintenance tasks &mdash; concentrate on building
+            products and growing revenue.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — USE CASES ════ -->
+  <section id="mvps-usecases" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">USE CASES</span>
+      <h2 class="title" data-animate="fade-up">Who Is Managed VPS Hosting For?</h2>
+      <p class="subtitle" data-animate="fade-up">Ideal for businesses and developers who need the power and isolation of
+        a VPS without the time and expertise required to manage it themselves.</p>
+
+      <div class="cloud-use-grid" data-stagger>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+              <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" />
+            </svg></div>
+          <h3>E-Commerce &amp; Online Stores</h3>
+          <p>Reliable VPS resources for WooCommerce, Magento, and custom storefronts that handle traffic spikes and
+            transaction loads.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z" />
+            </svg></div>
+          <h3>SaaS &amp; Web Applications</h3>
+          <p>Deploy and scale Node.js, Python, PHP, and Ruby applications on a managed VPS environment with zero server
+            management overhead.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+            </svg></div>
+          <h3>Business &amp; Enterprise Applications</h3>
+          <p>Host ERP, CRM, and business management software on a secure, isolated VPS with consistent performance and
+            expert-managed uptime.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg></div>
+          <h3>Development &amp; Staging Environments</h3>
+          <p>Isolated, fully managed environments for development, testing, and staging that mirror production without
+            the operational complexity.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ TESTIMONIALS ════ -->
+  <section class="testi-section" id="mvps-testimonials" aria-labelledby="mvps-testi-heading">
+    <div class="testi-container">
+      <h2 id="mvps-testi-heading" class="testi-title">What Our Clients Say</h2>
+
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FAQ ════ -->
+  <section class="faq-section" id="mvps-faq" aria-labelledby="mvps-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="mvps-faq-heading" class="faq-title">FAQs About ICSDC Managed VPS Hosting</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our Managed VPS Experts</h3>
+        <p class="faq-contact-desc">Our certified VPS engineers are available 24/7 to help you choose the right plan,
+          migrate your server, and keep your VPS environment running at peak performance.<br><br>&#128222; +91 98109
+          58857</p>
+        <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Launch Your Managed VPS &mdash; Expert Setup Included, Zero Hassle Guaranteed!</h2>
+      <p>High-performance, fully managed VPS hosting for businesses that can&rsquo;t afford downtime or server
+        headaches.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Get Managed VPS &rarr;</button>
+        <button class="cloud-cta-btn-outline">Talk to an Expert</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+
+        <!-- Brand column -->
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+              </svg>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                </path>
+              </svg>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram"
+              target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p id="footer-year-text">&#169; Copyright <span data-strapi-year id="footer-year"></span> <span
+          data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script>
+    STRAPI_URL = "http://13.126.9.248:1337";
+    TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+  </script>
+  <script src="assets/js/main.js" type="module"></script>
+  <script src="assets/js/managed-vps-hosting.js" type="module"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/polish.js" defer></script>
+
+
+</body>
+
+</html>

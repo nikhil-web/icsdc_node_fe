@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WordPress Hosting That Works as Hard as Your Content | ICSDC</title>
+  <meta name="description"
+    content="ICSDC WordPress Hosting — fast, secure, and fully managed WordPress with one-click installation, daily backups, LiteSpeed servers, and 24/7 expert support.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/wordpress-hosting.css">
+
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+  <!-- ════ HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="wp-eyebrow">&#9889; WordPress Hosting</div>
+        <h1 class="hero-title">WordPress Hosting That Works as Hard as Your Content</h1>
+        <p class="hero-sub">Fast, Secure, and Fully Managed WordPress &mdash; Ready in Minutes</p>
+        <p class="hero-desc">Launch your WordPress site with blazing speed, enterprise-grade security, and one-click
+          installation. ICSDC handles updates, backups, and optimizations so you focus on content.</p>
+        <div class="hero-btns">
+          <button class="btn-primary">Launch WordPress Now &rarr;</button>
+          <button class="btn-outline">Call +91 98109 58857</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="wp-hero-visual">
+          <div class="wp-top-badge">&#9889; One-Click WordPress Install</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- WordPress dashboard card -->
+            <rect x="20" y="20" width="260" height="180" rx="12" fill="#fff" stroke="rgba(99,102,241,0.1)"
+              stroke-width="1" />
+            <!-- Header bar -->
+            <rect x="20" y="20" width="260" height="44" rx="12" fill="#1d4ed8" />
+            <rect x="20" y="52" width="260" height="12" fill="#1d4ed8" />
+            <!-- WordPress W logo in header -->
+            <circle cx="47" cy="42" r="14" fill="rgba(255,255,255,0.2)" />
+            <text x="40" y="47" font-size="14" fill="white" font-weight="900">W</text>
+            <text x="63" y="47" font-size="12" fill="white" font-weight="700">WordPress Dashboard</text>
+            <!-- Sidebar -->
+            <rect x="20" y="64" width="68" height="136" fill="#f8faff" stroke="rgba(99,102,241,0.08)"
+              stroke-width="1" />
+            <text x="30" y="84" font-size="10" fill="#1d4ed8" font-weight="600">&#9632; Posts</text>
+            <text x="30" y="100" font-size="10" fill="#94a3b8">&#9632; Pages</text>
+            <text x="30" y="116" font-size="10" fill="#94a3b8">&#9632; Media</text>
+            <text x="30" y="132" font-size="10" fill="#94a3b8">&#9632; Plugins</text>
+            <text x="30" y="148" font-size="10" fill="#94a3b8">&#9632; Themes</text>
+            <text x="30" y="164" font-size="10" fill="#94a3b8">&#9632; Settings</text>
+            <!-- Content area -->
+            <rect x="96" y="72" width="172" height="36" rx="6" fill="#eff6ff" />
+            <rect x="104" y="79" width="80" height="7" rx="3" fill="#1d4ed8" opacity=".6" />
+            <rect x="104" y="91" width="55" height="5" rx="2" fill="#c7d2fe" />
+            <!-- Stats row -->
+            <rect x="96" y="114" width="50" height="40" rx="6" fill="#f0fdf4" stroke="rgba(34,197,94,0.2)"
+              stroke-width="1" />
+            <text x="108" y="131" font-size="11" fill="#16a34a" font-weight="800">247</text>
+            <text x="102" y="147" font-size="8" fill="#94a3b8">Posts</text>
+            <rect x="152" y="114" width="50" height="40" rx="6" fill="#fef9c3" stroke="rgba(234,179,8,0.2)"
+              stroke-width="1" />
+            <text x="162" y="131" font-size="11" fill="#ca8a04" font-weight="800">99.9%</text>
+            <text x="157" y="147" font-size="8" fill="#94a3b8">Uptime</text>
+            <rect x="208" y="114" width="50" height="40" rx="6" fill="#fdf4ff" stroke="rgba(168,85,247,0.2)"
+              stroke-width="1" />
+            <text x="216" y="131" font-size="11" fill="#9333ea" font-weight="800">2.1x</text>
+            <text x="213" y="147" font-size="8" fill="#94a3b8">Speed</text>
+            <!-- Recent posts list -->
+            <rect x="96" y="162" width="172" height="14" rx="4" fill="#f8fafc" />
+            <rect x="102" y="166" width="90" height="5" rx="2" fill="#cbd5e1" />
+            <rect x="96" y="180" width="172" height="14" rx="4" fill="#f8fafc" />
+            <rect x="102" y="184" width="70" height="5" rx="2" fill="#cbd5e1" />
+          </svg>
+          <div class="wp-status-badge">
+            <div class="wp-dot"></div>
+            <div>
+              <div class="wp-bt">Site Running</div>
+              <div class="wp-bs">99.9% Uptime Guaranteed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ WHY US — 4 PILLARS ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>One-Click Installation</h3>
+          <p>WordPress ready in minutes with no technical setup required. Our automated installer handles everything so
+            you can start publishing immediately.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Blazing Fast Performance</h3>
+          <p>LiteSpeed servers optimized specifically for WordPress deliver lightning-fast page loads that keep visitors
+            engaged and boost your search rankings.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg></div>
+          <h3>Daily Backups &amp; Restore</h3>
+          <p>Automatic daily backups with one-click restore give you complete peace of mind. Your content is always safe
+            and recoverable.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>24/7 WordPress Support</h3>
+          <p>Expert WordPress specialists available anytime to resolve issues, assist with themes and plugins, and keep
+            your site running perfectly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ HOSTING PLANS ════ -->
+  <section id="wp-plans" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Hosting Plans</span>
+      <h2 class="title" data-animate="fade-up">WordPress Hosting Plans for Every Need</h2>
+      <p class="subtitle" data-animate="fade-up">From personal blogs to high-traffic business sites &mdash; ICSDC has
+        the perfect WordPress hosting plan to match your ambitions.</p>
+      <div class="wp-plans-grid" data-stagger>
+
+        <!-- Starter Plan -->
+        <div class="wp-plan-card">
+          <div class="wp-plan-name">Starter</div>
+          <div class="wp-plan-price">&#8377;99<span>/mo</span></div>
+          <p class="wp-plan-desc">Perfect for personal blogs and small websites just getting started.</p>
+          <ul class="wp-plan-features">
+            <li>1 WordPress Site</li>
+            <li>5GB SSD Storage</li>
+            <li>Free SSL Certificate</li>
+            <li>One-Click WordPress Install</li>
+            <li>99.9% Uptime SLA</li>
+            <li>24/7 Support</li>
+          </ul>
+          <button class="wp-plan-btn">Get Started &rarr;</button>
+        </div>
+
+        <!-- Business Plan (Popular) -->
+        <div class="wp-plan-card wp-plan-popular">
+          <div class="wp-plan-badge">Most Popular</div>
+          <div class="wp-plan-name">Business</div>
+          <div class="wp-plan-price">&#8377;249<span>/mo</span></div>
+          <p class="wp-plan-desc">Ideal for growing businesses, portfolios, and WooCommerce stores.</p>
+          <ul class="wp-plan-features">
+            <li>5 WordPress Sites</li>
+            <li>20GB SSD Storage</li>
+            <li>Free SSL + Free Domain</li>
+            <li>Staging Environment</li>
+            <li>Daily Backups</li>
+            <li>LiteSpeed Caching</li>
+            <li>Priority Support</li>
+          </ul>
+          <button class="wp-plan-btn">Get Started &rarr;</button>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="wp-plan-card">
+          <div class="wp-plan-name">Pro</div>
+          <div class="wp-plan-price">&#8377;499<span>/mo</span></div>
+          <p class="wp-plan-desc">For high-traffic sites, agencies, and performance-critical WordPress deployments.</p>
+          <ul class="wp-plan-features">
+            <li>Unlimited WordPress Sites</li>
+            <li>50GB NVMe SSD Storage</li>
+            <li>Free SSL + Free Domain</li>
+            <li>CDN Included</li>
+            <li>Staging Environment</li>
+            <li>Daily Backups + Restore</li>
+            <li>Malware Scanning</li>
+            <li>Priority Support</li>
+          </ul>
+          <button class="wp-plan-btn">Get Started &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FEATURES ════ -->
+  <section id="features" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Features</span>
+      <h2 class="title" data-animate="fade-up">Everything You Need for a Powerful WordPress Site</h2>
+      <p class="subtitle" data-animate="fade-up">Built-in tools and infrastructure designed specifically to make
+        WordPress fly &mdash; secure, fast, and always online.</p>
+      <div class="cloud-power-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>LiteSpeed Caching</h3>
+          <p>Integrated LiteSpeed cache plugin dramatically accelerates WordPress page load times with server-level
+            caching.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>Free SSL Certificate</h3>
+          <p>Auto-provisioned Let's Encrypt SSL for every WordPress site &mdash; HTTPS enabled from day one, zero
+            cost.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg></div>
+          <h3>Daily Backups</h3>
+          <p>Automated daily backups stored offsite with one-click restore. Never lose a blog post or product listing
+            again.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <path d="M8 21h8M12 17v4" />
+            </svg></div>
+          <h3>Staging Environment</h3>
+          <p>Test theme changes, plugin updates, and new features on a staging clone before pushing live &mdash; no
+            surprises.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+            </svg></div>
+          <h3>CDN Integration</h3>
+          <p>Global CDN distributes your WordPress content from edge nodes worldwide for ultra-low latency wherever your
+            visitors are.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <polyline points="9 12 11 14 15 10" />
+            </svg></div>
+          <h3>Malware Scanning</h3>
+          <p>Continuous malware scanning and automatic threat removal keeps your WordPress site clean and your visitors
+            safe.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band">
+    <div class="cloud-cta-inner">
+      <h2>Start Your WordPress Journey Today</h2>
+      <p>One-click install, pre-optimized servers, and expert support included.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Launch WordPress Now &rarr;</button>
+        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ PERFORMANCE ════ -->
+  <section id="performance" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Performance</span>
+      <h2 class="title" data-animate="fade-up">Infrastructure Built for WordPress Speed</h2>
+      <p class="subtitle" data-animate="fade-up">Every layer of ICSDC's WordPress hosting is engineered for maximum
+        performance &mdash; from the storage layer to the network edge.</p>
+      <div class="cloud-use-grid" data-stagger>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <line x1="22" y1="12" x2="2" y2="12" />
+              <path
+                d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z" />
+              <line x1="6" y1="16" x2="6.01" y2="16" />
+              <line x1="10" y1="16" x2="10.01" y2="16" />
+            </svg></div>
+          <h3>NVMe SSD Storage</h3>
+          <p>Ultra-fast NVMe solid-state drives deliver database read/write speeds that make WordPress feel instant,
+            even under heavy load.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="2" width="20" height="8" rx="2" />
+              <rect x="2" y="14" width="20" height="8" rx="2" />
+              <line x1="6" y1="6" x2="6.01" y2="6" />
+              <line x1="6" y1="18" x2="6.01" y2="18" />
+            </svg></div>
+          <h3>LiteSpeed Web Server</h3>
+          <p>The world's fastest web server for WordPress &mdash; LiteSpeed outperforms Apache and Nginx for dynamic
+            PHP content by up to 6x.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>Built-in Caching</h3>
+          <p>Object caching, page caching, and opcode caching work together to serve WordPress pages at maximum speed
+            without hitting the database.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+            </svg></div>
+          <h3>Free CDN</h3>
+          <p>Complimentary content delivery network integration accelerates static assets globally, reducing load times
+            for international visitors.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M5 12.55a11 11 0 0114.08 0" />
+              <path d="M1.42 9a16 16 0 0121.16 0" />
+              <path d="M8.53 16.11a6 6 0 016.95 0" />
+              <line x1="12" y1="20" x2="12.01" y2="20" />
+            </svg></div>
+          <h3>HTTP/3 Support</h3>
+          <p>Cutting-edge HTTP/3 protocol support ensures the fastest possible connection setup and eliminates
+            head-of-line blocking for modern browsers.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="9" y="2" width="6" height="6" rx="1" />
+              <rect x="16" y="16" width="6" height="6" rx="1" />
+              <rect x="2" y="16" width="6" height="6" rx="1" />
+              <path d="M5 16v-4h14v4" />
+              <line x1="12" y1="12" x2="12" y2="8" />
+            </svg></div>
+          <h3>Resource Isolation</h3>
+          <p>Each WordPress site runs in its own isolated container &mdash; no noisy neighbors, guaranteed CPU and RAM
+            allocation at all times.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ MANAGED FEATURES ════ -->
+  <section id="managed" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Managed</span>
+      <h2 class="title" data-animate="fade-up">Fully Managed WordPress &mdash; We Handle the Hard Parts</h2>
+      <p class="subtitle" data-animate="fade-up">ICSDC's managed WordPress hosting takes care of maintenance,
+        security, and performance so you can spend 100% of your time creating great content.</p>
+      <div class="why-grid managed-why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+            </svg></div>
+          <h3>Auto Updates</h3>
+          <p>WordPress core, themes, and plugin updates are applied automatically in a tested, staged manner &mdash;
+            keeping your site secure without any effort from you.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg></div>
+          <h3>Daily Backups</h3>
+          <p>Comprehensive daily backups of files and database stored in geographically redundant storage with instant
+            one-click restore capability.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <polyline points="9 12 11 14 15 10" />
+            </svg></div>
+          <h3>Security Scanning</h3>
+          <p>Real-time malware detection, file integrity monitoring, and brute-force attack protection run continuously
+            around the clock.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Performance Monitoring</h3>
+          <p>Continuous uptime monitoring, performance analytics, and alerting ensure your WordPress site always
+            delivers the best possible experience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ WHY CHOOSE ICSDC ════ -->
+  <section id="why-choose" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Why ICSDC</span>
+      <h2 class="title" data-animate="fade-up">Why Choose ICSDC WordPress Hosting?</h2>
+      <p class="subtitle" data-animate="fade-up">Purpose-built WordPress infrastructure with the features power users
+        and agencies demand &mdash; at prices everyone can afford.</p>
+      <div class="cloud-power-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="8" rx="2" />
+              <rect x="2" y="14" width="20" height="8" rx="2" />
+              <line x1="6" y1="6" x2="6.01" y2="6" />
+              <line x1="6" y1="18" x2="6.01" y2="18" />
+            </svg></div>
+          <h3>WordPress Optimized Servers</h3>
+          <p>Every server configuration is tuned specifically for WordPress &mdash; PHP-FPM, OPcache, and database
+            settings all pre-optimized out of the box.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg></div>
+          <h3>Pre-Installed Plugins</h3>
+          <p>Essential WordPress plugins &mdash; SEO, caching, security, and backup &mdash; come pre-installed and
+            pre-configured so your site is production-ready from minute one.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="4" width="22" height="16" rx="2" />
+              <line x1="1" y1="10" x2="23" y2="10" />
+            </svg></div>
+          <h3>WooCommerce Ready</h3>
+          <p>Optimized for WooCommerce with fast checkout, high concurrency support, and PCI-compliant infrastructure
+            for secure online stores.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+            </svg></div>
+          <h3>Multisite Support</h3>
+          <p>Full WordPress Multisite Network support lets agencies and enterprises manage dozens of sites from a single
+            WordPress installation.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg></div>
+          <h3>PHP 8.x Support</h3>
+          <p>Run your WordPress sites on the latest PHP 8.x versions for maximum performance and compatibility with
+            modern themes and plugins.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>24/7 Expert Support</h3>
+          <p>Our WordPress-certified support team is available around the clock via live chat, phone, and ticket &mdash;
+            with guaranteed response times.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="wp-testi-heading">
+    <div class="testi-container">
+      <h2 id="wp-testi-heading" class="testi-title">See Our Clients' Stories</h2>
+
+      <!-- Cards rendered by components.js -->
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+
+      <!-- Pagination dots rendered by components.js -->
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FAQ ════ -->
+  <section class="faq-section" id="wp-faq" aria-labelledby="wp-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="wp-faq-heading" class="faq-title">FAQs About ICSDC WordPress Hosting</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our WordPress Experts</h3>
+        <p class="faq-contact-desc">Our certified WordPress engineers are available 24/7 to help you choose the right
+          plan, migrate your existing site, and optimize performance.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Build Your WordPress Site on the Best Platform</h2>
+      <p>Fast, secure, and managed WordPress hosting &mdash; starting at &#8377;99/month.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Launch WordPress Now &rarr;</button>
+        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+      </div>
+    </div>
+  </section>
+
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+
+        <!-- Brand column -->
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+              </svg>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                </path>
+              </svg>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram"
+              target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p id="footer-year-text">&#169; Copyright <span data-strapi-year id="footer-year"></span> <span
+          data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script>
+    STRAPI_URL = "http://13.126.9.248:1337";
+    TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+  </script>
+  <script src="assets/js/main.js" type="module"></script>
+  <script src="assets/js/wordpress-hosting.js" type="module"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/polish.js" defer></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,355 @@
+/* ══════════════════════════════════════
+   WORDPRESS HOSTING PAGE — SCOPED STYLES
+   All classes prefixed wp-* to prevent
+   any collision with style.css,
+   components.css, or cloud-hosting.css.
+   Zero overrides.
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.wp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(26, 86, 219, 0.15);
+}
+
+/* ══════════════════════════════════════
+   HERO VISUAL
+══════════════════════════════════════ */
+.wp-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #f3e8ff 0%, #faf5ff 55%, #ede9fe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(99, 102, 241, 0.13), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.wp-hero-visual svg {
+    width: 72%;
+    height: 72%;
+}
+
+/* ══════════════════════════════════════
+   HERO BADGES
+══════════════════════════════════════ */
+.wp-top-badge {
+    position: absolute;
+    top: 22px;
+    left: 22px;
+    background: #fff;
+    border: 1px solid rgba(26, 86, 219, 0.2);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue);
+    box-shadow: 0 4px 16px rgba(26, 86, 219, 0.12);
+    animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
+    z-index: 2;
+}
+
+.wp-status-badge {
+    position: absolute;
+    bottom: 22px;
+    right: 22px;
+    background: #fff;
+    border: 1px solid rgba(26, 86, 219, 0.12);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(26, 86, 219, 0.10);
+    animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
+    z-index: 2;
+}
+
+.wp-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    flex-shrink: 0;
+}
+
+.wp-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.wp-bs {
+    font-size: 10px;
+    color: var(--muted);
+}
+
+/* ══════════════════════════════════════
+   PLANS GRID
+══════════════════════════════════════ */
+.wp-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+    align-items: stretch;
+}
+
+/* ══════════════════════════════════════
+   PLAN CARD
+══════════════════════════════════════ */
+.wp-plan-card {
+    position: relative;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) var(--ease-out-expo),
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+}
+
+.wp-plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26, 86, 219, 0.22);
+}
+
+/* Popular / featured card */
+.wp-plan-card.wp-plan-popular {
+    border-color: var(--blue);
+    box-shadow: 0 12px 40px rgba(26, 86, 219, 0.18), 0 4px 16px rgba(26, 86, 219, 0.10);
+    transform: translateY(-6px);
+}
+
+.wp-plan-card.wp-plan-popular:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 56px rgba(26, 86, 219, 0.24);
+}
+
+/* ══════════════════════════════════════
+   PLAN BADGE ("Most Popular")
+══════════════════════════════════════ */
+.wp-plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--blue);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 18px;
+    border-radius: var(--radius-xl);
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(26, 86, 219, 0.35);
+}
+
+/* ══════════════════════════════════════
+   PLAN TYPOGRAPHY
+══════════════════════════════════════ */
+.wp-plan-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+}
+
+.wp-plan-price {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.wp-plan-price span {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0;
+}
+
+.wp-plan-desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--muted-alt);
+    margin: 8px 0 0;
+    flex-grow: 0;
+}
+
+/* Divider between desc and features */
+.wp-plan-card .wp-plan-desc {
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+}
+
+/* ══════════════════════════════════════
+   PLAN FEATURES LIST
+══════════════════════════════════════ */
+.wp-plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.wp-plan-features li {
+    font-size: 13.5px;
+    color: var(--text);
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.wp-plan-features li::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    border-radius: 50%;
+    background: rgba(34, 197, 94, 0.12);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 8l3 3 6-6' stroke='%2316a34a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: 1px;
+    flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════
+   PLAN CTA BUTTON
+══════════════════════════════════════ */
+.wp-plan-btn {
+    width: 100%;
+    padding: 12px 24px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 14.5px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    transition: background var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 48px;
+    margin-top: auto;
+}
+
+.wp-plan-btn:hover {
+    background: #1740b0;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.30);
+}
+
+.wp-plan-btn:active {
+    transform: translateY(0);
+}
+
+/* ══════════════════════════════════════
+   MANAGED WHY GRID MODIFIER
+   (overrides why-grid to 4-col for this
+    section on larger screens)
+══════════════════════════════════════ */
+.managed-why-grid {
+    margin-top: 40px;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — TABLET (≤1024px)
+══════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .wp-plans-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .wp-plan-card.wp-plan-popular {
+        transform: none;
+        order: -1;
+    }
+
+    .wp-plan-card.wp-plan-popular:hover {
+        transform: translateY(-4px);
+    }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — MOBILE (≤640px)
+══════════════════════════════════════ */
+@media (max-width: 640px) {
+    .wp-eyebrow {
+        font-size: 10px;
+        padding: 4px 12px;
+    }
+
+    .wp-hero-visual {
+        max-width: 100%;
+    }
+
+    .wp-top-badge {
+        font-size: 10px;
+        padding: 6px 10px;
+        top: 12px;
+        left: 12px;
+    }
+
+    .wp-status-badge {
+        padding: 8px 12px;
+        bottom: 12px;
+        right: 12px;
+    }
+
+    .wp-plans-grid {
+        max-width: 100%;
+        gap: 16px;
+    }
+
+    .wp-plan-card {
+        padding: 24px 20px;
+    }
+
+    .wp-plan-price {
+        font-size: 28px;
+    }
+
+    .managed-why-grid {
+        grid-template-columns: 1fr;
+    }
+}

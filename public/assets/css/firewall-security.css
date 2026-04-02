@@ -1,0 +1,321 @@
+/* ══════════════════════════════════════
+   FIREWALL SECURITY PAGE — SCOPED STYLES
+   All classes prefixed fw-* to prevent
+   any collision with style.css,
+   components.css, or other page styles.
+   Zero overrides.
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.fw-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(220, 38, 38, 0.22);
+}
+
+/* ══════════════════════════════════════
+   HERO VISUAL — RED GRADIENT
+══════════════════════════════════════ */
+.fw-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #fecaca 0%, #fee2e2 50%, #fff1f2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(220, 38, 38, 0.14), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.fw-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 65% 30%, rgba(220, 38, 38, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(239, 68, 68, 0.07) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.fw-hero-visual svg {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ══════════════════════════════════════
+   HERO BADGES
+══════════════════════════════════════ */
+.fw-top-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--white);
+    border: 1px solid rgba(220, 38, 38, 0.18);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #dc2626;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.14);
+    z-index: 2;
+    animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
+}
+
+.fw-status-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--white);
+    border: 1px solid rgba(220, 38, 38, 0.14);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(220, 38, 38, 0.13);
+    z-index: 2;
+    animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
+}
+
+.fw-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #dc2626;
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.50);
+    flex-shrink: 0;
+    animation: fw-pulse 2s ease-in-out infinite;
+}
+
+@keyframes fw-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.55); }
+    70%  { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+.fw-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+.fw-bs {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+/* ══════════════════════════════════════
+   STRENGTH / ADAPTS GRID — 4 COLUMNS (8 CARDS)
+══════════════════════════════════════ */
+.fw-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   THREAT DETECTION NARRATIVE SECTION
+══════════════════════════════════════ */
+.fw-threat-section {
+    background: #fff1f2;
+}
+
+.fw-section-label-light {
+    color: #dc2626 !important;
+}
+
+.fw-threat-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.fw-threat-text h2 {
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+}
+
+.fw-threat-text p {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.75;
+    margin: 0;
+}
+
+.fw-threat-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.fw-threat-stat {
+    background: var(--white);
+    border: 1.5px solid rgba(220, 38, 38, 0.14);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.08);
+    transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease;
+}
+
+.fw-threat-stat:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(220, 38, 38, 0.14);
+}
+
+.fw-threat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #fee2e2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #dc2626;
+}
+
+.fw-threat-info strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2px;
+}
+
+.fw-threat-info span {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* ══════════════════════════════════════
+   SERVICES GRID — 5 COLUMNS (10 CARDS) → wraps
+══════════════════════════════════════ */
+.fw-services-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   ENV / USE CASE GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.fw-three-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   USE CASES GRID — 4 COLUMNS (8 CARDS)
+══════════════════════════════════════ */
+.fw-usecases-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+
+/* 1280px */
+@media (max-width: 1280px) {
+    .fw-services-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .fw-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fw-usecases-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 1024px — 2 columns for most grids */
+@media (max-width: 1024px) {
+    .fw-services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fw-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fw-three-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fw-usecases-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fw-threat-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+/* 640px — single column */
+@media (max-width: 640px) {
+    .fw-services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .fw-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .fw-three-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .fw-usecases-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .fw-hero-visual {
+        max-width: 100%;
+    }
+
+    .fw-top-badge {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+}

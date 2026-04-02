@@ -1,0 +1,339 @@
+/* ══════════════════════════════════════
+   TALLY ON CLOUD PAGE — SCOPED STYLES
+   All classes prefixed toc-* to prevent
+   any collision with style.css,
+   components.css, or other page styles.
+   Zero overrides.
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.toc-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(79, 70, 229, 0.22);
+}
+
+/* ══════════════════════════════════════
+   HERO VISUAL — INDIGO GRADIENT
+══════════════════════════════════════ */
+.toc-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #c7d2fe 0%, #eef2ff 50%, #f5f3ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(79, 70, 229, 0.14), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.toc-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 65% 30%, rgba(79, 70, 229, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(99, 102, 241, 0.07) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.toc-hero-visual svg {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ══════════════════════════════════════
+   HERO BADGES
+══════════════════════════════════════ */
+.toc-top-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--white);
+    border: 1px solid rgba(79, 70, 229, 0.18);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #4f46e5;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 16px rgba(79, 70, 229, 0.14);
+    z-index: 2;
+    animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
+}
+
+.toc-status-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--white);
+    border: 1px solid rgba(79, 70, 229, 0.14);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.13);
+    z-index: 2;
+    animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
+}
+
+.toc-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4f46e5;
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.50);
+    flex-shrink: 0;
+    animation: toc-pulse 2s ease-in-out infinite;
+}
+
+@keyframes toc-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.55); }
+    70%  { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+}
+
+.toc-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+.toc-bs {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+/* ══════════════════════════════════════
+   ABOUT SECTION
+══════════════════════════════════════ */
+.toc-about-section {
+    background: #f5f3ff;
+}
+
+.toc-about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.toc-about-desc {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-top: 20px;
+}
+
+.toc-about-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.toc-about-card {
+    background: var(--white);
+    border: 1.5px solid rgba(79, 70, 229, 0.12);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    box-shadow: 0 4px 16px rgba(79, 70, 229, 0.07);
+    transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease;
+}
+
+.toc-about-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(79, 70, 229, 0.12);
+}
+
+.toc-about-icon {
+    flex-shrink: 0;
+}
+
+.toc-about-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+.toc-about-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ══════════════════════════════════════
+   IMPROVEMENTS GRID — 4 COLUMNS (12 CARDS)
+══════════════════════════════════════ */
+.toc-improvements-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   WHY GRID — 3 COLUMNS (9 CARDS)
+══════════════════════════════════════ */
+/* uses shared .cloud-power-grid — no override needed */
+
+/* ══════════════════════════════════════
+   COMPARISON TABLE
+══════════════════════════════════════ */
+.toc-compare-table-wrap {
+    overflow-x: auto;
+    margin-top: 36px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 24px rgba(79, 70, 229, 0.08);
+}
+
+.toc-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    font-size: 14px;
+}
+
+.toc-compare-table thead tr {
+    background: #4f46e5;
+    color: var(--white);
+}
+
+.toc-compare-table thead th {
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.toc-compare-table thead th.toc-col-cloud {
+    background: #4338ca;
+    color: var(--white);
+}
+
+.toc-compare-table tbody tr {
+    border-bottom: 1px solid rgba(79, 70, 229, 0.10);
+    transition: background var(--transition-fast) ease;
+}
+
+.toc-compare-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.toc-compare-table tbody tr:hover {
+    background: #eef2ff;
+}
+
+.toc-compare-table tbody td {
+    padding: 14px 20px;
+    vertical-align: middle;
+    color: var(--text-dark);
+    line-height: 1.5;
+}
+
+.toc-compare-table tbody td:first-child {
+    font-weight: 600;
+    color: var(--text-dark);
+    white-space: nowrap;
+}
+
+.toc-compare-table tbody td.toc-col-cloud {
+    background: #eef2ff;
+    color: #3730a3;
+    font-weight: 500;
+}
+
+.toc-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: #4f46e5;
+    color: var(--white);
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    margin-right: 8px;
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+/* ══════════════════════════════════════
+   WHO GRID — 3 COLUMNS (7 CARDS)
+══════════════════════════════════════ */
+/* uses shared .cloud-use-grid — no override needed */
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+
+/* 1280px */
+@media (max-width: 1280px) {
+    .toc-improvements-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 1024px — 2 columns for most grids */
+@media (max-width: 1024px) {
+    .toc-improvements-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .toc-about-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    .toc-compare-table tbody td:first-child {
+        white-space: normal;
+    }
+}
+
+/* 640px — single column */
+@media (max-width: 640px) {
+    .toc-improvements-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .toc-hero-visual {
+        max-width: 100%;
+    }
+
+    .toc-top-badge {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+}

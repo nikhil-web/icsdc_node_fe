@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICSDC Reseller Hosting | Scale Your Web Hosting Business</title>
+  <meta name="description"
+    content="Launch your own hosting business with ICSDC Reseller Hosting. Get white-label cPanel &amp; WHM, NVMe performance, scalable resources, free migration, and 24/7 expert support.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/reseller-hosting.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="rh-eyebrow">&#127760; Reseller Hosting</div>
+        <h1 class="hero-title">Start Your Own Web Hosting Business With ICSDC Reseller Hosting</h1>
+        <p class="hero-sub">Scalable Reseller Hosting Built for Long-Term Growth</p>
+        <p class="hero-desc">Start your hosting business with confidence using ICSDC Reseller Hosting. Get white-label
+          control, reliable infrastructure, and easy client management tools &mdash; all designed to help you sell
+          hosting under your own brand without technical complexity.</p>
+        <div class="hero-btns">
+          <button class="btn-primary">Start Your Reseller Business Today &rarr;</button>
+          <button class="btn-outline">View Reseller Plans</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="rh-hero-visual">
+          <div class="rh-top-badge">&#9989; White-Label Ready</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#f0fdf4" stroke="rgba(22,163,74,0.15)"
+              stroke-width="1" />
+            <!-- WHM Dashboard panel -->
+            <rect x="30" y="28" width="240" height="130" rx="10" fill="white" stroke="rgba(22,163,74,0.20)"
+              stroke-width="1.5" />
+            <!-- Top bar -->
+            <rect x="30" y="28" width="240" height="24" rx="10" fill="#f0fdf4" />
+            <rect x="30" y="40" width="240" height="12" rx="0" fill="#f0fdf4" />
+            <circle cx="46" cy="40" r="5" fill="#22c55e" opacity="0.8" />
+            <circle cx="62" cy="40" r="5" fill="#f59e0b" opacity="0.6" />
+            <circle cx="78" cy="40" r="5" fill="#ef4444" opacity="0.5" />
+            <text x="150" y="44" font-size="8" fill="#16a34a" text-anchor="middle" font-weight="700">WHM Control Panel</text>
+            <!-- Account rows -->
+            <rect x="42" y="62" width="216" height="16" rx="4" fill="#f0fdf4" />
+            <circle cx="54" cy="70" r="4" fill="#22c55e" />
+            <rect x="65" y="66" width="70" height="8" rx="2" fill="#dcfce7" />
+            <rect x="145" y="66" width="40" height="8" rx="2" fill="#dcfce7" />
+            <rect x="195" y="66" width="30" height="8" rx="2" fill="#dcfce7" />
+
+            <rect x="42" y="84" width="216" height="16" rx="4" fill="#f0fdf4" />
+            <circle cx="54" cy="92" r="4" fill="#22c55e" />
+            <rect x="65" y="88" width="55" height="8" rx="2" fill="#dcfce7" />
+            <rect x="145" y="88" width="45" height="8" rx="2" fill="#dcfce7" />
+            <rect x="195" y="88" width="35" height="8" rx="2" fill="#dcfce7" />
+
+            <rect x="42" y="106" width="216" height="16" rx="4" fill="#f0fdf4" />
+            <circle cx="54" cy="114" r="4" fill="#22c55e" />
+            <rect x="65" y="110" width="80" height="8" rx="2" fill="#dcfce7" />
+            <rect x="145" y="110" width="35" height="8" rx="2" fill="#dcfce7" />
+            <rect x="195" y="110" width="40" height="8" rx="2" fill="#dcfce7" />
+
+            <rect x="42" y="128" width="216" height="16" rx="4" fill="#f0fdf4" />
+            <circle cx="54" cy="136" r="4" fill="#f59e0b" opacity="0.7" />
+            <rect x="65" y="132" width="65" height="8" rx="2" fill="#fef9c3" />
+            <rect x="145" y="132" width="50" height="8" rx="2" fill="#fef9c3" />
+            <rect x="195" y="132" width="25" height="8" rx="2" fill="#fef9c3" />
+            <!-- Brand label bottom -->
+            <text x="150" y="178" font-size="8" fill="#16a34a" text-anchor="middle" font-weight="600">Your Brand · cPanel & WHM · White-Label</text>
+            <!-- Pulse ring -->
+            <circle cx="150" cy="100" r="70" stroke="rgba(22,163,74,0.08)" stroke-width="1" fill="none">
+              <animate attributeName="r" values="60;75;60" dur="4s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.4;0;0.4" dur="4s" repeatCount="indefinite" />
+            </circle>
+            <!-- Corner dots -->
+            <circle cx="28" cy="28" r="4" fill="#86efac" opacity="0.5" />
+            <circle cx="272" cy="28" r="4" fill="#86efac" opacity="0.5" />
+            <circle cx="28" cy="192" r="3" fill="#4ade80" opacity="0.4" />
+            <circle cx="272" cy="192" r="3" fill="#4ade80" opacity="0.4" />
+          </svg>
+          <div class="rh-status-badge">
+            <div class="rh-dot"></div>
+            <div>
+              <div class="rh-bt">Unlimited Clients</div>
+              <div class="rh-bs">White-Label cPanel</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — WHY US (4 PILLARS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <rect x="3" y="3" width="18" height="18" rx="3" />
+              <path d="M3 9h18M9 21V9" />
+            </svg></div>
+          <h3>White-Label cPanel &amp; WHM Access</h3>
+          <p>Sell hosting under your own brand with fully white-labeled cPanel and WHM for complete control and
+            professional client management.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Host Multiple Websites Effortlessly</h3>
+          <p>Create and manage unlimited client accounts from a single dashboard with flexible resource allocation.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Built-In Security &amp; Backups</h3>
+          <p>Keep client data safe with server-level security, automated backups, and proactive monitoring.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg></div>
+          <h3>Scalable Resources as You Grow</h3>
+          <p>Upgrade storage, bandwidth, and resources anytime to match your business growth &mdash; without downtime.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — PRICING PLANS ════ -->
+  <section id="rh-plans" class="section cloud-pricing-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">RESELLER PLANS</span>
+      <h2 class="title" data-animate="fade-up">Choose the Right Reseller Hosting Plan</h2>
+      <p class="subtitle" data-animate="fade-up">Powerful features, predictable pricing, and complete control.</p>
+
+      <div class="rh-plans-grid" data-stagger>
+
+        <!-- Reseller Starter -->
+        <div class="rh-plan-card">
+          <div class="rh-plan-name">Reseller Starter</div>
+          <div class="rh-plan-price">&#8377;799<span>/mo</span></div>
+          <p class="rh-plan-tagline">Perfect for freelancers and small agencies starting out</p>
+          <ul class="rh-plan-features">
+            <li>25 cPanel Accounts</li>
+            <li>50 GB NVMe SSD</li>
+            <li>Unlimited Bandwidth</li>
+            <li>White-Label WHM</li>
+            <li>Free SSL Certificates</li>
+            <li>Softaculous Installer</li>
+          </ul>
+          <button class="rh-plan-btn">Get Started &rarr;</button>
+        </div>
+
+        <!-- Reseller Pro (Featured) -->
+        <div class="rh-plan-card rh-plan-featured">
+          <div class="rh-plan-badge">Most Popular</div>
+          <div class="rh-plan-name">Reseller Pro</div>
+          <div class="rh-plan-price">&#8377;1,499<span>/mo</span></div>
+          <p class="rh-plan-tagline">Ideal for growing agencies and web developers</p>
+          <ul class="rh-plan-features">
+            <li>75 cPanel Accounts</li>
+            <li>150 GB NVMe SSD</li>
+            <li>Unlimited Bandwidth</li>
+            <li>White-Label WHM + Branded Nameservers</li>
+            <li>Free SSL + Daily Backups</li>
+            <li>WHMCS-Ready Billing Integration</li>
+            <li>Priority 24/7 Support</li>
+            <li>Free Migration</li>
+          </ul>
+          <button class="rh-plan-btn rh-plan-btn-featured">Get Started &rarr;</button>
+        </div>
+
+        <!-- Reseller Business -->
+        <div class="rh-plan-card">
+          <div class="rh-plan-name">Reseller Business</div>
+          <div class="rh-plan-price">&#8377;2,999<span>/mo</span></div>
+          <p class="rh-plan-tagline">For established hosting businesses with large client bases</p>
+          <ul class="rh-plan-features">
+            <li>Unlimited cPanel Accounts</li>
+            <li>300 GB NVMe SSD</li>
+            <li>Unlimited Bandwidth</li>
+            <li>Full White-Label Stack</li>
+            <li>Real-Time Backups</li>
+            <li>Dedicated Account Manager</li>
+            <li>API & Automation Access</li>
+          </ul>
+          <button class="rh-plan-btn">Contact Sales &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — WHAT YOU GET ════ -->
+  <section id="rh-features" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHAT YOU GET</span>
+      <h2 class="title" data-animate="fade-up">Everything You Need to Build, Brand &amp; Scale a Hosting Business</h2>
+      <p class="subtitle" data-animate="fade-up">Every reseller plan includes the complete toolkit for running a
+        professional hosting business under your own brand.</p>
+
+      <div class="rh-features-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="6" />
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+            </svg></div>
+          <h3>Complete White-Label Freedom</h3>
+          <p>Run your hosting business entirely under your own brand. ICSDC stays invisible while you own the
+            relationship, identity, and trust.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="3" />
+              <path d="M3 9h18M9 21V9" />
+            </svg></div>
+          <h3>Powerful cPanel &amp; WHM Management</h3>
+          <p>Manage all client accounts, domains, resources, and permissions from a single, built-in WHM dashboard
+            designed for efficiency and control.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14M12 2v2M12 20v2M2 12h2M20 12h2" />
+            </svg></div>
+          <h3>Flexible Resource Allocation</h3>
+          <p>Customize storage, bandwidth, email accounts, and features for each client &mdash; create tailored hosting
+            plans that fit different customer needs.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>High-Speed NVMe Infrastructure</h3>
+          <p>Deliver noticeably faster websites using NVMe-powered servers that improve load times, performance
+            stability, and overall client satisfaction.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Unlimited Client Hosting Capability</h3>
+          <p>Host multiple customers and websites without account limitations, making it easy to grow your reseller
+            business without changing platforms.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+            </svg></div>
+          <h3>Custom Branded Nameservers</h3>
+          <p>Strengthen your brand presence by using your own nameservers, giving clients a professional and fully
+            branded hosting experience.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Advanced Server-Level Security</h3>
+          <p>Protect client websites with firewalls, malware scanning, and proactive threat monitoring to reduce risks
+            and downtime.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+            </svg></div>
+          <h3>Automated Backup Protection</h3>
+          <p>Safeguard critical data with scheduled backups and easy restore options, ensuring business continuity for
+            you and your clients.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="8" rx="2" />
+              <rect x="2" y="14" width="20" height="8" rx="2" />
+              <circle cx="6" cy="6" r="1.5" />
+              <circle cx="6" cy="18" r="1.5" />
+            </svg></div>
+          <h3>High Availability &amp; Reliable Uptime</h3>
+          <p>Host client websites on stable, redundant infrastructure designed to deliver consistent uptime and
+            dependable performance.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg></div>
+          <h3>Instant Scalability as You Grow</h3>
+          <p>Upgrade resources anytime without downtime, allowing your hosting business to scale smoothly as your client
+            base expands.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg></div>
+          <h3>Developer-Ready Hosting Environment</h3>
+          <p>Support modern applications with multiple PHP versions, databases, and popular CMS platforms like
+            WordPress, Laravel, and more.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.72A2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.1 6.1l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+            </svg></div>
+          <h3>24/7 Expert Technical Support</h3>
+          <p>Get round-the-clock assistance from experienced hosting professionals who help resolve issues quickly
+            &mdash; so your business keeps running smoothly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — WHY CHOOSE ICSDC RESELLER ════ -->
+  <section id="rh-why" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHY ICSDC</span>
+      <h2 class="title" data-animate="fade-up">Why Choose ICSDC Linux Reseller Hosting?</h2>
+      <p class="subtitle" data-animate="fade-up">Build, manage, and scale your hosting business with confidence using
+        ICSDC&rsquo;s Linux Reseller Hosting &mdash; designed for performance, flexibility, and long-term growth.</p>
+
+      <div class="rh-why-grid" data-stagger>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4l3 3" />
+            </svg></div>
+          <h3>Free Reseller Account Setup</h3>
+          <p>Start selling instantly with a ready-to-use reseller environment. Resell hosting, domains, email, and more
+            under your own brand.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>30-Day Money-Back Assurance</h3>
+          <p>Try our reseller hosting risk-free. If it doesn&rsquo;t meet your expectations, get a full refund &mdash; no
+            questions asked.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="3" />
+              <path d="M3 9h18M9 21V9" />
+            </svg></div>
+          <h3>Free WHM &amp; cPanel Access</h3>
+          <p>Create, manage, and customize hosting plans easily using industry-standard WHM and cPanel tools.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.72A2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.1 6.1l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+            </svg></div>
+          <h3>24/7 Reseller-Focused Support</h3>
+          <p>Get round-the-clock assistance from experienced engineers who understand reseller environments and business
+            needs.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M8 12l2 2 4-4" />
+            </svg></div>
+          <h3>Softaculous App Installer</h3>
+          <p>Install 400+ applications like WordPress, Joomla, and Magento in just one click &mdash; no manual setup
+            required.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>Cloudflare-Powered Protection</h3>
+          <p>Boost website speed and security with built-in CDN, DDoS protection, and global network optimization.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="8" rx="2" />
+              <rect x="2" y="14" width="20" height="8" rx="2" />
+              <circle cx="6" cy="6" r="1.5" />
+              <circle cx="6" cy="18" r="1.5" />
+            </svg></div>
+          <h3>Performance-Optimized Infrastructure</h3>
+          <p>Run client websites on powerful hardware tuned for speed, stability, and consistent performance.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+            </svg></div>
+          <h3>Free Website Migration</h3>
+          <p>Move existing client websites from your current provider with expert assistance and minimal disruption.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — BUSINESS TOOLS ════ -->
+  <section id="rh-tools" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">BUSINESS TOOLS</span>
+      <h2 class="title" data-animate="fade-up">ICSDC Reseller Hosting &mdash; Technical Capabilities &amp; Business
+        Tools</h2>
+      <p class="subtitle" data-animate="fade-up">Everything you need to run a professional hosting business from a
+        single, unified platform.</p>
+
+      <div class="cloud-power-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg></div>
+          <h3>Unified Business Management Panel</h3>
+          <p>Manage hosting products, client accounts, orders, and services from a single dashboard designed for
+            day-to-day operations.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="5" y="2" width="14" height="20" rx="2" />
+              <line x1="12" y1="18" x2="12.01" y2="18" />
+            </svg></div>
+          <h3>Anytime Access Across Devices</h3>
+          <p>Monitor accounts, track usage, and manage services from anywhere using mobile-friendly interfaces.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+            </svg></div>
+          <h3>Competitive Pricing &amp; Reseller Margins</h3>
+          <p>Cost-effective pricing models and regular offers that help you stay competitive and maximize profitability.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg></div>
+          <h3>Automated Billing &amp; Client Management</h3>
+          <p>Streamline invoicing, renewals, and account provisioning with automation-ready systems that reduce manual
+            work.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg></div>
+          <h3>Easy Setup &amp; API Integration</h3>
+          <p>Get started quickly with seamless integrations, API access, and ready-to-use storefront options for faster
+            business launch.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" />
+              <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
+            </svg></div>
+          <h3>Knowledge Resources &amp; Learning Support</h3>
+          <p>Access helpful guides, documentation, and expert insights to stay updated on hosting best practices.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band">
+    <div class="cloud-cta-inner">
+      <h2>Start Your Reseller Hosting Business Today</h2>
+      <p>Free reseller account setup, free migration, and 24/7 expert support included with every plan.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Get Free Reseller Setup &rarr;</button>
+        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="rh-testi-heading">
+    <div class="testi-container">
+      <h2 id="rh-testi-heading" class="testi-title">What Our Reseller Hosting Clients Say</h2>
+
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — FAQ ════ -->
+  <section class="faq-section" id="rh-faq" aria-labelledby="rh-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="rh-faq-heading" class="faq-title">FAQs About ICSDC Reseller Hosting</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our Reseller Experts</h3>
+        <p class="faq-contact-desc">Our dedicated reseller support team is available round the clock to guide you,
+          resolve issues, and help your hosting business grow smoothly at every stage.<br><br>&#128222; +91 98109
+          58857</p>
+        <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Launch Your Hosting Business With ICSDC Today</h2>
+      <p>White-label cPanel &amp; WHM, NVMe performance, and 24/7 reseller support from ₹799/month.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Start Reseller Hosting &rarr;</button>
+        <button class="cloud-cta-btn-outline">Talk to an Expert</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+              </svg>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                </path>
+              </svg>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram"
+              target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p id="footer-year-text">&#169; Copyright <span data-strapi-year id="footer-year"></span> <span
+          data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script>
+    STRAPI_URL = "http://13.126.9.248:1337";
+    TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+  </script>
+  <script src="assets/js/main.js" type="module"></script>
+  <script src="assets/js/reseller-hosting.js" type="module"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/polish.js" defer></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,363 @@
+/* ══════════════════════════════════════
+   VPS HOSTING TRIAL PAGE — SCOPED STYLES
+   All classes prefixed vht-* to prevent
+   any collision with style.css,
+   components.css, or other page styles.
+   Zero overrides.
+   Color theme: Amber/Orange — #d97706
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.vht-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fffbeb;
+    color: #d97706;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(217, 119, 6, 0.18);
+}
+
+/* ══════════════════════════════════════
+   HERO VISUAL — AMBER/ORANGE GRADIENT
+══════════════════════════════════════ */
+.vht-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 55%, #fffef7 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(217, 119, 6, 0.13), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.vht-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 65% 30%, rgba(217, 119, 6, 0.09) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(245, 158, 11, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.vht-hero-visual svg {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ══════════════════════════════════════
+   HERO BADGES
+══════════════════════════════════════ */
+.vht-top-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--white);
+    border: 1px solid rgba(217, 119, 6, 0.18);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #d97706;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 16px rgba(217, 119, 6, 0.12);
+    z-index: 2;
+    animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
+}
+
+.vht-status-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--white);
+    border: 1px solid rgba(217, 119, 6, 0.12);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(217, 119, 6, 0.12);
+    z-index: 2;
+    animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
+}
+
+.vht-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    flex-shrink: 0;
+}
+
+.vht-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+.vht-bs {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+/* ══════════════════════════════════════
+   PLANS GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.vht-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.vht-plan-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 24px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+}
+
+.vht-plan-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(217, 119, 6, 0.28);
+}
+
+.vht-plan-card.vht-plan-featured {
+    border-color: #d97706;
+    border-width: 2px;
+}
+
+/* Most Popular badge */
+.vht-plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #d97706;
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: var(--radius-xl);
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.32);
+}
+
+.vht-plan-name {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #d97706;
+    margin-bottom: 8px;
+}
+
+.vht-plan-price {
+    font-size: 32px;
+    font-weight: 800;
+    color: #d97706;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+
+.vht-plan-price span {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0;
+}
+
+.vht-plan-tagline {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Feature list — checkmark bullets */
+.vht-plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vht-plan-features li {
+    font-size: 13px;
+    color: var(--text-dark);
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.vht-plan-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #d97706;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* Plan CTA buttons */
+.vht-plan-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: transparent;
+    color: #d97706;
+    border: 2px solid #d97706;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    margin-top: auto;
+    transition: background var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 44px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.vht-plan-btn:hover {
+    background: #fffbeb;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.14);
+}
+
+.vht-plan-btn-featured {
+    width: 100%;
+    padding: 12px 20px;
+    background: #d97706;
+    color: var(--white);
+    border: 2px solid #d97706;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    margin-top: auto;
+    transition: background var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 44px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.vht-plan-btn-featured:hover {
+    background: #b45309;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.30);
+}
+
+/* ══════════════════════════════════════
+   WHY CHOOSE GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.vht-why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   WHEN / WHO GRID — 4 COLUMNS
+══════════════════════════════════════ */
+.vht-when-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+
+/* 1280px — 2 columns for plans */
+@media (max-width: 1280px) {
+    .vht-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 1024px — 2 columns for most grids */
+@media (max-width: 1024px) {
+    .vht-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .vht-why-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .vht-when-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 640px — single column */
+@media (max-width: 640px) {
+    .vht-plans-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vht-why-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vht-when-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vht-hero-visual {
+        max-width: 100%;
+    }
+
+    .vht-top-badge {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+}

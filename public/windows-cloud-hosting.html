@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows Cloud Hosting by ICSDC | High-Performance Windows Servers</title>
+  <meta name="description"
+    content="Get fast, secure, and scalable Windows Cloud Hosting with ICSDC. Run Windows apps smoothly with dedicated resources, full RDP access, and expert 24/7 support.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/windows-cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">✕</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="wincloud-eyebrow">&#9729; Windows Cloud Hosting</div>
+        <h1 class="hero-title">Power Your Applications with Next-Gen Windows Cloud Hosting</h1>
+        <p class="hero-sub">A Future-Ready Windows Cloud Platform for Teams That Never Slow Down</p>
+        <p class="hero-desc">Run your Windows applications with unmatched speed, uptime, and security on ICSDC's
+          next-gen cloud platform — built for businesses that demand performance without compromise.</p>
+        <div class="hero-btns">
+          <button class="btn-primary">Get Started with Windows Cloud &rarr;</button>
+          <button class="btn-outline">View Plans</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="wincloud-hero-visual">
+          <div class="wincloud-top-badge">&#129695; Next-Gen Windows Cloud</div>
+          <svg viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="40" y="30" width="240" height="160" rx="14" fill="#fff" stroke="rgba(0,120,212,0.12)"
+              stroke-width="1" />
+            <rect x="40" y="30" width="240" height="40" rx="14" fill="#0078d4" />
+            <circle cx="62" cy="50" r="7" fill="rgba(255,255,255,0.35)" />
+            <circle cx="82" cy="50" r="7" fill="rgba(255,255,255,0.35)" />
+            <circle cx="102" cy="50" r="7" fill="rgba(255,255,255,0.35)" />
+            <rect x="56" y="84" width="200" height="10" rx="5" fill="#e3f2fd" />
+            <rect x="56" y="102" width="130" height="8" rx="4" fill="#f1f5f9" />
+            <rect x="56" y="118" width="150" height="8" rx="4" fill="#f1f5f9" />
+            <rect x="56" y="134" width="110" height="8" rx="4" fill="#f1f5f9" />
+            <rect x="56" y="152" width="170" height="8" rx="4" fill="#f1f5f9" />
+            <rect x="200" y="84" width="68" height="68" rx="10" fill="#f8fafc" stroke="rgba(0,120,212,0.1)" />
+            <text x="220" y="120" text-anchor="middle" font-size="28" fill="#0078d4">&#129695;</text>
+            <line x1="40" y1="170" x2="280" y2="170" stroke="rgba(0,0,0,0.05)" stroke-width="1" />
+            <text x="56" y="188" font-size="11" fill="#94a3b8">CPU: 8 vCore &bull; RAM: 16 GB &bull; NVMe: 320 GB</text>
+          </svg>
+          <div class="wincloud-status-badge">
+            <div class="wincloud-dot"></div>
+            <div>
+              <div class="wincloud-bt">Server Active</div>
+              <div class="wincloud-bs">99.9% Uptime SLA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ 4 PILLARS ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Optimized Windows Performance</h3>
+          <p>Finely tuned Windows environment for smooth RDP sessions, low latency, and stable workload execution for
+            demanding apps.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+              <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+            </svg></div>
+          <h3>Dedicated Cloud Resources</h3>
+          <p>Guaranteed CPU, RAM, and NVMe storage ensure consistent performance — your resources are never shared with
+            other users.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg></div>
+          <h3>Scalable &amp; Cost-Efficient</h3>
+          <p>Grow your Windows setup anytime with flexible resource upgrades — without downtime or unnecessary
+            infrastructure costs.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg></div>
+          <h3>Built for Business Reliability</h3>
+          <p>Enterprise datacenter uptime, secure access controls, and fast recovery options keep your operations
+            running 24/7.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FEATURES (12-grid) ════ -->
+  <section id="features" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Capabilities</span>
+      <h2 class="title" data-animate="fade-up">Complete Suite of Offerings for High-Performance Windows Cloud Hosting
+      </h2>
+      <p class="subtitle" data-animate="fade-up">Every feature engineered for Windows workloads — from legacy apps to
+        cutting-edge .NET deployments.</p>
+      <div class="cloud-power-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <path d="M8 21h8M12 17v4" />
+            </svg></div>
+          <h3>High-Performance Windows Virtual Machines</h3>
+          <p>Each VM is finely optimized for smoother application execution, faster loading times, and a stable
+            environment for production workloads.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+            </svg></div>
+          <h3>Dedicated Cloud Resources (CPU, RAM, NVMe)</h3>
+          <p>Your resources are never shared with other users, ensuring consistent speed, predictable performance, and
+            reliability during peak usage.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Instant Windows Server Deployment</h3>
+          <p>Spin up a fully configured Windows cloud instance within minutes — immediate use for hosting, development,
+            testing, or remote work.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>Full Administrator &amp; RDP Access</h3>
+          <p>Complete control with unrestricted administrative privileges — software installation, configuration, and
+            environment management.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg></div>
+          <h3>Scalable Cloud Infrastructure</h3>
+          <p>Increase CPU, RAM, or storage instantly as your applications grow — without any downtime, data loss, or
+            complex reconfiguration.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+            </svg></div>
+          <h3>Enterprise Datacenter Reliability</h3>
+          <p>Runs within Tier III+ datacenters with redundant power, HVAC, advanced fire suppression, and 24/7 physical
+            security monitoring.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 010 20" />
+            </svg></div>
+          <h3>Advanced Network Performance</h3>
+          <p>Low-latency connectivity, optimized routing, and stable bandwidth that enhance RDP sessions, data
+            transfers, and remote access.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Built-In Security Layers</h3>
+          <p>Custom firewall controls, OS hardening, DDoS mitigation, encrypted access, and continuous monitoring from
+            the ground up.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg></div>
+          <h3>Support for .NET, IIS, SQL &amp; Windows Apps</h3>
+          <p>Deploy modern and legacy Windows workloads — ERP, CRM, MS SQL, IIS-based apps, and .NET frameworks —
+            without compatibility headaches.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+              <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+            </svg></div>
+          <h3>Flexible Storage &amp; Database Options</h3>
+          <p>NVMe-backed storage with built-in support for MSSQL, MySQL, MariaDB, and other database systems to meet any
+            application demand.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg></div>
+          <h3>Backup, Snapshots &amp; Quick Restore</h3>
+          <p>Scheduled backups, instant snapshots, and rapid recovery features designed to safeguard against every
+            failure scenario.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+            </svg></div>
+          <h3>24/7 Expert Windows Cloud Support</h3>
+          <p>Round-the-clock access to specialists who deeply understand Windows workloads, performance tuning, and
+            real-world business applications.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ WHY CHOOSE ════ -->
+  <section id="why-us" class="cloud-why-section">
+    <div class="cloud-why-inner">
+      <span class="cloud-section-label" data-animate="fade-up">Why ICSDC</span>
+      <h2 class="title" data-animate="fade-up">Why Choose ICSDC Windows Cloud Hosting?</h2>
+      <p class="subtitle" data-animate="fade-up">Performance-driven cloud infrastructure, deep Windows expertise, and a
+        service approach that genuinely puts your business first.</p>
+      <div class="cloud-why-grid" data-stagger>
+        <div class="cloud-why-item">
+          <div class="cloud-why-num">01</div>
+          <h3>Purpose-Built for Windows Workloads</h3>
+        </div>
+        <div class="cloud-why-item">
+          <div class="cloud-why-num">02</div>
+          <h3>Seamless Scaling Without Downtime</h3>
+        </div>
+        <div class="cloud-why-item">
+          <div class="cloud-why-num">03</div>
+          <h3>Optimized Network for Faster Access</h3>
+        </div>
+        <div class="cloud-why-item">
+          <div class="cloud-why-num">04</div>
+          <h3>Security Built Into Every Layer</h3>
+        </div>
+        <div class="cloud-why-item">
+          <div class="cloud-why-num">05</div>
+          <h3>Predictable &amp; Fair Pricing</h3>
+        </div>
+        <div class="cloud-why-item">
+          <div class="cloud-why-num">06</div>
+          <h3>Instant Deployment &amp; Easy Management</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ WHEN TO CHOOSE + USE CASES 2-col ════ -->
+  <section id="use-cases" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Use Cases</span>
+      <h2 class="title" data-animate="fade-up">When Should You Choose Windows Cloud Hosting?</h2>
+      <p class="subtitle" data-animate="fade-up">If your workflows depend on Windows ecosystems or you need a stable
+        remote-access setup, this is your platform.</p>
+      <div class="wincloud-split" data-stagger>
+        <div>
+          <h3 style="font-size:18px; font-weight:700; color:var(--text-dark); margin-bottom:4px;">Ideal Scenarios</h3>
+          <ul class="wincloud-feature-list">
+            <li>Applications built on .NET, IIS, MS SQL, and other Windows frameworks</li>
+            <li>Teams that rely on smooth, native Remote Desktop access</li>
+            <li>Businesses operating within the Microsoft ecosystem</li>
+            <li>Users who need full admin control and customization options</li>
+            <li>Workloads that require easy resource scaling and flexibility</li>
+            <li>Legacy Windows-based software and older systems</li>
+            <li>High-performance tasks demanding consistent speed</li>
+            <li>Environments requiring strong security and encrypted access</li>
+          </ul>
+        </div>
+        <div class="wincloud-stats" data-animate="scale-up">
+          <div class="wincloud-stat"><strong>99.9%</strong><span>Uptime SLA Guaranteed</span></div>
+          <div class="wincloud-stat"><strong>&lt;5 min</strong><span>Average Deployment Time</span></div>
+          <div class="wincloud-stat"><strong>24/7</strong><span>Expert Windows Support</span></div>
+          <div class="wincloud-stat"><strong>Instant</strong><span>Resource Scaling — No Downtime</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ REAL-TIME APPLICATIONS ════ -->
+  <section class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Applications</span>
+      <h2 class="title" data-animate="fade-up">Real-Time Applications of Windows Cloud Hosting</h2>
+      <p class="subtitle" data-animate="fade-up">From ERP to remote desktops — see what businesses run on ICSDC Windows
+        Cloud.</p>
+      <div class="wincloud-apps-grid" data-stagger>
+        <div class="wincloud-app-badge">ERP and accounting applications</div>
+        <div class="wincloud-app-badge">CRM and customer management tools</div>
+        <div class="wincloud-app-badge">Remote desktop workspaces</div>
+        <div class="wincloud-app-badge">Software development &amp; testing</div>
+        <div class="wincloud-app-badge">Database-driven applications</div>
+        <div class="wincloud-app-badge">Reporting and analytics tools</div>
+        <div class="wincloud-app-badge">HR and employee management systems</div>
+        <div class="wincloud-app-badge">Inventory and POS applications</div>
+        <div class="wincloud-app-badge">Email and file-sharing platforms</div>
+        <div class="wincloud-app-badge">Project management tools</div>
+        <div class="wincloud-app-badge">Cloud-based desktops for teams</div>
+        <div class="wincloud-app-badge">Legacy Windows applications</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND ════ -->
+  <section class="cloud-cta-band">
+    <div class="cloud-cta-inner">
+      <h2>Ready to Power Your Workloads with ICSDC Windows Cloud Hosting?</h2>
+      <p>High-availability infrastructure. Full Windows control. Zero downtime scaling. Get started today.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Get Started Today &rarr;</button>
+        <button class="cloud-cta-btn-outline">Talk to an Expert</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+     SECTION 8 — TESTIMONIALS
+════════════════════════════════════ -->
+  <section class="testi-section" aria-labelledby="testi-heading">
+    <div class="testi-container">
+      <h2 id="testi-heading" class="testi-title">See our Clients Stories</h2>
+
+      <!-- Cards rendered by components.js -->
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+
+      <!-- Pagination dots rendered by components.js -->
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ FAQ ════════ -->
+  <section class="faq-section" id="acr-faq" aria-labelledby="acr-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="acr-faq-heading" class="faq-title">FAQs About ICSDC Acronis Backup</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our Backup Experts</h3>
+        <p class="faq-contact-desc">Our certified engineers are available 24/7 to help you design the right
+          backup and
+          disaster recovery strategy for your workloads.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA ════ -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Get Started with ICSDC Windows Cloud Hosting</h2>
+      <p>Fast. Secure. Scalable. Purpose-built for Windows — deploy your cloud server in minutes.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Start My Windows Cloud &rarr;</button>
+        <button class="cloud-cta-btn-outline">View All Plans</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+
+        <!-- Brand column -->
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+              </svg>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                </path>
+              </svg>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p id="footer-year-text">© Copyright <span data-strapi-year id="footer-year"></span> <span
+          data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script>
+    STRAPI_URL = "http://13.126.9.248:1337";
+    TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+  </script>
+  <script src="assets/js/main.js" type="module"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/polish.js" defer></script>
+  <script type="module" src="assets/js/windows-cloud-hosting.js"></script>
+
+
+</body>
+
+</html>

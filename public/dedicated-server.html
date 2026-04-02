@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dedicated Server Hosting | Smooth Migration | ICSDC</title>
+    <meta name="description"
+        content="Get 100% dedicated power, guaranteed 99.95% uptime, and 24/7 support. ICSDC offers instant deployment and seamless migration.">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/dedicated-server.css">
+</head>
+
+<body>
+
+    <!-- PAGE LOADER -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Loading...</p>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- DROPDOWN (populated by main.js) -->
+    <div id="dropdown-wrap">
+        <div id="dropdown">
+            <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+            <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+                <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+                <div>
+                    <h3 data-strapi-dd="flatTitle"></h3>
+                    <p data-strapi-dd="flatDesc"></p>
+                </div>
+            </div>
+            <div id="dd-content">
+                <div id="dd-top-bar">
+                    <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+                    <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+                </div>
+                <div data-strapi-dd="grid" id="dd-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR (identical to homepage — populated by main.js) -->
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+            </a>
+            <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+            <button class="btn-login desktop-login-btn">Login</button>
+            <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+            <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+            <button class="btn-login mobile-login-btn">Login</button>
+        </div>
+    </nav>
+
+    <!-- ════════════════════════════════════
+         SECTION 1 — HERO
+         Content populated by CMS via dedicated-server.js
+    ════════════════════════════════════ -->
+    <section class="hero-section">
+        <div class="hero">
+            <div class="hero-content">
+                <span class="ds-eyebrow">
+                    <span class="ds-eyebrow-dot"></span>
+                    Enterprise Dedicated Hosting
+                </span>
+                <h1 class="hero-title">Best Dedicated Server: Seamless Migration, Maximum Power</h1>
+                <p class="hero-sub">Your Server, Your Rules, Our Service</p>
+                <p class="hero-desc">Get exclusive dedicated server performance &amp; complete support built for your
+                    business without risking downtime.</p>
+                <div class="hero-price-container">
+                    <div class="hero-price-block">
+                        <div class="hero-price">
+                            <span>&#8377;4,999</span><span class="price-unit">/mo</span>
+                        </div>
+                        <p class="price-note">Starting price &mdash; No hidden fees, transparent billing.</p>
+                    </div>
+                    <div class="hero-btns">
+                        <button class="btn-outline">Start Free Trial</button>
+                        <button class="btn-primary">View Plans &rarr;</button>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-right">
+                <!-- Server rack visual (decorative — not CMS-driven) -->
+                <div class="ds-server-visual">
+                    <div class="ds-server-rack">
+                        <div class="ds-rack-unit">
+                            <div class="ds-rack-led"></div>
+                            <div class="ds-rack-bars">
+                                <div class="ds-rack-bar" style="flex:3"></div>
+                                <div class="ds-rack-bar" style="flex:2"></div>
+                                <div class="ds-rack-bar" style="flex:4"></div>
+                            </div>
+                            <span class="ds-rack-label">CPU</span>
+                            <span class="ds-rack-stat">98%</span>
+                        </div>
+                        <div class="ds-rack-unit">
+                            <div class="ds-rack-led"></div>
+                            <div class="ds-rack-bars">
+                                <div class="ds-rack-bar" style="flex:5"></div>
+                                <div class="ds-rack-bar" style="flex:1"></div>
+                                <div class="ds-rack-bar" style="flex:3"></div>
+                            </div>
+                            <span class="ds-rack-label">RAM</span>
+                            <span class="ds-rack-stat">64 GB</span>
+                        </div>
+                        <div class="ds-rack-unit">
+                            <div class="ds-rack-led"></div>
+                            <div class="ds-rack-bars">
+                                <div class="ds-rack-bar" style="flex:2"></div>
+                                <div class="ds-rack-bar" style="flex:6"></div>
+                                <div class="ds-rack-bar" style="flex:1"></div>
+                            </div>
+                            <span class="ds-rack-label">NVMe</span>
+                            <span class="ds-rack-stat">2 TB</span>
+                        </div>
+                        <div class="ds-rack-unit">
+                            <div class="ds-rack-led"></div>
+                            <div class="ds-rack-bars">
+                                <div class="ds-rack-bar" style="flex:4"></div>
+                                <div class="ds-rack-bar" style="flex:3"></div>
+                                <div class="ds-rack-bar" style="flex:2"></div>
+                            </div>
+                            <span class="ds-rack-label">NET</span>
+                            <span class="ds-rack-stat">1 Gbps</span>
+                        </div>
+                    </div>
+                    <!-- Floating uptime badge -->
+                    <div class="ds-hero-badge">
+                        <div class="ds-hero-badge-dot"></div>
+                        <div>
+                            <div class="ds-hero-badge-text">All systems operational</div>
+                            <div class="ds-hero-badge-sub">99.95% Uptime SLA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 2 — FOUR FEATURE HIGHLIGHTS
+         Cards populated by CMS
+    ════════════════════════════════════ -->
+    <section id="ds-features" class="why-us section">
+        <div class="container">
+            <div class="why-grid" data-stagger>
+                <!-- Populated by dedicated-server.js from CMS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 3 — PRICING PLANS
+         Header + cards populated by CMS
+    ════════════════════════════════════ -->
+    <section id="ds-pricing" class="section ds-pricing">
+        <div class="container">
+            <span class="ds-section-label" data-animate="fade-up">Pricing</span>
+            <h2 class="title" data-animate="fade-up">Our Dedicated Server Plans that Suit You</h2>
+            <p class="subtitle" data-animate="fade-up">Access exclusive hardware, consistent performance and reliable
+                infrastructure with pricing designed for every workload.</p>
+
+            <div class="ds-pricing-grid" data-stagger>
+                <!-- Populated by dedicated-server.js from CMS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 4 — 12 PILLARS
+         Cards populated by CMS
+    ════════════════════════════════════ -->
+    <section id="ds-pillars" class="section" style="background: var(--bg-light);">
+        <div class="container">
+            <span class="ds-section-label" data-animate="fade-up">Core Offerings</span>
+            <h2 class="title" data-animate="fade-up">ICSDC Pillars of Powerful Dedicated Servers</h2>
+            <p class="subtitle" data-animate="fade-up">At ICSDC, we believe in not settling for less. Our dedicated
+                server specifications match your exact business needs.</p>
+
+            <div class="ds-pillar-grid" data-stagger>
+                <!-- Populated by dedicated-server.js from CMS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 5 — CTA BAND #1
+    ════════════════════════════════════ -->
+    <section class="ds-cta-band" aria-label="Call to action">
+        <div class="ds-cta-inner">
+            <h2>Ready to Boost Your Business Presence with ICSDC Dedicated Server Power?</h2>
+            <p>Give us a call and get started today with zero-downtime migration and instant deployment.</p>
+            <div class="ds-cta-btns">
+                <button class="ds-cta-btn-primary">Get Started Now &rarr;</button>
+                <button class="ds-cta-btn-outline">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 6 — SECURITY SUITE
+         Cards populated by CMS
+    ════════════════════════════════════ -->
+    <section id="ds-security" class="ds-security-section">
+        <div class="ds-security-inner">
+
+            <!-- Left: security shield visual (decorative — not CMS-driven) -->
+            <div class="ds-security-visual" data-animate="fade-right">
+                <div class="ds-security-shield">
+                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M40 6L10 18V38C10 54.57 23.36 70.08 40 74C56.64 70.08 70 54.57 70 38V18L40 6Z"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M28 40L36 48L54 30" stroke-width="2.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    <div class="ds-security-shield-stat">
+                        <strong>Multi-Layer</strong>
+                        <span>Security Architecture</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: text + 4 security cards -->
+            <div class="ds-security-text" data-animate="fade-left">
+                <span class="ds-section-label">Security</span>
+                <h2 class="title" style="text-align:left; margin-top:8px;">Your Digital Servers: Secured by ICSDC</h2>
+                <p class="who-we-are-paragraph" style="margin:16px 0 0;">Your dedicated server requires protection at
+                    every layer. We don&rsquo;t just provide tools; we deliver managed security services built and
+                    monitored by our experts to keep your data safe 24/7.</p>
+
+                <div class="ds-security-grid" data-stagger>
+                    <!-- Populated by dedicated-server.js from CMS -->
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 7 — MORE SERVICES
+    ════════════════════════════════════ -->
+    <section id="ds-services" class="who-we-are section">
+        <div class="who-we-are-inner">
+            <div class="who-we-are-image" data-animate="fade-right">
+                <img src="assets/images/best-cloud-service-provider 1.png" alt="ICSDC dedicated server services">
+            </div>
+            <div class="blue-container" data-animate="fade-left">
+                <span class="ds-section-label">Server Types</span>
+                <h2 class="title" style="text-align:left; margin-top:8px;">More Services You Can Build On</h2>
+                <p class="who-we-are-paragraph">At ICSDC, we understand that no two businesses run the same way &mdash;
+                    and neither should their servers. Whether it&rsquo;s Windows or Linux, Managed or Unmanaged, ICSDC
+                    puts the power of choice &mdash; and performance &mdash; directly in your hands.</p>
+                <div class="who-we-are-btns" data-stagger>
+                    <!-- Populated by dedicated-server.js from CMS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 8 — ICSDC VS OTHERS
+         Table rows populated by CMS
+    ════════════════════════════════════ -->
+    <section id="ds-comparison" class="section ds-comparison-section">
+        <div class="container">
+            <span class="ds-section-label" data-animate="fade-up">Why ICSDC</span>
+            <h2 class="title" data-animate="fade-up">What ICSDC Gives You Different from Others</h2>
+            <p class="subtitle" data-animate="fade-up">We don&rsquo;t just compare features; we offer a superior
+                architectural standard compared to the general dedicated server market in India.</p>
+
+            <div class="ds-comparison-wrap" data-animate="fade-up">
+                <table class="ds-comparison-table" aria-label="ICSDC vs competitors comparison">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width:48%">Feature</th>
+                            <th scope="col" style="width:26%; text-align:center;">ICSDC</th>
+                            <th scope="col" style="width:26%; text-align:center;">Others</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Populated by dedicated-server.js from CMS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 9 — BID ADIEU TO SHARING
+    ════════════════════════════════════ -->
+    <section id="ds-performance" class="less-cloud-complex section">
+        <div class="less-cloud-inner">
+            <div class="blue-container-left" data-animate="fade-right">
+                <span class="ds-section-label">Performance</span>
+                <h2 class="title" style="text-align:left; margin-top:8px;">Bid Adieu to Sharing Resources, Start
+                    Dominating with Unmatched Performance</h2>
+                <p class="who-we-are-paragraph">Step up to a server platform built exclusively for your success,
+                    featuring superior performance, control, and reliability.</p>
+
+                <ul class="ds-checklist" data-stagger>
+                    <!-- Populated by dedicated-server.js from CMS -->
+                </ul>
+
+                <div class="hero-btns" style="margin-top: 32px;">
+                    <button class="btn-primary">Get Started &rarr;</button>
+                    <button class="btn-outline">Talk to an Expert</button>
+                </div>
+            </div>
+
+            <div class="less-cloud-complex-image" data-animate="scale-up">
+                <div class="ds-perf-visual" style="width:100%;">
+                    <div class="ds-perf-stats">
+                        <!-- Populated by dedicated-server.js from CMS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 10 — GLOBAL LOCATIONS
+    ════════════════════════════════════ -->
+    <section id="ds-locations" class="less-cloud-complex section industry-validated">
+        <div class="less-cloud-inner">
+            <div class="blue-container-left" style="background: transparent;" data-animate="fade-right">
+                <span class="ds-section-label">Infrastructure</span>
+                <h2 class="title" style="text-align:left; margin-top:8px; margin-bottom:0;">Global Locations. Local
+                    Speed.</h2>
+                <p class="who-we-are-paragraph">Deploy your server across our worldwide data centers, including India
+                    (Noida &amp; Mumbai), for the best performance closer to your audience.</p>
+                <div class="ds-location-tags" data-stagger>
+                    <!-- Populated by dedicated-server.js from CMS -->
+                </div>
+            </div>
+
+            <div class="less-cloud-complex-image" data-animate="scale-up">
+                <div class="ds-map-visual">
+                    <!-- Map pins populated by dedicated-server.js from CMS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 11 — WHEN DO YOU NEED
+    ════════════════════════════════════ -->
+    <section id="ds-when" class="section" style="background: var(--bg-light);">
+        <div class="container">
+            <span class="ds-section-label" data-animate="fade-up">Upgrade Checklist</span>
+            <h2 class="title" data-animate="fade-up">When Do You Need an ICSDC Dedicated Server?</h2>
+            <p class="subtitle" data-animate="fade-up">It&rsquo;s time to upgrade when your business hits critical mass
+                and needs guaranteed performance, security, and control.</p>
+
+            <div class="ds-when-grid" data-stagger>
+                <!-- Populated by dedicated-server.js from CMS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 12 — WHO CAN USE
+    ════════════════════════════════════ -->
+    <section id="ds-who" class="section ds-use-section">
+        <div class="container">
+            <span class="ds-section-label" data-animate="fade-up">Use Cases</span>
+            <h2 class="title" data-animate="fade-up">Who Can Use ICSDC Dedicated Servers?</h2>
+            <p class="subtitle" data-animate="fade-up">From e-commerce to AI model training, our dedicated servers are
+                built to power every kind of mission-critical workload.</p>
+
+            <div class="ds-use-grid" data-stagger>
+                <!-- Populated by dedicated-server.js from CMS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 13 — TESTIMONIALS
+    ════════════════════════════════════ -->
+    <section class="ds-testi-section testi-section" id="ds-testimonials">
+        <div class="ds-testi-container testi-container">
+            <h2 class="testi-title" data-animate="fade-up">Client Stories</h2>
+
+            <div class="testi-scroll-viewport">
+                <div class="testi-grid" id="ds-testi-grid" role="list" aria-label="Client testimonials">
+                    <!-- Populated by dedicated-server.js from CMS -->
+                </div>
+            </div>
+
+            <div class="testi-pagination" id="ds-testi-dots" role="tablist" aria-label="Testimonial navigation"></div>
+
+            <div class="testi-nav">
+                <button class="testi-nav-btn" id="ds-testi-prev" aria-label="Previous testimonial">&#8249;</button>
+                <button class="testi-nav-btn" id="ds-testi-next" aria-label="Next testimonial">&#8250;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 13 — FAQ
+    ════════════════════════════════════ -->
+    <section class="azure-faq-section faq-section section" id="azure-faq">
+        <div class="faq-container">
+
+            <div class="faq-col">
+                <h2 class="faq-title" data-animate="fade-up">FAQs about ICSDC Azure Cloud</h2>
+                <dl class="faq-accordions" id="faq-accordions">
+                    <!-- Populated by azure-cloud-hosting.js -->
+                </dl>
+            </div>
+
+            <div class="faq-contact-card" data-animate="fade-left">
+                <h3 class="faq-contact-title">Still have questions?</h3>
+                <p class="faq-contact-desc">Our certified Azure architects are available 24&times;7 to discuss your
+                    cloud requirements and help you make the right decision.</p>
+                <a href="/contact" class="faq-contact-btn">
+                    Talk to an Azure Expert
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+    </section>
+    <!-- ════════════════════════════════════
+         SECTION 13 — FAQ
+    ════════════════════════════════════ -->
+
+    <!-- ════════════════════════════════════
+         SECTION 15 — FINAL CTA BAND
+    ════════════════════════════════════ -->
+    <section class="ds-cta-band ds-cta-dark" aria-label="Final call to action">
+        <div class="ds-cta-inner">
+            <h2>ICSDC is the Secure, Powerful Engine Your Growing Digital Enterprise Deserves</h2>
+            <p>Step up to a server platform built exclusively for your success — featuring superior performance,
+                control, and 24/7 reliability.</p>
+            <div class="ds-cta-btns">
+                <button class="ds-cta-btn-primary">Get Started Today &rarr;</button>
+                <button class="ds-cta-btn-outline">View All Plans</button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+         FOOTER
+    ════════════════════════════════════ -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-main">
+            <div data-strapi-link-groups class="footer-container">
+
+                <!-- Brand column -->
+                <div class="footer-brand">
+                    <a href="/" aria-label="ICSDC Home">
+                        <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+                    </a>
+                    <address class="footer-address">
+                        <span data-strapi-footer-address></span>
+                        <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+                        <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                                class="footer-email-link">info@icsdc.com</a></span>
+                    </address>
+
+                    <div class="footer-social" aria-label="Social media links">
+                        <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook"
+                            target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter"
+                            target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                <path
+                                    d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                                </path>
+                            </svg>
+                        </a>
+                        <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram"
+                            target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p id="footer-year-text">© Copyright <span data-strapi-year id="footer-year"></span> <span
+                    data-strapi-company-name></span>. All Rights Reserved</p>
+        </div>
+    </footer>
+
+
+    <!-- ════════════════════════════════════
+         SCROLL ANIMATION ENGINE
+    ════════════════════════════════════ -->
+    <script>
+        (function () {
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+                observer.observe(el);
+            });
+        })();
+    </script>
+
+    <!-- Strapi config (enables nav population via main.js) -->
+    <script>
+        STRAPI_URL = "http://13.126.9.248:1337";
+        TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+    </script>
+    <script src="assets/js/main.js" type="module"></script>
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/polish.js" defer></script>
+    <script src="assets/js/dedicated-server.js" type="module"></script>
+
+    <script>
+        // Footer year
+        (function () {
+            var el = document.getElementById('footer-year');
+            if (el) el.textContent = new Date().getFullYear();
+        })();
+    </script>
+
+</body>
+
+</html>

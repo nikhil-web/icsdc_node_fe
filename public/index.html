@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICSDC - Scalable Fortified Cloud</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+</head>
+
+<body>
+
+    <!-- PAGE LOADER -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Loading...</p>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- DROPDOWN -->
+    <div id="dropdown-wrap">
+        <div id="dropdown">
+            <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+            <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+                <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+                <div>
+                    <h3 data-strapi-dd="flatTitle"></h3>
+                    <p data-strapi-dd="flatDesc"></p>
+                </div>
+            </div>
+            <div id="dd-content">
+                <div id="dd-top-bar">
+                    <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+                    <button class="dd-close" onclick="closeDropdown()">✕</button>
+                </div>
+                <div data-strapi-dd="grid" id="dd-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+            </a>
+            <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+            <button class="btn-login desktop-login-btn">NO STRAPI DATA</button>
+            <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+            <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+            <button class="btn-login mobile-login-btn">Login</button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero-section">
+        <div class="hero">
+            <div class="hero-content">
+                <h1 data-strapi="mainHeading" class="hero-title"></h1>
+                <p data-strapi="subHeading" class="hero-sub"></p>
+                <p data-strapi="description" class="hero-desc"></p>
+                <div class="hero-price-container">
+                    <div class="hero-price-block">
+                        <div class="hero-price">
+                            <span data-strapi="price"></span><span class="price-unit">/mo</span>
+                        </div>
+                        <p data-strapi="priceNote" class="price-note"></p>
+                    </div>
+                    <div class="hero-btns">
+                        <button class="btn-outline">Sign up</button>
+                        <button class="btn-primary">View Plans &rarr;</button>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-right">
+                <img src="assets/images/hero_right.png" alt="Cloud service illustration" class="hero-right-image">
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section id="why-us" class="why-us section">
+        <div class="container">
+            <h2 class="title" data-animate="fade-up">Why Choose Us</h2>
+            <h2 class="subtitle" data-animate="fade-up">Built for Enterprise Cloud Excellence</h2>
+            <div data-strapi-grid="whyUs" class="why-grid" data-stagger></div>
+        </div>
+    </section>
+
+    <!-- WHO WE ARE -->
+    <section id="who-we-are" class="who-we-are section">
+        <div class="who-we-are-inner">
+            <div class="who-we-are-image" data-animate="fade-right">
+                <img src="assets/images/best-cloud-service-provider 1.png" alt="Best cloud service provider">
+            </div>
+            <div class="blue-container" data-animate="fade-left">
+                <h2 class="title" data-strapi="whoWeAreHeading">Who We Are?</h2>
+                <p class="who-we-are-paragraph" data-strapi="whoWeAreParagraph">At ICSDC, we don't just host your data -
+                    we power your digital infrastructure. As a next-generation cloud service provider and data center,
+                    we adjoin advanced technology, intelligent infrastructure, and expert support to deliver unmatched
+                    reliability and speed. For over 15 years, businesses have trusted us to keep their operations
+                    seamless, secure, and always connected.</p>
+                <div class="who-we-are-btns" data-strapi-grid="whoWeAreCards" data-stagger>
+                    <button class="btn-outline feature-cards">Ultra-fast and scalable cloud solutions built for
+                        growth</button>
+                    <button class="btn-outline feature-cards">Enterprise-grade security with Least downtime</button>
+                    <button class="btn-outline feature-cards">Real people, real support - available 24/7</button>
+                    <button class="btn-primary feature-cards">Connect with a Cloud Architect Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LESS CLOUD COMPLEX -->
+    <section id="less-cloud-complex" class="less-cloud-complex section">
+        <div class="less-cloud-inner">
+            <div class="blue-container-left" data-animate="fade-right">
+                <h2 class="title" data-strapi="lessComplexityHeading">Less Cloud Complexity, More Expert Support with
+                    ICSDC Cloud Services</h2>
+                <p class="who-we-are-paragraph" data-strapi="lessComplexityParagraph">ICSDC servers operate across
+                    multiple global regions with dedicated deployment points in India (Noida &amp; Mumbai) for unmatched
+                    speed and reliability.</p>
+            </div>
+            <div class="less-cloud-complex-image" data-animate="scale-up">
+                <div class="gradient"></div>
+                <img src="assets/images/image 1.png" alt="ICSDC global infrastructure map">
+            </div>
+        </div>
+    </section>
+
+    <!-- CLOUD SOLUTIONS + PHONE MOCKUP -->
+    <section id="cloud-solutions" class="why-us section">
+        <div class="container">
+            <h2 class="title" data-animate="fade-up">Cloud Solutions Engineered for Your Success,<br>Find what suits
+                you!</h2>
+
+            <!-- Ripple controls -->
+            <div class="ripple-controls" data-animate="fade-up">
+                <div class="ripple-ctrl-group">
+                    <label>Rings</label>
+                    <button class="ctrl-btn" id="rings-dec">−</button>
+                    <span class="ctrl-val" id="rings-val">10</span>
+                    <button class="ctrl-btn" id="rings-inc">+</button>
+                </div>
+                <div class="ripple-ctrl-group">
+                    <label>Speed</label>
+                    <button class="ctrl-btn" id="speed-dec">−</button>
+                    <span class="ctrl-val" id="speed-val">8s</span>
+                    <button class="ctrl-btn" id="speed-inc">+</button>
+                </div>
+                <div class="ripple-ctrl-group">
+                    <label>Radius</label>
+                    <button class="ctrl-btn" id="radius-dec">−</button>
+                    <span class="ctrl-val" id="radius-val">260</span>
+                    <button class="ctrl-btn" id="radius-inc">+</button>
+                </div>
+            </div>
+
+            <!-- Mockup: ripple behind phone + floating cards -->
+            <div class="phone-mockup-wrapper" data-animate="scale-up">
+
+                <!-- LEFT COLUMN CARDS -->
+                <div class="floating-card fc-left fc-top" style="--fc-delay:0s">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2" />
+                            <path d="M8 21h8M12 17v4" />
+                        </svg></div>
+                    <h4>Dedicated Server</h4>
+                    <p>Get the exclusive power and control only dedicated hardware can offer — from Windows, Linux, NVMe
+                        to Managed GPU and Bare Metal.</p>
+                </div>
+
+                <div class="floating-card fc-left fc-mid" style="--fc-delay:0.8s">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <ellipse cx="12" cy="5" rx="9" ry="3" />
+                            <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+                            <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+                        </svg></div>
+                    <h4>NVMe Storage</h4>
+                    <p>Blazing-fast NVMe SSD arrays with enterprise-grade redundancy, ensuring ultra-low latency for
+                        your most critical workloads.</p>
+                </div>
+
+                <div class="floating-card fc-left fc-bot" style="--fc-delay:1.6s">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="4" y="4" width="16" height="16" rx="2" />
+                            <path d="M9 9h6M9 12h6M9 15h4" />
+                        </svg></div>
+                    <h4>Bare Metal</h4>
+                    <p>Single-tenant physical servers with no hypervisor overhead — full hardware access for maximum
+                        performance and compliance.</p>
+                </div>
+
+                <!-- RIPPLE + PHONE (centre) -->
+
+
+                <div class="ripple-wrap" id="ripple">
+                    <svg viewBox="0 0 600 600">
+                        <circle class="ripple-center" cx="300" cy="300" r="5" />
+                    </svg>
+                </div>
+                <div class="image-wrapper">
+                    <img src="assets/images/iPhone 16.png" alt="iPhone mockup">
+                </div>
+
+                <!-- RIGHT COLUMN CARDS -->
+                <div class="floating-card fc-right fc-top" style="--fc-delay:0.4s">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg></div>
+                    <h4>Managed Cloud</h4>
+                    <p>Fully managed cloud infrastructure with 24×7 expert support — we handle operations so your team
+                        can focus on innovation.</p>
+                </div>
+
+                <div class="floating-card fc-right fc-mid" style="--fc-delay:1.2s">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                        </svg></div>
+                    <h4>GPU Servers</h4>
+                    <p>High-density GPU clusters purpose-built for AI/ML training, rendering, and HPC — scalable from
+                        single node to full racks.</p>
+                </div>
+
+                <div class="floating-card fc-right fc-bot" style="--fc-delay:2.0s">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+                        </svg></div>
+                    <h4>Global CDN</h4>
+                    <p>Lightning-fast content delivery across 30+ PoPs worldwide — reduce latency and serve users at the
+                        edge, wherever they are.</p>
+                </div>
+
+                <!-- BOTTOM ROW CARDS -->
+                <div class="floating-card fc-btm fc-btm-l" style="--fc-delay:2.4s">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg></div>
+                    <h4>DDoS Protection</h4>
+                    <p>Enterprise-grade mitigation absorbing multi-Tbps attacks at the network edge, keeping your
+                        services online and responsive.</p>
+                </div>
+
+                <div class="floating-card fc-btm fc-btm-r" style="--fc-delay:3.0s">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                        </svg></div>
+                    <h4>24×7 Support</h4>
+                    <p>Round-the-clock certified cloud architects ready to resolve issues, optimise configurations, and
+                        guide your architecture decisions.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- INDUSTRY LEADING EXCELENCE VALIDATED -->
+    <section id="industry-validated" class="less-cloud-complex section industry-validated">
+        <div class="less-cloud-inner">
+            <div class="blue-container-left" data-animate="fade-right">
+                <!-- AFTER -->
+                <h2 class="title" data-strapi="industryValidatedHeading"></h2>
+                <p class="who-we-are-paragraph" data-strapi="industryValidatedParagraph"></p>
+            </div>
+            <div class="less-cloud-complex-image" data-animate="scale-up">
+                <img src="assets/images/industry.png" alt="ICSDC global infrastructure map">
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- ISO section start -->
+    <section class="iso-section" aria-labelledby="iso-heading">
+        <div class="iso-overlay">
+            <div class="iso-container">
+                <h2 id="iso-heading" class="iso-title">Beyond Best Practice: Our ISO Standards</h2>
+                <p class="iso-subtitle">
+                    Global certifications that our security, quality, and commitment consistently meet
+                    the world's highest standard.
+                </p>
+            </div>
+            <div class="iso-image-wrapper" aria-hidden="true">
+                <img src="assets/images/beyondbest.png" alt="" class="iso-image" loading="lazy">
+            </div>
+        </div>
+    </section>
+    <!-- ISO section end -->
+    <!-- Why Business Needs Cloud Services section start-->
+    <section id="business-needs-cloud" class="business-needs-cloud section"
+        aria-labelledby="business-needs-cloud-heading">
+        <div class="business-needs-cloud-inner">
+            <div class="business-needs-visual" data-animate="fade-right">
+                <ul class="business-needs-labels" aria-hidden="true">
+                    <li class="business-needs-label">99.99%<span>Uptime</span></li>
+                    <li class="business-needs-label">Super Fast Speed<span>&amp; Performance</span></li>
+                    <li class="business-needs-label">Affordable<span>Price</span></li>
+                </ul>
+                <div class="business-needs-image-wrap">
+                    <img src="assets/images/trusted-cloud-service-provider.png" alt="Cloud services illustration"
+                        class="business-needs-image">
+                </div>
+            </div>
+            <div class="business-needs-content" data-animate="fade-left">
+                <h2 id="business-needs-cloud-heading" class="business-needs-title">Why Business Needs Cloud Services in
+                    Today's Time?</h2>
+                <div class="business-needs-list">
+                    <article class="business-needs-item">
+                        <div class="business-needs-icon" aria-hidden="true">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <path d="M17 31H9V23H17V31Z" stroke="currentColor" stroke-width="2" />
+                                <path d="M31 25H17V11H31V25Z" stroke="currentColor" stroke-width="2" />
+                                <path d="M26 10H38V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M38 10L27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <div class="business-needs-copy">
+                            <h3>Scale Instantly</h3>
+                            <p>Handle peak demand by adding capacity in minutes, not months.</p>
+                        </div>
+                    </article>
+                    <article class="business-needs-item">
+                        <div class="business-needs-icon" aria-hidden="true">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <circle cx="11" cy="15" r="6" stroke="currentColor" stroke-width="2" />
+                                <path d="M11 12V18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M8.5 15H13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M8 37V24H14V37" stroke="currentColor" stroke-width="2" />
+                                <path d="M20 37V19H26V37" stroke="currentColor" stroke-width="2" />
+                                <path d="M32 37V27H38V37" stroke="currentColor" stroke-width="2" />
+                                <path d="M20 13L27 20L38 9" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M32 9H38V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <div class="business-needs-copy">
+                            <h3>Control Cash Flow</h3>
+                            <p>Replace big hardware costs with transparent monthly payments.</p>
+                        </div>
+                    </article>
+                    <article class="business-needs-item">
+                        <div class="business-needs-icon" aria-hidden="true">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <path d="M24 9V39" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M14 39H34" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M20 39H28" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <circle cx="24" cy="10" r="3" stroke="currentColor" stroke-width="2" />
+                                <path d="M9 19H39" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M13 19L8 30H18L13 19Z" stroke="currentColor" stroke-width="2"
+                                    stroke-linejoin="round" />
+                                <path d="M35 19L30 30H40L35 19Z" stroke="currentColor" stroke-width="2"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <div class="business-needs-copy">
+                            <h3>Data Safety &amp; Laws</h3>
+                            <p>Easily meet Indian data laws while getting world-class security for your customer
+                                information.</p>
+                        </div>
+                    </article>
+                    <article class="business-needs-item">
+                        <div class="business-needs-icon" aria-hidden="true">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <circle cx="20" cy="14" r="7" stroke="currentColor" stroke-width="2" />
+                                <path d="M14 23C14 19.6863 16.6863 17 20 17C23.3137 17 26 19.6863 26 23V25"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M8 36V31C8 27.6863 10.6863 25 14 25H26C29.3137 25 32 27.6863 32 31V36"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="M31 23H40V36H22" stroke="currentColor" stroke-width="2"
+                                    stroke-linejoin="round" />
+                                <circle cx="35.5" cy="29.5" r="1.5" fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="business-needs-copy">
+                            <h3>Data Safety &amp; Laws</h3>
+                            <p>Easily meet Indian data laws while getting world-class security for your customer
+                                information.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Why Business Needs Cloud Services section end-->
+
+    <section class="best-cloud-services" aria-labelledby="best-cloud-services-heading">
+
+        <div class="best-cloud-services-container">
+            <h2 id="best-cloud-services-heading" class="best-cloud-services-title">Best Cloud Services: See Why Our
+                Partnerships Assure Excellence</h2>
+            <p class="best-cloud-services-subtitle">
+                ICSDC servers operate across multiple global regions with dedicated deployment points in India
+                (Noida & Mumbai) for unmatched speed and reliability.
+            </p>
+
+            <div class="best-cloud-services-btns" data-strapi-grid="ourPartnershipsCards" data-stagger>
+                <button class="btn-outline feature-cards">Ultra-fast and scalable cloud solutions built for
+                    growth</button>
+                <button class="btn-outline feature-cards">Enterprise-grade security with Least downtime</button>
+                <button class="btn-outline feature-cards">Real people, real support - available 24/7</button>
+                <button class="btn-outline feature-cards">Connect with a Cloud Architect Now</button>
+            </div>
+        </div>
+
+
+    </section>
+    <!-- best-cloud-services section end -->
+
+    <!-- testimonials section start -->
+    <section class="testi-section" aria-labelledby="testi-heading">
+        <div class="testi-container">
+            <h2 id="testi-heading" class="testi-title">See our Clients Stories</h2>
+
+            <!-- Cards rendered by components.js -->
+            <div class="testi-scroll-viewport">
+                <div class="testi-grid" role="list" id="testi-grid"></div>
+            </div>
+
+            <!-- Pagination dots rendered by components.js -->
+            <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+
+            <div class="testi-nav">
+                <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+                <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+            </div>
+        </div>
+    </section>
+    <!-- testimonials section end -->
+
+    <!-- faq section start -->
+    <section class="faq-section" aria-labelledby="faq-heading">
+        <div class="faq-container">
+
+            <!-- FAQ accordion column -->
+            <div class="faq-col">
+                <h2 id="faq-heading" class="faq-title">Frequently Asked Questions</h2>
+                <!-- Accordion items rendered by components.js -->
+                <dl class="faq-accordions" id="faq-accordions"></dl>
+            </div>
+
+            <!-- Sticky contact card -->
+            <aside class="faq-contact-card" aria-label="Contact us">
+                <h3 class="faq-contact-title">Do you have more<br>Questions??</h3>
+                <p class="faq-contact-desc">
+                    We are here to answer all your queries.<br>
+                    Take a Test Drive of Our Cloud Now!<br><br>
+                    &#128222; +91 98109 58857
+                </p>
+                <a href="/contact" class="faq-contact-btn">
+                    Get In Touch
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </a>
+            </aside>
+
+        </div>
+    </section>
+    <!-- faq section end -->
+
+    <!-- contact section start -->
+    <section class="contact-section" aria-labelledby="contact-heading">
+        <div class="contact-container">
+
+            <!-- Left: info -->
+            <div class="contact-left">
+                <h2 id="contact-heading" class="contact-title">Get In Touch...</h2>
+                <p class="contact-subtitle">
+                    Get the best price &amp; premium cloud services. Share your details and requirements,
+                    and our team will get in touch with you shortly.
+                </p>
+
+                <div class="contact-cards">
+                    <div class="contact-info-card">
+                        <h3 class="contact-card-title">Email Address</h3>
+                        <hr class="contact-card-divider">
+                        <p class="contact-card-detail">help@info.com</p>
+                        <p class="contact-card-meta">
+                            Assistance hours:<br>
+                            Monday &ndash; Friday 6 am to 8 pm EST
+                        </p>
+                    </div>
+                    <div class="contact-info-card">
+                        <h3 class="contact-card-title">Phone Number</h3>
+                        <hr class="contact-card-divider">
+                        <p class="contact-card-detail">+91 98109 58857</p>
+                        <p class="contact-card-meta">
+                            Assistance hours:<br>
+                            Monday &ndash; Friday 6 am to 8 pm EST
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: form -->
+            <div class="contact-form-col">
+
+                <!-- Success message (hidden until form submitted) -->
+                <div class="contact-success" id="contact-success" role="alert">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <circle cx="24" cy="24" r="24" fill="#1a56db" />
+                        <path d="M14 24L21 31L34 18" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    <h3>Message Sent!</h3>
+                    <p>Thank you for reaching out. Our team will contact you within 24 hours.</p>
+                </div>
+
+                <form id="contact-form" class="contact-form" novalidate>
+
+                    <div class="contact-field">
+                        <input type="text" id="contact-name" name="name" placeholder=" " required class="contact-input"
+                            aria-required="true">
+                        <label for="contact-name" class="contact-label">
+                            Name <span class="contact-required" aria-hidden="true">*</span>
+                        </label>
+                    </div>
+
+                    <div class="contact-field">
+                        <input type="email" id="contact-email" name="email" placeholder=" " required
+                            class="contact-input" aria-required="true">
+                        <label for="contact-email" class="contact-label">
+                            Email <span class="contact-required" aria-hidden="true">*</span>
+                        </label>
+                    </div>
+
+                    <div class="contact-field">
+                        <input type="url" id="contact-website" name="website" placeholder=" " class="contact-input">
+                        <label for="contact-website" class="contact-label">
+                            Website <span class="contact-required" aria-hidden="true">*</span>
+                        </label>
+                    </div>
+
+                    <div class="contact-field">
+                        <textarea id="contact-message" name="message" placeholder=" " rows="5"
+                            class="contact-input contact-textarea"></textarea>
+                        <label for="contact-message" class="contact-label">Message</label>
+                    </div>
+
+                    <button type="submit" class="contact-submit">Submit</button>
+
+                </form>
+            </div>
+
+        </div>
+    </section>
+    <!-- contact section end -->
+
+
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-main">
+            <div data-strapi-link-groups class="footer-container">
+
+                <!-- Brand column -->
+                <div class="footer-brand">
+                    <a href="/" aria-label="ICSDC Home">
+                        <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+                    </a>
+                    <address class="footer-address">
+                        <span data-strapi-footer-address></span>
+                        <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+                        <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                                class="footer-email-link">info@icsdc.com</a></span>
+                    </address>
+
+                    <div class="footer-social" aria-label="Social media links">
+                        <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook"
+                            target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter"
+                            target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                <path
+                                    d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                                </path>
+                            </svg>
+                        </a>
+                        <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram"
+                            target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p id="footer-year-text">© Copyright <span data-strapi-year id="footer-year"></span> <span
+                    data-strapi-company-name></span>. All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- ════════════════════════════════════
+         RIPPLE BUILDER + CONTROLS SCRIPT
+    ════════════════════════════════════ -->
+    <script>
+        (function () {
+            const SVG_NS = 'http://www.w3.org/2000/svg';
+            const svg = document.querySelector('#ripple svg');
+            const wrap = document.getElementById('ripple');
+            const center = svg.querySelector('.ripple-center');
+
+            let rings = 10;
+            let duration = 8;    // seconds
+            let radius = 260;  // max ripple radius in SVG units (viewBox is 600×600, centre=300)
+
+            const ringsVal = document.getElementById('rings-val');
+            const speedVal = document.getElementById('speed-val');
+            const radiusVal = document.getElementById('radius-val');
+
+            // Inject / update the dynamic @keyframes for ripple-out
+            let styleEl = document.getElementById('ripple-dynamic-style');
+            if (!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.id = 'ripple-dynamic-style';
+                document.head.appendChild(styleEl);
+            }
+
+            function updateKeyframe() {
+                styleEl.textContent = `
+                @keyframes ripple-out {
+                    0%   { r: 0;        opacity: 0.65; }
+                    75%  { opacity: 0.12; }
+                    100% { r: ${radius}; opacity: 0; }
+                }
+            `;
+                // Scale the wrapper so rings don't get clipped
+                const px = Math.round(radius * 2 * (520 / 600)); // proportional to original 520px @ r=260
+                wrap.style.width = px + 'px';
+                wrap.style.height = px + 'px';
+            }
+
+            function buildRipple() {
+                updateKeyframe();
+                svg.querySelectorAll('.ripple-ring').forEach(el => el.remove());
+                for (let i = 0; i < rings; i++) {
+                    const circle = document.createElementNS(SVG_NS, 'circle');
+                    circle.setAttribute('cx', 300);
+                    circle.setAttribute('cy', 300);
+                    circle.setAttribute('r', 0);
+                    circle.classList.add('ripple-ring');
+                    circle.style.setProperty('--duration', `${duration}s`);
+                    circle.style.setProperty('--delay', `-${(duration / rings) * i}s`);
+                    svg.insertBefore(circle, center);
+                }
+            }
+
+            buildRipple();
+
+            // Rings (2 – 20)
+            document.getElementById('rings-dec').addEventListener('click', () => {
+                if (rings <= 2) return;
+                rings--;
+                ringsVal.textContent = rings;
+                buildRipple();
+            });
+            document.getElementById('rings-inc').addEventListener('click', () => {
+                if (rings >= 20) return;
+                rings++;
+                ringsVal.textContent = rings;
+                buildRipple();
+            });
+
+            // Speed (2s – 20s)
+            document.getElementById('speed-dec').addEventListener('click', () => {
+                if (duration <= 2) return;
+                duration--;
+                speedVal.textContent = duration + 's';
+                buildRipple();
+            });
+            document.getElementById('speed-inc').addEventListener('click', () => {
+                if (duration >= 20) return;
+                duration++;
+                speedVal.textContent = duration + 's';
+                buildRipple();
+            });
+
+            // Radius (80 – 500, step 20)
+            document.getElementById('radius-dec').addEventListener('click', () => {
+                if (radius <= 80) return;
+                radius -= 20;
+                radiusVal.textContent = radius;
+                buildRipple();
+            });
+            document.getElementById('radius-inc').addEventListener('click', () => {
+                if (radius >= 500) return;
+                radius += 20;
+                radiusVal.textContent = radius;
+                buildRipple();
+            });
+        })();
+    </script>
+
+    <!-- ════════════════════════════════════
+         APPLE-STYLE SCROLL ANIMATION ENGINE
+    ════════════════════════════════════ -->
+    <script>
+        (function () {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('[data-animate], [data-stagger]').forEach(el => {
+                observer.observe(el);
+            });
+        })();
+    </script>
+
+    <script>
+        STRAPI_URL = "http://13.126.9.248:1337";
+        TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+    </script>
+    <script src="assets/js/main.js" type="module"></script>
+    <script src="assets/js/polish.js" defer></script>
+    <script src="assets/js/homepage-cms.js" type="module"></script>
+
+    <script>
+        // Footer: inject current year
+        (function () {
+            var el = document.getElementById('footer-year');
+            if (el) el.textContent = new Date().getFullYear();
+        })();
+    </script>
+</body>
+
+</html>

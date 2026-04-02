@@ -1,0 +1,1344 @@
+/* ══════════════════════════════════════
+   VPS HOSTING PAGE — SCOPED STYLES
+   All classes prefixed vps-* to prevent
+   any collision with style.css,
+   components.css, or dedicated-server.css.
+   Zero overrides to existing rules.
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW LABEL
+══════════════════════════════════════ */
+.vps-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(26, 86, 219, 0.15);
+}
+
+.vps-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    animation: vps-pulse 2s ease-in-out infinite;
+}
+
+@keyframes vps-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+.vps-section-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 8px;
+    opacity: 0.75;
+}
+
+/* ══════════════════════════════════════
+   HERO — VPS VISUAL (right column)
+   Animated virtualisation block stack
+══════════════════════════════════════ */
+.vps-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 60%, #f0fdf4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(26, 86, 219, 0.13), 0 4px 16px rgba(0,0,0,0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.vps-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 70% 25%, rgba(26,86,219,0.09) 0%, transparent 55%),
+        radial-gradient(circle at 20% 75%, rgba(79,209,197,0.07) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* VM block stack */
+.vps-vm-stack {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 28px;
+    width: 100%;
+    max-width: 380px;
+}
+
+.vps-vm-block {
+    background: var(--white);
+    border: 1px solid rgba(26,86,219,0.12);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(26,86,219,0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vps-hero-visual:hover .vps-vm-block:nth-child(1) { transform: translateX(5px); }
+.vps-hero-visual:hover .vps-vm-block:nth-child(2) { transform: translateX(5px); transition-delay: 0.05s; }
+.vps-hero-visual:hover .vps-vm-block:nth-child(3) { transform: translateX(5px); transition-delay: 0.10s; }
+
+.vps-vm-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #e8f0fe 0%, #c7d9fb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.vps-vm-icon svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--blue);
+    stroke-width: 1.8;
+    fill: none;
+}
+
+.vps-vm-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.vps-vm-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vps-vm-bar-wrap {
+    margin-top: 5px;
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.vps-vm-bar {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--accent-teal));
+    animation: vps-bar-load 1.8s ease-out forwards;
+    width: 0;
+}
+
+.vps-vm-block:nth-child(1) .vps-vm-bar { animation-delay: 0.3s; --bar-w: 72%; }
+.vps-vm-block:nth-child(2) .vps-vm-bar { animation-delay: 0.6s; --bar-w: 58%; }
+.vps-vm-block:nth-child(3) .vps-vm-bar { animation-delay: 0.9s; --bar-w: 85%; }
+
+@keyframes vps-bar-load {
+    to { width: var(--bar-w, 70%); }
+}
+
+.vps-vm-stat {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    min-width: 44px;
+    text-align: right;
+}
+
+/* Uptime badge */
+.vps-hero-badge {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    background: var(--white);
+    border: 1px solid rgba(26,86,219,0.12);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(26,86,219,0.12);
+    z-index: 2;
+    animation: vps-badge-float 5s ease-in-out 0.5s infinite;
+}
+
+@keyframes vps-badge-float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-6px); }
+}
+
+.vps-hero-badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34,197,94,0.5);
+    flex-shrink: 0;
+}
+
+.vps-hero-badge-text {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+.vps-hero-badge-sub {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+/* Phone CTA row */
+.vps-hero-phone {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--muted-alt);
+}
+
+.vps-hero-phone a {
+    font-weight: 700;
+    color: var(--blue);
+    text-decoration: none;
+    transition: color var(--transition-base) ease;
+}
+
+.vps-hero-phone a:hover { color: var(--blue-dark); }
+
+/* ══════════════════════════════════════
+   INFRASTRUCTURE PILLARS (14 items)
+══════════════════════════════════════ */
+.vps-infra-section {
+    background: var(--bg-light);
+}
+
+.vps-pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    text-align: left;
+}
+
+.vps-pillar-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 26px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease,
+                box-shadow var(--transition-base) ease,
+                border-color var(--transition-base) ease;
+}
+
+.vps-pillar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26,86,219,0.18);
+}
+
+.vps-pillar-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #e8f0fe 0%, #c7d9fb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform var(--transition-base) var(--ease-out-back);
+}
+
+.vps-pillar-card:hover .vps-pillar-icon {
+    transform: scale(1.12) rotate(-4deg);
+}
+
+.vps-pillar-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--blue);
+    stroke-width: 1.8;
+    fill: none;
+}
+
+.vps-pillar-card h3 {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.vps-pillar-card p {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--muted-alt);
+    margin: 0;
+}
+
+/* ══════════════════════════════════════
+   PRICING
+══════════════════════════════════════ */
+.vps-pricing-section {
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.vps-pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+}
+
+.vps-plan-card {
+    position: relative;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px 32px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) var(--ease-out-expo),
+                box-shadow var(--transition-base) ease,
+                border-color var(--transition-base) ease;
+}
+
+.vps-plan-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26,86,219,0.22);
+}
+
+.vps-plan-card.vps-featured {
+    background: var(--blue);
+    border-color: var(--blue);
+    transform: translateY(-8px);
+    box-shadow: 0 24px 64px rgba(26,86,219,0.32), 0 8px 24px rgba(26,86,219,0.20);
+    z-index: 2;
+}
+
+.vps-plan-card.vps-featured:hover {
+    transform: translateY(-14px);
+    box-shadow: 0 32px 72px rgba(26,86,219,0.38), 0 8px 24px rgba(26,86,219,0.22);
+}
+
+.vps-plan-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--orange);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: var(--radius-xl);
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(245,158,11,0.35);
+}
+
+.vps-plan-tier {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 12px;
+}
+
+.vps-plan-card.vps-featured .vps-plan-tier { color: rgba(255,255,255,0.75); }
+
+.vps-plan-price-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.vps-plan-currency {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    align-self: flex-start;
+    margin-top: 8px;
+}
+
+.vps-plan-price {
+    font-size: clamp(36px, 4vw, 48px);
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+.vps-plan-period {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 2px;
+}
+
+.vps-plan-card.vps-featured .vps-plan-currency,
+.vps-plan-card.vps-featured .vps-plan-price { color: var(--white); }
+.vps-plan-card.vps-featured .vps-plan-period { color: rgba(255,255,255,0.7); }
+
+.vps-plan-tagline {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted-alt);
+    margin: 12px 0 0;
+}
+
+.vps-plan-card.vps-featured .vps-plan-tagline { color: rgba(255,255,255,0.80); }
+
+.vps-plan-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 22px 0;
+    border: none;
+}
+
+.vps-plan-card.vps-featured .vps-plan-divider { background: rgba(255,255,255,0.20); }
+
+.vps-plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    flex: 1;
+    margin-bottom: 28px;
+}
+
+.vps-plan-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+}
+
+.vps-plan-card.vps-featured .vps-plan-feature { color: rgba(255,255,255,0.90); }
+
+.vps-plan-check {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(26,86,219,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+}
+
+.vps-plan-card.vps-featured .vps-plan-check { background: rgba(255,255,255,0.20); }
+
+.vps-plan-check svg { width: 10px; height: 10px; stroke: var(--blue); stroke-width: 2.5; }
+.vps-plan-card.vps-featured .vps-plan-check svg { stroke: var(--white); }
+
+.vps-plan-cta {
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+    transition: background var(--transition-base) ease,
+                transform var(--transition-fast) ease,
+                box-shadow var(--transition-base) ease;
+    min-height: 48px;
+    border: 2px solid transparent;
+}
+
+.vps-plan-cta-outline {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text);
+}
+
+.vps-plan-cta-outline:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: var(--blue-light);
+    transform: translateY(-1px);
+}
+
+.vps-plan-cta-primary {
+    background: var(--white);
+    color: var(--blue);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.vps-plan-cta-primary:hover {
+    background: var(--blue-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.14);
+}
+
+/* ══════════════════════════════════════
+   VPS TYPES ROW (links strip)
+══════════════════════════════════════ */
+.vps-types-section {
+    background: var(--bg-light);
+    padding: 48px 0;
+}
+
+.vps-types-inner {
+    width: 100%;
+    max-width: var(--c-container);
+    margin: 0 auto;
+    padding: 0 var(--c-px);
+}
+
+.vps-types-inner h2 {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.vps-types-strip {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.vps-type-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-decoration: none;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease,
+                box-shadow var(--transition-base) ease,
+                border-color var(--transition-base) ease,
+                color var(--transition-base) ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.vps-type-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(26,86,219,0.04) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity var(--transition-base) ease;
+}
+
+.vps-type-link:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26,86,219,0.25);
+    color: var(--blue);
+}
+
+.vps-type-link:hover::before { opacity: 1; }
+
+.vps-type-link svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--blue);
+    stroke-width: 1.8;
+    fill: none;
+    flex-shrink: 0;
+}
+
+.vps-type-arrow {
+    margin-left: auto;
+    font-size: 16px;
+    color: var(--muted);
+    transition: transform var(--transition-base) var(--ease-out-expo),
+                color var(--transition-base) ease;
+}
+
+.vps-type-link:hover .vps-type-arrow {
+    transform: translateX(4px);
+    color: var(--blue);
+}
+
+/* ══════════════════════════════════════
+   HOW WE MAINTAIN SPEED (4 items)
+══════════════════════════════════════ */
+.vps-speed-section {
+    background: var(--white);
+}
+
+.vps-speed-inner {
+    width: 100%;
+    max-width: var(--c-container);
+    margin: 0 auto;
+    padding: 80px var(--c-px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(48px, 7vw, 112px);
+    align-items: center;
+}
+
+.vps-speed-visual {
+    width: 100%;
+    max-width: 480px;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--blue) 0%, #1341b0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(26,86,219,0.25);
+}
+
+.vps-speed-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.10) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(79,209,197,0.12) 0%, transparent 50%);
+}
+
+.vps-speed-stat-wrap {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 28px;
+}
+
+.vps-speed-stat {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 12px;
+    padding: 18px 14px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+}
+
+.vps-speed-stat strong {
+    display: block;
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+.vps-speed-stat span {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.70);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 5px;
+    display: block;
+}
+
+.vps-speed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.vps-speed-item {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 18px;
+    align-items: center;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+    transition: background var(--transition-base) ease;
+}
+
+.vps-speed-item:last-child { border-bottom: none; }
+
+.vps-speed-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #e8f0fe 0%, #c7d9fb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform var(--transition-base) var(--ease-out-back);
+}
+
+.vps-speed-item:hover .vps-speed-icon { transform: scale(1.1) rotate(-4deg); }
+
+.vps-speed-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--blue);
+    stroke-width: 1.8;
+    fill: none;
+}
+
+.vps-speed-item h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    margin: 0 0 4px;
+    line-height: 1.3;
+}
+
+.vps-speed-item p {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--muted-alt);
+    margin: 0;
+}
+
+/* ══════════════════════════════════════
+   MANAGEMENT SYSTEMS (6-item grid)
+══════════════════════════════════════ */
+.vps-mgmt-section {
+    background: var(--bg-light);
+}
+
+.vps-mgmt-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    text-align: left;
+}
+
+.vps-mgmt-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--transition-base) ease,
+                box-shadow var(--transition-base) ease,
+                border-color var(--transition-base) ease;
+}
+
+.vps-mgmt-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--accent-teal));
+    opacity: 0;
+    transition: opacity var(--transition-base) ease;
+}
+
+.vps-mgmt-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26,86,219,0.18);
+}
+
+.vps-mgmt-card:hover::after { opacity: 1; }
+
+.vps-mgmt-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #e8f0fe 0%, #c7d9fb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform var(--transition-base) var(--ease-out-back);
+}
+
+.vps-mgmt-card:hover .vps-mgmt-icon { transform: scale(1.12) rotate(-4deg); }
+
+.vps-mgmt-icon svg {
+    width: 21px;
+    height: 21px;
+    stroke: var(--blue);
+    stroke-width: 1.8;
+    fill: none;
+}
+
+.vps-mgmt-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.vps-mgmt-card p {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--muted-alt);
+    margin: 0;
+}
+
+/* ══════════════════════════════════════
+   VPS DIFFERENCE — 3 differentiators
+   (gradient bg section)
+══════════════════════════════════════ */
+.vps-diff-section {
+    background: linear-gradient(135deg, #1a56db 0%, #1341b0 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 80px 0;
+}
+
+.vps-diff-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 10% 50%, rgba(255,255,255,0.07) 0%, transparent 45%),
+        radial-gradient(circle at 90% 20%, rgba(79,209,197,0.09) 0%, transparent 50%),
+        radial-gradient(circle at 50% 90%, rgba(255,255,255,0.04) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.vps-diff-inner {
+    width: 100%;
+    max-width: var(--c-container);
+    margin: 0 auto;
+    padding: 0 var(--c-px);
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.vps-diff-inner .vps-section-label {
+    color: rgba(255,255,255,0.65);
+    opacity: 1;
+}
+
+.vps-diff-inner h2 {
+    font-size: clamp(26px, 3vw, 36px);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin: 8px 0 12px;
+}
+
+.vps-diff-inner > p {
+    font-size: clamp(15px, 1.4vw, 18px);
+    color: rgba(255,255,255,0.80);
+    line-height: 1.65;
+    max-width: 640px;
+    margin: 0 auto 52px;
+}
+
+.vps-diff-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    text-align: left;
+}
+
+.vps-diff-card {
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: background var(--transition-base) ease,
+                border-color var(--transition-base) ease,
+                transform var(--transition-base) ease;
+}
+
+.vps-diff-card:hover {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.28);
+    transform: translateY(-4px);
+}
+
+.vps-diff-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    transition: transform var(--transition-base) var(--ease-out-back);
+}
+
+.vps-diff-card:hover .vps-diff-icon { transform: scale(1.1) rotate(-4deg); }
+
+.vps-diff-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--white);
+    stroke-width: 1.8;
+    fill: none;
+}
+
+.vps-diff-card h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.03em;
+    margin: 0 0 10px;
+    line-height: 1.2;
+}
+
+.vps-diff-card p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.80);
+    margin: 0;
+}
+
+/* ══════════════════════════════════════
+   GLOBAL DEPLOYMENT — 2-col split
+══════════════════════════════════════ */
+.vps-global-section {
+    background: var(--white);
+}
+
+.vps-global-inner {
+    width: 100%;
+    max-width: var(--c-container);
+    margin: 0 auto;
+    padding: 80px var(--c-px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(48px, 7vw, 100px);
+    align-items: center;
+}
+
+.vps-global-content .who-we-are-paragraph {
+    margin: 16px 0 28px;
+}
+
+.vps-global-cta-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+}
+
+.vps-locations-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.vps-location-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    transition: transform var(--transition-base) ease,
+                box-shadow var(--transition-base) ease,
+                border-color var(--transition-base) ease;
+}
+
+.vps-location-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(26,86,219,0.18);
+}
+
+.vps-location-flag {
+    font-size: 24px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.vps-location-info h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+    margin: 0 0 2px;
+}
+
+.vps-location-info p {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* ══════════════════════════════════════
+   USE CASES (4-item)
+══════════════════════════════════════ */
+.vps-use-section {
+    background: var(--bg-light);
+}
+
+.vps-use-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    text-align: left;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.vps-use-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease,
+                box-shadow var(--transition-base) ease,
+                border-color var(--transition-base) ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.vps-use-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--accent-teal));
+    opacity: 0;
+    transition: opacity var(--transition-base) ease;
+}
+
+.vps-use-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26,86,219,0.18);
+}
+
+.vps-use-card:hover::before { opacity: 1; }
+
+.vps-use-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #e8f0fe 0%, #c7d9fb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform var(--transition-base) var(--ease-out-back);
+}
+
+.vps-use-card:hover .vps-use-icon { transform: scale(1.12) rotate(-4deg); }
+
+.vps-use-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--blue);
+    stroke-width: 1.8;
+    fill: none;
+}
+
+.vps-use-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin: 0 0 6px;
+}
+
+.vps-use-card p {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--muted-alt);
+    margin: 0;
+}
+
+/* ══════════════════════════════════════
+   CONTROL PANELS
+══════════════════════════════════════ */
+.vps-panels-section {
+    background: var(--white);
+}
+
+.vps-panels-strip {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 36px;
+}
+
+.vps-panel-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px 24px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease,
+                box-shadow var(--transition-base) ease,
+                border-color var(--transition-base) ease;
+    min-width: 160px;
+    justify-content: center;
+}
+
+.vps-panel-badge:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26,86,219,0.22);
+}
+
+.vps-panel-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #e8f0fe 0%, #c7d9fb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.vps-panel-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--blue);
+    stroke-width: 1.8;
+    fill: none;
+}
+
+.vps-panel-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+/* ══════════════════════════════════════
+   CTA BANDS (reused pattern from DS page)
+══════════════════════════════════════ */
+.vps-cta-band {
+    background: var(--blue);
+    position: relative;
+    overflow: hidden;
+    padding: 80px 0;
+}
+
+.vps-cta-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 15% 50%, rgba(255,255,255,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(79,209,197,0.10) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.vps-cta-band.vps-cta-dark {
+    background: var(--c-footer-bg);
+}
+
+.vps-cta-inner {
+    width: 100%;
+    max-width: var(--c-container);
+    margin: 0 auto;
+    padding: 0 var(--c-px);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.vps-cta-inner h2 {
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    max-width: 760px;
+    margin: 0 auto 14px;
+}
+
+.vps-cta-inner p {
+    font-size: clamp(15px, 1.5vw, 18px);
+    color: rgba(255,255,255,0.80);
+    line-height: 1.65;
+    margin: 0 auto 36px;
+    max-width: 560px;
+}
+
+.vps-cta-btns {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.vps-cta-btn-primary {
+    padding: 14px 32px;
+    background: var(--white);
+    color: var(--blue);
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+    transition: background var(--transition-base) ease,
+                transform var(--transition-fast) ease,
+                box-shadow var(--transition-base) ease;
+    min-height: 48px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    overflow: hidden;
+    position: relative;
+}
+
+.vps-cta-btn-primary:hover {
+    background: var(--blue-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.20);
+}
+
+.vps-cta-btn-outline {
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--white);
+    border: 2px solid rgba(255,255,255,0.45);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+    transition: border-color var(--transition-base) ease,
+                background var(--transition-base) ease,
+                transform var(--transition-fast) ease;
+    min-height: 48px;
+}
+
+.vps-cta-btn-outline:hover {
+    border-color: rgba(255,255,255,0.80);
+    background: rgba(255,255,255,0.10);
+    transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — TABLET (≤ 1024px)
+══════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .vps-pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .vps-plan-card.vps-featured { transform: translateY(0); }
+
+    .vps-pillar-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .vps-speed-inner {
+        grid-template-columns: 1fr;
+        padding: 60px var(--c-px);
+    }
+
+    .vps-speed-visual { max-width: 420px; margin: 0 auto; }
+
+    .vps-mgmt-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .vps-diff-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .vps-global-inner {
+        grid-template-columns: 1fr;
+        padding: 60px var(--c-px);
+    }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — MOBILE (≤ 640px)
+══════════════════════════════════════ */
+@media (max-width: 640px) {
+    .vps-pillar-grid,
+    .vps-mgmt-grid,
+    .vps-diff-grid { grid-template-columns: 1fr; }
+
+    .vps-use-grid { grid-template-columns: 1fr; }
+
+    .vps-locations-grid { grid-template-columns: 1fr; }
+
+    .vps-types-strip { flex-direction: column; align-items: center; }
+    .vps-type-link { width: 100%; max-width: 340px; }
+
+    .vps-cta-btns { flex-direction: column; align-items: center; }
+    .vps-cta-btn-primary,
+    .vps-cta-btn-outline { width: 100%; max-width: 320px; }
+
+    .vps-panels-strip { gap: 12px; }
+    .vps-panel-badge { min-width: 130px; padding: 14px 18px; }
+
+    .vps-global-cta-row { flex-direction: column; }
+}

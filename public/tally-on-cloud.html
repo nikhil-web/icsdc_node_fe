@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tally on Cloud for Anywhere Accounting Access | ICSDC</title>
+  <meta name="description"
+    content="Access Tally securely from anywhere with ICSDC Tally on Cloud. Enable multi-user access, improve data security, and ensure business continuity.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/tally-on-cloud.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="toc-eyebrow">&#9729; Tally on Cloud</div>
+        <h1 class="hero-title">Access Tally Anytime, Anywhere with Tally on Cloud</h1>
+        <p class="hero-sub">Simplify Accounting Operations with Cloud-Hosted Tally</p>
+        <p class="hero-desc">Manage your accounting operations more efficiently by running Tally on a secure cloud
+          environment. Access your data anytime, collaborate with your team in real time, and ensure business continuity
+          without relying on local systems or physical servers.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="location.href='/contact'">Get Started with Tally on Cloud &rarr;</button>
+          <button class="btn-outline" onclick="location.href='#toc-improvements'">Learn More</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="toc-hero-visual">
+          <div class="toc-top-badge">&#9729; ICSDC Tally on Cloud</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#eef2ff" stroke="rgba(79,70,229,0.12)"
+              stroke-width="1" />
+            <!-- Cloud shape -->
+            <ellipse cx="150" cy="85" rx="55" ry="32" fill="white" stroke="rgba(79,70,229,0.30)" stroke-width="2" />
+            <ellipse cx="118" cy="95" rx="30" ry="22" fill="white" stroke="rgba(79,70,229,0.20)" stroke-width="1.5" />
+            <ellipse cx="182" cy="95" rx="30" ry="22" fill="white" stroke="rgba(79,70,229,0.20)" stroke-width="1.5" />
+            <rect x="95" y="90" width="110" height="35" rx="0" fill="white" stroke="none" />
+            <!-- Cloud fill -->
+            <ellipse cx="150" cy="83" rx="50" ry="28" fill="#c7d2fe" stroke="none" opacity="0.7" />
+            <ellipse cx="120" cy="93" rx="26" ry="19" fill="#c7d2fe" stroke="none" opacity="0.6" />
+            <ellipse cx="180" cy="93" rx="26" ry="19" fill="#c7d2fe" stroke="none" opacity="0.6" />
+            <rect x="94" y="89" width="112" height="30" rx="0" fill="#c7d2fe" stroke="none" opacity="0.6" />
+            <!-- Cloud bottom -->
+            <rect x="94" y="108" width="112" height="10" fill="white" stroke="none" />
+            <!-- Laptop base -->
+            <rect x="90" y="128" width="120" height="2" rx="1" fill="rgba(79,70,229,0.25)" />
+            <!-- Laptop screen -->
+            <rect x="105" y="115" width="90" height="58" rx="5" fill="white" stroke="rgba(79,70,229,0.30)"
+              stroke-width="1.5" />
+            <rect x="109" y="119" width="82" height="48" rx="3" fill="#eef2ff" />
+            <!-- Tally ledger lines on laptop screen -->
+            <line x1="115" y1="128" x2="185" y2="128" stroke="rgba(79,70,229,0.35)" stroke-width="1" />
+            <line x1="115" y1="135" x2="185" y2="135" stroke="rgba(79,70,229,0.25)" stroke-width="1" />
+            <line x1="115" y1="142" x2="185" y2="142" stroke="rgba(79,70,229,0.25)" stroke-width="1" />
+            <line x1="115" y1="149" x2="185" y2="149" stroke="rgba(79,70,229,0.25)" stroke-width="1" />
+            <line x1="115" y1="156" x2="185" y2="156" stroke="rgba(79,70,229,0.25)" stroke-width="1" />
+            <!-- Vertical column dividers -->
+            <line x1="145" y1="122" x2="145" y2="163" stroke="rgba(79,70,229,0.30)" stroke-width="1" />
+            <line x1="165" y1="122" x2="165" y2="163" stroke="rgba(79,70,229,0.30)" stroke-width="1" />
+            <!-- Header row fill -->
+            <rect x="109" y="119" width="82" height="9" rx="2" fill="rgba(79,70,229,0.18)" />
+            <text x="125" y="126" font-size="5" fill="#4f46e5" text-anchor="middle" font-weight="700">Tally</text>
+            <text x="155" y="126" font-size="5" fill="#4f46e5" text-anchor="middle" font-weight="700">Dr</text>
+            <text x="175" y="126" font-size="5" fill="#4f46e5" text-anchor="middle" font-weight="700">Cr</text>
+            <!-- Check icon on cloud -->
+            <circle cx="150" cy="83" r="14" fill="#4f46e5" opacity="0.90" />
+            <polyline points="143,83 148,88 158,76" stroke="white" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            <!-- User dots (multi-user) -->
+            <circle cx="46" cy="100" r="10" fill="white" stroke="rgba(79,70,229,0.22)" stroke-width="1.2" />
+            <circle cx="46" cy="97" r="4" fill="#c7d2fe" />
+            <path d="M38 108 Q46 104 54 108" stroke="#c7d2fe" stroke-width="1.5" fill="none" />
+            <circle cx="254" cy="100" r="10" fill="white" stroke="rgba(79,70,229,0.22)" stroke-width="1.2" />
+            <circle cx="254" cy="97" r="4" fill="#c7d2fe" />
+            <path d="M246 108 Q254 104 262 108" stroke="#c7d2fe" stroke-width="1.5" fill="none" />
+            <!-- Connection lines from users to cloud -->
+            <line x1="56" y1="100" x2="94" y2="100" stroke="rgba(79,70,229,0.30)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <line x1="244" y1="100" x2="206" y2="100" stroke="rgba(79,70,229,0.30)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <!-- Corner accent dots -->
+            <circle cx="28" cy="28" r="4" fill="#c7d2fe" opacity="0.7" />
+            <circle cx="272" cy="28" r="4" fill="#c7d2fe" opacity="0.7" />
+            <circle cx="28" cy="192" r="3" fill="#a5b4fc" opacity="0.5" />
+            <circle cx="272" cy="192" r="3" fill="#a5b4fc" opacity="0.5" />
+          </svg>
+          <div class="toc-status-badge">
+            <div class="toc-dot"></div>
+            <div>
+              <div class="toc-bt">Always Available</div>
+              <div class="toc-bs">Secure Cloud Access</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — PILLARS (4 WHY-US CARDS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+            </svg></div>
+          <h3>Anywhere Access</h3>
+          <p>Work on Tally securely from any location and device with internet access.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Multi-User Collaboration</h3>
+          <p>Allow multiple users to work on the same Tally data in real time.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Secure Cloud Environment</h3>
+          <p>Keep your accounting data protected with controlled access and cloud security.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></div>
+          <h3>No Local Setup Required</h3>
+          <p>Eliminate hardware dependency and access Tally without complex installations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — WHO WE ARE ════ -->
+  <section id="toc-about" class="section toc-about-section">
+    <div class="container">
+      <div class="toc-about-grid">
+        <div class="toc-about-text" data-animate="fade-up">
+          <span class="cloud-section-label" data-animate="fade-up">ABOUT US</span>
+          <h2 class="title" id="toc-about-title">Who We Are</h2>
+          <p class="toc-about-desc" id="toc-about-desc">We are a cloud solutions partner focused on helping businesses
+            move their critical applications to secure, high-performance cloud environments. With deep expertise in cloud
+            infrastructure and business software hosting, we make it easy to run Tally on the cloud without changing the
+            way you work. At ICSDC, we combine reliable infrastructure, strong security practices, and responsive support
+            to ensure your accounting systems stay accessible, protected, and always online. From small businesses to
+            growing enterprises and CA firms, we help teams work smarter, collaborate better, and manage their financial
+            data with confidence.</p>
+        </div>
+        <div class="toc-about-visual" data-animate="fade-up">
+          <div class="toc-about-card">
+            <div class="toc-about-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="48" height="48">
+                <circle cx="24" cy="24" r="22" fill="#eef2ff" stroke="rgba(79,70,229,0.20)" stroke-width="1.5" />
+                <path d="M24 10 C14 10 8 17 8 24 C8 31 14 38 24 38 C34 38 40 31 40 24 C40 17 34 10 24 10Z"
+                  fill="#c7d2fe" stroke="rgba(79,70,229,0.30)" stroke-width="1" />
+                <line x1="8" y1="24" x2="40" y2="24" stroke="rgba(79,70,229,0.40)" stroke-width="1.2" />
+                <line x1="24" y1="10" x2="24" y2="38" stroke="rgba(79,70,229,0.40)" stroke-width="1.2" />
+                <path d="M24 10 Q30 24 24 38" stroke="rgba(79,70,229,0.50)" stroke-width="1" fill="none"
+                  stroke-dasharray="3 2" />
+                <path d="M24 10 Q18 24 24 38" stroke="rgba(79,70,229,0.50)" stroke-width="1" fill="none"
+                  stroke-dasharray="3 2" />
+              </svg>
+            </div>
+            <h3>Cloud-First Accounting Partner</h3>
+            <p>Helping businesses run Tally smarter, safer, and from anywhere.</p>
+          </div>
+          <div class="toc-about-card">
+            <div class="toc-about-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="48" height="48">
+                <circle cx="24" cy="24" r="22" fill="#eef2ff" stroke="rgba(79,70,229,0.20)" stroke-width="1.5" />
+                <path d="M24 14 L32 18 L32 28 Q32 36 24 40 Q16 36 16 28 L16 18 Z"
+                  fill="#c7d2fe" stroke="rgba(79,70,229,0.30)" stroke-width="1" />
+                <polyline points="20,26 23,29 29,22" stroke="#4f46e5" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round" fill="none" />
+              </svg>
+            </div>
+            <h3>Security-First Infrastructure</h3>
+            <p>Enterprise-grade protection for your most sensitive accounting data.</p>
+          </div>
+          <div class="toc-about-card">
+            <div class="toc-about-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="48" height="48">
+                <circle cx="24" cy="24" r="22" fill="#eef2ff" stroke="rgba(79,70,229,0.20)" stroke-width="1.5" />
+                <circle cx="24" cy="20" r="5" fill="#c7d2fe" stroke="rgba(79,70,229,0.30)" stroke-width="1" />
+                <path d="M14 36 Q24 30 34 36" stroke="rgba(79,70,229,0.40)" stroke-width="1.5" fill="none" />
+                <circle cx="14" cy="22" r="3.5" fill="#c7d2fe" stroke="rgba(79,70,229,0.25)" stroke-width="1" />
+                <circle cx="34" cy="22" r="3.5" fill="#c7d2fe" stroke="rgba(79,70,229,0.25)" stroke-width="1" />
+                <path d="M9 34 Q14 29 19 32" stroke="rgba(79,70,229,0.35)" stroke-width="1.2" fill="none" />
+                <path d="M29 32 Q34 29 39 34" stroke="rgba(79,70,229,0.35)" stroke-width="1.2" fill="none" />
+              </svg>
+            </div>
+            <h3>Multi-User Tally Hosting</h3>
+            <p>Enabling teams and CA firms to collaborate on Tally data seamlessly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — 12 KEY IMPROVEMENTS ════ -->
+  <section id="toc-improvements" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">KEY BENEFITS</span>
+      <h2 class="title" data-animate="fade-up">How Tally on Cloud Improves Your Business Operations</h2>
+
+      <div class="toc-improvements-grid" data-stagger id="toc-improvements-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+            </svg></div>
+          <h3>Access Tally Anytime, Anywhere</h3>
+          <p>Work on your Tally data securely from office, home, or while traveling.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Multi-User Collaboration</h3>
+          <p>Multiple users work on the same Tally data in real time.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>Improved Data Security</h3>
+          <p>Accounting data stored in secure cloud with controlled access.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Business Continuity</h3>
+          <p>Operations continue smoothly even during hardware issues or office downtime.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></div>
+          <h3>No Hardware Dependency</h3>
+          <p>Eliminate expensive local servers or high-end system requirements.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>Faster Performance</h3>
+          <p>Optimized cloud infrastructure delivers consistent speed for daily tasks.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg></div>
+          <h3>Easy Scalability</h3>
+          <p>Add users or upgrade resources as your business grows.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+            </svg></div>
+          <h3>Centralized Data Management</h3>
+          <p>Single, centralized Tally database accessible to authorized users.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Secure Remote Access for CA Firms</h3>
+          <p>Share access with auditors securely without file exchanges.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg></div>
+          <h3>Reduced IT Maintenance</h3>
+          <p>No local servers, backups, or system upgrade management.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10" />
+              <path d="M3.51 15a9 9 0 1 0 .49-3.44" />
+            </svg></div>
+          <h3>Data Backup &amp; Recovery</h3>
+          <p>Regular cloud backups protect data from accidental loss.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+            </svg></div>
+          <h3>Cost-Effective Solution</h3>
+          <p>Reduce infrastructure costs while gaining enterprise-grade reliability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — WHY CHOOSE ICSDC (9 CARDS) ════ -->
+  <section id="toc-why" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHY ICSDC</span>
+      <h2 class="title" data-animate="fade-up">Why Choose ICSDC for Tally on Cloud?</h2>
+
+      <div class="cloud-power-grid" data-stagger id="toc-why-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>Built Specifically for Tally Workloads</h3>
+          <p>Cloud infrastructure optimized for smooth, reliable Tally performance.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>Secure &amp; Controlled Access</h3>
+          <p>Restricted access with financial data protection.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+            </svg></div>
+          <h3>Anywhere, Anytime Availability</h3>
+          <p>Access from office, home, or on the go.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Multi-User Friendly Setup</h3>
+          <p>Multiple users and CA partners collaborate on same data simultaneously.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></div>
+          <h3>No Hardware or Server Dependency</h3>
+          <p>Eliminates reliance on local systems completely.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Business Continuity Assured</h3>
+          <p>Power outages and office closures won&rsquo;t stop your work.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12" />
+            </svg></div>
+          <h3>Simple &amp; Hassle-Free Onboarding</h3>
+          <p>Setup and migration assistance for smooth transition.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+            </svg></div>
+          <h3>Dedicated Support When You Need It</h3>
+          <p>Professionals who understand both cloud hosting and Tally.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+            </svg></div>
+          <h3>Cost-Effective Cloud Accounting</h3>
+          <p>Enterprise-grade reliability at predictable costs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — COMPARISON TABLE ════ -->
+  <section id="toc-compare" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">COMPARISON</span>
+      <h2 class="title" data-animate="fade-up">Tally on Cloud vs Desktop Tally</h2>
+
+      <div class="toc-compare-table-wrap" data-animate="fade-up">
+        <table class="toc-compare-table" aria-label="Tally on Cloud vs Desktop Tally comparison">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="toc-col-cloud">Tally on Cloud &#10003;</th>
+              <th>Desktop Tally &#10006;</th>
+            </tr>
+          </thead>
+          <tbody id="toc-compare-tbody">
+            <tr>
+              <td>Access from Anywhere</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> Work from any location</td>
+              <td>Restricted to office system</td>
+            </tr>
+            <tr>
+              <td>Multi-User Access</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> Multiple users simultaneously</td>
+              <td>Limited or complex setup</td>
+            </tr>
+            <tr>
+              <td>Data Security</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> Secured cloud environment</td>
+              <td>Dependent on local system safety</td>
+            </tr>
+            <tr>
+              <td>Hardware Dependency</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> No server needed</td>
+              <td>Requires dedicated systems</td>
+            </tr>
+            <tr>
+              <td>Business Continuity</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> Works during power/office downtime</td>
+              <td>Stops during system failure</td>
+            </tr>
+            <tr>
+              <td>Remote CA / Auditor Access</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> Secure shared access</td>
+              <td>File sharing required</td>
+            </tr>
+            <tr>
+              <td>Scalability</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> Easily add users or resources</td>
+              <td>Hardware upgrade needed</td>
+            </tr>
+            <tr>
+              <td>Maintenance Responsibility</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> Managed by ICSDC</td>
+              <td>Handled by business</td>
+            </tr>
+            <tr>
+              <td>Data Backup</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> Cloud backups supported</td>
+              <td>Manual or local backups</td>
+            </tr>
+            <tr>
+              <td>Initial Setup Cost</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> Low upfront investment</td>
+              <td>Higher hardware cost</td>
+            </tr>
+            <tr>
+              <td>Collaboration Speed</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> Real-time access</td>
+              <td>Delayed file transfers</td>
+            </tr>
+            <tr>
+              <td>Mobility &amp; Flexibility</td>
+              <td class="toc-col-cloud"><span class="toc-check">&#10003;</span> High</td>
+              <td>Low</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band" id="toc-cta1">
+    <div class="cloud-cta-inner">
+      <h2>Choose Your ICSDC Tally Cloud Plan</h2>
+      <p>Simple, predictable, and scalable pricing &mdash; so you only pay for what you need while getting secure
+        access, reliable performance, and expert support.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='/contact'">View Plans &amp; Pricing &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='/contact'">Talk to an Expert</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — WHO CAN USE (7 CARDS) ════ -->
+  <section id="toc-who" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHO IT&rsquo;S FOR</span>
+      <h2 class="title" data-animate="fade-up">Who Can Use Tally on Cloud?</h2>
+      <p class="subtitle" data-animate="fade-up">Tally on Cloud is designed for any business that needs reliable,
+        secure, and accessible accounting software.</p>
+
+      <div class="cloud-use-grid" data-stagger id="toc-who-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M9 9h6M9 12h6M9 15h4" />
+            </svg></div>
+          <h3>Small &amp; Medium Businesses</h3>
+          <p>Access Tally from multiple locations without local servers.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>CA Firms &amp; Accounting Professionals</h3>
+          <p>Secure remote access to client data for audits and filings.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg></div>
+          <h3>Growing Enterprises</h3>
+          <p>Distributed teams with centralized accounting data and controlled access.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>Startups</h3>
+          <p>Cost-effective professional accounting without upfront hardware costs.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10" />
+              <path d="M3.51 15a9 9 0 1 0 .49-3.44" />
+            </svg></div>
+          <h3>Businesses Upgrading from Desktop Tally</h3>
+          <p>Need better accessibility, security, and continuity.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Remote &amp; Hybrid Teams</h3>
+          <p>Collaborate on same Tally data from different locations.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="3 11 22 2 13 21 11 13 3 11" />
+            </svg></div>
+          <h3>Multi-Branch Businesses</h3>
+          <p>Manage accounts for multiple offices from one cloud-hosted environment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — TESTIMONIALS ════ -->
+  <section class="testi-section" id="toc-testi" aria-labelledby="toc-testi-heading">
+    <div class="testi-container">
+      <h2 id="toc-testi-heading" class="testi-title">What Our Clients Say About Tally on Cloud</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — FAQ ════ -->
+  <section class="faq-section" id="toc-faq" aria-labelledby="toc-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="toc-faq-heading" class="faq-title">FAQs about Tally on Cloud</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our Tally Cloud Team</h3>
+        <p class="faq-contact-desc">Our Tally on Cloud specialists are available to help you get started, migrate
+          your data, and set up multi-user access for your team.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark" id="toc-cta2">
+    <div class="cloud-cta-inner">
+      <h2>Move Your Accounting to the Cloud with ICSDC</h2>
+      <p>Start running Tally on a secure, always-available cloud environment. No hardware dependency, no location
+        restrictions, no downtime worries.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='/contact'">Get Started Today &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='/contact'">Talk to an Expert</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+              </svg>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                </path>
+              </svg>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram"
+              target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p id="footer-year-text">&#169; Copyright <span data-strapi-year id="footer-year"></span> <span
+          data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script>
+    STRAPI_URL = "http://13.126.9.248:1337";
+    TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+  </script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/tally-on-cloud.js"></script>
+
+</body>
+
+</html>

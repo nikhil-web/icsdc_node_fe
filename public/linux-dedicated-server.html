@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Dedicated Servers: Engineered for Growth | ICSDC</title>
+    <meta name="description"
+        content="ICSDC Linux Dedicated Servers — full root access, enterprise NVMe hardware, GPU-ready, 99.99% uptime SLA. Managed and self-managed plans. Deploy in hours.">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/linux-dedicated-server.css">
+</head>
+
+<body>
+
+    <!-- PAGE LOADER -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Loading...</p>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- DROPDOWN (populated by main.js) -->
+    <div id="dropdown-wrap">
+        <div id="dropdown">
+            <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+            <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+                <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+                <div>
+                    <h3 data-strapi-dd="flatTitle"></h3>
+                    <p data-strapi-dd="flatDesc"></p>
+                </div>
+            </div>
+            <div id="dd-content">
+                <div id="dd-top-bar">
+                    <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+                    <button class="dd-close" onclick="closeDropdown()">✕</button>
+                </div>
+                <div data-strapi-dd="grid" id="dd-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR (populated by main.js) -->
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+            </a>
+            <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+            <button class="btn-login desktop-login-btn">Login</button>
+            <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+            <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+            <button class="btn-login mobile-login-btn">Login</button>
+        </div>
+    </nav>
+
+    <!-- ════════════════════════════════════
+         SECTION 1 — HERO
+    ════════════════════════════════════ -->
+    <section class="hero-section">
+        <div class="hero">
+            <div class="hero-content">
+                <span class="lds-eyebrow">
+                    <span class="lds-eyebrow-dot"></span>
+                    Enterprise Linux Infrastructure
+                </span>
+                <h1 class="hero-title">Linux Dedicated Servers: Engineered for Growth &amp; Dedicated for Tomorrow</h1>
+                <p class="hero-sub">Where open-source freedom meets dedicated server strength</p>
+                <p class="hero-desc">Get the performance, security, and control your workloads truly deserve — without
+                    the complexity. Choose the Linux dedicated server configuration that fits your growth and scale with
+                    confidence.</p>
+                <div class="hero-price-container">
+                    <div class="hero-price-block">
+                        <div class="hero-price">
+                            <span>&#8377;4,999</span><span class="price-unit">/mo</span>
+                        </div>
+                        <p class="price-note">Starting price &mdash; No hidden fees, transparent billing.</p>
+                    </div>
+                    <div class="hero-btns">
+                        <button class="btn-outline">View Plans</button>
+                        <button class="btn-primary">Get Your Server &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Animated terminal visual -->
+            <div class="hero-right">
+                <div class="lds-hero-visual">
+                    <div class="lds-terminal">
+                        <div class="lds-terminal-bar">
+                            <span class="lds-terminal-dot"></span>
+                            <span class="lds-terminal-dot"></span>
+                            <span class="lds-terminal-dot"></span>
+                            <span class="lds-terminal-title">root@icsdc-server:~</span>
+                        </div>
+                        <div class="lds-terminal-body" aria-label="Terminal demonstration">
+                            <span class="lds-terminal-line">
+                                <span class="lds-terminal-prompt">root@icsdc:~# </span>
+                                <span class="lds-terminal-cmd">uname -r</span>
+                            </span>
+                            <span class="lds-terminal-line lds-terminal-out">6.8.0-49-generic</span>
+                            <span class="lds-terminal-line">
+                                <span class="lds-terminal-prompt">root@icsdc:~# </span>
+                                <span class="lds-terminal-cmd">free -h</span>
+                            </span>
+                            <span class="lds-terminal-line lds-terminal-out">Mem: 128G used: 14G free: 114G</span>
+                            <span class="lds-terminal-line">
+                                <span class="lds-terminal-prompt">root@icsdc:~# </span>
+                                <span class="lds-terminal-cmd">df -h /</span>
+                            </span>
+                            <span class="lds-terminal-line lds-terminal-out">Filesystem: /dev/nvme0 2.0T avail: 1.8T</span>
+                            <span class="lds-terminal-line">
+                                <span class="lds-terminal-prompt">root@icsdc:~# </span>
+                                <span class="lds-terminal-cmd">uptime</span>
+                            </span>
+                            <span class="lds-terminal-line lds-terminal-out">up 365 days, load avg: 0.12 0.08 0.06</span>
+                            <span class="lds-terminal-line">
+                                <span class="lds-terminal-prompt">root@icsdc:~# </span>
+                                <span class="lds-terminal-cursor" aria-hidden="true"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="lds-hero-badge">
+                        <div class="lds-hero-badge-dot"></div>
+                        <div>
+                            <div class="lds-hero-badge-text">All systems operational</div>
+                            <div class="lds-hero-badge-sub">99.99% Uptime SLA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 2 — FOUR FEATURE HIGHLIGHTS
+    ════════════════════════════════════ -->
+    <section id="lds-features" class="why-us section">
+        <div class="container">
+            <div class="why-grid" data-stagger>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0110 0v4"/>
+                        </svg>
+                    </div>
+                    <h3>Full Root Access &amp; Complete Control</h3>
+                    <p>Take full command of your environment with unrestricted root access, custom configurations, and
+                        total server freedom.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                            <rect x="2" y="3" width="20" height="14" rx="2"/>
+                            <path d="M8 21h8M12 17v4"/>
+                        </svg>
+                    </div>
+                    <h3>Enterprise-Grade Performance</h3>
+                    <p>Run high-demand workloads on dedicated CPU, RAM, NVMe storage, and rock-solid network speeds
+                        optimized for Linux.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h3>Advanced Security &amp; Isolation</h3>
+                    <p>Protect your applications with dedicated hardware, firewall options, DDoS protection, and a
+                        hardened Linux ecosystem.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                        </svg>
+                    </div>
+                    <h3>Reliable 24/7 ICSDC Expert Support</h3>
+                    <p>Get always-on technical support from Linux specialists who ensure your server stays fast, secure,
+                        and running without interruptions.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 3 — PRICING PLANS
+    ════════════════════════════════════ -->
+    <section id="lds-pricing" class="lds-pricing section">
+        <div class="container">
+            <p class="lds-section-label">Pricing</p>
+            <h2 class="title" data-animate="fade-up">Choose the Right Linux Dedicated Server Plan</h2>
+            <h2 class="subtitle">Find the perfect balance of performance, scalability, and control with ICSDC's
+                purpose-built Linux dedicated server configurations.</h2>
+
+            <div class="lds-pricing-grid" data-stagger>
+
+                <div class="lds-plan-card">
+                    <p class="lds-plan-tier">Entry</p>
+                    <div class="lds-plan-price-wrap">
+                        <span class="lds-plan-currency">&#8377;</span>
+                        <span class="lds-plan-price">4,999</span>
+                        <span class="lds-plan-period">/mo</span>
+                    </div>
+                    <p class="lds-plan-tagline">Ideal for staging, dev environments &amp; small workloads.</p>
+                    <hr class="lds-plan-divider">
+                    <ul class="lds-plan-specs">
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Intel Xeon 4-Core / 8 Threads
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            32 GB DDR4 ECC RAM
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            500 GB NVMe SSD
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            1 Gbps Unmetered Bandwidth
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            5 Dedicated IPv4
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            DDoS Protection Included
+                        </li>
+                    </ul>
+                    <button class="lds-plan-cta lds-plan-cta-secondary">Get Started</button>
+                </div>
+
+                <div class="lds-plan-card lds-featured">
+                    <span class="lds-plan-badge">Most Popular</span>
+                    <p class="lds-plan-tier">Professional</p>
+                    <div class="lds-plan-price-wrap">
+                        <span class="lds-plan-currency">&#8377;</span>
+                        <span class="lds-plan-price">9,999</span>
+                        <span class="lds-plan-period">/mo</span>
+                    </div>
+                    <p class="lds-plan-tagline">Best for production apps, databases &amp; SaaS platforms.</p>
+                    <hr class="lds-plan-divider">
+                    <ul class="lds-plan-specs">
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Intel Xeon 8-Core / 16 Threads
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            64 GB DDR4 ECC RAM
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            1 TB NVMe SSD RAID
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            1 Gbps Unmetered Bandwidth
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            10 Dedicated IPv4
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Managed Backups Included
+                        </li>
+                    </ul>
+                    <button class="lds-plan-cta lds-plan-cta-primary">Get Started</button>
+                </div>
+
+                <div class="lds-plan-card">
+                    <p class="lds-plan-tier">Enterprise</p>
+                    <div class="lds-plan-price-wrap">
+                        <span class="lds-plan-currency">&#8377;</span>
+                        <span class="lds-plan-price">18,999</span>
+                        <span class="lds-plan-period">/mo</span>
+                    </div>
+                    <p class="lds-plan-tagline">For AI/ML pipelines, high-traffic &amp; mission-critical systems.</p>
+                    <hr class="lds-plan-divider">
+                    <ul class="lds-plan-specs">
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Dual Intel Xeon 16-Core / 32 Threads
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            128 GB DDR4 ECC RAM
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            2 TB NVMe SSD RAID
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            10 Gbps Premium Network
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            20 Dedicated IPv4 + VLAN
+                        </li>
+                        <li class="lds-plan-spec">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Full Managed + GPU-Ready
+                        </li>
+                    </ul>
+                    <button class="lds-plan-cta lds-plan-cta-secondary">Contact Sales</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 4 — WHAT ARE LINUX DEDICATED SERVERS
+    ════════════════════════════════════ -->
+    <section id="lds-what" class="lds-what-section">
+        <div class="lds-what-inner">
+            <div class="lds-what-content" data-animate="fade-right">
+                <p class="lds-section-label">What We Offer</p>
+                <h2 class="lds-what-title">What Are ICSDC Linux Dedicated Servers?</h2>
+                <p class="lds-what-body">ICSDC Linux Dedicated Servers are high-performance, single-tenant machines
+                    designed to give your business complete control, unmatched speed, and enterprise-grade security.
+                    Unlike shared or virtual hosting, every resource &mdash; CPU, RAM, storage, and bandwidth &mdash; is
+                    reserved exclusively for your workloads, ensuring consistent performance even under heavy demand.</p>
+                <p class="lds-what-body">Powered by a hardened Linux environment, these servers are built for everything
+                    from mission-critical applications to large-scale databases, DevOps pipelines, SaaS platforms, and
+                    custom deployments. It&rsquo;s your own dedicated Linux-powered engine &mdash; optimized, isolated,
+                    and ready for anything your business needs to run.</p>
+                <div class="hero-btns">
+                    <button class="btn-primary">Get Started &rarr;</button>
+                    <button class="btn-outline">Talk to an Expert</button>
+                </div>
+            </div>
+            <div class="lds-what-visual" data-animate="fade-left">
+                <img src="assets/images/linux-dedicated-what.png"
+                    alt="Linux Dedicated Server infrastructure diagram" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 5 — WHY BUSINESSES CHOOSE
+    ════════════════════════════════════ -->
+    <section id="lds-why" class="lds-why-section">
+        <div class="container">
+            <p class="lds-section-label">Advantages</p>
+            <h2 class="title" data-animate="fade-up">Why Businesses Choose ICSDC Linux Dedicated Servers</h2>
+            <div class="lds-why-grid" data-stagger>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <h3>Guaranteed Dedicated Performance</h3>
+                    <p>Fixed, non-shared CPU, RAM, and NVMe storage ensures your applications stay fast and responsive
+                        even during peak usage.</p>
+                </div>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    </div>
+                    <h3>Full Root Access &amp; Developer Freedom</h3>
+                    <p>Install custom packages, optimize kernels, configure firewalls, run containers, or deploy your
+                        tech stack exactly the way you want.</p>
+                </div>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <h3>Hardened Security With Real Protections</h3>
+                    <p>DDoS mitigation, isolated hardware, SSH hardening, real-time intrusion checks, and optional WAF
+                        setup for secure deployments.</p>
+                </div>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                    </div>
+                    <h3>99.995% Uptime Built on Redundant Architecture</h3>
+                    <p>Multi-layered power, network redundancy, and enterprise data-center standards ensure uninterrupted
+                        availability for critical workloads.</p>
+                </div>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+                    </div>
+                    <h3>Zero-Noise, Single-Tenant Infrastructure</h3>
+                    <p>Your server is fully isolated &mdash; no noisy neighbors, no shared resources, no performance
+                        dips caused by other users.</p>
+                </div>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+                    </div>
+                    <h3>Effortless Scalability With Instant Upgrades</h3>
+                    <p>Need more RAM, CPU cores, or storage? Scale instantly without downtime or migrations, keeping your
+                        operations running smoothly.</p>
+                </div>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                    </div>
+                    <h3>Multi-Distro Flexibility</h3>
+                    <p>Run Ubuntu, CentOS, Debian, AlmaLinux, Rocky Linux, or your preferred distro &mdash; optimized
+                        for stability and security.</p>
+                </div>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </div>
+                    <h3>Proactive Performance Monitoring &amp; Alerts</h3>
+                    <p>Real-time server monitoring, resource tracking, and alerts help detect issues before they affect
+                        your workload.</p>
+                </div>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg>
+                    </div>
+                    <h3>Managed Backup &amp; Recovery Options</h3>
+                    <p>Automated backups, offsite storage, and rapid restore capabilities safeguard your data against
+                        accidental loss or failures.</p>
+                </div>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                    </div>
+                    <h3>High-Speed Bandwidth &amp; Low-Latency Routing</h3>
+                    <p>Premium network routes ensure fast global connectivity, ideal for apps, APIs, websites, and
+                        latency-sensitive services.</p>
+                </div>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 12h20M12 2v20"/></svg>
+                    </div>
+                    <h3>Dedicated IPs &amp; Custom Network Configuration</h3>
+                    <p>Multiple IPv4/IPv6 addresses, private VLANs, firewall rules, and routing options tailored to your
+                        architecture.</p>
+                </div>
+
+                <div class="lds-why-card">
+                    <div class="lds-why-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    </div>
+                    <h3>24/7 Support From Certified Linux Engineers</h3>
+                    <p>A dedicated team of Linux specialists available day and night to troubleshoot, optimize, and
+                        resolve server issues.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 6 — SELF-MANAGED VS FULLY MANAGED
+    ════════════════════════════════════ -->
+    <section id="lds-compare" class="lds-compare-section">
+        <div class="lds-compare-container">
+            <p class="lds-section-label" style="text-align:center">Managed vs Self-Managed</p>
+            <h2 class="section-title title" data-animate="fade-up"
+                style="font-size:clamp(26px,3vw,36px);font-weight:800;color:var(--blue);letter-spacing:-0.03em;text-align:center;margin:8px 0 0">
+                Self-Managed vs Fully Managed Dedicated Server Hosting</h2>
+
+            <div class="lds-compare-table-wrap" data-animate="fade-up">
+                <table class="lds-compare-table">
+                    <thead>
+                        <tr>
+                            <th>Capabilities</th>
+                            <th>Self-Managed</th>
+                            <th>Fully Managed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Full Server Control</td>
+                            <td><span class="lds-compare-check">✅</span> You manage everything</td>
+                            <td><span class="lds-compare-check">✅</span> Control + ICSDC handles system-level tasks</td>
+                        </tr>
+                        <tr>
+                            <td>OS &amp; Software Installation</td>
+                            <td><span class="lds-compare-check">✅</span> Done by your team</td>
+                            <td><span class="lds-compare-check">✅</span> Handled and configured by ICSDC</td>
+                        </tr>
+                        <tr>
+                            <td>Firewall, Security &amp; Patching</td>
+                            <td><span class="lds-compare-cross">❌</span> Not included</td>
+                            <td><span class="lds-compare-check">✅</span> Fully maintained and monitored</td>
+                        </tr>
+                        <tr>
+                            <td>24/7 Monitoring &amp; Alerts</td>
+                            <td><span class="lds-compare-cross">❌</span> You must set it up</td>
+                            <td><span class="lds-compare-check">✅</span> ICSDC monitors uptime, load, and health</td>
+                        </tr>
+                        <tr>
+                            <td>Performance Optimization</td>
+                            <td><span class="lds-compare-cross">❌</span> Requires in-house expertise</td>
+                            <td><span class="lds-compare-check">✅</span> Kernel tuning, caching, and optimization done for you</td>
+                        </tr>
+                        <tr>
+                            <td>Backup &amp; Restore Management</td>
+                            <td><span class="lds-compare-cross">❌</span> Manual setup required</td>
+                            <td><span class="lds-compare-check">✅</span> Automated backups + assisted restore</td>
+                        </tr>
+                        <tr>
+                            <td>Troubleshooting &amp; Fixes</td>
+                            <td><span class="lds-compare-cross">❌</span> You resolve issues</td>
+                            <td><span class="lds-compare-check">✅</span> ICSDC engineers handle issues end-to-end</td>
+                        </tr>
+                        <tr>
+                            <td>Time Required From Your Team</td>
+                            <td><span class="lds-compare-cross">❌</span> High &mdash; daily upkeep</td>
+                            <td><span class="lds-compare-check">✅</span> Low &mdash; focus on business, not servers</td>
+                        </tr>
+                        <tr>
+                            <td>Risk of Misconfiguration</td>
+                            <td><span class="lds-compare-cross">❌</span> Higher</td>
+                            <td><span class="lds-compare-check">✅</span> Lower with expert oversight</td>
+                        </tr>
+                        <tr>
+                            <td>Support Scope</td>
+                            <td><span class="lds-compare-cross">❌</span> Limited (hardware only)</td>
+                            <td><span class="lds-compare-check">✅</span> Full-stack support (OS, apps, configurations)</td>
+                        </tr>
+                        <tr>
+                            <td>Best Suited For</td>
+                            <td>Developers &amp; sysadmins</td>
+                            <td>Businesses needing reliability &amp; peace of mind</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="lds-compare-btns">
+                <button class="btn-outline">Self-Managed Plans</button>
+                <button class="btn-primary">Managed Server Plans &rarr;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 7 — SPECIFICATIONS
+    ════════════════════════════════════ -->
+    <section id="lds-specs" class="lds-specs-section">
+        <div class="container">
+            <p class="lds-section-label">Technical Specs</p>
+            <h2 class="title" data-animate="fade-up">ICSDC Linux Dedicated Server Specifications</h2>
+            <h2 class="subtitle">Built on enterprise-class hardware, high-speed networking, and flexible software
+                environments &mdash; engineered for reliability, speed, and complete control.</h2>
+
+            <div class="lds-specs-grid" data-stagger>
+
+                <div class="lds-specs-card">
+                    <div class="lds-specs-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
+                    </div>
+                    <h3>High-Performance Compute Power</h3>
+                    <ul class="lds-specs-list">
+                        <li>Latest-generation Intel Xeon scalable processors</li>
+                        <li>Optimized for AI, ML, virtualization, and high-traffic enterprise applications</li>
+                    </ul>
+                </div>
+
+                <div class="lds-specs-card">
+                    <div class="lds-specs-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg>
+                    </div>
+                    <h3>Enterprise-Grade Storage Options</h3>
+                    <ul class="lds-specs-list">
+                        <li>NVMe U3 SSDs for ultra-fast workloads &amp; Enterprise SSDs for high IOPS and low latency</li>
+                        <li>Storage ranging from 100 GB to multi-terabytes</li>
+                    </ul>
+                </div>
+
+                <div class="lds-specs-card">
+                    <div class="lds-specs-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                    </div>
+                    <h3>High-Speed Network Infrastructure</h3>
+                    <ul class="lds-specs-list">
+                        <li>1 Gbps bandwidth as standard &amp; L3-private network for tenant isolation</li>
+                        <li>Built-in shared firewall protection</li>
+                    </ul>
+                </div>
+
+                <div class="lds-specs-card">
+                    <div class="lds-specs-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                    </div>
+                    <h3>Backup &amp; Data Protection</h3>
+                    <ul class="lds-specs-list">
+                        <li>Immutable S3 backup options (MinIO, Scality)</li>
+                        <li>Guaranteed 2-hour RPO for critical environments</li>
+                    </ul>
+                </div>
+
+                <div class="lds-specs-card">
+                    <div class="lds-specs-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    </div>
+                    <h3>Developer Tools &amp; Control Options</h3>
+                    <ul class="lds-specs-list">
+                        <li>cPanel / custom control panels &amp; one-click software installation</li>
+                        <li>Unlimited MySQL/MariaDB databases</li>
+                    </ul>
+                </div>
+
+                <div class="lds-specs-card">
+                    <div class="lds-specs-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </div>
+                    <h3>Email &amp; Communication Tools</h3>
+                    <ul class="lds-specs-list">
+                        <li>Unlimited email accounts &amp; up to 2,000 outbound emails per hour</li>
+                        <li>Unlimited forwarders &amp; webmail access from any device</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 8 — 24/7 SUPPORT
+    ════════════════════════════════════ -->
+    <section id="lds-support" class="lds-support-section">
+        <div class="container">
+            <p class="lds-section-label">Support</p>
+            <h2 class="title" data-animate="fade-up">Here When You Need Us &mdash; 24/7 Expert Linux Support</h2>
+            <h2 class="subtitle">Access round-the-clock assistance from certified Linux engineers who understand your
+                infrastructure, workloads, and business goals.</h2>
+
+            <div class="lds-support-grid" data-stagger>
+
+                <div class="lds-support-card">
+                    <div class="lds-support-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                    </div>
+                    <h3>Live Chat</h3>
+                    <p>Instant Technical Assistance, Anytime. Connect directly with a Linux specialist in seconds.</p>
+                    <a href="#" class="lds-support-cta">Chat Now</a>
+                </div>
+
+                <div class="lds-support-card">
+                    <div class="lds-support-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>
+                    </div>
+                    <h3>Get Support</h3>
+                    <p>Real Experts. Real Solutions. 24/7. Raise a ticket and get a response from a certified engineer.</p>
+                    <a href="/contact" class="lds-support-cta">Get in Touch</a>
+                </div>
+
+                <div class="lds-support-card">
+                    <div class="lds-support-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 01.01 2.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+                    </div>
+                    <h3>Call Us</h3>
+                    <p>Talk to an ICSDC Linux Specialist Anytime. Available 24/7 for urgent technical assistance.</p>
+                    <a href="tel:+919810958857" class="lds-support-cta">&#128222; +91-98109 58857</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 9 — AI/ML INNOVATION
+    ════════════════════════════════════ -->
+    <section id="lds-innovation" class="lds-innovation-section">
+        <div class="container">
+            <p class="lds-section-label">AI &amp; ML Ready</p>
+            <h2 class="title" data-animate="fade-up">Why ICSDC Linux Dedicated Servers Are Ideal for AI, ML &amp;
+                Modern IT Innovation</h2>
+            <h2 class="subtitle">The perfect foundation for future-focused workloads &mdash; combining raw compute
+                power, GPU acceleration, scalable architecture, and a development-friendly ecosystem.</h2>
+
+            <div class="lds-innovation-grid" data-stagger>
+
+                <div class="lds-innovation-card">
+                    <div class="lds-innovation-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <div>
+                        <h3>Optimized Resource Management</h3>
+                        <p>Handles CPU-heavy models, GPU workloads, and memory-intensive training cycles with efficient
+                            resource distribution.</p>
+                    </div>
+                </div>
+
+                <div class="lds-innovation-card">
+                    <div class="lds-innovation-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div>
+                        <h3>Long-Term Security &amp; OS Stability</h3>
+                        <p>LTS-based Linux environments provide consistent performance, long-term patching, strong
+                            kernel protection, and dependable security.</p>
+                    </div>
+                </div>
+
+                <div class="lds-innovation-card">
+                    <div class="lds-innovation-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    </div>
+                    <div>
+                        <h3>Cloud and DevOps Ready Architecture</h3>
+                        <p>Seamlessly supports hybrid cloud setups, CI/CD pipelines, Kubernetes, Docker, Ansible,
+                            Terraform, and GitOps workflows.</p>
+                    </div>
+                </div>
+
+                <div class="lds-innovation-card">
+                    <div class="lds-innovation-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+                    </div>
+                    <div>
+                        <h3>Advanced GPU &amp; Driver Support</h3>
+                        <p>Compatible with NVIDIA CUDA, cuDNN, TensorRT, and high-performance GPU drivers for
+                            accelerated AI/ML training and deep learning models.</p>
+                    </div>
+                </div>
+
+                <div class="lds-innovation-card">
+                    <div class="lds-innovation-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                    </div>
+                    <div>
+                        <h3>High-Performance Compute for Data-Driven Tasks</h3>
+                        <p>Handles large datasets, training clusters, inference engines, ETL processes, and real-time
+                            data analytics with ease.</p>
+                    </div>
+                </div>
+
+                <div class="lds-innovation-card">
+                    <div class="lds-innovation-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+                    </div>
+                    <div>
+                        <h3>Scalable Infrastructure for Growing AI Models</h3>
+                        <p>Expand CPU cores, GPU units, RAM, or NVMe storage instantly &mdash; no rebuilds or downtime
+                            required.</p>
+                    </div>
+                </div>
+
+                <div class="lds-innovation-card">
+                    <div class="lds-innovation-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                    </div>
+                    <div>
+                        <h3>Open-Source Flexibility for Developers</h3>
+                        <p>Supports Ubuntu, Debian, AlmaLinux, Rocky Linux, CentOS Stream, and custom builds &mdash;
+                            giving engineers full control and customization freedom.</p>
+                    </div>
+                </div>
+
+                <div class="lds-innovation-card">
+                    <div class="lds-innovation-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M20.49 12H22M2 12h1.51M19.07 19.07l-1.41-1.41M5.34 5.34L3.93 3.93M12 20.49V22M12 2v1.51"/></svg>
+                    </div>
+                    <div>
+                        <h3>Compatible With Modern Development Stacks</h3>
+                        <p>Built to run TensorFlow, PyTorch, Scikit-learn, Hugging Face, Jupyter environments,
+                            microservices, and modern frameworks without constraints.</p>
+                    </div>
+                </div>
+
+                <div class="lds-innovation-card">
+                    <div class="lds-innovation-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+                    </div>
+                    <div>
+                        <h3>Ideal for Automation &amp; Edge Deployments</h3>
+                        <p>Provides stable environments for IoT, robotics, automation systems, and AI-driven edge
+                            applications.</p>
+                    </div>
+                </div>
+
+                <div class="lds-innovation-card">
+                    <div class="lds-innovation-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </div>
+                    <div>
+                        <h3>Reliable for High-Demand Research &amp; Enterprise Computing</h3>
+                        <p>Trusted for scientific computing, simulation engines, HPC workloads, and enterprise-scale AI
+                            transformations.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 10 — USE CASES
+    ════════════════════════════════════ -->
+    <section id="lds-usecases" class="lds-usecase-section">
+        <div class="container">
+            <p class="lds-section-label">Use Cases</p>
+            <h2 class="title" data-animate="fade-up">Best Use Cases for Linux Dedicated Servers</h2>
+
+            <div class="lds-usecase-grid" data-stagger>
+
+                <div class="lds-usecase-card">
+                    <div class="lds-usecase-num" aria-hidden="true">01</div>
+                    <h3>High-Traffic Websites &amp; Web Applications</h3>
+                    <p>Ideal for platforms that handle thousands of concurrent users, ensuring fast load times and
+                        uninterrupted performance.</p>
+                </div>
+
+                <div class="lds-usecase-card">
+                    <div class="lds-usecase-num" aria-hidden="true">02</div>
+                    <h3>Large Databases &amp; Data-Intensive Systems</h3>
+                    <p>Perfect for running heavy SQL/NoSQL databases that demand consistent stability and high compute
+                        power.</p>
+                </div>
+
+                <div class="lds-usecase-card">
+                    <div class="lds-usecase-num" aria-hidden="true">03</div>
+                    <h3>AI, ML &amp; Deep Learning Workloads</h3>
+                    <p>Supports GPU acceleration, large model training, and high-memory pipelines with exceptional
+                        resource optimization.</p>
+                </div>
+
+                <div class="lds-usecase-card">
+                    <div class="lds-usecase-num" aria-hidden="true">04</div>
+                    <h3>DevOps, CI/CD &amp; Container Orchestration</h3>
+                    <p>A stable, flexible environment for running Kubernetes clusters, Docker workloads, and automated
+                        deployment pipelines.</p>
+                </div>
+
+                <div class="lds-usecase-card">
+                    <div class="lds-usecase-num" aria-hidden="true">05</div>
+                    <h3>Enterprise SaaS &amp; Mission-Critical Applications</h3>
+                    <p>Designed for always-on platforms that require strong security, high uptime, and dedicated compute
+                        resources.</p>
+                </div>
+
+                <div class="lds-usecase-card">
+                    <div class="lds-usecase-num" aria-hidden="true">06</div>
+                    <h3>Big Data Processing &amp; Real-Time Analytics</h3>
+                    <p>Handles large datasets, ETL workflows, and real-time analytics engines with scalable compute and
+                        fast NVMe storage.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 11 — TESTIMONIALS
+         Uses #lds-* IDs so components.js
+         does not overwrite page-specific content
+    ════════════════════════════════════ -->
+    <section class="lds-testi-section testi-section" id="lds-testimonials">
+        <div class="testi-container">
+            <h2 class="testi-title" data-animate="fade-up">Read Our Client Stories about ICSDC Linux Dedicated Servers
+            </h2>
+
+            <div class="testi-scroll-viewport">
+                <div class="testi-grid" id="lds-testi-grid" role="list" aria-label="Client testimonials">
+                    <!-- Populated by linux-dedicated-server.js -->
+                </div>
+            </div>
+
+            <div class="testi-pagination" id="lds-testi-dots" role="tablist"
+                aria-label="Testimonial navigation"></div>
+
+            <div class="testi-nav">
+                <button class="testi-nav-btn" id="lds-testi-prev" aria-label="Previous testimonial">&#8249;</button>
+                <button class="testi-nav-btn" id="lds-testi-next" aria-label="Next testimonial">&#8250;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 12 — FAQ
+         Uses lds- prefixed IDs so components.js
+         does not overwrite LDS-specific content
+    ════════════════════════════════════ -->
+    <section class="lds-faq-section faq-section" id="lds-faq">
+        <div class="faq-container">
+
+            <!-- Left: accordion -->
+            <div class="faq-col">
+                <h2 class="faq-title" data-animate="fade-up">FAQs about ICSDC Linux Dedicated Servers</h2>
+                <dl class="faq-accordions" id="lds-faq-accordions">
+                    <!-- Populated by linux-dedicated-server.js -->
+                </dl>
+            </div>
+
+            <!-- Right: sticky contact card -->
+            <div class="faq-contact-card" data-animate="fade-left">
+                <h3 class="faq-contact-title">Still have questions?</h3>
+                <p class="faq-contact-desc">Our Linux server experts are available 24/7 to walk you through the right
+                    plan for your infrastructure needs.</p>
+                <a href="/contact" class="faq-contact-btn">
+                    Talk to an Expert
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 13 — FINAL CTA BAND
+    ════════════════════════════════════ -->
+    <section class="lds-cta-band lds-cta-dark" aria-label="Final call to action">
+        <div class="lds-cta-inner">
+            <h2>ICSDC Linux Dedicated Servers Give You a Powerful, Stable, and Scalable Foundation</h2>
+            <p>Built for AI, cloud, DevOps, and enterprise workloads &mdash; delivering consistent performance and
+                complete control without compromise.</p>
+            <div class="lds-cta-btns">
+                <button class="lds-cta-btn-primary">Get Started Today &rarr;</button>
+                <button class="lds-cta-btn-outline">Talk to an Expert</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         FOOTER
+    ════════════════════════════════════ -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-main">
+            <div class="footer-container">
+
+                <div class="footer-brand">
+                    <a href="/" aria-label="ICSDC Home">
+                        <img src="assets/images/main_logo.png" alt="ICSDC" width="117" class="footer-logo">
+                    </a>
+                    <address class="footer-address">
+                        <span>A108 Adam Street</span>
+                        <span>New York, NY 535022</span>
+                        <span>United States</span>
+                        <span class="footer-phone">Phone: +1 5589 55488 55</span>
+                        <span>Email: <a href="mailto:info@icsdc.com" class="footer-email-link">info@icsdc.com</a></span>
+                    </address>
+                    <div class="footer-social" aria-label="Social media links">
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                            class="footer-social-link" aria-label="Facebook">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"
+                                    stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+                            class="footer-social-link" aria-label="Twitter/X">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path
+                                    d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
+                                    stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                            class="footer-social-link" aria-label="Instagram">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="white" stroke-width="1.5"/>
+                                <circle cx="12" cy="12" r="4" stroke="white" stroke-width="1.5"/>
+                                <circle cx="17.5" cy="6.5" r="1" fill="white"/>
+                            </svg>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+                            class="footer-social-link" aria-label="LinkedIn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path
+                                    d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"
+                                    stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="4" cy="4" r="2" stroke="white" stroke-width="1.5"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-link-group" aria-labelledby="footer-services-lds">
+                    <h3 id="footer-services-lds" class="footer-link-title">Services</h3>
+                    <ul>
+                        <li><a href="/dedicated-server" class="footer-link">Dedicated Server</a></li>
+                        <li><a href="/linux-dedicated-server" class="footer-link">Linux Dedicated</a></li>
+                        <li><a href="/vps-hosting" class="footer-link">VPS Hosting</a></li>
+                        <li><a href="/cloud-hosting" class="footer-link">Cloud Hosting</a></li>
+                        <li><a href="/email-hosting" class="footer-link">Email Hosting</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-link-group" aria-labelledby="footer-company-lds">
+                    <h3 id="footer-company-lds" class="footer-link-title">Company</h3>
+                    <ul>
+                        <li><a href="/about" class="footer-link">About Us</a></li>
+                        <li><a href="/careers" class="footer-link">Careers</a></li>
+                        <li><a href="/resources/blog" class="footer-link">Blog</a></li>
+                        <li><a href="/press" class="footer-link">Press</a></li>
+                        <li><a href="/contact" class="footer-link">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-link-group" aria-labelledby="footer-support-lds">
+                    <h3 id="footer-support-lds" class="footer-link-title">Support</h3>
+                    <ul>
+                        <li><a href="/support" class="footer-link">Help Center</a></li>
+                        <li><a href="/resources/docs" class="footer-link">Documentation</a></li>
+                        <li><a href="/status" class="footer-link">System Status</a></li>
+                        <li><a href="/resources/case-studies" class="footer-link">Case Studies</a></li>
+                        <li><a href="/migration" class="footer-link">Migration</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-link-group" aria-labelledby="footer-legal-lds">
+                    <h3 id="footer-legal-lds" class="footer-link-title">Legal</h3>
+                    <ul>
+                        <li><a href="/privacy" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="/terms" class="footer-link">Terms of Service</a></li>
+                        <li><a href="/cookies" class="footer-link">Cookie Policy</a></li>
+                        <li><a href="/sla" class="footer-link">SLA</a></li>
+                        <li><a href="/gdpr" class="footer-link">GDPR</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p id="footer-year-text">&#169; Copyright <span id="footer-year"></span> ICSDC. All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- Strapi config -->
+    <script>
+        STRAPI_URL = "http://13.126.9.248:1337";
+        TOKEN = "";
+    </script>
+    <script src="assets/js/main.js" type="module"></script>
+    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/polish.js" defer></script>
+    <script src="assets/js/linux-dedicated-server.js" defer></script>
+
+    <script>
+        (function () {
+            var el = document.getElementById('footer-year');
+            if (el) el.textContent = new Date().getFullYear();
+        }());
+    </script>
+
+</body>
+
+</html>

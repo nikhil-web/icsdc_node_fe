@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cPanel Hosting India | Affordable &amp; Fast Web Hosting | ICSDC</title>
+  <meta name="description"
+    content="Launch your website with ICSDC cPanel hosting. NVMe SSD, free SSL, daily backups, one-click WordPress install, and 24/7 expert support. Starting at ₹99/mo.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/cpanel-hosting.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+  <!-- ════ HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="cp-eyebrow">&#128421; cPanel Hosting</div>
+        <h1 class="hero-title">Launch &amp; Manage Your Website Easily With cPanel Hosting</h1>
+        <p class="hero-sub">Your All-In-One Hosting Solution With Full cPanel Access</p>
+        <p class="hero-desc">From email to files to databases, control everything in one simple dashboard with
+          top-tier speed and uptime.</p>
+        <div class="hero-btns">
+          <button class="btn-primary">Launch Your Website &rarr;</button>
+          <button class="btn-outline">View Plans</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="cp-hero-visual">
+          <div class="cp-top-badge">&#128421; cPanel Powered</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- cPanel dashboard card background -->
+            <rect x="20" y="20" width="260" height="180" rx="12" fill="#fff" stroke="rgba(20,184,166,0.12)"
+              stroke-width="1" />
+            <!-- Header bar — teal -->
+            <rect x="20" y="20" width="260" height="44" rx="12" fill="#0f766e" />
+            <rect x="20" y="52" width="260" height="12" fill="#0f766e" />
+            <!-- cPanel "C" icon in header -->
+            <circle cx="47" cy="42" r="14" fill="rgba(255,255,255,0.18)" />
+            <text x="40" y="48" font-size="15" fill="white" font-weight="900">C</text>
+            <text x="63" y="47" font-size="12" fill="white" font-weight="700">cPanel Dashboard</text>
+            <!-- Sidebar -->
+            <rect x="20" y="64" width="68" height="136" fill="#f0fdfa" stroke="rgba(20,184,166,0.1)"
+              stroke-width="1" />
+            <text x="28" y="84" font-size="9.5" fill="#0f766e" font-weight="600">&#9632; File Manager</text>
+            <text x="28" y="100" font-size="9.5" fill="#64748b">&#9632; Databases</text>
+            <text x="28" y="116" font-size="9.5" fill="#64748b">&#9632; Email</text>
+            <text x="28" y="132" font-size="9.5" fill="#64748b">&#9632; Domains</text>
+            <text x="28" y="148" font-size="9.5" fill="#64748b">&#9632; SSL/TLS</text>
+            <text x="28" y="164" font-size="9.5" fill="#64748b">&#9632; Softaculous</text>
+            <!-- Main content area header -->
+            <rect x="96" y="72" width="172" height="32" rx="6" fill="#f0fdfa" />
+            <rect x="104" y="79" width="90" height="7" rx="3" fill="#0f766e" opacity=".7" />
+            <rect x="104" y="90" width="60" height="5" rx="2" fill="#99f6e4" />
+            <!-- Stats row -->
+            <rect x="96" y="110" width="50" height="40" rx="6" fill="#f0fdfa" stroke="rgba(20,184,166,0.25)"
+              stroke-width="1" />
+            <text x="105" y="127" font-size="10" fill="#0f766e" font-weight="800">5 GB</text>
+            <text x="99" y="143" font-size="8" fill="#94a3b8">Storage</text>
+            <rect x="152" y="110" width="50" height="40" rx="6" fill="#fef9c3" stroke="rgba(234,179,8,0.2)"
+              stroke-width="1" />
+            <text x="157" y="127" font-size="10" fill="#ca8a04" font-weight="800">99.9%</text>
+            <text x="157" y="143" font-size="8" fill="#94a3b8">Uptime</text>
+            <rect x="208" y="110" width="50" height="40" rx="6" fill="#ecfdf5" stroke="rgba(34,197,94,0.2)"
+              stroke-width="1" />
+            <text x="212" y="127" font-size="10" fill="#16a34a" font-weight="800">Free</text>
+            <text x="214" y="143" font-size="8" fill="#94a3b8">SSL</text>
+            <!-- File manager row mockup -->
+            <rect x="96" y="158" width="172" height="14" rx="4" fill="#f8fafc" />
+            <rect x="104" y="162" width="16" height="6" rx="2" fill="#99f6e4" />
+            <rect x="124" y="163" width="70" height="4" rx="2" fill="#cbd5e1" />
+            <rect x="96" y="176" width="172" height="14" rx="4" fill="#f8fafc" />
+            <rect x="104" y="180" width="16" height="6" rx="2" fill="#99f6e4" />
+            <rect x="124" y="181" width="50" height="4" rx="2" fill="#cbd5e1" />
+          </svg>
+          <div class="cp-status-badge">
+            <div class="cp-dot"></div>
+            <div>
+              <div class="cp-bt">99.9% Uptime</div>
+              <div class="cp-bs">SLA Guaranteed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ WHY US — 4 PILLARS ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <!-- Pillar 1 -->
+        <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M3 9h18M9 21V9" />
+            </svg>
+          </div>
+          <h3>One-Click Website Management</h3>
+          <p>Easily manage files, emails, domains and databases from a clean, intuitive cPanel dashboard.</p>
+        </div>
+        <!-- Pillar 2 -->
+        <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          </div>
+          <h3>Fast &amp; Optimized Performance</h3>
+          <p>High-speed SSD storage, stable uptime and servers optimized for smooth website performance.</p>
+        </div>
+        <!-- Pillar 3 -->
+        <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <h3>Built-In Security &amp; Backups</h3>
+          <p>Firewalls, malware scanning, SSL support and automated daily backups keep your site protected.</p>
+        </div>
+        <!-- Pillar 4 -->
+        <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <h3>Instant Setup &amp; 24/7 Support</h3>
+          <p>Get your hosting activated instantly with round-the-clock assistance from ICSDC experts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ PRICING PLANS ════ -->
+  <section id="cp-plans" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">PRICING PLANS</span>
+      <h2 class="title" data-animate="fade-up">Affordable cPanel Hosting Solutions for Every Business</h2>
+      <p class="subtitle" data-animate="fade-up">Trusted by businesses worldwide, ICSDC delivers high-performance
+        hosting with transparent pricing and premium features &mdash; without the premium cost.</p>
+      <div class="cp-plans-grid" data-stagger>
+
+        <!-- Starter Plan -->
+        <div class="cp-plan-card">
+          <div class="cp-plan-name">Starter</div>
+          <div class="cp-plan-price">&#8377;99<span>/mo</span></div>
+          <p class="cp-plan-desc">Perfect for personal websites, blogs and portfolios</p>
+          <ul class="cp-plan-features">
+            <li>1 Website</li>
+            <li>5 GB NVMe SSD Storage</li>
+            <li>Free SSL Certificate</li>
+            <li>5 Email Accounts</li>
+            <li>Daily Backups</li>
+            <li>24/7 Support</li>
+          </ul>
+          <button class="cp-plan-btn cp-plan-btn-outline">Get Started &rarr;</button>
+        </div>
+
+        <!-- Professional Plan (Featured) -->
+        <div class="cp-plan-card cp-plan-popular">
+          <div class="cp-plan-badge">Most Popular</div>
+          <div class="cp-plan-name">Professional</div>
+          <div class="cp-plan-price">&#8377;249<span>/mo</span></div>
+          <p class="cp-plan-desc">Ideal for SMBs, agencies and eCommerce stores</p>
+          <ul class="cp-plan-features">
+            <li>10 Websites</li>
+            <li>50 GB NVMe SSD Storage</li>
+            <li>Free SSL + Free Domain</li>
+            <li>Unlimited Email Accounts</li>
+            <li>Daily Backups + Restore</li>
+            <li>Free CDN</li>
+            <li>Priority 24/7 Support</li>
+          </ul>
+          <button class="cp-plan-btn cp-plan-btn-primary">Get Started &rarr;</button>
+        </div>
+
+        <!-- Business Plan -->
+        <div class="cp-plan-card">
+          <div class="cp-plan-name">Business</div>
+          <div class="cp-plan-price">&#8377;499<span>/mo</span></div>
+          <p class="cp-plan-desc">For high-traffic websites and growing businesses</p>
+          <ul class="cp-plan-features">
+            <li>Unlimited Websites</li>
+            <li>200 GB NVMe SSD Storage</li>
+            <li>Free SSL + Free Domain</li>
+            <li>Unlimited Email Accounts</li>
+            <li>Daily Backups + On-Demand Restore</li>
+            <li>Free CDN + DDoS Protection</li>
+            <li>Free Website Migration</li>
+            <li>Dedicated Account Manager</li>
+          </ul>
+          <button class="cp-plan-btn cp-plan-btn-outline">Get Started &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ WHAT MAKES BETTER ════ -->
+  <section id="cp-features" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">FEATURES</span>
+      <h2 class="title" data-animate="fade-up">What Makes Our cPanel Hosting Better?</h2>
+      <p class="subtitle" data-animate="fade-up">Built for performance and simplicity &mdash; every feature
+        designed to make your website experience effortless.</p>
+      <div class="cp-features-grid" data-stagger>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M3 9h18M9 21V9" />
+            </svg>
+          </div>
+          <h3>Simple Website Management</h3>
+          <p>Manage everything from domains to email accounts from a clean, organized cPanel interface &mdash; even
+            non-technical users can handle tasks quickly.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          </div>
+          <h3>Optimized Server Performance</h3>
+          <p>Your website runs on high-performance infrastructure tuned for speed, stability, and reduced latency
+            &mdash; ensuring consistently fast load times.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+          </div>
+          <h3>Quick Deployment With One-Click Tools</h3>
+          <p>Set up CMS platforms, eCommerce systems, analytics tools, and more using one-click installers that
+            eliminate manual configuration.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+          </div>
+          <h3>Multi-Layered Security Architecture</h3>
+          <p>Firewalls, malware detection, account isolation, secure FTP, and free SSL &mdash; keeping your files,
+            data, and visitors safe from online threats.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+            </svg>
+          </div>
+          <h3>Reliable Data Restoration</h3>
+          <p>Daily backup systems ensure multiple restore points, allowing you to reverse errors or recover lost
+            data instantly without downtime.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
+          </div>
+          <h3>Professional Business Email</h3>
+          <p>Create domain-based email accounts with spam protection, mobile sync, and webmail access for a more
+            credible business communication channel.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ WHY CHOOSE ICSDC ════ -->
+  <section id="cp-why" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHY ICSDC</span>
+      <h2 class="title" data-animate="fade-up">Why Choose ICSDC?</h2>
+      <p class="subtitle" data-animate="fade-up">Delivering a reliable, secure and high-performance hosting
+        environment built for businesses that need stability without complications.</p>
+      <div class="cp-why-grid" data-stagger>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="8" rx="2" />
+              <rect x="2" y="14" width="20" height="8" rx="2" />
+              <line x1="6" y1="6" x2="6.01" y2="6" />
+              <line x1="6" y1="18" x2="6.01" y2="18" />
+            </svg>
+          </div>
+          <h3>Enterprise-Grade Infrastructure</h3>
+          <p>Your website runs on powerful servers with SSD storage, optimized configurations and strong
+            performance consistency.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <h3>Strong, Multi-Layered Security</h3>
+          <p>Firewalls, malware scanning, DDoS protection, secure account isolation and free SSL &mdash; all
+            designed to keep threats out.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M3 9h18M9 21V9" />
+            </svg>
+          </div>
+          <h3>Effortless cPanel Management</h3>
+          <p>Control domains, emails, files, DNS, and databases easily through a clean, intuitive interface
+            without technical complexity.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+            </svg>
+          </div>
+          <h3>Daily Backups for Safe Recovery</h3>
+          <p>Automatic daily backups ensure recent restore points for quick recovery in case of accidental loss
+            or errors.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </div>
+          <h3>Free &amp; Smooth Website Migration</h3>
+          <p>Move your website to ICSDC without downtime &mdash; our team handles the migration securely and
+            ensures a seamless transition.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg>
+          </div>
+          <h3>Scalable Plans Built for Growth</h3>
+          <p>Upgrade storage, bandwidth or other resources anytime without disruptions as your business
+            grows.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ WHO CAN USE ════ -->
+  <section id="cp-who" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHO IT'S FOR</span>
+      <h2 class="title" data-animate="fade-up">Who Can Use ICSDC cPanel Hosting?</h2>
+      <p class="subtitle" data-animate="fade-up">Designed for a wide range of users who need a simple, reliable
+        and secure way to manage websites.</p>
+      <div class="cp-who-grid" data-stagger>
+
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+            </svg>
+          </div>
+          <h3>Small &amp; Medium Businesses</h3>
+          <p>Host corporate websites, service pages, landing pages or portfolios without managing complex
+            server settings.</p>
+        </div>
+
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+            </svg>
+          </div>
+          <h3>Startups &amp; Entrepreneurs</h3>
+          <p>Affordable, easy-to-manage hosting with room to grow as traffic and operations scale.</p>
+        </div>
+
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+          </div>
+          <h3>Bloggers &amp; Content Creators</h3>
+          <p>WordPress blogs, news websites, and content-driven platforms that need fast, stable
+            performance.</p>
+        </div>
+
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+              <path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6" />
+            </svg>
+          </div>
+          <h3>eCommerce Stores</h3>
+          <p>Online shops built on WooCommerce, OpenCart, or Magento with smooth control and dependable
+            uptime.</p>
+        </div>
+
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
+            </svg>
+          </div>
+          <h3>Agencies &amp; Web Developers</h3>
+          <p>Manage multiple client websites with cPanel tools for domains, staging, backups, DNS, and
+            email.</p>
+        </div>
+
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <h3>Freelancers &amp; Consultants</h3>
+          <p>Professional websites, email accounts and simple management tools for a streamlined setup.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ BUILT-IN FEATURES ════ -->
+  <section id="cp-builtin" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">BUILT-IN FEATURES</span>
+      <h2 class="title" data-animate="fade-up">cPanel Hosting Loaded With Built-In Features</h2>
+      <p class="subtitle" data-animate="fade-up">All the essential tools you need &mdash; delivered right out of
+        the box with ICSDC's cPanel Hosting.</p>
+      <div class="cp-builtin-grid" data-stagger>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+            </svg>
+          </div>
+          <h3>Global Data Center Choice</h3>
+          <p>Multiple Tier-4 data center locations. Enterprise-grade speed, security, and consistency for your
+            audience worldwide.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+            </svg>
+          </div>
+          <h3>Automated Website Backups</h3>
+          <p>ICSDC includes automated backups with every cPanel plan. Restore your site instantly anytime &mdash;
+            no extra charges.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+          </div>
+          <h3>Latest PHP &amp; MySQL Support</h3>
+          <p>Run applications on the most recent PHP and MySQL versions. Switch effortlessly whenever
+            required.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+          </div>
+          <h3>Free SSL Certificates</h3>
+          <p>Every website gets free Let's Encrypt SSL certificates. Higher-tier plans also include a free
+            domain.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          </div>
+          <h3>100% NVMe SSD Storage</h3>
+          <p>Ultra-fast NVMe SSDs &mdash; your website loads up to 20x faster, improving engagement,
+            conversions, and SEO rankings.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <h3>99.9% Uptime Commitment</h3>
+          <p>Tier-4, ISO-certified, fully redundant infrastructure ensures industry-leading uptime
+            performance.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band">
+    <div class="cloud-cta-inner">
+      <h2>Get Your Website Online in Minutes</h2>
+      <p>Instant activation, one-click WordPress install, and free migration &mdash; your site is ready to
+        go.</p>
+      <div class="cloud-cta-btns">
+        <a href="/contact" class="cloud-cta-btn-primary">Start Hosting Today &rarr;</a>
+        <a href="#cp-plans" class="cloud-cta-btn-outline">View All Plans</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ TESTIMONIALS ════ -->
+  <section class="testi-section" id="cp-testimonials" aria-labelledby="cp-testi-heading">
+    <div class="testi-container">
+      <h2 id="cp-testi-heading" class="testi-title">What Our Clients Say About cPanel Hosting</h2>
+
+      <!-- Cards rendered by components.js -->
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+
+      <!-- Pagination dots rendered by components.js -->
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FAQ ════ -->
+  <section class="faq-section" id="cp-faq" aria-labelledby="cp-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="cp-faq-heading" class="faq-title">FAQs About ICSDC cPanel Hosting</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our cPanel Experts</h3>
+        <p class="faq-contact-desc">Our hosting specialists are available 24/7 to help you choose the right
+          plan, migrate your existing site, and get everything configured.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Build, Manage and Grow Your Website With Reliable Hosting Built for Performance.</h2>
+      <p>Join thousands of businesses that trust ICSDC for fast, secure, and effortless web hosting.</p>
+      <div class="cloud-cta-btns">
+        <a href="/contact" class="cloud-cta-btn-primary">Get cPanel Hosting &rarr;</a>
+        <a href="/contact" class="cloud-cta-btn-outline">Talk to an Expert</a>
+      </div>
+    </div>
+  </section>
+
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+
+        <!-- Brand column -->
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook"
+              target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+              </svg>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter"
+              target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                </path>
+              </svg>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram"
+              target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p id="footer-year-text">&#169; Copyright <span data-strapi-year id="footer-year"></span> <span
+          data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script>
+    STRAPI_URL = "http://13.126.9.248:1337";
+    TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+  </script>
+
+  <!-- Page scripts -->
+  <script src="assets/js/utils/cms-helpers.js" type="module"></script>
+  <script src="assets/js/main.js" type="module"></script>
+  <script src="assets/js/cpanel-hosting.js" type="module"></script>
+
+</body>
+
+</html>

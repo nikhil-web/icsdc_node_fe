@@ -1,0 +1,387 @@
+/* ══════════════════════════════════════
+   LINUX VPS HOSTING PAGE — SCOPED STYLES
+   All classes prefixed lvps-* to prevent
+   any collision with style.css,
+   components.css, or cloud-hosting.css.
+   Zero overrides.
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.lvps-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(26, 86, 219, 0.15);
+}
+
+/* ══════════════════════════════════════
+   HERO VISUAL — AMBER/TERMINAL TINT
+══════════════════════════════════════ */
+.lvps-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 55%, #fef9f0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(180, 120, 20, 0.13), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.lvps-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 65% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(26, 86, 219, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.lvps-hero-visual svg {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ══════════════════════════════════════
+   HERO BADGES
+══════════════════════════════════════ */
+.lvps-top-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--white);
+    border: 1px solid rgba(26, 86, 219, 0.14);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 16px rgba(26, 86, 219, 0.10);
+    z-index: 2;
+    animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
+}
+
+.lvps-status-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--white);
+    border: 1px solid rgba(26, 86, 219, 0.12);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(26, 86, 219, 0.12);
+    z-index: 2;
+    animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
+}
+
+.lvps-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    flex-shrink: 0;
+}
+
+.lvps-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+.lvps-bs {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+/* ══════════════════════════════════════
+   VPS PLANS GRID — 4 COLUMNS
+══════════════════════════════════════ */
+.lvps-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.lvps-plan-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 22px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+}
+
+.lvps-plan-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26, 86, 219, 0.22);
+}
+
+.lvps-plan-card.lvps-plan-popular {
+    border-color: var(--blue);
+    border-width: 2px;
+}
+
+/* Most Popular badge */
+.lvps-plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--blue);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: var(--radius-xl);
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(26, 86, 219, 0.30);
+}
+
+.lvps-plan-name {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--blue);
+    margin-bottom: 8px;
+}
+
+.lvps-plan-price {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+}
+
+.lvps-plan-price span {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0;
+}
+
+/* Specs 2-column mini-grid */
+.lvps-plan-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 0 0 20px;
+}
+
+.lvps-plan-spec {
+    background: var(--bg-light);
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lvps-plan-spec-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+}
+
+.lvps-plan-spec-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* Plan CTA button */
+.lvps-plan-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    margin-top: auto;
+    transition: background var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 44px;
+}
+
+.lvps-plan-btn:hover {
+    background: var(--blue-dark, #1448b8);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.25);
+}
+
+/* ══════════════════════════════════════
+   OS OPTIONS GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.lvps-os-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 36px;
+}
+
+.lvps-os-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 20px 16px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition-base) ease,
+        transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease;
+    cursor: default;
+}
+
+.lvps-os-card:hover {
+    border-color: var(--blue);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.lvps-os-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    line-height: 1;
+}
+
+.lvps-os-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+}
+
+.lvps-os-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+/* ══════════════════════════════════════
+   CONTROL PANEL GRID — 4 COLUMNS
+══════════════════════════════════════ */
+.lvps-cp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 36px;
+}
+
+.lvps-cp-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 20px 16px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition-base) ease,
+        transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease;
+    cursor: default;
+}
+
+.lvps-cp-card:hover {
+    border-color: var(--blue);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+
+/* 1280px — plans start compressing */
+@media (max-width: 1280px) {
+    .lvps-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 1024px — 2 columns for most grids */
+@media (max-width: 1024px) {
+    .lvps-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lvps-os-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lvps-cp-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 640px — single column */
+@media (max-width: 640px) {
+    .lvps-plans-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lvps-os-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lvps-cp-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lvps-plan-specs {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .lvps-hero-visual {
+        max-width: 100%;
+    }
+
+    .lvps-top-badge {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+}

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firewall Security &amp; Managed Firewall Services | ICSDC</title>
+  <meta name="description"
+    content="Protect your network with ICSDC's managed firewall security. Real-time threat prevention, traffic control, continuous monitoring, and expert-managed protection.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/firewall-security.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="fw-eyebrow">&#128293; Firewall Security</div>
+        <h1 class="hero-title">Firewall Security Built for Real-World Attacks, Not Assumptions</h1>
+        <p class="hero-sub">Advanced traffic inspection designed to prevent unauthorized access and attacks</p>
+        <p class="hero-desc">Our firewall security actively monitors and controls network traffic to block unauthorized
+          access and threats before they reach your systems.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="location.href='/contact'">Talk to Our Firewall Security Experts &rarr;</button>
+          <button class="btn-outline" onclick="location.href='/contact'">Get a Quote</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="fw-hero-visual">
+          <div class="fw-top-badge">&#128293; ICSDC Firewall Security</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#fef2f2" stroke="rgba(220,38,38,0.12)"
+              stroke-width="1" />
+            <!-- Central firewall shield -->
+            <path d="M150 28 L205 52 L205 115 Q205 162 150 188 Q95 162 95 115 L95 52 Z"
+              fill="white" stroke="rgba(220,38,38,0.28)" stroke-width="2" />
+            <path d="M150 36 L197 57 L197 115 Q197 154 150 178 Q103 154 103 115 L103 57 Z"
+              fill="#fee2e2" stroke="none" />
+            <!-- Lock icon in shield center -->
+            <rect x="136" y="98" width="28" height="22" rx="4" fill="none" stroke="#dc2626" stroke-width="2.5" />
+            <path d="M141 98 L141 92 Q141 84 150 84 Q159 84 159 92 L159 98" fill="none" stroke="#dc2626"
+              stroke-width="2.5" stroke-linecap="round" />
+            <circle cx="150" cy="109" r="3" fill="#dc2626" />
+            <!-- Network nodes — left side -->
+            <circle cx="55" cy="80" r="10" fill="white" stroke="rgba(220,38,38,0.30)" stroke-width="1.5" />
+            <text x="55" y="84" font-size="8" fill="#dc2626" text-anchor="middle" font-weight="700">PC</text>
+            <circle cx="55" cy="130" r="10" fill="white" stroke="rgba(220,38,38,0.30)" stroke-width="1.5" />
+            <text x="55" y="134" font-size="7" fill="#dc2626" text-anchor="middle" font-weight="700">SRV</text>
+            <!-- Connection lines — left to shield -->
+            <line x1="65" y1="85" x2="95" y2="90" stroke="rgba(220,38,38,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <line x1="65" y1="130" x2="95" y2="120" stroke="rgba(220,38,38,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <!-- Network nodes — right side (internet/threats) -->
+            <circle cx="245" cy="75" r="10" fill="white" stroke="rgba(220,38,38,0.30)" stroke-width="1.5" />
+            <text x="245" y="79" font-size="7" fill="#b91c1c" text-anchor="middle" font-weight="700">WEB</text>
+            <circle cx="245" cy="115" r="10" fill="#fef2f2" stroke="rgba(220,38,38,0.45)" stroke-width="1.5" />
+            <text x="245" y="119" font-size="7" fill="#b91c1c" text-anchor="middle" font-weight="700">ATK</text>
+            <circle cx="245" cy="155" r="10" fill="white" stroke="rgba(220,38,38,0.30)" stroke-width="1.5" />
+            <text x="245" y="159" font-size="7" fill="#b91c1c" text-anchor="middle" font-weight="700">VPN</text>
+            <!-- Connection lines — right to shield -->
+            <line x1="235" y1="80" x2="205" y2="90" stroke="rgba(220,38,38,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <line x1="235" y1="120" x2="205" y2="115" stroke="rgba(220,38,38,0.55)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <line x1="235" y1="150" x2="205" y2="130" stroke="rgba(220,38,38,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <!-- Blocked indicator (X) on attack line -->
+            <circle cx="222" cy="117" r="7" fill="#dc2626" />
+            <line x1="218" y1="113" x2="226" y2="121" stroke="white" stroke-width="2" stroke-linecap="round" />
+            <line x1="226" y1="113" x2="218" y2="121" stroke="white" stroke-width="2" stroke-linecap="round" />
+            <!-- Status boxes at bottom -->
+            <rect x="38" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(220,38,38,0.22)"
+              stroke-width="1.2" />
+            <text x="64" y="168" font-size="6" fill="#dc2626" text-anchor="middle" font-weight="600">Inbound</text>
+            <text x="64" y="178" font-size="7" fill="#dc2626" text-anchor="middle" font-weight="700">&#10003; Filtered</text>
+
+            <rect x="98" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(220,38,38,0.22)"
+              stroke-width="1.2" />
+            <text x="124" y="168" font-size="6" fill="#dc2626" text-anchor="middle" font-weight="600">Outbound</text>
+            <text x="124" y="178" font-size="7" fill="#dc2626" text-anchor="middle" font-weight="700">&#10003; Checked</text>
+
+            <rect x="158" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(220,38,38,0.22)"
+              stroke-width="1.2" />
+            <text x="184" y="168" font-size="6" fill="#dc2626" text-anchor="middle" font-weight="600">Threats</text>
+            <text x="184" y="178" font-size="7" fill="#dc2626" text-anchor="middle" font-weight="700">&#10005; Blocked</text>
+
+            <rect x="218" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(220,38,38,0.22)"
+              stroke-width="1.2" />
+            <text x="244" y="168" font-size="6" fill="#dc2626" text-anchor="middle" font-weight="600">Policies</text>
+            <text x="244" y="178" font-size="7" fill="#dc2626" text-anchor="middle" font-weight="700">&#10003; Active</text>
+            <!-- Corner accent dots -->
+            <circle cx="28" cy="28" r="4" fill="#fecaca" opacity="0.7" />
+            <circle cx="272" cy="28" r="4" fill="#fecaca" opacity="0.7" />
+            <circle cx="28" cy="192" r="3" fill="#fca5a5" opacity="0.5" />
+            <circle cx="272" cy="192" r="3" fill="#fca5a5" opacity="0.5" />
+          </svg>
+          <div class="fw-status-badge">
+            <div class="fw-dot"></div>
+            <div>
+              <div class="fw-bt">Network Protected</div>
+              <div class="fw-bs">24/7 Monitoring</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — PILLARS (4 WHY-US CARDS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>Real-Time Threat Filtering</h3>
+          <p>Continuously inspect and filter network traffic to block malicious activity before it enters your
+            environment.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>Granular Access Control</h3>
+          <p>Define precise rules for users, applications, and services to ensure only authorized traffic is allowed.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Advanced Threat Prevention</h3>
+          <p>Detects and prevents modern attacks using deep packet inspection, intrusion prevention, and threat
+            intelligence.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg></div>
+          <h3>Continuous Monitoring &amp; Updates</h3>
+          <p>Keep your firewall policies up to date with ongoing monitoring, logging, and regular security updates.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — HOW ICSDC STRENGTHENS YOUR NETWORK (8 CARDS) ════ -->
+  <section id="fw-features" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">HOW WE HELP</span>
+      <h2 class="title" data-animate="fade-up">How ICSDC Firewall Security Strengthens Your Network</h2>
+      <p class="subtitle" data-animate="fade-up">Purpose-built firewall management that delivers protection, clarity,
+        and control across your entire network.</p>
+
+      <div class="fw-features-grid" data-stagger id="fw-features-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg></div>
+          <h3>Fewer Security Incidents, Fewer Surprises</h3>
+          <p>By controlling what enters and leaves your network, firewalls reduce exposure to common attacks and
+            unauthorized access attempts that often lead to security incidents.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Clear Visibility Into Network Traffic</h3>
+          <p>Understand who and what is accessing your network. Detailed logs and monitoring help your team identify
+            unusual activity early and respond before it becomes a problem.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg></div>
+          <h3>Better Control as Your Network Grows</h3>
+          <p>As applications, users, and locations increase, firewall rules help maintain structure and control -
+            preventing security gaps caused by rapid expansion.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z" />
+              <path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+              <path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z" />
+              <path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z" />
+              <path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z" />
+              <path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" />
+              <path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z" />
+              <path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z" />
+            </svg></div>
+          <h3>Reduced Risk From Misconfigurations</h3>
+          <p>With expert configuration and ongoing reviews, firewall policies remain aligned with your actual
+            infrastructure, minimizing risks caused by outdated or incorrect rules.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Stronger Protection at the Network Edge</h3>
+          <p>Firewalls act as the first checkpoint, stopping unwanted traffic before it reaches critical systems and
+            applications deeper in your environment.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <line x1="3" y1="9" x2="21" y2="9" />
+              <line x1="9" y1="21" x2="9" y2="9" />
+            </svg></div>
+          <h3>Support for Compliance and Audits</h3>
+          <p>Well-configured firewall policies and logs help demonstrate controlled access and security practices during
+            audits and compliance reviews.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Less Burden on Internal Teams</h3>
+          <p>ICSDC helps manage firewall setup, updates, and monitoring, allowing your IT team to focus on core
+            operations instead of day-to-day security management.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10" />
+              <path d="M3.51 15a9 9 0 1 0 .49-3.44" />
+            </svg></div>
+          <h3>Security That Adapts Over Time</h3>
+          <p>As threats evolve, firewall rules and protections are updated to stay relevant - ensuring your defenses
+            don't become outdated or ineffective.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — FIREWALL SECURITY THAT ADAPTS (8 CARDS) ════ -->
+  <section id="fw-adapts" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">ADAPTIVE SECURITY</span>
+      <h2 class="title" data-animate="fade-up">Firewall Security That Adapts as Your Network Grows</h2>
+      <p class="subtitle" data-animate="fade-up">Built for modern networks — context-aware, performance-optimized, and
+        ready to scale.</p>
+
+      <div class="fw-features-grid" data-stagger id="fw-adapts-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+            </svg></div>
+          <h3>Security That Understands Context</h3>
+          <p>Our firewall policies are designed around how your applications and users actually behave, reducing
+            unnecessary blocks while still stopping real threats.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>Faster Threat Containment, Less Manual Effort</h3>
+          <p>When suspicious activity is detected, responses are triggered quickly and intelligently, helping contain
+            issues before they spread across your network.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>Designed for Encrypted, Modern Traffic</h3>
+          <p>Most traffic today is encrypted. Our firewall setup ensures visibility and protection even within encrypted
+            connections, without creating blind spots.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></div>
+          <h3>Stability Comes First</h3>
+          <p>Security controls are implemented with performance in mind, ensuring protection does not disrupt critical
+            business applications or network availability.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6" />
+              <line x1="8" y1="12" x2="21" y2="12" />
+              <line x1="8" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="3.01" y2="6" />
+              <line x1="3" y1="12" x2="3.01" y2="12" />
+              <line x1="3" y1="18" x2="3.01" y2="18" />
+            </svg></div>
+          <h3>Understandable Security Logs</h3>
+          <p>You don't just get logs - you get clarity. Firewall activity is logged in a way that helps teams quickly
+            understand what happened and why.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg></div>
+          <h3>Scales Without Rebuilding Everything</h3>
+          <p>As your network grows, firewall policies and configurations can scale smoothly without forcing redesigns or
+            frequent rule rewrites.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <polyline points="9 12 11 14 15 10" />
+            </svg></div>
+          <h3>Reduced Risk from Human Error</h3>
+          <p>Structured rule management and expert oversight help prevent misconfigurations, which are one of the most
+            common causes of firewall-related breaches.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg></div>
+          <h3>Backed by Ongoing Expertise, Not Just Setup</h3>
+          <p>Firewall security is not a one-time task. ICSDC supports continuous tuning, updates, and reviews to keep
+            your protection relevant over time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — THREAT DETECTION NARRATIVE ════ -->
+  <section id="fw-threat" class="section fw-threat-section">
+    <div class="container">
+      <div class="fw-threat-inner">
+        <div class="fw-threat-label-col">
+          <span class="cloud-section-label fw-label-light" data-animate="fade-up">THREAT DETECTION</span>
+          <h2 class="title" data-animate="fade-up">Faster Threat Detection with Clear Response</h2>
+        </div>
+        <div class="fw-threat-text-col" data-animate="fade-up">
+          <p id="fw-threat-description">Modern workloads change fast, and threats move even faster. ICSDC helps you spot
+            malicious activity early and respond with precision - before attackers can establish persistence or cause
+            disruption.</p>
+          <p>Our security approach delivers unified visibility across servers, containers, and cloud environments,
+            allowing unusual behavior and attack attempts to stand out quickly. Instead of isolated alerts, related
+            events are correlated to help teams understand the full picture without delay.</p>
+          <p>Advanced behavior-based detection techniques identify suspicious actions such as privilege misuse, exploit
+            attempts, and abnormal process activity - even when traditional signatures fail. When action is required,
+            secure remote access enables controlled investigation and remediation without exposing systems to additional
+            risk.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — ENVIRONMENT CARDS (3 CARDS) ════ -->
+  <section id="fw-env" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">COVERAGE</span>
+      <h2 class="title" data-animate="fade-up">Flexible Security That Grows With Your Infrastructure</h2>
+      <p class="subtitle" data-animate="fade-up">As businesses move from traditional servers to hybrid and cloud-native
+        environments, security must remain consistent and reliable everywhere.</p>
+
+      <div class="fw-env-grid" data-stagger id="fw-env-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></div>
+          <h3>Linux &amp; Container Environment Protection</h3>
+          <p>We secure Linux systems across on-prem, cloud, and containerized environments. Protection is designed for
+            modern workloads, covering container runtimes and cloud-native architectures while monitoring behavior that
+            traditional tools often miss.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+              <polyline points="6 9 9 12 6 15" />
+            </svg></div>
+          <h3>Windows Server &amp; Endpoint Security</h3>
+          <p>Our security controls help protect Windows servers and connected systems from ransomware, exploits, and
+            emerging threats. We also support application control, configuration hardening, and continuous monitoring of
+            critical system changes.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z" />
+            </svg></div>
+          <h3>Hybrid &amp; Multi-Cloud Coverage</h3>
+          <p>Whether your workloads run in data centers or across multiple cloud platforms, ICSDC helps maintain
+            consistent security visibility and control. Protection extends across hybrid and multi-cloud environments
+            from a unified management approach.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band" id="fw-cta1">
+    <div class="cloud-cta-inner">
+      <h2>Request a custom pricing plan tailored to your environment</h2>
+      <p>Flexible firewall security plans aligned with your deployment model, security requirements, and scale. Our team
+        helps you define the right structure before anything is finalized.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='/contact'">Talk to Our Experts &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='tel:+919810958857'">Call +91 98109 58857</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — MANAGED FIREWALL SERVICES (10 CARDS) ════ -->
+  <section id="fw-services" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">OUR SERVICES</span>
+      <h2 class="title" data-animate="fade-up">Managed Firewall Security That Protects Your Network End-to-End</h2>
+      <p class="subtitle" data-animate="fade-up">ICSDC's Managed Firewall service gives you continuous protection, full
+        network visibility, and expert-managed security controls.</p>
+
+      <div class="fw-services-grid" data-stagger id="fw-services-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07" />
+            </svg></div>
+          <h3>Firewall Configuration &amp; Deployment</h3>
+          <p>Secure installation and configuration tailored to your network architecture and security requirements.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6" />
+              <line x1="8" y1="12" x2="21" y2="12" />
+              <line x1="8" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="3.01" y2="6" />
+              <line x1="3" y1="12" x2="3.01" y2="12" />
+              <line x1="3" y1="18" x2="3.01" y2="18" />
+            </svg></div>
+          <h3>Firewall Policy Management</h3>
+          <p>Ongoing rule creation, optimization, and review to ensure secure and efficient traffic flow.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <line x1="9" y1="12" x2="15" y2="12" />
+            </svg></div>
+          <h3>Intrusion Prevention (IPS)</h3>
+          <p>Active detection and blocking of malicious traffic and known attack patterns.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>VPN Setup &amp; Management</h3>
+          <p>Secure remote access for users, branches, and partners with encrypted VPN configurations.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>Threat Intelligence Integration</h3>
+          <p>Firewall policies updated with the latest threat intelligence to block emerging risks.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10" />
+              <path d="M3.51 15a9 9 0 1 0 .49-3.44" />
+            </svg></div>
+          <h3>Firewall Upgrades &amp; Patch Management</h3>
+          <p>Timely updates to firmware and security features to prevent exposure from known vulnerabilities.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4" />
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+            </svg></div>
+          <h3>Firewall Auditing &amp; Reviews</h3>
+          <p>Regular audits to identify misconfigurations, unused rules, and potential security gaps.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+            </svg></div>
+          <h3>Web Content Filtering</h3>
+          <p>Control access to risky or non-business websites to reduce exposure and improve productivity.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Network Traffic Monitoring &amp; Analysis</h3>
+          <p>Continuous analysis of traffic patterns to detect anomalies and suspicious behavior early.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg></div>
+          <h3>24/7 Backend Support</h3>
+          <p>Round-the-clock monitoring and expert support to respond quickly to incidents and issues.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — USE CASES (8 CARDS) ════ -->
+  <section id="fw-usecases" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">USE CASES</span>
+      <h2 class="title" data-animate="fade-up">Real-Time Applications of Firewall Services</h2>
+      <p class="subtitle" data-animate="fade-up">Firewall security applied across every critical use case — from
+        corporate networks to compliance.</p>
+
+      <div class="fw-features-grid" data-stagger id="fw-usecases-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></div>
+          <h3>Securing Business Networks</h3>
+          <p>Firewalls protect corporate networks by controlling incoming and outgoing traffic, preventing unauthorized
+            access to internal systems and sensitive data.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z" />
+            </svg></div>
+          <h3>Protecting Cloud &amp; Hybrid Environments</h3>
+          <p>As workloads move to cloud and hybrid setups, firewalls help enforce consistent security controls across
+            on-premises infrastructure and cloud platforms.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>Enabling Secure Remote Access</h3>
+          <p>Firewalls support secure VPN connections for remote employees and branch offices, ensuring encrypted access
+            without exposing internal resources.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+            </svg></div>
+          <h3>Protecting Web-Facing Applications</h3>
+          <p>Firewalls help shield public-facing applications from malicious traffic, scanning attempts, and unauthorized
+            access before threats reach the application layer.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Controlling Third-Party &amp; Vendor Access</h3>
+          <p>Firewall rules restrict and monitor access for partners and vendors, reducing risk while maintaining
+            necessary connectivity.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+            </svg></div>
+          <h3>Preventing Lateral Movement Inside Networks</h3>
+          <p>By segmenting network traffic, firewalls limit how far attackers can move if a breach occurs - containing
+            threats early.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4" />
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+            </svg></div>
+          <h3>Supporting Compliance Requirements</h3>
+          <p>Firewall logging and access controls help organizations meet audit, regulatory, and security policy
+            requirements.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Monitoring Traffic for Anomalies</h3>
+          <p>Continuous traffic analysis helps identify unusual behavior, allowing early detection of potential security
+            incidents.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="fw-testi-heading">
+    <div class="testi-container">
+      <h2 id="fw-testi-heading" class="testi-title">What Our Firewall Security Clients Say</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 10 — FAQ ════ -->
+  <section class="faq-section" id="fw-faq" aria-labelledby="fw-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="fw-faq-heading" class="faq-title">FAQs About ICSDC Managed Firewall Services</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our Firewall Security Team</h3>
+        <p class="faq-contact-desc">Our firewall specialists are available to design a security strategy tailored to
+          your network, compliance needs, and risk profile.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark" id="fw-cta2">
+    <div class="cloud-cta-inner">
+      <h2>Ready to strengthen your network security?</h2>
+      <p>Get started with ICSDC Managed Firewall Services - continuous protection, full network visibility, and
+        expert-managed security controls.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='/contact'">Get Started with Managed Firewall
+          Services &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='/contact'">Talk to an Expert</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+              </svg>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                </path>
+              </svg>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p id="footer-year-text">&#169; Copyright <span data-strapi-year id="footer-year"></span> <span
+          data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script>
+    STRAPI_URL = "http://13.126.9.248:1337";
+    TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+  </script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/firewall-security.js"></script>
+
+</body>
+
+</html>

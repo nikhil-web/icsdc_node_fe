@@ -1,0 +1,484 @@
+/* ══════════════════════════════════════
+   BARE METAL SERVER PAGE — SCOPED STYLES
+   All classes prefixed bms-* to prevent
+   any collision with style.css,
+   components.css, or other page styles.
+   Zero overrides.
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.bms-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fef3c7;
+    color: #b45309;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(180, 83, 9, 0.18);
+}
+
+/* ══════════════════════════════════════
+   HERO VISUAL — AMBER GRADIENT
+══════════════════════════════════════ */
+.bms-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #fde68a 0%, #fef3c7 50%, #fffbeb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(180, 83, 9, 0.13), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.bms-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 65% 30%, rgba(180, 83, 9, 0.09) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(251, 191, 36, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.bms-hero-visual svg {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ══════════════════════════════════════
+   HERO BADGES
+══════════════════════════════════════ */
+.bms-top-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--white);
+    border: 1px solid rgba(180, 83, 9, 0.16);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #b45309;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 16px rgba(180, 83, 9, 0.12);
+    z-index: 2;
+    animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
+}
+
+.bms-status-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--white);
+    border: 1px solid rgba(180, 83, 9, 0.12);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(180, 83, 9, 0.12);
+    z-index: 2;
+    animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
+}
+
+.bms-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #b45309;
+    box-shadow: 0 0 8px rgba(180, 83, 9, 0.5);
+    flex-shrink: 0;
+    animation: bms-pulse 2s ease-in-out infinite;
+}
+
+@keyframes bms-pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(180, 83, 9, 0.5); }
+    50% { opacity: 0.7; box-shadow: 0 0 14px rgba(180, 83, 9, 0.8); }
+}
+
+.bms-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+.bms-bs {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+/* ══════════════════════════════════════
+   SERVER CONFIGS TABLE
+══════════════════════════════════════ */
+.bms-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 40px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1.5px solid rgba(180, 83, 9, 0.12);
+}
+
+.bms-config-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    background: var(--white);
+    min-width: 820px;
+}
+
+.bms-config-table thead tr {
+    background: #fef3c7;
+}
+
+.bms-config-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: #b45309;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-bottom: 2px solid rgba(180, 83, 9, 0.18);
+    white-space: nowrap;
+}
+
+.bms-config-table td {
+    padding: 13px 16px;
+    color: var(--text-dark);
+    border-bottom: 1px solid rgba(180, 83, 9, 0.07);
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+/* Alternating rows */
+.bms-config-table tbody tr:nth-child(even) {
+    background: #fffbeb;
+}
+
+.bms-config-table tbody tr:nth-child(odd) {
+    background: var(--white);
+}
+
+/* Hover highlight */
+.bms-config-table tbody tr:hover {
+    background: #fef3c7;
+    transition: background 0.15s ease;
+}
+
+/* Config name — bold amber */
+.bms-config-name {
+    font-weight: 700;
+    color: #b45309;
+    white-space: nowrap;
+}
+
+/* Last row — remove bottom border */
+.bms-config-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ══════════════════════════════════════
+   CONFIG QUOTE BUTTON
+══════════════════════════════════════ */
+.bms-config-quote-btn {
+    display: inline-block;
+    padding: 6px 14px;
+    background: transparent;
+    color: #b45309;
+    border: 1.5px solid #b45309;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: 0;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background var(--transition-base) ease,
+        color var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 32px;
+    line-height: 1.6;
+}
+
+.bms-config-quote-btn:hover {
+    background: #b45309;
+    color: var(--white);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(180, 83, 9, 0.25);
+}
+
+/* ══════════════════════════════════════
+   COMPARISON TABLE — MANAGED VS SELF
+══════════════════════════════════════ */
+.bms-compare-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 40px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1.5px solid rgba(180, 83, 9, 0.12);
+}
+
+.bms-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    background: var(--white);
+    min-width: 500px;
+}
+
+.bms-compare-table thead tr {
+    background: #fef3c7;
+}
+
+.bms-compare-table th {
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #b45309;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid rgba(180, 83, 9, 0.18);
+    text-align: center;
+}
+
+.bms-compare-feature-col {
+    text-align: left !important;
+    width: 55%;
+}
+
+.bms-compare-self-col,
+.bms-compare-managed-col {
+    width: 22.5%;
+}
+
+.bms-compare-table td {
+    padding: 12px 20px;
+    color: var(--text-dark);
+    border-bottom: 1px solid rgba(180, 83, 9, 0.07);
+    vertical-align: middle;
+    text-align: center;
+}
+
+.bms-compare-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+}
+
+/* Alternating rows */
+.bms-compare-table tbody tr:nth-child(even) {
+    background: #fffbeb;
+}
+
+.bms-compare-table tbody tr:nth-child(odd) {
+    background: var(--white);
+}
+
+/* Both row — highlighted */
+.bms-compare-table tbody tr.bms-both-row {
+    background: #fef3c7;
+}
+
+.bms-compare-table tbody tr.bms-both-row td:first-child {
+    font-weight: 700;
+    color: #b45309;
+}
+
+/* Tick and cross symbols */
+.bms-yes {
+    color: #b45309;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.bms-no {
+    color: #9ca3af;
+    font-size: 16px;
+}
+
+/* Last row */
+.bms-compare-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ══════════════════════════════════════
+   CTA ACTIONS BELOW COMPARE TABLE
+══════════════════════════════════════ */
+.bms-cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
+
+.bms-manage-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background: transparent;
+    color: #b45309;
+    border: 2px solid #b45309;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    transition: background var(--transition-base) ease,
+        color var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 44px;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.bms-manage-btn:hover {
+    background: #fef3c7;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(180, 83, 9, 0.14);
+}
+
+.bms-manage-btn-primary {
+    background: #b45309;
+    color: var(--white);
+}
+
+.bms-manage-btn-primary:hover {
+    background: #92400e;
+    color: var(--white);
+    box-shadow: 0 6px 20px rgba(180, 83, 9, 0.30);
+}
+
+/* ══════════════════════════════════════
+   WHY-CHOOSE FEATURES GRID — AMBER ICONS
+══════════════════════════════════════ */
+.bms-features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* Override icon color for amber theme in bms-features-grid */
+.bms-features-grid .cloud-power-card .cloud-power-icon {
+    color: #b45309;
+    background: #fef3c7;
+    border-color: rgba(180, 83, 9, 0.14);
+}
+
+/* ══════════════════════════════════════
+   WHO-IT'S-FOR GRID — 4 COLS
+══════════════════════════════════════ */
+.bms-who-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* Amber icon overrides for who grid */
+.bms-who-grid .cloud-power-card .cloud-power-icon {
+    color: #b45309;
+    background: #fef3c7;
+    border-color: rgba(180, 83, 9, 0.14);
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+
+/* 1280px — 3-col why grid, 3-col who grid */
+@media (max-width: 1280px) {
+    .bms-features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .bms-who-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 1024px — 2-col grids */
+@media (max-width: 1024px) {
+    .bms-features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bms-who-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bms-config-table {
+        font-size: 12.5px;
+    }
+
+    .bms-config-table th,
+    .bms-config-table td {
+        padding: 11px 12px;
+    }
+}
+
+/* 768px — smaller table font */
+@media (max-width: 768px) {
+    .bms-compare-table th,
+    .bms-compare-table td {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .bms-cta-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .bms-manage-btn {
+        text-align: center;
+    }
+}
+
+/* 640px — single column */
+@media (max-width: 640px) {
+    .bms-features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bms-who-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bms-hero-visual {
+        max-width: 100%;
+    }
+
+    .bms-top-badge {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+
+    .bms-config-table {
+        font-size: 11.5px;
+    }
+}

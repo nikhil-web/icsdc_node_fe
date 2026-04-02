@@ -1,0 +1,424 @@
+/* ══════════════════════════════════════
+   GOOGLE WORKSPACE PAGE — SCOPED STYLES
+   All classes prefixed gws-* to prevent
+   any collision with style.css,
+   components.css, or cloud-hosting.css.
+   Zero overrides.
+══════════════════════════════════════ */
+
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.gws-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(26, 86, 219, 0.15);
+}
+
+
+/* ══════════════════════════════════════
+   HERO VISUAL
+══════════════════════════════════════ */
+.gws-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 55%, #fce4ec 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(66, 133, 244, 0.13), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.gws-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 65% 30%, rgba(66, 133, 244, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(52, 168, 83, 0.07) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.gws-hero-visual svg {
+    width: 90%;
+    height: 90%;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ══════════════════════════════════════
+   HERO BADGES
+══════════════════════════════════════ */
+.gws-top-badge {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    background: var(--white);
+    border: 1px solid rgba(66, 133, 244, 0.18);
+    border-radius: 10px;
+    padding: 7px 13px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 14px rgba(66, 133, 244, 0.12);
+    letter-spacing: -0.01em;
+}
+
+.gws-status-badge {
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+    background: var(--white);
+    border: 1px solid rgba(66, 133, 244, 0.12);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(66, 133, 244, 0.12);
+    z-index: 3;
+    animation: gws-badge-float 5s ease-in-out 0.8s infinite;
+}
+
+@keyframes gws-badge-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+.gws-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    flex-shrink: 0;
+    animation: gws-dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes gws-dot-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.75); }
+}
+
+.gws-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+}
+
+.gws-bs {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+
+/* ══════════════════════════════════════
+   PLANS GRID
+══════════════════════════════════════ */
+.gws-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.gws-plan-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    position: relative;
+}
+
+.gws-plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(26, 86, 219, 0.13);
+}
+
+.gws-plan-card.gws-plan-popular {
+    border-color: var(--blue);
+    border-width: 2px;
+}
+
+.gws-plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--blue);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 50px;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+}
+
+.gws-plan-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.gws-plan-price {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--blue);
+    line-height: 1.1;
+}
+
+.gws-plan-price span {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.gws-plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.gws-plan-features li {
+    font-size: 13.5px;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+}
+
+.gws-plan-features li::before {
+    content: '✓';
+    color: #22c55e;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.gws-plan-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    margin-top: auto;
+}
+
+.gws-plan-btn:hover {
+    background: var(--blue-dark, #1a56db);
+}
+
+
+/* ══════════════════════════════════════
+   HOW IT WORKS STEPS
+══════════════════════════════════════ */
+.gws-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+.gws-step {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 22px;
+    position: relative;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.gws-step:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 36px rgba(26, 86, 219, 0.11);
+}
+
+.gws-step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+}
+
+.gws-step h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+.gws-step p {
+    font-size: 13.5px;
+    color: var(--text);
+    line-height: 1.65;
+}
+
+.gws-step-arrow {
+    position: absolute;
+    top: 50%;
+    right: -14px;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    background: var(--blue-light);
+    border: 1px solid rgba(26, 86, 219, 0.18);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--blue);
+    font-weight: 700;
+    z-index: 2;
+}
+
+
+/* ══════════════════════════════════════
+   CLOUD USE GRID (Why ICSDC cards)
+   — reuses cloud-use-card pattern
+   from cloud-hosting.css
+══════════════════════════════════════ */
+.cloud-use-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+.cloud-use-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.cloud-use-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 36px rgba(26, 86, 219, 0.11);
+}
+
+.cloud-use-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 14px 0 8px;
+}
+
+.cloud-use-card p {
+    font-size: 13.5px;
+    color: var(--text);
+    line-height: 1.65;
+}
+
+
+/* ══════════════════════════════════════
+   RESPONSIVE — TABLET (max 1024px)
+══════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .gws-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gws-plans-grid .gws-plan-card:last-child {
+        grid-column: 1 / -1;
+        max-width: 480px;
+        margin: 0 auto;
+    }
+
+    .gws-steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gws-step-arrow {
+        display: none;
+    }
+
+    .cloud-use-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* ══════════════════════════════════════
+   RESPONSIVE — MOBILE (max 640px)
+══════════════════════════════════════ */
+@media (max-width: 640px) {
+    .gws-plans-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gws-plans-grid .gws-plan-card:last-child {
+        grid-column: auto;
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .gws-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .cloud-use-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gws-hero-visual {
+        max-width: 100%;
+    }
+
+    .gws-plan-card {
+        padding: 28px 20px;
+    }
+
+    .gws-plan-price {
+        font-size: 28px;
+    }
+}

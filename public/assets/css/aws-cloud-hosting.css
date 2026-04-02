@@ -1,0 +1,50 @@
+/* ── AWS page tweaks (extends cloud-hosting.css) ── */
+    .aws-eyebrow-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg,#ff9900 0%,#ffb347 100%);
+      color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 5px 14px; border-radius: 50px;
+      margin-bottom: 14px;
+    }
+    .aws-hero-visual {
+      width:100%; max-width:560px; aspect-ratio:4/3;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg,#fff8e1 0%,#fffde7 55%,#fff3e0 100%);
+      display:flex; align-items:center; justify-content:center;
+      position:relative; overflow:hidden;
+      box-shadow:0 24px 64px rgba(255,153,0,.15),0 4px 16px rgba(0,0,0,.06);
+      animation: heroImageFloat 8s ease-in-out 1s infinite;
+    }
+    .aws-hero-visual svg { width:78%; height:78%; }
+    .aws-hero-badge {
+      position:absolute; bottom:22px; right:22px; background:#fff;
+      border:1px solid rgba(255,153,0,.2); border-radius:12px; padding:10px 16px;
+      display:flex; align-items:center; gap:8px;
+      box-shadow:0 8px 24px rgba(255,153,0,.15);
+      animation: cloud-badge-float 5s ease-in-out .8s infinite;
+    }
+    .aws-badge-dot { width:8px; height:8px; border-radius:50%; background:#22c55e; box-shadow:0 0 8px rgba(34,197,94,.5); }
+    .aws-badge-text { font-size:12px; font-weight:700; color:var(--text-dark); }
+    .aws-badge-sub  { font-size:10px; color:var(--muted); }
+    .aws-partner-badge {
+      position:absolute; top:22px; left:22px; background:#fff;
+      border:1px solid rgba(255,153,0,.2); border-radius:12px; padding:8px 14px;
+      font-size:11px; font-weight:700; color:#e65c00; letter-spacing:.04em;
+      box-shadow:0 4px 16px rgba(255,153,0,.12);
+      animation: cloud-badge-float 6s ease-in-out .2s infinite;
+    }
+    /* Comparison table */
+    .aws-comparison { width:100%; border-collapse:collapse; margin-top:32px; }
+    .aws-comparison th { background:var(--blue); color:#fff; padding:14px 20px; text-align:left; font-size:14px; font-weight:700; }
+    .aws-comparison th:first-child { border-radius:12px 0 0 0; }
+    .aws-comparison th:last-child  { border-radius:0 12px 0 0; }
+    .aws-comparison td { padding:13px 20px; font-size:14px; color:var(--text); border-bottom:1px solid var(--border); }
+    .aws-comparison tr:nth-child(even) td { background:var(--bg-light); }
+    .aws-comparison tr:last-child td:first-child { border-radius:0 0 0 12px; }
+    .aws-comparison tr:last-child td:last-child  { border-radius:0 0 12px 0; }
+    .aws-check { color:#22c55e; font-weight:700; }
+    .aws-feature-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:40px;
+    }
+    @media(max-width:900px){ .aws-feature-grid { grid-template-columns:1fr 1fr; } }
+    @media(max-width:640px){ .aws-feature-grid { grid-template-columns:1fr; } }

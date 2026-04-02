@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICSDC Shared Hosting | Fast &amp; Reliable Hosting Provider in India</title>
+    <meta name="description"
+        content="Experience lightning-fast websites with ICSDC Shared Hosting. NVMe SSD speed, 99.9% uptime, free SSL, and 24/7 local expert support at startup-friendly pricing.">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+    <link rel="stylesheet" href="assets/css/shared-hosting.css">
+</head>
+
+<body>
+
+    <!-- PAGE LOADER -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Loading...</p>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- DROPDOWN -->
+    <div id="dropdown-wrap">
+        <div id="dropdown">
+            <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+            <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+                <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+                <div>
+                    <h3 data-strapi-dd="flatTitle"></h3>
+                    <p data-strapi-dd="flatDesc"></p>
+                </div>
+            </div>
+            <div id="dd-content">
+                <div id="dd-top-bar">
+                    <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+                    <button class="dd-close" onclick="closeDropdown()">✕</button>
+                </div>
+                <div data-strapi-dd="grid" id="dd-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+            </a>
+            <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+            <button class="btn-login desktop-login-btn">Login</button>
+            <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+            <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+            <button class="btn-login mobile-login-btn">Login</button>
+        </div>
+    </nav>
+
+
+    <!-- ════════════════════════════════════
+         SECTION 1 — HERO
+    ════════════════════════════════════ -->
+    <section class="hero-section">
+        <div class="hero">
+            <div class="hero-content">
+                <span class="cloud-eyebrow">
+                    <span class="cloud-eyebrow-dot"></span>
+                    Made in India &bull; Built for the World
+                </span>
+                <h1 class="hero-title">Host Smarter with ICSDC Shared Hosting</h1>
+                <p class="hero-sub">"Everything You Need to Host, Launch, and Grow &mdash; Effortlessly."</p>
+                <p class="hero-desc">Launch your website on ICSDC Shared Hosting and experience the perfect balance of
+                    speed, security, and simplicity. Whether you're a blogger, startup, or growing business &mdash; we
+                    make web hosting simple, fast, and reliable.</p>
+                <div class="hero-btns">
+                    <button class="btn-primary">Get Started with Shared Hosting &rarr;</button>
+                    <button class="btn-outline">Connect with Us</button>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="cloud-hero-visual">
+                    <div class="cloud-hero-india-badge">
+                        &#127470;&#127475; India-Based Servers
+                    </div>
+                    <div class="cloud-node-graph">
+                        <svg viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <line class="cloud-edge" x1="160" y1="120" x2="60" y2="50" />
+                            <line class="cloud-edge" x1="160" y1="120" x2="260" y2="50" />
+                            <line class="cloud-edge" x1="160" y1="120" x2="40" y2="150" />
+                            <line class="cloud-edge" x1="160" y1="120" x2="280" y2="150" />
+                            <line class="cloud-edge" x1="160" y1="120" x2="100" y2="210" />
+                            <line class="cloud-edge" x1="160" y1="120" x2="220" y2="210" />
+                            <circle class="cloud-node-circle" cx="60" cy="50" r="28" />
+                            <circle class="cloud-node-circle" cx="260" cy="50" r="28" />
+                            <circle class="cloud-node-circle" cx="40" cy="150" r="28" />
+                            <circle class="cloud-node-circle" cx="280" cy="150" r="28" />
+                            <circle class="cloud-node-circle" cx="100" cy="210" r="28" />
+                            <circle class="cloud-node-circle" cx="220" cy="210" r="28" />
+                            <circle class="cloud-node-circle cloud-node-center" cx="160" cy="120" r="38" />
+                            <text class="cloud-node-icon" x="160" y="127" text-anchor="middle"
+                                fill="white">&#127760;</text>
+                            <text x="60" y="57" text-anchor="middle" font-size="11" fill="#1a56db">SSL</text>
+                            <text x="260" y="57" text-anchor="middle" font-size="10" fill="#1a56db">Email</text>
+                            <text x="40" y="157" text-anchor="middle" font-size="10" fill="#1a56db">NVMe</text>
+                            <text x="280" y="157" text-anchor="middle" font-size="10" fill="#1a56db">cPanel</text>
+                            <text x="100" y="217" text-anchor="middle" font-size="10" fill="#1a56db">FTP</text>
+                            <text x="220" y="217" text-anchor="middle" font-size="10" fill="#1a56db">MySQL</text>
+                        </svg>
+                    </div>
+                    <div class="cloud-hero-badge">
+                        <div class="cloud-hero-badge-dot"></div>
+                        <div>
+                            <div class="cloud-hero-badge-text">99.9% Uptime</div>
+                            <div class="cloud-hero-badge-sub">Always online</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+         SECTION 2 — 4 PILLARS
+    ════════════════════════════════════ -->
+    <section class="why-us section">
+        <div class="container">
+            <div class="why-grid" data-stagger>
+                <div class="why-card">
+                    <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            width="22" height="22">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg></div>
+                    <h3>High-Speed Performance</h3>
+                    <p>NVMe SSD storage, optimized servers, and a 1 Gbps network backbone ensure lightning-fast load
+                        times for every visitor.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            width="22" height="22">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg></div>
+                    <h3>Secure &amp; Stable Environment</h3>
+                    <p>Your website stays protected with shared firewalls, malware detection, and real-time monitoring —
+                        safety you can count on.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            width="22" height="22">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg></div>
+                    <h3>99.9% Uptime Assurance</h3>
+                    <p>Stay online without interruptions. ICSDC's robust infrastructure and world-class data centers
+                        ensure maximum availability.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            width="22" height="22">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                        </svg></div>
+                    <h3>24/7 Local Expert Support</h3>
+                    <p>No bots. No delays. Just real India-based engineers ready to assist you anytime — with expertise
+                        you can actually rely on.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+         SECTION 3 — WHO WE ARE
+    ════════════════════════════════════ -->
+    <section id="about" class="who-we-are section">
+        <div class="who-we-are-inner">
+            <div class="who-we-are-image" data-animate="fade-right">
+                <img src="assets/images/trusted-cloud-service-provider 1.png" alt="ICSDC Team">
+            </div>
+            <div class="blue-container" data-animate="fade-left">
+                <span class="cloud-section-label">About ICSDC</span>
+                <h2 class="title" style="text-align:left; margin-top:8px;">Who We Are?</h2>
+                <p class="who-we-are-paragraph">At ICSDC, we're redefining reliability and performance in web hosting.
+                    From shared hosting to enterprise cloud &mdash; we're a trusted provider in India, built for the
+                    world with enterprise-grade performance at every tier.</p>
+                <div class="cloud-why-grid" style="margin-top:24px; grid-template-columns:1fr;" data-stagger>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">01</div>
+                        <h3>Trusted web hosting provider &mdash; built for the world</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">02</div>
+                        <h3>Security, scalability, Gold Processors &amp; NIXI Partnered</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">03</div>
+                        <h3>Affordable hosting with enterprise-grade quality</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">04</div>
+                        <h3>24/7 local expert team &mdash; real help, every time</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+         SECTION 4 — EVERYTHING YOU GAIN
+    ════════════════════════════════════ -->
+    <section id="features" class="section cloud-power-section">
+        <div class="container">
+            <span class="cloud-section-label" data-animate="fade-up">Features</span>
+            <h2 class="title" data-animate="fade-up">Everything You Gain with ICSDC Shared Hosting</h2>
+            <p class="subtitle" data-animate="fade-up">More than just server space &mdash; speed, stability, and support
+                designed to help your website succeed.</p>
+            <div class="cloud-power-grid" data-stagger>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg></div>
+                    <h3>Affordable Hosting for Every Stage</h3>
+                    <p>Premium hosting without overspending. Cost-effective yet packed with features that rival
+                        enterprise solutions at every plan level.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg></div>
+                    <h3>Lightning-Fast Load Times</h3>
+                    <p>NVMe SSD-powered servers and a 1 Gbps network ensure your website loads instantly, improving user
+                        experience and search rankings.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg></div>
+                    <h3>99.95% Uptime Guarantee</h3>
+                    <p>World-class data center partnerships ensure your website stays live and accessible around the
+                        clock, every day of the year.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg></div>
+                    <h3>Multi-Layer Security Protection</h3>
+                    <p>Firewalls, DDoS protection, malware detection, and server hardening keep your website safe from
+                        modern and emerging threats.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="7" height="7" rx="1" />
+                            <rect x="14" y="3" width="7" height="7" rx="1" />
+                            <rect x="14" y="14" width="7" height="7" rx="1" />
+                            <rect x="3" y="14" width="7" height="7" rx="1" />
+                        </svg></div>
+                    <h3>User-Friendly Control Panel</h3>
+                    <p>No tech skills needed. Manage domains, files, emails, and databases from an intuitive control
+                        panel built for everyone.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                        </svg></div>
+                    <h3>Quick Deployment &amp; Easy Setup</h3>
+                    <p>Launch your website within minutes with simplified setup and one-click installers &mdash; even
+                        for first-time users.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg></div>
+                    <h3>Flexible &amp; Scalable Plans</h3>
+                    <p>Upgrade RAM, storage, or bandwidth anytime without migration or downtime, ensuring a smooth
+                        growth journey at every stage.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <path d="M7 11V7a5 5 0 0110 0v4" />
+                        </svg></div>
+                    <h3>Free SSL Certificates</h3>
+                    <p>Protect visitors and boost SEO automatically with free SSL encryption. Every domain gets complete
+                        HTTPS coverage included.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg></div>
+                    <h3>Professional Email Hosting</h3>
+                    <p>Branded email accounts matching your domain &mdash; a professional touch for client
+                        communication, built into every hosting plan.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg></div>
+                    <h3>Daily Backups &amp; Easy Restore</h3>
+                    <p>Automatic daily backups with one-click recovery &mdash; so you never lose progress or peace of
+                        mind on your website data.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <rect x="4" y="4" width="16" height="16" rx="2" />
+                            <path d="M9 9h6M9 12h6M9 15h4" />
+                        </svg></div>
+                    <h3>Optimized for All Major CMS</h3>
+                    <p>Host WordPress, Joomla, Magento, or any CMS &mdash; servers pre-optimized for popular web
+                        platforms out of the box.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><svg viewBox="0 0 24 24">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                        </svg></div>
+                    <h3>Round-the-Clock Local Support</h3>
+                    <p>Real team. Real expertise. India-based support engineers available 24/7 to resolve issues quickly
+                        &mdash; no bots involved.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+         SECTION 5 — WHY CHOOSE
+    ════════════════════════════════════ -->
+    <section id="why-us" class="cloud-why-section">
+        <div class="cloud-why-inner">
+            <span class="cloud-section-label" data-animate="fade-up">Why ICSDC</span>
+            <h2 class="title" data-animate="fade-up">Why Choose ICSDC Shared Hosting?</h2>
+            <p class="subtitle" data-animate="fade-up">The perfect mix of performance, protection, and peace of mind
+                &mdash; all at unbeatable value.</p>
+            <div class="cloud-why-grid" data-stagger>
+                <div class="cloud-why-item">
+                    <div class="cloud-why-num">01</div>
+                    <h3>One-click app installer (WordPress, Joomla, Magento &amp; more)</h3>
+                </div>
+                <div class="cloud-why-item">
+                    <div class="cloud-why-num">02</div>
+                    <h3>Automated backups with quick restore</h3>
+                </div>
+                <div class="cloud-why-item">
+                    <div class="cloud-why-num">03</div>
+                    <h3>Free SSL certificate for every domain</h3>
+                </div>
+                <div class="cloud-why-item">
+                    <div class="cloud-why-num">04</div>
+                    <h3>Professional business email accounts included</h3>
+                </div>
+                <div class="cloud-why-item">
+                    <div class="cloud-why-num">05</div>
+                    <h3>Developer-friendly environment (FTP, MySQL, PHP access)</h3>
+                </div>
+                <div class="cloud-why-item">
+                    <div class="cloud-why-num">06</div>
+                    <h3>99.9% uptime reliability guarantee</h3>
+                </div>
+                <div class="cloud-why-item">
+                    <div class="cloud-why-num">07</div>
+                    <h3>Built-in DDoS and malware protection</h3>
+                </div>
+                <div class="cloud-why-item">
+                    <div class="cloud-why-num">08</div>
+                    <h3>24/7 expert local support &mdash; no bots, just real engineers</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+         SECTION 6 — NEXT-GEN TECH
+    ════════════════════════════════════ -->
+    <section id="tech" class="section cloud-use-section">
+        <div class="container">
+            <span class="cloud-section-label" data-animate="fade-up">Technology</span>
+            <h2 class="title" data-animate="fade-up">Next-Gen Hosting Engineered for Growth</h2>
+            <p class="subtitle" data-animate="fade-up">Faster, safer, and smarter &mdash; next-generation infrastructure
+                paired with tools built for real business needs.</p>
+            <div class="cloud-use-grid" data-stagger>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><svg viewBox="0 0 24 24">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg></div>
+                    <h3>NVMe SSD Performance</h3>
+                    <p>Ultra-fast NVMe SSD storage delivers content to visitors in milliseconds &mdash; no throttling,
+                        no bottlenecks.</p>
+                </div>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><svg viewBox="0 0 24 24">
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                        </svg></div>
+                    <h3>Developer-Ready Environment</h3>
+                    <p>Full control with FTP, PHP, MySQL, and SSH access &mdash; perfect for developers and creators who
+                        demand flexibility.</p>
+                </div>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><svg viewBox="0 0 24 24">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg></div>
+                    <h3>Advanced Web Security</h3>
+                    <p>Built-in firewalls, malware scanning, and secure SSH keep your data and users safe around the
+                        clock, every day.</p>
+                </div>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><svg viewBox="0 0 24 24">
+                            <line x1="12" y1="1" x2="12" y2="23" />
+                            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+                        </svg></div>
+                    <h3>eCommerce-Optimized Hosting</h3>
+                    <p>Run your online store with high uptime, fast checkout performance, and SSL encryption to earn and
+                        keep customer trust.</p>
+                </div>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><svg viewBox="0 0 24 24">
+                            <rect x="2" y="3" width="20" height="14" rx="2" />
+                            <path d="M8 21h8M12 17v4" />
+                        </svg></div>
+                    <h3>Smart Resource Management</h3>
+                    <p>No overcrowded servers, no lag. Every website gets dedicated resources to perform consistently
+                        under any traffic load.</p>
+                </div>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><svg viewBox="0 0 24 24">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg></div>
+                    <h3>Seamless Platform Upgrades</h3>
+                    <p>Start on Shared Hosting and scale to VPS or Cloud anytime &mdash; no data loss, no downtime, no
+                        complications.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+         SECTION 7 — CTA BAND
+    ════════════════════════════════════ -->
+    <section class="cloud-cta-band" aria-label="Get started CTA">
+        <div class="cloud-cta-inner">
+            <h2>Powering Businesses That Never Settle</h2>
+            <p>Join thousands of websites running on India's most reliable shared hosting platform.</p>
+            <div class="cloud-cta-btns">
+                <button class="cloud-cta-btn-primary">Get Started with ICSDC &rarr;</button>
+                <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+     SECTION 8 — TESTIMONIALS
+════════════════════════════════════ -->
+    <section class="testi-section" aria-labelledby="testi-heading">
+        <div class="testi-container">
+            <h2 id="testi-heading" class="testi-title">See our Clients Stories</h2>
+
+            <!-- Cards rendered by components.js -->
+            <div class="testi-scroll-viewport">
+                <div class="testi-grid" role="list" id="testi-grid"></div>
+            </div>
+
+            <!-- Pagination dots rendered by components.js -->
+            <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+
+            <div class="testi-nav">
+                <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+                <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ FAQ ════════ -->
+    <section class="faq-section" id="acr-faq" aria-labelledby="acr-faq-heading">
+        <div class="faq-container">
+            <div class="faq-col">
+                <h2 id="acr-faq-heading" class="faq-title">FAQs About ICSDC Acronis Backup</h2>
+                <dl class="faq-accordions" id="faq-accordions"></dl>
+            </div>
+            <aside class="faq-contact-card">
+                <h3 class="faq-contact-title">Talk to Our Backup Experts</h3>
+                <p class="faq-contact-desc">Our certified engineers are available 24/7 to help you design the right
+                    backup and
+                    disaster recovery strategy for your workloads.<br><br>&#128222; +91 98109 58857</p>
+                <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg></a>
+            </aside>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+         SECTION 10 — FINAL CTA
+    ════════════════════════════════════ -->
+    <section class="cloud-cta-band cloud-cta-dark" aria-label="Final CTA">
+        <div class="cloud-cta-inner">
+            <h2>Start Hosting Smarter with ICSDC</h2>
+            <p>Fast. Secure. Affordable. Everything your website needs &mdash; right from day one.</p>
+            <div class="cloud-cta-btns">
+                <button class="cloud-cta-btn-primary">Start Hosting Now &rarr;</button>
+                <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-main">
+            <div data-strapi-link-groups class="footer-container">
+
+                <!-- Brand column -->
+                <div class="footer-brand">
+                    <a href="/" aria-label="ICSDC Home">
+                        <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+                    </a>
+                    <address class="footer-address">
+                        <span data-strapi-footer-address></span>
+                        <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+                        <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                                class="footer-email-link">info@icsdc.com</a></span>
+                    </address>
+
+                    <div class="footer-social" aria-label="Social media links">
+                        <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook"
+                            target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter"
+                            target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                <path
+                                    d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                                </path>
+                            </svg>
+                        </a>
+                        <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram"
+                            target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p id="footer-year-text">© Copyright <span data-strapi-year id="footer-year"></span> <span
+                    data-strapi-company-name></span>. All Rights Reserved</p>
+        </div>
+    </footer>
+    <!-- SCROLL ANIMATION ENGINE -->
+    <script>
+        (function () {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+                observer.observe(el);
+            });
+        })();
+    </script>
+
+    <!-- Strapi config -->
+    <script>
+        STRAPI_URL = "http://13.126.9.248:1337";
+        TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+    </script>
+    <script src="assets/js/main.js" type="module"></script>
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/polish.js" defer></script>
+    <script src="assets/js/shared-hosting.js" type="module"></script>
+
+    <script>
+        (function () {
+            var el = document.getElementById('footer-year');
+            if (el) el.textContent = new Date().getFullYear();
+        })();
+    </script>
+
+</body>
+
+</html>

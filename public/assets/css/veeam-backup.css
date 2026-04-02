@@ -1,0 +1,411 @@
+/* ══════════════════════════════════════
+   VEEAM BACKUP PAGE — SCOPED STYLES
+   All classes prefixed veeam-* to prevent
+   any collision with style.css,
+   components.css, or other page styles.
+   Zero overrides.
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.veeam-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #dcfce7;
+    color: #059669;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(5, 150, 105, 0.22);
+}
+
+/* ══════════════════════════════════════
+   HERO VISUAL — EMERALD GRADIENT
+══════════════════════════════════════ */
+.veeam-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #bbf7d0 0%, #dcfce7 50%, #f0fdf4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(5, 150, 105, 0.14), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.veeam-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 65% 30%, rgba(5, 150, 105, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(16, 185, 129, 0.07) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.veeam-hero-visual svg {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ══════════════════════════════════════
+   HERO BADGES
+══════════════════════════════════════ */
+.veeam-top-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--white);
+    border: 1px solid rgba(5, 150, 105, 0.18);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #059669;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 16px rgba(5, 150, 105, 0.14);
+    z-index: 2;
+    animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
+}
+
+.veeam-status-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--white);
+    border: 1px solid rgba(5, 150, 105, 0.14);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.13);
+    z-index: 2;
+    animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
+}
+
+.veeam-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #059669;
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.50);
+    flex-shrink: 0;
+    animation: veeam-pulse 2s ease-in-out infinite;
+}
+
+@keyframes veeam-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.55); }
+    70%  { box-shadow: 0 0 0 8px rgba(5, 150, 105, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+}
+
+.veeam-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+.veeam-bs {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+/* ══════════════════════════════════════
+   FEATURES GRID — 3 COLUMNS (9 CARDS)
+══════════════════════════════════════ */
+.veeam-features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   COMPARISON TABLE
+══════════════════════════════════════ */
+.veeam-compare-table-wrap {
+    overflow-x: auto;
+    margin-top: 36px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 24px rgba(5, 150, 105, 0.08);
+}
+
+.veeam-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    font-size: 14px;
+}
+
+.veeam-compare-table thead tr {
+    background: #059669;
+    color: var(--white);
+}
+
+.veeam-compare-table thead th {
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.veeam-compare-table thead th.veeam-col-icsdc {
+    background: #047857;
+    color: var(--white);
+}
+
+.veeam-compare-table tbody tr {
+    border-bottom: 1px solid rgba(5, 150, 105, 0.10);
+    transition: background var(--transition-fast) ease;
+}
+
+.veeam-compare-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.veeam-compare-table tbody tr:hover {
+    background: #f0fdf4;
+}
+
+.veeam-compare-table tbody td {
+    padding: 14px 20px;
+    vertical-align: middle;
+    color: var(--text-dark);
+    line-height: 1.5;
+}
+
+.veeam-compare-table tbody td:first-child {
+    font-weight: 600;
+    color: var(--text-dark);
+    white-space: nowrap;
+}
+
+.veeam-compare-table tbody td.veeam-col-icsdc {
+    background: #f0fdf4;
+    color: #065f46;
+    font-weight: 500;
+}
+
+.veeam-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: #059669;
+    color: var(--white);
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    margin-right: 8px;
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+/* ══════════════════════════════════════
+   STATS SECTION — RANSOMWARE REALITY
+══════════════════════════════════════ */
+.veeam-stats-section {
+    background: #f0fdf4;
+}
+
+.veeam-section-label-light {
+    color: #059669 !important;
+}
+
+.veeam-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.veeam-stat-card {
+    background: var(--white);
+    border: 1.5px solid rgba(5, 150, 105, 0.14);
+    border-radius: var(--radius-lg);
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(5, 150, 105, 0.08);
+    transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease;
+}
+
+.veeam-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(5, 150, 105, 0.14);
+}
+
+.veeam-stat-number {
+    font-size: 52px;
+    font-weight: 800;
+    color: #059669;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 12px;
+}
+
+.veeam-stat-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ══════════════════════════════════════
+   HOW IT WORKS — 5 STEPS
+══════════════════════════════════════ */
+.veeam-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.veeam-step-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 20px 24px;
+    position: relative;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+}
+
+.veeam-step-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(5, 150, 105, 0.30);
+}
+
+.veeam-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #059669;
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0 auto 16px;
+    letter-spacing: -0.02em;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.30);
+}
+
+.veeam-step-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.veeam-step-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ══════════════════════════════════════
+   WHO / USE CASE GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.cloud-use-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+
+/* 1280px — 3-col features, 4-col steps → 3 */
+@media (max-width: 1280px) {
+    .veeam-steps-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .veeam-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 1024px — 2 columns for most grids */
+@media (max-width: 1024px) {
+    .veeam-features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .veeam-steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .veeam-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cloud-use-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .veeam-compare-table tbody td:first-child {
+        white-space: normal;
+    }
+}
+
+/* 640px — single column */
+@media (max-width: 640px) {
+    .veeam-features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .veeam-steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .veeam-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cloud-use-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .veeam-hero-visual {
+        max-width: 100%;
+    }
+
+    .veeam-top-badge {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+
+    .veeam-stat-number {
+        font-size: 40px;
+    }
+}

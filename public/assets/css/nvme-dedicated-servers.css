@@ -1,0 +1,521 @@
+/* ══════════════════════════════════════
+   NVME DEDICATED SERVERS PAGE — SCOPED STYLES
+   All classes prefixed nds-* to prevent
+   any collision with style.css,
+   components.css, or cloud-hosting.css.
+   Zero overrides.
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.nds-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff7ed;
+    color: #b45309;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(245, 158, 11, 0.22);
+}
+
+/* ══════════════════════════════════════
+   HERO VISUAL — AMBER/ORANGE TINT
+══════════════════════════════════════ */
+.nds-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 55%, #fed7aa 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(245, 158, 11, 0.15), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.nds-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 65% 30%, rgba(245, 158, 11, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(251, 191, 36, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.nds-hero-visual svg {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ══════════════════════════════════════
+   HERO BADGES
+══════════════════════════════════════ */
+.nds-top-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--white);
+    border: 1px solid rgba(245, 158, 11, 0.22);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #b45309;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.14);
+    z-index: 2;
+    animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
+}
+
+.nds-status-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--white);
+    border: 1px solid rgba(245, 158, 11, 0.16);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.14);
+    z-index: 2;
+    animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
+}
+
+.nds-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    flex-shrink: 0;
+}
+
+.nds-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+.nds-bs {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+/* ══════════════════════════════════════
+   PRICING PLANS GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.nds-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+    align-items: stretch;
+}
+
+.nds-plan-card {
+    position: relative;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px 32px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+}
+
+.nds-plan-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(245, 158, 11, 0.28);
+}
+
+/* Featured (Most Popular) card */
+.nds-plan-featured {
+    background: #b45309;
+    border-color: #b45309;
+    transform: translateY(-8px);
+    box-shadow: 0 24px 64px rgba(180, 83, 9, 0.30), 0 8px 24px rgba(180, 83, 9, 0.18);
+    z-index: 2;
+}
+
+.nds-plan-featured:hover {
+    transform: translateY(-14px);
+    box-shadow: 0 32px 72px rgba(180, 83, 9, 0.38), 0 8px 24px rgba(180, 83, 9, 0.22);
+}
+
+/* Most Popular badge */
+.nds-plan-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f59e0b;
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: var(--radius-xl);
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.38);
+}
+
+.nds-plan-tier {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #b45309;
+    margin-bottom: 12px;
+}
+
+.nds-plan-featured .nds-plan-tier {
+    color: rgba(255, 255, 255, 0.80);
+}
+
+.nds-plan-price-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.nds-plan-currency {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    align-self: flex-start;
+    margin-top: 8px;
+}
+
+.nds-plan-price {
+    font-size: clamp(36px, 4vw, 48px);
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+.nds-plan-period {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 2px;
+}
+
+.nds-plan-featured .nds-plan-currency,
+.nds-plan-featured .nds-plan-price {
+    color: var(--white);
+}
+
+.nds-plan-featured .nds-plan-period {
+    color: rgba(255, 255, 255, 0.70);
+}
+
+.nds-plan-tagline {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted-alt);
+    margin: 12px 0 0;
+}
+
+.nds-plan-featured .nds-plan-tagline {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.nds-plan-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+    border: none;
+}
+
+.nds-plan-featured .nds-plan-divider {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+/* Features list */
+.nds-plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    margin-bottom: 28px;
+    padding: 0;
+}
+
+.nds-plan-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+}
+
+.nds-plan-featured .nds-plan-feature {
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.nds-plan-check {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(245, 158, 11, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+}
+
+.nds-plan-check svg {
+    stroke: #b45309;
+}
+
+.nds-plan-featured .nds-plan-check {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.nds-plan-featured .nds-plan-check svg {
+    stroke: var(--white);
+}
+
+/* Plan CTA buttons */
+.nds-plan-btn {
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+    transition: background var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 48px;
+    border: 2px solid transparent;
+    margin-top: auto;
+}
+
+.nds-plan-btn-outline {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text);
+}
+
+.nds-plan-btn-outline:hover {
+    border-color: #f59e0b;
+    color: #b45309;
+    background: #fff7ed;
+    transform: translateY(-1px);
+}
+
+.nds-plan-btn-primary {
+    background: var(--white);
+    color: #b45309;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+    border-color: transparent;
+}
+
+.nds-plan-btn-primary:hover {
+    background: #fff7ed;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+}
+
+/* ══════════════════════════════════════
+   INFRA GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.nds-infra-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+/* ══════════════════════════════════════
+   WHY NVME GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.nds-why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+/* ══════════════════════════════════════
+   USE CASES GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.nds-usecases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+/* ══════════════════════════════════════
+   WHEN TO CHOOSE GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.nds-when-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+    text-align: left;
+}
+
+.nds-when-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.nds-when-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #f59e0b, #b45309);
+    opacity: 0;
+    transition: opacity var(--transition-base) ease;
+}
+
+.nds-when-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(245, 158, 11, 0.24);
+}
+
+.nds-when-card:hover::before {
+    opacity: 1;
+}
+
+.nds-when-num {
+    font-size: 42px;
+    font-weight: 800;
+    color: rgba(245, 158, 11, 0.12);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: -8px;
+}
+
+.nds-when-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.nds-when-card p {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--muted-alt);
+    margin: 0;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+
+/* 1024px — 2 columns for most grids */
+@media (max-width: 1024px) {
+    .nds-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .nds-plan-featured {
+        transform: none;
+    }
+
+    .nds-infra-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .nds-why-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .nds-usecases-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .nds-when-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 640px — single column */
+@media (max-width: 640px) {
+    .nds-plans-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nds-plan-featured {
+        transform: none;
+    }
+
+    .nds-infra-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nds-why-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nds-usecases-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nds-when-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nds-hero-visual {
+        max-width: 100%;
+    }
+
+    .nds-top-badge {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+}

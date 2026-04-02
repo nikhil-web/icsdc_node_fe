@@ -1,0 +1,370 @@
+/* ══════════════════════════════════════
+   MICROSOFT 365 PAGE — SCOPED STYLES
+   All classes prefixed m365-* to prevent
+   any collision with style.css,
+   components.css, or other page styles.
+   Zero overrides.
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.m365-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(37, 99, 235, 0.18);
+}
+
+/* ══════════════════════════════════════
+   HERO VISUAL — BLUE GRADIENT
+══════════════════════════════════════ */
+.m365-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 55%, #f0f9ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(37, 99, 235, 0.13), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.m365-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 65% 30%, rgba(37, 99, 235, 0.09) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.m365-hero-visual svg {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ══════════════════════════════════════
+   HERO BADGES
+══════════════════════════════════════ */
+.m365-top-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--white);
+    border: 1px solid rgba(37, 99, 235, 0.16);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #2563eb;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.12);
+    z-index: 2;
+    animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
+}
+
+.m365-status-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--white);
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+    z-index: 2;
+    animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
+}
+
+.m365-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    flex-shrink: 0;
+}
+
+.m365-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+.m365-bs {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+/* ══════════════════════════════════════
+   PLANS GRID — 3 COLUMNS
+══════════════════════════════════════ */
+.m365-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.m365-plan-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 24px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+}
+
+.m365-plan-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(37, 99, 235, 0.28);
+}
+
+.m365-plan-card.m365-plan-featured {
+    border-color: #2563eb;
+    border-width: 2px;
+}
+
+/* Most Popular badge */
+.m365-plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2563eb;
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: var(--radius-xl);
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.32);
+}
+
+.m365-plan-name {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #2563eb;
+    margin-bottom: 8px;
+}
+
+.m365-plan-price {
+    font-size: 32px;
+    font-weight: 800;
+    color: #2563eb;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+
+.m365-plan-price span {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0;
+}
+
+.m365-plan-tagline {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Feature list — checkmark bullets */
+.m365-plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.m365-plan-features li {
+    font-size: 13px;
+    color: var(--text-dark);
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.m365-plan-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #2563eb;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* Plan CTA buttons */
+.m365-plan-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: transparent;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    margin-top: auto;
+    transition: background var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 44px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.m365-plan-btn:hover {
+    background: #eff6ff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.14);
+}
+
+.m365-plan-btn-featured {
+    width: 100%;
+    padding: 12px 20px;
+    background: #2563eb;
+    color: var(--white);
+    border: 2px solid #2563eb;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    margin-top: auto;
+    transition: background var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 44px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.m365-plan-btn-featured:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.30);
+}
+
+/* ══════════════════════════════════════
+   FEATURES GRID — 4 COLUMNS (12 CARDS)
+══════════════════════════════════════ */
+.m365-features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   BACKUP GRID — 4 COLUMNS (7 CARDS)
+══════════════════════════════════════ */
+.m365-backup-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+
+/* 1280px — 2-col plans, 3-col features */
+@media (max-width: 1280px) {
+    .m365-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .m365-features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .m365-backup-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 1024px — 2 columns for most grids */
+@media (max-width: 1024px) {
+    .m365-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .m365-features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .m365-backup-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 640px — single column */
+@media (max-width: 640px) {
+    .m365-plans-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .m365-features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .m365-backup-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .m365-hero-visual {
+        max-width: 100%;
+    }
+
+    .m365-top-badge {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+}

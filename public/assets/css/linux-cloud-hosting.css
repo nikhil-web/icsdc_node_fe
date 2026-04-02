@@ -1,0 +1,470 @@
+/* ══════════════════════════════════════
+   LINUX CLOUD HOSTING PAGE — SCOPED STYLES
+   All classes prefixed lch-* to prevent
+   any collision with style.css,
+   components.css, or cloud-hosting.css.
+   Zero overrides.
+══════════════════════════════════════ */
+
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.lch-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(26, 86, 219, 0.15);
+}
+
+
+/* ══════════════════════════════════════
+   HERO VISUAL — subtle green tint for Linux/open-source
+══════════════════════════════════════ */
+.lch-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 55%, #d1fae5 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(16, 185, 129, 0.13), 0 4px 16px rgba(0, 0, 0, 0.06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.lch-hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 65% 30%, rgba(16, 185, 129, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(34, 197, 94, 0.07) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.lch-hero-visual svg {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+    padding: 0;
+    display: block;
+}
+
+
+/* ══════════════════════════════════════
+   TOP BADGE (inside hero visual, top)
+══════════════════════════════════════ */
+.lch-top-badge {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--white);
+    border: 1px solid rgba(16, 185, 129, 0.18);
+    border-radius: 10px;
+    padding: 7px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #059669;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.12);
+    z-index: 3;
+    animation: lch-badge-float 6s ease-in-out 0.2s infinite;
+}
+
+@keyframes lch-badge-float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(-5px); }
+}
+
+
+/* ══════════════════════════════════════
+   STATUS BADGE (inside hero visual, bottom-right)
+══════════════════════════════════════ */
+.lch-status-badge {
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+    background: var(--white);
+    border: 1px solid rgba(16, 185, 129, 0.14);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.12);
+    z-index: 3;
+    animation: lch-badge-float 5s ease-in-out 0.8s infinite;
+}
+
+.lch-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.55);
+    flex-shrink: 0;
+    animation: lch-dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes lch-dot-pulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(34, 197, 94, 0.55); }
+    50%       { box-shadow: 0 0 16px rgba(34, 197, 94, 0.85); }
+}
+
+.lch-bt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+}
+
+.lch-bs {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+    line-height: 1.3;
+}
+
+
+/* ══════════════════════════════════════
+   PLANS GRID
+══════════════════════════════════════ */
+.lch-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+    align-items: stretch;
+}
+
+.lch-plan-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--transition-base) var(--ease-out-expo),
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+}
+
+.lch-plan-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26, 86, 219, 0.22);
+}
+
+.lch-plan-card.lch-plan-featured {
+    background: var(--blue);
+    border-color: var(--blue);
+    transform: translateY(-8px);
+    box-shadow: 0 24px 64px rgba(26, 86, 219, 0.30), 0 8px 24px rgba(26, 86, 219, 0.18);
+    z-index: 2;
+}
+
+.lch-plan-card.lch-plan-featured:hover {
+    transform: translateY(-14px);
+}
+
+.lch-plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--blue);
+    border: 2px solid var(--white);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: var(--radius-xl);
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(26, 86, 219, 0.35);
+}
+
+.lch-plan-featured .lch-plan-badge {
+    background: var(--orange);
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+}
+
+.lch-plan-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+}
+
+.lch-plan-featured .lch-plan-name {
+    color: var(--white);
+}
+
+.lch-plan-price {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.lch-plan-featured .lch-plan-price {
+    color: var(--white);
+}
+
+.lch-plan-price span {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0;
+}
+
+.lch-plan-featured .lch-plan-price span {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.lch-plan-tagline {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--muted-alt);
+    margin-bottom: 20px;
+    flex: 0;
+}
+
+.lch-plan-featured .lch-plan-tagline {
+    color: rgba(255, 255, 255, 0.80);
+}
+
+
+/* ══════════════════════════════════════
+   PLAN SPECS — 2-column spec grid
+══════════════════════════════════════ */
+.lch-plan-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 0 0 24px;
+    flex: 1;
+}
+
+.lch-plan-spec {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--bg-light);
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+.lch-plan-featured .lch-plan-spec {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.lch-plan-spec-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 2px;
+    font-weight: 600;
+}
+
+.lch-plan-featured .lch-plan-spec-label {
+    color: rgba(255, 255, 255, 0.60);
+}
+
+.lch-plan-spec-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+}
+
+.lch-plan-featured .lch-plan-spec-value {
+    color: var(--white);
+}
+
+
+/* ══════════════════════════════════════
+   PLAN BUTTON
+══════════════════════════════════════ */
+.lch-plan-btn {
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    border: 2px solid var(--blue);
+    background: transparent;
+    color: var(--blue);
+    transition: background var(--transition-base) ease,
+        color var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 48px;
+}
+
+.lch-plan-btn:hover {
+    background: var(--blue);
+    color: var(--white);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.25);
+}
+
+.lch-plan-btn-featured {
+    background: var(--white);
+    color: var(--blue);
+    border-color: var(--white);
+}
+
+.lch-plan-btn-featured:hover {
+    background: var(--blue-light);
+    border-color: var(--blue-light);
+    color: var(--blue);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+}
+
+
+/* ══════════════════════════════════════
+   FRAMEWORKS GRID
+══════════════════════════════════════ */
+.lch-frameworks-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 36px;
+}
+
+.lch-framework-badge {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease,
+        color var(--transition-base) ease;
+    white-space: nowrap;
+    cursor: default;
+}
+
+.lch-framework-badge:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26, 86, 219, 0.25);
+    color: var(--blue);
+}
+
+
+/* ══════════════════════════════════════
+   RESPONSIVE — 1024px breakpoint
+══════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .lch-plans-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .lch-plan-card.lch-plan-featured {
+        transform: none;
+        order: -1;
+    }
+
+    .lch-plan-card.lch-plan-featured:hover {
+        transform: translateY(-6px);
+    }
+
+    .lch-frameworks-grid {
+        gap: 10px;
+    }
+}
+
+
+/* ══════════════════════════════════════
+   RESPONSIVE — 640px breakpoint
+══════════════════════════════════════ */
+@media (max-width: 640px) {
+    .lch-eyebrow {
+        font-size: 11px;
+        padding: 5px 12px;
+    }
+
+    .lch-plans-grid {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+    }
+
+    .lch-plan-card {
+        padding: 28px 20px;
+    }
+
+    .lch-plan-specs {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .lch-plan-price {
+        font-size: 28px;
+    }
+
+    .lch-frameworks-grid {
+        gap: 8px;
+    }
+
+    .lch-framework-badge {
+        font-size: 12px;
+        padding: 7px 14px;
+    }
+
+    .lch-top-badge {
+        font-size: 10px;
+        padding: 5px 12px;
+    }
+
+    .lch-status-badge {
+        padding: 8px 12px;
+        bottom: 12px;
+        right: 12px;
+    }
+
+    .lch-bt {
+        font-size: 11px;
+    }
+
+    .lch-bs {
+        font-size: 9px;
+    }
+}

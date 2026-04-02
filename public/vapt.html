@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VAPT Security Services | Real-World Penetration Testing by ICSDC</title>
+  <meta name="description"
+    content="ICSDC provides practical VAPT services to identify, exploit, and fix security gaps across your digital infrastructure.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/vapt.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="vapt-eyebrow">&#128272; VAPT Security Services</div>
+        <h1 class="hero-title">Hackers Don't Ask for Permission - Is Your System Ready?</h1>
+        <p class="hero-sub">A real-world approach to finding, exploiting, and fixing security gaps across your digital infrastructure</p>
+        <p class="hero-desc">Our VAPT services uncover hidden vulnerabilities by simulating real-world attacks across your applications, networks, and cloud environments. You get clear, prioritized insights with practical fixes &mdash; not just technical reports.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="location.href='/contact'">Schedule a VAPT Assessment &rarr;</button>
+          <button class="btn-outline" onclick="location.href='#vapt-offerings'">Learn More</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="vapt-hero-visual">
+          <div class="vapt-top-badge">&#128272; ICSDC VAPT Security</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#f5f3ff" stroke="rgba(124,58,237,0.12)"
+              stroke-width="1" />
+            <!-- Central shield body -->
+            <path d="M150 28 L205 52 L205 115 Q205 162 150 188 Q95 162 95 115 L95 52 Z"
+              fill="white" stroke="rgba(124,58,237,0.28)" stroke-width="2" />
+            <path d="M150 36 L197 57 L197 115 Q197 154 150 178 Q103 154 103 115 L103 57 Z"
+              fill="#ede9fe" stroke="none" />
+            <!-- Lock body in shield -->
+            <rect x="136" y="100" width="28" height="20" rx="4" fill="none" stroke="#7c3aed" stroke-width="2.5" />
+            <path d="M141 100 L141 94 Q141 86 150 86 Q159 86 159 94 L159 100" fill="none" stroke="#7c3aed"
+              stroke-width="2.5" stroke-linecap="round" />
+            <circle cx="150" cy="110" r="3" fill="#7c3aed" />
+            <!-- Magnifier overlay (penetration testing symbol) -->
+            <circle cx="180" cy="72" r="12" fill="none" stroke="rgba(124,58,237,0.45)" stroke-width="2" />
+            <line x1="189" y1="81" x2="197" y2="89" stroke="rgba(124,58,237,0.55)" stroke-width="2.5"
+              stroke-linecap="round" />
+            <!-- Attack vector nodes — left -->
+            <circle cx="55" cy="78" r="10" fill="white" stroke="rgba(124,58,237,0.30)" stroke-width="1.5" />
+            <text x="55" y="82" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">APP</text>
+            <circle cx="55" cy="132" r="10" fill="white" stroke="rgba(124,58,237,0.30)" stroke-width="1.5" />
+            <text x="55" y="136" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">API</text>
+            <!-- Connection lines — left to shield -->
+            <line x1="65" y1="83" x2="95" y2="90" stroke="rgba(124,58,237,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <line x1="65" y1="132" x2="95" y2="118" stroke="rgba(124,58,237,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <!-- Threat nodes — right -->
+            <circle cx="245" cy="73" r="10" fill="white" stroke="rgba(124,58,237,0.30)" stroke-width="1.5" />
+            <text x="245" y="77" font-size="6" fill="#6d28d9" text-anchor="middle" font-weight="700">NET</text>
+            <circle cx="245" cy="113" r="10" fill="#f5f3ff" stroke="rgba(124,58,237,0.45)" stroke-width="1.5" />
+            <text x="245" y="117" font-size="6" fill="#6d28d9" text-anchor="middle" font-weight="700">CVE</text>
+            <circle cx="245" cy="153" r="10" fill="white" stroke="rgba(124,58,237,0.30)" stroke-width="1.5" />
+            <text x="245" y="157" font-size="6" fill="#6d28d9" text-anchor="middle" font-weight="700">CLD</text>
+            <!-- Connection lines — right to shield -->
+            <line x1="235" y1="78" x2="205" y2="90" stroke="rgba(124,58,237,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <line x1="235" y1="118" x2="205" y2="115" stroke="rgba(124,58,237,0.55)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <line x1="235" y1="148" x2="205" y2="130" stroke="rgba(124,58,237,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <!-- Validated vulnerability indicator -->
+            <circle cx="222" cy="116" r="7" fill="#7c3aed" />
+            <line x1="219" y1="113" x2="225" y2="119" stroke="white" stroke-width="2" stroke-linecap="round" />
+            <line x1="225" y1="113" x2="219" y2="119" stroke="white" stroke-width="2" stroke-linecap="round" />
+            <!-- Status boxes at bottom -->
+            <rect x="38" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(124,58,237,0.22)"
+              stroke-width="1.2" />
+            <text x="64" y="168" font-size="6" fill="#7c3aed" text-anchor="middle" font-weight="600">Web App</text>
+            <text x="64" y="178" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">&#10003; Tested</text>
+
+            <rect x="98" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(124,58,237,0.22)"
+              stroke-width="1.2" />
+            <text x="124" y="168" font-size="6" fill="#7c3aed" text-anchor="middle" font-weight="600">Network</text>
+            <text x="124" y="178" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">&#10003; Scanned</text>
+
+            <rect x="158" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(124,58,237,0.22)"
+              stroke-width="1.2" />
+            <text x="184" y="168" font-size="6" fill="#7c3aed" text-anchor="middle" font-weight="600">Cloud</text>
+            <text x="184" y="178" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">&#10003; Reviewed</text>
+
+            <rect x="218" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(124,58,237,0.22)"
+              stroke-width="1.2" />
+            <text x="244" y="168" font-size="6" fill="#7c3aed" text-anchor="middle" font-weight="600">Report</text>
+            <text x="244" y="178" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">&#10003; Ready</text>
+            <!-- Corner accent dots -->
+            <circle cx="28" cy="28" r="4" fill="#ddd6fe" opacity="0.7" />
+            <circle cx="272" cy="28" r="4" fill="#ddd6fe" opacity="0.7" />
+            <circle cx="28" cy="192" r="3" fill="#c4b5fd" opacity="0.5" />
+            <circle cx="272" cy="192" r="3" fill="#c4b5fd" opacity="0.5" />
+          </svg>
+          <div class="vapt-status-badge">
+            <div class="vapt-dot"></div>
+            <div>
+              <div class="vapt-bt">Assessment Active</div>
+              <div class="vapt-bs">Real-World Testing</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — PILLARS (4 WHY-US CARDS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9 9s.5-2 3-2 3 2 3 2c0 2-3 3-3 5" />
+              <line x1="12" y1="18" x2="12.01" y2="18" />
+            </svg></div>
+          <h3>Real-World Attack Simulation</h3>
+          <p>We don't rely only on automated scans. Our experts mimic real attacker techniques to uncover vulnerabilities that tools often miss.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M9 9h6M9 12h6M9 15h4" />
+            </svg></div>
+          <h3>Actionable &amp; Prioritized Reports</h3>
+          <p>Get clear risk rankings with step-by-step remediation guidance, helping your team fix what matters most, fast.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <polyline points="9 11 12 14 22 4" />
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+            </svg></div>
+          <h3>Compliance-Ready Security Testing</h3>
+          <p>Our VAPT assessments align with industry standards and regulatory requirements, making audits and compliance easier.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+            </svg></div>
+          <h3>Coverage Across Your Entire Stack</h3>
+          <p>From web and mobile apps to networks, APIs, and cloud infrastructure, we test everything attackers can reach.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — WHY ICSDC VAPT (8 CARDS) ════ -->
+  <section id="vapt-why" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHY ICSDC VAPT</span>
+      <h2 class="title" data-animate="fade-up">Why ICSDC VAPT Security Goes Beyond Basic Testing</h2>
+
+      <div class="vapt-cards-grid" data-stagger id="vapt-why-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <polyline points="9 12 11 14 15 10" />
+            </svg></div>
+          <h3>Real-World Exploit Validation</h3>
+          <p>We don't stop at identifying vulnerabilities. Our security experts actively validate whether discovered weaknesses can be exploited in real attack scenarios.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Manual + Automated Testing Approach</h3>
+          <p>ICSDC combines automated vulnerability scanners with in-depth manual testing. This hybrid approach minimizes false positives and reveals logic flaws.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 11 12 14 22 4" />
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+            </svg></div>
+          <h3>OWASP &amp; Industry Framework Alignment</h3>
+          <p>All VAPT engagements follow OWASP Top 10, SANS, and NIST standards, ensuring compliance with recognized benchmarks.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></div>
+          <h3>Network &amp; Infrastructure Penetration Testing</h3>
+          <p>We assess internal and external network surfaces, testing exposed services, open ports, firewall rules, and system configurations.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg></div>
+          <h3>Application &amp; API Security Testing</h3>
+          <p>Deep testing of web applications, mobile apps, and APIs, focusing on authentication flaws, injection vulnerabilities, and insecure data handling.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z" />
+            </svg></div>
+          <h3>Cloud &amp; Configuration Security Review</h3>
+          <p>We evaluate AWS and Azure environments, identifying misconfigured identity policies, exposed storage, and insecure services.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg></div>
+          <h3>Risk-Based Severity Classification</h3>
+          <p>Each finding is categorized by impact, exploitability, and business risk to help teams prioritize remediation.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10" />
+              <path d="M3.51 15a9 9 0 1 0 .49-3.44" />
+            </svg></div>
+          <h3>Clear Remediation &amp; Retesting Support</h3>
+          <p>Reports include detailed remediation steps. Post-fix retesting verifies vulnerabilities are resolved before production.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — WHAT VAPT MEANS (NARRATIVE) ════ -->
+  <section id="vapt-what" class="section vapt-what-section">
+    <div class="container">
+      <div class="vapt-what-inner">
+        <div class="vapt-what-label-col">
+          <span class="cloud-section-label vapt-label-light" data-animate="fade-up">WHAT IS VAPT</span>
+          <h2 class="title" data-animate="fade-up">What VAPT Means for Your Security</h2>
+        </div>
+        <div class="vapt-what-text-col" data-animate="fade-up">
+          <p id="vapt-what-description">VAPT (Vulnerability Assessment and Penetration Testing) is a structured security exercise that shows how attackers see your systems. Instead of guessing where risks exist, VAPT identifies weaknesses and actively tests how far an attacker could go if those gaps were exploited.</p>
+          <p>At ICSDC, VAPT combines two critical layers: Vulnerability Assessment to detect security gaps across applications, networks, and infrastructure; and Penetration Testing to simulate real attacks and validate which vulnerabilities pose real business risk.</p>
+          <p>The outcome is not just visibility, but clarity &mdash; clear insights into your security posture, real-world attack paths, and actionable steps to strengthen defenses before a breach occurs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — WHY CHOOSE ICSDC (7 CARDS) ════ -->
+  <section id="vapt-why-choose" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHY CHOOSE ICSDC</span>
+      <h2 class="title" data-animate="fade-up">Why Choose ICSDC for Your VAPT Security Needs</h2>
+
+      <div class="cloud-power-grid" data-stagger id="vapt-why-choose-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Trusted Cybersecurity Experts</h3>
+          <p>Certified professionals with hands-on experience across industries. We focus on real threats, not just surface-level checks.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M9 9h6M9 12h6M9 15h4" />
+            </svg></div>
+          <h3>Practical Insights, Not Just Reports</h3>
+          <p>Detailed findings with clear, actionable guidance prioritized by real business impact.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07" />
+            </svg></div>
+          <h3>Customized Testing, Every Time</h3>
+          <p>VAPT scope tailored to your architecture, regulatory needs, and risk profile.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Proactive Protection You Can Act On</h3>
+          <p>We help you understand vulnerabilities and fix them with confidence before threats hit.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 11 12 14 22 4" />
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+            </svg></div>
+          <h3>Aligned With Modern Threats &amp; Compliance</h3>
+          <p>Aligned with global standards for audits, compliance assessments, and customer assurance reviews.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg></div>
+          <h3>Ongoing Partnership, Not One-Time Engagement</h3>
+          <p>Follow-up support, retesting, and improvement planning as your security evolves.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg></div>
+          <h3>We Treat Your Security Like It's Our Own</h3>
+          <p>Strategic defense initiative backed by real expertise and human-first delivery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band" id="vapt-cta1">
+    <div class="cloud-cta-inner">
+      <h2>Ready to elevate your security posture?</h2>
+      <p>Partner with ICSDC for proactive VAPT that delivers clarity, protection, and confidence.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='/contact'">Request a Personalized VAPT Assessment &rarr;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — VAPT OFFERINGS (6 CARDS) ════ -->
+  <section id="vapt-offerings" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">OUR SERVICES</span>
+      <h2 class="title" data-animate="fade-up">Explore ICSDC VAPT Offerings</h2>
+
+      <div class="vapt-offerings-grid" data-stagger id="vapt-offerings-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg></div>
+          <h3>Vulnerability Assessment</h3>
+          <p>Identify security weaknesses across systems using structured scanning and analysis.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Penetration Testing</h3>
+          <p>Simulate real-world attacks to validate how far an attacker could actually go.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></div>
+          <h3>Web Application VAPT</h3>
+          <p>Security testing for web applications: auth flaws, injection vulnerabilities, logic gaps.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+              <line x1="1" y1="10" x2="23" y2="10" />
+            </svg></div>
+          <h3>Network &amp; Infrastructure VAPT</h3>
+          <p>Assessment of networks, servers, firewalls, and exposed services.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg></div>
+          <h3>API &amp; Mobile Application Testing</h3>
+          <p>Insecure endpoints, improper authentication, data exposure, configuration issues.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z" />
+            </svg></div>
+          <h3>Cloud Security Assessment</h3>
+          <p>Cloud environment review: risky configurations, identity issues, exposed services.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — VAPT PROCESS (6 STEPS) ════ -->
+  <section id="vapt-process" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">HOW IT WORKS</span>
+      <h2 class="title" data-animate="fade-up">Our VAPT Security Process</h2>
+
+      <div class="vapt-steps-grid" data-stagger id="vapt-steps-grid">
+        <div class="vapt-step-card">
+          <div class="vapt-step-num">1</div>
+          <h3>Scope &amp; Planning</h3>
+          <p>Define what needs to be tested so the assessment stays focused on systems that matter.</p>
+        </div>
+        <div class="vapt-step-card">
+          <div class="vapt-step-num">2</div>
+          <h3>Asset Discovery &amp; Reconnaissance</h3>
+          <p>Map digital assets and identify possible entry points.</p>
+        </div>
+        <div class="vapt-step-card">
+          <div class="vapt-step-num">3</div>
+          <h3>Vulnerability Identification</h3>
+          <p>Use automated tools and expert analysis to find misconfigurations and weaknesses.</p>
+        </div>
+        <div class="vapt-step-card">
+          <div class="vapt-step-num">4</div>
+          <h3>Penetration Testing</h3>
+          <p>Simulate real-world attack scenarios to validate exploitability.</p>
+        </div>
+        <div class="vapt-step-card">
+          <div class="vapt-step-num">5</div>
+          <h3>Risk Analysis &amp; Reporting</h3>
+          <p>Document findings with severity levels, impact, and remediation steps.</p>
+        </div>
+        <div class="vapt-step-card">
+          <div class="vapt-step-num">6</div>
+          <h3>Remediation &amp; Retesting</h3>
+          <p>Offer retesting to confirm vulnerabilities are properly resolved.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — TESTIMONIALS ════ -->
+  <section id="vapt-testi" class="testi-section" aria-labelledby="vapt-testi-heading">
+    <div class="testi-container">
+      <h2 id="vapt-testi-heading" class="testi-title">Read ICSDC VAPT Client Stories</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — FAQ ════ -->
+  <section class="faq-section" id="vapt-faq" aria-labelledby="vapt-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="vapt-faq-heading" class="faq-title">FAQs about ICSDC VAPT Security</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our VAPT Security Team</h3>
+        <p class="faq-contact-desc">Our VAPT specialists are available to design a security testing plan tailored to your systems, compliance needs, and risk profile.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark" id="vapt-cta2">
+    <div class="cloud-cta-inner">
+      <h2>Take Control of Your Security Before It's Tested for You</h2>
+      <p>Every system has risks. Knowing them early gives you the power to fix them on your terms. Let our experts help you uncover real vulnerabilities and strengthen your security.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='/contact'">Start Your VAPT Assessment Today &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='/contact'">Talk to an Expert</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+              </svg>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                </path>
+              </svg>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p id="footer-year-text">&#169; Copyright <span data-strapi-year id="footer-year"></span> <span
+          data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script>
+    STRAPI_URL = "http://13.126.9.248:1337";
+    TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+  </script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/vapt.js"></script>
+
+</body>
+
+</html>

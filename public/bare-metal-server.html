@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICSDC Dedicated Bare Metal Servers | Single-Tenant Physical Infrastructure</title>
+  <meta name="description"
+    content="Deploy dedicated bare metal servers with full hardware control, zero virtualization overhead, and guaranteed performance. Single-tenant infrastructure built for mission-critical workloads.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/bare-metal-server.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="bms-eyebrow" data-strapi-heroEyebrow>&#9881; Dedicated Bare Metal Servers</div>
+        <h1 class="hero-title" data-strapi-heroTitle>Dedicated Bare Metal Server Without Virtual Limits</h1>
+        <p class="hero-sub" data-strapi-heroSubtitle>Engineered for Workloads That Demand the Entire Server</p>
+        <p class="hero-desc" data-strapi-heroDescription>ICSDC Bare Metal Servers deliver single-tenant physical infrastructure with zero virtualization overhead, giving your workloads full access to dedicated hardware. Built for performance-critical and compliance-driven environments, they ensure consistent power, low latency, and complete control.</p>
+        <div class="hero-btns">
+          <a href="#bms-configs" class="btn-primary">Get Started with Bare Metal &rarr;</a>
+          <a href="#bms-configs" class="btn-outline">View Configurations</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="bms-hero-visual">
+          <div class="bms-top-badge" data-strapi-heroTopBadge>&#9881; ICSDC Bare Metal</div>
+          <!-- Server Rack SVG Illustration -->
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#fffbeb" stroke="rgba(180,83,9,0.12)" stroke-width="1" />
+            <!-- Rack enclosure -->
+            <rect x="60" y="25" width="180" height="170" rx="8" fill="#fef3c7" stroke="rgba(180,83,9,0.25)" stroke-width="1.5" />
+            <!-- Rack side rails -->
+            <rect x="60" y="25" width="14" height="170" rx="4" fill="#fde68a" stroke="rgba(180,83,9,0.20)" stroke-width="1" />
+            <rect x="226" y="25" width="14" height="170" rx="4" fill="#fde68a" stroke="rgba(180,83,9,0.20)" stroke-width="1" />
+            <!-- Server Unit 1 -->
+            <rect x="78" y="38" width="144" height="44" rx="5" fill="white" stroke="rgba(180,83,9,0.30)" stroke-width="1.5" />
+            <rect x="84" y="48" width="60" height="6" rx="3" fill="#fde68a" />
+            <rect x="84" y="58" width="40" height="4" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.18)" stroke-width="0.8" />
+            <!-- Status LEDs server 1 -->
+            <circle cx="196" cy="50" r="4" fill="#22c55e" opacity="0.9" />
+            <circle cx="207" cy="50" r="4" fill="#b45309" opacity="0.85" />
+            <circle cx="196" cy="62" r="4" fill="#22c55e" opacity="0.7" />
+            <circle cx="207" cy="62" r="4" fill="#fbbf24" opacity="0.8" />
+            <!-- Drive bays server 1 -->
+            <rect x="150" y="46" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
+            <rect x="150" y="58" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
+            <!-- Server Unit 2 -->
+            <rect x="78" y="90" width="144" height="44" rx="5" fill="white" stroke="rgba(180,83,9,0.30)" stroke-width="1.5" />
+            <rect x="84" y="100" width="60" height="6" rx="3" fill="#fde68a" />
+            <rect x="84" y="110" width="40" height="4" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.18)" stroke-width="0.8" />
+            <!-- Status LEDs server 2 -->
+            <circle cx="196" cy="102" r="4" fill="#22c55e" opacity="0.9" />
+            <circle cx="207" cy="102" r="4" fill="#b45309" opacity="0.85" />
+            <circle cx="196" cy="114" r="4" fill="#22c55e" opacity="0.7" />
+            <circle cx="207" cy="114" r="4" fill="#fbbf24" opacity="0.8" />
+            <!-- Drive bays server 2 -->
+            <rect x="150" y="98" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
+            <rect x="150" y="110" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
+            <!-- Server Unit 3 -->
+            <rect x="78" y="142" width="144" height="44" rx="5" fill="white" stroke="rgba(180,83,9,0.30)" stroke-width="1.5" />
+            <rect x="84" y="152" width="60" height="6" rx="3" fill="#fde68a" />
+            <rect x="84" y="162" width="40" height="4" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.18)" stroke-width="0.8" />
+            <!-- Status LEDs server 3 -->
+            <circle cx="196" cy="154" r="4" fill="#22c55e" opacity="0.9" />
+            <circle cx="207" cy="154" r="4" fill="#b45309" opacity="0.85" />
+            <circle cx="196" cy="166" r="4" fill="#22c55e" opacity="0.7" />
+            <circle cx="207" cy="166" r="4" fill="#fbbf24" opacity="0.8" />
+            <!-- Drive bays server 3 -->
+            <rect x="150" y="150" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
+            <rect x="150" y="162" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
+            <!-- Network cables (bottom) -->
+            <path d="M 96 186 Q 96 198 108 198 Q 120 198 120 186" stroke="rgba(180,83,9,0.35)" stroke-width="1.5" fill="none" stroke-dasharray="3 2" />
+            <path d="M 140 186 Q 140 200 155 200 Q 170 200 170 186" stroke="rgba(180,83,9,0.30)" stroke-width="1.5" fill="none" stroke-dasharray="3 2" />
+            <path d="M 188 186 Q 188 196 200 196 Q 212 196 212 186" stroke="rgba(180,83,9,0.25)" stroke-width="1.5" fill="none" stroke-dasharray="3 2" />
+            <!-- Labels on server units -->
+            <text x="150" y="44" font-size="6" fill="#b45309" text-anchor="middle" font-weight="700">SERVER 01</text>
+            <text x="150" y="96" font-size="6" fill="#b45309" text-anchor="middle" font-weight="700">SERVER 02</text>
+            <text x="150" y="148" font-size="6" fill="#b45309" text-anchor="middle" font-weight="700">SERVER 03</text>
+            <!-- Corner accent dots -->
+            <circle cx="28" cy="28" r="4" fill="#fde68a" opacity="0.7" />
+            <circle cx="272" cy="28" r="4" fill="#fde68a" opacity="0.7" />
+            <circle cx="28" cy="192" r="3" fill="#fbbf24" opacity="0.5" />
+            <circle cx="272" cy="192" r="3" fill="#fbbf24" opacity="0.5" />
+          </svg>
+          <div class="bms-status-badge">
+            <div class="bms-dot"></div>
+            <div>
+              <div class="bms-bt" data-strapi-heroStatusTitle>99.9% Uptime</div>
+              <div class="bms-bs" data-strapi-heroStatusSubtitle>Single-Tenant Hardware</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — PILLARS (4 CARDS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" id="bms-pillars-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></div>
+          <h3>Dedicated Physical Resources</h3>
+          <p>Your workloads run on single-tenant hardware with no resource sharing, ensuring consistent and predictable performance.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>Zero Virtualization Overhead</h3>
+          <p>Direct access to CPU, RAM, and storage delivers maximum efficiency, lower latency, and higher throughput.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.07 4.93A10 10 0 115 18.07" />
+              <path d="M12 2v2M12 20v2M2 12h2M20 12h2" />
+            </svg></div>
+          <h3>Full Hardware &amp; OS Control</h3>
+          <p>Choose your operating system, configure hardware, and customize the environment to meet exact workload requirements.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Enhanced Security &amp; Compliance</h3>
+          <p>Physical isolation reduces attack surfaces and supports strict compliance needs for regulated industries.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — SERVER CONFIGURATIONS TABLE ════ -->
+  <section id="bms-configs" class="section cloud-pricing-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up" id="bms-configs-label">SERVER CONFIGURATIONS</span>
+      <h2 class="title" data-animate="fade-up" id="bms-configs-title">Dedicated Bare Metal Server Configurations</h2>
+      <p class="subtitle" data-animate="fade-up" id="bms-configs-subtitle">Single-tenant physical servers with full hardware access &mdash; choose the configuration that matches your workload requirements.</p>
+
+      <div class="bms-table-wrap" data-animate="fade-up">
+        <table class="bms-config-table" id="bms-config-table">
+          <thead>
+            <tr>
+              <th>Server Config</th>
+              <th>CPU</th>
+              <th>Cores / Threads</th>
+              <th>RAM</th>
+              <th>Storage</th>
+              <th>Bandwidth</th>
+              <th>Network Speed</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="bms-config-tbody">
+            <tr>
+              <td class="bms-config-name">Entry Level</td>
+              <td>Intel Xeon E3-1230 V3</td>
+              <td>4 / 8</td>
+              <td>32 GB DDR3</td>
+              <td>480 GB SSD</td>
+              <td>10 TB</td>
+              <td>1 Gbps</td>
+              <td><a href="/contact" class="bms-config-quote-btn">Get a Quote</a></td>
+            </tr>
+            <tr>
+              <td class="bms-config-name">Performance Tier 1</td>
+              <td>Intel Xeon E-2136</td>
+              <td>6 / 12</td>
+              <td>32 GB DDR4</td>
+              <td>480 GB SSD</td>
+              <td>10 TB</td>
+              <td>1 Gbps</td>
+              <td><a href="/contact" class="bms-config-quote-btn">Get a Quote</a></td>
+            </tr>
+            <tr>
+              <td class="bms-config-name">Balanced Power</td>
+              <td>AMD Ryzen 9700X</td>
+              <td>8 / 16</td>
+              <td>64 GB DDR5</td>
+              <td>960 GB NVMe</td>
+              <td>10 TB</td>
+              <td>1 Gbps</td>
+              <td><a href="/contact" class="bms-config-quote-btn">Get a Quote</a></td>
+            </tr>
+            <tr>
+              <td class="bms-config-name">Gold Class Server</td>
+              <td>Intel Xeon Gold 6244</td>
+              <td>8 / 16</td>
+              <td>64 GB DDR4</td>
+              <td>960 GB NVMe</td>
+              <td>10 TB</td>
+              <td>1 Gbps</td>
+              <td><a href="/contact" class="bms-config-quote-btn">Get a Quote</a></td>
+            </tr>
+            <tr>
+              <td class="bms-config-name">High-Throughput</td>
+              <td>AMD Ryzen 9950X</td>
+              <td>16 / 32</td>
+              <td>64 GB DDR5</td>
+              <td>960 GB NVMe</td>
+              <td>10 TB</td>
+              <td>1 Gbps</td>
+              <td><a href="/contact" class="bms-config-quote-btn">Get a Quote</a></td>
+            </tr>
+            <tr>
+              <td class="bms-config-name">Dual Gold Config</td>
+              <td>2&times; Intel Xeon Gold 6244</td>
+              <td>16 / 32</td>
+              <td>64 GB DDR4</td>
+              <td>960 GB NVMe</td>
+              <td>10 TB</td>
+              <td>1 Gbps</td>
+              <td><a href="/contact" class="bms-config-quote-btn">Get a Quote</a></td>
+            </tr>
+            <tr>
+              <td class="bms-config-name">Heavy Compute</td>
+              <td>Intel Xeon Gold 6254</td>
+              <td>18 / 36</td>
+              <td>64 GB DDR4</td>
+              <td>960 GB NVMe</td>
+              <td>10 TB</td>
+              <td>1 Gbps</td>
+              <td><a href="/contact" class="bms-config-quote-btn">Get a Quote</a></td>
+            </tr>
+            <tr>
+              <td class="bms-config-name">Extreme Dual Gold</td>
+              <td>2&times; Intel Xeon Gold 6254</td>
+              <td>36 / 72</td>
+              <td>128 GB DDR4</td>
+              <td>960 GB NVMe</td>
+              <td>10 TB</td>
+              <td>1 Gbps</td>
+              <td><a href="/contact" class="bms-config-quote-btn">Get a Quote</a></td>
+            </tr>
+            <tr>
+              <td class="bms-config-name">EPYC Mid-Range</td>
+              <td>AMD EPYC 7543</td>
+              <td>32 / 64</td>
+              <td>128 GB DDR4</td>
+              <td>960 GB NVMe</td>
+              <td>15 TB</td>
+              <td>1 Gbps</td>
+              <td><a href="/contact" class="bms-config-quote-btn">Get a Quote</a></td>
+            </tr>
+            <tr>
+              <td class="bms-config-name">EPYC High-Core</td>
+              <td>AMD EPYC 7763</td>
+              <td>64 / 128</td>
+              <td>256 GB DDR4</td>
+              <td>1.92 TB NVMe</td>
+              <td>15 TB</td>
+              <td>1 Gbps</td>
+              <td><a href="/contact" class="bms-config-quote-btn">Get a Quote</a></td>
+            </tr>
+            <tr>
+              <td class="bms-config-name">EPYC Top Tier</td>
+              <td>AMD EPYC 9554</td>
+              <td>64 / 128</td>
+              <td>256 GB DDR5</td>
+              <td>1.92 TB NVMe</td>
+              <td>25 TB</td>
+              <td>1 Gbps</td>
+              <td><a href="/contact" class="bms-config-quote-btn">Get a Quote</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — MANAGED VS SELF-MANAGED COMPARISON ════ -->
+  <section id="bms-compare" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">MANAGEMENT OPTIONS</span>
+      <h2 class="title" data-animate="fade-up" id="bms-compare-title">Self-Managed vs. Managed Bare Metal</h2>
+      <p class="subtitle" data-animate="fade-up">Choose the level of management that fits your team&rsquo;s capabilities and operational needs.</p>
+
+      <div class="bms-compare-wrap" data-animate="fade-up">
+        <table class="bms-compare-table" id="bms-compare-table">
+          <thead>
+            <tr>
+              <th class="bms-compare-feature-col">Feature</th>
+              <th class="bms-compare-self-col">Self-Managed</th>
+              <th class="bms-compare-managed-col">Managed</th>
+            </tr>
+          </thead>
+          <tbody id="bms-compare-tbody">
+            <tr>
+              <td>Hardware Issue Support</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>Network Uptime Support</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>On-Demand OS Updates</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>DNS Configuration</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>Installation of Third-Party Apps</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>Preliminary Server Hardening</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>Protection Against Server Blacklisting</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>Installation of Web &amp; DB Server</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>ICMP Monitoring</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>Backup Configuration &amp; Restoration</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>Malware Scanning</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>Data Migration</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr class="bms-both-row">
+              <td>Full Root / Admin Access</td>
+              <td class="bms-yes">&#10004;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+            <tr>
+              <td>24&times;7 Priority Support</td>
+              <td class="bms-no">&#10006;</td>
+              <td class="bms-yes">&#10004;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bms-cta-actions" data-animate="fade-up">
+        <a href="#bms-configs" class="bms-manage-btn">Self-Managed Server Plans</a>
+        <a href="#bms-configs" class="bms-manage-btn bms-manage-btn-primary">Managed Server Plans</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band" id="bms-cta-band1">
+    <div class="cloud-cta-inner">
+      <h2>Need dedicated performance without shared limits?</h2>
+      <p>Talk to our bare metal experts and get a server configured to your exact workload, compliance, and performance requirements.</p>
+      <div class="cloud-cta-btns">
+        <a href="/contact" class="cloud-cta-btn-primary">Talk to Our Bare Metal Experts &rarr;</a>
+        <a href="tel:+919810958857" class="cloud-cta-btn-outline">Call +91 98109 58857</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — WHY CHOOSE ICSDC (7 CARDS) ════ -->
+  <section id="bms-why" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up" id="bms-why-label">WHY CHOOSE ICSDC</span>
+      <h2 class="title" data-animate="fade-up" id="bms-why-title">Why Choose ICSDC Bare Metal Servers?</h2>
+      <p class="subtitle" data-animate="fade-up" id="bms-why-subtitle">Built for the most demanding workloads, ICSDC Bare Metal delivers consistent performance, strong security, and complete control.</p>
+
+      <div class="bms-features-grid cloud-power-grid" id="bms-why-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></div>
+          <h3>Reliable Infrastructure for Critical Workloads</h3>
+          <p>Our bare metal servers are built to support always-on applications, delivering stability and consistency for business-critical operations.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg></div>
+          <h3>High Uptime Commitment</h3>
+          <p>Designed to minimize downtime, our platform ensures your services remain accessible and performant even under demanding conditions.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg></div>
+          <h3>Strong Security by Design</h3>
+          <p>Physical isolation and hardened configurations help protect your workloads from threats, supporting data safety and compliance requirements.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+            </svg></div>
+          <h3>24&times;7 Expert Technical Support</h3>
+          <p>Our experienced engineers are available round the clock to assist with setup, optimization, and issue resolution whenever you need help.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+            </svg></div>
+          <h3>High-Performance Storage Capabilities</h3>
+          <p>Optimized storage options ensure fast data access and smooth performance for applications, databases, and intensive workloads.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.07 4.93A10 10 0 115 18.07" />
+              <path d="M12 2v2M12 20v2M2 12h2M20 12h2" />
+            </svg></div>
+          <h3>Complete Administrative Control</h3>
+          <p>Full root access allows you to customize your environment, install preferred software, and fine-tune performance based on your needs.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg></div>
+          <h3>Quick Deployment</h3>
+          <p>Get your server up and running quickly, reducing setup delays and helping you move from planning to production faster.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — WHO IT'S FOR (8 CARDS) ════ -->
+  <section id="bms-who" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up" id="bms-who-label">WHO IT&rsquo;S FOR</span>
+      <h2 class="title" data-animate="fade-up" id="bms-who-title">Who Should Choose ICSDC Bare Metal Servers?</h2>
+      <p class="subtitle" data-animate="fade-up" id="bms-who-subtitle">From enterprises to developers, anyone who needs dedicated physical infrastructure and maximum control.</p>
+
+      <div class="bms-who-grid" id="bms-who-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+            </svg></div>
+          <h3>Enterprises Running Mission-Critical Applications</h3>
+          <p>Organizations that require consistent performance, high availability, and full hardware control for core business systems.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg></div>
+          <h3>SaaS &amp; Product-Based Companies</h3>
+          <p>Teams building performance-intensive platforms that need predictable resources, stable environments, and scalable infrastructure.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>Fintech &amp; Regulated Businesses</h3>
+          <p>Companies handling sensitive data or operating under compliance requirements where physical isolation and security are essential.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+            </svg></div>
+          <h3>High-Traffic Websites &amp; Digital Platforms</h3>
+          <p>Businesses managing large volumes of users, transactions, or content that demand steady throughput and low latency.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+            </svg></div>
+          <h3>Data-Intensive Workloads</h3>
+          <p>Teams working with large databases, analytics, or processing pipelines that benefit from dedicated compute and storage.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="4" y="4" width="16" height="16" rx="2" />
+              <rect x="9" y="9" width="6" height="6" />
+              <line x1="9" y1="1" x2="9" y2="4" />
+              <line x1="15" y1="1" x2="15" y2="4" />
+              <line x1="9" y1="20" x2="9" y2="23" />
+              <line x1="15" y1="20" x2="15" y2="23" />
+              <line x1="20" y1="9" x2="23" y2="9" />
+              <line x1="20" y1="14" x2="23" y2="14" />
+              <line x1="1" y1="9" x2="4" y2="9" />
+              <line x1="1" y1="14" x2="4" y2="14" />
+            </svg></div>
+          <h3>AI, ML &amp; Compute-Heavy Projects</h3>
+          <p>Organizations running training models, simulations, or parallel processing workloads that need direct hardware access.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg></div>
+          <h3>Gaming &amp; Real-Time Applications</h3>
+          <p>Platforms require fast response times and uninterrupted performance for multiplayer, streaming, or real-time interactions.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Agencies &amp; IT Service Providers</h3>
+          <p>Teams managing infrastructure for multiple clients who need dedicated resources, customization, and full administrative control.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="bms-testi-heading">
+    <div class="testi-container">
+      <h2 id="bms-testi-heading" class="testi-title">What Our Bare Metal Clients Say</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — FAQ ════ -->
+  <section class="faq-section" id="bms-faq" aria-labelledby="bms-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="bms-faq-heading" class="faq-title">FAQs About ICSDC Bare Metal Servers</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title" id="bms-faq-contact-title">Talk to Our Bare Metal Experts</h3>
+        <p class="faq-contact-desc" id="bms-faq-contact-desc">Our bare metal specialists are available to help you choose the right configuration, discuss compliance requirements, and get your infrastructure deployed quickly.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark" id="bms-cta-band2">
+    <div class="cloud-cta-inner">
+      <h2>Ready to deploy uncompromised infrastructure?</h2>
+      <p>Single-tenant bare metal servers with full hardware control, zero virtualization, and 99.9% uptime. Built for businesses that demand the best.</p>
+      <div class="cloud-cta-btns">
+        <a href="#bms-configs" class="cloud-cta-btn-primary">Get Started with Bare Metal &rarr;</a>
+        <a href="/contact" class="cloud-cta-btn-outline">Talk to an Expert</a>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+              </svg>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                </path>
+              </svg>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p id="footer-year-text">&#169; Copyright <span data-strapi-year id="footer-year"></span> <span
+          data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script>
+    STRAPI_URL = "http://13.126.9.248:1337";
+    TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+  </script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/bare-metal-server.js"></script>
+
+</body>
+
+</html>
