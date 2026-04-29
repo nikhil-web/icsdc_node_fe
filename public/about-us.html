@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="assets/js/theme-init.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About ICSDC | Our Story, Mission &amp; Infrastructure</title>
+  <meta name="description"
+    content="Learn about ICSDC — our story, mission, core values, and the enterprise infrastructure that powers businesses across India and beyond.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/about-us.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="au-hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="au-eyebrow">&#127970; Our Story</div>
+        <h1 class="hero-title" id="au-hero-title">Read Our Story</h1>
+        <p class="hero-sub" id="au-hero-sub">Because We've Never Settled for Just 'Good Enough'</p>
+        <p class="hero-desc" id="au-hero-desc">At ICSDC, we believe technology should be reliable, secure, and built to
+          last. From the beginning, we chose quality over shortcuts &mdash; building infrastructure that delivers
+          consistent performance and real peace of mind.</p>
+        <div class="hero-btns">
+          <a href="/contact-us.html" class="btn-primary">Get In Touch &rarr;</a>
+          <a href="/" class="btn-outline">Explore Services</a>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="au-stats-row">
+          <div class="au-stat">
+            <span class="au-stat-value" id="au-stat-founded">2024</span>
+            <span class="au-stat-label">Founded</span>
+          </div>
+          <div class="au-stat">
+            <span class="au-stat-value" id="au-stat-countries">5+</span>
+            <span class="au-stat-label">Countries</span>
+          </div>
+          <div class="au-stat">
+            <span class="au-stat-value" id="au-stat-datacenters">3</span>
+            <span class="au-stat-label">Data Centers</span>
+          </div>
+          <div class="au-stat">
+            <span class="au-stat-value" id="au-stat-services">20+</span>
+            <span class="au-stat-label">Services</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+                <img class="hero-right-image" alt="" style="display:none">
+        <div class="au-hero-visual">
+          <div class="au-hero-badge-top">&#127970; ICSDC Infrastructure</div>
+          <svg viewBox="0 0 340 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Background panel -->
+            <rect x="8" y="8" width="324" height="244" rx="20" fill="#EEF4FF" stroke="rgba(26,86,219,0.10)"
+              stroke-width="1.2" />
+
+            <!-- Subtle grid lines -->
+            <line x1="8" y1="90" x2="332" y2="90" stroke="rgba(26,86,219,0.06)" stroke-width="1" />
+            <line x1="8" y1="160" x2="332" y2="160" stroke="rgba(26,86,219,0.06)" stroke-width="1" />
+            <line x1="120" y1="8" x2="120" y2="252" stroke="rgba(26,86,219,0.06)" stroke-width="1" />
+            <line x1="220" y1="8" x2="220" y2="252" stroke="rgba(26,86,219,0.06)" stroke-width="1" />
+
+            <!-- Central data center block -->
+            <rect x="130" y="70" width="80" height="120" rx="10" fill="white" stroke="rgba(26,86,219,0.20)"
+              stroke-width="1.5" />
+            <rect x="138" y="80" width="64" height="14" rx="4" fill="#DBEAFE" />
+            <rect x="138" y="98" width="64" height="14" rx="4" fill="#DBEAFE" />
+            <rect x="138" y="116" width="64" height="14" rx="4" fill="#DBEAFE" />
+            <rect x="138" y="134" width="64" height="14" rx="4" fill="#EEF4FF" />
+            <rect x="138" y="152" width="64" height="14" rx="4" fill="#EEF4FF" />
+            <!-- LED dots on server racks -->
+            <circle cx="195" cy="87" r="3" fill="#1a56db" />
+            <circle cx="195" cy="105" r="3" fill="#1a56db" />
+            <circle cx="195" cy="123" r="3" fill="#22c55e" />
+            <circle cx="195" cy="141" r="3" fill="#6366f1" />
+            <circle cx="195" cy="159" r="3" fill="#f59e0b" />
+            <!-- Server label -->
+            <text x="170" y="200" font-size="8" fill="#1a56db" text-anchor="middle" font-weight="700"
+              letter-spacing="0.5">PRIMARY NODE</text>
+
+            <!-- Left cluster — Noida 1 -->
+            <rect x="28" y="80" width="72" height="86" rx="8" fill="white" stroke="rgba(26,86,219,0.16)"
+              stroke-width="1.2" />
+            <rect x="34" y="88" width="60" height="10" rx="3" fill="#DBEAFE" />
+            <rect x="34" y="102" width="60" height="10" rx="3" fill="#DBEAFE" />
+            <rect x="34" y="116" width="60" height="10" rx="3" fill="#EEF4FF" />
+            <rect x="34" y="130" width="60" height="10" rx="3" fill="#EEF4FF" />
+            <circle cx="86" cy="93" r="2.5" fill="#22c55e" />
+            <circle cx="86" cy="107" r="2.5" fill="#22c55e" />
+            <circle cx="86" cy="121" r="2.5" fill="#1a56db" />
+            <circle cx="86" cy="135" r="2.5" fill="#f59e0b" />
+            <text x="64" y="155" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="700">NOIDA 1</text>
+
+            <!-- Right cluster — Mumbai -->
+            <rect x="240" y="80" width="72" height="86" rx="8" fill="white" stroke="rgba(26,86,219,0.16)"
+              stroke-width="1.2" />
+            <rect x="246" y="88" width="60" height="10" rx="3" fill="#DBEAFE" />
+            <rect x="246" y="102" width="60" height="10" rx="3" fill="#DBEAFE" />
+            <rect x="246" y="116" width="60" height="10" rx="3" fill="#EEF4FF" />
+            <rect x="246" y="130" width="60" height="10" rx="3" fill="#EEF4FF" />
+            <circle cx="298" cy="93" r="2.5" fill="#22c55e" />
+            <circle cx="298" cy="107" r="2.5" fill="#22c55e" />
+            <circle cx="298" cy="121" r="2.5" fill="#1a56db" />
+            <circle cx="298" cy="135" r="2.5" fill="#6366f1" />
+            <text x="276" y="155" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="700">MUMBAI</text>
+
+            <!-- Connection lines — left cluster to center -->
+            <line x1="100" y1="110" x2="130" y2="120" stroke="#1a56db" stroke-width="1.5" stroke-dasharray="5 3"
+              opacity="0.5" />
+            <line x1="100" y1="130" x2="130" y2="140" stroke="#1a56db" stroke-width="1.5" stroke-dasharray="5 3"
+              opacity="0.4" />
+
+            <!-- Connection lines — right cluster to center -->
+            <line x1="210" y1="120" x2="240" y2="110" stroke="#1a56db" stroke-width="1.5" stroke-dasharray="5 3"
+              opacity="0.5" />
+            <line x1="210" y1="140" x2="240" y2="130" stroke="#1a56db" stroke-width="1.5" stroke-dasharray="5 3"
+              opacity="0.4" />
+
+            <!-- Data flow animated dots (decorative) -->
+            <circle cx="115" cy="115" r="4" fill="#1a56db" opacity="0.8" />
+            <circle cx="225" cy="115" r="4" fill="#1a56db" opacity="0.8" />
+
+            <!-- Bottom network nodes — ISP / Connectivity -->
+            <rect x="48" y="185" width="50" height="30" rx="6" fill="white" stroke="rgba(26,86,219,0.18)"
+              stroke-width="1.2" />
+            <text x="73" y="197" font-size="6" fill="#1a56db" text-anchor="middle" font-weight="600">ISP 1</text>
+            <text x="73" y="208" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="700">&#10003;
+              Active</text>
+
+            <rect x="118" y="185" width="50" height="30" rx="6" fill="white" stroke="rgba(26,86,219,0.18)"
+              stroke-width="1.2" />
+            <text x="143" y="197" font-size="6" fill="#1a56db" text-anchor="middle" font-weight="600">ISP 2</text>
+            <text x="143" y="208" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="700">&#10003;
+              Active</text>
+
+            <rect x="188" y="185" width="50" height="30" rx="6" fill="white" stroke="rgba(26,86,219,0.18)"
+              stroke-width="1.2" />
+            <text x="213" y="197" font-size="6" fill="#1a56db" text-anchor="middle" font-weight="600">Firewall</text>
+            <text x="213" y="208" font-size="7" fill="#22c55e" text-anchor="middle" font-weight="700">&#10003;
+              Secured</text>
+
+            <rect x="248" y="185" width="50" height="30" rx="6" fill="white" stroke="rgba(26,86,219,0.18)"
+              stroke-width="1.2" />
+            <text x="273" y="197" font-size="6" fill="#1a56db" text-anchor="middle" font-weight="600">NVMe</text>
+            <text x="273" y="208" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="700">&#10003; Fast
+              I/O</text>
+
+            <!-- Lines from center to bottom nodes -->
+            <line x1="160" y1="190" x2="73" y2="185" stroke="rgba(26,86,219,0.25)" stroke-width="1.2"
+              stroke-dasharray="4 3" />
+            <line x1="163" y1="190" x2="143" y2="185" stroke="rgba(26,86,219,0.25)" stroke-width="1.2"
+              stroke-dasharray="4 3" />
+            <line x1="177" y1="190" x2="213" y2="185" stroke="rgba(26,86,219,0.25)" stroke-width="1.2"
+              stroke-dasharray="4 3" />
+            <line x1="200" y1="190" x2="273" y2="185" stroke="rgba(26,86,219,0.25)" stroke-width="1.2"
+              stroke-dasharray="4 3" />
+
+            <!-- Top globe / global network icon -->
+            <circle cx="170" cy="38" r="20" fill="white" stroke="rgba(26,86,219,0.18)" stroke-width="1.2" />
+            <circle cx="170" cy="38" r="13" fill="none" stroke="#1a56db" stroke-width="1.2" opacity="0.5" />
+            <line x1="157" y1="38" x2="183" y2="38" stroke="#1a56db" stroke-width="1" opacity="0.5" />
+            <path d="M170 25 Q177 38 170 51 Q163 38 170 25" fill="none" stroke="#1a56db" stroke-width="1"
+              opacity="0.5" />
+            <!-- Connecting line globe to center block -->
+            <line x1="170" y1="58" x2="170" y2="70" stroke="#1a56db" stroke-width="1.5" stroke-dasharray="3 2"
+              opacity="0.5" />
+
+            <!-- Corner accent -->
+            <circle cx="26" cy="26" r="5" fill="#DBEAFE" opacity="0.7" />
+            <circle cx="314" cy="26" r="5" fill="#DBEAFE" opacity="0.7" />
+            <circle cx="26" cy="234" r="4" fill="#DBEAFE" opacity="0.5" />
+            <circle cx="314" cy="234" r="4" fill="#DBEAFE" opacity="0.5" />
+          </svg>
+          <div class="au-hero-badge-bottom">
+            <div class="au-hero-dot"></div>
+            <div>
+              <div class="au-hero-bt">Infrastructure Live</div>
+              <div class="au-hero-bs">3 Active Data Centers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — CORE SPECIALIZATIONS ════ -->
+  <section id="au-specs" class="section au-specs-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHAT WE SPECIALIZE IN</span>
+      <h2 class="title" id="au-specs-title" data-animate="fade-up">Our Core Specializations</h2>
+      <div class="au-specs-grid" id="au-specs-grid" data-stagger>
+
+        <div class="au-spec-card">
+          <div class="au-spec-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+              <line x1="6" y1="6" x2="6.01" y2="6" />
+              <line x1="6" y1="18" x2="6.01" y2="18" />
+            </svg>
+          </div>
+          <h3>High-Performance VPS Hosting</h3>
+          <p>Enterprise-grade VPS and fully managed solutions powered by Gold and Platinum processors with NVMe storage,
+            built for speed, stability, and consistent performance.</p>
+        </div>
+
+        <div class="au-spec-card">
+          <div class="au-spec-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z" />
+            </svg>
+          </div>
+          <h3>Highly Available Cloud Infrastructure</h3>
+          <p>Cloud platforms designed for reliability, with high-availability architecture, multiple ISP connectivity,
+            and isolated virtual networks to keep systems running without interruption.</p>
+        </div>
+
+        <div class="au-spec-card">
+          <div class="au-spec-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+            </svg>
+          </div>
+          <h3>Backup &amp; Data Protection</h3>
+          <p>Immutable S3-based backups with built-in snapshots and ransomware protection, ensuring fast recovery and
+            secure data continuity when it matters most.</p>
+        </div>
+
+        <div class="au-spec-card">
+          <div class="au-spec-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <h3>Security-First Network Design</h3>
+          <p>Private L3 networking, dedicated switching, and firewall-protected environments that prioritize security,
+            performance, and complete network isolation.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — WHO WE ARE ════ -->
+  <section id="au-who" class="au-who-section">
+    <div class="container">
+      <div class="au-who-inner">
+        <span class="au-who-label">WHO WE ARE</span>
+        <h2 id="au-who-title">Who We Are</h2>
+        <p id="au-who-desc">At ICSDC (Indian Cloud Services &amp; Data Center), we are a leading IT infrastructure
+          partner helping businesses of all sizes succeed online with high-performance, secure, and scalable cloud
+          solutions. From startups to enterprises, we provide robust hosting technologies and managed services that keep
+          your digital operations running smoothly &mdash; always with performance, reliability, and support at the core
+          of everything we do.</p>
+        <div class="au-who-chips">
+          <span class="au-chip">&#128197; Founded 2024</span>
+          <span class="au-chip">&#128205; Noida, India</span>
+          <span class="au-chip">&#9203; 24/7 Support</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — WHAT WE DO ════ -->
+  <section id="au-what" class="section au-what-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHAT WE DO</span>
+      <h2 class="title" id="au-what-title" data-animate="fade-up">What We Do</h2>
+      <div class="au-what-grid" id="au-what-grid" data-stagger>
+
+        <div class="au-what-card">
+          <div class="au-what-number">01</div>
+          <div class="au-what-body">
+            <h3>Cloud Hosting Solutions</h3>
+            <p>Flexible Linux and Windows cloud servers designed for speed, uptime, and seamless scalability across all
+              workloads.</p>
+          </div>
+        </div>
+
+        <div class="au-what-card">
+          <div class="au-what-number">02</div>
+          <div class="au-what-body">
+            <h3>Dedicated &amp; Private Cloud</h3>
+            <p>High-performance dedicated servers and private cloud environments for businesses that require full
+              control, security, and customization.</p>
+          </div>
+        </div>
+
+        <div class="au-what-card">
+          <div class="au-what-number">03</div>
+          <div class="au-what-body">
+            <h3>Managed IT Services</h3>
+            <p>Comprehensive support including server management, backups, monitoring, and cloud infrastructure
+              optimization so you can focus on growth.</p>
+          </div>
+        </div>
+
+        <div class="au-what-card">
+          <div class="au-what-number">04</div>
+          <div class="au-what-body">
+            <h3>Tally on Cloud</h3>
+            <p>Cloud-ready access for Tally ERP software, enabling financial operations from anywhere with enhanced
+              security and zero local setup.</p>
+          </div>
+        </div>
+
+        <div class="au-what-card">
+          <div class="au-what-number">05</div>
+          <div class="au-what-body">
+            <h3>VDI &amp; Remote Work Solutions</h3>
+            <p>Virtual Desktop Infrastructure and enterprise-grade remote desktop support to keep teams connected and
+              productive anywhere in the world.</p>
+          </div>
+        </div>
+
+        <div class="au-what-card">
+          <div class="au-what-number">06</div>
+          <div class="au-what-body">
+            <h3>Advanced Security Services</h3>
+            <p>Firewall as a Service, Web Application Firewall, MFA, SSL certificates, and other security layers to
+              safeguard your critical data.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — VISION + MISSION ════ -->
+  <section id="au-vm" class="section au-vm-section">
+    <div class="container">
+      <div class="au-vm-panels">
+
+        <div class="au-vm-panel au-vm-panel-left">
+          <div class="au-vm-icon">&#128065;</div>
+          <h3 id="au-vision-title">Our Vision</h3>
+          <p id="au-vision-text">To make cloud infrastructure something businesses never have to worry about.</p>
+        </div>
+
+        <div class="au-vm-panel au-vm-panel-right">
+          <div class="au-vm-icon">&#127919;</div>
+          <h3 id="au-mission-title">Our Mission</h3>
+          <p id="au-mission-text">To deliver secure, high-performance cloud solutions that simply work &mdash; every
+            day.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — WHY CHOOSE US ════ -->
+  <section id="au-why" class="section au-why-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHY ICSDC</span>
+      <h2 class="title" id="au-why-title" data-animate="fade-up">Why Choose ICSDC</h2>
+      <p class="au-why-desc" id="au-why-desc" data-animate="fade-up">We combine cutting-edge technology with dependable
+        support and industry-trusted architecture to ensure your systems stay available, secure, and optimized. With a
+        focus on cost-effectiveness, reliability, scalability, and customer-first service, ICSDC has earned the trust of
+        clients across industries looking for a true infrastructure partner.</p>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — JOURNEY ════ -->
+  <section id="au-journey" class="section au-journey-section">
+    <div class="container">
+      <h2 class="title au-journey-title" id="au-journey-title" data-animate="fade-up">Our Journey &amp; Infrastructure
+      </h2>
+      <div class="au-journey-grid" data-stagger>
+
+        <div class="au-journey-card">
+          <div class="au-journey-card-header">
+            <span class="au-journey-icon">&#128640;</span>
+            <h3 id="au-started-heading">How We Started</h3>
+          </div>
+          <ul class="au-journey-list" id="au-started-list">
+            <li>ICSDC was founded in 2024 with a clear goal: to build cloud and hosting solutions that businesses can
+              truly rely on.</li>
+            <li>We started from Noida, India, focusing on strong infrastructure, clean network design, and real
+              operational reliability &mdash; not shortcuts.</li>
+          </ul>
+        </div>
+
+        <div class="au-journey-card">
+          <div class="au-journey-card-header">
+            <span class="au-journey-icon">&#127758;</span>
+            <h3 id="au-operate-heading">Where We Operate</h3>
+          </div>
+          <div class="au-flag-chips" id="au-operate-list">
+            <span class="au-flag-chip">&#127470;&#127475; India</span>
+            <span class="au-flag-chip">&#127465;&#127466; Germany</span>
+            <span class="au-flag-chip">&#127482;&#127480; USA</span>
+            <span class="au-flag-chip">&#127468;&#127463; UK</span>
+            <span class="au-flag-chip">&#127479;&#127482; Russia</span>
+          </div>
+        </div>
+
+        <div class="au-journey-card">
+          <div class="au-journey-card-header">
+            <span class="au-journey-icon">&#127970;</span>
+            <h3 id="au-dc-heading">Our Data Centers</h3>
+          </div>
+          <ul class="au-journey-list au-dc-list" id="au-dc-list">
+            <li><strong>Noida 1</strong> &mdash; CtrlS Data Center</li>
+            <li><strong>Noida 2</strong> &mdash; Yotta Data Center</li>
+            <li><strong>Mumbai</strong> &mdash; NTT Data Center</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — LIFE @ ICSDC ════ -->
+  <section id="au-life" class="section au-life-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">LIFE AT ICSDC</span>
+      <h2 class="title" id="au-life-title" data-animate="fade-up">Life @ ICSDC</h2>
+      <p class="au-life-desc" id="au-life-desc" data-animate="fade-up">Where ideas, collaboration, and everyday moments
+        come together.</p>
+    </div>
+    <div class="au-life-gallery" data-animate="fade-up">
+      <div class="au-life-card" style="background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%);">
+        <span class="au-life-card-icon">&#128736;</span>
+        <span class="au-life-card-label">Engineering</span>
+      </div>
+      <div class="au-life-card" style="background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);">
+        <span class="au-life-card-icon">&#129300;</span>
+        <span class="au-life-card-label">Innovation</span>
+      </div>
+      <div class="au-life-card" style="background: linear-gradient(135deg, #0891b2 0%, #38bdf8 100%);">
+        <span class="au-life-card-icon">&#129309;</span>
+        <span class="au-life-card-label">Collaboration</span>
+      </div>
+      <div class="au-life-card" style="background: linear-gradient(135deg, #059669 0%, #34d399 100%);">
+        <span class="au-life-card-icon">&#127881;</span>
+        <span class="au-life-card-label">Culture</span>
+      </div>
+      <div class="au-life-card" style="background: linear-gradient(135deg, #dc2626 0%, #f87171 100%);">
+        <span class="au-life-card-icon">&#127919;</span>
+        <span class="au-life-card-label">Growth</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — PARTNERS ════ -->
+  <section id="au-partners" class="section au-partners-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">OUR PARTNERS</span>
+      <h2 class="title" id="au-partners-title" data-animate="fade-up">Our Partners</h2>
+      <div class="au-partners-grid" id="au-partners-grid" data-stagger>
+        <!-- populated by about-us.js from ds.partner-logo[] — placeholders shown until JS loads -->
+        <div class="au-partner-box"><span class="au-partner-name">Partner</span></div>
+        <div class="au-partner-box"><span class="au-partner-name">Partner</span></div>
+        <div class="au-partner-box"><span class="au-partner-name">Partner</span></div>
+        <div class="au-partner-box"><span class="au-partner-name">Partner</span></div>
+        <div class="au-partner-box"><span class="au-partner-name">Partner</span></div>
+        <div class="au-partner-box"><span class="au-partner-name">Partner</span></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND ════ -->
+  <section class="cloud-cta-band" id="au-cta">
+    <div class="cloud-cta-inner">
+      <h2 id="au-cta-title">Whether You're Growing or Scaling, We're Here</h2>
+      <p id="au-cta-desc">Start a conversation with ICSDC today. Our experts are ready to help you find the right
+        infrastructure solution.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='/contact-us.html'">Contact Us Now &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='/'">Explore Services</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+              </svg>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                </path>
+              </svg>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p id="footer-year-text">&#169; Copyright <span data-strapi-year id="footer-year"></span> <span
+          data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script>
+    STRAPI_URL = "http://localhost:1338";
+    TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+
+  </script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/about-us.js"></script>
+
+</body>
+
+</html>

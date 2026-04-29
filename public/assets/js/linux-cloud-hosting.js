@@ -28,7 +28,7 @@ import {
         var sorted = plans.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
 
         grid.innerHTML = sorted.map(function (plan, i) {
-            var isFeatured = plan.featured || false;
+            var isFeatured = plan.isPopular || false;
             var cardClass = 'lch-plan-card' + (isFeatured ? ' lch-plan-featured' : '');
             var btnClass = 'lch-plan-btn' + (isFeatured ? ' lch-plan-btn-featured' : '');
             var badge = isFeatured ? '<div class="lch-plan-badge">' + (plan.badgeLabel || 'Most Popular') + '</div>' : '';
@@ -51,7 +51,7 @@ import {
                 var fallbackSpecs = [
                     { label: 'vCPU',      value: plan.vcpu || '' },
                     { label: 'RAM',       value: plan.ram || '' },
-                    { label: 'NVMe SSD',  value: plan.ssd || '' },
+                    { label: 'NVMe SSD',  value: plan.storage || '' },
                     { label: 'Bandwidth', value: plan.bandwidth || '' }
                 ];
                 specHTML = fallbackSpecs.map(function (s) {
@@ -114,7 +114,8 @@ import {
                 subtitle: page.heroSubtitle,
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
-                ctaSecondary: page.heroCtaSecondary
+                ctaSecondary: page.heroCtaSecondary,
+            heroImage: page.heroImage
             });
 
             // 3 — Hero badges
@@ -165,9 +166,9 @@ import {
                 var contactTitle = document.querySelector('.faq-contact-title');
                 if (contactTitle) contactTitle.textContent = page.faqContactTitle;
             }
-            if (page.faqContactDescription) {
+            if (page.faqContactDesc) {
                 var contactDesc = document.querySelector('.faq-contact-desc');
-                if (contactDesc) contactDesc.innerHTML = page.faqContactDescription;
+                if (contactDesc) contactDesc.innerHTML = page.faqContactDesc;
             }
 
             // 15 — CTA Band 2 (dark)

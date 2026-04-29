@@ -80,7 +80,7 @@ import {
             return '<div class="nds-when-card">' +
                 '<div class="nds-when-num">' + (item.number || '') + '</div>' +
                 '<h3>' + (item.title || '') + '</h3>' +
-                '<p>' + (item.description || '') + '</p>' +
+                '<p>' + (item.description || item.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -103,7 +103,8 @@ import {
                 subtitle: page.heroSubtitle,
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
-                ctaSecondary: page.heroCtaSecondary
+                ctaSecondary: page.heroCtaSecondary,
+            heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.nds-top-badge', page.heroTopBadge);

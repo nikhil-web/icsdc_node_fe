@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    GOOGLE WORKSPACE PAGE — SCOPED STYLES
    All classes prefixed gws-* to prevent
    any collision with style.css,
@@ -363,7 +363,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (max 1024px)
 ══════════════════════════════════════ */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .gws-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -391,7 +391,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — MOBILE (max 640px)
 ══════════════════════════════════════ */
-@media (max-width: 640px) {
+@media (max-width: 767px) {
     .gws-plans-grid {
         grid-template-columns: 1fr;
     }

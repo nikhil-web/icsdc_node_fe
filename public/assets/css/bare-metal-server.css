@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    BARE METAL SERVER PAGE — SCOPED STYLES
    All classes prefixed bms-* to prevent
    any collision with style.css,
@@ -411,7 +411,7 @@
 ══════════════════════════════════════ */
 
 /* 1280px — 3-col why grid, 3-col who grid */
-@media (max-width: 1280px) {
+@media (max-width: 1279px) {
     .bms-features-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -422,7 +422,7 @@
 }
 
 /* 1024px — 2-col grids */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .bms-features-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -442,7 +442,7 @@
 }
 
 /* 768px — smaller table font */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .bms-compare-table th,
     .bms-compare-table td {
         padding: 10px 14px;
@@ -457,10 +457,7 @@
     .bms-manage-btn {
         text-align: center;
     }
-}
 
-/* 640px — single column */
-@media (max-width: 640px) {
     .bms-features-grid {
         grid-template-columns: 1fr;
     }

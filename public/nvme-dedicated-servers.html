@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <script src="assets/js/theme-init.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NVMe Dedicated Servers — Ultra-Fast | ICSDC</title>
@@ -14,6 +15,7 @@
   <link rel="stylesheet" href="assets/css/cloud-hosting.css">
   <link rel="stylesheet" href="assets/css/nvme-dedicated-servers.css">
 
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
 </head>
 
 <body>
@@ -83,6 +85,7 @@
         </div>
       </div>
       <div class="hero-right">
+                <img class="hero-right-image" alt="" style="display:none">
         <div class="nds-hero-visual">
           <div class="nds-top-badge">&#9889; NVMe Powered</div>
           <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -97,23 +100,28 @@
             <circle cx="38" cy="36" r="5" fill="#ef4444" />
             <circle cx="54" cy="36" r="5" fill="#f59e0b" />
             <circle cx="70" cy="36" r="5" fill="#22c55e" />
-            <text x="90" y="41" font-size="10" fill="rgba(255,255,255,0.65)" font-family="monospace">nvme-ds-icsdc</text>
+            <text x="90" y="41" font-size="10" fill="rgba(255,255,255,0.65)"
+              font-family="monospace">nvme-ds-icsdc</text>
             <!-- NVMe drive bay -->
             <rect x="28" y="62" width="244" height="46" rx="6" fill="#fef3c7" stroke="rgba(245,158,11,0.22)"
               stroke-width="1" />
-            <text x="40" y="80" font-size="9" fill="#92400e" font-family="monospace" font-weight="600">NVMe U.3 — 2TB</text>
-            <text x="40" y="94" font-size="9" fill="#b45309" font-family="monospace">READ: 7000 MB/s  WRITE: 6500 MB/s</text>
+            <text x="40" y="80" font-size="9" fill="#92400e" font-family="monospace" font-weight="600">NVMe U.3 —
+              2TB</text>
+            <text x="40" y="94" font-size="9" fill="#b45309" font-family="monospace">READ: 7000 MB/s WRITE: 6500
+              MB/s</text>
             <!-- Drive slot indicators -->
             <rect x="220" y="68" width="40" height="12" rx="3" fill="#f59e0b" opacity="0.25" />
             <rect x="220" y="84" width="40" height="10" rx="3" fill="#22c55e" opacity="0.35" />
             <!-- RAM modules strip -->
             <rect x="28" y="116" width="244" height="28" rx="5" fill="#fff7ed" stroke="rgba(245,158,11,0.18)"
               stroke-width="1" />
-            <text x="40" y="134" font-size="9" fill="#92400e" font-family="monospace" font-weight="600">RAM: 128 GB DDR5  |  CPU: Dual Intel Platinum</text>
+            <text x="40" y="134" font-size="9" fill="#92400e" font-family="monospace" font-weight="600">RAM: 128 GB DDR5
+              | CPU: Dual Intel Platinum</text>
             <!-- Network / IO row -->
             <rect x="28" y="152" width="244" height="26" rx="5" fill="#fff7ed" stroke="rgba(245,158,11,0.14)"
               stroke-width="1" />
-            <text x="40" y="169" font-size="9" fill="#b45309" font-family="monospace">NET: 10 Gbps  |  PCIe 4.0 x4  |  Uptime: 99.9%</text>
+            <text x="40" y="169" font-size="9" fill="#b45309" font-family="monospace">NET: 10 Gbps | PCIe 4.0 x4 |
+              Uptime: 99.9%</text>
             <!-- LED activity strip -->
             <circle cx="254" cy="165" r="4" fill="#22c55e" opacity="0.85" />
             <circle cx="264" cy="165" r="4" fill="#f59e0b" opacity="0.70" />
@@ -200,12 +208,30 @@
           <p class="nds-plan-tagline">Entry-level dedicated NVMe server for growing businesses</p>
           <hr class="nds-plan-divider">
           <ul class="nds-plan-features">
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>Intel Gold Processor</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>32 GB RAM</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>500 GB NVMe SSD</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>1 Gbps Network Port</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>Enterprise Firewall</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>24/7 Managed Support</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>Intel Gold Processor</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>32 GB RAM</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>500 GB NVMe SSD</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>1 Gbps Network Port</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>Enterprise Firewall</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>24/7 Managed Support</li>
           </ul>
           <button class="nds-plan-btn nds-plan-btn-outline">Get Started</button>
         </div>
@@ -222,13 +248,34 @@
           <p class="nds-plan-tagline">High-performance NVMe server for demanding production workloads</p>
           <hr class="nds-plan-divider">
           <ul class="nds-plan-features">
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>Intel Platinum Processor</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>64 GB RAM</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>1 TB NVMe SSD</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>1 Gbps Network Port</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>L3 Private Network</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>DDoS Protection</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>Priority 24/7 Support</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>Intel Platinum Processor</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>64 GB RAM</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>1 TB NVMe SSD</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>1 Gbps Network Port</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>L3 Private Network</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>DDoS Protection</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>Priority 24/7 Support</li>
           </ul>
           <button class="nds-plan-btn nds-plan-btn-primary">Get Started &rarr;</button>
         </div>
@@ -244,13 +291,34 @@
           <p class="nds-plan-tagline">Maximum performance for enterprise-grade and high-traffic platforms</p>
           <hr class="nds-plan-divider">
           <ul class="nds-plan-features">
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>Dual Intel Platinum Processors</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>128 GB RAM</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>2 TB NVMe SSD</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>10 Gbps Network Port</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>L3 Private Network + Switching</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>Advanced DDoS Protection</li>
-            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>Dedicated Account Manager</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>Dual Intel Platinum Processors</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>128 GB RAM</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>2 TB NVMe SSD</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>10 Gbps Network Port</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>L3 Private Network + Switching</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>Advanced DDoS Protection</li>
+            <li class="nds-plan-feature"><span class="nds-plan-check"><svg width="10" height="10" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></span>Dedicated Account Manager</li>
           </ul>
           <button class="nds-plan-btn nds-plan-btn-outline">Contact Sales</button>
         </div>
@@ -492,7 +560,8 @@
             </svg>
           </div>
           <h3>Large &amp; Complex Databases</h3>
-          <p>SQL/NoSQL databases with heavy indexing or constant read/write operations run significantly faster on NVMe.</p>
+          <p>SQL/NoSQL databases with heavy indexing or constant read/write operations run significantly faster on NVMe.
+          </p>
         </div>
         <div class="cloud-use-card">
           <div class="cloud-use-icon">
@@ -502,7 +571,8 @@
             </svg>
           </div>
           <h3>Media Streaming &amp; Delivery</h3>
-          <p>Streaming services and VOD applications benefit from faster data throughput and reduced buffering times.</p>
+          <p>Streaming services and VOD applications benefit from faster data throughput and reduced buffering times.
+          </p>
         </div>
       </div>
     </div>
@@ -525,7 +595,8 @@
         <div class="nds-when-card">
           <div class="nds-when-num">02</div>
           <h3>Performance Bottlenecks Exist</h3>
-          <p>When you&rsquo;re experiencing slow database queries, high disk I/O wait, or sluggish application responses.</p>
+          <p>When you&rsquo;re experiencing slow database queries, high disk I/O wait, or sluggish application
+            responses.</p>
         </div>
         <div class="nds-when-card">
           <div class="nds-when-num">03</div>
@@ -540,7 +611,8 @@
         <div class="nds-when-card">
           <div class="nds-when-num">05</div>
           <h3>Running VMs or Containers</h3>
-          <p>When Docker, Kubernetes, or virtual machines require rapid disk operations for fast start-up and scaling.</p>
+          <p>When Docker, Kubernetes, or virtual machines require rapid disk operations for fast start-up and scaling.
+          </p>
         </div>
         <div class="nds-when-card">
           <div class="nds-when-num">06</div>
@@ -635,8 +707,8 @@
                 </path>
               </svg>
             </a>
-            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram"
-              target="_blank" rel="noopener noreferrer">
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram" target="_blank"
+              rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                 <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
@@ -674,7 +746,7 @@
 
   <!-- Strapi config -->
   <script>
-    STRAPI_URL = "http://13.126.9.248:1337";
+    STRAPI_URL = "http://localhost:1338";
     TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
   </script>
   <script src="assets/js/main.js" type="module"></script>

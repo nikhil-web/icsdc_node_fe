@@ -217,18 +217,6 @@
     transform: scale(1.03);
 }
 
-@media (max-width: 860px) {
-    .azure-who-inner {
-        grid-template-columns: 1fr;
-    }
-
-    .azure-who-visual {
-        order: -1;
-        max-width: 560px;
-        margin: 0 auto;
-    }
-}
-
 /* ══════════════════════════════════════
    ADVANTAGES — 4×3 GRID
 ══════════════════════════════════════ */
@@ -291,24 +279,6 @@
     font-size: 13.5px;
     color: var(--muted-alt);
     line-height: 1.6;
-}
-
-@media (max-width: 1100px) {
-    .azure-advantages-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .azure-advantages-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 480px) {
-    .azure-advantages-grid {
-        grid-template-columns: 1fr;
-    }
 }
 
 /* ══════════════════════════════════════
@@ -433,7 +403,8 @@
 }
 
 .azure-why-card {
-    background: var(--white);
+    align-items: center;
+    justify-content: center;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 36px 28px;
@@ -441,6 +412,8 @@
     box-shadow: var(--shadow-card);
     transition: transform var(--transition-base) ease,
         box-shadow var(--transition-base) ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .azure-why-card:hover {
@@ -470,18 +443,6 @@
     font-size: 14px;
     color: var(--muted-alt);
     line-height: 1.65;
-}
-
-@media (max-width: 900px) {
-    .azure-why-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 640px) {
-    .azure-why-grid {
-        grid-template-columns: 1fr;
-    }
 }
 
 /* ══════════════════════════════════════
@@ -553,18 +514,6 @@
     font-size: 15px;
     color: var(--muted-alt);
     line-height: 1.65;
-}
-
-@media (max-width: 640px) {
-    .azure-process-steps::before {
-        display: none;
-    }
-
-    .azure-step {
-        flex-direction: column;
-        gap: 12px;
-        padding: 20px 0;
-    }
 }
 
 /* ══════════════════════════════════════
@@ -650,18 +599,6 @@
     color: rgba(255, 255, 255, 0.65);
 }
 
-@media (max-width: 900px) {
-    .azure-stack-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 480px) {
-    .azure-stack-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* ══════════════════════════════════════
    SECURITY SECTION
 ══════════════════════════════════════ */
@@ -740,18 +677,6 @@
     width: 100%;
     height: auto;
     display: block;
-}
-
-@media (max-width: 860px) {
-    .azure-security-inner {
-        grid-template-columns: 1fr;
-    }
-
-    .azure-security-visual {
-        order: -1;
-        max-width: 560px;
-        margin: 0 auto;
-    }
 }
 
 /* ══════════════════════════════════════
@@ -861,12 +786,6 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
-@media (max-width: 768px) {
-    .azure-pricing-callout-inner {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* ══════════════════════════════════════
    CTA BAND
 ══════════════════════════════════════ */
@@ -974,4 +893,75 @@
     padding: 11px;
     border-radius: 10px;
     color: #595959;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+@media (max-width: 1023px) {
+    .azure-who-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .azure-who-visual {
+        order: -1;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    .azure-advantages-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .azure-why-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .azure-stack-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .azure-security-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .azure-security-visual {
+        order: -1;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .azure-advantages-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .azure-why-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .azure-process-steps::before {
+        display: none;
+    }
+
+    .azure-step {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px 0;
+    }
+
+    .azure-pricing-callout-inner {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 479px) {
+    .azure-advantages-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .azure-stack-grid {
+        grid-template-columns: 1fr;
+    }
 }

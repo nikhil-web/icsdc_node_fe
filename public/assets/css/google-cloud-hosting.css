@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    GOOGLE CLOUD HOSTING PAGE — SCOPED STYLES
    All classes prefixed gch-* to prevent
    any collision with style.css,
@@ -505,7 +505,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — 1280px breakpoint
 ══════════════════════════════════════ */
-@media (max-width: 1280px) {
+@media (max-width: 1279px) {
     .gch-why-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -519,7 +519,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — 1024px breakpoint
 ══════════════════════════════════════ */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .gch-plans-grid {
         grid-template-columns: 1fr;
         max-width: 480px;
@@ -545,7 +545,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — 768px breakpoint
 ══════════════════════════════════════ */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .gch-why-grid {
         grid-template-columns: 1fr;
     }
@@ -557,13 +557,7 @@
     .gch-features-grid {
         grid-template-columns: 1fr;
     }
-}
 
-
-/* ══════════════════════════════════════
-   RESPONSIVE — 640px breakpoint
-══════════════════════════════════════ */
-@media (max-width: 640px) {
     .gch-eyebrow {
         font-size: 11px;
         padding: 5px 12px;

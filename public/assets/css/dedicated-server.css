@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    DEDICATED SERVER PAGE — SCOPED STYLES
    All classes prefixed ds-* to prevent
    any collision with style.css or
@@ -1338,7 +1338,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (≤ 1024px)
 ══════════════════════════════════════ */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .ds-pricing-grid {
         grid-template-columns: 1fr;
         max-width: 480px;
@@ -1385,7 +1385,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — MOBILE (≤ 640px)
 ══════════════════════════════════════ */
-@media (max-width: 640px) {
+@media (max-width: 767px) {
     .ds-pillar-grid {
         grid-template-columns: 1fr;
     }
@@ -1426,7 +1426,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479px) {
     .ds-use-grid {
         grid-template-columns: 1fr;
     }

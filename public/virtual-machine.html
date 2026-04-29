@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <script src="assets/js/theme-init.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ICSDC Virtual Machines | Flexible, Isolated Cloud Compute</title>
@@ -13,6 +14,7 @@
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/cloud-hosting.css">
   <link rel="stylesheet" href="assets/css/virtual-machine.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
 </head>
 
 <body>
@@ -83,6 +85,7 @@
         </div>
       </div>
       <div class="hero-right">
+                <img class="hero-right-image" alt="" style="display:none">
         <div class="vm-hero-visual">
           <div class="vm-top-badge">&#9672; ICSDC Virtual Machines</div>
           <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -121,8 +124,7 @@
             <text x="67" y="123" font-size="5.5" fill="#7c3aed" text-anchor="middle" font-weight="600">Running</text>
 
             <!-- VM Box 2 (center, slightly taller) -->
-            <rect x="113" y="55" width="74" height="80" rx="10" fill="white" stroke="#7c3aed"
-              stroke-width="2" />
+            <rect x="113" y="55" width="74" height="80" rx="10" fill="white" stroke="#7c3aed" stroke-width="2" />
             <rect x="121" y="63" width="58" height="10" rx="3" fill="#7c3aed" />
             <text x="150" y="71" font-size="6" fill="white" text-anchor="middle" font-weight="700">VM&nbsp;2</text>
             <text x="150" y="84" font-size="5.5" fill="#6d28d9" text-anchor="middle">4 vCPU · 8 GB</text>
@@ -382,7 +384,8 @@
               <polyline points="12 8 12 12 14 14" />
             </svg></div>
           <h3>Snapshot &amp; Image Management</h3>
-          <p>Create snapshots to capture system states, enabling quick recovery, cloning, or environment replication.</p>
+          <p>Create snapshots to capture system states, enabling quick recovery, cloning, or environment replication.
+          </p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -522,7 +525,8 @@
           <p class="vm-bs-subtitle">Add dependable block storage to your virtual machines and keep your data available,
             movable, and scalable as your workloads evolve.</p>
           <h3 class="vm-bs-subheading">Block Storage Designed to Grow With Your VMs</h3>
-          <p class="vm-bs-desc">Enhance your virtual machine capacity with high-performance cloud block storage built for
+          <p class="vm-bs-desc">Enhance your virtual machine capacity with high-performance cloud block storage built
+            for
             flexibility. Allocate only the storage you need, attach or detach volumes effortlessly across prepaid or
             pay-as-you-go VMs, and resize anytime as application demands increase &mdash; all without disrupting
             operations.</p>
@@ -889,7 +893,7 @@
 
   <!-- Strapi config -->
   <script>
-    STRAPI_URL = "http://13.126.9.248:1337";
+    STRAPI_URL = "http://localhost:1338";
     TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
   </script>
   <script type="module" src="assets/js/main.js"></script>

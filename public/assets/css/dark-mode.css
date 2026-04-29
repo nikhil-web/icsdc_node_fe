@@ -1,0 +1,1090 @@
+﻿/* ══════════════════════════════════════════════════════
+   DARK MODE — ICSDC Frontend
+   Applied via: html[data-theme="dark"]
+   Toggled by:  main.js (theme toggle button)
+   Persisted:   localStorage key "icsdc-theme"
+   Anti-FOUC:   assets/js/theme-init.js (sync, in <head>)
+══════════════════════════════════════════════════════ */
+
+/* ── TRANSITION on theme switch ─────────────────────── */
+html[data-theme="dark"],
+html[data-theme="light"] {
+    color-scheme: dark;
+}
+
+html[data-theme="light"] {
+    color-scheme: light;
+}
+
+/* Smooth transition when toggling (only on non-reduced-motion) */
+@media (prefers-reduced-motion: no-preference) {
+
+    body,
+    nav,
+    .mobile-menu,
+    #dropdown,
+    #dd-sidebar,
+    #dd-flat-left,
+    .hero-section,
+    .section,
+    .card,
+    .why-card,
+    .cloud-power-card,
+    .ds-plan-card,
+    .lds-plan-card,
+    input,
+    textarea {
+        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+}
+
+/* ══════════════════════════════════════════════════════
+   1. DESIGN TOKEN OVERRIDES
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] {
+    /* Core palette */
+    --text: #e2e8f0;
+    --text-dark: #f1f5f9;
+    --muted: #94a3b8;
+    --muted-alt: #8899b4;
+    --muted-light: #cbd5e1;
+    --white: #1e293b;
+    --bg-light: #0f172a;
+    --border: #334155;
+    --blue-hover-bg: #172554;
+    --blue-light: #1e3a5f;
+
+    /* Shadows — more opaque for dark bg */
+    --shadow: 0 8px 40px rgba(0, 0, 0, 0.40);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.30), 0 1px 2px rgba(0, 0, 0, 0.20);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.25);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.30);
+    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.35), 0 1px 4px rgba(0, 0, 0, 0.20);
+    --shadow-card-hover: 0 16px 48px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.30);
+    --shadow-icon: 0 8px 24px rgba(0, 0, 0, 0.40);
+    --shadow-nav: 0 1px 0 rgba(255, 255, 255, 0.04), 0 4px 16px rgba(0, 0, 0, 0.35);
+
+    /* Component tokens */
+    --c-dark: #0a1f44;
+    --c-text-dark: #f1f5f9;
+    --c-text-mid: #94a3b8;
+    --c-text-muted: #94a3b8;
+    --c-text-light: #64748b;
+    --c-bg-grey: #1e293b;
+    --c-white: #1e293b;
+    /* overridden for card backgrounds; ISO text forced white via explicit rules */
+    --c-border: #334155;
+    --c-border-blue: rgba(99, 153, 255, 0.2);
+    --c-footer-bg: #070c14;
+    --c-footer-bar: #020408;
+    --c-shadow-card: 0 4px 24px rgba(0, 0, 0, 0.35), 0 1px 4px rgba(0, 0, 0, 0.20);
+    --c-shadow-card-hover: 0 16px 48px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.30);
+}
+
+/* ══════════════════════════════════════════════════════
+   2. BODY & HTML ROOT
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+    background-color: #0f172a !important;
+    color: var(--text);
+}
+
+/* ══════════════════════════════════════════════════════
+   3. NAVBAR
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] nav {
+    background: rgba(10, 18, 35, 0.97) !important;
+}
+
+html[data-theme="dark"] nav.scrolled {
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 28px rgba(0, 0, 0, 0.5) !important;
+}
+
+html[data-theme="dark"] .mobile-menu {
+    background: #1e293b !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5) !important;
+}
+
+html[data-theme="dark"] #dropdown {
+    background: #1e293b !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .dd-item:hover {
+    border-color: rgba(99, 153, 255, 0.25) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+html[data-theme="dark"] #dd-sidebar,
+html[data-theme="dark"] #dd-flat-left {
+    background: #152032 !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .dd-item {
+    background: #1e293b !important;
+}
+
+html[data-theme="dark"] .dd-item-icon,
+html[data-theme="dark"] .sidebar-icon,
+html[data-theme="dark"] .dd-flat-icon {
+    background: #152032 !important;
+}
+
+html[data-theme="dark"] .hamburger span {
+    background: var(--text) !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   4. THEME TOGGLE BUTTON
+══════════════════════════════════════════════════════ */
+#theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--bg-light);
+    color: var(--muted);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition:
+        background var(--transition-base) ease,
+        color var(--transition-base) ease,
+        transform var(--transition-base) var(--ease-out-back),
+        box-shadow var(--transition-base) ease;
+    margin-right: 4px;
+    font-family: inherit;
+}
+
+#theme-toggle:hover {
+    background: var(--blue-hover-bg);
+    color: var(--blue);
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: var(--shadow-md);
+}
+
+#theme-toggle svg {
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+/* On mobile, hide the nav-bar toggle — it lives in the hamburger menu */
+@media (max-width: 1023px) {
+    #theme-toggle {
+        display: none !important;
+    }
+}
+
+/* ── Mobile menu theme toggle row ──────────────────── */
+.mobile-theme-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm, 8px);
+    border: 1px solid var(--border);
+    margin-top: 4px;
+    background: transparent;
+}
+
+.mobile-theme-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    font-family: inherit;
+    letter-spacing: -0.01em;
+}
+
+.mobile-theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: var(--bg-light);
+    color: var(--muted);
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: inherit;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mobile-theme-toggle:hover,
+.mobile-theme-toggle:active {
+    background: var(--blue-hover-bg);
+    color: var(--blue);
+    transform: scale(1.1) rotate(15deg);
+}
+
+.mobile-theme-toggle svg {
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+/* Dark mode overrides for the mobile row */
+html[data-theme="dark"] .mobile-theme-row {
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .mobile-theme-label {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .mobile-theme-toggle {
+    background: #1e293b;
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .mobile-theme-toggle:hover {
+    background: #172554;
+    color: #93c5fd;
+}
+
+/* ══════════════════════════════════════════════════════
+   5. HERO
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] .hero-section {
+    background: linear-gradient(175deg,
+            rgba(17, 38, 82, 0.75) 0%,
+            rgba(15, 28, 60, 0.45) 45%,
+            #0f172a 70%) !important;
+}
+
+html[data-theme="dark"] .hero-section::before {
+    opacity: 0.08 !important;
+}
+
+/* Price note / eyebrow etc use var(--muted) — already covered */
+
+/* ══════════════════════════════════════════════════════
+   6. SECTIONS — hardcoded backgrounds
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] .best-cloud-services {
+    background:
+        radial-gradient(circle at top right, rgba(30, 94, 255, 0.06), transparent 32%),
+        linear-gradient(180deg, #0f172a 0%, #152032 100%) !important;
+}
+
+html[data-theme="dark"] .business-needs-cloud {
+    background: #111827 !important;
+}
+
+html[data-theme="dark"] .business-needs-label {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .business-needs-copy h3 {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .business-needs-copy p {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .business-needs-icon {
+    background: #1e3a5f !important;
+    color: var(--blue) !important;
+}
+
+/* Generic light-bg sections */
+html[data-theme="dark"] .section {
+    background: #0f172a !important;
+}
+
+html[data-theme="dark"] .why-us {
+    background: #111827 !important;
+}
+
+/* ── HOMEPAGE EXTRAS — hardcoded light backgrounds ───── */
+
+/* Global presence / map section */
+html[data-theme="dark"] .hp-global-section {
+    background: linear-gradient(#111827 0%, #0f172a 100%) !important;
+}
+
+html[data-theme="dark"] .hp-global-title {
+    color: var(--text) !important;
+}
+
+html[data-theme="dark"] .hp-map-img {
+    filter: invert(1) hue-rotate(180deg) brightness(0.85) !important;
+}
+
+html[data-theme="dark"] .hp-pin-head {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Tech partners section */
+html[data-theme="dark"] .hp-tech-section {
+    background: #111827 !important;
+}
+
+html[data-theme="dark"] .hp-logos-heading {
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .hp-logo-box {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .hp-logo-box:hover {
+    border-color: rgba(99, 153, 255, 0.35) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+html[data-theme="dark"] .hp-logo-badge {
+    background: #152032 !important;
+}
+
+html[data-theme="dark"] .hp-logo-name {
+    color: #94a3b8 !important;
+}
+
+/* Trusted leaders section */
+html[data-theme="dark"] .hp-trusted-section {
+    background: #0f172a !important;
+}
+
+html[data-theme="dark"] .hp-trusted-section .hp-logo-box {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+/* ISO / certifications section — stays blue but fix white overrides */
+html[data-theme="dark"] .iso-section {
+    /* keep --c-blue background, just ensure it stays readable */
+    background: #001646 !important;
+}
+
+html[data-theme="dark"] .iso-title {
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .iso-subtitle {
+    color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* Industry Validated / Less Cloud Complex blue containers */
+html[data-theme="dark"] .blue-container-left {
+    /* these are intentionally blue — keep them */
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .blue-container-left h2,
+html[data-theme="dark"] .blue-container-left h3,
+html[data-theme="dark"] .blue-container-left p,
+html[data-theme="dark"] .blue-container-left li {
+    color: #ffffff !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   7. CARDS — generic patterns
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] .best-cloud-services-btns .feature-cards {
+    background: rgba(30, 41, 59, 0.9);
+    border-color: rgba(99, 153, 255, 0.14);
+}
+
+html[data-theme="dark"] .best-cloud-services-btns .feature-cards:hover {
+    background: #1e293b;
+    border-color: rgba(99, 153, 255, 0.28);
+}
+
+/* why-card (used on many pages) */
+html[data-theme="dark"] .why-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .why-icon {
+    background: var(--blue-light);
+}
+
+/* cloud-power-card */
+html[data-theme="dark"] .cloud-power-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .cloud-power-icon {
+    background: var(--blue-light);
+}
+
+/* ds-plan-card / lds-plan-card */
+html[data-theme="dark"] .ds-plan-card,
+html[data-theme="dark"] .lds-plan-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .ds-featured,
+html[data-theme="dark"] .lds-featured {
+    background: #0f172a;
+    border-color: var(--blue);
+}
+
+html[data-theme="dark"] .ds-plan-divider,
+html[data-theme="dark"] .lds-plan-divider {
+    border-color: #334155;
+}
+
+/* General card classes that appear across pages */
+html[data-theme="dark"] [class*="-card"] {
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .blue-container {
+    background-color: #00000000
+}
+
+/* ══════════════════════════════════════════════════════
+   8. BUTTONS
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] .btn-outline {
+    border-color: #334155;
+    color: var(--text);
+    background: transparent;
+}
+
+html[data-theme="dark"] .btn-outline:hover {
+    background: #1e293b;
+    border-color: var(--blue);
+}
+
+html[data-theme="dark"] .cloud-plan-cta-outline,
+html[data-theme="dark"] .ds-plan-cta-outline,
+html[data-theme="dark"] .lds-plan-cta-secondary {
+    border-color: #334155;
+    color: var(--text);
+}
+
+/* ══════════════════════════════════════════════════════
+   9. PAGE LOADER
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] #page-loader {
+    background: #0f172a;
+}
+
+/* ══════════════════════════════════════════════════════
+   10. COMPARISON TABLES
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] .compare-table,
+html[data-theme="dark"] .lds-compare-table,
+html[data-theme="dark"] [class*="compare-table"] {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .compare-table thead,
+html[data-theme="dark"] .lds-compare-table thead,
+html[data-theme="dark"] [class*="compare-table"] thead {
+    background: #152032;
+}
+
+html[data-theme="dark"] .compare-table th,
+html[data-theme="dark"] .lds-compare-table th,
+html[data-theme="dark"] [class*="compare-table"] th {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .compare-table td,
+html[data-theme="dark"] .lds-compare-table td,
+html[data-theme="dark"] [class*="compare-table"] td {
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .compare-table tr:nth-child(even),
+html[data-theme="dark"] .lds-compare-table tr:nth-child(even),
+html[data-theme="dark"] [class*="compare-table"] tr:nth-child(even) {
+    background: rgba(15, 23, 42, 0.5);
+}
+
+/* ══════════════════════════════════════════════════════
+   11. FORMS & INPUTS
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+    /* background: #1e293b; */
+    border-color: #334155;
+    color: var(--text);
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+    color: var(--muted);
+}
+
+html[data-theme="dark"] input:focus,
+html[data-theme="dark"] textarea:focus,
+html[data-theme="dark"] select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.2);
+}
+
+/* ══════════════════════════════════════════════════════
+   12. FAQ ACCORDIONS
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] .faq-section {
+    background: #111827;
+}
+
+html[data-theme="dark"] .gws-plan-card {
+    background: #111827;
+}
+
+html[data-theme="dark"] .faq-contact-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] dt[class*="faq"],
+html[data-theme="dark"] [class*="faq-q"],
+html[data-theme="dark"] [class*="faq-item"] {
+    border-color: #334155;
+}
+
+/* ══════════════════════════════════════════════════════
+   13. CLOUD SOLUTIONS SECTION — FLOATING CARDS
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] #cloud-solutions {
+    background: linear-gradient(180deg, #0d1829 0%, #111827 100%) !important;
+}
+
+html[data-theme="dark"] .floating-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    border-left-color: #3b82f6 !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35), 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+html[data-theme="dark"] .floating-card:hover {
+    box-shadow: 0 16px 48px rgba(59, 130, 246, 0.20), 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+html[data-theme="dark"] .floating-card h4 {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .floating-card p {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .fc-icon {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1e3058 100%) !important;
+}
+
+html[data-theme="dark"] .fc-icon svg {
+    stroke: #60a5fa !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   14. TESTIMONIALS
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] .testi-section {
+    background: #0f172a;
+}
+
+html[data-theme="dark"] .testi-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .testi-footer {
+    border-top-color: #334155;
+}
+
+html[data-theme="dark"] .testi-name {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .testi-quote {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .testi-job {
+    color: #64748b !important;
+}
+
+html[data-theme="dark"] .testi-quote-mark {
+    color: #60a5fa;
+    opacity: 0.25;
+}
+
+html[data-theme="dark"] .testi-nav-btn {
+    background: #1e293b !important;
+    color: #60a5fa !important;
+    border-color: #3b82f6 !important;
+}
+
+html[data-theme="dark"] .testi-nav-btn:hover {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+/* ── Homepage contact info cards ────────────────────── */
+/* .contact-card-title uses var(--c-dark) = #0a1f44 — invisible on dark bg */
+html[data-theme="dark"] .contact-card-title {
+    color: #f1f5f9 !important;
+}
+
+/* .contact-card-divider uses background: var(--c-dark) — invisible */
+html[data-theme="dark"] .contact-card-divider {
+    background: #3b82f6 !important;
+}
+
+/* .contact-card-detail and .contact-card-meta use hardcoded #434343 (dark grey) */
+html[data-theme="dark"] .contact-card-detail {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .contact-card-meta {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .contact-info-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   14. SECTION LABELS (gradient text) — keep readable
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] .cloud-section-label,
+html[data-theme="dark"] .ds-section-label,
+html[data-theme="dark"] .lds-section-label {
+    opacity: 0.9;
+}
+
+/* ══════════════════════════════════════════════════════
+   15. HARDCODED LIGHT BACKGROUNDS — generic sweep
+      Catches inline background: #f8f*, #eff*, #eef* etc.
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] [class*="-section"],
+html[data-theme="dark"] [class*="-wrap"] {
+    background-color: transparent;
+    /* let body bg show through unless specifically overridden */
+}
+
+/* Pricing sections */
+html[data-theme="dark"] [class*="pricing"] {
+    background: #0f172a;
+}
+
+/* Stats / perf bars */
+html[data-theme="dark"] [class*="perf-bar-track"],
+html[data-theme="dark"] [class*="-bar-bg"] {
+    background: #334155;
+}
+
+/* Page-level blue gradient sections (why-us style) */
+html[data-theme="dark"] [style*="#f8fbff"],
+html[data-theme="dark"] [style*="#eef5ff"],
+html[data-theme="dark"] [style*="#f4f6f9"],
+html[data-theme="dark"] [style*="#efefef"] {
+    background: #1e293b !important;
+    color: var(--text) !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   16. FOOTER — already dark, just slightly deeper
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] .site-footer {
+    background: var(--c-footer-bg);
+}
+
+html[data-theme="dark"] .footer-bar {
+    background: var(--c-footer-bar);
+}
+
+/* ══════════════════════════════════════════════════════
+   17. SCROLLBAR (Webkit)
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] ::-webkit-scrollbar {
+    width: 8px;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* ══════════════════════════════════════════════════════
+   18. SELECTION HIGHLIGHT
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] ::selection {
+    background: rgba(26, 86, 219, 0.35);
+    color: #f1f5f9;
+}
+
+/* ══════════════════════════════════════════════════════
+   19. GLOBAL FIX — color: var(--white) on blue elements
+   --white is overridden to #1e293b (dark bg) in dark mode.
+   Any element using color: var(--white) on a blue/colored
+   background will have dark text — force white everywhere
+   this pattern is used.
+══════════════════════════════════════════════════════ */
+
+/* Primary / CTA buttons across ALL pages */
+html[data-theme="dark"] .btn-primary,
+html[data-theme="dark"] .btn-login,
+html[data-theme="dark"] .desktop-login-btn,
+html[data-theme="dark"] .mobile-login-btn,
+html[data-theme="dark"] .cu-submit-btn,
+html[data-theme="dark"] [class*="cta-primary"],
+html[data-theme="dark"] [class*="submit-btn"],
+html[data-theme="dark"] [class*="plan-badge"] {
+    color: #ffffff !important;
+}
+
+/* Step / process numbered circles */
+html[data-theme="dark"] [class*="-step-number"],
+html[data-theme="dark"] .cu-step-number {
+    color: #ffffff !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   20. CONTACT PAGE — cu- prefix
+══════════════════════════════════════════════════════ */
+
+/* Hero */
+html[data-theme="dark"] .cu-hero-section {
+    background: linear-gradient(135deg, #0f172a 0%, #111827 55%, #152032 100%) !important;
+}
+
+html[data-theme="dark"] .cu-hero-visual {
+    background: linear-gradient(135deg, #152032 0%, #1e293b 50%, #1a3058 100%) !important;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Eyebrow pill */
+html[data-theme="dark"] .cu-eyebrow {
+    background: #172554 !important;
+    color: #93c5fd !important;
+    border-color: rgba(99, 153, 255, 0.25) !important;
+}
+
+/* Hero badges */
+html[data-theme="dark"] .cu-hero-badge-top,
+html[data-theme="dark"] .cu-hero-badge-bottom {
+    background: #1e293b !important;
+    border-color: rgba(99, 153, 255, 0.2) !important;
+}
+
+html[data-theme="dark"] .cu-hero-badge-top {
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .cu-bt {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .cu-bs {
+    color: #94a3b8 !important;
+}
+
+/* Help section */
+html[data-theme="dark"] .cu-help-card-icon {
+    background: #172554 !important;
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .cu-help-card-title {
+    color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .cu-help-card-desc,
+html[data-theme="dark"] .cu-help-desc {
+    color: #94a3b8 !important;
+}
+
+/* Steps section — hardcoded #f8fafc */
+html[data-theme="dark"] .cu-steps-section {
+    background: #111827 !important;
+}
+
+html[data-theme="dark"] .cu-step-connector {
+    border-color: rgba(99, 153, 255, 0.25) !important;
+}
+
+html[data-theme="dark"] .cu-step-title {
+    color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .cu-step-desc,
+html[data-theme="dark"] .cu-steps-desc {
+    color: #94a3b8 !important;
+}
+
+/* Contact info cards — hardcoded #f8fafc */
+html[data-theme="dark"] .cu-info-card {
+    background: #152032 !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .cu-info-card:hover {
+    border-color: rgba(99, 153, 255, 0.3) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+html[data-theme="dark"] .cu-info-icon {
+    background: #172554 !important;
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .cu-info-label {
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .cu-info-value {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .cu-info-title {
+    color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .cu-info-subtitle {
+    color: #94a3b8 !important;
+}
+
+/* Form */
+html[data-theme="dark"] .cu-form-title {
+    color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .cu-form-subtitle {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .cu-label {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .cu-required {
+    color: #f87171 !important;
+}
+
+html[data-theme="dark"] .cu-input {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .cu-input::placeholder {
+    color: #64748b !important;
+}
+
+html[data-theme="dark"] .cu-input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+html[data-theme="dark"] .cu-select option {
+    background: #1e293b;
+    color: #e2e8f0;
+}
+
+/* Form success state */
+html[data-theme="dark"] .cu-form-success {
+    background: #152032 !important;
+    border-color: rgba(99, 153, 255, 0.2) !important;
+}
+
+html[data-theme="dark"] .cu-success-icon {
+    background: #172554 !important;
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .cu-form-success h3 {
+    color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .cu-form-success p {
+    color: #94a3b8 !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   21. FOOTER — phone, email, address, links
+══════════════════════════════════════════════════════ */
+html[data-theme="dark"] .footer-address,
+html[data-theme="dark"] [data-strapi-footer-address],
+html[data-theme="dark"] [data-strapi-address] {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .footer-phone,
+html[data-theme="dark"] [data-strapi-footer-phone] {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .footer-email-link,
+html[data-theme="dark"] [data-strapi-footer-email] {
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .footer-link {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .footer-link:hover {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .footer-link-title {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .footer-social-link {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .footer-social-link:hover {
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .footer-bottom,
+html[data-theme="dark"] #footer-year-text {
+    color: #64748b !important;
+    border-color: #1e293b !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   22. SITEWIDE TEXT SAFETY NET
+   Ensures headings / titles never render dark-on-dark.
+   Tokens already cascade from html[data-theme="dark"]
+   but explicit rules handle edge-cases where a page
+   CSS overrides with a light hardcoded color.
+══════════════════════════════════════════════════════ */
+
+html[data-theme="dark"] .title {
+    color: var(--text-dark) !important;
+}
+
+html[data-theme="dark"] .subtitle {
+    color: var(--muted) !important;
+}
+
+/* Hardcoded dark text colors that appear on now-dark backgrounds */
+html[data-theme="dark"] [style*="color: #1a1a1a"],
+html[data-theme="dark"] [style*="color: #111111"],
+html[data-theme="dark"] [style*="color: #333"],
+html[data-theme="dark"] [style*="color:#333"],
+html[data-theme="dark"] [style*="color: #222"] {
+    color: #e2e8f0 !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   23. PAGE-SPECIFIC CHIP / BADGE ELEMENTS
+   Hardcoded background:#fff / #f1f5f9 on these elements
+   stays white in dark mode while token-driven text turns
+   light → invisible. Override backgrounds to dark.
+══════════════════════════════════════════════════════ */
+
+/* about-us.html — country flag chips
+   bg: #f1f5f9 (hardcoded) + color: var(--text-dark) = #f1f5f9 → same color */
+html[data-theme="dark"] .au-flag-chip {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+/* about-us.html — "Life @ ICSDC" section hardcoded #f8fafc */
+html[data-theme="dark"] .au-life-section {
+    background: #111827 !important;
+}
+
+/* windows-cloud-hosting.html — app badges (background: #fff hardcoded) */
+html[data-theme="dark"] .wincloud-app-badge {
+    background: #1e293b !important;
+    border-color: rgba(0, 120, 212, 0.2) !important;
+    color: #e2e8f0 !important;
+}
+
+/* zimbra-hosting.html — feature badges (background: #fff hardcoded) */
+html[data-theme="dark"] .zimbra-feat-badge {
+    background: #1e293b !important;
+    border-color: rgba(212, 56, 13, 0.15) !important;
+    color: #e2e8f0 !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   24. WINDOWS VPS HOSTING PAGE
+══════════════════════════════════════════════════════ */
+
+/* "How We Secure" security cards — background: #fff hardcoded */
+html[data-theme="dark"] .win-security-card {
+    background: #1e293b !important;
+    border-color: rgba(0, 120, 212, 0.15) !important;
+}
+
+html[data-theme="dark"] .win-security-card h3 {
+    color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .win-security-card p {
+    color: #94a3b8 !important;
+}
+
+/* Tech stack cards (feature lists with LIs) — background: #fff */
+html[data-theme="dark"] .win-stack-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .win-stack-card:hover {
+    border-color: rgba(0, 120, 212, 0.25) !important;
+}
+
+html[data-theme="dark"] .win-stack-list li {
+    color: #cbd5e1 !important;
+}
+
+/* Hero visual badges — background: #fff */
+html[data-theme="dark"] .win-status-badge,
+html[data-theme="dark"] .win-tech-badge {
+    background: #1e293b !important;
+    border-color: rgba(0, 120, 212, 0.2) !important;
+}
+
+html[data-theme="dark"] .win-badge-text {
+    color: #e2e8f0 !important;
+}
+
+/* CTA dark band — bg is already #070c14 but text uses color: var(--white)
+   which becomes #1e293b (dark navy) in dark mode → dark text on near-black bg */
+html[data-theme="dark"] .cloud-cta-band.cloud-cta-dark h2,
+html[data-theme="dark"] .cloud-cta-band.cloud-cta-dark h3,
+html[data-theme="dark"] .cloud-cta-band.cloud-cta-dark p {
+    color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .cloud-cta-btn-outline {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}

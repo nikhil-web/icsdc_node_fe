@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    COMPONENT TOKENS
 ══════════════════════════════════════ */
 :root {
@@ -28,7 +28,6 @@
     --c-shadow-btn: 0 4px 20px rgba(30, 94, 255, 0.32);
     --c-shadow-btn-hover: 0 8px 28px rgba(30, 94, 255, 0.42);
 }
-
 
 /* ══════════════════════════════════════
    ISO SECTION
@@ -106,7 +105,7 @@
 }
 
 .business-needs-visual {
-    display: grid;
+    /* display: grid; */
     grid-template-columns: minmax(120px, 190px) minmax(260px, 1fr);
     align-items: start;
     gap: 10px;
@@ -155,7 +154,7 @@
 .business-needs-title {
     max-width: 760px;
     margin: 0 0 18px;
-    font-size: clamp(34px, 3.5vw, 58px);
+    font-size: clamp(34px, 2.0vw, 58px);
     line-height: 1.04;
     letter-spacing: -0.04em;
     font-weight: 800;
@@ -194,8 +193,8 @@
 
 .business-needs-copy h3 {
     margin: 0 0 6px;
-    font-size: clamp(22px, 1.8vw, 32px);
-    line-height: 1.15;
+    font-size: clamp(22px, 1.5vw, 26px);
+    line-height: .8em;
     letter-spacing: -0.02em;
     font-weight: 700;
     color: #555555;
@@ -203,112 +202,14 @@
 
 .business-needs-copy p {
     margin: 0;
-    font-size: clamp(18px, 1.45vw, 24px);
+    font-size: clamp(18px, 1vw, 20px);
     line-height: 1.35;
     letter-spacing: -0.01em;
     color: #616161;
 }
 
-@media (max-width: 900px) {
-    .best-cloud-services {
-        padding: 72px 0;
-    }
 
-    .best-cloud-services-btns {
-        grid-template-columns: 1fr;
-    }
 
-    .business-needs-cloud {
-        padding: 72px 0;
-    }
-
-    .business-needs-cloud-inner {
-        grid-template-columns: 1fr;
-        gap: 48px;
-    }
-
-    .business-needs-visual {
-        max-width: 760px;
-        margin: 0 auto;
-    }
-
-    .business-needs-title {
-        max-width: 640px;
-    }
-}
-
-@media (max-width: 640px) {
-    .best-cloud-services-title {
-        font-size: 28px;
-    }
-
-    .best-cloud-services-subtitle {
-        margin-bottom: 28px;
-    }
-
-    .best-cloud-services-btns {
-        gap: 14px;
-    }
-
-    .best-cloud-services-btns .feature-cards {
-        min-height: 68px;
-        padding: 18px 16px;
-    }
-
-    .business-needs-cloud {
-        padding: 56px 0 64px;
-    }
-
-    .business-needs-visual {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-
-    .business-needs-labels {
-        padding-top: 0;
-        gap: 16px;
-        align-items: flex-start;
-    }
-
-    .business-needs-label {
-        max-width: none;
-        text-align: left;
-        font-size: 20px;
-    }
-
-    .business-needs-image-wrap {
-        max-width: 520px;
-    }
-
-    .business-needs-title {
-        font-size: 30px;
-    }
-
-    .business-needs-item {
-        grid-template-columns: 72px 1fr;
-        gap: 16px;
-        padding: 22px 0;
-    }
-
-    .business-needs-icon {
-        width: 72px;
-        height: 72px;
-    }
-
-    .business-needs-icon svg {
-        width: 40px;
-        height: 40px;
-    }
-
-    .business-needs-copy h3 {
-        font-size: 22px;
-    }
-
-    .business-needs-copy p {
-        font-size: 18px;
-        line-height: 1.45;
-    }
-}
 
 .iso-section {
     background: var(--c-blue);
@@ -321,7 +222,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: 630px;
+    min-height: 700px;
 }
 
 .iso-container {
@@ -361,7 +262,7 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, calc(-50% + 54px));
-    width: 1080px;
+    width: 65%;
     height: 1080px;
     z-index: 1;
     pointer-events: none;
@@ -373,28 +274,12 @@
     object-fit: contain;
 }
 
-@media (max-width: 900px) {
-    .iso-title {
-        font-size: 26px;
-    }
-
-    .iso-subtitle {
-        font-size: 16px;
-    }
-
-    .iso-image-wrapper {
-        width: 600px;
-        height: 600px;
-    }
-}
-
-
 /* ══════════════════════════════════════
    TESTIMONIALS SECTION
 ══════════════════════════════════════ */
 .testi-section {
     padding: 88px 0;
-    background: var(--c-white);
+    background: var(--bg-light, #f8fafc);
 }
 
 .testi-container {
@@ -420,8 +305,8 @@
     overflow: hidden;
     position: relative;
     margin-bottom: 40px;
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
-    mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
+    /* -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%); */
+    /* mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%); */
 }
 
 .testi-grid {
@@ -433,33 +318,36 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 12px 4px 16px;
+    padding: 12px 4px 20px;
 }
 
 .testi-grid::-webkit-scrollbar {
     display: none;
 }
 
-/* IMPROVED: Card hover lift with elevated shadow */
+/* Card — vertical layout, matches site card visual language */
 .testi-card {
-    background: var(--c-white);
-    border: 1px solid var(--c-border-blue);
+    background: #ffffff;
+    border: 1.5px solid var(--c-border-blue);
     border-radius: var(--c-r-lg);
     box-shadow: var(--c-shadow-card);
     display: flex;
-    overflow: hidden;
-    height: 200px;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 28px 28px 24px;
+    min-height: 260px;
+    height: auto;
+    flex: 0 0 380px;
+    scroll-snap-align: start;
     transition: transform var(--c-ease),
         box-shadow var(--c-ease),
         border-color var(--c-ease);
-    flex: 0 0 420px;
-    scroll-snap-align: start;
 }
 
 .testi-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--c-shadow-card-hover);
-    border-color: rgba(26, 86, 219, 0.22);
+    border-color: rgba(26, 86, 219, 0.28);
 }
 
 .testi-card.testi-active {
@@ -467,90 +355,43 @@
     box-shadow: 0 12px 48px rgba(26, 86, 219, 0.18);
 }
 
-.testi-left {
-    width: 38%;
-    background: var(--c-bg-grey);
-    border-right: 1px solid var(--c-border-blue);
-    border-radius: var(--c-r-lg) 0 0 var(--c-r-lg);
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    position: relative;
+/* ── Card body: quote mark + text + stars ── */
+.testi-body {
+    flex: 1;
 }
 
-.testi-avatar {
-    position: absolute;
-    top: 9px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 74px;
-    height: 74px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: linear-gradient(135deg, var(--c-blue) 0%, var(--c-blue-bright) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    /* Subtle ring on hover */
-    transition: box-shadow var(--c-ease), transform var(--c-ease);
+.testi-quote-mark {
+    display: block;
+    font-size: 56px;
+    line-height: 0.8;
+    color: var(--c-blue);
+    opacity: 0.15;
+    margin-bottom: 10px;
+    font-family: Georgia, 'Times New Roman', serif;
 }
 
-.testi-card:hover .testi-avatar {
-    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.20), 0 4px 12px rgba(26, 86, 219, 0.20);
-    transform: translateX(-50%) scale(1.04);
-}
-
-.testi-avatar-initials {
+.testi-quote {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1;
-}
-
-.testi-client-info {
-    margin-top: 90px;
-    text-align: center;
-}
-
-.testi-name {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 400;
     color: var(--c-dark);
-    letter-spacing: -0.01em;
-}
-
-.testi-job {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--c-text-light);
-    margin-top: 2px;
-}
-
-.testi-company {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 10px;
-    font-weight: 400;
-    color: var(--c-text-light);
+    line-height: 1.7;
+    font-style: italic;
+    margin: 0;
 }
 
 .testi-rating {
     display: flex;
     gap: 3px;
-    margin-top: 8px;
+    margin-top: 16px;
+    margin-bottom: 20px;
 }
 
 .testi-star {
     display: inline-block;
-    width: 13px;
-    height: 13px;
+    width: 14px;
+    height: 14px;
     color: #f59e0b;
-    /* Slight stagger on hover via sibling selectors */
     transition: transform 0.15s ease;
 }
 
@@ -579,22 +420,63 @@
     transform: scale(1.2);
 }
 
-.testi-right {
-    flex: 1;
-    padding: 20px 24px;
+/* ── Card footer: avatar + name/job row ── */
+.testi-footer {
     display: flex;
     align-items: center;
+    gap: 14px;
+    padding-top: 18px;
+    border-top: 1px solid var(--c-border-blue);
 }
 
-.testi-quote {
+.testi-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c-blue) 0%, var(--c-blue-bright) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: box-shadow var(--c-ease);
+}
+
+.testi-card:hover .testi-avatar {
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.18);
+}
+
+.testi-avatar-initials {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+}
+
+.testi-client-info {
+    text-align: left;
+}
+
+.testi-name {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 700;
     color: var(--c-dark);
-    line-height: 1.65;
-    font-style: italic;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
 }
 
+.testi-job {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--c-text-light);
+    margin-top: 2px;
+    line-height: 1.4;
+}
+
+/* ── Controls ── */
 .testi-pagination {
     display: flex;
     justify-content: center;
@@ -617,7 +499,6 @@
     transform: scale(1.1);
 }
 
-/* IMPROVED: active dot becomes a pill */
 .testi-dot.testi-dot-active {
     background: var(--c-blue);
     width: 24px;
@@ -635,7 +516,7 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--c-white);
+    background: #ffffff;
     border: 2px solid var(--c-blue);
     color: var(--c-blue);
     font-size: 26px;
@@ -652,7 +533,7 @@
 
 .testi-nav-btn:hover {
     background: var(--c-blue);
-    color: var(--c-white);
+    color: #ffffff;
     transform: scale(1.08);
     box-shadow: 0 4px 16px rgba(26, 86, 219, 0.28);
 }
@@ -660,19 +541,6 @@
 .testi-nav-btn:active {
     transform: scale(0.96);
 }
-
-@media (max-width: 1100px) {
-    .testi-card {
-        flex: 0 0 360px;
-    }
-}
-
-@media (max-width: 640px) {
-    .testi-card {
-        flex: 0 0 88vw;
-    }
-}
-
 
 /* ══════════════════════════════════════
    FAQ SECTION
@@ -861,18 +729,6 @@
     transform: translateY(0);
     box-shadow: var(--c-shadow-btn);
 }
-
-@media (max-width: 1100px) {
-    .faq-container {
-        grid-template-columns: 1fr;
-        gap: 48px;
-    }
-
-    .faq-contact-card {
-        position: static;
-    }
-}
-
 
 /* ══════════════════════════════════════
    CONTACT SECTION
@@ -1117,20 +973,6 @@
     line-height: 1.6;
 }
 
-@media (max-width: 1024px) {
-    .contact-container {
-        grid-template-columns: 1fr;
-        gap: 48px;
-    }
-}
-
-@media (max-width: 600px) {
-    .contact-cards {
-        grid-template-columns: 1fr;
-    }
-}
-
-
 /* ══════════════════════════════════════
    FOOTER — POLISHED
 ══════════════════════════════════════ */
@@ -1281,26 +1123,6 @@
     letter-spacing: 0.01em;
 }
 
-@media (max-width: 1200px) {
-    .footer-container {
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 40px;
-    }
-}
-
-@media (max-width: 768px) {
-    .footer-container {
-        grid-template-columns: 1fr 1fr;
-        gap: 32px;
-    }
-}
-
-@media (max-width: 500px) {
-    .footer-container {
-        grid-template-columns: 1fr;
-    }
-}
-
 
 /* ══════════════════════════════════════
    SHARED PAGE COMPONENTS
@@ -1335,13 +1157,29 @@
 }
 
 @keyframes cloud-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%      { opacity: 0.4; transform: scale(0.7); }
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(0.7);
+    }
 }
 
 @keyframes cloud-badge-float {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-6px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
 }
 
 .cloud-section-label {
@@ -1904,32 +1742,114 @@
 }
 
 /* ── Shared Cloud Responsive ── */
-@media (max-width: 1024px) {
-    .cloud-pricing-grid {
-        grid-template-columns: 1fr;
-        max-width: 480px;
-        margin-left: auto;
-        margin-right: auto;
-    }
 
-    .cloud-plan-card.cloud-featured {
-        transform: translateY(0);
-    }
-
-    .cloud-power-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .cloud-why-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .cloud-use-grid {
-        grid-template-columns: repeat(2, 1fr);
+@media (max-width: 1279px) {
+    .footer-container {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 40px;
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 479px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+
+    .cloud-why-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    .best-cloud-services-title {
+        font-size: 28px;
+    }
+
+    .best-cloud-services-subtitle {
+        margin-bottom: 28px;
+    }
+
+    .best-cloud-services-btns {
+        gap: 14px;
+    }
+
+    .best-cloud-services-btns .feature-cards {
+        min-height: 68px;
+        padding: 18px 16px;
+    }
+
+    .business-needs-cloud {
+        padding: 56px 0 64px;
+    }
+
+    .business-needs-visual {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .business-needs-labels {
+        padding-top: 0;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    .business-needs-label {
+        max-width: none;
+        text-align: left;
+        font-size: 20px;
+    }
+
+    .business-needs-image-wrap {
+        max-width: 520px;
+    }
+
+    .business-needs-title {
+        font-size: 30px;
+    }
+
+    .business-needs-item {
+        grid-template-columns: 72px 1fr;
+        gap: 16px;
+        padding: 22px 0;
+    }
+
+    .business-needs-icon {
+        width: 72px;
+        height: 72px;
+    }
+
+    .business-needs-icon svg {
+        width: 40px;
+        height: 40px;
+    }
+
+    .business-needs-copy h3 {
+        font-size: 22px;
+    }
+
+    .business-needs-copy p {
+        font-size: 18px;
+        line-height: 1.45;
+    }
+
+    .testi-card {
+        flex: 0 0 88vw;
+        padding: 22px 20px 18px;
+    }
+
+    .testi-section {
+        padding: 56px 0;
+    }
+
+    .contact-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+    }
+
     .cloud-power-grid,
     .cloud-use-grid {
         grid-template-columns: 1fr;
@@ -1951,8 +1871,84 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1023px) {
+    .best-cloud-services {
+        padding: 72px 0;
+    }
+
+    .best-cloud-services-btns {
+        grid-template-columns: 1fr;
+    }
+
+    .business-needs-cloud {
+        padding: 72px 0;
+    }
+
+    .business-needs-cloud-inner {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .business-needs-visual {
+        max-width: 760px;
+        margin: 0 auto;
+    }
+
+    .business-needs-title {
+        max-width: 640px;
+    }
+
+    .iso-title {
+        font-size: 26px;
+    }
+
+    .iso-subtitle {
+        font-size: 16px;
+    }
+
+    .iso-image-wrapper {
+        width: 100%;
+        height: 600px;
+    }
+
+    .testi-card {
+        flex: 0 0 340px;
+    }
+
+    .faq-container {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .faq-contact-card {
+        position: static;
+    }
+
+    .contact-container {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .cloud-pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cloud-plan-card.cloud-featured {
+        transform: translateY(0);
+    }
+
+    .cloud-power-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .cloud-why-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cloud-use-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

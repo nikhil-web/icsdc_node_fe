@@ -234,12 +234,34 @@ export function populateHero(section, data) {
     if (btns.length >= 1 && data.ctaPrimary) {
         // Try second button first (dedicated-server pattern), fall back to first
         var primaryBtn = btns.length >= 2 ? btns[1] : btns[0];
-        primaryBtn.innerHTML = data.ctaPrimary.text + ' &rarr;';
+        primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' &rarr;';
         if (data.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + data.ctaPrimary.link + "'");
     }
     if (btns.length >= 2 && data.ctaSecondary) {
-        btns[0].textContent = data.ctaSecondary.text;
+        btns[0].textContent = data.ctaSecondary.text || '';
         if (data.ctaSecondary.link) btns[0].setAttribute('onclick', "window.location.href='" + data.ctaSecondary.link + "'");
+    }
+
+    // Hero Image — set from Strapi common.image component
+    if (data.heroImage && data.heroImage.image) {
+        var heroRight = section.querySelector('.hero-right');
+        var heroImg = heroRight && heroRight.querySelector('.hero-right-image');
+        if (heroImg) {
+            var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
+            var _m = data.heroImage.image;
+            var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)
+                ? (_m.formats.large || _m.formats.medium || _m.formats.small).url
+                : _m.url) || '';
+            if (_url && !_url.startsWith('http')) _url = _base + _url;
+            if (_url) {
+                heroImg.src = _url;
+                heroImg.style.display = '';
+                // Hide the CSS decorative visual so the CMS image shows cleanly
+                Array.from(heroRight.children).forEach(function (child) {
+                    if (!child.classList.contains('hero-right-image')) child.style.display = 'none';
+                });
+            }
+        }
     }
 }
 
@@ -316,11 +338,11 @@ export function populateCtaBand(selector, cta) {
         var secondaryBtn = btns.querySelector('.cloud-cta-btn-outline') || btns.querySelector('.ds-cta-btn-outline');
 
         if (primaryBtn && cta.ctaPrimary) {
-            primaryBtn.innerHTML = cta.ctaPrimary.text + ' &rarr;';
+            primaryBtn.innerHTML = (cta.ctaPrimary.text || '') + ' &rarr;';
             if (cta.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
         }
         if (secondaryBtn && cta.ctaSecondary) {
-            secondaryBtn.textContent = cta.ctaSecondary.text;
+            secondaryBtn.textContent = cta.ctaSecondary.text || '';
             if (cta.ctaSecondary.link) secondaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
         }
     }

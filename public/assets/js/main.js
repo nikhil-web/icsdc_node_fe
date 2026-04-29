@@ -28,8 +28,10 @@ function initNav(menuData) {
     const CMS_MENUS = (menuData?.data?.menus ?? []).map(menu => ({
         id: String(menu.id),
         label: menu.lebel,
+        directLink: menu.directLink || '',
+        isHighlighted: !!menu.isHighlighted,
         icon: menu.icon,
-        desc: menu.desc,
+        desc: menu.desc || menu.description || '',
         cols: menu.cols,
         items: (menu.items || []).map(item => ({
             icon: item.icon,
@@ -50,9 +52,18 @@ function initNav(menuData) {
         })),
     }));
 
-    function buildNavLinkHTML(menu) {
+    function buildNavLinkHTML(menu, mobile = false) {
+        const hlClass = menu.isHighlighted ? ' nav-link--highlight' : '';
+        // Direct link — renders as a plain anchor, no dropdown
+        if (menu.directLink) {
+            return `<a class="nav-link nav-link--direct${hlClass}" href="${menu.directLink}">${menu.label}</a>`;
+        }
+        // Dropdown button
+        const onclick = mobile
+            ? `openDropdown('${menu.id}', this); closeMobileMenu()`
+            : `openDropdown('${menu.id}', this)`;
         return `
-            <button class="nav-link" onclick="openDropdown('${menu.id}', this)">
+            <button class="nav-link${hlClass}" onclick="${onclick}">
                 ${menu.label}
                 <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <polyline points="6 9 12 15 18 9"/>
@@ -64,7 +75,7 @@ function initNav(menuData) {
         CMS_MENUS.forEach(menu => {
             const li = document.createElement("li");
             li.className = "nav-item";
-            li.innerHTML = buildNavLinkHTML(menu);
+            li.innerHTML = buildNavLinkHTML(menu, false);
             navLinks.appendChild(li);
         });
     });
@@ -73,13 +84,7 @@ function initNav(menuData) {
         CMS_MENUS.forEach(menu => {
             const li = document.createElement("li");
             li.className = "nav-item";
-            li.innerHTML = `
-                <button class="nav-link" onclick="openDropdown('${menu.id}', this); closeMobileMenu()">
-                    ${menu.label}
-                    <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <polyline points="6 9 12 15 18 9"/>
-                    </svg>
-                </button>`;
+            li.innerHTML = buildNavLinkHTML(menu, true);
             mobileNav.appendChild(li);
         });
     });
@@ -331,6 +336,76 @@ async function init() {
     }
 
     initHamburger();
+    initThemeToggle();
 }
 
 init();
+
+// ══════════════════════════════════════════════════════
+//  THEME TOGGLE
+// ══════════════════════════════════════════════════════
+function initThemeToggle() {
+    var MOON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    var SUN_SVG  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+
+    function getTheme() {
+        return document.documentElement.getAttribute('data-theme') || 'light';
+    }
+
+    // ── Desktop nav button ──────────────────────────────
+    var btn = document.createElement('button');
+    btn.id = 'theme-toggle';
+    btn.setAttribute('aria-label', 'Toggle dark mode');
+    btn.title = 'Toggle dark / light mode';
+
+    // ── Mobile menu row ─────────────────────────────────
+    var mobileRow = document.createElement('div');
+    mobileRow.className = 'mobile-theme-row';
+
+    var mobileLabel = document.createElement('span');
+    mobileLabel.className = 'mobile-theme-label';
+    mobileLabel.textContent = 'Dark Mode';
+
+    var mobileBtn = document.createElement('button');
+    mobileBtn.className = 'mobile-theme-toggle';
+    mobileBtn.setAttribute('aria-label', 'Toggle dark mode');
+    mobileBtn.type = 'button';
+
+    mobileRow.appendChild(mobileLabel);
+    mobileRow.appendChild(mobileBtn);
+
+    // ── Shared apply function — syncs both buttons ──────
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('icsdc-theme', theme);
+        var isDark = theme === 'dark';
+        var icon   = isDark ? SUN_SVG : MOON_SVG;
+        var label  = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+        btn.innerHTML     = icon;
+        mobileBtn.innerHTML = icon;
+        btn.setAttribute('aria-label', label);
+        mobileBtn.setAttribute('aria-label', label);
+        mobileLabel.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+    }
+
+    applyTheme(getTheme());
+
+    btn.addEventListener('click', function () {
+        applyTheme(getTheme() === 'dark' ? 'light' : 'dark');
+    });
+    mobileBtn.addEventListener('click', function () {
+        applyTheme(getTheme() === 'dark' ? 'light' : 'dark');
+    });
+
+    // Insert desktop button before login in nav-inner
+    var navInner = document.querySelector('.nav-inner');
+    var loginBtn = navInner && navInner.querySelector('.btn-login');
+    if (loginBtn) navInner.insertBefore(btn, loginBtn);
+    else if (navInner) navInner.appendChild(btn);
+
+    // Insert mobile row inside mobile-menu, before the mobile login button
+    var mobileMenu = document.getElementById('mobile-menu');
+    var mobileLoginBtn = mobileMenu && mobileMenu.querySelector('.mobile-login-btn');
+    if (mobileLoginBtn) mobileMenu.insertBefore(mobileRow, mobileLoginBtn);
+    else if (mobileMenu) mobileMenu.appendChild(mobileRow);
+}

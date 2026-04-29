@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="assets/js/theme-init.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAM &amp; MFA Security Solutions for Enterprises | ICSDC</title>
+  <meta name="description"
+    content="Protect privileged accounts with ICSDC PAM &amp; MFA. Control, monitor, and secure high-risk access with zero-trust security, session auditing, and least-privilege enforcement.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/pam-mfa.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="pam-eyebrow">&#128272; PAM &amp; MFA Security</div>
+        <h1 class="hero-title" id="pam-hero-title">Privileged Access Management and Multi-Factor Authentication Built
+          for Zero-Trust Security</h1>
+        <p class="hero-sub" id="pam-hero-subtitle">Because One Compromised Login Can Cost Everything - PAM + MFA
+          Security</p>
+        <p class="hero-desc" id="pam-hero-desc">Privileged accounts are prime targets for cyberattacks. ICSDC's PAM and
+          MFA solution protects critical access by verifying every login and tightly controlling privileged permissions
+          - helping you reduce risk, prevent credential misuse, and enforce zero-trust security across your environment.
+        </p>
+        <div class="hero-btns">
+          <button class="btn-primary" id="pam-cta-primary" onclick="location.href='#contact'">Secure Privileged Access
+            with ICSDC PAM &amp; MFA &rarr;</button>
+          <button class="btn-outline" id="pam-cta-secondary" onclick="location.href='#contact'">Get a Custom
+            Quote</button>
+        </div>
+      </div>
+      <div class="hero-right">
+                <img class="hero-right-image" alt="" style="display:none">
+        <div class="pam-hero-visual">
+          <div class="pam-top-badge">&#128272; ICSDC PAM &amp; MFA Security</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#f5f3ff" stroke="rgba(124,58,237,0.12)"
+              stroke-width="1" />
+            <!-- Central shield body -->
+            <path d="M150 28 L205 52 L205 115 Q205 162 150 188 Q95 162 95 115 L95 52 Z" fill="white"
+              stroke="rgba(124,58,237,0.28)" stroke-width="2" />
+            <path d="M150 36 L197 57 L197 115 Q197 154 150 178 Q103 154 103 115 L103 57 Z" fill="#ede9fe"
+              stroke="none" />
+            <!-- Lock body in shield -->
+            <rect x="136" y="100" width="28" height="20" rx="4" fill="none" stroke="#7c3aed" stroke-width="2.5" />
+            <path d="M141 100 L141 94 Q141 86 150 86 Q159 86 159 94 L159 100" fill="none" stroke="#7c3aed"
+              stroke-width="2.5" stroke-linecap="round" />
+            <circle cx="150" cy="110" r="3" fill="#7c3aed" />
+            <!-- MFA badge top-right -->
+            <rect x="198" y="40" width="52" height="22" rx="8" fill="#7c3aed" opacity="0.90" />
+            <text x="224" y="55" font-size="8" fill="white" text-anchor="middle" font-weight="700">MFA ON</text>
+            <!-- User nodes left -->
+            <circle cx="55" cy="78" r="10" fill="white" stroke="rgba(124,58,237,0.30)" stroke-width="1.5" />
+            <text x="55" y="82" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">ADM</text>
+            <circle cx="55" cy="132" r="10" fill="white" stroke="rgba(124,58,237,0.30)" stroke-width="1.5" />
+            <text x="55" y="136" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">SVC</text>
+            <!-- Connection lines left -->
+            <line x1="65" y1="83" x2="95" y2="90" stroke="rgba(124,58,237,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <line x1="65" y1="132" x2="95" y2="118" stroke="rgba(124,58,237,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <!-- System nodes right -->
+            <circle cx="245" cy="73" r="10" fill="white" stroke="rgba(124,58,237,0.30)" stroke-width="1.5" />
+            <text x="245" y="77" font-size="6" fill="#6d28d9" text-anchor="middle" font-weight="700">DB</text>
+            <circle cx="245" cy="113" r="10" fill="#f5f3ff" stroke="rgba(124,58,237,0.45)" stroke-width="1.5" />
+            <text x="245" y="117" font-size="6" fill="#6d28d9" text-anchor="middle" font-weight="700">SRV</text>
+            <circle cx="245" cy="153" r="10" fill="white" stroke="rgba(124,58,237,0.30)" stroke-width="1.5" />
+            <text x="245" y="157" font-size="6" fill="#6d28d9" text-anchor="middle" font-weight="700">CLD</text>
+            <!-- Connection lines right -->
+            <line x1="235" y1="78" x2="205" y2="90" stroke="rgba(124,58,237,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <line x1="235" y1="118" x2="205" y2="115" stroke="rgba(124,58,237,0.55)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <line x1="235" y1="148" x2="205" y2="130" stroke="rgba(124,58,237,0.35)" stroke-width="1.5"
+              stroke-dasharray="4 3" />
+            <!-- Verified access indicator -->
+            <circle cx="222" cy="116" r="7" fill="#7c3aed" />
+            <line x1="219" y1="113" x2="225" y2="119" stroke="white" stroke-width="2" stroke-linecap="round" />
+            <line x1="225" y1="113" x2="219" y2="119" stroke="white" stroke-width="2" stroke-linecap="round" />
+            <!-- Status boxes at bottom -->
+            <rect x="38" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(124,58,237,0.22)"
+              stroke-width="1.2" />
+            <text x="64" y="168" font-size="6" fill="#7c3aed" text-anchor="middle" font-weight="600">PAM</text>
+            <text x="64" y="178" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">&#10003;
+              Active</text>
+            <rect x="98" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(124,58,237,0.22)"
+              stroke-width="1.2" />
+            <text x="124" y="168" font-size="6" fill="#7c3aed" text-anchor="middle" font-weight="600">MFA</text>
+            <text x="124" y="178" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">&#10003;
+              Enforced</text>
+            <rect x="158" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(124,58,237,0.22)"
+              stroke-width="1.2" />
+            <text x="184" y="168" font-size="6" fill="#7c3aed" text-anchor="middle" font-weight="600">Session</text>
+            <text x="184" y="178" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">&#10003;
+              Logged</text>
+            <rect x="218" y="158" width="52" height="28" rx="6" fill="white" stroke="rgba(124,58,237,0.22)"
+              stroke-width="1.2" />
+            <text x="244" y="168" font-size="6" fill="#7c3aed" text-anchor="middle" font-weight="600">Vault</text>
+            <text x="244" y="178" font-size="7" fill="#7c3aed" text-anchor="middle" font-weight="700">&#10003;
+              Secured</text>
+            <!-- Corner accent dots -->
+            <circle cx="28" cy="28" r="4" fill="#ddd6fe" opacity="0.7" />
+            <circle cx="272" cy="28" r="4" fill="#ddd6fe" opacity="0.7" />
+            <circle cx="28" cy="192" r="3" fill="#c4b5fd" opacity="0.5" />
+            <circle cx="272" cy="192" r="3" fill="#c4b5fd" opacity="0.5" />
+          </svg>
+          <div class="pam-status-badge">
+            <div class="pam-dot"></div>
+            <div>
+              <div class="pam-bt">Zero-Trust Active</div>
+              <div class="pam-bs">All Sessions Monitored</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — PILLARS (4 CARDS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger id="pam-pillars-grid">
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Privileged Account Control</h3>
+          <p>Secure and manage access to administrator and high-risk accounts with role-based permissions and
+            least-privilege enforcement.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>Multi-Factor Authentication</h3>
+          <p>Add strong identity verification across all access points to block unauthorized logins, even if credentials
+            are compromised.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Session Monitoring &amp; Auditing</h3>
+          <p>Track, record, and audit privileged sessions in real time to detect suspicious activity and maintain
+            compliance.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+            </svg></div>
+          <h3>Secure Credential Vaulting</h3>
+          <p>Store and rotate privileged credentials securely to eliminate hard-coded passwords and reduce exposure
+            risks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — WHY PAM (6 CARDS) ════ -->
+  <section id="pam-why" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" id="pam-why-label" data-animate="fade-up">WHY IT MATTERS</span>
+      <h2 class="title" id="pam-why-title" data-animate="fade-up">Why Do You Need Privileged Access Management (PAM)?
+      </h2>
+
+      <div class="cloud-power-grid" data-stagger id="pam-why-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg></div>
+          <h3>Prime Target Accounts</h3>
+          <p>Privileged accounts have unrestricted access to critical systems, making them a top target for
+            cyberattacks.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg></div>
+          <h3>Devastating Breach Impact</h3>
+          <p>A single compromised admin credential can lead to data breaches, ransomware, or complete service
+            disruption.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07" />
+            </svg></div>
+          <h3>Centralized Control</h3>
+          <p>ICSDC PAM helps you control, monitor, and secure high-risk accounts across servers, applications, and cloud
+            environments.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 11 12 14 22 4" />
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+            </svg></div>
+          <h3>Least-Privilege Enforcement</h3>
+          <p>Enforce least-privilege access so users get only what they need - nothing more.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg></div>
+          <h3>Full Session Visibility</h3>
+          <p>Track and audit every privileged session to maintain visibility, accountability, and compliance.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Comprehensive Coverage</h3>
+          <p>Protect internal teams, third-party vendors, and DevOps access without slowing operations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band" id="pam-cta1">
+    <div class="cloud-cta-inner">
+      <h2>Secure Privileged Access with ICSDC PAM</h2>
+      <p></p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='#contact'">Get Started &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='#how-it-works'">Learn More</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — CONTROL SECTION (7 CARDS) ════ -->
+  <section id="pam-control" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" id="pam-control-label" data-animate="fade-up">WHAT WE DELIVER</span>
+      <h2 class="title" id="pam-control-title" data-animate="fade-up">Control, Monitor, and Secure Privileged Access
+      </h2>
+
+      <div class="cloud-power-grid pam-control-grid" data-stagger id="pam-control-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <polyline points="9 12 11 14 15 10" />
+            </svg></div>
+          <h3>Prevents unauthorized privileged access</h3>
+          <p>Ensures that only verified and approved users can access administrative accounts, blocking attackers even
+            if credentials are exposed or reused.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="16" />
+              <line x1="8" y1="12" x2="16" y2="12" />
+            </svg></div>
+          <h3>Reduces the overall attack surface</h3>
+          <p>Enforces least-privilege policies so users receive only the permissions required for their role, limiting
+            the impact of compromised accounts.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg></div>
+          <h3>Protects against insider threats</h3>
+          <p>Monitors and controls privileged activity from employees, contractors, and vendors, reducing both
+            accidental misuse and malicious actions.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>Strengthens Zero-Trust security enforcement</h3>
+          <p>Applies multi-factor authentication and access validation for every privileged login, regardless of user
+            location or network trust level.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Improves visibility and accountability</h3>
+          <p>Provides detailed logs and session recordings, allowing security teams to trace actions, investigate
+            incidents, and respond faster.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 11 12 14 22 4" />
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+            </svg></div>
+          <h3>Supports compliance and audit readiness</h3>
+          <p>Maintains clear access records and approval workflows to help meet regulatory requirements and simplify
+            internal and external audits.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z" />
+            </svg></div>
+          <h3>Secures cloud, hybrid, and DevOps environments</h3>
+          <p>Delivers consistent privileged access controls across on-prem systems, cloud workloads, and CI/CD pipelines
+            without disrupting operations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — WHY MATTERS NARRATIVE ════ -->
+  <section id="pam-matters" class="section pam-matters-section">
+    <div class="container">
+      <div class="pam-matters-inner">
+        <div class="pam-matters-label-col">
+          <h2 class="title" id="pam-matters-title" data-animate="fade-up">Why Securing Privileged Accounts Matters</h2>
+          <p class="pam-matters-desc" id="pam-matters-desc" data-animate="fade-up">Privileged accounts have direct
+            access to critical systems, data, and infrastructure. When those accounts are compromised, the consequences
+            can be severe. ICSDC PAM ensures that privileged access is controlled, monitored, and audited at every step.
+          </p>
+        </div>
+        <div class="pam-matters-steps-col">
+          <ol class="pam-numbered-list" id="pam-matters-list">
+            <li class="pam-numbered-item">
+              <div class="pam-numbered-badge">1</div>
+              <div class="pam-numbered-body">
+                <h3>Privileged Account Governance</h3>
+                <p>ICSDC PAM manages the full lifecycle of privileged credentials - from secure storage and regular
+                  password rotation to continuous access monitoring and detailed session tracking. Every privileged
+                  action is logged, ensuring transparency, accountability, and audit readiness.</p>
+              </div>
+            </li>
+            <li class="pam-numbered-item">
+              <div class="pam-numbered-badge">2</div>
+              <div class="pam-numbered-body">
+                <h3>Endpoint Security with Least-Privilege Access</h3>
+                <p>Identify systems and users with elevated rights and restrict access based on role and necessity.
+                  ICSDC PAM enforces least-privilege principles to ensure administrative access is granted only to
+                  approved applications and endpoints.</p>
+              </div>
+            </li>
+            <li class="pam-numbered-item">
+              <div class="pam-numbered-badge">3</div>
+              <div class="pam-numbered-body">
+                <h3>Protecting DevOps and Cloud Workflows</h3>
+                <p>Secure privileged access to DevOps tools, CI/CD pipelines, and cloud environments with centralized
+                  secrets management. ICSDC PAM safeguards automation processes while maintaining complete visibility
+                  and compliance through detailed access logs.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — PRICING ════ -->
+  <section id="pam-pricing" class="section cloud-power-section pam-pricing-section">
+    <div class="container">
+      <h2 class="title" id="pam-pricing-title" data-animate="fade-up">Pricing Built Around Your Access Security Needs
+      </h2>
+      <p class="pam-pricing-desc" id="pam-pricing-desc" data-animate="fade-up">Every organization has different
+        privileged access requirements. ICSDC PAM &amp; MFA pricing is flexible and based on your infrastructure size,
+        number of privileged users, and security scope - ensuring you pay only for what you actually need.</p>
+      <div class="pam-pricing-cta" data-animate="fade-up">
+        <button class="btn-primary" onclick="location.href='#contact'">Get a Custom Quote &rarr;</button>
+        <button class="btn-outline" onclick="location.href='#contact'">Talk to an Expert</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 2 ════ -->
+  <section class="cloud-cta-band" id="pam-cta2">
+    <div class="cloud-cta-inner">
+      <h2>Get a Custom PAM &amp; MFA Quote</h2>
+      <p></p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='#contact'">Request a Quote &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='#contact'">Talk to an Expert</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — HOW IT WORKS (6 STEPS) ════ -->
+  <section id="how-it-works" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" id="pam-process-label" data-animate="fade-up">THE PROCESS</span>
+      <h2 class="title" id="pam-process-title" data-animate="fade-up">How ICSDC PAM / MFA Works</h2>
+
+      <div class="pam-steps-grid" data-stagger id="pam-steps-list">
+        <div class="pam-step-card">
+          <div class="pam-step-num">1</div>
+          <h3>Identify Privileged Users and Systems</h3>
+          <p>ICSDC PAM discovers and maps all privileged accounts across servers, applications, cloud platforms, and
+            DevOps tools.</p>
+        </div>
+        <div class="pam-step-card">
+          <div class="pam-step-num">2</div>
+          <h3>Secure and Store Credentials</h3>
+          <p>Privileged credentials are securely vaulted, encrypted, and removed from hard-coded files or shared access
+            points.</p>
+        </div>
+        <div class="pam-step-card">
+          <div class="pam-step-num">3</div>
+          <h3>Verify Access with MFA</h3>
+          <p>Every privileged login is validated using multi-factor authentication to ensure only authorized users gain
+            access.</p>
+        </div>
+        <div class="pam-step-card">
+          <div class="pam-step-num">4</div>
+          <h3>Grant Role-Based, Least-Privilege Access</h3>
+          <p>Access is approved based on predefined roles and policies, allowing users only the permissions required for
+            their tasks.</p>
+        </div>
+        <div class="pam-step-card">
+          <div class="pam-step-num">5</div>
+          <h3>Monitor and Record Privileged Sessions</h3>
+          <p>All privileged activity is monitored and logged in real time, providing full visibility and accountability.
+          </p>
+        </div>
+        <div class="pam-step-card">
+          <div class="pam-step-num">6</div>
+          <h3>Audit and Enforce Security Policies</h3>
+          <p>Detailed logs and session data help security teams audit access, detect anomalies, and maintain compliance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — WHY CHOOSE ICSDC (6 CARDS) ════ -->
+  <section id="pam-why-choose" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" id="pam-why-choose-label" data-animate="fade-up">WHY ICSDC</span>
+      <h2 class="title" id="pam-why-choose-title" data-animate="fade-up">Why Choose ICSDC PAM / MFA</h2>
+
+      <div class="cloud-power-grid" data-stagger id="pam-why-choose-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <polyline points="9 12 11 14 15 10" />
+            </svg></div>
+          <h3>Built for real privileged access risks</h3>
+          <p>ICSDC PAM / MFA focuses on securing high-risk accounts that attackers actually target - administrators,
+            service accounts, and third-party access.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg></div>
+          <h3>PAM and MFA working together, not separately</h3>
+          <p>Privileged access control combined with strong authentication ensures that access is both verified and
+            restricted at every step.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg></div>
+          <h3>Designed for complex IT environments</h3>
+          <p>Works seamlessly across on-premise systems, cloud platforms, hybrid infrastructure, and DevOps pipelines.
+          </p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 11 12 14 22 4" />
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+            </svg></div>
+          <h3>Least-privilege by default</h3>
+          <p>Access is granted strictly based on role and task, helping you reduce over-permissioning without impacting
+            productivity.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>Full visibility and audit readiness</h3>
+          <p>Every privileged session is logged and traceable, making investigations, audits, and compliance simpler and
+            faster.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg></div>
+          <h3>Scales as your security needs grow</h3>
+          <p>Whether you're securing a few admin accounts or a large enterprise environment, ICSDC PAM / MFA scales
+            without adding complexity.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — TESTIMONIALS ════ -->
+  <section id="pam-testi" class="testi-section" aria-labelledby="pam-testi-heading">
+    <div class="testi-container">
+      <h2 id="pam-testi-heading" class="testi-title">What Our Clients Say About ICSDC PAM &amp; MFA</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 10 — FAQ ════ -->
+  <section class="faq-section" id="pam-faq" aria-labelledby="pam-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="pam-faq-heading" class="faq-title">FAQs about ICSDC PAM &amp; MFA Security</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our PAM &amp; MFA Security Team</h3>
+        <p class="faq-contact-desc">Our PAM &amp; MFA specialists are available to design a privileged access security
+          plan tailored to your infrastructure, compliance needs, and risk profile.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark" id="pam-cta3">
+    <div class="cloud-cta-inner">
+      <h2>Secure Privileged Access Before It Becomes a Risk</h2>
+      <p>Take control of privileged identities, enforce strong authentication, and protect your critical systems with
+        ICSDC PAM &amp; MFA. Let our security experts help you design an access strategy that fits your infrastructure
+        and compliance needs.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='#contact'">Get Started with ICSDC PAM &amp; MFA
+          &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='#contact'">Request a Demo</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +1 5589 55488 55</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com"
+                class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+              </svg>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path
+                  d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                </path>
+              </svg>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram" target="_blank"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p id="footer-year-text">&#169; Copyright <span data-strapi-year id="footer-year"></span> <span
+          data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script>
+    STRAPI_URL = "http://localhost:1338";
+    TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
+  </script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/pam-mfa.js"></script>
+
+</body>
+
+</html>

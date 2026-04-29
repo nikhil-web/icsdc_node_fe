@@ -28,7 +28,7 @@ import { getAzureCloudHostingPage } from './services/contentService.js';
             return '<div class="' + cardClass + '">' +
                 '<div class="' + iconClass + '">' + resolveIcon(card.icon) + '</div>' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.description || '') + '</p>' +
+                '<p>' + (card.description || card.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -74,7 +74,7 @@ import { getAzureCloudHostingPage } from './services/contentService.js';
                 '<div class="azure-step-num" aria-hidden="true">' + (step.number || index + 1) + '</div>' +
                 '<div class="azure-step-content">' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || '') + '</p>' +
+                '<p>' + (step.description || step.desc || '') + '</p>' +
                 '</div>' +
                 '</div>';
         }).join('');

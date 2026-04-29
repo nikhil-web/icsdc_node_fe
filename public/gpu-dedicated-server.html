@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <script src="assets/js/theme-init.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ICSDC GPU Dedicated Servers | Bare-Metal GPU Power</title>
@@ -13,6 +14,7 @@
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/cloud-hosting.css">
   <link rel="stylesheet" href="assets/css/gpu-dedicated-server.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
 </head>
 
 <body>
@@ -83,6 +85,7 @@
         </div>
       </div>
       <div class="hero-right">
+                <img class="hero-right-image" alt="" style="display:none">
         <div class="gds-hero-visual">
           <div class="gds-top-badge">&#9881; Bare-Metal GPU</div>
           <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -154,7 +157,8 @@
             <line x1="220" y1="125" x2="230" y2="125" stroke="rgba(225,29,72,0.30)" stroke-width="1.2"
               stroke-dasharray="3 2" />
             <!-- Bottom label -->
-            <text x="150" y="180" font-size="8" fill="#e11d48" text-anchor="middle" font-weight="600">NVIDIA H100 · A100 · L40S · GH200</text>
+            <text x="150" y="180" font-size="8" fill="#e11d48" text-anchor="middle" font-weight="600">NVIDIA H100 · A100
+              · L40S · GH200</text>
             <!-- Pulse ring -->
             <circle cx="150" cy="105" r="22" stroke="rgba(225,29,72,0.18)" stroke-width="1" fill="none">
               <animate attributeName="r" values="18;28;18" dur="3s" repeatCount="indefinite" />
@@ -188,8 +192,10 @@
               height="22">
               <rect x="4" y="4" width="16" height="16" rx="2" />
               <rect x="9" y="9" width="6" height="6" />
-              <line x1="9" y1="1" x2="9" y2="4" /><line x1="15" y1="1" x2="15" y2="4" />
-              <line x1="9" y1="20" x2="9" y2="23" /><line x1="15" y1="20" x2="15" y2="23" />
+              <line x1="9" y1="1" x2="9" y2="4" />
+              <line x1="15" y1="1" x2="15" y2="4" />
+              <line x1="9" y1="20" x2="9" y2="23" />
+              <line x1="15" y1="20" x2="15" y2="23" />
             </svg></div>
           <h3>Dedicated GPU Compute Power</h3>
           <p>Access full GPU resources exclusively allocated to your workloads, ensuring consistent performance without
@@ -311,7 +317,8 @@
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="2" y="2" width="20" height="8" rx="2" />
               <rect x="2" y="14" width="20" height="8" rx="2" />
-              <circle cx="6" cy="6" r="1.5" /><circle cx="6" cy="18" r="1.5" />
+              <circle cx="6" cy="6" r="1.5" />
+              <circle cx="6" cy="18" r="1.5" />
             </svg></div>
           <h3>True Bare-Metal GPU Performance</h3>
           <p>Physical hardware with no virtualization layers. Your workloads get uninterrupted GPU access with zero
@@ -392,10 +399,12 @@
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
             </svg></div>
           <h3>Ready-to-Use GPU Software Stack</h3>
-          <p>Optional pre-installed NVIDIA drivers and CUDA libraries let you start immediately with TensorFlow, PyTorch,
+          <p>Optional pre-installed NVIDIA drivers and CUDA libraries let you start immediately with TensorFlow,
+            PyTorch,
             and other frameworks.</p>
         </div>
         <div class="cloud-power-card">
@@ -439,7 +448,8 @@
         </div>
         <div class="cloud-use-card">
           <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="23 7 16 12 23 17 23 7" /><rect x="1" y="5" width="15" height="14" rx="2" />
+              <polygon points="23 7 16 12 23 17 23 7" />
+              <rect x="1" y="5" width="15" height="14" rx="2" />
             </svg></div>
           <h3>3D Rendering &amp; Visual Workloads</h3>
           <p>Reduce rendering times for complex scenes with GPU-accelerated engines. High-resolution textures, lighting,
@@ -472,7 +482,8 @@
         </div>
         <div class="cloud-use-card">
           <div class="cloud-use-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+              <path
+                d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
             </svg></div>
           <h3>Financial Analytics &amp; Fraud Detection</h3>
           <p>GPU-accelerated models analyse large transaction datasets in near real time for fraud detection, risk
@@ -511,7 +522,8 @@
               <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
             </svg></div>
           <h3>Reliable 99.9% Uptime Commitment</h3>
-          <p>Redundant power, network connectivity, and continuous monitoring help ensure workloads remain accessible and
+          <p>Redundant power, network connectivity, and continuous monitoring help ensure workloads remain accessible
+            and
             operational.</p>
         </div>
         <div class="cloud-power-card">
@@ -533,8 +545,7 @@
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="3" />
-              <path
-                d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14M12 2v2M12 20v2M2 12h2M20 12h2" />
+              <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14M12 2v2M12 20v2M2 12h2M20 12h2" />
             </svg></div>
           <h3>Balanced Performance — No Bottlenecks</h3>
           <p>GPU servers are configured to maintain an effective balance between GPU power, CPU capability, memory, and
@@ -710,8 +721,8 @@
                 </path>
               </svg>
             </a>
-            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram"
-              target="_blank" rel="noopener noreferrer">
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram" target="_blank"
+              rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                 <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
@@ -747,7 +758,7 @@
 
   <!-- Strapi config -->
   <script>
-    STRAPI_URL = "http://13.126.9.248:1337";
+    STRAPI_URL = "http://localhost:1338";
     TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
   </script>
   <script src="assets/js/main.js" type="module"></script>

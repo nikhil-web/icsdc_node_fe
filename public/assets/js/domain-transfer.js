@@ -31,7 +31,7 @@ import {
             return '<div class="dt-tip-card">' +
                 '<div class="dt-tip-num">' + (tip.number || (i + 1)) + '</div>' +
                 '<h3>' + (tip.title || '') + '</h3>' +
-                '<p>' + (tip.description || '') + '</p>' +
+                '<p>' + (tip.description || tip.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -46,7 +46,7 @@ import {
             return '<div class="dt-highlight-card" data-animate="fade-up">' +
                 '<div class="dt-highlight-icon">' + (card.icon || '') + '</div>' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.description || '') + '</p>' +
+                '<p>' + (card.description || card.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -60,7 +60,7 @@ import {
         grid.innerHTML = sorted.map(function (card) {
             return '<div class="dt-related-card" data-animate="fade-up">' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.description || '') + '</p>' +
+                '<p>' + (card.description || card.desc || '') + '</p>' +
                 '<a href="' + (card.btnUrl || '#') + '" class="dt-related-btn">' + (card.btnLabel || 'Learn More') + ' &rarr;</a>' +
                 '</div>';
         }).join('');
@@ -83,7 +83,8 @@ import {
                 subtitle: page.heroSubtitle,
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
-                ctaSecondary: page.heroCtaSecondary
+                ctaSecondary: page.heroCtaSecondary,
+            heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.dt-top-badge', page.heroTopBadge);

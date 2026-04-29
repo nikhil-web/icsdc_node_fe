@@ -70,11 +70,11 @@ import { getSharedHostingPage } from './services/contentService.js';
             var heroBtns = heroSection.querySelectorAll('.hero-btns button');
             if (heroBtns.length >= 2) {
                 if (page.heroCtaPrimary) {
-                    heroBtns[0].innerHTML = page.heroCtaPrimary.text;
+                    heroBtns[0].innerHTML = page.heroCtaPrimary.text || '';
                     if (page.heroCtaPrimary.link) heroBtns[0].setAttribute('onclick', "window.location.href='" + page.heroCtaPrimary.link + "'");
                 }
                 if (page.heroCtaSecondary) {
-                    heroBtns[1].textContent = page.heroCtaSecondary.text;
+                    heroBtns[1].textContent = page.heroCtaSecondary.text || '';
                     if (page.heroCtaSecondary.link) heroBtns[1].setAttribute('onclick', "window.location.href='" + page.heroCtaSecondary.link + "'");
                 }
             }

@@ -59,7 +59,8 @@ import {
                 subtitle: page.heroSubtitle,
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
-                ctaSecondary: page.heroCtaSecondary
+                ctaSecondary: page.heroCtaSecondary,
+            heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.vapt-top-badge', page.heroTopBadge);
@@ -82,9 +83,9 @@ import {
                 var whatTitle = document.querySelector('#vapt-what .title');
                 if (whatTitle) whatTitle.textContent = page.whatTitle;
             }
-            if (page.whatDescription) {
+            if (page.whatDesc) {
                 var whatDesc = document.getElementById('vapt-what-description');
-                if (whatDesc) whatDesc.innerHTML = page.whatDescription.replace(/\n\n/g, '</p><p>');
+                if (whatDesc) whatDesc.innerHTML = page.whatDesc.replace(/\n\n/g, '</p><p>');
             }
 
             // Why Choose ICSDC (7 cards)
@@ -100,7 +101,7 @@ import {
 
             // VAPT Process (6 steps)
             populateSectionHeader('#vapt-process', page.processLabel, page.processTitle, null);
-            populateSteps(page.processSteps);
+            populateSteps(page.steps);
 
             // Testimonials
             if (page.testimonialTitle) setText(document, '#vapt-testi-heading', page.testimonialTitle);

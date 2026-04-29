@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <script src="assets/js/theme-init.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ICSDC Dedicated Bare Metal Servers | Single-Tenant Physical Infrastructure</title>
@@ -13,6 +14,7 @@
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/cloud-hosting.css">
   <link rel="stylesheet" href="assets/css/bare-metal-server.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
 </head>
 
 <body>
@@ -74,64 +76,87 @@
         <div class="bms-eyebrow" data-strapi-heroEyebrow>&#9881; Dedicated Bare Metal Servers</div>
         <h1 class="hero-title" data-strapi-heroTitle>Dedicated Bare Metal Server Without Virtual Limits</h1>
         <p class="hero-sub" data-strapi-heroSubtitle>Engineered for Workloads That Demand the Entire Server</p>
-        <p class="hero-desc" data-strapi-heroDescription>ICSDC Bare Metal Servers deliver single-tenant physical infrastructure with zero virtualization overhead, giving your workloads full access to dedicated hardware. Built for performance-critical and compliance-driven environments, they ensure consistent power, low latency, and complete control.</p>
+        <p class="hero-desc" data-strapi-heroDescription>ICSDC Bare Metal Servers deliver single-tenant physical
+          infrastructure with zero virtualization overhead, giving your workloads full access to dedicated hardware.
+          Built for performance-critical and compliance-driven environments, they ensure consistent power, low latency,
+          and complete control.</p>
         <div class="hero-btns">
           <a href="#bms-configs" class="btn-primary">Get Started with Bare Metal &rarr;</a>
           <a href="#bms-configs" class="btn-outline">View Configurations</a>
         </div>
       </div>
       <div class="hero-right">
+                <img class="hero-right-image" alt="" style="display:none">
         <div class="bms-hero-visual">
           <div class="bms-top-badge" data-strapi-heroTopBadge>&#9881; ICSDC Bare Metal</div>
           <!-- Server Rack SVG Illustration -->
           <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
             <!-- Background panel -->
-            <rect x="10" y="10" width="280" height="200" rx="16" fill="#fffbeb" stroke="rgba(180,83,9,0.12)" stroke-width="1" />
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#fffbeb" stroke="rgba(180,83,9,0.12)"
+              stroke-width="1" />
             <!-- Rack enclosure -->
-            <rect x="60" y="25" width="180" height="170" rx="8" fill="#fef3c7" stroke="rgba(180,83,9,0.25)" stroke-width="1.5" />
+            <rect x="60" y="25" width="180" height="170" rx="8" fill="#fef3c7" stroke="rgba(180,83,9,0.25)"
+              stroke-width="1.5" />
             <!-- Rack side rails -->
-            <rect x="60" y="25" width="14" height="170" rx="4" fill="#fde68a" stroke="rgba(180,83,9,0.20)" stroke-width="1" />
-            <rect x="226" y="25" width="14" height="170" rx="4" fill="#fde68a" stroke="rgba(180,83,9,0.20)" stroke-width="1" />
+            <rect x="60" y="25" width="14" height="170" rx="4" fill="#fde68a" stroke="rgba(180,83,9,0.20)"
+              stroke-width="1" />
+            <rect x="226" y="25" width="14" height="170" rx="4" fill="#fde68a" stroke="rgba(180,83,9,0.20)"
+              stroke-width="1" />
             <!-- Server Unit 1 -->
-            <rect x="78" y="38" width="144" height="44" rx="5" fill="white" stroke="rgba(180,83,9,0.30)" stroke-width="1.5" />
+            <rect x="78" y="38" width="144" height="44" rx="5" fill="white" stroke="rgba(180,83,9,0.30)"
+              stroke-width="1.5" />
             <rect x="84" y="48" width="60" height="6" rx="3" fill="#fde68a" />
-            <rect x="84" y="58" width="40" height="4" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.18)" stroke-width="0.8" />
+            <rect x="84" y="58" width="40" height="4" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.18)"
+              stroke-width="0.8" />
             <!-- Status LEDs server 1 -->
             <circle cx="196" cy="50" r="4" fill="#22c55e" opacity="0.9" />
             <circle cx="207" cy="50" r="4" fill="#b45309" opacity="0.85" />
             <circle cx="196" cy="62" r="4" fill="#22c55e" opacity="0.7" />
             <circle cx="207" cy="62" r="4" fill="#fbbf24" opacity="0.8" />
             <!-- Drive bays server 1 -->
-            <rect x="150" y="46" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
-            <rect x="150" y="58" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
+            <rect x="150" y="46" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)"
+              stroke-width="0.8" />
+            <rect x="150" y="58" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)"
+              stroke-width="0.8" />
             <!-- Server Unit 2 -->
-            <rect x="78" y="90" width="144" height="44" rx="5" fill="white" stroke="rgba(180,83,9,0.30)" stroke-width="1.5" />
+            <rect x="78" y="90" width="144" height="44" rx="5" fill="white" stroke="rgba(180,83,9,0.30)"
+              stroke-width="1.5" />
             <rect x="84" y="100" width="60" height="6" rx="3" fill="#fde68a" />
-            <rect x="84" y="110" width="40" height="4" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.18)" stroke-width="0.8" />
+            <rect x="84" y="110" width="40" height="4" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.18)"
+              stroke-width="0.8" />
             <!-- Status LEDs server 2 -->
             <circle cx="196" cy="102" r="4" fill="#22c55e" opacity="0.9" />
             <circle cx="207" cy="102" r="4" fill="#b45309" opacity="0.85" />
             <circle cx="196" cy="114" r="4" fill="#22c55e" opacity="0.7" />
             <circle cx="207" cy="114" r="4" fill="#fbbf24" opacity="0.8" />
             <!-- Drive bays server 2 -->
-            <rect x="150" y="98" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
-            <rect x="150" y="110" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
+            <rect x="150" y="98" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)"
+              stroke-width="0.8" />
+            <rect x="150" y="110" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)"
+              stroke-width="0.8" />
             <!-- Server Unit 3 -->
-            <rect x="78" y="142" width="144" height="44" rx="5" fill="white" stroke="rgba(180,83,9,0.30)" stroke-width="1.5" />
+            <rect x="78" y="142" width="144" height="44" rx="5" fill="white" stroke="rgba(180,83,9,0.30)"
+              stroke-width="1.5" />
             <rect x="84" y="152" width="60" height="6" rx="3" fill="#fde68a" />
-            <rect x="84" y="162" width="40" height="4" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.18)" stroke-width="0.8" />
+            <rect x="84" y="162" width="40" height="4" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.18)"
+              stroke-width="0.8" />
             <!-- Status LEDs server 3 -->
             <circle cx="196" cy="154" r="4" fill="#22c55e" opacity="0.9" />
             <circle cx="207" cy="154" r="4" fill="#b45309" opacity="0.85" />
             <circle cx="196" cy="166" r="4" fill="#22c55e" opacity="0.7" />
             <circle cx="207" cy="166" r="4" fill="#fbbf24" opacity="0.8" />
             <!-- Drive bays server 3 -->
-            <rect x="150" y="150" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
-            <rect x="150" y="162" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)" stroke-width="0.8" />
+            <rect x="150" y="150" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)"
+              stroke-width="0.8" />
+            <rect x="150" y="162" width="36" height="8" rx="2" fill="#fef3c7" stroke="rgba(180,83,9,0.15)"
+              stroke-width="0.8" />
             <!-- Network cables (bottom) -->
-            <path d="M 96 186 Q 96 198 108 198 Q 120 198 120 186" stroke="rgba(180,83,9,0.35)" stroke-width="1.5" fill="none" stroke-dasharray="3 2" />
-            <path d="M 140 186 Q 140 200 155 200 Q 170 200 170 186" stroke="rgba(180,83,9,0.30)" stroke-width="1.5" fill="none" stroke-dasharray="3 2" />
-            <path d="M 188 186 Q 188 196 200 196 Q 212 196 212 186" stroke="rgba(180,83,9,0.25)" stroke-width="1.5" fill="none" stroke-dasharray="3 2" />
+            <path d="M 96 186 Q 96 198 108 198 Q 120 198 120 186" stroke="rgba(180,83,9,0.35)" stroke-width="1.5"
+              fill="none" stroke-dasharray="3 2" />
+            <path d="M 140 186 Q 140 200 155 200 Q 170 200 170 186" stroke="rgba(180,83,9,0.30)" stroke-width="1.5"
+              fill="none" stroke-dasharray="3 2" />
+            <path d="M 188 186 Q 188 196 200 196 Q 212 196 212 186" stroke="rgba(180,83,9,0.25)" stroke-width="1.5"
+              fill="none" stroke-dasharray="3 2" />
             <!-- Labels on server units -->
             <text x="150" y="44" font-size="6" fill="#b45309" text-anchor="middle" font-weight="700">SERVER 01</text>
             <text x="150" y="96" font-size="6" fill="#b45309" text-anchor="middle" font-weight="700">SERVER 02</text>
@@ -160,36 +185,44 @@
     <div class="container">
       <div class="why-grid" id="bms-pillars-grid" data-stagger>
         <div class="why-card">
-          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
               <rect x="2" y="3" width="20" height="14" rx="2" />
               <line x1="8" y1="21" x2="16" y2="21" />
               <line x1="12" y1="17" x2="12" y2="21" />
             </svg></div>
           <h3>Dedicated Physical Resources</h3>
-          <p>Your workloads run on single-tenant hardware with no resource sharing, ensuring consistent and predictable performance.</p>
+          <p>Your workloads run on single-tenant hardware with no resource sharing, ensuring consistent and predictable
+            performance.</p>
         </div>
         <div class="why-card">
-          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg></div>
           <h3>Zero Virtualization Overhead</h3>
-          <p>Direct access to CPU, RAM, and storage delivers maximum efficiency, lower latency, and higher throughput.</p>
+          <p>Direct access to CPU, RAM, and storage delivers maximum efficiency, lower latency, and higher throughput.
+          </p>
         </div>
         <div class="why-card">
-          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
               <circle cx="12" cy="12" r="3" />
               <path d="M19.07 4.93A10 10 0 115 18.07" />
               <path d="M12 2v2M12 20v2M2 12h2M20 12h2" />
             </svg></div>
           <h3>Full Hardware &amp; OS Control</h3>
-          <p>Choose your operating system, configure hardware, and customize the environment to meet exact workload requirements.</p>
+          <p>Choose your operating system, configure hardware, and customize the environment to meet exact workload
+            requirements.</p>
         </div>
         <div class="why-card">
-          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22"
+              height="22">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg></div>
           <h3>Enhanced Security &amp; Compliance</h3>
-          <p>Physical isolation reduces attack surfaces and supports strict compliance needs for regulated industries.</p>
+          <p>Physical isolation reduces attack surfaces and supports strict compliance needs for regulated industries.
+          </p>
         </div>
       </div>
     </div>
@@ -201,7 +234,8 @@
     <div class="container">
       <span class="cloud-section-label" data-animate="fade-up" id="bms-configs-label">SERVER CONFIGURATIONS</span>
       <h2 class="title" data-animate="fade-up" id="bms-configs-title">Dedicated Bare Metal Server Configurations</h2>
-      <p class="subtitle" data-animate="fade-up" id="bms-configs-subtitle">Single-tenant physical servers with full hardware access &mdash; choose the configuration that matches your workload requirements.</p>
+      <p class="subtitle" data-animate="fade-up" id="bms-configs-subtitle">Single-tenant physical servers with full
+        hardware access &mdash; choose the configuration that matches your workload requirements.</p>
 
       <div class="bms-table-wrap" data-animate="fade-up">
         <table class="bms-config-table" id="bms-config-table">
@@ -340,7 +374,8 @@
     <div class="container">
       <span class="cloud-section-label" data-animate="fade-up">MANAGEMENT OPTIONS</span>
       <h2 class="title" data-animate="fade-up" id="bms-compare-title">Self-Managed vs. Managed Bare Metal</h2>
-      <p class="subtitle" data-animate="fade-up">Choose the level of management that fits your team&rsquo;s capabilities and operational needs.</p>
+      <p class="subtitle" data-animate="fade-up">Choose the level of management that fits your team&rsquo;s capabilities
+        and operational needs.</p>
 
       <div class="bms-compare-wrap" data-animate="fade-up">
         <table class="bms-compare-table" id="bms-compare-table">
@@ -438,7 +473,8 @@
   <section class="cloud-cta-band" id="bms-cta-band1">
     <div class="cloud-cta-inner">
       <h2>Need dedicated performance without shared limits?</h2>
-      <p>Talk to our bare metal experts and get a server configured to your exact workload, compliance, and performance requirements.</p>
+      <p>Talk to our bare metal experts and get a server configured to your exact workload, compliance, and performance
+        requirements.</p>
       <div class="cloud-cta-btns">
         <a href="/contact" class="cloud-cta-btn-primary">Talk to Our Bare Metal Experts &rarr;</a>
         <a href="tel:+919810958857" class="cloud-cta-btn-outline">Call +91 98109 58857</a>
@@ -452,7 +488,8 @@
     <div class="container">
       <span class="cloud-section-label" data-animate="fade-up" id="bms-why-label">WHY CHOOSE ICSDC</span>
       <h2 class="title" data-animate="fade-up" id="bms-why-title">Why Choose ICSDC Bare Metal Servers?</h2>
-      <p class="subtitle" data-animate="fade-up" id="bms-why-subtitle">Built for the most demanding workloads, ICSDC Bare Metal delivers consistent performance, strong security, and complete control.</p>
+      <p class="subtitle" data-animate="fade-up" id="bms-why-subtitle">Built for the most demanding workloads, ICSDC
+        Bare Metal delivers consistent performance, strong security, and complete control.</p>
 
       <div class="bms-features-grid cloud-power-grid" id="bms-why-grid" data-stagger>
         <div class="cloud-power-card">
@@ -462,7 +499,8 @@
               <line x1="12" y1="17" x2="12" y2="21" />
             </svg></div>
           <h3>Reliable Infrastructure for Critical Workloads</h3>
-          <p>Our bare metal servers are built to support always-on applications, delivering stability and consistency for business-critical operations.</p>
+          <p>Our bare metal servers are built to support always-on applications, delivering stability and consistency
+            for business-critical operations.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -470,21 +508,24 @@
               <polyline points="17 6 23 6 23 12" />
             </svg></div>
           <h3>High Uptime Commitment</h3>
-          <p>Designed to minimize downtime, our platform ensures your services remain accessible and performant even under demanding conditions.</p>
+          <p>Designed to minimize downtime, our platform ensures your services remain accessible and performant even
+            under demanding conditions.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg></div>
           <h3>Strong Security by Design</h3>
-          <p>Physical isolation and hardened configurations help protect your workloads from threats, supporting data safety and compliance requirements.</p>
+          <p>Physical isolation and hardened configurations help protect your workloads from threats, supporting data
+            safety and compliance requirements.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
             </svg></div>
           <h3>24&times;7 Expert Technical Support</h3>
-          <p>Our experienced engineers are available round the clock to assist with setup, optimization, and issue resolution whenever you need help.</p>
+          <p>Our experienced engineers are available round the clock to assist with setup, optimization, and issue
+            resolution whenever you need help.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -493,7 +534,8 @@
               <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
             </svg></div>
           <h3>High-Performance Storage Capabilities</h3>
-          <p>Optimized storage options ensure fast data access and smooth performance for applications, databases, and intensive workloads.</p>
+          <p>Optimized storage options ensure fast data access and smooth performance for applications, databases, and
+            intensive workloads.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -502,7 +544,8 @@
               <path d="M12 2v2M12 20v2M2 12h2M20 12h2" />
             </svg></div>
           <h3>Complete Administrative Control</h3>
-          <p>Full root access allows you to customize your environment, install preferred software, and fine-tune performance based on your needs.</p>
+          <p>Full root access allows you to customize your environment, install preferred software, and fine-tune
+            performance based on your needs.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -510,7 +553,8 @@
               <polyline points="12 6 12 12 16 14" />
             </svg></div>
           <h3>Quick Deployment</h3>
-          <p>Get your server up and running quickly, reducing setup delays and helping you move from planning to production faster.</p>
+          <p>Get your server up and running quickly, reducing setup delays and helping you move from planning to
+            production faster.</p>
         </div>
       </div>
     </div>
@@ -522,7 +566,8 @@
     <div class="container">
       <span class="cloud-section-label" data-animate="fade-up" id="bms-who-label">WHO IT&rsquo;S FOR</span>
       <h2 class="title" data-animate="fade-up" id="bms-who-title">Who Should Choose ICSDC Bare Metal Servers?</h2>
-      <p class="subtitle" data-animate="fade-up" id="bms-who-subtitle">From enterprises to developers, anyone who needs dedicated physical infrastructure and maximum control.</p>
+      <p class="subtitle" data-animate="fade-up" id="bms-who-subtitle">From enterprises to developers, anyone who needs
+        dedicated physical infrastructure and maximum control.</p>
 
       <div class="bms-who-grid" id="bms-who-grid" data-stagger>
         <div class="cloud-power-card">
@@ -531,14 +576,16 @@
               <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
             </svg></div>
           <h3>Enterprises Running Mission-Critical Applications</h3>
-          <p>Organizations that require consistent performance, high availability, and full hardware control for core business systems.</p>
+          <p>Organizations that require consistent performance, high availability, and full hardware control for core
+            business systems.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg></div>
           <h3>SaaS &amp; Product-Based Companies</h3>
-          <p>Teams building performance-intensive platforms that need predictable resources, stable environments, and scalable infrastructure.</p>
+          <p>Teams building performance-intensive platforms that need predictable resources, stable environments, and
+            scalable infrastructure.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -546,7 +593,8 @@
               <path d="M7 11V7a5 5 0 0110 0v4" />
             </svg></div>
           <h3>Fintech &amp; Regulated Businesses</h3>
-          <p>Companies handling sensitive data or operating under compliance requirements where physical isolation and security are essential.</p>
+          <p>Companies handling sensitive data or operating under compliance requirements where physical isolation and
+            security are essential.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -554,7 +602,8 @@
               <path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
             </svg></div>
           <h3>High-Traffic Websites &amp; Digital Platforms</h3>
-          <p>Businesses managing large volumes of users, transactions, or content that demand steady throughput and low latency.</p>
+          <p>Businesses managing large volumes of users, transactions, or content that demand steady throughput and low
+            latency.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -563,7 +612,8 @@
               <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
             </svg></div>
           <h3>Data-Intensive Workloads</h3>
-          <p>Teams working with large databases, analytics, or processing pipelines that benefit from dedicated compute and storage.</p>
+          <p>Teams working with large databases, analytics, or processing pipelines that benefit from dedicated compute
+            and storage.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -579,14 +629,16 @@
               <line x1="1" y1="14" x2="4" y2="14" />
             </svg></div>
           <h3>AI, ML &amp; Compute-Heavy Projects</h3>
-          <p>Organizations running training models, simulations, or parallel processing workloads that need direct hardware access.</p>
+          <p>Organizations running training models, simulations, or parallel processing workloads that need direct
+            hardware access.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polygon points="5 3 19 12 5 21 5 3" />
             </svg></div>
           <h3>Gaming &amp; Real-Time Applications</h3>
-          <p>Platforms require fast response times and uninterrupted performance for multiplayer, streaming, or real-time interactions.</p>
+          <p>Platforms require fast response times and uninterrupted performance for multiplayer, streaming, or
+            real-time interactions.</p>
         </div>
         <div class="cloud-power-card">
           <div class="cloud-power-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -596,7 +648,8 @@
               <path d="M16 3.13a4 4 0 010 7.75" />
             </svg></div>
           <h3>Agencies &amp; IT Service Providers</h3>
-          <p>Teams managing infrastructure for multiple clients who need dedicated resources, customization, and full administrative control.</p>
+          <p>Teams managing infrastructure for multiple clients who need dedicated resources, customization, and full
+            administrative control.</p>
         </div>
       </div>
     </div>
@@ -628,7 +681,9 @@
       </div>
       <aside class="faq-contact-card">
         <h3 class="faq-contact-title" id="bms-faq-contact-title">Talk to Our Bare Metal Experts</h3>
-        <p class="faq-contact-desc" id="bms-faq-contact-desc">Our bare metal specialists are available to help you choose the right configuration, discuss compliance requirements, and get your infrastructure deployed quickly.<br><br>&#128222; +91 98109 58857</p>
+        <p class="faq-contact-desc" id="bms-faq-contact-desc">Our bare metal specialists are available to help you
+          choose the right configuration, discuss compliance requirements, and get your infrastructure deployed
+          quickly.<br><br>&#128222; +91 98109 58857</p>
         <a href="/contact" class="faq-contact-btn">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24"
             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             aria-hidden="true">
@@ -644,7 +699,8 @@
   <section class="cloud-cta-band cloud-cta-dark" id="bms-cta-band2">
     <div class="cloud-cta-inner">
       <h2>Ready to deploy uncompromised infrastructure?</h2>
-      <p>Single-tenant bare metal servers with full hardware control, zero virtualization, and 99.9% uptime. Built for businesses that demand the best.</p>
+      <p>Single-tenant bare metal servers with full hardware control, zero virtualization, and 99.9% uptime. Built for
+        businesses that demand the best.</p>
       <div class="cloud-cta-btns">
         <a href="#bms-configs" class="cloud-cta-btn-primary">Get Started with Bare Metal &rarr;</a>
         <a href="/contact" class="cloud-cta-btn-outline">Talk to an Expert</a>
@@ -718,7 +774,7 @@
 
   <!-- Strapi config -->
   <script>
-    STRAPI_URL = "http://13.126.9.248:1337";
+    STRAPI_URL = "http://localhost:1338";
     TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
   </script>
   <script type="module" src="assets/js/main.js"></script>

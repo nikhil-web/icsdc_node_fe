@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    VPS HOSTING PAGE — SCOPED STYLES
    All classes prefixed vps-* to prevent
    any collision with style.css,
@@ -1283,7 +1283,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (≤ 1024px)
 ══════════════════════════════════════ */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .vps-pricing-grid {
         grid-template-columns: 1fr;
         max-width: 480px;
@@ -1321,7 +1321,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — MOBILE (≤ 640px)
 ══════════════════════════════════════ */
-@media (max-width: 640px) {
+@media (max-width: 767px) {
     .vps-pillar-grid,
     .vps-mgmt-grid,
     .vps-diff-grid { grid-template-columns: 1fr; }

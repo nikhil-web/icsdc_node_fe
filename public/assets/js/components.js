@@ -8,7 +8,7 @@
     'use strict';
 
     // ── CONFIG (set by index.html before this script loads) ──
-    const BASE_URL = (typeof STRAPI_URL !== "undefined" ? STRAPI_URL : "http://13.126.9.248:1337");
+    const BASE_URL = (typeof STRAPI_URL !== "undefined" ? STRAPI_URL : "https://icsdcadmin.duckdns.org");
     const API_TOKEN = (typeof TOKEN !== "undefined" ? TOKEN : "");
 
     const headers = {
@@ -122,6 +122,8 @@
             ? `<img src="${avatarSrc}" alt="${t.name}" class="testi-avatar-img" loading="lazy">`
             : `<span class="testi-avatar-initials">${initials}</span>`;
 
+        const jobLine = [t.jobTitle ?? t.title ?? '', t.company ?? ''].filter(Boolean).join(' · ');
+
         return `
         <article
             class="testi-card"
@@ -129,21 +131,19 @@
             data-testi-index="${index}"
             aria-label="Testimonial from ${t.name}"
         >
-            <div class="testi-left">
-                <div class="testi-avatar" aria-hidden="true">
-                    ${avatarHTML}
-                </div>
-                <div class="testi-client-info">
-                    <p class="testi-name">${t.name}</p>
-                    <p class="testi-job">${t.jobTitle ?? t.title ?? ''}</p>
-                    <p class="testi-company">${t.company}</p>
-                </div>
+            <div class="testi-body">
+                <span class="testi-quote-mark" aria-hidden="true">&#10077;</span>
+                <blockquote class="testi-quote">${t.quote}</blockquote>
                 <div class="testi-rating" aria-label="Rating: ${t.rating} out of 5 stars">
                     ${stars}
                 </div>
             </div>
-            <div class="testi-right">
-                <blockquote class="testi-quote">${t.quote}</blockquote>
+            <div class="testi-footer">
+                <div class="testi-avatar" aria-hidden="true">${avatarHTML}</div>
+                <div class="testi-client-info">
+                    <p class="testi-name">${t.name}</p>
+                    <p class="testi-job">${jobLine}</p>
+                </div>
             </div>
         </article>`;
     }
@@ -219,10 +219,10 @@
             if (res?.data?.length) {
                 // Strapi v5 returns flat data (no nested attributes object)
                 items = res.data.map(entry => ({
-                    name: entry.name ?? entry.attributes?.name,
-                    jobTitle: entry.jobTitle ?? entry.attributes?.jobTitle,
-                    company: entry.company ?? entry.attributes?.company,
-                    quote: entry.quote ?? entry.attributes?.quote,
+                    name: (entry.name ?? entry.attributes?.name ?? '').replace(/[,\s]+$/, '').trim(),
+                    jobTitle: (entry.jobTitle ?? entry.attributes?.jobTitle ?? '').replace(/\s+at\s*$/i, '').trim(),
+                    company: (entry.company ?? entry.attributes?.company ?? '').trim(),
+                    quote: (entry.quote ?? entry.attributes?.quote ?? '').trim(),
                     rating: entry.rating ?? entry.attributes?.rating ?? 5,
                     avatar: entry.avatar ?? entry.attributes?.avatar?.data ?? null,
                 }));

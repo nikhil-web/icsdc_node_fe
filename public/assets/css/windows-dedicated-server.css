@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    WINDOWS DEDICATED SERVER PAGE
    Contains ds-* (dedicated server base)
    and wds-* (Windows-specific) styles.
@@ -1346,7 +1346,7 @@
         /* ══════════════════════════════════════
    RESPONSIVE — TABLET (≤ 1024px)
 ══════════════════════════════════════ */
-        @media (max-width: 1024px) {
+        @media (max-width: 1023px) {
             .ds-pricing-grid {
                 grid-template-columns: 1fr;
                 max-width: 480px;
@@ -1393,7 +1393,7 @@
         /* ══════════════════════════════════════
    RESPONSIVE — MOBILE (≤ 640px)
 ══════════════════════════════════════ */
-        @media (max-width: 640px) {
+        @media (max-width: 767px) {
             .ds-pillar-grid {
                 grid-template-columns: 1fr;
             }
@@ -1432,9 +1432,18 @@
                 padding: 14px 16px;
                 font-size: 13px;
             }
+
+            .wds-compare-table {
+                font-size: 0.82rem;
+            }
+
+            .wds-compare-table td,
+            .wds-compare-table th {
+                padding: 0.65rem 0.75rem;
+            }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 479px) {
             .ds-use-grid {
                 grid-template-columns: 1fr;
             }
@@ -1715,16 +1724,5 @@
         .wds-cross {
             color: #dc2626;
             font-size: 1.1rem;
-        }
-
-        @media (max-width: 640px) {
-            .wds-compare-table {
-                font-size: 0.82rem;
-            }
-
-            .wds-compare-table td,
-            .wds-compare-table th {
-                padding: 0.65rem 0.75rem;
-            }
         }
 

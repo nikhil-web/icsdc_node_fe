@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <script src="assets/js/theme-init.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICSDC - Scalable Fortified Cloud</title>
@@ -9,6 +10,8 @@
         rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/homepage-extras.css">
+    <link rel="stylesheet" href="assets/css/dark-mode.css">
 </head>
 
 <body>
@@ -77,8 +80,8 @@
                         <p data-strapi="priceNote" class="price-note"></p>
                     </div>
                     <div class="hero-btns">
+                        <button class="btn-primary">View Plans</button>
                         <button class="btn-outline">Sign up</button>
-                        <button class="btn-primary">View Plans &rarr;</button>
                     </div>
                 </div>
             </div>
@@ -101,7 +104,7 @@
     <section id="who-we-are" class="who-we-are section">
         <div class="who-we-are-inner">
             <div class="who-we-are-image" data-animate="fade-right">
-                <img src="assets/images/best-cloud-service-provider 1.png" alt="Best cloud service provider">
+                <img src="assets/images/Home page images_s.png" alt="Best cloud service provider">
             </div>
             <div class="blue-container" data-animate="fade-left">
                 <h2 class="title" data-strapi="whoWeAreHeading">Who We Are?</h2>
@@ -308,11 +311,7 @@
         aria-labelledby="business-needs-cloud-heading">
         <div class="business-needs-cloud-inner">
             <div class="business-needs-visual" data-animate="fade-right">
-                <ul class="business-needs-labels" aria-hidden="true">
-                    <li class="business-needs-label">99.99%<span>Uptime</span></li>
-                    <li class="business-needs-label">Super Fast Speed<span>&amp; Performance</span></li>
-                    <li class="business-needs-label">Affordable<span>Price</span></li>
-                </ul>
+
                 <div class="business-needs-image-wrap">
                     <img src="assets/images/trusted-cloud-service-provider.png" alt="Cloud services illustration"
                         class="business-needs-image">
@@ -423,6 +422,39 @@
     </section>
     <!-- best-cloud-services section end -->
 
+    <!-- ════ GLOBAL PRESENCE / WORLD MAP ════ -->
+    <section id="hp-global" class="hp-global-section" aria-labelledby="hp-global-title">
+
+        <div class="hp-global-header">
+            <span class="cloud-section-label">GLOBAL PRESENCE</span>
+            <h2 class="hp-global-title" id="hp-global-title" data-animate="fade-up">Where We Are in the World</h2>
+            <p class="hp-global-sub" id="hp-global-sub" data-animate="fade-up">From Noida to the globe — ICSDC serves
+                clients across 5+ countries with enterprise infrastructure and 24/7 expert support.</p>
+        </div>
+
+        <!-- Full-width map -->
+        <div class="hp-map-outer">
+            <div class="hp-map-wrap">
+
+                <!-- Layer 1: World map base -->
+                <img src="assets/images/world-map.svg" alt="ICSDC Global Presence Map" class="hp-map-img">
+
+
+
+                <!-- Layer 3: Location pins — rendered dynamically by homepage-cms.js -->
+
+            </div><!-- /.hp-map-wrap -->
+        </div><!-- /.hp-map-outer -->
+
+        <!-- Legend below map -->
+        <div class="hp-legend-wrap">
+            <!-- Legend items rendered dynamically by homepage-cms.js -->
+            <div class="hp-legend" id="hp-legend" data-stagger></div>
+        </div><!-- /.hp-legend-wrap -->
+
+    </section>
+    <!-- global presence section end -->
+
     <!-- testimonials section start -->
     <section class="testi-section" aria-labelledby="testi-heading">
         <div class="testi-container">
@@ -443,6 +475,137 @@
         </div>
     </section>
     <!-- testimonials section end -->
+
+    <!-- ════ TECHNOLOGY PARTNERS ════ -->
+    <section id="hp-tech-partners" class="hp-tech-section section" aria-labelledby="hp-tech-title">
+        <div class="container">
+            <h2 class="hp-logos-heading" id="hp-tech-title" data-animate="fade-up">Check our World-class Technologies
+            </h2>
+            <div class="hp-logo-grid" id="hp-tech-grid" data-stagger>
+                <!-- Row 1 -->
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#009EAD">VM</div><span
+                        class="hp-logo-name">VMware</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#00B4F0">V</div><span class="hp-logo-name">Veeam</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#F05A28">PS</div><span class="hp-logo-name">Pure
+                        Storage</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#1B1B1B">RDM</div><span class="hp-logo-name">RDM</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#0078D4">Az</div><span
+                        class="hp-logo-name">Azure</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#4285F4">GC</div><span class="hp-logo-name">Google
+                        Cloud</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#FDB722; color:#1a1a1a">Sy</div><span
+                        class="hp-logo-name">Symantec</span>
+                </div>
+                <!-- Row 2 -->
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#00A651">FP</div><span
+                        class="hp-logo-name">Forcepoint</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#007DB8">De</div><span class="hp-logo-name">Dell</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#5E3B8F">wp</div><span
+                        class="hp-logo-name">webpros</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#005EAD">Ac</div><span
+                        class="hp-logo-name">Acronis</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#CC0000">RH</div><span class="hp-logo-name">Red
+                        Hat</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#009EAD">VM</div><span class="hp-logo-name">VMware
+                        Cloud</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#009EAD">VM</div><span class="hp-logo-name">VMware
+                        Horizon</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- tech partners section end -->
+
+    <!-- ════ TRUSTED BY INDUSTRY LEADERS ════ -->
+    <section id="hp-trusted" class="hp-trusted-section section" aria-labelledby="hp-trusted-title">
+        <div class="container">
+            <h2 class="hp-logos-heading" id="hp-trusted-title" data-animate="fade-up">Trusted by Industry Leaders</h2>
+            <div class="hp-logo-grid" id="hp-trusted-grid" data-stagger>
+                <!-- Row 1 -->
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#009EAD">VM</div><span
+                        class="hp-logo-name">VMware</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#00B4F0">V</div><span class="hp-logo-name">Veeam</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#F05A28">PS</div><span class="hp-logo-name">Pure
+                        Storage</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#1B1B1B">RDM</div><span class="hp-logo-name">RDM</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#0078D4">Az</div><span
+                        class="hp-logo-name">Azure</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#4285F4">GC</div><span class="hp-logo-name">Google
+                        Cloud</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#FDB722; color:#1a1a1a">Sy</div><span
+                        class="hp-logo-name">Symantec</span>
+                </div>
+                <!-- Row 2 -->
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#00A651">FP</div><span
+                        class="hp-logo-name">Forcepoint</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#007DB8">De</div><span class="hp-logo-name">Dell</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#5E3B8F">wp</div><span
+                        class="hp-logo-name">webpros</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#005EAD">Ac</div><span
+                        class="hp-logo-name">Acronis</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#CC0000">RH</div><span class="hp-logo-name">Red
+                        Hat</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#009EAD">VM</div><span class="hp-logo-name">VMware
+                        Cloud</span>
+                </div>
+                <div class="hp-logo-box">
+                    <div class="hp-logo-badge" style="background:#009EAD">VM</div><span class="hp-logo-name">VMware
+                        Horizon</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- trusted leaders section end -->
 
     <!-- faq section start -->
     <section class="faq-section" aria-labelledby="faq-heading">
@@ -631,8 +794,8 @@
             const center = svg.querySelector('.ripple-center');
 
             let rings = 10;
-            let duration = 8;    // seconds
-            let radius = 260;  // max ripple radius in SVG units (viewBox is 600×600, centre=300)
+            let duration = 10;    // seconds
+            let radius = 460;  // max ripple radius in SVG units (viewBox is 600×600, centre=300)
 
             const ringsVal = document.getElementById('rings-val');
             const speedVal = document.getElementById('speed-val');
@@ -742,7 +905,7 @@
     </script>
 
     <script>
-        STRAPI_URL = "http://13.126.9.248:1337";
+        STRAPI_URL = "http://localhost:1338";
         TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
     </script>
     <script src="assets/js/main.js" type="module"></script>

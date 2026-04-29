@@ -27,10 +27,10 @@ import {
 
         var sorted = plans.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
         grid.innerHTML = sorted.map(function (plan) {
-            var popularBadge = plan.popular
+            var popularBadge = plan.isPopular
                 ? '<div class="lvps-plan-badge">Most Popular</div>'
                 : '';
-            var popularClass = plan.popular ? ' lvps-plan-popular' : '';
+            var popularClass = plan.isPopular ? ' lvps-plan-popular' : '';
 
             var specs = [
                 { label: 'vCPU', value: plan.vcpu || plan.cpu || '' },
@@ -110,7 +110,8 @@ import {
                 subtitle: page.heroSubtitle,
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
-                ctaSecondary: page.heroCtaSecondary
+                ctaSecondary: page.heroCtaSecondary,
+            heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.lvps-top-badge', page.heroTopBadge);
@@ -132,11 +133,11 @@ import {
             populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
 
             // OS Options
-            populateSectionHeader('#os-options', page.osLabel, page.osTitle, page.osSubtitle);
+            populateSectionHeader('#os-options', page.osOptionsLabel, page.osOptionsTitle, page.osOptionsSubtitle);
             populateOsOptions(page.osOptions);
 
             // Control Panels
-            populateSectionHeader('#control-panel', page.cpLabel, page.cpTitle, page.cpSubtitle);
+            populateSectionHeader('#control-panel', page.controlPanelLabel, page.controlPanelTitle, page.controlPanelSubtitle);
             populateControlPanels(page.controlPanels);
 
             // Why Linux VPS

@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    LINUX CLOUD HOSTING PAGE — SCOPED STYLES
    All classes prefixed lch-* to prevent
    any collision with style.css,
@@ -391,7 +391,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — 1024px breakpoint
 ══════════════════════════════════════ */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .lch-plans-grid {
         grid-template-columns: 1fr;
         max-width: 480px;
@@ -417,7 +417,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — 640px breakpoint
 ══════════════════════════════════════ */
-@media (max-width: 640px) {
+@media (max-width: 767px) {
     .lch-eyebrow {
         font-size: 11px;
         padding: 5px 12px;

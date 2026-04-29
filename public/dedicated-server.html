@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <script src="assets/js/theme-init.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dedicated Server Hosting | Smooth Migration | ICSDC</title>
@@ -12,6 +13,8 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/dedicated-server.css">
+    <link rel="stylesheet" href="assets/css/homepage-extras.css">
+    <link rel="stylesheet" href="assets/css/dark-mode.css">
 </head>
 
 <body>
@@ -94,6 +97,7 @@
                 </div>
             </div>
             <div class="hero-right">
+                <img class="hero-right-image" alt="" style="display:none">
                 <!-- Server rack visual (decorative — not CMS-driven) -->
                 <div class="ds-server-visual">
                     <div class="ds-server-rack">
@@ -175,7 +179,112 @@
                 infrastructure with pricing designed for every workload.</p>
 
             <div class="ds-pricing-grid" data-stagger>
-                <!-- Populated by dedicated-server.js from CMS -->
+                <!-- Fallback cards — overwritten by dedicated-server.js when CMS plans exist -->
+                <div class="ds-plan-card">
+                    <div class="ds-plan-tier">Entry</div>
+                    <div class="ds-plan-price-wrap">
+                        <span class="ds-plan-currency">₹</span>
+                        <span class="ds-plan-price">6,999</span>
+                        <span class="ds-plan-period">/mo</span>
+                    </div>
+                    <p class="ds-plan-tagline">Ideal for small businesses getting started with dedicated hosting.</p>
+                    <hr class="ds-plan-divider">
+                    <ul class="ds-plan-features">
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>4 vCPU Cores</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>16 GB RAM</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>500 GB NVMe SSD</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>1 Gbps Port</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>Dedicated IP</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>24/7 Support</li>
+                    </ul>
+                    <button class="ds-plan-cta ds-plan-cta-outline">Get Started</button>
+                </div>
+
+                <div class="ds-plan-card ds-featured">
+                    <span class="ds-plan-badge">Most Popular</span>
+                    <div class="ds-plan-tier">Professional</div>
+                    <div class="ds-plan-price-wrap">
+                        <span class="ds-plan-currency">₹</span>
+                        <span class="ds-plan-price">13,999</span>
+                        <span class="ds-plan-period">/mo</span>
+                    </div>
+                    <p class="ds-plan-tagline">Best for growing businesses that need guaranteed performance.</p>
+                    <hr class="ds-plan-divider">
+                    <ul class="ds-plan-features">
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>8 vCPU Cores</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>32 GB RAM</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>1 TB NVMe SSD</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>1 Gbps Port</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>Dedicated IP</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>Free Migration</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>24/7 Priority Support</li>
+                    </ul>
+                    <button class="ds-plan-cta ds-plan-cta-primary">Get Started &rarr;</button>
+                </div>
+
+                <div class="ds-plan-card">
+                    <div class="ds-plan-tier">Enterprise</div>
+                    <div class="ds-plan-price-wrap">
+                        <span class="ds-plan-currency">₹</span>
+                        <span class="ds-plan-price">24,999</span>
+                        <span class="ds-plan-period">/mo</span>
+                    </div>
+                    <p class="ds-plan-tagline">Full-power dedicated hardware for mission-critical workloads.</p>
+                    <hr class="ds-plan-divider">
+                    <ul class="ds-plan-features">
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>16 vCPU Cores</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>64 GB RAM</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>2 TB NVMe SSD</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>1 Gbps Port</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>Dedicated IP</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>Free Migration</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>Managed Services</li>
+                        <li class="ds-plan-feature"><span class="ds-plan-check"><svg viewBox="0 0 12 12" fill="none">
+                                    <polyline points="2,6 5,9 10,3" />
+                                </svg></span>24/7 Priority Support</li>
+                    </ul>
+                    <button class="ds-plan-cta ds-plan-cta-outline">Contact Sales</button>
+                </div>
             </div>
         </div>
     </section>
@@ -256,7 +365,7 @@
     <section id="ds-services" class="who-we-are section">
         <div class="who-we-are-inner">
             <div class="who-we-are-image" data-animate="fade-right">
-                <img src="assets/images/best-cloud-service-provider 1.png" alt="ICSDC dedicated server services">
+                <img src="assets/images/Home page images_s.png" alt="ICSDC dedicated server services">
             </div>
             <div class="blue-container" data-animate="fade-left">
                 <span class="ds-section-label">Server Types</span>
@@ -267,6 +376,9 @@
                 <div class="who-we-are-btns" data-stagger>
                     <!-- Populated by dedicated-server.js from CMS -->
                 </div>
+                <p id="ds-services-footer-text" class="who-we-are-paragraph" style="margin-top:20px;">
+                    <!-- Populated by dedicated-server.js from CMS -->
+                </p>
             </div>
         </div>
     </section>
@@ -334,23 +446,24 @@
     <!-- ════════════════════════════════════
          SECTION 10 — GLOBAL LOCATIONS
     ════════════════════════════════════ -->
-    <section id="ds-locations" class="less-cloud-complex section industry-validated">
-        <div class="less-cloud-inner">
-            <div class="blue-container-left" style="background: transparent;" data-animate="fade-right">
-                <span class="ds-section-label">Infrastructure</span>
-                <h2 class="title" style="text-align:left; margin-top:8px; margin-bottom:0;">Global Locations. Local
-                    Speed.</h2>
-                <p class="who-we-are-paragraph">Deploy your server across our worldwide data centers, including India
-                    (Noida &amp; Mumbai), for the best performance closer to your audience.</p>
-                <div class="ds-location-tags" data-stagger>
-                    <!-- Populated by dedicated-server.js from CMS -->
-                </div>
-            </div>
+    <section id="ds-locations" class="hp-global-section" aria-labelledby="ds-locations-title">
+        <div class="hp-global-header">
+            <span class="ds-section-label" data-animate="fade-up">Infrastructure</span>
+            <h2 class="title" id="ds-locations-title" data-animate="fade-up">Global Locations. Local Speed.</h2>
+            <p class="subtitle" data-animate="fade-up">Deploy your server across our worldwide data centers, including
+                India (Noida &amp; Mumbai), for the best performance closer to your audience.</p>
+        </div>
 
-            <div class="less-cloud-complex-image" data-animate="scale-up">
-                <div class="ds-map-visual">
-                    <!-- Map pins populated by dedicated-server.js from CMS -->
-                </div>
+        <div class="hp-map-outer">
+            <div class="hp-map-wrap" id="ds-map-wrap">
+                <img src="assets/images/world-map.svg" alt="ICSDC Global Presence Map" class="hp-map-img">
+                <!-- Pins populated by dedicated-server.js from CMS -->
+            </div>
+        </div>
+
+        <div class="hp-legend-wrap">
+            <div class="ds-location-tags" id="ds-location-legend" data-stagger>
+                <!-- Location tags populated by dedicated-server.js from CMS -->
             </div>
         </div>
     </section>
@@ -416,18 +529,18 @@
         <div class="faq-container">
 
             <div class="faq-col">
-                <h2 class="faq-title" data-animate="fade-up">FAQs about ICSDC Azure Cloud</h2>
+                <h2 class="faq-title" data-animate="fade-up">FAQs about ICSDC Dedicated Server</h2>
                 <dl class="faq-accordions" id="faq-accordions">
-                    <!-- Populated by azure-cloud-hosting.js -->
+                    <!-- Populated by dedicated-server.js from CMS -->
                 </dl>
             </div>
 
             <div class="faq-contact-card" data-animate="fade-left">
                 <h3 class="faq-contact-title">Still have questions?</h3>
-                <p class="faq-contact-desc">Our certified Azure architects are available 24&times;7 to discuss your
-                    cloud requirements and help you make the right decision.</p>
+                <p class="faq-contact-desc">Our certified dedicated server experts are available 24&times;7 to discuss
+                    your requirements and help you make the right decision.</p>
                 <a href="/contact" class="faq-contact-btn">
-                    Talk to an Azure Expert
+                    Talk to an Expert
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <line x1="5" y1="12" x2="19" y2="12" />
@@ -539,7 +652,7 @@
 
     <!-- Strapi config (enables nav population via main.js) -->
     <script>
-        STRAPI_URL = "http://13.126.9.248:1337";
+        STRAPI_URL = "http://localhost:1338";
         TOKEN = "5e685bd788588b5db88df3d3d47ad9a446f82768a2514d7dce437f6dc10c872d61b83b91763e6ea54acb9f7d7aac432e1714eef2dd12d718aae5c3bbae246aa90a85d22938474559dd9327dc2f7c9114b06bfdbb4ce9daf5d4e8f45b7a608c7d80eea92ac9896b47238380007a7d592b3825db93c9f9e5fbdab95be79a2c8e6e";
     </script>
     <script src="assets/js/main.js" type="module"></script>

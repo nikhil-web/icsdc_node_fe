@@ -34,7 +34,8 @@ import { getCloudHostingPage } from './services/contentService.js';
             price: page.heroPrice,
             priceNote: page.heroPriceNote,
             ctaPrimary: page.heroCtaPrimary,
-            ctaSecondary: page.heroCtaSecondary
+            ctaSecondary: page.heroCtaSecondary,
+            heroImage: page.heroImage
         });
 
         populateIconCards('.why-grid', page.pillars, 'why-card');

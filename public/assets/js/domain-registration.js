@@ -80,7 +80,7 @@ import {
         // CTA / Search button
         var searchBtn = section.querySelector('.dom-search-btn');
         if (searchBtn && page.heroCtaPrimary) {
-            searchBtn.innerHTML = page.heroCtaPrimary.text;
+            searchBtn.innerHTML = page.heroCtaPrimary.text || '';
             if (page.heroCtaPrimary.link && page.heroCtaPrimary.link !== '#') {
                 searchBtn.setAttribute('onclick', "window.location.href='" + page.heroCtaPrimary.link + "'");
             }
@@ -217,25 +217,14 @@ import {
             if (page.testimonialTitle) {
                 setText(document, '#dom-testi-heading', page.testimonialTitle);
             }
-            initTestimonials(page.testimonials);
-
-
-
             if (page.testimonials && page.testimonials.length) {
-                initTestimonials(page.testimonials)
+                initTestimonials(page.testimonials);
             } else {
-                //hide the entire section if no testimonials            
-                var testiSection = document.getElementsByClassName('testi-section');
-                if (testiSection) {
-                    testiSection.style.display = 'none';
-                }
+                var testiSection = document.querySelector('.testi-section');
+                if (testiSection) testiSection.style.display = 'none';
             }
 
             // 10. FAQ
-            if (page.faqTitle) {
-                setText(document, '#dom-faq-heading', page.faqTitle);
-            }
-            // 9. FAQ
             if (page.faqTitle) {
                 setText(document, '#acr-faq-heading', page.faqTitle);
             }

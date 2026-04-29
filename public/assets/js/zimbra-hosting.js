@@ -36,9 +36,9 @@ import {
         grid.innerHTML = sorted.map(function (step, i) {
             var arrow = i < sorted.length - 1 ? '<div class="zimbra-step-arrow">&#8250;</div>' : '';
             return '<div class="zimbra-step">' +
-                '<div class="zimbra-step-num">' + step.number + '</div>' +
-                '<h3>' + step.title + '</h3>' +
-                '<p>' + step.description + '</p>' +
+                '<div class="zimbra-step-num">' + (step.number || '') + '</div>' +
+                '<h3>' + (step.title || '') + '</h3>' +
+                '<p>' + (step.description || '') + '</p>' +
                 arrow +
                 '</div>';
         }).join('');
@@ -150,7 +150,8 @@ import {
                 subtitle: page.heroSubtitle,
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
-                ctaSecondary: page.heroCtaSecondary
+                ctaSecondary: page.heroCtaSecondary,
+            heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.zimbra-top-badge', page.heroTopBadge);

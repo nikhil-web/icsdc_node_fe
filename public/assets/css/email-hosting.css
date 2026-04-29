@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    EMAIL HOSTING PAGE — SCOPED STYLES
    Accent: sky blue (#0ea5e9)
    Shared cloud-* classes are in components.css
@@ -270,7 +270,7 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
     .email-solutions-grid {
         grid-template-columns: 1fr;
     }
@@ -280,7 +280,7 @@
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
     .email-when-grid {
         grid-template-columns: 1fr;
     }

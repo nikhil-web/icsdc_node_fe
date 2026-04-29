@@ -24,27 +24,27 @@ import {
         var sorted = plans.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
 
         grid.innerHTML = sorted.map(function (plan) {
-            var badgeHtml = plan.isPopular
-                ? '<div class="gws-plan-badge">Most Popular</div>'
+            var badgeHtml = plan.isFeatured
+                ? '<div class="gws-plan-badge">' + (plan.badge || 'Most Popular') + '</div>'
                 : '';
-            var popularClass = plan.isPopular ? ' gws-plan-popular' : '';
+            var popularClass = plan.isFeatured ? ' gws-plan-popular' : '';
 
             var featuresHtml = '';
             if (plan.features && plan.features.length) {
                 featuresHtml = plan.features.map(function (f) {
-                    return '<li>' + (f.text || f) + '</li>';
+                    return '<li>' + (f.label || '') + '</li>';
                 }).join('');
             }
 
             return '<div class="gws-plan-card' + popularClass + '">' +
                 badgeHtml +
-                '<div class="gws-plan-name">' + (plan.name || '') + '</div>' +
+                '<div class="gws-plan-name">' + (plan.tier || '') + '</div>' +
                 '<div class="gws-plan-price">' + (plan.price || '') +
-                '<span>' + (plan.priceSuffix || '/user/month') + '</span>' +
+                '<span>' + (plan.period || '/user/month') + '</span>' +
                 '</div>' +
-                (plan.description ? '<p style="font-size:13px;color:var(--muted);margin:12px 0 0;">' + plan.description + '</p>' : '') +
+                (plan.tagline ? '<p style="font-size:13px;color:var(--muted);margin:12px 0 0;">' + plan.tagline + '</p>' : '') +
                 '<ul class="gws-plan-features">' + featuresHtml + '</ul>' +
-                '<button class="gws-plan-btn">' + (plan.ctaLabel || 'Get Started &rarr;') + '</button>' +
+                '<button class="gws-plan-btn">' + (plan.ctaText || 'Get Started') + ' &rarr;</button>' +
                 '</div>';
         }).join('');
     }
@@ -74,7 +74,7 @@ import {
         if (!card) return;
 
         if (page.faqContactTitle) setHTML(card, '.faq-contact-title', page.faqContactTitle);
-        if (page.faqContactDescription) setHTML(card, '.faq-contact-desc', page.faqContactDescription);
+        if (page.faqContactDesc) setHTML(card, '.faq-contact-desc', page.faqContactDesc);
 
         if (page.faqContactBtnLabel) {
             var btn = card.querySelector('.faq-contact-btn');
@@ -105,7 +105,8 @@ import {
                 subtitle: page.heroSubtitle,
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
-                ctaSecondary: page.heroCtaSecondary
+                ctaSecondary: page.heroCtaSecondary,
+            heroImage: page.heroImage
             });
 
             // Hero badges
@@ -140,16 +141,16 @@ import {
             }
 
             // Why ICSDC section
-            if (page.whyLabel || page.whyTitle || page.whySubtitle) {
-                populateSectionHeader('#why-icsdc', page.whyLabel, page.whyTitle, page.whySubtitle);
+            if (page.whyIcsdcLabel || page.whyIcsdcTitle || page.whyIcsdcSubtitle) {
+                populateSectionHeader('#why-icsdc', page.whyIcsdcLabel, page.whyIcsdcTitle, page.whyIcsdcSubtitle);
             }
             if (page.whyCards) {
                 populateIconCards('#why-icsdc .cloud-use-grid', page.whyCards, 'cloud-use-card');
             }
 
             // How it works steps
-            if (page.stepsLabel || page.stepsTitle || page.stepsSubtitle) {
-                populateSectionHeader('#how-it-works', page.stepsLabel, page.stepsTitle, page.stepsSubtitle);
+            if (page.howItWorksLabel || page.howItWorksTitle || page.howItWorksSubtitle) {
+                populateSectionHeader('#how-it-works', page.howItWorksLabel, page.howItWorksTitle, page.howItWorksSubtitle);
             }
             if (page.steps) {
                 populateSteps(page.steps);

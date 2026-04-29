@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    VEEAM BACKUP PAGE — SCOPED STYLES
    All classes prefixed veeam-* to prevent
    any collision with style.css,
@@ -345,7 +345,7 @@
 ══════════════════════════════════════ */
 
 /* 1280px — 3-col features, 4-col steps → 3 */
-@media (max-width: 1280px) {
+@media (max-width: 1279px) {
     .veeam-steps-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -356,7 +356,7 @@
 }
 
 /* 1024px — 2 columns for most grids */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .veeam-features-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -379,7 +379,7 @@
 }
 
 /* 640px — single column */
-@media (max-width: 640px) {
+@media (max-width: 767px) {
     .veeam-features-grid {
         grid-template-columns: 1fr;
     }

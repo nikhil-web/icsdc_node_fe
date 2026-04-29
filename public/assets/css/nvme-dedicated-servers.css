@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    NVME DEDICATED SERVERS PAGE — SCOPED STYLES
    All classes prefixed nds-* to prevent
    any collision with style.css,
@@ -458,7 +458,7 @@
 ══════════════════════════════════════ */
 
 /* 1024px — 2 columns for most grids */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .nds-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -485,7 +485,7 @@
 }
 
 /* 640px — single column */
-@media (max-width: 640px) {
+@media (max-width: 767px) {
     .nds-plans-grid {
         grid-template-columns: 1fr;
     }

@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════
+﻿/* ══════════════════════════════════════
    DOMAIN REGISTRATION PAGE — SCOPED STYLES
    Accent: ICSDC blue (#1a56db)
    Shared cloud-* classes are in components.css
@@ -222,7 +222,7 @@
 }
 
 .dom-tld-card {
-    background: #fff;
+    /* background: #fff; */
     border: 2px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 28px 20px;
@@ -275,19 +275,17 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .dom-tld-grid {
         grid-template-columns: repeat(4, 1fr);
     }
-}
 
-@media (max-width: 900px) {
     .dom-tld-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
     .dom-search-bar {
         flex-direction: column;
         padding: 12px;
