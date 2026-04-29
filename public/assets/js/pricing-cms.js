@@ -100,15 +100,19 @@ import { populateSEO } from './utils/cms-helpers.js';
             }
 
             var isActive = idx === 0 ? ' is-active' : '';
-            var icon = sec.sidebarIcon ? '<span class="pr-sidebar-icon">' + esc(sec.sidebarIcon) + '</span> ' : '';
+            var icon = sec.sidebarIcon
+                ? '<span class="pr-sidebar-icon"><i class="fa-solid fa-' + esc(sec.sidebarIcon) + '"></i></span> '
+                : '';
 
             sidebarHTML += '<button class="pr-sidebar-link' + isActive + '" data-target="' + esc(sec.sectionId) + '">' +
                 icon + esc(sec.sidebarLinkText) +
                 '</button>';
 
-            // Mobile tabs — use icon + short text
+            // Mobile tabs — icon + short text
             var mobIsActive = idx === 0 ? ' is-active' : '';
-            var mobIcon = sec.sidebarIcon ? esc(sec.sidebarIcon) + ' ' : '';
+            var mobIcon = sec.sidebarIcon
+                ? '<i class="fa-solid fa-' + esc(sec.sidebarIcon) + '"></i> '
+                : '';
             mobHTML += '<button class="pr-mob-tab' + mobIsActive + '" data-target="' + esc(sec.sectionId) + '">' +
                 mobIcon + esc(sec.sidebarLinkText) +
                 '</button>';
@@ -128,8 +132,8 @@ import { populateSEO } from './utils/cms-helpers.js';
         if (!page.showBillingToggle) return;
 
         var monthlyLabel = page.billingMonthlyLabel || 'Monthly';
-        var annualLabel  = page.billingAnnualLabel  || 'Annual';
-        var savePill     = page.billingSavePill      || '';
+        var annualLabel = page.billingAnnualLabel || 'Annual';
+        var savePill = page.billingSavePill || '';
 
         var html = '<div class="pr-billing-row">' +
             '<span class="pr-bill-opt is-monthly is-active">' + esc(monthlyLabel) + '</span>' +
@@ -152,9 +156,9 @@ import { populateSEO } from './utils/cms-helpers.js';
     ───────────────────────────────────────────────────────── */
 
     function renderCell(colType, cell, rowIsPopular, colIndex) {
-        var val     = (cell && cell.value)    != null ? cell.value    : '';
-        var sub     = (cell && cell.subValue) != null ? cell.subValue : '';
-        var isHl    = cell && cell.isHighlight;
+        var val = (cell && cell.value) != null ? cell.value : '';
+        var sub = (cell && cell.subValue) != null ? cell.subValue : '';
+        var isHl = cell && cell.isHighlight;
         var tdClass = isHl ? ' class="pr-cell-highlight"' : '';
 
         var inner = '';
@@ -202,7 +206,7 @@ import { populateSEO } from './utils/cms-helpers.js';
         if (!table) return '';
 
         var cols = Array.isArray(table.columns) ? table.columns : [];
-        var rows = Array.isArray(table.rows)    ? table.rows    : [];
+        var rows = Array.isArray(table.rows) ? table.rows : [];
 
         // Build <thead>
         var theadCells = cols.map(function (col) {
@@ -255,7 +259,7 @@ import { populateSEO } from './utils/cms-helpers.js';
                 });
             }
 
-            var tagHTML  = sec.sectionTag
+            var tagHTML = sec.sectionTag
                 ? '<span class="pr-section-tag">' + esc(sec.sectionTag) + '</span>'
                 : '';
             var descHTML = sec.description
@@ -282,12 +286,12 @@ import { populateSEO } from './utils/cms-helpers.js';
         if (!cta) return;
 
         var titleEl = document.querySelector('[data-pr="cta-title"]');
-        var descEl  = document.querySelector('[data-pr="cta-desc"]');
+        var descEl = document.querySelector('[data-pr="cta-desc"]');
         var primBtn = document.querySelector('[data-pr="cta-primary-btn"]');
-        var secBtn  = document.querySelector('[data-pr="cta-secondary-btn"]');
+        var secBtn = document.querySelector('[data-pr="cta-secondary-btn"]');
 
         setText(titleEl, cta.title || '');
-        setText(descEl,  cta.description || '');
+        setText(descEl, cta.description || '');
 
         if (primBtn && cta.ctaPrimary) {
             primBtn.textContent = cta.ctaPrimary.text || 'Talk to an Expert';
@@ -299,7 +303,12 @@ import { populateSEO } from './utils/cms-helpers.js';
             secBtn.textContent = cta.ctaSecondary.text || '';
             if (cta.ctaSecondary.link) {
                 secBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
+            } else {
+
+
             }
+        } else {
+            secBtn.style.display = 'none';
         }
     }
 

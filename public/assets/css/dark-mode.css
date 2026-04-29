@@ -762,6 +762,10 @@ html[data-theme="dark"] [class*="plan-badge"] {
     color: #ffffff !important;
 }
 
+html[data-theme="dark"] .pr-cta-primary {
+    background: #0f0f0f;
+}
+
 /* Step / process numbered circles */
 html[data-theme="dark"] [class*="-step-number"],
 html[data-theme="dark"] .cu-step-number {
