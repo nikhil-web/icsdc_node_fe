@@ -540,9 +540,9 @@ export function getHomepagePage() {
         "&populate[globalLocations]=*" +
         "&populate[techPartners][populate][logo]=true" +
         "&populate[heroImage][populate][image]=true" +
-        "&populate[trustedPartners][populate][logo]=true"
-
-
+        "&populate[trustedPartners][populate][logo]=true" +
+        "&populate[whyBusinessNeedsCloud][populate][image]=true" +
+        "&populate[whyBusinessNeedsCloud][populate][items]=*"
     );
 }
 
