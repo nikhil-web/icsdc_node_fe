@@ -33,23 +33,7 @@ export function getFooterHTML() {
                 </div>
 
                 <div class="footer-brand-right">
-                    <div class="footer-social" aria-label="Social media links">
-                        <a data-strapi-social="linkedin" href="#" class="footer-social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
-                            <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
-                        </a>
-                        <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
-                            <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
-                        </a>
-                        <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-                            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
-                        </a>
-                        <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="X / Twitter" target="_blank" rel="noopener noreferrer">
-                            <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
-                        </a>
-                        <a data-strapi-social="youtube" href="#" class="footer-social-link" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
-                            <i class="fa-brands fa-youtube" aria-hidden="true"></i>
-                        </a>
-                    </div>
+                    <div class="footer-social" data-strapi-social-list aria-label="Social media links"></div>
                 </div>
 
             </div>

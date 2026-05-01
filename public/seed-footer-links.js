@@ -136,12 +136,15 @@ async function seedFooterLinks() {
     console.log(`    socials   : ${(existing.socialLinks || []).length} entries`);
     console.log(`    old groups: ${(existing.linkGroups  || []).length} entries\n`);
 
-    // 2. Strip internal IDs from social links (Strapi v5 rejects id in component PUT)
-    const socialLinks = (existing.socialLinks || []).map(({ platform, url, name }) => ({
-        platform,
-        url,
-        ...(name ? { name } : {}),
-    }));
+    // 2. Social links — new schema: icon (FA name) + name + url
+    //    These replace the old enum-based "platform" field entirely.
+    const socialLinks = [
+        { icon: "brands:linkedin-in", name: "LinkedIn",  url: "https://www.linkedin.com"  },
+        { icon: "brands:facebook-f",  name: "Facebook",  url: "https://www.facebook.com"  },
+        { icon: "brands:instagram",   name: "Instagram", url: "https://www.instagram.com" },
+        { icon: "brands:x-twitter",   name: "X",         url: "https://www.twitter.com"   },
+        { icon: "brands:youtube",     name: "YouTube",   url: "https://www.youtube.com"   },
+    ];
 
     // 3. Build PUT body — preserve everything except linkGroups
     const body = {

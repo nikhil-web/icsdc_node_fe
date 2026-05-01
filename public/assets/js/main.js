@@ -267,13 +267,19 @@ function initFooter(footer) {
         email.innerHTML = footer.email;
     }
 
-    // --- Social links ---
-    if (footer.socialLinks) {
+    // --- Social links (dynamic — icon + name + url from Strapi) ---
+    var socialList = document.querySelector('[data-strapi-social-list]');
+    if (socialList && footer.socialLinks) {
         footer.socialLinks.forEach(function (item) {
-            var el = document.querySelector('[data-strapi-social="' + item.platform + '"]');
-            if (el && item.url) {
-                el.href = item.url;
-            }
+            if (!item.url) return;
+            var a = document.createElement('a');
+            a.href = item.url;
+            a.className = 'footer-social-link';
+            a.setAttribute('aria-label', item.name || '');
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.innerHTML = resolveIcon(item.icon);
+            socialList.appendChild(a);
         });
     }
 
