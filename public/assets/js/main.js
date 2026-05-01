@@ -5,6 +5,7 @@
 
 import { getNavigation, getFooter } from "./services/contentService.js";
 import { resolveIcon } from "./utils/cms-helpers.js";
+import { getFooterHTML } from "./footer-template.js";
 
 
 // ══════════════════════════════════════════════════════════
@@ -280,7 +281,6 @@ function initFooter(footer) {
 
     if (groupsWrap && footer.linkGroups) {
         footer.linkGroups.forEach(function (group) {
-
             var links = (group.links || []).map(function (link) {
                 return `<li><a class="footer-link" href="${link.url || '#'}">${link.label || ''}</a></li>`;
             }).join('');
@@ -325,6 +325,10 @@ async function init() {
         initNav(menuData);
         initMainLogo(menuData);
         initLoginButton(menuData);
+
+        // Inject footer template into the placeholder element
+        const footerEl = document.getElementById('site-footer');
+        if (footerEl) footerEl.innerHTML = getFooterHTML();
 
         const footerData = await getFooter();
         initFooter(footerData.data.commonFooter);
