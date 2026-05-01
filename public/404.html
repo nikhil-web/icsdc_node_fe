@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="assets/js/theme-init.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 – Page Not Found | ICSDC</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+  <style>
+    .nf-wrap {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px;
+      gap: 0;
+    }
+
+    .nf-code {
+      font-size: clamp(96px, 18vw, 180px);
+      font-weight: 800;
+      line-height: 1;
+      color: var(--blue);
+      letter-spacing: -4px;
+      opacity: 0.12;
+      user-select: none;
+      position: absolute;
+    }
+
+    .nf-icon-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 96px;
+      height: 96px;
+      border-radius: 24px;
+      background: var(--blue-light);
+      margin-bottom: 28px;
+    }
+
+    .nf-icon-wrap i {
+      font-size: 42px;
+      color: var(--blue);
+    }
+
+    .nf-wrap h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800;
+      color: var(--c-heading, #0f172a);
+      margin: 0 0 14px;
+    }
+
+    .nf-wrap p {
+      font-size: 17px;
+      color: var(--c-text-muted, #64748b);
+      max-width: 460px;
+      line-height: 1.65;
+      margin: 0 0 36px;
+    }
+
+    .nf-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .nf-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      background: var(--blue);
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.18s;
+    }
+
+    .nf-btn-primary:hover { background: var(--blue-dark); }
+
+    .nf-btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      background: transparent;
+      color: var(--blue);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      border: 2px solid var(--blue);
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.18s, color 0.18s;
+    }
+
+    .nf-btn-outline:hover {
+      background: var(--blue-hover-bg, #eff6ff);
+    }
+
+    .nf-divider {
+      width: 56px;
+      height: 4px;
+      border-radius: 99px;
+      background: var(--blue);
+      margin: 0 auto 28px;
+      opacity: 0.35;
+    }
+
+    .nf-quick-links {
+      margin-top: 52px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 640px;
+    }
+
+    .nf-quick-links span {
+      font-size: 13px;
+      color: var(--c-text-muted, #64748b);
+      width: 100%;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .nf-quick-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      background: var(--c-surface, #f8fafc);
+      border: 1px solid var(--c-border, #e2e8f0);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--c-heading, #0f172a);
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .nf-quick-link:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .nf-quick-link i { font-size: 12px; opacity: 0.7; }
+  </style>
+</head>
+
+<body>
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+  <!-- 404 CONTENT -->
+  <section class="nf-wrap">
+    <div class="nf-icon-wrap">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <h1>Page Not Found</h1>
+    <div class="nf-divider"></div>
+    <p>The page you're looking for doesn't exist or may have been moved. Let's get you back on track.</p>
+    <div class="nf-actions">
+      <a href="/" class="nf-btn-primary">
+        <i class="fa-solid fa-house"></i> Back to Home
+      </a>
+      <a href="contact-us.html" class="nf-btn-outline">
+        <i class="fa-solid fa-headset"></i> Contact Support
+      </a>
+    </div>
+
+    <div class="nf-quick-links">
+      <span>Popular pages</span>
+      <a href="cloud-hosting.html" class="nf-quick-link"><i class="fa-solid fa-cloud"></i> Cloud Hosting</a>
+      <a href="dedicated-server.html" class="nf-quick-link"><i class="fa-solid fa-server"></i> Dedicated Servers</a>
+      <a href="vps-hosting.html" class="nf-quick-link"><i class="fa-solid fa-layer-group"></i> VPS Hosting</a>
+      <a href="gpu-dedicated-server.html" class="nf-quick-link"><i class="fa-solid fa-microchip"></i> GPU Servers</a>
+      <a href="pricing.html" class="nf-quick-link"><i class="fa-solid fa-tag"></i> Pricing</a>
+      <a href="ssl-certificate.html" class="nf-quick-link"><i class="fa-solid fa-lock"></i> SSL Certificates</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      <div data-strapi-link-groups class="footer-container">
+        <div class="footer-brand">
+          <a href="/" aria-label="ICSDC Home">
+            <img data-strapi-logo src="" alt="ICSDC" width="117" class="footer-logo">
+          </a>
+          <address class="footer-address">
+            <span data-strapi-footer-address></span>
+            <span data-strapi-address class="footer-phone">Phone: +91 98109 58857</span>
+            <span>Email: <a data-strapi-address href="mailto:info@icsdc.com" class="footer-email-link">info@icsdc.com</a></span>
+          </address>
+          <div class="footer-social" aria-label="Social media links">
+            <a data-strapi-social="facebook" href="#" class="footer-social-link" aria-label="facebook" target="_blank" rel="noopener noreferrer">
+              <i class="fa-solid fa-code" aria-hidden="true"></i>
+            </a>
+            <a data-strapi-social="twitter" href="#" class="footer-social-link" aria-label="twitter" target="_blank" rel="noopener noreferrer">
+              <i class="fa-solid fa-code" aria-hidden="true"></i>
+            </a>
+            <a data-strapi-social="instagram" href="#" class="footer-social-link" aria-label="instagram" target="_blank" rel="noopener noreferrer">
+              <i class="fa-solid fa-code" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p id="footer-year-text">&#169; Copyright <span data-strapi-year id="footer-year"></span> <span data-strapi-company-name></span>. All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/main.js" type="module"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/polish.js" defer></script>
+</body>
+
+</html>

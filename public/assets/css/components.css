@@ -1952,3 +1952,95 @@
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* ══════════════════════════════════════
+   FONT AWESOME ICON SIZING
+   All icon containers use FA icons — no inline SVGs.
+══════════════════════════════════════ */
+
+/* Generic: any container ending in -icon gets FA sizing */
+[class*="-icon"] i.fa-solid,
+[class*="-icon"] i.fa-brands,
+[class*="-icon"] i.fa-regular {
+    font-size: 22px;
+    color: var(--blue, var(--c-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Why-card icons */
+.why-icon i.fa-solid {
+    font-size: 22px;
+    color: var(--blue, var(--c-blue));
+}
+
+/* Cloud power / feature icons */
+.cloud-power-icon i.fa-solid,
+.cloud-power-icon i.fa-brands {
+    font-size: 20px;
+    color: var(--blue, var(--c-blue));
+}
+
+/* Solution cards */
+.solution-icon i.fa-solid,
+.solution-icon i.fa-brands {
+    font-size: 24px;
+    color: var(--blue, var(--c-blue));
+}
+
+/* Framework / tech badges */
+.cloud-framework-badge i.fa-solid,
+.cloud-framework-badge i.fa-brands,
+.tech-badge i.fa-solid,
+.tech-badge i.fa-brands {
+    font-size: 18px;
+    color: var(--blue, var(--c-blue));
+}
+
+/* Checklist check icons */
+.ds-cl-icon i.fa-solid,
+[class*="plan-check"] i.fa-solid {
+    font-size: 11px;
+    color: var(--blue, var(--c-blue));
+}
+
+/* Comparison table icons */
+.ds-check-icon i.fa-solid {
+    font-size: 13px;
+    color: #16a34a;
+}
+
+.ds-partial-icon i.fa-solid {
+    font-size: 13px;
+    color: #ca8a04;
+}
+
+.ds-cross-icon i.fa-solid {
+    font-size: 13px;
+    color: #dc2626;
+}
+
+/* Testimonial stars */
+.testi-star {
+    font-size: 14px;
+    color: #f59e0b;
+}
+
+/* FAQ chevron */
+.faq-chevron {
+    font-size: 16px;
+    transition: transform 0.25s ease;
+    color: var(--c-text-mid, #4a5568);
+    flex-shrink: 0;
+}
+
+.faq-open .faq-chevron {
+    transform: rotate(180deg);
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] [class*="-icon"] i.fa-solid,
+[data-theme="dark"] [class*="-icon"] i.fa-brands {
+    color: var(--blue, var(--c-blue));
+}

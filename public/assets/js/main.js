@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getNavigation, getFooter } from "./services/contentService.js";
+import { resolveIcon } from "./utils/cms-helpers.js";
 
 
 // ══════════════════════════════════════════════════════════
@@ -103,7 +104,7 @@ function initNav(menuData) {
         grid.className = `cols-${cols || 2}`;
         grid.innerHTML = source.items.map(item => `
             <a href="${item.url}" class="dd-item">
-                <div class="dd-item-icon">${item.icon}</div>
+                <div class="dd-item-icon">${resolveIcon(item.icon)}</div>
                 <div class="dd-item-text">
                     <h5>${item.title}</h5>
                     <p>${item.sub}</p>
@@ -131,7 +132,7 @@ function initNav(menuData) {
             sidebar.innerHTML = menu.sections.map((sec, i) => `
                 <button class="sidebar-item${i === 0 ? " active" : ""}"
                         onclick="selectSection('${menu.id}', '${sec.id}', this)">
-                    <div class="sidebar-icon">${sec.icon}</div>
+                    <div class="sidebar-icon">${resolveIcon(sec.icon)}</div>
                     <span class="sidebar-label">${sec.label}</span>
                     <span class="sidebar-arrow">›</span>
                 </button>
@@ -140,7 +141,7 @@ function initNav(menuData) {
         } else {
             sidebar.classList.add("hidden");
             flatLeft.classList.remove("hidden");
-            document.querySelector("[data-strapi-dd='flatIcon']").textContent = menu.icon;
+            document.querySelector("[data-strapi-dd='flatIcon']").innerHTML = resolveIcon(menu.icon);
             document.querySelector("[data-strapi-dd='flatTitle']").textContent = menu.label;
             document.querySelector("[data-strapi-dd='flatDesc']").textContent = menu.desc;
             renderItems(menu, menu.cols, null);
