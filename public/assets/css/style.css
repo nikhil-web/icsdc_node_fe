@@ -1290,7 +1290,8 @@ nav.scrolled {
 
 /* Section gets a subtle gradient to separate from adjacent white sections */
 #cloud-solutions {
-    background: linear-gradient(180deg, #f0f4fb 0%, #f8fafc 100%);
+    background: linear-gradient(180deg, #ffffff 0%, #dfecfa 100%);
+    padding-bottom: 100px;
 }
 
 .phone-mockup-wrapper {
@@ -1582,7 +1583,7 @@ nav.scrolled {
    RIPPLE CONTROLS
 ══════════════════════════════════════ */
 .ripple-controls {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     gap: 16px;
