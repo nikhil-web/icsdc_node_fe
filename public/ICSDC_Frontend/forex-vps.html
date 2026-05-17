@@ -1,0 +1,490 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="assets/js/theme-init.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High-Performance Forex VPS | MT4, MT5 &amp; EA Trading | ICSDC</title>
+  <meta name="description"
+    content="Trade without interruptions using ICSDC Forex VPS. Ultra-low latency, 24/7 uptime, MT4/MT5 support, and dedicated resources for uninterrupted automated and manual trading.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-components.css">
+  <link rel="stylesheet" href="assets/css/forex-vps.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="fvps-eyebrow">&#128200; Forex VPS Hosting</div>
+        <h1 class="hero-title">Trade Without Interruptions With ICSDC High-Performance Forex VPS</h1>
+        <p class="hero-sub">Optimized for MT4, MT5, Expert Advisors &amp; 24/7 Trading</p>
+        <p class="hero-desc">Run your trading platforms and automated strategies on a reliable, always-on VPS built for
+          speed, stability, and real trading conditions. Never miss a market move due to system downtime or connectivity
+          issues.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="location.href='#fvps-plans'">Check Plans &amp; Get Started
+            &rarr;</button>
+          <button class="btn-outline" onclick="location.href='/contact'">Talk to Us</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img class="hero-right-image" alt="" style="display:none">
+        <div class="fvps-hero-visual">
+          <div class="fvps-top-badge">&#9654; Live Trading Active</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#f0fdfa" stroke="rgba(13,148,136,0.12)"
+              stroke-width="1" />
+
+            <!-- Chart grid lines -->
+            <line x1="30" y1="50" x2="270" y2="50" stroke="rgba(13,148,136,0.12)" stroke-width="1" />
+            <line x1="30" y1="80" x2="270" y2="80" stroke="rgba(13,148,136,0.12)" stroke-width="1" />
+            <line x1="30" y1="110" x2="270" y2="110" stroke="rgba(13,148,136,0.12)" stroke-width="1" />
+            <line x1="30" y1="140" x2="270" y2="140" stroke="rgba(13,148,136,0.12)" stroke-width="1" />
+
+            <!-- Trend line (upward) -->
+            <polyline points="30,160 60,145 90,150 120,120 150,125 180,95 210,85 240,60 270,45" stroke="#0d9488"
+              stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+
+            <!-- Area fill under trend -->
+            <path d="M30,160 60,145 90,150 120,120 150,125 180,95 210,85 240,60 270,45 L270,170 L30,170 Z"
+              fill="url(#fvps-area-gradient)" />
+
+            <!-- Candlestick chart at bottom -->
+            <!-- Candle 1 — bullish -->
+            <rect x="38" y="120" width="8" height="24" rx="1" fill="#0d9488" />
+            <line x1="42" y1="116" x2="42" y2="120" stroke="#0d9488" stroke-width="1.5" />
+            <line x1="42" y1="144" x2="42" y2="148" stroke="#0d9488" stroke-width="1.5" />
+            <!-- Candle 2 — bearish -->
+            <rect x="56" y="118" width="8" height="18" rx="1" fill="#f87171" />
+            <line x1="60" y1="114" x2="60" y2="118" stroke="#f87171" stroke-width="1.5" />
+            <line x1="60" y1="136" x2="60" y2="140" stroke="#f87171" stroke-width="1.5" />
+            <!-- Candle 3 — bullish -->
+            <rect x="74" y="106" width="8" height="28" rx="1" fill="#0d9488" />
+            <line x1="78" y1="102" x2="78" y2="106" stroke="#0d9488" stroke-width="1.5" />
+            <line x1="78" y1="134" x2="78" y2="138" stroke="#0d9488" stroke-width="1.5" />
+            <!-- Candle 4 — bullish -->
+            <rect x="92" y="94" width="8" height="24" rx="1" fill="#0d9488" />
+            <line x1="96" y1="90" x2="96" y2="94" stroke="#0d9488" stroke-width="1.5" />
+            <line x1="96" y1="118" x2="96" y2="122" stroke="#0d9488" stroke-width="1.5" />
+            <!-- Candle 5 — bearish -->
+            <rect x="110" y="98" width="8" height="16" rx="1" fill="#f87171" />
+            <line x1="114" y1="94" x2="114" y2="98" stroke="#f87171" stroke-width="1.5" />
+            <line x1="114" y1="114" x2="114" y2="118" stroke="#f87171" stroke-width="1.5" />
+
+            <!-- MT4/MT5 label boxes -->
+            <rect x="160" y="150" width="40" height="22" rx="5" fill="white" stroke="rgba(13,148,136,0.22)"
+              stroke-width="1.2" />
+            <text x="180" y="160" font-size="6" fill="#0d9488" text-anchor="middle" font-weight="600">MT4</text>
+            <text x="180" y="169" font-size="6" fill="#0d9488" text-anchor="middle" font-weight="700">&#10003;
+              Running</text>
+
+            <rect x="208" y="150" width="40" height="22" rx="5" fill="white" stroke="rgba(13,148,136,0.22)"
+              stroke-width="1.2" />
+            <text x="228" y="160" font-size="6" fill="#0d9488" text-anchor="middle" font-weight="600">MT5</text>
+            <text x="228" y="169" font-size="6" fill="#0d9488" text-anchor="middle" font-weight="700">&#10003;
+              Running</text>
+
+            <!-- EA badge -->
+            <rect x="160" y="177" width="88" height="16" rx="4" fill="#ccfbf1" />
+            <text x="204" y="188" font-size="6.5" fill="#0f766e" text-anchor="middle" font-weight="700">Expert Advisor:
+              Active</text>
+
+            <!-- Gradient definition -->
+            <defs>
+              <linearGradient id="fvps-area-gradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0d9488" stop-opacity="0.18" />
+                <stop offset="100%" stop-color="#0d9488" stop-opacity="0.02" />
+              </linearGradient>
+            </defs>
+
+            <!-- Corner accent dots -->
+            <circle cx="28" cy="28" r="4" fill="#99f6e4" opacity="0.7" />
+            <circle cx="272" cy="28" r="4" fill="#99f6e4" opacity="0.7" />
+            <circle cx="28" cy="192" r="3" fill="#5eead4" opacity="0.5" />
+            <circle cx="272" cy="192" r="3" fill="#5eead4" opacity="0.5" />
+          </svg>
+          <div class="fvps-status-badge">
+            <div class="fvps-dot"></div>
+            <div>
+              <div class="fvps-bt">Trading Live</div>
+              <div class="fvps-bs">24/7 Uptime</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — PILLARS (4 WHY-US CARDS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+          <h3>Ultra-Low Latency Infrastructure</h3>
+          <p>Servers optimized for fast trade execution and minimal delays between your platform and broker.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Always-On VPS Availability</h3>
+          <p>99.9%+ uptime ensures your trading bots and platforms run 24/7 without interruptions.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+          <h3>Platform-Ready Environment</h3>
+          <p>Pre-configured for MT4, MT5, cTrader, and other major trading platforms out of the box.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Dedicated &amp; Secure Resources</h3>
+          <p>Your VPS runs on isolated resources, keeping performance stable and data protected.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — FOREX VPS PLANS ════ -->
+  <section id="fvps-plans" class="section cloud-power-section">
+    <div class="container">
+      <span id="fvps-plans-label" class="cloud-section-label" data-animate="fade-up">PRICING</span>
+      <h2 id="fvps-plans-title" class="title" data-animate="fade-up">Flexible Forex VPS Pricing Plans</h2>
+      <p id="fvps-plans-subtitle" class="subtitle" data-animate="fade-up">Choose a Forex VPS plan that matches your
+        trading volume and strategy. Transparent pricing, scalable resources, and no hidden costs - upgrade anytime as
+        your trading needs grow.</p>
+      <div class="fvps-plans-grid" data-stagger></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — WHAT MAKES ICSDC FOREX VPS BETTER ════ -->
+  <section id="fvps-features" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHY FOREX VPS</span>
+      <h2 class="title" data-animate="fade-up">Why Choose ICSDC Forex VPS for Your Trading</h2>
+      <p class="subtitle" data-animate="fade-up">Purpose-built for traders who need speed, stability, and uninterrupted
+        access to their trading platforms and automated strategies.</p>
+
+      <div class="fvps-features-grid" data-stagger id="fvps-features-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Faster Trade Execution</h3>
+          <p>Low-latency infrastructure reduces the time between order placement and execution, giving your strategies a
+            real performance edge.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Uninterrupted 24/7 Trading</h3>
+          <p>Your trading platform runs continuously on the VPS regardless of your local system's status, power, or
+            internet connection.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <h3>Stable Performance During Market Peaks</h3>
+          <p>Dedicated resources ensure consistent performance even during high-volatility periods when trade volumes
+            spike.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Compatible With All Major Trading Platforms</h3>
+          <p>ICSDC Forex VPS supports MT4, MT5, cTrader, NinjaTrader, TradingView, and custom trading tools without
+            compatibility issues.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+          <h3>Predictable Performance</h3>
+          <p>Unlike shared environments, your VPS resources are dedicated, ensuring performance does not fluctuate based
+            on other users' activity.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <h3>Global Server Locations</h3>
+          <p>Choose server locations closer to your broker's infrastructure to minimize latency and improve execution
+            speed.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Fast Setup, No Complexity</h3>
+          <p>Get your VPS activated quickly with a ready-to-use environment that requires minimal configuration.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Scales With Your Trading Growth</h3>
+          <p>Easily upgrade CPU, RAM, or storage as your strategies, accounts, or bots expand.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+          <h3>Human Support When You Need It</h3>
+          <p>Our technical team understands trading environments and is available to help whenever required.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — HOW TO SET UP ════ -->
+  <section id="fvps-setup" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title" data-animate="fade-up" id="fvps-setup-title">How To Set Up Your Forex VPS With ICSDC</h2>
+      <div class="fvps-steps-grid" data-stagger id="fvps-steps-grid"></div>
+    </div>
+  </section>
+
+  <!-- ════ SECTION 5 — POPULAR TRADING APPS ════ -->
+  <section id="fvps-apps" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title" data-animate="fade-up" id="fvps-apps-title">Popular Trading Apps for Your Forex VPS</h2>
+      <p class="subtitle" data-animate="fade-up">Install and run your preferred Forex trading platforms with ease. ICSDC
+        Forex VPS supports all major trading tools, giving you the flexibility to trade the way you want.</p>
+      <div class="fvps-apps-grid" data-stagger id="fvps-apps-grid"></div>
+    </div>
+  </section>
+
+  <!-- ════ SECTION 6 — WHY CHOOSE ICSDC ════ -->
+  <section id="fvps-why-choose" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up" id="fvps-why-choose-label">WHY ICSDC</span>
+      <h2 class="title" data-animate="fade-up" id="fvps-why-choose-title">Why Choose ICSDC for Forex VPS Servers?</h2>
+      <div class="fvps-features-grid" data-stagger id="fvps-why-choose-grid"></div>
+    </div>
+  </section>
+
+  <!-- ════ SECTION 7 — USE CASES (6 CARDS) ════ -->
+  <section id="fvps-usecases" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">USE CASES</span>
+      <h2 class="title" data-animate="fade-up">How Traders Use ICSDC Forex VPS</h2>
+      <p class="subtitle" data-animate="fade-up">From automated bots to remote access, Forex VPS keeps your trading
+        active under every condition.</p>
+
+      <div class="cloud-use-grid" data-stagger id="fvps-usecases-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Automated Trading &amp; Expert Advisors</h3>
+          <p>Forex VPS allows trading bots and Expert Advisors to run continuously without interruptions caused by
+            system
+            shutdowns, internet issues, or power failures on your local machine.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <h3>High-Frequency &amp; Scalping Strategies</h3>
+          <p>Low-latency VPS environments help execute trades faster, which is critical for scalping and high-frequency
+            strategies where even small delays can impact profitability.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Multi-Account Trading Management</h3>
+          <p>Traders managing multiple accounts or strategies can run everything from a single VPS, ensuring stable
+            performance and centralized control without overloading personal systems.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>News &amp; Event-Based Trading</h3>
+          <p>During major economic announcements and volatile market movements, a Forex VPS ensures your trades remain
+            active and responsive when timing is crucial.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <h3>Remote Trading From Anywhere</h3>
+          <p>Access your trading platforms securely from any device or location, making it easy to monitor, adjust, or
+            close positions while traveling or away from your main setup.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Backup Trading Environment</h3>
+          <p>A Forex VPS acts as a reliable backup system, protecting your trades from unexpected local disruptions like
+            power cuts, hardware failures, or unstable internet connections.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — WHO SHOULD USE (6 CARDS) ════ -->
+  <section id="fvps-who" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHO IT&rsquo;S FOR</span>
+      <h2 class="title" data-animate="fade-up">Who Should Use ICSDC Forex VPS?</h2>
+      <p class="subtitle" data-animate="fade-up">Whether you run bots, scalp the markets, or trade from multiple
+        locations &mdash; Forex VPS gives you the reliability you need.</p>
+
+      <div class="cloud-use-grid" data-stagger id="fvps-who-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Automated Traders &amp; Bot Users</h3>
+          <p>Traders running Expert Advisors or automated strategies need a VPS to keep their systems active 24/7
+            without relying on personal devices.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <h3>Scalpers &amp; High-Frequency Traders</h3>
+          <p>Those who depend on fast execution and low latency benefit from VPS environments that reduce delays during
+            rapid trade entries and exits.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Traders Managing Multiple Accounts</h3>
+          <p>A Forex VPS helps handle multiple trading accounts or strategies simultaneously from one stable and
+            centralized setup.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>News &amp; Event-Based Traders</h3>
+          <p>Traders who operate during high-impact economic announcements require consistent uptime and responsiveness,
+            which a VPS provides.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <h3>Remote or Traveling Traders</h3>
+          <p>Anyone who needs secure access to their trading platform from different locations or devices can rely on a
+            Forex VPS for uninterrupted access.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
+          <h3>Traders Facing Power or Internet Issues</h3>
+          <p>If local power cuts or unstable internet connections affect your trading, a Forex VPS ensures your trades
+            remain protected and running.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — TESTIMONIALS ════ -->
+  <section class="testi-section" id="fvps-testi" aria-labelledby="fvps-testi-heading">
+    <div class="testi-container">
+      <h2 id="fvps-testi-heading" class="testi-title">What Traders Say About ICSDC Forex VPS</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band" id="fvps-cta1">
+    <div class="cloud-cta-inner">
+      <h2>Ready to Trade Without Interruptions?</h2>
+      <p>Run your trading platforms on a reliable, always-on Forex VPS built for speed, stability, and real trading
+        conditions. Whether you use manual strategies or automated bots, ICSDC Forex VPS keeps your trades live 24/7.
+      </p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='/contact'">Get Started &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='#fvps-plans'">View Plans</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — FAQ ════ -->
+  <section class="faq-section" id="fvps-faq" aria-labelledby="fvps-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="fvps-faq-heading" class="faq-title">FAQs About ICSDC Forex VPS</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our Forex VPS Team</h3>
+        <p class="faq-contact-desc">Our team understands trading environments and is available to help with setup,
+          configuration, and platform support.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact-us.html" class="faq-contact-btn">Talk to an Expert <i class="fa-solid fa-headset"
+            aria-hidden="true"></i></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/forex-vps.js"></script>
+
+</body>
+
+</html>

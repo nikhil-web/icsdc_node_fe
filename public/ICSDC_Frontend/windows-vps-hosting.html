@@ -1,0 +1,484 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="assets/js/theme-init.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows VPS Hosting | Fast, Secure & Scalable Windows Cloud by ICSDC</title>
+  <meta name="description"
+    content="Get fast, secure, high-performance Windows VPS Hosting with dedicated resources, full RDP access, instant deployment and 24/7 support by ICSDC.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/windows-vps-hosting.css">
+  <link rel="stylesheet" href="assets/css/cloud-components.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">✕</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="win-badge">&#129695; Windows VPS Hosting</div>
+        <h1 class="hero-title">Your Windows Workspace — Virtualized, Streamlined, Unlimited</h1>
+        <p class="hero-sub">ICSDC Windows VPS Hosting You Can Count On</p>
+        <p class="hero-desc">Run your Windows-based apps with confidence on ICSDC's high-availability VPS platform —
+          designed for speed, uptime, and unmatched reliability with full RDP access.</p>
+        <div class="hero-btns">
+          <button class="btn-primary">Get Your Windows VPS Now &rarr;</button>
+          <button class="btn-outline">View Plans</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img class="hero-right-image" alt="" style="display:none">
+        <div class="win-hero-visual">
+          <div class="win-tech-badge">&#129695; Windows Server 2022</div>
+          <svg viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="20" width="240" height="160" rx="12" fill="#fff" stroke="rgba(0,120,212,0.15)"
+              stroke-width="1" />
+            <rect x="20" y="20" width="240" height="36" rx="12" fill="#0078d4" />
+            <circle cx="40" cy="38" r="6" fill="rgba(255,255,255,0.4)" />
+            <circle cx="58" cy="38" r="6" fill="rgba(255,255,255,0.4)" />
+            <circle cx="76" cy="38" r="6" fill="rgba(255,255,255,0.4)" />
+            <rect x="34" y="68" width="100" height="8" rx="4" fill="#e3f2fd" />
+            <rect x="34" y="84" width="70" height="6" rx="3" fill="#f1f5f9" />
+            <rect x="34" y="100" width="85" height="6" rx="3" fill="#f1f5f9" />
+            <rect x="34" y="116" width="60" height="6" rx="3" fill="#f1f5f9" />
+            <rect x="150" y="68" width="96" height="96" rx="8" fill="#f8fafc" stroke="rgba(0,120,212,0.1)"
+              stroke-width="1" />
+            <rect x="160" y="78" width="35" height="35" rx="6" fill="#0078d4" />
+            <rect x="201" y="78" width="35" height="35" rx="6" fill="#50e3c2" opacity=".7" />
+            <rect x="160" y="119" width="35" height="35" rx="6" fill="#ffb347" opacity=".8" />
+            <rect x="201" y="119" width="35" height="35" rx="6" fill="#0078d4" opacity=".4" />
+            <text x="165" y="100" font-size="18" fill="white">&#128269;</text>
+            <text x="205" y="100" font-size="18" fill="white">&#9881;</text>
+            <text x="165" y="141" font-size="18" fill="white">&#128202;</text>
+            <text x="205" y="141" font-size="18" fill="white">&#128274;</text>
+          </svg>
+          <div class="win-status-badge">
+            <div class="win-dot"></div>
+            <div>
+              <div class="win-badge-text">RDP Active</div>
+              <div class="win-badge-sub">Full Admin Access</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════ 4 PILLARS ════════════════════════════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+          <h3>Optimized Windows Environment</h3>
+          <p>Pre-tuned for smoother app performance, faster RDP sessions, and reliable business workflows on Windows
+            Server 2022/2019/2016.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+          <h3>Enterprise-Grade Resources</h3>
+          <p>Dedicated CPU, RAM, and NVMe storage ensure stable, high-speed operations for critical applications without
+            resource sharing.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
+          <h3>Cost-Efficient Virtualization</h3>
+          <p>Get the power of a dedicated Windows setup without hardware expense or maintenance overhead — predictable,
+            transparent billing.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+          <h3>Built for Always-On Productivity</h3>
+          <p>Secure datacenter uptime, quick recovery options, and consistent performance keep your remote team moving
+            24/7.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════ FEATURES ════════════════════════════ -->
+  <section id="features" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Features</span>
+      <h2 class="title" data-animate="fade-up">What Makes ICSDC Windows VPS Hosting Better?</h2>
+      <p class="subtitle" data-animate="fade-up">Every capability built for the Windows ecosystem — from .NET apps to
+        SQL databases to RDP-powered teams.</p>
+      <div class="cloud-power-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Instant Windows VPS Deployment</h3>
+          <p>Spin up a fully configured Windows VPS within minutes — start working, testing, or hosting applications
+            without delay.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+          <h3>Guaranteed Dedicated Resources</h3>
+          <p>Consistent performance with allocated CPU, RAM, and NVMe storage reserved exclusively for your virtual
+            server — no sharing.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Full Administrator-Level Control</h3>
+          <p>Complete RDP and admin access to install software, configure settings, and manage your server exactly as
+            your business demands.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></div>
+          <h3>Modern Virtualization Technology</h3>
+          <p>Advanced KVM hypervisors deliver better workload isolation, improved stability, and optimized Windows
+            performance consistently.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
+          <h3>Effortless Resource Scalability</h3>
+          <p>As requirements grow, upgrade CPU, RAM, or storage seamlessly without service interruptions or complex
+            migrations.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <h3>High-Speed Network &amp; Low Latency</h3>
+          <p>Reliable bandwidth, fast data transfer speeds, and stable remote desktop sessions supported by ICSDC's
+            optimized network.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+          <h3>Optional Managed Windows Support</h3>
+          <p>Let ICSDC handle OS updates, patch installation, and system optimization so you focus on applications, not
+            server admin.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-file-lines" aria-hidden="true"></i></div>
+          <h3>Application-Ready Environment</h3>
+          <p>Perfectly suited for ERP systems, accounting tools, CRM platforms, .NET applications, SQL databases, and
+            remote desktop workflows.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Flexible Backup &amp; Restore</h3>
+          <p>Safeguard critical data with scheduled backups, snapshots, and fast restore features for added business
+            continuity.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════ SECURITY ════════════════════════════ -->
+  <section id="security" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Security</span>
+      <h2 class="title" data-animate="fade-up">How We Secure Your Windows VPS Hosting Servers</h2>
+      <p class="subtitle" data-animate="fade-up">Multi-layered protection built into every Windows VPS from day one.</p>
+      <div class="win-security-grid" data-stagger>
+        <div class="win-security-card">
+          <div class="win-security-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Isolated VPS Environment</h3>
+          <p>Your data and applications remain completely separate from other users on dedicated virtual resources.</p>
+        </div>
+        <div class="win-security-card">
+          <div class="win-security-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Custom Firewall Controls</h3>
+          <p>Define your own access rules, allowing only approved ports, IPs, and protocols to interact with your
+            server.</p>
+        </div>
+        <div class="win-security-card">
+          <div class="win-security-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Real-Time DDoS Defense</h3>
+          <p>Automated attack filtering keeps your VPS stable by blocking harmful traffic before it reaches your system.
+          </p>
+        </div>
+        <div class="win-security-card">
+          <div class="win-security-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Encrypted RDP Sessions</h3>
+          <p>Secure, end-to-end encrypted connections protect user logins and sensitive data during remote access.</p>
+        </div>
+        <div class="win-security-card">
+          <div class="win-security-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Continuous Monitoring</h3>
+          <p>ICSDC tracks network activity and system health around the clock to detect and respond to unusual behavior
+            immediately.</p>
+        </div>
+        <div class="win-security-card">
+          <div class="win-security-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+          <h3>OS Hardening</h3>
+          <p>Essential Windows security enhancements and best practices strengthen your virtual server's baseline
+            configuration.</p>
+        </div>
+        <div class="win-security-card">
+          <div class="win-security-icon"><i class="fa-solid fa-house" aria-hidden="true"></i></div>
+          <h3>Secured Datacenters</h3>
+          <p>Facilities with controlled access, surveillance, redundant power, and strict environmental protection.</p>
+        </div>
+        <div class="win-security-card">
+          <div class="win-security-icon"><i class="fa-solid fa-download" aria-hidden="true"></i></div>
+          <h3>Snapshot &amp; Recovery</h3>
+          <p>Quick snapshots enable fast restoration from misconfigurations or unexpected issues — business continuity
+            assured.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════ TECHNOLOGY STACK ════════════════════════════ -->
+  <section class="win-stack-section section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Technology Stack</span>
+      <h2 class="title" data-animate="fade-up">ICSDC Windows VPS Technology Stack</h2>
+      <p class="subtitle" data-animate="fade-up">Core technologies and tools that power our Windows VPS hosting — built
+        for performance, stability, and business compatibility.</p>
+      <div class="win-stack-grid" data-stagger>
+        <div class="win-stack-card">
+          <div class="win-stack-title">Development &amp; Platform</div>
+          <ul class="win-stack-list">
+            <li>Windows Server 2022 / 2019 / 2016</li>
+            <li>Full Administrator (RDP) Access</li>
+            <li>IIS Web Server Support</li>
+            <li>.NET Framework &amp; .NET Core</li>
+            <li>ASP.NET, ASP.NET MVC</li>
+            <li>PowerShell &amp; Command Line</li>
+            <li>Visual Studio Compatibility</li>
+          </ul>
+        </div>
+        <div class="win-stack-card">
+          <div class="win-stack-title">Management &amp; Infrastructure</div>
+          <ul class="win-stack-list">
+            <li>NVMe SSD Storage for Fast I/O</li>
+            <li>Dedicated CPU &amp; RAM Allocation</li>
+            <li>1 Gbps Network Connectivity</li>
+            <li>KVM Virtualization</li>
+            <li>Automated Backups (Optional)</li>
+            <li>Scalable Resources on Demand</li>
+            <li>24/7 Infrastructure Monitoring</li>
+          </ul>
+        </div>
+        <div class="win-stack-card">
+          <div class="win-stack-title">Databases &amp; Communication</div>
+          <ul class="win-stack-list">
+            <li>MS SQL Server (2022, 2019, 2017)</li>
+            <li>MySQL (Latest Community Version)</li>
+            <li>phpMyAdmin &amp; MS Access Support</li>
+            <li>Secure Email Ports &amp; Catch-All</li>
+            <li>Built-in Anti-Spam Protection</li>
+            <li>MailEnable / SmarterMail Add-ons</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════ WHO SHOULD CHOOSE ════════════════════════════ -->
+  <section id="use-cases" class="section cloud-use-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Who Is It For?</span>
+      <h2 class="title" data-animate="fade-up">Who Should Choose Windows VPS Hosting?</h2>
+      <p class="subtitle" data-animate="fade-up">Ideal for individuals and businesses that rely on Windows-based tools,
+        applications, or workflows.</p>
+      <div class="cloud-use-grid" data-stagger>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Businesses Running Windows Apps</h3>
+          <p>Organizations using .NET apps, MS SQL databases, ERP/CRM tools, or any Windows-native software that needs
+            dedicated resources.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+          <h3>Remote Teams &amp; RDP Users</h3>
+          <p>Companies requiring remote desktops, multi-user access, and centralized workspace management for
+            distributed teams.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Developers &amp; IT Professionals</h3>
+          <p>Building, testing, and deploying Windows frameworks like ASP.NET, IIS-based apps, and .NET Core projects
+            with full control.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
+          <h3>Companies Migrating from Shared</h3>
+          <p>Those needing more power, stability, and customization than shared environments can offer — without full
+            dedicated cost.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
+          <h3>Financial &amp; Accounting Teams</h3>
+          <p>Works seamlessly with Tally, accounting apps, reporting engines, Crystal Reports, and legacy Windows-native
+            business tools.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-house" aria-hidden="true"></i></div>
+          <h3>Enterprises With Legacy Applications</h3>
+          <p>Supports older Windows-based software that must run in a stable, compatible environment without rewriting
+            or porting code.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════ CTA BAND ════════════════════════════ -->
+  <section class="cloud-cta-band">
+    <div class="cloud-cta-inner">
+      <h2>Let's Build Your Perfect Windows VPS Together</h2>
+      <p>Share your vision and we'll shape the right hosting setup for your business needs and budget.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Deploy Your Windows VPS Now &rarr;</button>
+        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════
+     SECTION 8 — TESTIMONIALS
+════════════════════════════════════ -->
+  <section class="testi-section" aria-labelledby="testi-heading">
+    <div class="testi-container">
+      <h2 id="testi-heading" class="testi-title">See our Clients Stories</h2>
+
+      <!-- Cards rendered by components.js -->
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+
+      <!-- Pagination dots rendered by components.js -->
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ FAQ ════════ -->
+  <section class="faq-section" id="acr-faq" aria-labelledby="acr-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="acr-faq-heading" class="faq-title">FAQs About ICSDC Acronis Backup</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our Backup Experts</h3>
+        <p class="faq-contact-desc">Our certified engineers are available 24/7 to help you design the right
+          backup and
+          disaster recovery strategy for your workloads.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact-us.html" class="faq-contact-btn">Talk to an Expert <i class="fa-solid fa-headset"
+            aria-hidden="true"></i></a>
+      </aside>
+    </div>
+  </section>
+
+
+
+
+  <!-- ════════════════════════════ FINAL CTA ════════════════════════════ -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Get Started with ICSDC Windows VPS Hosting</h2>
+      <p>Fast. Secure. Scalable. Full RDP access — your Windows environment, your rules.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Start My Windows VPS &rarr;</button>
+        <button class="cloud-cta-btn-outline">View All Plans</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
+  <!-- SCROLL ANIMATION ENGINE -->
+
+
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/main.js" type="module"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/polish.js" defer></script>
+  <script src="assets/js/windows-vps-hosting.js" type="module"></script>
+
+  <script>
+    (function () {
+      var el = document.getElementById('footer-year');
+      if (el) el.textContent = new Date().getFullYear();
+    })();
+  </script>
+
+</body>
+
+</html>

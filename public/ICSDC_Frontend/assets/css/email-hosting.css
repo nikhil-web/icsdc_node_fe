@@ -1,0 +1,287 @@
+﻿/* ══════════════════════════════════════
+   EMAIL HOSTING PAGE — SCOPED STYLES
+   Accent: sky blue (#0ea5e9)
+   Shared cloud-* classes are in components.css
+══════════════════════════════════════ */
+
+.email-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 50px;
+    margin-bottom: 14px;
+}
+
+.email-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4/3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 55%, #e8f4fd 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(14, 165, 233, .15), 0 4px 16px rgba(0, 0, 0, .06);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
+
+.email-hero-visual svg {
+    width: 72%;
+    height: 72%;
+}
+
+.email-tech-badge {
+    position: absolute;
+    top: 22px;
+    left: 22px;
+    background: #fff;
+    border: 1px solid rgba(14, 165, 233, .25);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0284c7;
+    letter-spacing: .04em;
+    box-shadow: 0 4px 16px rgba(14, 165, 233, .12);
+    animation: cloud-badge-float 6s ease-in-out .2s infinite;
+}
+
+.email-status-badge {
+    position: absolute;
+    bottom: 22px;
+    right: 22px;
+    background: #fff;
+    border: 1px solid rgba(14, 165, 233, .2);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(14, 165, 233, .12);
+    animation: cloud-badge-float 5s ease-in-out .8s infinite;
+}
+
+.email-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, .5);
+}
+
+.email-badge-text {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.email-badge-sub {
+    font-size: 10px;
+    color: var(--muted);
+}
+
+/* ── Solutions Cards ── */
+.email-solutions-section {
+    background: var(--bg-light);
+    padding: 80px 0;
+}
+
+.email-solutions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 40px;
+}
+
+.email-solution-card {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.email-solution-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-4px);
+}
+
+.email-solution-card.google:hover {
+    border-color: rgba(234, 67, 53, .3);
+}
+
+.email-solution-card.microsoft:hover {
+    border-color: rgba(0, 120, 212, .3);
+}
+
+.email-solution-card.zimbra:hover {
+    border-color: rgba(14, 165, 233, .3);
+}
+
+.email-solution-logo {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    font-size: 26px;
+}
+
+.email-solution-card.google .email-solution-logo {
+    background: #fef2f2;
+}
+
+.email-solution-card.microsoft .email-solution-logo {
+    background: #e3f2fd;
+}
+
+.email-solution-card.zimbra .email-solution-logo {
+    background: #e0f2fe;
+}
+
+.email-solution-card h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+.email-solution-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.email-solution-tagline {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.email-solution-btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: transform var(--transition-fast) ease,
+        opacity var(--transition-base) ease;
+}
+
+.email-solution-card.google .email-solution-btn {
+    background: #ea4335;
+    color: #fff;
+}
+
+.email-solution-card.microsoft .email-solution-btn {
+    background: #0078d4;
+    color: #fff;
+}
+
+.email-solution-card.zimbra .email-solution-btn {
+    background: #0ea5e9;
+    color: #fff;
+}
+
+.email-solution-btn:hover {
+    opacity: .88;
+    transform: translateY(-1px);
+}
+
+/* ── When to Choose ── */
+.email-when-section {
+    padding: 80px 0;
+}
+
+.email-when-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.email-when-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px 20px;
+    box-shadow: var(--shadow-card);
+    text-align: center;
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease;
+}
+
+.email-when-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.email-when-icon {
+    width: 48px;
+    height: 48px;
+    background: #e0f2fe;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+}
+
+.email-when-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke: #0284c7;
+    fill: none;
+    stroke-width: 2;
+}
+
+.email-when-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.email-when-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1023px) {
+    .email-solutions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .email-when-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .email-when-grid {
+        grid-template-columns: 1fr;
+    }
+}

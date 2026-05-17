@@ -1,0 +1,871 @@
+﻿/* ══════════════════════════════════════
+   LINUX DEDICATED SERVER PAGE — SCOPED STYLES
+   All classes prefixed lds-* to prevent
+   any collision with style.css or components.css.
+══════════════════════════════════════ */
+
+/* ══════════════════════════════════════
+   EYEBROW
+══════════════════════════════════════ */
+.lds-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 20px;
+    border: 1px solid rgba(26, 86, 219, 0.15);
+}
+
+.lds-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    animation: lds-pulse 2s ease-in-out infinite;
+}
+
+@keyframes lds-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.7); }
+}
+
+/* ══════════════════════════════════════
+   SECTION LABEL  (small uppercase pill above titles)
+══════════════════════════════════════ */
+.lds-section-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 10px;
+}
+
+/* ══════════════════════════════════════
+   HERO — TERMINAL VISUAL  (inside .hero-right)
+══════════════════════════════════════ */
+.lds-hero-visual {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.30), 0 4px 16px rgba(0, 0, 0, 0.15);
+    animation: heroImageFloat 8s ease-in-out 1s infinite;
+    position: relative;
+}
+
+/* Terminal chrome */
+.lds-terminal {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.lds-terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: #1e293b;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+}
+
+.lds-terminal-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #4b5563;
+}
+.lds-terminal-dot:nth-child(1) { background: #ef4444; }
+.lds-terminal-dot:nth-child(2) { background: #f59e0b; }
+.lds-terminal-dot:nth-child(3) { background: #22c55e; }
+
+.lds-terminal-title {
+    margin-left: 8px;
+    font-size: 11px;
+    color: #94a3b8;
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+}
+
+.lds-terminal-body {
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.lds-terminal-line      { display: block; color: #e2e8f0; }
+.lds-terminal-prompt    { color: #22c55e; font-weight: 600; }
+.lds-terminal-cmd       { color: #93c5fd; }
+.lds-terminal-out       { color: #94a3b8; }
+
+.lds-terminal-cursor {
+    display: inline-block;
+    width: 7px;
+    height: 14px;
+    background: #22c55e;
+    animation: lds-blink 1s step-end infinite;
+    vertical-align: text-bottom;
+}
+
+@keyframes lds-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+/* Status badge overlay */
+.lds-hero-badge {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(8px);
+    z-index: 2;
+}
+
+.lds-hero-badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    flex-shrink: 0;
+    animation: lds-pulse 2s ease-in-out infinite;
+}
+
+.lds-hero-badge-text {
+    font-size: 11px;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.lds-hero-badge-sub {
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+/* ══════════════════════════════════════
+   PRICING SECTION
+   Note: section also has .section class —
+   remove double-padding by zeroing ours
+   and letting .section handle top/bottom.
+══════════════════════════════════════ */
+.lds-pricing {
+    background: var(--bg-light, #f8fafc);
+}
+
+.lds-pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+/* Plan cards */
+.lds-plan-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.lds-plan-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26, 86, 219, 0.22);
+}
+
+.lds-plan-card.lds-featured {
+    border-color: var(--blue);
+    border-width: 2px;
+}
+
+.lds-plan-badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--blue);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 18px;
+    border-radius: var(--radius-xl);
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(26, 86, 219, 0.30);
+}
+
+.lds-plan-tier {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--blue);
+    margin-bottom: 10px;
+}
+
+.lds-plan-price-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    margin-bottom: 8px;
+}
+
+.lds-plan-currency { font-size: 20px; font-weight: 700; color: var(--text-dark); }
+.lds-plan-price    { font-size: 36px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.03em; line-height: 1; }
+.lds-plan-period   { font-size: 13px; color: var(--muted); font-weight: 400; margin-left: 2px; }
+
+.lds-plan-tagline {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.lds-plan-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 0 20px;
+}
+
+/* Feature list — HTML has SVG + text directly in <li> */
+.lds-plan-specs {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.lds-plan-spec {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-dark);
+    line-height: 1.5;
+}
+
+/* SVG icon inside each li */
+.lds-plan-spec svg {
+    flex-shrink: 0;
+    color: var(--blue);
+    margin-top: 2px;
+}
+
+/* CTA buttons */
+.lds-plan-cta {
+    width: 100%;
+    padding: 13px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+    min-height: 44px;
+    margin-top: auto;
+}
+
+.lds-plan-cta-primary {
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+}
+.lds-plan-cta-primary:hover {
+    background: var(--blue-dark, #1448b8);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.25);
+}
+
+.lds-plan-cta-secondary {
+    background: transparent;
+    color: var(--blue);
+    border: 1.5px solid var(--blue);
+}
+.lds-plan-cta-secondary:hover {
+    background: var(--blue-light);
+    transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════════
+   WHAT SECTION  (2-col: text | image)
+══════════════════════════════════════ */
+.lds-what-section {
+    padding: 80px 0;
+    background: var(--white);
+}
+
+.lds-what-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 48px);
+}
+
+.lds-what-title {
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 16px;
+}
+
+.lds-what-body {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 14px;
+}
+
+.lds-what-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 60%, #ffffff 100%);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+}
+
+.lds-what-visual img {
+    width: 100%;
+    max-width: 480px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    display: block;
+}
+
+/* ══════════════════════════════════════
+   WHY GRID  (12-card, 3-col)
+   HTML uses .lds-why-card
+══════════════════════════════════════ */
+.lds-why-section {
+    padding: 80px 0;
+    background: var(--bg-light, #f8fafc);
+}
+
+.lds-why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.lds-why-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px 24px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.lds-why-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26, 86, 219, 0.2);
+}
+
+.lds-why-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    color: var(--blue);
+}
+
+.lds-why-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    line-height: 1.35;
+}
+
+.lds-why-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* ══════════════════════════════════════
+   COMPARISON TABLE
+══════════════════════════════════════ */
+.lds-compare-section {
+    padding: 80px 0;
+    background: var(--white);
+}
+
+.lds-compare-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 48px);
+}
+
+.lds-compare-table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    margin-top: 40px;
+    border: 1px solid var(--border);
+}
+
+.lds-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 560px;
+}
+
+.lds-compare-table th {
+    background: var(--blue);
+    color: var(--white);
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.lds-compare-table td {
+    padding: 13px 20px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dark);
+    line-height: 1.5;
+    vertical-align: top;
+}
+
+.lds-compare-table tr:last-child td { border-bottom: none; }
+.lds-compare-table tr:nth-child(even) td { background: var(--bg-light, #f8fafc); }
+
+.lds-compare-table td:first-child {
+    font-weight: 600;
+    color: var(--text-dark);
+    white-space: nowrap;
+}
+
+.lds-compare-check { color: #16a34a; margin-right: 4px; }
+.lds-compare-cross { color: #dc2626; margin-right: 4px; }
+
+.lds-compare-btns {
+    display: flex;
+    gap: 16px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
+
+/* ══════════════════════════════════════
+   SPECS GRID
+══════════════════════════════════════ */
+.lds-specs-section {
+    padding: 80px 0;
+    background: var(--bg-light, #f8fafc);
+}
+
+.lds-specs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.lds-specs-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px 24px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.lds-specs-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(26, 86, 219, 0.2);
+}
+
+.lds-specs-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    color: var(--blue);
+    font-size: 22px;
+}
+
+.lds-specs-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+}
+
+.lds-specs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.lds-specs-list li {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    padding-left: 14px;
+    position: relative;
+}
+
+.lds-specs-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--blue);
+    font-weight: 700;
+}
+
+/* ══════════════════════════════════════
+   SUPPORT GRID  (3 cards, centered layout)
+══════════════════════════════════════ */
+.lds-support-section {
+    padding: 80px 0;
+    background: var(--white);
+}
+
+.lds-support-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.lds-support-card {
+    background: var(--bg-light, #f8fafc);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 36px 28px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lds-support-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.lds-support-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: var(--blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--blue);
+    margin-bottom: 4px;
+}
+
+.lds-support-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.lds-support-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.lds-support-cta {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    text-decoration: none;
+    border-bottom: 1.5px solid transparent;
+    transition: border-color 0.2s ease;
+}
+.lds-support-cta:hover { border-color: var(--blue); }
+
+/* ══════════════════════════════════════
+   INNOVATION GRID
+   HTML structure: .lds-innovation-card > .lds-innovation-icon + <div>(h3+p)
+══════════════════════════════════════ */
+.lds-innovation-section {
+    padding: 80px 0;
+    background: var(--bg-light, #f8fafc);
+}
+
+.lds-innovation-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.lds-innovation-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.lds-innovation-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(26, 86, 219, 0.2);
+}
+
+.lds-innovation-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--blue);
+    flex-shrink: 0;
+}
+
+.lds-innovation-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+    line-height: 1.35;
+}
+
+.lds-innovation-card p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* ══════════════════════════════════════
+   USE CASES GRID
+══════════════════════════════════════ */
+.lds-usecase-section {
+    padding: 80px 0;
+    background: var(--white);
+}
+
+.lds-usecase-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.lds-usecase-card {
+    background: var(--bg-light, #f8fafc);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px 24px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.lds-usecase-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(26, 86, 219, 0.2);
+}
+
+.lds-usecase-num {
+    font-size: 40px;
+    font-weight: 800;
+    color: rgba(26, 86, 219, 0.10);
+    line-height: 1;
+    margin-bottom: 8px;
+    letter-spacing: -0.03em;
+}
+
+.lds-usecase-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.lds-usecase-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* ══════════════════════════════════════
+   FINAL CTA BAND
+══════════════════════════════════════ */
+.lds-cta-band {
+    padding: 80px 0;
+}
+
+.lds-cta-dark {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+}
+
+.lds-cta-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 48px);
+    text-align: center;
+}
+
+.lds-cta-inner h2 {
+    font-size: clamp(22px, 3vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 14px;
+    color: var(--white);
+}
+
+.lds-cta-inner p {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.72);
+    margin-bottom: 36px;
+    line-height: 1.6;
+}
+
+.lds-cta-btns {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.lds-cta-btn-primary {
+    padding: 14px 32px;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.15s ease;
+    min-height: 48px;
+}
+.lds-cta-btn-primary:hover {
+    background: var(--blue-dark, #1448b8);
+    transform: translateY(-1px);
+}
+
+.lds-cta-btn-outline {
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--white);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.25s ease, background 0.25s ease;
+    min-height: 48px;
+}
+.lds-cta-btn-outline:hover {
+    border-color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════ */
+
+/* 1280px: Innovation 4→3 columns */
+@media (max-width: 1279px) {
+    .lds-innovation-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* 1024px: most grids go 2-column */
+@media (max-width: 1023px) {
+    .lds-pricing-grid    { grid-template-columns: 1fr; max-width: 520px; margin-left: auto; margin-right: auto; }
+    .lds-what-inner      { grid-template-columns: 1fr; gap: 40px; }
+    .lds-what-visual     { order: -1; }
+    .lds-why-grid        { grid-template-columns: repeat(2, 1fr); }
+    .lds-specs-grid      { grid-template-columns: repeat(2, 1fr); }
+    .lds-innovation-grid { grid-template-columns: repeat(2, 1fr); }
+    .lds-usecase-grid    { grid-template-columns: repeat(2, 1fr); }
+    .lds-support-grid    { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* 768px: support 3→1, innovation 2→2 */
+@media (max-width: 767px) {
+    .lds-support-grid    { grid-template-columns: 1fr; }
+    .lds-why-grid        { grid-template-columns: repeat(2, 1fr); }
+
+    .lds-pricing-grid,
+    .lds-why-grid,
+    .lds-specs-grid,
+    .lds-innovation-grid,
+    .lds-usecase-grid    { grid-template-columns: 1fr; }
+
+    .lds-compare-btns    { flex-direction: column; }
+    .lds-compare-btns button { width: 100%; }
+
+    .lds-cta-btns        { flex-direction: column; align-items: center; }
+    .lds-cta-btn-primary,
+    .lds-cta-btn-outline { width: 100%; max-width: 320px; }
+
+    .lds-what-inner      { gap: 28px; }
+
+    .lds-innovation-card { flex-direction: column; gap: 10px; }
+}

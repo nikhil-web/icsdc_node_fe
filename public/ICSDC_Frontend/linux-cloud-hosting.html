@@ -1,0 +1,591 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="assets/js/theme-init.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICSDC Linux Cloud Hosting — Intelligent, Scalable & Secure | ICSDC</title>
+  <meta name="description"
+    content="Harness the power of Linux-based cloud hosting that auto-scales, self-heals, and optimizes performance proactively. ICSDC Linux Cloud is designed for developers and businesses that demand intelligent, always-on infrastructure.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-components.css">
+  <link rel="stylesheet" href="assets/css/linux-cloud-hosting.css">
+
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="lch-eyebrow">&#128039; Linux Cloud Hosting</div>
+        <h1 class="hero-title">ICSDC Linux Cloud Hosting That Thinks Ahead &mdash; Not Just Faster, But Intelligent</h1>
+        <p class="hero-sub">Intelligent Cloud Infrastructure Built for Scale and Speed</p>
+        <p class="hero-desc">Harness the power of Linux-based cloud hosting that auto-scales, self-heals, and optimizes
+          performance proactively. ICSDC Linux Cloud is designed for developers and businesses that demand intelligent,
+          always-on infrastructure.</p>
+        <div class="hero-btns">
+          <button class="btn-primary">Start Linux Cloud &rarr;</button>
+          <button class="btn-outline">Call +91 98109 58857</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img class="hero-right-image" alt="" style="display:none">
+        <div class="lch-hero-visual">
+          <div class="lch-top-badge">&#129504; AI-Powered Infrastructure</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Dark terminal background -->
+            <rect x="20" y="20" width="260" height="180" rx="12" fill="#0f172a" stroke="rgba(34,197,94,0.15)"
+              stroke-width="1" />
+            <!-- Title bar -->
+            <rect x="20" y="20" width="260" height="32" rx="12" fill="#1e293b" />
+            <circle cx="38" cy="36" r="5" fill="#ff5f57" />
+            <circle cx="54" cy="36" r="5" fill="#febc2e" />
+            <circle cx="70" cy="36" r="5" fill="#28c840" />
+            <text x="150" y="40" font-size="10" fill="#94a3b8" text-anchor="middle"
+              font-weight="600">root@icsdc-linux:~</text>
+            <!-- Cloud icon top right -->
+            <text x="260" y="40" font-size="14" fill="#22c55e" text-anchor="middle">&#9729;</text>
+            <!-- Penguin mascot simplified -->
+            <ellipse cx="246" cy="130" rx="16" ry="18" fill="#1e293b" stroke="rgba(34,197,94,0.3)" stroke-width="1" />
+            <ellipse cx="246" cy="127" rx="9" ry="10" fill="#f8fafc" />
+            <circle cx="242" cy="123" r="2.5" fill="#0f172a" />
+            <circle cx="250" cy="123" r="2.5" fill="#0f172a" />
+            <ellipse cx="246" cy="132" rx="5" ry="3" fill="#f97316" />
+            <!-- Terminal lines -->
+            <text x="32" y="72" font-size="10" fill="#22c55e" font-weight="700">$</text>
+            <text x="44" y="72" font-size="10" fill="#e2e8f0">uname -r</text>
+            <text x="32" y="88" font-size="9" fill="#94a3b8">6.1.0-icsdc-cloud x86_64</text>
+            <text x="32" y="108" font-size="10" fill="#22c55e" font-weight="700">$</text>
+            <text x="44" y="108" font-size="10" fill="#e2e8f0">systemctl status nginx</text>
+            <text x="32" y="124" font-size="9" fill="#4ade80">&#9679; active (running) since 365 days</text>
+            <text x="32" y="144" font-size="10" fill="#22c55e" font-weight="700">$</text>
+            <text x="44" y="144" font-size="10" fill="#e2e8f0">docker ps --filter status=running</text>
+            <text x="32" y="160" font-size="9" fill="#94a3b8">3 containers: nginx, redis, node-app</text>
+            <!-- Blinking cursor -->
+            <text x="32" y="180" font-size="10" fill="#22c55e" font-weight="700">$</text>
+            <rect x="44" y="172" width="8" height="12" fill="#22c55e" opacity="0.8">
+              <animate attributeName="opacity" values="0.8;0;0.8" dur="1.2s" repeatCount="indefinite" />
+            </rect>
+          </svg>
+          <div class="lch-status-badge">
+            <div class="lch-dot"></div>
+            <div>
+              <div class="lch-bt">All Systems Operational</div>
+              <div class="lch-bs">99.99% Uptime</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — WHY US (4 PILLARS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+          <h3>Intelligent Auto-Scaling</h3>
+          <p>Resources scale automatically based on demand — your cloud grows instantly when traffic spikes and scales
+            back to save costs when quiet.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Linux-Powered Reliability</h3>
+          <p>Battle-tested Linux stability with enterprise support. The same OS that powers 96% of the world's top
+            servers — now working for you.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <h3>Developer-First Tools</h3>
+          <p>Full root access, SSH, custom stacks, and support for any framework. Build, deploy, and iterate without
+            restrictions.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <h3>Proactive Monitoring</h3>
+          <p>24/7 AI-driven monitoring and self-healing infrastructure catch and resolve issues before they ever impact
+            your users.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — CLOUD PLANS ════ -->
+  <section id="lch-plans" class="section cloud-pricing-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Pricing</span>
+      <h2 class="title" data-animate="fade-up">Linux Cloud Plans Built for Every Scale</h2>
+      <p class="subtitle" data-animate="fade-up">Transparent pricing with no hidden fees. Upgrade or downgrade anytime
+        with zero downtime and zero hassle.</p>
+
+      <div class="lch-plans-grid" data-stagger>
+
+        <!-- Starter Cloud -->
+        <div class="lch-plan-card">
+          <div class="lch-plan-name">Starter Cloud</div>
+          <div class="lch-plan-price">&#8377;399<span>/mo</span></div>
+          <p class="lch-plan-tagline">Perfect for developers and small projects that need reliable Linux cloud
+            hosting.</p>
+          <div class="lch-plan-specs">
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">vCPU</span>
+              <span class="lch-plan-spec-value">2 vCPU</span>
+            </div>
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">RAM</span>
+              <span class="lch-plan-spec-value">4 GB</span>
+            </div>
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">NVMe SSD</span>
+              <span class="lch-plan-spec-value">50 GB</span>
+            </div>
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">Bandwidth</span>
+              <span class="lch-plan-spec-value">1 TB</span>
+            </div>
+          </div>
+          <button class="lch-plan-btn">Get Started &rarr;</button>
+        </div>
+
+        <!-- Business Cloud (Featured) -->
+        <div class="lch-plan-card lch-plan-featured">
+          <div class="lch-plan-badge">Most Popular</div>
+          <div class="lch-plan-name">Business Cloud</div>
+          <div class="lch-plan-price">&#8377;999<span>/mo</span></div>
+          <p class="lch-plan-tagline">The complete Linux cloud stack for high-growth businesses and production
+            workloads.</p>
+          <div class="lch-plan-specs">
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">vCPU</span>
+              <span class="lch-plan-spec-value">4 vCPU</span>
+            </div>
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">RAM</span>
+              <span class="lch-plan-spec-value">8 GB</span>
+            </div>
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">NVMe SSD</span>
+              <span class="lch-plan-spec-value">100 GB</span>
+            </div>
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">Bandwidth</span>
+              <span class="lch-plan-spec-value">5 TB</span>
+            </div>
+          </div>
+          <button class="lch-plan-btn lch-plan-btn-featured">Get Started &rarr;</button>
+        </div>
+
+        <!-- Enterprise Cloud -->
+        <div class="lch-plan-card">
+          <div class="lch-plan-name">Enterprise Cloud</div>
+          <div class="lch-plan-price">&#8377;2,499<span>/mo</span></div>
+          <p class="lch-plan-tagline">Maximum performance and fully managed Linux cloud for enterprise and
+            mission-critical workloads.</p>
+          <div class="lch-plan-specs">
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">vCPU</span>
+              <span class="lch-plan-spec-value">8 vCPU</span>
+            </div>
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">RAM</span>
+              <span class="lch-plan-spec-value">16 GB</span>
+            </div>
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">NVMe SSD</span>
+              <span class="lch-plan-spec-value">250 GB</span>
+            </div>
+            <div class="lch-plan-spec">
+              <span class="lch-plan-spec-label">Bandwidth</span>
+              <span class="lch-plan-spec-value">Unlimited</span>
+            </div>
+          </div>
+          <button class="lch-plan-btn">Contact Sales &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — POWER FEATURES ════ -->
+  <section id="power" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Features</span>
+      <h2 class="title" data-animate="fade-up">Infrastructure Engineered for Intelligence</h2>
+      <p class="subtitle" data-animate="fade-up">Every feature is purpose-built to give your Linux workloads the speed,
+        security, and reliability they demand.</p>
+
+      <div class="cloud-power-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Auto-Scaling Infrastructure</h3>
+          <p>Your resources scale automatically in real-time based on traffic and CPU demand — without manual
+            intervention or downtime.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>NVMe SSD Storage</h3>
+          <p>Enterprise-grade NVMe SSDs deliver up to 10x faster I/O than traditional SSDs — ideal for
+            database-intensive and high-throughput workloads.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <h3>Private Networking</h3>
+          <p>Isolated VLAN and private network channels enable secure server-to-server communication with zero exposure
+            to the public internet.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></div>
+          <h3>Load Balancing</h3>
+          <p>Distribute incoming traffic intelligently across multiple instances to maximize performance and eliminate
+            single points of failure.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+          <h3>Snapshot Backups</h3>
+          <p>Create instant full-disk snapshots at any time. Restore your entire cloud instance to any point in seconds
+            — no data loss, ever.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>DDoS Protection</h3>
+          <p>Advanced, always-on DDoS mitigation absorbs and filters malicious traffic before it ever reaches your
+            application layer.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band">
+    <div class="cloud-cta-inner">
+      <h2>Deploy Your Linux Cloud Today</h2>
+      <p>Intelligent infrastructure that scales with your business.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Get Started Now &rarr;</button>
+        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — SUPPORTED FRAMEWORKS ════ -->
+  <section id="frameworks" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Frameworks</span>
+      <h2 class="title" data-animate="fade-up">Every Stack, Every Framework</h2>
+      <p class="subtitle" data-animate="fade-up">Deploy any language or framework on your Linux cloud. From monoliths to
+        microservices — ICSDC Linux Cloud supports it all out of the box.</p>
+
+      <div class="lch-frameworks-grid" data-stagger>
+        <div class="lch-framework-badge">Node.js</div>
+        <div class="lch-framework-badge">Python</div>
+        <div class="lch-framework-badge">PHP</div>
+        <div class="lch-framework-badge">Ruby</div>
+        <div class="lch-framework-badge">Go</div>
+        <div class="lch-framework-badge">Java</div>
+        <div class="lch-framework-badge">Django</div>
+        <div class="lch-framework-badge">Laravel</div>
+        <div class="lch-framework-badge">React</div>
+        <div class="lch-framework-badge">Next.js</div>
+        <div class="lch-framework-badge">Docker</div>
+        <div class="lch-framework-badge">Kubernetes</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — WHY LINUX ════ -->
+  <section id="why-linux" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Why Linux</span>
+      <h2 class="title" data-animate="fade-up">The Advantages of Linux Cloud Hosting</h2>
+      <p class="subtitle" data-animate="fade-up">Linux is the foundation of the modern internet. Here is why the world's
+        most demanding infrastructure runs on Linux — and why yours should too.</p>
+
+      <div class="cloud-use-grid" data-stagger>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Open Source Freedom</h3>
+          <p>No licensing fees, no vendor lock-in. Linux gives you complete freedom to customize your environment and
+            run any open-source software stack.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Better Performance</h3>
+          <p>Linux's lean kernel and minimal overhead translate to faster response times, higher concurrency, and more
+            efficient resource utilization across all workloads.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Superior Security</h3>
+          <p>A mature permission model, rapid security patching, SELinux, AppArmor, and a transparent open-source
+            codebase make Linux the most secure server OS.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
+          <h3>Cost Effective</h3>
+          <p>Zero OS licensing costs combined with superior resource efficiency means you get more compute for every
+            rupee you spend on ICSDC Linux Cloud.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+          <h3>Massive Community</h3>
+          <p>Millions of developers, billions of packages, and decades of documentation. If you hit a challenge on
+            Linux, the answer already exists somewhere.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Enterprise Proven</h3>
+          <p>From Google and Amazon to NASA and the NYSE — Linux powers the world's most demanding infrastructure. It is
+            the enterprise-grade choice.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — USE CASES ════ -->
+  <section id="use-cases" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Use Cases</span>
+      <h2 class="title" data-animate="fade-up">What Will You Build on ICSDC Linux Cloud?</h2>
+      <p class="subtitle" data-animate="fade-up">From startups to enterprise — Linux cloud hosting that adapts to every
+        workload, every team, every industry.</p>
+
+      <div class="cloud-use-grid" data-stagger>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Web Applications</h3>
+          <p>Host high-traffic web apps with intelligent auto-scaling, sub-second load times, and the reliability your
+            users expect.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
+          <h3>E-Commerce Stores</h3>
+          <p>Run WooCommerce, Magento, or custom storefronts on a secure, PCI-friendly Linux cloud built for peak
+            shopping traffic.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></div>
+          <h3>SaaS Platforms</h3>
+          <p>Scale your multi-tenant SaaS product on isolated, high-performance cloud instances with the flexibility to
+            grow at any pace.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>API Services</h3>
+          <p>Deploy REST or GraphQL APIs that handle millions of requests with consistent low latency and intelligent
+            load distribution.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Dev/Staging Environments</h3>
+          <p>Spin up and tear down isolated dev and staging environments in seconds. Mirror production with confidence
+            and without extra cost.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+          <h3>Big Data Processing</h3>
+          <p>Crunch large datasets with Hadoop, Spark, or custom ETL pipelines on high-CPU, high-RAM Linux cloud
+            instances built for heavy compute.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — SPECS / WORKLOADS ════ -->
+  <section id="workloads" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Specifications</span>
+      <h2 class="title" data-animate="fade-up">Technical Specifications Built for Demanding Workloads</h2>
+      <p class="subtitle" data-animate="fade-up">Enterprise-grade hardware and networking configured specifically to
+        maximise Linux performance at every layer of the stack.</p>
+
+      <div class="cloud-power-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-file-lines" aria-hidden="true"></i></div>
+          <h3>CPU Isolation</h3>
+          <p>Dedicated vCPUs pinned to physical cores using KVM hypervisor — no shared CPU contention, guaranteed
+            compute performance at all times.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Dedicated RAM</h3>
+          <p>ECC RAM allocated exclusively to your instance. Memory is never over-provisioned — ensuring stable,
+            predictable application performance.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-wrench" aria-hidden="true"></i></div>
+          <h3>NVMe I/O</h3>
+          <p>3,500 MB/s sequential read speeds powered by enterprise NVMe drives. Handle the most I/O-intensive Linux
+            databases and file systems effortlessly.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <h3>Private Network</h3>
+          <p>10 Gbps private VLAN connectivity between your cloud nodes. High-bandwidth, low-latency inter-service
+            communication for distributed architectures.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-star" aria-hidden="true"></i></div>
+          <h3>IPv4 + IPv6</h3>
+          <p>Dual-stack networking with dedicated public IPv4 and full IPv6 support — future-proof connectivity for all
+            your applications and services.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <h3>Full Root Access</h3>
+          <p>Complete root SSH access to your instance. Install any software, configure any service, and build any
+            custom environment your workload requires.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 10 — TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="lch-testi-heading">
+    <div class="testi-container">
+      <h2 id="lch-testi-heading" class="testi-title">See Our Clients' Stories</h2>
+
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 11 — FAQ ════ -->
+  <section class="faq-section" id="lch-faq" aria-labelledby="lch-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="lch-faq-heading" class="faq-title">FAQs About ICSDC Linux Cloud Hosting</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our Linux Cloud Experts</h3>
+        <p class="faq-contact-desc">Our Linux-certified engineers are available 24/7 to help you choose the right cloud
+          plan, migrate your workloads, and keep your infrastructure running at peak performance.<br><br>&#128222; +91
+          98109 58857</p>
+        <a href="/contact-us.html" class="faq-contact-btn">Talk to an Expert <i class="fa-solid fa-gauge-high"
+            aria-hidden="true"></i></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Choose Linux Cloud That Thinks Ahead</h2>
+      <p>Intelligent, scalable, and developer-friendly Linux cloud hosting.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Start Linux Cloud &rarr;</button>
+        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/main.js" type="module"></script>
+  <script src="assets/js/linux-cloud-hosting.js" type="module"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/polish.js" defer></script>
+
+
+</body>
+
+</html>

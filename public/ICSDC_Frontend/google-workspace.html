@@ -1,0 +1,541 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="assets/js/theme-init.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Workspace for Teams That Want to Work Faster, Smarter & Together | ICSDC</title>
+  <meta name="description"
+    content="ICSDC Google Workspace — official Google partner offering Gmail, Drive, Meet, Docs, Sheets, Slides and more for modern businesses with setup, migration, and 24/7 support.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-components.css">
+  <link rel="stylesheet" href="assets/css/google-workspace.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+  <!-- ════ HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="gws-eyebrow">&#9729; Google Workspace</div>
+        <h1 class="hero-title">Google Workspace for Teams That Want to Work Faster, Smarter &amp; Together</h1>
+        <p class="hero-sub">Professional Collaboration Suite Built for Modern Businesses</p>
+        <p class="hero-desc">Power your team with Gmail, Drive, Meet, Docs, Sheets, Slides, and more &mdash; all in one
+          integrated workspace. ICSDC makes Google Workspace setup, management, and support effortless.</p>
+        <div class="hero-btns">
+          <button class="btn-primary">Get Google Workspace &rarr;</button>
+          <button class="btn-outline">Call +91 98109 58857</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img class="hero-right-image" alt="" style="display:none">
+        <div class="gws-hero-visual">
+          <div class="gws-top-badge">&#10003; Official Google Workspace Partner</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background card -->
+            <rect x="20" y="20" width="260" height="180" rx="14" fill="#fff" stroke="rgba(66,133,244,0.12)"
+              stroke-width="1.5" />
+            <!-- Top bar -->
+            <rect x="20" y="20" width="260" height="38" rx="14" fill="url(#gwsGrad)" />
+            <defs>
+              <linearGradient id="gwsGrad" x1="20" y1="20" x2="280" y2="58" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#4285f4" />
+                <stop offset="50%" stop-color="#34a853" />
+                <stop offset="100%" stop-color="#ea4335" />
+              </linearGradient>
+            </defs>
+            <text x="40" y="44" font-size="12" fill="white" font-weight="700">Google Workspace</text>
+            <!-- Gmail card -->
+            <rect x="34" y="72" width="70" height="58" rx="10" fill="#fff3f0" stroke="rgba(234,67,53,0.15)"
+              stroke-width="1" />
+            <circle cx="69" cy="90" r="12" fill="#ea4335" />
+            <text x="63" y="95" font-size="13" fill="white" font-weight="800">M</text>
+            <text x="55" y="113" font-size="9" fill="#ea4335" font-weight="700">Gmail</text>
+            <text x="44" y="124" font-size="8" fill="#94a3b8">Business Email</text>
+            <!-- Drive card -->
+            <rect x="115" y="72" width="70" height="58" rx="10" fill="#e8f5e9" stroke="rgba(52,168,83,0.15)"
+              stroke-width="1" />
+            <circle cx="150" cy="90" r="12" fill="#34a853" />
+            <text x="142" y="95" font-size="11" fill="white" font-weight="700">&#9650;</text>
+            <text x="138" y="113" font-size="9" fill="#34a853" font-weight="700">Drive</text>
+            <text x="125" y="124" font-size="8" fill="#94a3b8">Cloud Storage</text>
+            <!-- Meet card -->
+            <rect x="196" y="72" width="70" height="58" rx="10" fill="#e3f2fd" stroke="rgba(66,133,244,0.15)"
+              stroke-width="1" />
+            <circle cx="231" cy="90" r="12" fill="#4285f4" />
+            <text x="225" y="96" font-size="13" fill="white" font-weight="700">&#9654;</text>
+            <text x="223" y="113" font-size="9" fill="#4285f4" font-weight="700">Meet</text>
+            <text x="208" y="124" font-size="8" fill="#94a3b8">Video Calls</text>
+            <!-- Docs card -->
+            <rect x="34" y="143" width="70" height="45" rx="10" fill="#fff8e1" stroke="rgba(251,188,4,0.15)"
+              stroke-width="1" />
+            <circle cx="69" cy="156" r="9" fill="#fbbc04" />
+            <text x="64" y="161" font-size="10" fill="white" font-weight="700">D</text>
+            <text x="55" y="179" font-size="8" fill="#94a3b8">Docs &amp; Sheets</text>
+            <!-- Calendar card -->
+            <rect x="115" y="143" width="70" height="45" rx="10" fill="#fce4ec" stroke="rgba(234,67,53,0.12)"
+              stroke-width="1" />
+            <circle cx="150" cy="156" r="9" fill="#ea4335" />
+            <text x="144" y="161" font-size="10" fill="white" font-weight="700">C</text>
+            <text x="136" y="179" font-size="8" fill="#94a3b8">Calendar</text>
+            <!-- Admin card -->
+            <rect x="196" y="143" width="70" height="45" rx="10" fill="#f3e5f5" stroke="rgba(156,39,176,0.12)"
+              stroke-width="1" />
+            <circle cx="231" cy="156" r="9" fill="#9c27b0" />
+            <text x="225" y="161" font-size="10" fill="white" font-weight="700">A</text>
+            <text x="205" y="179" font-size="8" fill="#94a3b8">Admin Console</text>
+          </svg>
+          <div class="gws-status-badge">
+            <div class="gws-dot"></div>
+            <div>
+              <div class="gws-bt">Active Collaboration</div>
+              <div class="gws-bs">5M+ Google Users Worldwide</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ 4 PILLARS ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon">
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+          </div>
+          <h3>Professional Business Email</h3>
+          <p>Custom domain @yourcompany.com with Gmail's world-class reliability, security, and spam protection built
+            in.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">
+            <i class="fa-solid fa-users" aria-hidden="true"></i>
+          </div>
+          <h3>Real-Time Collaboration</h3>
+          <p>Edit Docs, Sheets, and Slides together live with your team — no version conflicts, instant sync, zero
+            friction.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">
+            <i class="fa-solid fa-database" aria-hidden="true"></i>
+          </div>
+          <h3>Secure Cloud Storage</h3>
+          <p>Google Drive storage for every team member — access files anywhere, share securely, and never lose
+            important data.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+          </div>
+          <h3>24/7 Expert Support</h3>
+          <p>ICSDC certified Google Workspace specialists available around the clock to resolve issues and optimize your
+            setup.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ PLANS SECTION ════ -->
+  <section id="gws-plans" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Plans &amp; Pricing</span>
+      <h2 class="title" data-animate="fade-up">Choose the Right Google Workspace Plan</h2>
+      <p class="subtitle" data-animate="fade-up">Flexible plans for every team size — from startups to large
+        enterprises. All include ICSDC setup support.</p>
+      <div class="gws-plans-grid" data-stagger>
+
+        <!-- Business Starter -->
+        <div class="gws-plan-card">
+          <div class="gws-plan-name">Business Starter</div>
+          <div class="gws-plan-price">&#8377;125<span>/user/month</span></div>
+          <p style="font-size:13px;color:var(--muted);margin:12px 0 0;">Billed annually. Ideal for small teams getting
+            started.</p>
+          <ul class="gws-plan-features">
+            <li>Custom business email (@yourcompany.com)</li>
+            <li>30 GB pooled storage per user</li>
+            <li>Google Meet video calls (100 participants)</li>
+            <li>Google Docs, Sheets, Slides</li>
+            <li>Google Calendar &amp; Contacts</li>
+            <li>Google Drive file sharing</li>
+            <li>Security &amp; admin controls</li>
+            <li>Standard support</li>
+          </ul>
+          <button class="gws-plan-btn">Get Business Starter &rarr;</button>
+        </div>
+
+        <!-- Business Standard -->
+        <div class="gws-plan-card gws-plan-popular">
+          <div class="gws-plan-badge">Most Popular</div>
+          <div class="gws-plan-name">Business Standard</div>
+          <div class="gws-plan-price">&#8377;672<span>/user/month</span></div>
+          <p style="font-size:13px;color:var(--muted);margin:12px 0 0;">Billed annually. Best for growing teams that
+            collaborate heavily.</p>
+          <ul class="gws-plan-features">
+            <li>Everything in Business Starter</li>
+            <li>2 TB pooled storage per user</li>
+            <li>Google Meet (150 participants + recording)</li>
+            <li>Noise cancellation in Meet</li>
+            <li>Shared drives for team files</li>
+            <li>eDiscovery &amp; audit reports</li>
+            <li>Enhanced security &amp; admin controls</li>
+            <li>Standard support</li>
+          </ul>
+          <button class="gws-plan-btn">Get Business Standard &rarr;</button>
+        </div>
+
+        <!-- Business Plus -->
+        <div class="gws-plan-card">
+          <div class="gws-plan-name">Business Plus</div>
+          <div class="gws-plan-price">&#8377;1,260<span>/user/month</span></div>
+          <p style="font-size:13px;color:var(--muted);margin:12px 0 0;">Billed annually. Advanced compliance and
+            security for larger teams.</p>
+          <ul class="gws-plan-features">
+            <li>Everything in Business Standard</li>
+            <li>5 TB pooled storage per user</li>
+            <li>Google Meet (500 participants + attendance)</li>
+            <li>Vault for data retention &amp; eDiscovery</li>
+            <li>Advanced endpoint management</li>
+            <li>Enhanced audit &amp; reporting</li>
+            <li>S/MIME email encryption</li>
+            <li>Enhanced support</li>
+          </ul>
+          <button class="gws-plan-btn">Get Business Plus &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FEATURES SECTION ════ -->
+  <section id="features" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Features</span>
+      <h2 class="title" data-animate="fade-up">Everything Your Team Needs in One Workspace</h2>
+      <p class="subtitle" data-animate="fade-up">Google Workspace brings together the world's most productive apps —
+        built for collaboration, security, and speed.</p>
+      <div class="cloud-power-grid" data-stagger>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+          </div>
+          <h3>Gmail</h3>
+          <p>Professional business email on your own domain. Ad-free inbox with 99.9% uptime SLA, advanced spam
+            protection, and 15+ years of reliability.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-database" aria-hidden="true"></i>
+          </div>
+          <h3>Google Drive</h3>
+          <p>Cloud storage for every team member. Store, sync, and share files securely. Access from any device, any
+            time, with full version history.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+          </div>
+          <h3>Google Meet</h3>
+          <p>HD video conferencing with noise cancellation, live captions, recording, and breakout rooms — right from
+            your browser, no downloads needed.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+          </div>
+          <h3>Google Calendar</h3>
+          <p>Shared team calendars, meeting scheduling, and resource booking — all integrated with Meet and Gmail for
+            seamless workflow management.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+          </div>
+          <h3>Docs, Sheets &amp; Slides</h3>
+          <p>Real-time collaborative documents, spreadsheets, and presentations. Edit together simultaneously — with
+            comments, suggestions, and full revision history.</p>
+        </div>
+
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+          </div>
+          <h3>Admin Console</h3>
+          <p>Centralized management for users, devices, apps, and security policies. Control your entire workspace from
+            one powerful dashboard.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band">
+    <div class="cloud-cta-inner">
+      <h2>Ready to Move Your Team to Google Workspace?</h2>
+      <p>Start your 14-day free trial with full ICSDC setup support.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Start Free Trial &rarr;</button>
+        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ WHY ICSDC SECTION ════ -->
+  <section id="why-icsdc" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">Why ICSDC</span>
+      <h2 class="title" data-animate="fade-up">Why Choose ICSDC for Google Workspace?</h2>
+      <p class="subtitle" data-animate="fade-up">More than resellers — we are certified Google Workspace experts who
+        handle your entire journey from purchase to day-to-day support.</p>
+      <div class="cloud-use-grid" data-stagger>
+
+        <div class="cloud-use-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+          </div>
+          <h3>Official Google Partner</h3>
+          <p>ICSDC is an authorized Google Workspace reseller — you get genuine licenses with full Google SLA
+            guarantees.</p>
+        </div>
+
+        <div class="cloud-use-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+          </div>
+          <h3>Fast Setup</h3>
+          <p>Your team is up and running within hours. ICSDC handles domain verification, DNS configuration, and account
+            provisioning end-to-end.</p>
+        </div>
+
+        <div class="cloud-use-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+          </div>
+          <h3>Data Security</h3>
+          <p>Your data stays protected with Google's enterprise-grade encryption, ICSDC security audits, and strict
+            access policies.</p>
+        </div>
+
+        <div class="cloud-use-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+          </div>
+          <h3>Migration Support</h3>
+          <p>Moving from Outlook, Exchange, or another provider? ICSDC migrates all your emails, contacts, and calendars
+            with zero data loss.</p>
+        </div>
+
+        <div class="cloud-use-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-headset" aria-hidden="true"></i>
+          </div>
+          <h3>Training Included</h3>
+          <p>Onboarding sessions and user training included with every setup — so your team adopts Google Workspace
+            quickly and confidently.</p>
+        </div>
+
+        <div class="cloud-use-card">
+          <div class="cloud-power-icon">
+            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+          </div>
+          <h3>Ongoing Support</h3>
+          <p>Dedicated 24/7 support from ICSDC certified specialists — not call centers. Real experts who know your
+            setup and your team.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ HOW IT WORKS ════ -->
+  <section id="how-it-works" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">How It Works</span>
+      <h2 class="title" data-animate="fade-up">Get Up and Running in 4 Simple Steps</h2>
+      <p class="subtitle" data-animate="fade-up">ICSDC handles every step from plan selection to team training — so you
+        can focus on your business.</p>
+      <div class="gws-steps" data-stagger>
+
+        <div class="gws-step">
+          <div class="gws-step-num">1</div>
+          <h3>Choose Your Plan</h3>
+          <p>Select the right Google Workspace plan for your team size and needs. Our specialists help you pick the best
+            fit.</p>
+          <div class="gws-step-arrow">&#8250;</div>
+        </div>
+
+        <div class="gws-step">
+          <div class="gws-step-num">2</div>
+          <h3>Purchase &amp; Setup</h3>
+          <p>ICSDC activates your workspace, configures your domain, sets up admin controls, and provisions all user
+            accounts.</p>
+          <div class="gws-step-arrow">&#8250;</div>
+        </div>
+
+        <div class="gws-step">
+          <div class="gws-step-num">3</div>
+          <h3>Data Migration</h3>
+          <p>We migrate existing emails, contacts, calendars, and files from your current platform — with zero downtime
+            and zero data loss.</p>
+          <div class="gws-step-arrow">&#8250;</div>
+        </div>
+
+        <div class="gws-step">
+          <div class="gws-step-num">4</div>
+          <h3>Team Training</h3>
+          <p>Hands-on onboarding sessions for your team. Everyone learns to use Gmail, Drive, Meet, and Docs from day
+            one.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="testi-heading">
+    <div class="testi-container">
+      <h2 id="testi-heading" class="testi-title">See our Clients Stories</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FAQ ════ -->
+  <section class="faq-section" id="gws-faq" aria-labelledby="gws-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="gws-faq-heading" class="faq-title">FAQs About Google Workspace</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our Google Workspace Experts</h3>
+        <p class="faq-contact-desc">Our certified specialists are available 24/7 to help you choose the right plan,
+          migrate your data, and get your team productive fast.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact-us.html" class="faq-contact-btn">Talk to an Expert
+          <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+        </a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Switch to Google Workspace Today</h2>
+      <p>Official Google Workspace through ICSDC &mdash; setup included.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Get Google Workspace &rarr;</button>
+        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/main.js" type="module"></script>
+  <script src="assets/js/google-workspace.js" type="module"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/polish.js" defer></script>
+
+</body>
+
+</html>

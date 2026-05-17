@@ -1,0 +1,752 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="assets/js/theme-init.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Hosting Built for Speed, Security &amp; Zero Downtime | ICSDC</title>
+  <meta name="description"
+    content="Get fast, secure, and scalable web hosting with ICSDC. Built on enterprise infrastructure for high performance, strong security, reliable uptime, and business growth.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-components.css">
+  <link rel="stylesheet" href="assets/css/web-hosting.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="webh-eyebrow">&#127760; Web Hosting</div>
+        <h1 class="hero-title" id="webh-hero-title">ICSDC Web Hosting Built for Speed, Security, and Zero Downtime</h1>
+        <p class="hero-sub" id="webh-hero-subtitle">Fast, Secure, and Scalable Hosting for Websites That Matter</p>
+        <p class="hero-desc" id="webh-hero-desc">Your website needs hosting that's fast, secure, and reliable every
+          single day. ICSDC Web Hosting is built on enterprise-grade infrastructure to deliver consistent performance,
+          strong security, and the flexibility to grow as your business grows - without the usual hosting headaches.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" id="webh-cta-primary" onclick="location.href='/contact'">Get Started with ICSDC
+            Web Hosting &rarr;</button>
+          <button class="btn-outline" id="webh-cta-secondary" onclick="location.href='/shared-hosting.html'">View
+            Hosting Plans</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img class="hero-right-image" alt="" style="display:none">
+        <div class="webh-hero-visual">
+          <div class="webh-top-badge">&#127760; ICSDC Web Hosting</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#eff6ff" stroke="rgba(37,99,235,0.12)"
+              stroke-width="1" />
+            <!-- Central globe / server icon -->
+            <circle cx="150" cy="100" r="55" fill="white" stroke="rgba(37,99,235,0.22)" stroke-width="1.5" />
+            <circle cx="150" cy="100" r="45" fill="#dbeafe" stroke="none" />
+            <!-- Globe lines -->
+            <ellipse cx="150" cy="100" rx="20" ry="45" fill="none" stroke="rgba(37,99,235,0.35)" stroke-width="1.2" />
+            <ellipse cx="150" cy="100" rx="45" ry="18" fill="none" stroke="rgba(37,99,235,0.35)" stroke-width="1.2" />
+            <line x1="105" y1="100" x2="195" y2="100" stroke="rgba(37,99,235,0.30)" stroke-width="1" />
+            <line x1="150" y1="55" x2="150" y2="145" stroke="rgba(37,99,235,0.30)" stroke-width="1" />
+            <!-- Speed indicator -->
+            <path d="M130 88 L150 78 L160 95" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <circle cx="150" cy="100" r="6" fill="#2563eb" />
+            <!-- Left side nodes -->
+            <rect x="22" y="68" width="52" height="28" rx="8" fill="white" stroke="rgba(37,99,235,0.22)"
+              stroke-width="1.2" />
+            <text x="48" y="79" font-size="6" fill="#2563eb" text-anchor="middle" font-weight="600">SPEED</text>
+            <text x="48" y="90" font-size="7" fill="#1d4ed8" text-anchor="middle" font-weight="700">&#10003; Fast</text>
+            <rect x="22" y="112" width="52" height="28" rx="8" fill="white" stroke="rgba(37,99,235,0.22)"
+              stroke-width="1.2" />
+            <text x="48" y="123" font-size="6" fill="#2563eb" text-anchor="middle" font-weight="600">UPTIME</text>
+            <text x="48" y="134" font-size="7" fill="#1d4ed8" text-anchor="middle" font-weight="700">99.9%</text>
+            <!-- Right side nodes -->
+            <rect x="226" y="68" width="52" height="28" rx="8" fill="white" stroke="rgba(37,99,235,0.22)"
+              stroke-width="1.2" />
+            <text x="252" y="79" font-size="6" fill="#2563eb" text-anchor="middle" font-weight="600">SECURITY</text>
+            <text x="252" y="90" font-size="7" fill="#1d4ed8" text-anchor="middle" font-weight="700">&#128274; On</text>
+            <rect x="226" y="112" width="52" height="28" rx="8" fill="white" stroke="rgba(37,99,235,0.22)"
+              stroke-width="1.2" />
+            <text x="252" y="123" font-size="6" fill="#2563eb" text-anchor="middle" font-weight="600">SCALE</text>
+            <text x="252" y="134" font-size="7" fill="#1d4ed8" text-anchor="middle" font-weight="700">&#8679;
+              Ready</text>
+            <!-- Connecting lines -->
+            <line x1="74" y1="82" x2="105" y2="90" stroke="rgba(37,99,235,0.28)" stroke-width="1.2"
+              stroke-dasharray="3 3" />
+            <line x1="74" y1="126" x2="108" y2="110" stroke="rgba(37,99,235,0.28)" stroke-width="1.2"
+              stroke-dasharray="3 3" />
+            <line x1="226" y1="82" x2="195" y2="90" stroke="rgba(37,99,235,0.28)" stroke-width="1.2"
+              stroke-dasharray="3 3" />
+            <line x1="226" y1="126" x2="192" y2="110" stroke="rgba(37,99,235,0.28)" stroke-width="1.2"
+              stroke-dasharray="3 3" />
+            <!-- Bottom status boxes -->
+            <rect x="38" y="168" width="52" height="28" rx="6" fill="white" stroke="rgba(37,99,235,0.18)"
+              stroke-width="1.2" />
+            <text x="64" y="178" font-size="6" fill="#2563eb" text-anchor="middle" font-weight="600">SSD Storage</text>
+            <text x="64" y="188" font-size="7" fill="#1d4ed8" text-anchor="middle" font-weight="700">&#10003;
+              Active</text>
+            <rect x="124" y="168" width="52" height="28" rx="6" fill="white" stroke="rgba(37,99,235,0.18)"
+              stroke-width="1.2" />
+            <text x="150" y="178" font-size="6" fill="#2563eb" text-anchor="middle" font-weight="600">Firewall</text>
+            <text x="150" y="188" font-size="7" fill="#1d4ed8" text-anchor="middle" font-weight="700">&#10003;
+              Active</text>
+            <rect x="210" y="168" width="52" height="28" rx="6" fill="white" stroke="rgba(37,99,235,0.18)"
+              stroke-width="1.2" />
+            <text x="236" y="178" font-size="6" fill="#2563eb" text-anchor="middle" font-weight="600">Backup</text>
+            <text x="236" y="188" font-size="7" fill="#1d4ed8" text-anchor="middle" font-weight="700">&#10003;
+              Daily</text>
+            <!-- Corner accent dots -->
+            <circle cx="28" cy="28" r="4" fill="#bfdbfe" opacity="0.8" />
+            <circle cx="272" cy="28" r="4" fill="#bfdbfe" opacity="0.8" />
+            <circle cx="28" cy="192" r="3" fill="#93c5fd" opacity="0.6" />
+            <circle cx="272" cy="192" r="3" fill="#93c5fd" opacity="0.6" />
+          </svg>
+          <div class="webh-status-badge">
+            <div class="webh-dot"></div>
+            <div>
+              <div class="webh-bt">Website Online</div>
+              <div class="webh-bs">Enterprise Hosting</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — PILLARS (4 WHY-US CARDS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger id="webh-pillars-grid">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+          <h3>High-Speed Performance</h3>
+          <p>Optimized servers and SSD-based storage ensure fast load times and smooth performance for your website.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Reliable Uptime</h3>
+          <p>Built on stable infrastructure with continuous monitoring to keep your website online and accessible at all
+            times.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+          <h3>Built-In Security</h3>
+          <p>Includes firewalls, malware protection, and regular updates to protect your website from common threats.
+          </p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Scalable Resources</h3>
+          <p>Easily upgrade storage, bandwidth, and compute as your website traffic and business needs grow.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — WEB HOSTING PLANS ════ -->
+  <section id="webh-plans" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title" id="webh-plans-title" data-animate="fade-up">Web Hosting Plans That Fit Your Business</h2>
+      <p class="subtitle" id="webh-plans-subtitle" data-animate="fade-up">Choose a hosting plan that matches your
+        website's traffic, performance needs, and growth goals - with no hidden costs.</p>
+      <div class="webh-plans-placeholder" data-animate="fade-up">
+        <div class="webh-plans-note">
+          <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+          <p>Pricing table coming soon</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band" id="webh-cta1">
+    <div class="cloud-cta-inner">
+      <h2>View Hosting Plans &amp; Pricing</h2>
+      <p>Explore our range of web hosting plans designed for performance, security, and scalable growth.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='/shared-hosting.html'">View Plans &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='#contact'">Contact Sales</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — WHAT MAKES ICSDC DIFFERENT (12 CARDS) ════ -->
+  <section id="webh-features" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title" id="webh-features-title" data-animate="fade-up">What Makes ICSDC Web Hosting Different</h2>
+
+      <div class="webh-features-grid" data-stagger id="webh-features-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Enterprise-Grade Infrastructure</h3>
+          <p>Your website is hosted on robust, enterprise-class servers designed for high availability and long-term
+            stability, not oversold shared hosting environments.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+          <h3>Consistent Performance Under Load</h3>
+          <p>ICSDC ensures reliable performance even during peak traffic by intelligently managing server resources and
+            avoiding overcrowding that slows down websites.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Security-First Hosting Architecture</h3>
+          <p>Hosting environments are designed with built-in security controls including firewalls, malware protection,
+            and hardened configurations to reduce common attack vectors.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Isolated Hosting Environments</h3>
+          <p>Each website runs in a logically isolated environment, protecting your site from performance issues or
+            security risks caused by other users on the same server.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>High Availability by Design</h3>
+          <p>Redundant infrastructure and proactive monitoring help minimize downtime and ensure your website remains
+            accessible even during hardware or network issues.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Scalable Without Migration Hassles</h3>
+          <p>Hosting resources can be upgraded as your traffic and business grow, without the need to migrate data or
+            experience service interruptions.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Optimized for Popular Web Applications</h3>
+          <p>Servers are tuned for common content management systems and business applications to deliver faster load
+            times and smoother user experiences.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Advanced Backup and Recovery</h3>
+          <p>Automated backups with reliable restore options help protect your website against accidental deletion, data
+            corruption, or unexpected failures.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i></div>
+          <h3>Full Control with Simplified Management</h3>
+          <p>An intuitive control panel allows you to manage domains, databases, email accounts, and website settings
+            without unnecessary technical complexity.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+          <h3>Expert Technical Support</h3>
+          <p>Support is handled by experienced hosting professionals who understand performance optimization, security
+            issues, and infrastructure reliability.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Data Privacy and Compliance Focused</h3>
+          <p>Hosting environments are designed with data protection best practices in mind, supporting compliance
+            requirements and responsible data handling.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Built for Long-Term Growth</h3>
+          <p>ICSDC Web Hosting is designed to scale with your business, ensuring your hosting platform supports growth
+            rather than limiting it over time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — IS IT SAFE (5 CARDS) ════ -->
+  <section id="webh-safety" class="section webh-safety-section">
+    <div class="container">
+      <h2 class="title" id="webh-safety-title" data-animate="fade-up">Is It Safe to Use ICSDC Web Hosting?</h2>
+      <p class="subtitle" id="webh-safety-desc" data-animate="fade-up">Yes! ICSDC Web Hosting is built with safety and
+        reliability at its core. Every layer of the hosting environment is designed to protect your website, data, and
+        users.</p>
+
+      <div class="webh-safety-grid" data-stagger id="webh-safety-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Secure Hosting Environment</h3>
+          <p>We deploy secure server configurations with firewalls, malware detection, and regular security updates to
+            protect against common online threats.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Isolated Customer Environments</h3>
+          <p>Each website operates within its own secure space, preventing risks from other users or shared traffic.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Automated Backups &amp; Restore Options</h3>
+          <p>Regular backups are generated automatically so you can recover your site quickly in case of accidental
+            changes or data loss.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i></div>
+          <h3>Data Privacy Best Practices</h3>
+          <p>Your data is handled according to best practices for privacy, with measures in place to reduce unauthorized
+            access.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Continuous Monitoring</h3>
+          <p>Our systems monitor hosting performance and security events in real time to quickly identify and respond to
+            potential issues.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — COMPARE TABLE 1 ════ -->
+  <section id="webh-compare" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">COMPARISON</span>
+      <h2 class="title" id="webh-compare-title" data-animate="fade-up">ICSDC Web Hosting vs Typical Web Hosting
+        Providers</h2>
+
+      <div class="webh-compare-table-wrap" data-animate="fade-up">
+        <table class="webh-compare-table" aria-label="ICSDC Web Hosting vs Typical Web Hosting comparison">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="webh-col-icsdc">ICSDC Web Hosting</th>
+              <th>Typical Providers</th>
+            </tr>
+          </thead>
+          <tbody id="webh-compare-tbody">
+            <tr>
+              <td>Infrastructure Quality</td>
+              <td class="webh-col-icsdc">Enterprise-grade servers designed for
+                stability and long-term performance</td>
+              <td>Mass-market shared servers often oversold for cost efficiency</td>
+            </tr>
+            <tr>
+              <td>Performance Consistency</td>
+              <td class="webh-col-icsdc">Predictable speed and response times,
+                even during traffic spikes</td>
+              <td>Performance drops during peak usage due to shared resources</td>
+            </tr>
+            <tr>
+              <td>Security Approach</td>
+              <td class="webh-col-icsdc">Security-first architecture with
+                firewalls, monitoring, and isolation</td>
+              <td>Basic security with limited visibility and protection</td>
+            </tr>
+            <tr>
+              <td>Account Isolation</td>
+              <td class="webh-col-icsdc">Isolated hosting environments to
+                prevent cross-site risks</td>
+              <td>Multiple websites share the same environment</td>
+            </tr>
+            <tr>
+              <td>Scalability</td>
+              <td class="webh-col-icsdc">Easy resource upgrades without
+                migration or downtime</td>
+              <td>Scaling often requires plan changes or site migration</td>
+            </tr>
+            <tr>
+              <td>Uptime Reliability</td>
+              <td class="webh-col-icsdc">High availability infrastructure with
+                proactive monitoring</td>
+              <td>Reactive uptime handling with limited redundancy</td>
+            </tr>
+            <tr>
+              <td>Backup &amp; Recovery</td>
+              <td class="webh-col-icsdc">Automated backups with reliable
+                restore options</td>
+              <td>Backups often limited, paid, or manual</td>
+            </tr>
+            <tr>
+              <td>Support Quality</td>
+              <td class="webh-col-icsdc">Access to experienced hosting
+                professionals</td>
+              <td>Ticket-based or scripted support</td>
+            </tr>
+            <tr>
+              <td>Business Readiness</td>
+              <td class="webh-col-icsdc">Suitable for growing businesses and
+                critical websites</td>
+              <td>Best for small or hobby websites</td>
+            </tr>
+            <tr>
+              <td>Long-Term Value</td>
+              <td class="webh-col-icsdc">Designed to support growth without
+                performance bottlenecks</td>
+              <td>Often requires frequent upgrades or provider changes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — WHY CHOOSE (6 CARDS) ════ -->
+  <section id="webh-why" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title" id="webh-why-title" data-animate="fade-up">Why Choose ICSDC Web Hosting</h2>
+
+      <div class="webh-why-grid" data-stagger id="webh-why-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Built on Enterprise Infrastructure</h3>
+          <p>ICSDC hosts websites on strong, enterprise-grade infrastructure designed for reliability, performance, and
+            long-term stability - not overcrowded shared servers.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Security as a Priority, Not an Add-On</h3>
+          <p>From firewalls and monitoring to isolated environments and regular updates, security is integrated into the
+            hosting platform by default.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Consistent Performance You Can Rely On</h3>
+          <p>ICSDC focuses on predictable performance, ensuring your website remains fast and responsive even during
+            traffic surges.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Designed to Scale with Your Business</h3>
+          <p>Easily upgrade resources as your website grows without migrations, downtime, or complex plan changes.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+          <h3>Expert Support When You Need It</h3>
+          <p>Get access to experienced professionals who understand hosting infrastructure, security, and performance -
+            not just basic troubleshooting.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Transparency and Control</h3>
+          <p>Simple management tools and clear service structures give you full visibility and control over your hosting
+            environment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — DESIGNED TO SUCCEED (3 CARDS) ════ -->
+  <section id="webh-succeed" class="section webh-succeed-section">
+    <div class="container">
+      <h2 class="title" id="webh-succeed-title" data-animate="fade-up">Web Hosting Designed to Help You Succeed</h2>
+
+      <div class="webh-succeed-grid" data-stagger id="webh-succeed-grid">
+        <div class="webh-succeed-card">
+          <div class="webh-succeed-icon"><i class="fa-solid fa-server" aria-hidden="true"></i></div>
+          <h3>Get Your Website Live, Faster</h3>
+          <p>ICSDC Web Hosting is built to help you launch without delays. With quick setup and smooth onboarding, your
+            website is ready to go without unnecessary technical complexity. Whether you're moving from another provider
+            or starting fresh, we make the transition simple and stress-free from day one.</p>
+        </div>
+        <div class="webh-succeed-card">
+          <div class="webh-succeed-icon"><i class="fa-solid fa-circle-dot" aria-hidden="true"></i></div>
+          <h3>Performance That Supports Growth</h3>
+          <p>As your traffic grows, your hosting should keep up. ICSDC Web Hosting delivers consistent speed, reliable
+            uptime, and scalable resources to ensure your website performs well under load. From business websites to
+            high-traffic applications, our hosting is designed to support growth without compromising performance.</p>
+        </div>
+        <div class="webh-succeed-card">
+          <div class="webh-succeed-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+          <h3>Reliable Support, When It Matters</h3>
+          <p>Our hosting is backed by experienced professionals who understand infrastructure, security, and
+            performance.
+            Whether you need help during setup or ongoing assistance, our team is available to provide clear guidance
+            and
+            practical solutions - without scripted responses or delays.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — NEED HELP (3 CARDS) ════ -->
+  <section id="webh-help" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title" id="webh-help-title" data-animate="fade-up">Need Help? We're Here for You</h2>
+      <p class="subtitle" id="webh-help-desc" data-animate="fade-up">Have a question about hosting, domains, email, or
+        performance? Our support team is always available to help.</p>
+
+      <div class="webh-help-grid" data-stagger id="webh-help-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Live Chat</h3>
+          <p>Connect with our support team instantly for quick questions or real-time assistance.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+          <h3>Email &amp; Tickets</h3>
+          <p>Prefer a detailed response? Reach out via email or ticket and get clear, actionable support.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-phone" aria-hidden="true"></i></div>
+          <h3>Phone Support</h3>
+          <p>Speak directly with our experts for immediate help, any time you need it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 10 — COMPARE TABLE 2 (CHECKMARK STYLE) ════ -->
+  <section id="webh-compare2" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">FEATURE COMPARISON</span>
+      <h2 class="title" id="webh-compare2-title" data-animate="fade-up">ICSDC Web Hosting vs Others</h2>
+
+      <div class="webh-compare2-table-wrap" data-animate="fade-up">
+        <table class="webh-compare2-table" aria-label="ICSDC Web Hosting feature comparison">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="webh-col-icsdc">ICSDC Web Hosting</th>
+              <th>Others</th>
+            </tr>
+          </thead>
+          <tbody id="webh-compare2-tbody">
+            <tr>
+              <td>Enterprise-Grade Infrastructure</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+            <tr>
+              <td>Consistent Performance Under Load</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+            <tr>
+              <td>Isolated Hosting Environment</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+            <tr>
+              <td>Built-In Security Protection</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+            <tr>
+              <td>Automated Backups &amp; Recovery</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+            <tr>
+              <td>Scalability Without Migration</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+            <tr>
+              <td>Proactive Uptime Monitoring</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+            <tr>
+              <td>Expert Technical Support</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+            <tr>
+              <td>Optimized for Business Websites</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+            <tr>
+              <td>Data Privacy &amp; Compliance Focus</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+            <tr>
+              <td>Transparent Resource Allocation</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+            <tr>
+              <td>Long-Term Growth Ready</td>
+              <td class="webh-col-icsdc"><span class="webh-yes">&#10004;</span></td>
+              <td><span class="webh-no">&#10008;</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CROSS-SELL — PAM & BACKUP (PARALLEL) ════ -->
+  <section class="section" style="padding-top:0; padding-bottom:0;">
+    <div class="container">
+      <div style="display:flex; gap:32px; flex-wrap:wrap;">
+
+        <div id="webh-pam-promo" class="webh-promo-section" style="flex:1; min-width:280px;">
+          <div class="webh-promo-card" data-animate="fade-up">
+            <div class="webh-promo-icon">
+              <i class="fa-solid fa-database" aria-hidden="true"></i>
+            </div>
+            <div class="webh-promo-body">
+              <h3 id="webh-pam-title">Secure Your Website with PAM &amp; MFA</h3>
+              <p id="webh-pam-desc">Protect admin and backend access to your hosting environment by verifying every
+                login
+                and controlling privileged permissions with ICSDC PAM &amp; MFA.</p>
+              <a href="/pam-mfa.html" class="webh-promo-btn" id="webh-pam-cta">Explore ICSDC PAM &amp; MFA Security
+                &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div id="webh-backup-promo" class="webh-promo-section webh-promo-alt" style="flex:1; min-width:280px;">
+          <div class="webh-promo-card" data-animate="fade-up">
+            <div class="webh-promo-icon">
+              <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+            </div>
+            <div class="webh-promo-body">
+              <h3 id="webh-backup-title">Protect Your Website Data with Backup &amp; Recovery</h3>
+              <p id="webh-backup-desc">Safeguard your website with regular backups and fast recovery options to minimize
+                downtime and prevent data loss.</p>
+              <a href="/acronis-backup.html" class="webh-promo-btn" id="webh-backup-cta">View Backup &amp; Recovery
+                Solutions &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 11 — TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="webh-testi-heading">
+    <div class="testi-container">
+      <h2 id="webh-testi-heading" class="testi-title">What Our Web Hosting Clients Say</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 12 — FAQ ════ -->
+  <section class="faq-section" id="webh-faq" aria-labelledby="webh-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="webh-faq-heading" class="faq-title">FAQs About ICSDC Web Hosting</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our Web Hosting Team</h3>
+        <p class="faq-contact-desc">Our hosting specialists are available to help you choose the right plan and get your
+          website live with confidence.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact-us.html" class="faq-contact-btn">Talk to an Expert <i class="fa-solid fa-headset"
+            aria-hidden="true"></i></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark" id="webh-cta2">
+    <div class="cloud-cta-inner">
+      <h2>Host Your Website on Infrastructure You Can Trust</h2>
+      <p>Get fast, secure, and scalable web hosting built for reliability and growth. Let ICSDC help you choose the
+        right hosting plan for your website.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='#contact'">Request a Web Hosting Consultation
+          &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='/shared-hosting.html'">View All Hosting
+          Plans</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/web-hosting.js"></script>
+
+</body>
+
+</html>

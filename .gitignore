@@ -1,1 +1,2 @@
-public/ICSDC_Frontend/
+node_modules/
+.env

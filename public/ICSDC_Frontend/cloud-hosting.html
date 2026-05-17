@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="assets/js/theme-init.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Cloud Hosting Service Provider in India | ICSDC Cloud Hosting</title>
+    <meta name="description"
+        content="ICSDC offers 99.9% uptime, managed & unmanaged hosting, real 24/7 support, and full data residency compliance. Start your free trial today and power your business with India's most reliable cloud platform.">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/cloud-hosting.css">
+    <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+
+    <!-- PAGE LOADER -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Loading...</p>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- DROPDOWN -->
+    <div id="dropdown-wrap">
+        <div id="dropdown">
+            <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+            <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+                <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+                <div>
+                    <h3 data-strapi-dd="flatTitle"></h3>
+                    <p data-strapi-dd="flatDesc"></p>
+                </div>
+            </div>
+            <div id="dd-content">
+                <div id="dd-top-bar">
+                    <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+                    <button class="dd-close" onclick="closeDropdown()">✕</button>
+                </div>
+                <div data-strapi-dd="grid" id="dd-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+            </a>
+            <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+            <button class="btn-login desktop-login-btn">Login</button>
+            <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+            <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+            <button class="btn-login mobile-login-btn">Login</button>
+        </div>
+    </nav>
+
+    <!-- ════════════════════════════════════
+         SECTION 1 — HERO
+    ════════════════════════════════════ -->
+    <section class="hero-section">
+        <div class="hero">
+            <div class="hero-content">
+                <span class="cloud-eyebrow">
+                    <span class="cloud-eyebrow-dot"></span>
+                    Made in India &bull; Built for the World
+                </span>
+                <h1 class="hero-title">Best Cloud Hosting Service Provider in India</h1>
+                <p class="hero-sub">ICSDC: The Only Infrastructure Built for India&rsquo;s Scale</p>
+                <p class="hero-desc">The future of your business scale is non-negotiable. Stop settling for global
+                    trade-offs. Secure the only cloud infrastructure with guaranteed data sovereignty and instant scale
+                    for the Indian market.</p>
+                <div class="hero-price-container">
+                    <div class="hero-price-block">
+                        <div class="hero-price">
+                            <span>&#8377;799</span><span class="price-unit">/mo</span>
+                        </div>
+                        <p class="price-note">Pay-as-you-go &mdash; per-minute billing, zero hidden fees.</p>
+                    </div>
+                    <div class="hero-btns">
+                        <button class="btn-outline" onclick="location.href='contact-us.html'">Start Free Trial</button>
+                        <button class="btn-primary">See Plans &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <img class="hero-right-image" alt="" style="display:none">
+                <!-- Cloud node graph visual -->
+                <div class="cloud-hero-visual">
+                    <div class="cloud-hero-india-badge">
+                        &#127470;&#127475; 100% Data Residency
+                    </div>
+
+                    <div class="cloud-node-graph">
+                        <svg viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <!-- Dashed edges from center to nodes -->
+                            <line class="cloud-edge" x1="160" y1="120" x2="60" y2="50" />
+                            <line class="cloud-edge" x1="160" y1="120" x2="260" y2="50" />
+                            <line class="cloud-edge" x1="160" y1="120" x2="40" y2="150" />
+                            <line class="cloud-edge" x1="160" y1="120" x2="280" y2="150" />
+                            <line class="cloud-edge" x1="160" y1="120" x2="100" y2="210" />
+                            <line class="cloud-edge" x1="160" y1="120" x2="220" y2="210" />
+
+                            <!-- Outer nodes -->
+                            <circle class="cloud-node-circle" cx="60" cy="50" r="28" />
+                            <circle class="cloud-node-circle" cx="260" cy="50" r="28" />
+                            <circle class="cloud-node-circle" cx="40" cy="150" r="28" />
+                            <circle class="cloud-node-circle" cx="280" cy="150" r="28" />
+                            <circle class="cloud-node-circle" cx="100" cy="210" r="28" />
+                            <circle class="cloud-node-circle" cx="220" cy="210" r="28" />
+
+                            <!-- Center node -->
+                            <circle class="cloud-node-circle cloud-node-center" cx="160" cy="120" r="38" />
+
+                            <!-- Icons as text emojis -->
+                            <text x="160" y="127" text-anchor="middle" font-size="20" fill="white">&#9729;</text>
+
+                            <text x="60" y="57" text-anchor="middle" font-size="15" fill="#1a56db">&#128274;</text>
+                            <text x="260" y="57" text-anchor="middle" font-size="15" fill="#1a56db">&#9889;</text>
+                            <text x="40" y="157" text-anchor="middle" font-size="15" fill="#1a56db">&#127760;</text>
+                            <text x="280" y="157" text-anchor="middle" font-size="15" fill="#1a56db">&#128202;</text>
+                            <text x="100" y="217" text-anchor="middle" font-size="15" fill="#1a56db">&#128225;</text>
+                            <text x="220" y="217" text-anchor="middle" font-size="15" fill="#1a56db">&#127970;</text>
+                        </svg>
+                    </div>
+
+                    <div class="cloud-hero-badge">
+                        <div class="cloud-hero-badge-dot"></div>
+                        <div>
+                            <div class="cloud-hero-badge-text">All systems operational</div>
+                            <div class="cloud-hero-badge-sub">99.9% Uptime SLA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 2 — FOUR PILLARS
+    ════════════════════════════════════ -->
+    <section class="why-us section">
+        <div class="container">
+            <div class="why-grid" data-stagger>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                    </div>
+                    <h3>Direct-Connect Infrastructure</h3>
+                    <p>Data centers strategically positioned in major Indian economic zones, with direct NIXI peering
+                        for ultra-low latency across the country.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                    </div>
+                    <h3>True Pay-As-You-Go Billing</h3>
+                    <p>Granular, per-minute billing models with transparent cost visibility. Only pay for exactly what
+                        you use &mdash; no surprises, no hidden fees.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                    </div>
+                    <h3>100% Data Residency</h3>
+                    <p>Guaranteed storage and processing within Indian borders, ensuring full compliance with data
+                        sovereignty laws and regulatory requirements.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <i class="fa-solid fa-database" aria-hidden="true"></i>
+                    </div>
+                    <h3>minIO &mdash; S3 Backup Storage</h3>
+                    <p>minIO and Scality-powered immutable backup S3 storage with ransomware protection and guaranteed
+                        2-hour Recovery Point Objective.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 3 — PRICING PLANS
+    ════════════════════════════════════ -->
+    <section id="cloud-pricing" class="section cloud-pricing-section">
+        <div class="container">
+            <span class="cloud-section-label" data-animate="fade-up">Pricing</span>
+            <h2 class="title" data-animate="fade-up">Simple, Transparent &amp; Scalable
+                Pricing</h2>
+            <p class="subtitle" data-animate="fade-up">Choose the plan that fits your business
+                today &mdash; upgrade as
+                you grow with zero hassle. No hidden fees. No surprises.</p>
+
+            <div class="cloud-pricing-grid" data-stagger>
+
+                <!-- Starter -->
+                <div class="cloud-plan-card">
+                    <div class="cloud-plan-tier">Starter</div>
+                    <div class="cloud-plan-price-wrap">
+                        <span class="cloud-plan-currency">&#8377;</span>
+                        <span class="cloud-plan-price">799</span>
+                        <span class="cloud-plan-period">/mo</span>
+                    </div>
+                    <p class="cloud-plan-tagline">Perfect for startups and small businesses launching on India&rsquo;s
+                        sovereign cloud.</p>
+                    <hr class="cloud-plan-divider">
+                    <ul class="cloud-plan-features">
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>2 vCPU &bull; 4 GB RAM</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>80 GB SSD Storage</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>2 TB Monthly Bandwidth</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Free SSL Certificate</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Daily Automated Backups</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>99.9% Uptime SLA</li>
+                    </ul>
+                    <button class="cloud-plan-cta cloud-plan-cta-outline">Get Started</button>
+                </div>
+
+                <!-- Business (Featured) -->
+                <div class="cloud-plan-card cloud-featured">
+                    <span class="cloud-plan-badge">Most Popular</span>
+                    <div class="cloud-plan-tier">Business</div>
+                    <div class="cloud-plan-price-wrap">
+                        <span class="cloud-plan-currency">&#8377;</span>
+                        <span class="cloud-plan-price">2,499</span>
+                        <span class="cloud-plan-period">/mo</span>
+                    </div>
+                    <p class="cloud-plan-tagline">The complete cloud stack for high-growth businesses that need
+                        reliability and speed.</p>
+                    <hr class="cloud-plan-divider">
+                    <ul class="cloud-plan-features">
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>8 vCPU &bull; 16 GB RAM</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>320 GB NVMe SSD Storage</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Unlimited Bandwidth</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Intel Xeon Gold 3 GHz</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Direct NIXI Peering</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>2-Hour RPO Guarantee</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Advanced DDoS Protection</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>minIO S3 Backup Storage</li>
+                    </ul>
+                    <button class="cloud-plan-cta cloud-plan-cta-primary">Get Started &rarr;</button>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="cloud-plan-card">
+                    <div class="cloud-plan-tier">Enterprise</div>
+                    <div class="cloud-plan-price-wrap">
+                        <span class="cloud-plan-currency">&#8377;</span>
+                        <span class="cloud-plan-price">7,999</span>
+                        <span class="cloud-plan-period">/mo</span>
+                    </div>
+                    <p class="cloud-plan-tagline">Maximum performance and full managed services for enterprise &amp;
+                        mission-critical workloads.</p>
+                    <hr class="cloud-plan-divider">
+                    <ul class="cloud-plan-features">
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>32 vCPU &bull; 64 GB ECC RAM</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>2 TB NVMe SSD RAID Storage</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Dedicated 10 Gbps Network</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Kubernetes &amp; Docker Ready</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Full Managed Service Option</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Disaster Recovery Included</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Priority 24/7 Expert Support</li>
+                        <li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check"
+                                    aria-hidden="true"></i></span>Custom SLA &amp; Compliance</li>
+                    </ul>
+                    <button class="cloud-plan-cta cloud-plan-cta-outline">Contact Sales</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 4 — 12 POWER FEATURES
+    ════════════════════════════════════ -->
+    <section id="cloud-features" class="section cloud-power-section">
+        <div class="container">
+            <span class="cloud-section-label" data-animate="fade-up">Capabilities</span>
+            <h2 class="title" data-animate="fade-up">Experience the Power of Cloud Hosting with ICSDC</h2>
+            <p class="subtitle" data-animate="fade-up">Every feature engineered specifically for Indian businesses that
+                refuse to compromise on performance, security, or reliability.</p>
+
+            <div class="cloud-power-grid" data-stagger>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+                    <h3>High Availability</h3>
+                    <p>Uninterrupted performance with L3-switched virtual network segregation and 3rd-gen Intel Xeon
+                        Gold processors running at 3 GHz for flawless uptime.</p>
+                </div>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+                    <h3>Direct NIXI Peering</h3>
+                    <p>A direct link to NIXI (National Internet Exchange of India) enables lower latency, faster content
+                        delivery, and enhanced performance for users across India.</p>
+                </div>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+                    <h3>Guaranteed 2-Hour RPO &amp; Ransomware Protection</h3>
+                    <p>Protect your data with confidence. Enjoy guaranteed 2-hour Recovery Point Objective and
+                        safemode-protected, in-built snapshot technology against ransomware threats.</p>
+                </div>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+                    <h3>Assured 99.9% Uptime</h3>
+                    <p>Built on reliable Indian and global data centers, your projects stay live 24/7 — no lag, no
+                        downtime, no compromise. Backed by a formal SLA commitment.</p>
+                </div>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
+                    <h3>Scale Effortlessly</h3>
+                    <p>Whether you&rsquo;re running a startup or a large enterprise, ICSDC lets you increase or decrease
+                        your resources instantly &mdash; only pay for what you need, when you need it.</p>
+                </div>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+                    <h3>24/7 Local Expert Support</h3>
+                    <p>Talk to real engineers based in India &mdash; no ticket loops or time-zone delays. We&rsquo;re
+                        always here to help with practical, on-ground expertise.</p>
+                </div>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+                    <h3>Enterprise-Grade Security</h3>
+                    <p>Your data stays shielded with multi-layered security including anti-DDoS protection, end-to-end
+                        encryption, and round-the-clock monitoring.</p>
+                </div>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+                    <h3>User-Friendly Control Panel</h3>
+                    <p>Manage your servers, monitor performance, and configure settings with an intuitive dashboard
+                        built for ease of use &mdash; no deep technical expertise required.</p>
+                </div>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+                    <h3>Sustainable Hosting</h3>
+                    <p>Our servers run on energy-efficient technology, offering top performance while supporting a
+                        cleaner, greener India with reduced carbon footprint per workload.</p>
+                </div>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+                    <h3>Perfect for Teams &amp; Collaboration</h3>
+                    <p>Enable your team to work together securely with centralized access to cloud-based tools and
+                        projects &mdash; anytime, anywhere, across any device.</p>
+                </div>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-download" aria-hidden="true"></i></div>
+                    <h3>Disaster Recovery Ready</h3>
+                    <p>Built-in redundancy systems ensure your mission-critical data can be restored swiftly in the
+                        event of failure or cyber threats, minimizing business disruption.</p>
+                </div>
+
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
+                    <h3>Transparent &amp; Flexible Pricing</h3>
+                    <p>Choose from a variety of flexible plans designed for Indian businesses &mdash; no hidden fees,
+                        complete billing clarity, and genuine pay-as-you-go flexibility.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 5 — CTA BAND #1
+    ════════════════════════════════════ -->
+    <section class="cloud-cta-band" aria-label="Free trial call to action">
+        <div class="cloud-cta-inner">
+            <h2>Ready to Launch Your Business on India&rsquo;s Most Reliable Cloud?</h2>
+            <p>Start your free trial now and experience the difference of infrastructure engineered for India.</p>
+            <div class="cloud-cta-btns">
+                <button class="cloud-cta-btn-primary" onclick="location.href='contact-us.html'">Get Started with ICSDC
+                    &rarr;</button>
+                <button class="cloud-cta-btn-outline" onclick="location.href='contact-us.html'">Talk to an
+                    Expert</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 6 — CLOUD FRAMEWORKS
+    ════════════════════════════════════ -->
+    <section id="cloud-frameworks" class="cloud-frameworks-section">
+        <div class="cloud-frameworks-inner">
+            <span class="cloud-section-label" style="display:block; text-align:center;"
+                data-animate="fade-up">Technology Stack</span>
+            <h2 class="title" data-animate="fade-up" style="font-weight:700;">Best Cloud Hosting Services Powered by
+                Best-in-Class Cloud
+                Frameworks</h2>
+            <p class="subtitle" data-animate="fade-up" style="margin-bottom:0;">At ICSDC, we don&rsquo;t just host your
+                applications &mdash; we enrich businesses with a robust, scalable, and modern cloud ecosystem.</p>
+
+            <div class="cloud-frameworks-grid" data-stagger>
+                <div class="cloud-framework-badge">
+                    <div class="cloud-fw-icon"><i class="fa-solid fa-dharmachakra" aria-hidden="true"></i></div>
+                    <span class="cloud-fw-name">Kubernetes (K8s)</span>
+                </div>
+                <div class="cloud-framework-badge">
+                    <div class="cloud-fw-icon"><i class="fa-brands fa-docker" aria-hidden="true"></i></div>
+                    <span class="cloud-fw-name">Docker</span>
+                </div>
+                <div class="cloud-framework-badge">
+                    <div class="cloud-fw-icon"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></div>
+                    <span class="cloud-fw-name">OpenStack</span>
+                </div>
+                <div class="cloud-framework-badge">
+                    <div class="cloud-fw-icon"><i class="fa-solid fa-server" aria-hidden="true"></i></div>
+                    <span class="cloud-fw-name">VMware vSphere</span>
+                </div>
+                <div class="cloud-framework-badge">
+                    <div class="cloud-fw-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+                    <span class="cloud-fw-name">Ceph Storage</span>
+                </div>
+                <div class="cloud-framework-badge">
+                    <div class="cloud-fw-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+                    <span class="cloud-fw-name">NGINX &amp; Apache</span>
+                </div>
+                <div class="cloud-framework-badge">
+                    <div class="cloud-fw-icon"><i class="fa-solid fa-terminal" aria-hidden="true"></i></div>
+                    <span class="cloud-fw-name">Ansible &amp; Terraform</span>
+                </div>
+                <div class="cloud-framework-badge">
+                    <div class="cloud-fw-icon"><i class="fa-solid fa-chart-line" aria-hidden="true"></i></div>
+                    <span class="cloud-fw-name">Prometheus &amp; Grafana</span>
+                </div>
+                <div class="cloud-framework-badge">
+                    <div class="cloud-fw-icon"><i class="fa-solid fa-lock" aria-hidden="true"></i></div>
+                    <span class="cloud-fw-name">Let&rsquo;s Encrypt SSL</span>
+                </div>
+                <div class="cloud-framework-badge">
+                    <div class="cloud-fw-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+                    <span class="cloud-fw-name">Cloudflare CDN &amp; Security</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 7 — MANAGED / UNMANAGED CHOICE
+         (2-col: choice cards left, portal box right)
+    ════════════════════════════════════ -->
+    <section id="cloud-choice" class="cloud-choice-section">
+        <div class="cloud-choice-inner">
+
+            <div class="cloud-choice-left" data-animate="fade-right">
+                <span class="cloud-section-label">Your Way</span>
+                <h2 class="title cloud-choice-title">Choose Best Cloud Hosting Solution, Your Way</h2>
+                <p class="cloud-choice-desc subtitle">At ICSDC, we believe cloud hosting should adapt to you &mdash; not the
+                    other way around. That&rsquo;s why we&rsquo;ve built a dedicated service portal where you can
+                    handpick what you need and skip what you don&rsquo;t.</p>
+
+                <div class="cloud-choice-options" data-stagger>
+
+                    <div class="cloud-choice-card">
+                        <div class="cloud-choice-card-icon">
+                            <i class="fa-solid fa-terminal" aria-hidden="true"></i>
+                        </div>
+                        <div class="cloud-choice-card-body">
+                            <span class="cloud-choice-tag">Unmanaged</span>
+                            <h3>Tech-Savvy? Go Unmanaged</h3>
+                            <p>Full control, root access, and custom stacks &mdash; build your cloud exactly your way
+                                with zero restrictions.</p>
+                        </div>
+                    </div>
+
+                    <div class="cloud-choice-card cloud-choice-card--managed">
+                        <div class="cloud-choice-card-icon">
+                            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                        </div>
+                        <div class="cloud-choice-card-body">
+                            <span class="cloud-choice-tag cloud-choice-tag--managed">Managed</span>
+                            <h3>Prefer Peace of Mind? Choose Managed</h3>
+                            <p>We handle patches, security, and updates so you can focus entirely on growing your
+                                business.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Portal box -->
+            <div class="cloud-portal-box" data-animate="fade-left">
+                <div class="cloud-portal-box-header">
+                    <div class="cloud-portal-box-icon">
+                        <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h3>Smart Portal. Smart Choices.</h3>
+                        <p>No tech hurdles. No guesswork. Pick, configure, and launch.</p>
+                    </div>
+                </div>
+                <div class="cloud-portal-steps">
+                    <div class="cloud-portal-step">
+                        <div class="cloud-portal-step-num">1</div>
+                        <div class="cloud-portal-step-content">
+                            <span>Visit our hosting portal</span>
+                        </div>
+                    </div>
+                    <div class="cloud-portal-step">
+                        <div class="cloud-portal-step-num">2</div>
+                        <div class="cloud-portal-step-content">
+                            <span>Select your preferred service type</span>
+                        </div>
+                    </div>
+                    <div class="cloud-portal-step">
+                        <div class="cloud-portal-step-num">3</div>
+                        <div class="cloud-portal-step-content">
+                            <span>Customize your plan</span>
+                        </div>
+                    </div>
+                    <div class="cloud-portal-step">
+                        <div class="cloud-portal-step-num">4</div>
+                        <div class="cloud-portal-step-content">
+                            <span>Launch in minutes</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cloud-portal-footer">
+                    <i class="fa-solid fa-quote-left cloud-portal-quote-icon" aria-hidden="true"></i>
+                    <em>Build and Scale &mdash; Your Cloud, Your Rules, just in ICSDC style.</em>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 8 — WHY CHOOSE ICSDC (10)
+    ════════════════════════════════════ -->
+    <section id="cloud-why" class="cloud-why-section">
+        <div class="cloud-why-inner">
+
+            <!-- Left: label + title + subtitle + CTA -->
+            <div class="cloud-why-left" data-animate="fade-right">
+                <span class="cloud-section-label">Why Choose</span>
+                <h2 class="title cloud-why-title">ICSDC Cloud Hosting</h2>
+                <p class="subtitle cloud-why-subtitle">At ICSDC, we&rsquo;re redefining cloud hosting for Indian
+                    businesses. Fast, secure, and built with flexibility &mdash; our cloud adapts to you, not the other
+                    way around.</p>
+                <a href="#cloud-pricing" class="cloud-why-cta-btn">
+                    Explore Cloud Plans <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+
+            <!-- Right: 2×5 reasons grid -->
+            <div class="cloud-why-right">
+                <div class="cloud-why-grid" data-stagger>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">01</div>
+                        <h3>Scalable Performance</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">02</div>
+                        <h3>Made in India, Built for the World</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">03</div>
+                        <h3>Next-Level Security</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">04</div>
+                        <h3>Easy Control Panel</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">05</div>
+                        <h3>Managed or Unmanaged</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">06</div>
+                        <h3>24/7 Expert Support</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">07</div>
+                        <h3>Guaranteed 2-Hour RPO</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">08</div>
+                        <h3>NIXI Registered</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">09</div>
+                        <h3>3rd-Gen Gold Processors</h3>
+                    </div>
+                    <div class="cloud-why-item">
+                        <div class="cloud-why-num">10</div>
+                        <h3>minIO &mdash; S3 Backup Storage</h3>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 9 — WHATEVER YOUR GOAL (6 uses)
+    ════════════════════════════════════ -->
+    <section id="cloud-usecases" class="section cloud-use-section">
+        <div class="container">
+            <h2 class="title" data-animate="fade-up">Whatever your goal, ICSDC has a cloud for you!</h2>
+            <p class="subtitle" data-animate="fade-up">Our cloud hosting isn&rsquo;t just for one type of user &mdash;
+                it&rsquo;s built for everyone who needs speed, security, and scalability.</p>
+
+            <div class="cloud-use-grid" data-stagger>
+
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-table" aria-hidden="true"></i></div>
+                    <h3>E-Commerce Platforms</h3>
+                    <p>Host online stores with high traffic &mdash; fast checkout, low cart drop-offs, and zero downtime
+                        during peak sales periods like festive seasons.</p>
+                </div>
+
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+                    <h3>SaaS &amp; App Developers</h3>
+                    <p>Deploy apps with built-in scalability and secure APIs across multiple regions. CI/CD-ready
+                        infrastructure that grows as your user base grows.</p>
+                </div>
+
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+                    <h3>Media &amp; Content Publishers</h3>
+                    <p>Stream videos, serve files, and publish content lightning-fast worldwide. Our Cloudflare CDN
+                        integration ensures global reach from Indian servers.</p>
+                </div>
+
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-house" aria-hidden="true"></i></div>
+                    <h3>Enterprises &amp; Corporates</h3>
+                    <p>Run mission-critical systems with guaranteed uptime and enterprise-grade security. 100% data
+                        residency ensures compliance with Indian regulations.</p>
+                </div>
+
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+                    <h3>EdTech &amp; Online Learning</h3>
+                    <p>Deliver seamless virtual classrooms and content to thousands of learners simultaneously without
+                        lag, even during peak registration periods.</p>
+                </div>
+
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
+                    <h3>Startups &amp; Innovators</h3>
+                    <p>Launch with confidence &mdash; grow quickly without worrying about infrastructure. Pay-as-you-go
+                        billing means you invest in growth, not overhead.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 10 — ENGINEERED FOR MODERN WORKLOADS
+         (2-col: headline+metrics left, feature cards right)
+    ════════════════════════════════════ -->
+    <section id="cloud-workloads" class="cloud-workload-section">
+        <div class="cloud-workload-inner">
+
+            <!-- LEFT — headline, metrics, CTA -->
+            <div class="cloud-workload-left" data-animate="fade-right">
+                <span class="cloud-section-label"></span>
+                <h2 class="title cloud-workload-title">Engineered for Modern Cloud Workloads</h2>
+                <p class="subtitle cloud-workload-subtitle">ICSDC Cloud Hosting is designed for users who need high
+                    performance, deep control, and the freedom to architect their own infrastructure.</p>
+
+                <div class="cloud-wl-metrics">
+                    <div class="cloud-wl-metric">
+                        <strong>99.9%</strong>
+                        <span>Uptime SLA</span>
+                    </div>
+                    <div class="cloud-wl-metric">
+                        <strong>2-Hr</strong>
+                        <span>RPO Guarantee</span>
+                    </div>
+                    <div class="cloud-wl-metric">
+                        <strong>100%</strong>
+                        <span>Data in India</span>
+                    </div>
+                    <div class="cloud-wl-metric">
+                        <strong>24/7</strong>
+                        <span>Local Support</span>
+                    </div>
+                </div>
+
+                <a href="#cloud-pricing" class="cloud-wl-cta-btn">
+                    Explore Cloud Plans <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- RIGHT — 2×3 feature cards (CMS-populated via .cloud-workload-list) -->
+            <div class="cloud-workload-right" data-animate="fade-left">
+                <div class="cloud-workload-list" data-stagger>
+
+                    <div class="cloud-wl-feat-card">
+                        <div class="cloud-wl-feat-icon"><i class="fa-solid fa-sliders" aria-hidden="true"></i></div>
+                        <h3>Fully Customizable Server Setup</h3>
+                        <p>Choose your preferred OS and configure CPUs, RAM, and storage exactly as you want &mdash; no
+                            fixed limits.</p>
+                    </div>
+
+                    <div class="cloud-wl-feat-card">
+                        <div class="cloud-wl-feat-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
+                        <h3>Faster Performance with SSD &amp; NVMe</h3>
+                        <p>Every server runs on high-speed SSD and NVMe, ensuring faster apps and a smoother user
+                            experience.</p>
+                    </div>
+
+                    <div class="cloud-wl-feat-card">
+                        <div class="cloud-wl-feat-icon"><i class="fa-solid fa-rocket" aria-hidden="true"></i></div>
+                        <h3>One-Click App Deploy</h3>
+                        <p>Install popular web apps like WordPress or Node.js in a single click &mdash; go live in
+                            minutes.</p>
+                    </div>
+
+                    <div class="cloud-wl-feat-card">
+                        <div class="cloud-wl-feat-icon"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></div>
+                        <h3>Docker &amp; Kubernetes Compatible</h3>
+                        <p>Docker and K8s-based workflows supported out of the box &mdash; containers or complex
+                            microservices.</p>
+                    </div>
+
+                    <div class="cloud-wl-feat-card">
+                        <div class="cloud-wl-feat-icon"><i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                        </div>
+                        <h3>Advanced DNS &amp; Network Routing</h3>
+                        <p>Enterprise DNS management, VPC support, and private or public IP options &mdash; your
+                            network, your choice.</p>
+                    </div>
+
+                    <div class="cloud-wl-feat-card">
+                        <div class="cloud-wl-feat-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                        </div>
+                        <h3>Built-In Security &amp; Monitoring</h3>
+                        <p>Free SSL, firewall, DDoS protection, and real-time CPU, bandwidth, and disk usage monitoring.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 11 — SINGLE DASHBOARD MANAGEMENT
+    ════════════════════════════════════ -->
+    <section id="cloud-dashboard" class="cloud-dashboard-section">
+        <div class="cloud-dashboard-inner">
+
+            <!-- LEFT — decorative image card -->
+            <div class="cloud-dash-image-col" data-animate="fade-right">
+                <div class="cloud-dash-image-wrap">
+                    <img src="assets/images/best-cloud-service-provider 1.png" alt="ICSDC Cloud Dashboard">
+                </div>
+            </div>
+
+            <!-- RIGHT — content -->
+            <div class="cloud-dash-content-col" data-animate="fade-left">
+                <span class="cloud-section-label">Dashboard</span>
+                <h2 class="title cloud-dash-title">Manage as You Want from a Single Dashboard</h2>
+                <p class="subtitle cloud-dash-subtitle">Cloud management shouldn&rsquo;t feel complicated. ICSDC&rsquo;s
+                    clean and intuitive dashboard lets you control everything from a single place &mdash; without
+                    confusion or technical overload.</p>
+
+                <div class="cloud-dashboard-grid" data-stagger>
+
+                    <div class="cloud-dashboard-item">
+                        <div class="cloud-dash-icon"><i class="fa-solid fa-rocket" aria-hidden="true"></i></div>
+                        <div>
+                            <h3>Install WordPress in One Click</h3>
+                            <p>Launch your website in seconds. No manual setup, no technical steps. Just click and go
+                                live.</p>
+                        </div>
+                    </div>
+
+                    <div class="cloud-dashboard-item">
+                        <div class="cloud-dash-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+                        <div>
+                            <h3>Create &amp; Manage Business Emails</h3>
+                            <p>Set up professional email accounts and manage mailboxes directly from the dashboard
+                                &mdash; quick, simple, and reliable.</p>
+                        </div>
+                    </div>
+
+                    <div class="cloud-dashboard-item">
+                        <div class="cloud-dash-icon"><i class="fa-solid fa-folder-open" aria-hidden="true"></i></div>
+                        <div>
+                            <h3>Upload &amp; Manage Files Smoothly</h3>
+                            <p>Use the built-in File Manager or FTP to upload, edit, and organize your website files
+                                effortlessly.</p>
+                        </div>
+                    </div>
+
+                    <div class="cloud-dashboard-item">
+                        <div class="cloud-dash-icon"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i></div>
+                        <div>
+                            <h3>Automatic Daily Backups</h3>
+                            <p>Your data is backed up automatically every day. Restore your website instantly with a
+                                single click if something goes wrong.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+         SECTION 11 — TESTIMONIALS
+    ════════════════════════════════════ -->
+    <section class="azure-testi-section testi-section" id="azure-testimonials section">
+        <div class="testi-container">
+            <h2 class="testi-title" data-animate="fade-up">Client Success Stories</h2>
+
+            <div class="testi-scroll-viewport">
+                <div class="testi-grid" id="testi-grid" role="list" aria-label="Client testimonials">
+                    <!-- Populated by azure-cloud-hosting.js -->
+                </div>
+            </div>
+
+            <div class="testi-pagination" id="testi-dots" role="tablist" aria-label="Testimonial navigation">
+            </div>
+
+            <div class="testi-nav">
+                <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+                <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+         SECTION 15 — FINAL CTA
+    ════════════════════════════════════ -->
+    <section class="cloud-cta-band cloud-cta-dark" aria-label="Final call to action">
+        <div class="cloud-cta-inner">
+            <h2>Get Started with ICSDC Cloud Hosting &mdash; India&rsquo;s Most Reliable Cloud</h2>
+            <p>Stop waiting for launch. Your server is just a click away. Deploy smarter, scale faster, and stay
+                sovereign.</p>
+            <div class="cloud-cta-btns">
+                <button class="cloud-cta-btn-primary">Start My Free Trial &rarr;</button>
+                <button class="cloud-cta-btn-outline">View All Plans</button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ════════════════════════════════════
+         SECTION 13 — FAQ
+    ════════════════════════════════════ -->
+    <section class="azure-faq-section faq-section section" id="azure-faq">
+        <div class="faq-container">
+
+            <div class="faq-col">
+                <h2 class="faq-title" data-animate="fade-up">FAQs About ICSDC Cloud Hosting</h2>
+                <dl class="faq-accordions" id="faq-accordions">
+                    <!-- Populated by azure-cloud-hosting.js -->
+                </dl>
+            </div>
+
+            <div class="faq-contact-card" data-animate="fade-left">
+                <h3 class="faq-contact-title">Still have questions?</h3>
+                <p class="faq-contact-desc">Our certified Azure architects are available 24&times;7 to discuss your
+                    cloud requirements and help you make the right decision.</p>
+                <a href="/contact-us.html" class="faq-contact-btn">
+                    Talk to an Azure Expert
+                    <i class="fa-solid fa-headset" aria-hidden="true"></i>
+                </a>
+            </div>
+
+        </div>
+    </section>
+    <!-- ════════════════════════════════════
+         SECTION 13 — FAQ
+    ════════════════════════════════════ -->
+
+
+    <!-- ════════════════════════════════════
+         FOOTER
+    ════════════════════════════════════ -->
+    <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
+    <!-- SCROLL ANIMATION ENGINE -->
+    <script>
+        (function () {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+                observer.observe(el);
+            });
+        })();
+    </script>
+
+    <!-- Strapi config -->
+    <script src="assets/js/config.js"></script>
+
+    <script src="assets/js/main.js" type="module"></script>
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/polish.js" defer></script>
+    <script type="module" src="assets/js/cloud-hosting.js" defer></script>
+
+    <script>
+        (function () {
+            var el = document.getElementById('footer-year');
+            if (el) el.textContent = new Date().getFullYear();
+        })();
+    </script>
+
+</body>
+
+</html>

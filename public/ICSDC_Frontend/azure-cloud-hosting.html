@@ -1,0 +1,766 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="assets/js/theme-init.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICSDC Azure Cloud Hosting | Scalable, Secure, Enterprise-Ready Azure Solutions</title>
+    <meta name="description"
+        content="Accelerate innovation with ICSDC Azure Cloud. Fully managed Azure infrastructure, cost optimization, enterprise security, and 24×7 expert support. Get a custom quote today.">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/cloud-components.css">
+    <link rel="stylesheet" href="assets/css/azure-cloud-hosting.css">
+    <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+
+    <!-- PAGE LOADER -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Loading...</p>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- DROPDOWN (populated by main.js) -->
+    <div id="dropdown-wrap">
+        <div id="dropdown">
+            <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+            <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+                <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+                <div>
+                    <h3 data-strapi-dd="flatTitle"></h3>
+                    <p data-strapi-dd="flatDesc"></p>
+                </div>
+            </div>
+            <div id="dd-content">
+                <div id="dd-top-bar">
+                    <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+                    <button class="dd-close" onclick="closeDropdown()">✕</button>
+                </div>
+                <div data-strapi-dd="grid" id="dd-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR (populated by main.js) -->
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+            </a>
+            <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+            <button class="btn-login desktop-login-btn">Login</button>
+            <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+            <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+            <button class="btn-login mobile-login-btn">Login</button>
+        </div>
+    </nav>
+
+    <!-- ════════════════════════════════════
+         SECTION 1 — HERO
+         Left: heading + CTA  |  Right: contact form
+    ════════════════════════════════════ -->
+    <section class="hero-section ">
+        <div class="hero">
+            <div class="hero-content">
+                <span class="azure-eyebrow">
+                    <span class="azure-eyebrow-dot"></span>
+                    Microsoft Azure &bull; Managed by ICSDC
+                </span>
+                <h1 class="hero-title">Accelerate Innovation with ICSDC Azure Cloud Hosting</h1>
+                <p class="hero-sub">Scalable, Secure, and Enterprise-Ready Azure Cloud Solutions</p>
+                <p class="hero-desc">Run your workloads on Microsoft Azure with ICSDC's fully-managed cloud expertise.
+                    We combine Azure's global infrastructure with 24&times;7 support, optimization, and cost-efficient
+                    architecture — giving your business unmatched performance, reliability, and governance.</p>
+                <div class="hero-btns">
+                    <a href="tel:+919810958857" class="btn-primary">&#128222; +91 98109 58857</a>
+                    <button class="btn-outline">View Plans</button>
+                </div>
+            </div>
+
+            <!-- Contact form on the right -->
+            <div class="hero-right azure-hero-right">
+                <div class="azure-hero-visual">
+                    <h2 class="azure-hero-form-title">Talk to Our Azure Specialists</h2>
+                    <p class="azure-hero-form-sub">Get a custom architecture, migration plan, and cost estimate within
+                        24 hours.</p>
+                    <form class="azure-hero-form" id="azure-hero-form" novalidate>
+                        <div class="azure-form-field">
+                            <input type="text" class="azure-form-input" placeholder="Your Name *" required
+                                aria-label="Your name">
+                        </div>
+                        <div class="azure-form-field">
+                            <input type="email" class="azure-form-input" placeholder="Business Email *" required
+                                aria-label="Business email">
+                        </div>
+                        <div class="azure-form-field">
+                            <input type="tel" class="azure-form-input" placeholder="Phone Number *" required
+                                aria-label="Phone number">
+                        </div>
+                        <div class="azure-form-field">
+                            <input type="text" class="azure-form-input" placeholder="Company Name"
+                                aria-label="Company name">
+                        </div>
+                        <div class="azure-form-field">
+                            <textarea class="azure-form-input azure-form-textarea"
+                                placeholder="Describe your cloud requirements..."
+                                aria-label="Cloud requirements"></textarea>
+                        </div>
+                        <button type="submit" class="azure-form-submit">Request a Quote &rarr;</button>
+                        <p class="azure-form-privacy">Your data is safe. We never share your information with third
+                            parties.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 2 — FOUR FEATURE HIGHLIGHTS
+    ════════════════════════════════════ -->
+    <section id="azure-features" class="why-us section">
+        <div class="container">
+            <div class="why-grid" data-stagger>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <i class="fa-solid fa-database" aria-hidden="true"></i>
+                    </div>
+                    <h3>Fully-Managed Azure Infrastructure</h3>
+                    <p>End-to-end setup, management, and optimization. We handle everything so you can focus on what
+                        matters most — your business.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                    </div>
+                    <h3>Cost-Optimized Cloud Architecture</h3>
+                    <p>Lower Azure bills with smart resource allocation, right-sizing, reserved instances, and automated
+                        cost control strategies.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                    </div>
+                    <h3>Enterprise Security &amp; Compliance</h3>
+                    <p>Advanced protection with global security standards, threat detection, daily monitoring, and
+                        configuration hardening for your workload.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon" aria-hidden="true">
+                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                    </div>
+                    <h3>24&times;7 Monitoring &amp; Support</h3>
+                    <p>Always-on monitoring with priority engineer assistance. Real experts, real answers, real
+                        solutions — available 24 hours a day, 7 days a week.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 3 — WHO WE ARE
+    ════════════════════════════════════ -->
+    <section id="azure-who" class="azure-who-section section">
+        <div class="azure-who-inner">
+            <div data-animate="fade-right">
+                <p class="azure-section-label">About ICSDC</p>
+                <h2 class="azure-who-title">Who We Are</h2>
+                <p class="azure-who-body">ICSDC is a technology-first cloud service provider focused on delivering
+                    reliable, intelligent, and future-ready Azure environments. We help businesses simplify cloud
+                    adoption by providing structured guidance, precise engineering, and continuous operational
+                    excellence. Our goal is to ensure your cloud works seamlessly — so your teams can innovate without
+                    disruption.</p>
+                <ul class="azure-who-list">
+                    <li>
+                        <span class="azure-who-check" aria-hidden="true">
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                        </span>
+                        Strategic Azure implementation tailored to business workflows
+                    </li>
+                    <li>
+                        <span class="azure-who-check" aria-hidden="true">
+                            <i class="fa-solid fa-circle-dot" aria-hidden="true"></i>
+                        </span>
+                        Proactive cloud governance to maintain stability and control
+                    </li>
+                    <li>
+                        <span class="azure-who-check" aria-hidden="true">
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                        </span>
+                        Skilled engineers dedicated to performance tuning and automation
+                    </li>
+                    <li>
+                        <span class="azure-who-check" aria-hidden="true">
+                            <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+                        </span>
+                        Transparent communication and support across every stage of your cloud journey
+                    </li>
+                </ul>
+            </div>
+            <div class="azure-who-visual" data-animate="fade-left">
+                <img src="assets/images/trusted-cloud-service-provider 1.png" alt="ICSDC Azure Cloud team"
+                    loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 4 — ADVANTAGES (12 cards)
+    ════════════════════════════════════ -->
+    <section id="azure-advantages" class="azure-advantages-section section">
+        <div class="container">
+            <p class="azure-section-label">Advantages</p>
+            <h2 class="title" data-animate="fade-up">Unlock Powerful Advantages with ICSDC Azure Cloud</h2>
+
+            <div class="azure-advantages-grid" data-stagger>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                    </div>
+                    <h3>Faster Application Performance</h3>
+                    <p>We fine-tune Azure resources for speed and efficiency so your applications run quicker and
+                        respond
+                        better under any load.</p>
+                </div>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-circle-dot" aria-hidden="true"></i>
+                    </div>
+                    <h3>Reliable Uptime</h3>
+                    <p>We design your cloud setup to remain stable and available so your business doesn't face
+                        interruptions or downtime.</p>
+                </div>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                    </div>
+                    <h3>Smooth Migration Support</h3>
+                    <p>Our team handles the entire shift to Azure — planning, moving, and validating — so your data and
+                        apps transition without any impact on users.</p>
+                </div>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                    </div>
+                    <h3>Smart Cost Control</h3>
+                    <p>We continuously analyze your cloud usage, remove wasteful resources, and apply cost-saving
+                        techniques to keep your monthly bills under control.</p>
+                </div>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                    </div>
+                    <h3>Strong Data Protection</h3>
+                    <p>Automated backups, encrypted storage, and quick disaster recovery options keep your information
+                        safe in case of emergencies.</p>
+                </div>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-hard-drive" aria-hidden="true"></i>
+                    </div>
+                    <h3>Secure Access Management</h3>
+                    <p>Strict access controls, login policies, and identity protections ensure only trusted people can
+                        reach your cloud environment.</p>
+                </div>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                    </div>
+                    <h3>Real-Time Monitoring</h3>
+                    <p>Our systems watch your Azure setup 24&times;7, detecting unusual behavior early and resolving
+                        issues before they affect your business.</p>
+                </div>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-circle-dot" aria-hidden="true"></i>
+                    </div>
+                    <h3>Scalable Resources</h3>
+                    <p>Your Azure resources expand or shrink instantly whether you need more power during peak hours or
+                        less during low usage periods.</p>
+                </div>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-download" aria-hidden="true"></i>
+                    </div>
+                    <h3>Automated Updates &amp; Patches</h3>
+                    <p>Security patches, OS updates, and performance improvements are applied automatically, keeping
+                        your environment safe and current.</p>
+                </div>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-users" aria-hidden="true"></i>
+                    </div>
+                    <h3>Dedicated Azure Experts</h3>
+                    <p>Direct access to certified Azure professionals who guide, troubleshoot, and optimize your cloud
+                        setup whenever required.</p>
+                </div>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                    </div>
+                    <h3>Global Cloud Reach</h3>
+                    <p>Azure's worldwide infrastructure lets you deploy applications closer to your customers, improving
+                        speed and user experience across regions.</p>
+                </div>
+
+                <div class="azure-adv-card">
+                    <div class="azure-adv-icon" aria-hidden="true">
+                        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                    </div>
+                    <h3>Easy Integration with Microsoft Tools</h3>
+                    <p>Azure connects effortlessly with Microsoft 365, Active Directory, DevOps, and other solutions,
+                        making workflows simple and unified.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 5 — MICROSOFT AZURE vs ICSDC AZURE
+    ════════════════════════════════════ -->
+    <section id="azure-compare" class="azure-compare-section section">
+        <div class="azure-compare-container">
+            <p class="azure-section-label azure-section-label-center">Comparison</p>
+            <h2 class="title" data-animate="fade-up">Why Choose ICSDC Azure When Microsoft Azure Is There?</h2>
+            <p class="subtitle azure-compare-subtitle">
+                Microsoft Azure vs ICSDC Azure Plans — see exactly what you gain.</p>
+
+            <div class="azure-compare-table-wrap" data-animate="fade-up">
+                <table class="azure-compare-table">
+                    <thead>
+                        <tr>
+                            <th>Feature / Capability</th>
+                            <th>Microsoft Azure</th>
+                            <th>ICSDC Azure Plans</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Enterprise-grade Azure infrastructure</td>
+                            <td><span class="azure-compare-both">✔️</span></td>
+                            <td><span class="azure-compare-both">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>Handheld onboarding &amp; setup support</td>
+                            <td><span class="azure-compare-cross">❌</span></td>
+                            <td><span class="azure-compare-check">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>Cost trimming &amp; plan optimization</td>
+                            <td><span class="azure-compare-cross">❌</span></td>
+                            <td><span class="azure-compare-check">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>Dedicated human engineers for queries</td>
+                            <td><span class="azure-compare-cross">❌</span></td>
+                            <td><span class="azure-compare-check">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>India-focused technical assistance</td>
+                            <td><span class="azure-compare-cross">❌</span></td>
+                            <td><span class="azure-compare-check">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>Simplified configuration for non-tech teams</td>
+                            <td><span class="azure-compare-cross">❌</span></td>
+                            <td><span class="azure-compare-check">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>On-demand scaling across global regions</td>
+                            <td><span class="azure-compare-both">✔️</span></td>
+                            <td><span class="azure-compare-both">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>Billing transparency with predictable costs</td>
+                            <td><span class="azure-compare-cross">❌</span></td>
+                            <td><span class="azure-compare-check">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>Active performance monitoring</td>
+                            <td><span class="azure-compare-cross">❌</span></td>
+                            <td><span class="azure-compare-check">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>End-to-end migration help</td>
+                            <td><span class="azure-compare-cross">❌</span></td>
+                            <td><span class="azure-compare-check">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>Direct cloud control panel access</td>
+                            <td><span class="azure-compare-both">✔️</span></td>
+                            <td><span class="azure-compare-both">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>Custom workload tuning</td>
+                            <td><span class="azure-compare-cross">❌</span></td>
+                            <td><span class="azure-compare-check">✔️</span></td>
+                        </tr>
+                        <tr>
+                            <td>Best Suited For</td>
+                            <td>Large teams managing Azure internally</td>
+                            <td>Businesses wanting Azure without complexity</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="azure-compare-cta">
+                <button class="btn-primary">Get a Tailored Azure Plan &rarr;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 6 — WHY CHOOSE US
+    ════════════════════════════════════ -->
+    <section id="azure-why" class="azure-why-section section">
+        <div class="container">
+            <p class="azure-section-label">Why ICSDC</p>
+            <h2 class="title" data-animate="fade-up">What Sets Us Apart</h2>
+            <h2 class="subtitle">Choosing ICSDC means partnering with a team that understands how to build, manage, and
+                scale Azure environments with precision.</h2>
+
+            <div class="azure-why-grid" data-stagger>
+
+                <div class="azure-why-card">
+                    <div class="azure-why-num">01</div>
+                    <h3>Architectures Built for Stability</h3>
+                    <p>We design cloud setups that stay consistent even during heavy workloads — no surprises, no
+                        degradation under pressure.</p>
+                </div>
+
+                <div class="azure-why-card">
+                    <div class="azure-why-num">02</div>
+                    <h3>Performance-Driven Configuration</h3>
+                    <p>Every resource is tuned to deliver the best speed and efficiency for your applications. No
+                        generic templates, no waste.</p>
+                </div>
+
+                <div class="azure-why-card">
+                    <div class="azure-why-num">03</div>
+                    <h3>Transparent Guidance &amp; Best Practices</h3>
+                    <p>We simplify cloud decisions with clear recommendations, not confusing technical jargon. You
+                        always
+                        understand what we're doing and why.</p>
+                </div>
+
+                <div class="azure-why-card">
+                    <div class="azure-why-num">04</div>
+                    <h3>Proactive Issue Prevention</h3>
+                    <p>Our team fixes potential problems before they turn into service disruptions — monitoring,
+                        alerting, and resolving in real time.</p>
+                </div>
+
+                <div class="azure-why-card">
+                    <div class="azure-why-num">05</div>
+                    <h3>Support That Actually Responds</h3>
+                    <p>You get real engineers, real answers, and real assistance — available 24&times;7. Not chatbots,
+                        not ticket queues, not waiting.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 7 — OUR PROCESS
+    ════════════════════════════════════ -->
+    <section id="azure-process" class="azure-process-section section">
+        <div class="container">
+            <p class="azure-section-label">Our Process</p>
+            <h2 class="title" data-animate="fade-up">Built for Businesses That Don&rsquo;t Want Complexity</h2>
+            <h2 class="subtitle">Working with ICSDC means Azure becomes simpler, smoother, and business-driven — not
+                just a technical platform you&rsquo;re left to figure out alone.</h2>
+
+            <div class="azure-process-steps" data-animate="fade-up">
+
+                <div class="azure-step">
+                    <div class="azure-step-num" aria-hidden="true">1</div>
+                    <div class="azure-step-content">
+                        <h3>Understanding Your Workloads</h3>
+                        <p>We begin by studying your current environment, pain points, and future plans — something
+                            Microsoft doesn't do unless you're an enterprise spending huge budgets.</p>
+                    </div>
+                </div>
+
+                <div class="azure-step">
+                    <div class="azure-step-num" aria-hidden="true">2</div>
+                    <div class="azure-step-content">
+                        <h3>Custom Azure Architecture</h3>
+                        <p>Our engineers build an Azure setup designed for your exact needs, not a general template.
+                            Every resource, every rule, every configuration is tailored to you.</p>
+                    </div>
+                </div>
+
+                <div class="azure-step">
+                    <div class="azure-step-num" aria-hidden="true">3</div>
+                    <div class="azure-step-content">
+                        <h3>Zero-Stress Migration</h3>
+                        <p>You don't deal with scripts, configs, downtime windows, or data loss worries. We handle
+                            everything end-to-end with minimal disruption to your live operations.</p>
+                    </div>
+                </div>
+
+                <div class="azure-step">
+                    <div class="azure-step-num" aria-hidden="true">4</div>
+                    <div class="azure-step-content">
+                        <h3>Monitoring &amp; Optimization</h3>
+                        <p>We actively monitor your Azure consumption, performance, and security — without waiting for a
+                            ticket. Issues are caught and fixed before you notice them.</p>
+                    </div>
+                </div>
+
+                <div class="azure-step">
+                    <div class="azure-step-num" aria-hidden="true">5</div>
+                    <div class="azure-step-content">
+                        <h3>Continuous Improvement</h3>
+                        <p>As your business evolves, we expand and reshape your Azure infrastructure without forcing you
+                            to relearn cloud technology. We grow with you.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 8 — TECH STACK
+    ════════════════════════════════════ -->
+    <section id="azure-stack" class="azure-stack-section section">
+        <div class="container azure-stack-inner">
+            <p class="azure-section-label azure-stack-section-label">Technology Stack</p>
+            <h2 class="azure-stack-headline">Technology Stack That Works With You — Not Against You</h2>
+            <p class="azure-stack-subhead">Anyone can buy Azure. Very few can operate Azure efficiently.</p>
+
+            <div class="azure-stack-grid" data-stagger>
+
+            </div>
+
+            <p class="azure-stack-tagline">Microsoft gives the tools. ICSDC makes the tools work for YOU.</p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 9 — SECURITY
+    ════════════════════════════════════ -->
+    <section id="azure-security" class="azure-security-section section">
+        <div class="azure-security-inner">
+            <div data-animate="fade-right">
+                <p class="azure-section-label">Security</p>
+                <h2 class="azure-security-title">Enterprise-Grade Security Without Enterprise-Grade Complexity</h2>
+                <p class="azure-security-intro">Microsoft provides the framework. ICSDC implements and manages the
+                    actual day-to-day security. Here&rsquo;s what we add that Microsoft doesn&rsquo;t manage for you:
+                </p>
+                <ul class="azure-security-list">
+                    <li>
+                        <span class="azure-who-check" aria-hidden="true">
+                            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                        </span>
+                        Access rules tailored to your real internal hierarchy
+                    </li>
+                    <li>
+                        <span class="azure-who-check" aria-hidden="true">
+                            <i class="fa-solid fa-circle-dot" aria-hidden="true"></i>
+                        </span>
+                        Daily monitoring of suspicious activity with manual review of alerts
+                    </li>
+                    <li>
+                        <span class="azure-who-check" aria-hidden="true">
+                            <i class="fa-solid fa-circle-dot" aria-hidden="true"></i>
+                        </span>
+                        Configuration hardening based on your workload type
+                    </li>
+                    <li>
+                        <span class="azure-who-check" aria-hidden="true">
+                            <i class="fa-solid fa-circle-dot" aria-hidden="true"></i>
+                        </span>
+                        Regular audits to identify cost leaks and security risks
+                    </li>
+                    <li>
+                        <span class="azure-who-check" aria-hidden="true">
+                            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                        </span>
+                        Encrypted backups stored across regions
+                    </li>
+                    <li>
+                        <span class="azure-who-check" aria-hidden="true">
+                            <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                        </span>
+                        Real human response — not automated documentation
+                    </li>
+                </ul>
+                <blockquote class="azure-security-quote">
+                    &ldquo;With Microsoft, you get the infrastructure. With ICSDC, you get a completely secure operating
+                    environment.&rdquo;
+                </blockquote>
+            </div>
+            <div class="azure-security-visual" data-animate="fade-left">
+                <img src="assets/images/azure-security.png" alt="Azure security architecture" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 10 — PRICING TRANSPARENCY
+    ════════════════════════════════════ -->
+    <section id="azure-pricing-info" class="azure-pricing-callout section">
+        <div class="azure-pricing-callout-inner">
+            <div class="azure-pricing-callout-text" data-animate="fade-right">
+                <h2>Pricing That Eliminates Surprise Bills</h2>
+                <p>Buying Azure directly can lead to unpredictable bills. But with ICSDC, companies love the clarity:
+                </p>
+                <ul class="azure-pricing-points">
+                    <li>Transparent monthly cost structure</li>
+                    <li>Alerts before any unusual spending spike</li>
+                    <li>Regular cost reviews with clear reports</li>
+                    <li>No hidden overages or surprise charges</li>
+                </ul>
+                <p class="azure-pricing-note">
+                    Your cloud stays predictable — not a monthly shock.
+                </p>
+            </div>
+            <div class="azure-pricing-highlight" data-animate="fade-left">
+                <h3>Get a Custom Quote</h3>
+                <p>Tell us about your workloads and we&rsquo;ll design a cost-optimized Azure architecture specifically
+                    for your business.</p>
+                <a href="mailto:info@indiancloudservices.com">Get Your Quote &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 11 — TESTIMONIALS
+    ════════════════════════════════════ -->
+    <section class="azure-testi-section testi-section" id="azure-testimonials section">
+        <div class="testi-container">
+            <h2 class="testi-title" data-animate="fade-up">Client Success Stories</h2>
+
+            <div class="testi-scroll-viewport">
+                <div class="testi-grid" id="testi-grid" role="list" aria-label="Client testimonials">
+                    <!-- Populated by azure-cloud-hosting.js -->
+                </div>
+            </div>
+
+            <div class="testi-pagination" id="testi-dots" role="tablist" aria-label="Testimonial navigation">
+            </div>
+
+            <div class="testi-nav">
+                <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+                <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 12 — FINAL CTA BAND
+    ════════════════════════════════════ -->
+    <section class="azure-cta-band section" aria-label="Call to action ">
+        <div class="azure-cta-inner">
+            <h2>Why Manage Azure Alone When ICSDC Handles Everything for You?</h2>
+            <p>Move to Azure with zero guesswork. Get a custom architecture, migration plan, and cost estimate from our
+                certified Azure specialists.</p>
+            <div class="azure-cta-btns">
+                <button class="azure-cta-btn-primary">Book a Consultation &rarr;</button>
+                <a href="tel:+919810958857" class="azure-cta-btn-outline">&#128222; +91 98109 58857</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION 13 — FAQ
+    ════════════════════════════════════ -->
+    <section class="azure-faq-section faq-section section" id="azure-faq">
+        <div class="faq-container">
+
+            <div class="faq-col">
+                <h2 class="faq-title" data-animate="fade-up">FAQs about ICSDC Azure Cloud</h2>
+                <dl class="faq-accordions" id="faq-accordions">
+                    <!-- Populated by azure-cloud-hosting.js -->
+                </dl>
+            </div>
+
+            <div class="faq-contact-card" data-animate="fade-left">
+                <h3 class="faq-contact-title">Still have questions?</h3>
+                <p class="faq-contact-desc">Our certified Azure architects are available 24&times;7 to discuss your
+                    cloud requirements and help you make the right decision.</p>
+                <a href="/contact-us.html" class="faq-contact-btn">
+                    Talk to an Azure Expert
+                    <i class="fa-solid fa-headset" aria-hidden="true"></i>
+                </a>
+            </div>
+
+        </div>
+    </section>
+    <!-- ════════════════════════════════════
+         SECTION 13 — FAQ
+    ════════════════════════════════════ -->
+
+
+    <!-- ════════════════════════════════════
+         FOOTER
+    ════════════════════════════════════ -->
+    <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
+    <!-- SCROLL ANIMATION ENGINE -->
+    <script>
+        (function () {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+                observer.observe(el);
+            });
+        })();
+    </script>
+    <!-- Strapi config -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/main.js" type="module"></script>
+    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/polish.js" defer></script>
+    <script src="assets/js/azure-cloud-hosting.js" type="module"></script>
+
+    <script>
+        (function () {
+            var el = document.getElementById('footer-year');
+            if (el) el.textContent = new Date().getFullYear();
+        }());
+    </script>
+
+</body>
+
+</html>

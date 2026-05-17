@@ -1,0 +1,481 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="assets/js/theme-init.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Managed VPS cPanel Hosting for Growing Businesses | ICSDC</title>
+  <meta name="description"
+    content="Run your websites on high-performance VPS cPanel Hosting with dedicated resources, strong security, and easy management. Scalable plans by ICSDC.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-components.css">
+  <link rel="stylesheet" href="assets/css/vps-cpanel.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="vpc-eyebrow">&#128187; VPS cPanel Hosting</div>
+        <h1 class="hero-title">VPS cPanel Hosting for Growing Businesses</h1>
+        <p class="hero-sub">Advanced VPS Resources Made Simple with cPanel</p>
+        <p class="hero-desc">Manage your websites with ease using VPS hosting powered by cPanel. Get dedicated
+          resources,
+          enhanced security, and optimized performance without the complexity of server management.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="location.href='/contact'">Launch Your VPS cPanel Hosting Now
+            &rarr;</button>
+          <button class="btn-outline" onclick="location.href='#vpc-plans'">View Plans</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img class="hero-right-image" alt="" style="display:none">
+        <div class="vpc-hero-visual">
+          <div class="vpc-top-badge">&#128187; ICSDC VPS cPanel</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#fff7ed" stroke="rgba(234,88,12,0.12)"
+              stroke-width="1" />
+            <!-- Server rack -->
+            <rect x="30" y="30" width="110" height="160" rx="10" fill="white" stroke="rgba(234,88,12,0.20)"
+              stroke-width="1.5" />
+            <!-- Server units in rack -->
+            <rect x="38" y="42" width="94" height="18" rx="4" fill="#fff7ed" stroke="rgba(234,88,12,0.25)"
+              stroke-width="1" />
+            <circle cx="50" cy="51" r="3" fill="#ea580c" opacity="0.8" />
+            <text x="58" y="55" font-size="6" fill="#c2410c" font-weight="600">VPS Server 1</text>
+
+            <rect x="38" y="64" width="94" height="18" rx="4" fill="#fff7ed" stroke="rgba(234,88,12,0.25)"
+              stroke-width="1" />
+            <circle cx="50" cy="73" r="3" fill="#ea580c" opacity="0.8" />
+            <text x="58" y="77" font-size="6" fill="#c2410c" font-weight="600">VPS Server 2</text>
+
+            <rect x="38" y="86" width="94" height="18" rx="4" fill="#fff7ed" stroke="rgba(234,88,12,0.25)"
+              stroke-width="1" />
+            <circle cx="50" cy="95" r="3" fill="#f97316" opacity="0.7" />
+            <text x="58" y="99" font-size="6" fill="#c2410c" font-weight="600">VPS Server 3</text>
+
+            <rect x="38" y="108" width="94" height="18" rx="4" fill="#fff7ed" stroke="rgba(234,88,12,0.25)"
+              stroke-width="1" />
+            <circle cx="50" cy="117" r="3" fill="#ea580c" opacity="0.8" />
+            <text x="58" y="121" font-size="6" fill="#c2410c" font-weight="600">VPS Server 4</text>
+
+            <!-- cPanel dashboard card -->
+            <rect x="155" y="28" width="125" height="95" rx="10" fill="white" stroke="rgba(234,88,12,0.20)"
+              stroke-width="1.5" />
+            <rect x="155" y="28" width="125" height="22" rx="10" fill="#ea580c" />
+            <rect x="155" y="40" width="125" height="10" rx="0" fill="#ea580c" />
+            <text x="168" y="43" font-size="7" fill="white" font-weight="700">cPanel Dashboard</text>
+            <!-- cPanel items -->
+            <rect x="163" y="56" width="50" height="14" rx="3" fill="#fff7ed" stroke="rgba(234,88,12,0.20)"
+              stroke-width="1" />
+            <text x="168" y="66" font-size="5.5" fill="#c2410c" font-weight="600">&#127760; Domains</text>
+
+            <rect x="221" y="56" width="50" height="14" rx="3" fill="#fff7ed" stroke="rgba(234,88,12,0.20)"
+              stroke-width="1" />
+            <text x="226" y="66" font-size="5.5" fill="#c2410c" font-weight="600">&#128231; Email</text>
+
+            <rect x="163" y="75" width="50" height="14" rx="3" fill="#fff7ed" stroke="rgba(234,88,12,0.20)"
+              stroke-width="1" />
+            <text x="168" y="85" font-size="5.5" fill="#c2410c" font-weight="600">&#128193; Files</text>
+
+            <rect x="221" y="75" width="50" height="14" rx="3" fill="#fff7ed" stroke="rgba(234,88,12,0.20)"
+              stroke-width="1" />
+            <text x="226" y="85" font-size="5.5" fill="#c2410c" font-weight="600">&#128202; Stats</text>
+
+            <rect x="163" y="94" width="108" height="14" rx="3" fill="#fff7ed" stroke="rgba(234,88,12,0.20)"
+              stroke-width="1" />
+            <text x="168" y="104" font-size="5.5" fill="#c2410c" font-weight="600">&#128274; SSL &amp; Security</text>
+
+            <!-- Resource meters -->
+            <rect x="155" y="132" width="125" height="75" rx="10" fill="white" stroke="rgba(234,88,12,0.20)"
+              stroke-width="1.5" />
+            <text x="168" y="147" font-size="6" fill="#7c2d12" font-weight="700">Resource Usage</text>
+            <!-- CPU bar -->
+            <text x="163" y="160" font-size="5.5" fill="#9a3412">CPU</text>
+            <rect x="180" y="153" width="88" height="6" rx="3" fill="#fed7aa" />
+            <rect x="180" y="153" width="55" height="6" rx="3" fill="#ea580c" />
+            <!-- RAM bar -->
+            <text x="163" y="173" font-size="5.5" fill="#9a3412">RAM</text>
+            <rect x="180" y="166" width="88" height="6" rx="3" fill="#fed7aa" />
+            <rect x="180" y="166" width="38" height="6" rx="3" fill="#f97316" />
+            <!-- Disk bar -->
+            <text x="163" y="186" font-size="5.5" fill="#9a3412">Disk</text>
+            <rect x="180" y="179" width="88" height="6" rx="3" fill="#fed7aa" />
+            <rect x="180" y="179" width="65" height="6" rx="3" fill="#ea580c" />
+
+            <!-- Corner accent dots -->
+            <circle cx="28" cy="28" r="4" fill="#fed7aa" opacity="0.7" />
+            <circle cx="272" cy="28" r="4" fill="#fed7aa" opacity="0.7" />
+            <circle cx="28" cy="192" r="3" fill="#fdba74" opacity="0.5" />
+            <circle cx="272" cy="192" r="3" fill="#fdba74" opacity="0.5" />
+          </svg>
+          <div class="vpc-status-badge">
+            <div class="vpc-dot"></div>
+            <div>
+              <div class="vpc-bt">All Systems Active</div>
+              <div class="vpc-bs">cPanel Managed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — PILLARS (4 CARDS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-file-lines" aria-hidden="true"></i></div>
+          <h3>Easy Website Management</h3>
+          <p>Control domains, emails, databases, and files from a single cPanel dashboard.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+          <h3>Dedicated VPS Resources</h3>
+          <p>Guaranteed CPU, RAM, and storage for stable performance without shared hosting limits.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Enhanced Security &amp; Isolation</h3>
+          <p>VPS-level isolation, firewall protection, and SSL support for safer hosting.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Scalable Performance on Demand</h3>
+          <p>Upgrade resources instantly as your traffic and business grow.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — WHO WE ARE ════ -->
+  <section id="vpc-about" class="section cloud-power-section">
+    <div class="container">
+      <div class="vpc-about-wrap" data-animate="fade-up">
+        <h2 class="title" id="vpc-about-title">Who We Are</h2>
+        <p class="subtitle" id="vpc-about-desc">We are a technology-driven hosting partner focused on delivering
+          reliable, high-performance VPS solutions for businesses that need control without complexity. Our VPS cPanel
+          Hosting is built on enterprise-grade infrastructure, backed by experienced engineers who understand
+          performance, security, and scalability at every level. From server optimization to proactive monitoring and
+          support, we simplify hosting so businesses can focus on growth &mdash; not backend management.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ PRICING PLACEHOLDER ════ -->
+  <section id="vpc-plans" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">PLANS &amp; PRICING</span>
+      <h2 class="title" data-animate="fade-up">VPS cPanel Hosting Plans</h2>
+      <p class="subtitle" data-animate="fade-up">Choose the right plan for your business needs. Contact us for custom
+        configurations and enterprise pricing.</p>
+      <div class="vpc-plans-placeholder" data-animate="fade-up">
+        <p>Pricing plans coming soon. <a href="/contact-us.html" class="vpc-plans-link">Contact us</a> for a custom
+          quote.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — KEY ADVANTAGES (12 CARDS) ════ -->
+  <section id="vpc-advantages" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up" id="vpc-advantages-label">KEY ADVANTAGES</span>
+      <h2 class="title" data-animate="fade-up" id="vpc-advantages-title">Key Advantages of ICSDC VPS cPanel Hosting</h2>
+
+      <div class="vpc-advantages-grid" data-stagger id="vpc-advantages-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Dedicated Server Resources</h3>
+          <p>Guaranteed CPU, RAM, and storage not shared with other users. Stable performance, predictable speed, and
+            better traffic spike handling.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-file-lines" aria-hidden="true"></i></div>
+          <h3>Easy-to-Use cPanel Interface</h3>
+          <p>Manage domains, emails, files, and databases without technical complexity.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Improved Website Performance</h3>
+          <p>Faster load times, better user experience, improved SEO.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Stronger Security &amp; Account Isolation</h3>
+          <p>Isolated VPS environment with built-in security tools.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
+          <h3>Scalable Resources as You Grow</h3>
+          <p>Scale CPU, RAM, or storage without migrating servers.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-wifi" aria-hidden="true"></i></div>
+          <h3>Full Root Access &amp; Custom Control</h3>
+          <p>Complete control over server settings, configurations, and software installations.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <h3>Host Multiple Websites Efficiently</h3>
+          <p>Manage multiple domains from a single server &mdash; ideal for agencies and resellers.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Higher Uptime &amp; Reliability</h3>
+          <p>Enterprise-grade infrastructure with better uptime than shared hosting.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+          <h3>Support for Custom Applications</h3>
+          <p>Install custom software, frameworks, and tools not possible on shared hosting.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <h3>Cost-Effective Alternative to Dedicated Servers</h3>
+          <p>Near-dedicated performance without the high dedicated server costs.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
+          <h3>Simplified Account &amp; Resource Management</h3>
+          <p>cPanel and WHM for easy account creation and real-time resource monitoring.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Built for Professional Use Cases</h3>
+          <p>Ideal for businesses, developers, and growing websites needing better performance and control.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — WHY CHOOSE ICSDC (8 CARDS) ════ -->
+  <section id="vpc-why" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up" id="vpc-why-label">WHY ICSDC</span>
+      <h2 class="title" data-animate="fade-up" id="vpc-why-title">Why Choose ICSDC for VPS cPanel Hosting?</h2>
+
+      <div class="cloud-power-grid" data-stagger id="vpc-why-grid">
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Consistent High Performance</h3>
+          <p>Optimized infrastructure with fast SSD storage for smooth performance and dependable uptime.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-file-lines" aria-hidden="true"></i></div>
+          <h3>cPanel Included for Easy Control</h3>
+          <p>Manage websites, domains, emails, and databases with the industry-standard cPanel.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
+          <h3>Flexible Resource Scaling</h3>
+          <p>Start with what you need and scale anytime as traffic and workload grow.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Free &amp; Seamless Migration</h3>
+          <p>Experts handle website migration safely with minimal downtime.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <h3>Transparent &amp; Fair Pricing</h3>
+          <p>No hidden charges, lock-ins, or unexpected renewal shocks.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>24/7 Expert Support</h3>
+          <p>Round-the-clock assistance from experienced hosting professionals.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Enhanced Security &amp; Isolation</h3>
+          <p>Secure, isolated VPS environment for your data and applications.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Built for Growing Businesses</h3>
+          <p>Ideal for websites that have outgrown shared hosting.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — CPANEL FEATURES ════ -->
+  <section id="vpc-cpanel-features" class="section vpc-cpanel-features-section">
+    <div class="container">
+      <div class="vpc-cpanel-features-inner">
+        <div class="vpc-cpanel-features-text">
+          <h2 class="title" id="vpc-cpanel-features-title">What You Can Manage with cPanel</h2>
+          <p class="subtitle" id="vpc-cpanel-features-desc">cPanel gives you full control over your hosting environment
+            through an intuitive dashboard.</p>
+        </div>
+        <div class="vpc-cpanel-features-list-wrap">
+          <ul class="vpc-cpanel-features-list" id="vpc-cpanel-features-list">
+            <li>Manage websites and domains</li>
+            <li>AI-powered website builder</li>
+            <li>Create and manage databases</li>
+            <li>Email accounts and mail settings</li>
+            <li>Upload and download files</li>
+            <li>FTP accounts and more</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band" id="vpc-cta1">
+    <div class="cloud-cta-inner">
+      <h2>Launch Your VPS cPanel Hosting Now</h2>
+      <p>Whether you're upgrading from shared hosting or scaling fast, our VPS cPanel plans offer the right balance of
+        power, control, and value.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='/contact'">Get Started &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='#vpc-plans'">View Plans</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="vpc-testi-heading">
+    <div class="testi-container">
+      <h2 id="vpc-testi-heading" class="testi-title">What Our Clients Say About VPS cPanel Hosting</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — FAQ ════ -->
+  <section class="faq-section" id="vpc-faq" aria-labelledby="vpc-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="vpc-faq-heading" class="faq-title">FAQs about VPS cPanel Hosting</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our VPS cPanel Team</h3>
+        <p class="faq-contact-desc">Our hosting specialists are available to help you choose the right VPS cPanel plan
+          for your business needs.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact-us.html" class="faq-contact-btn">Talk to an Expert <i class="fa-solid fa-headset"
+            aria-hidden="true"></i></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 2 (DARK) ════ -->
+  <section class="cloud-cta-band cloud-cta-dark" id="vpc-cta2">
+    <div class="cloud-cta-inner">
+      <h2>Ready to Power Your Business with VPS cPanel Hosting?</h2>
+      <p>Get reliable, scalable, and easy-to-manage VPS hosting with cPanel. Expert support, enterprise-grade
+        infrastructure, and transparent pricing by ICSDC.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="location.href='/contact'">Get Started Now &rarr;</button>
+        <button class="cloud-cta-btn-outline" onclick="location.href='/contact'">Talk to an Expert</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/vps-cpanel.js"></script>
+
+</body>
+
+</html>

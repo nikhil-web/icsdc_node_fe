@@ -1,0 +1,546 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="assets/js/theme-init.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICSDC Microsoft 365 Services | Managed Setup, Migration &amp; Support</title>
+  <meta name="description"
+    content="Get Microsoft 365 with expert setup, secure migration, backups, and ongoing support from ICSDC. Simplify collaboration, email, and productivity for your business.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-components.css">
+  <link rel="stylesheet" href="assets/css/microsoft-365.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
+      <button class="btn-login desktop-login-btn">Login</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul>
+      <button class="btn-login mobile-login-btn">Login</button>
+    </div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="m365-eyebrow">&#9670; Microsoft 365 by ICSDC</div>
+        <h1 class="hero-title">Transform How Your Teams Work With Microsoft 365 by ICSDC</h1>
+        <p class="hero-sub">Everything Your Team Needs to Communicate, Create, and Collaborate</p>
+        <p class="hero-desc">Manage emails, files, meetings, and collaboration from one powerful platform with ICSDC
+          Microsoft 365. We help you choose the right plan, handle setup and migration, and ensure secure access for
+          your teams &mdash; so you can focus on productivity, not IT complexity.</p>
+        <div class="hero-btns">
+          <button class="btn-primary">Get Started With Microsoft 365 &rarr;</button>
+          <button class="btn-outline">View Plans</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img class="hero-right-image" alt="" style="display:none">
+        <div class="m365-hero-visual">
+          <div class="m365-top-badge">&#9670; Microsoft 365</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#eff6ff" stroke="rgba(37,99,235,0.12)"
+              stroke-width="1" />
+            <!-- App tile grid -->
+            <!-- Row 1 -->
+            <rect x="30" y="30" width="50" height="50" rx="10" fill="white" stroke="rgba(37,99,235,0.15)"
+              stroke-width="1" />
+            <text x="55" y="58" font-size="18" text-anchor="middle" fill="#0078d4">O</text>
+            <text x="55" y="70" font-size="6" text-anchor="middle" fill="#64748b">Outlook</text>
+
+            <rect x="90" y="30" width="50" height="50" rx="10" fill="white" stroke="rgba(37,99,235,0.15)"
+              stroke-width="1" />
+            <text x="115" y="58" font-size="18" text-anchor="middle" fill="#464eb8">T</text>
+            <text x="115" y="70" font-size="6" text-anchor="middle" fill="#64748b">Teams</text>
+
+            <rect x="150" y="30" width="50" height="50" rx="10" fill="white" stroke="rgba(37,99,235,0.15)"
+              stroke-width="1" />
+            <text x="175" y="58" font-size="18" text-anchor="middle" fill="#215a9e">W</text>
+            <text x="175" y="70" font-size="6" text-anchor="middle" fill="#64748b">Word</text>
+
+            <rect x="210" y="30" width="60" height="50" rx="10" fill="white" stroke="rgba(37,99,235,0.15)"
+              stroke-width="1" />
+            <text x="240" y="58" font-size="18" text-anchor="middle" fill="#217346">X</text>
+            <text x="240" y="70" font-size="6" text-anchor="middle" fill="#64748b">Excel</text>
+
+            <!-- Row 2 -->
+            <rect x="30" y="90" width="50" height="50" rx="10" fill="white" stroke="rgba(37,99,235,0.15)"
+              stroke-width="1" />
+            <text x="55" y="118" font-size="18" text-anchor="middle" fill="#b7472a">P</text>
+            <text x="55" y="130" font-size="6" text-anchor="middle" fill="#64748b">PowerPoint</text>
+
+            <rect x="90" y="90" width="50" height="50" rx="10" fill="white" stroke="rgba(37,99,235,0.15)"
+              stroke-width="1" />
+            <text x="115" y="118" font-size="18" text-anchor="middle" fill="#036c70">S</text>
+            <text x="115" y="130" font-size="6" text-anchor="middle" fill="#64748b">SharePoint</text>
+
+            <rect x="150" y="90" width="50" height="50" rx="10" fill="white" stroke="rgba(37,99,235,0.15)"
+              stroke-width="1" />
+            <text x="175" y="118" font-size="18" text-anchor="middle" fill="#0f6cbd">D</text>
+            <text x="175" y="130" font-size="6" text-anchor="middle" fill="#64748b">OneDrive</text>
+
+            <rect x="210" y="90" width="60" height="50" rx="10" fill="white" stroke="rgba(37,99,235,0.15)"
+              stroke-width="1" />
+            <text x="240" y="118" font-size="18" text-anchor="middle" fill="#742774">D</text>
+            <text x="240" y="130" font-size="6" text-anchor="middle" fill="#64748b">Defender</text>
+
+            <!-- Bottom label -->
+            <text x="150" y="175" font-size="8" fill="#2563eb" text-anchor="middle" font-weight="600">Complete Microsoft
+              365 Suite — Fully Managed</text>
+            <!-- Decorative line -->
+            <line x1="40" y1="162" x2="260" y2="162" stroke="rgba(37,99,235,0.12)" stroke-width="1" />
+            <!-- Corner dots -->
+            <circle cx="28" cy="28" r="4" fill="#bfdbfe" opacity="0.6" />
+            <circle cx="272" cy="28" r="4" fill="#bfdbfe" opacity="0.6" />
+            <circle cx="28" cy="192" r="3" fill="#93c5fd" opacity="0.4" />
+            <circle cx="272" cy="192" r="3" fill="#93c5fd" opacity="0.4" />
+          </svg>
+          <div class="m365-status-badge">
+            <div class="m365-dot"></div>
+            <div>
+              <div class="m365-bt">Enterprise Security</div>
+              <div class="m365-bs">ICSDC Managed Setup</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — WHY US (4 PILLARS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid" data-stagger>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+          <h3>Business Email &amp; Calendar Management</h3>
+          <p>Professional Outlook email with custom domains, shared calendars, and reliable uptime to keep your
+            communication organized and uninterrupted.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+          <h3>Real-Time Collaboration Tools</h3>
+          <p>Work together seamlessly using Microsoft Teams, SharePoint, and OneDrive &mdash; edit files, chat, and
+            meet in real time from anywhere.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Advanced Security &amp; Compliance</h3>
+          <p>Protect business data with built-in security features like multi-factor authentication, threat protection,
+            and compliance controls.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Flexible Plans That Scale Easily</h3>
+          <p>Choose and upgrade Microsoft 365 plans as your team grows, with simple license management and expert
+            support from ICSDC.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — PRICING PLANS ════ -->
+  <section id="m365-plans" class="section cloud-pricing-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">PRICING</span>
+      <h2 class="title" data-animate="fade-up">Transparent &amp; Trusted Pricing That Scales Your Business</h2>
+      <p class="subtitle" data-animate="fade-up">Flexible pricing with no hidden costs, easy upgrades, and expert
+        support included &mdash; so you get reliable productivity without overpaying.</p>
+
+      <div class="m365-plans-grid" data-stagger>
+
+        <!-- Email Essentials -->
+        <div class="m365-plan-card">
+          <div class="m365-plan-name">Email Essentials</div>
+          <div class="m365-plan-price">&#8377;149<span>/user/mo</span></div>
+          <p class="m365-plan-tagline">Professional email with custom domain and reliable security</p>
+          <ul class="m365-plan-features">
+            <li>Professional domain email (you@yourdomain)</li>
+            <li>10 GB mailbox storage</li>
+            <li>Web-based Outlook access</li>
+            <li>Mobile &amp; desktop email sync</li>
+            <li>Shared calendars</li>
+            <li>Spam &amp; malware protection</li>
+            <li>ICSDC setup &amp; migration support</li>
+          </ul>
+          <button class="m365-plan-btn">Get Started &rarr;</button>
+        </div>
+
+        <!-- Online Business Essentials (Featured) -->
+        <div class="m365-plan-card m365-plan-featured">
+          <div class="m365-plan-badge">Most Popular</div>
+          <div class="m365-plan-name">Business Essentials</div>
+          <div class="m365-plan-price">&#8377;499<span>/user/mo</span></div>
+          <p class="m365-plan-tagline">Full collaboration suite with Teams, OneDrive &amp; web Office apps</p>
+          <ul class="m365-plan-features">
+            <li>50 GB mailbox storage</li>
+            <li>Microsoft Teams (chat &amp; meetings)</li>
+            <li>OneDrive for Business (1 TB)</li>
+            <li>Word, Excel, PowerPoint (Web)</li>
+            <li>SharePoint collaboration</li>
+            <li>Data security &amp; compliance</li>
+            <li>ICSDC technical support</li>
+            <li>Automatic updates</li>
+          </ul>
+          <button class="m365-plan-btn m365-plan-btn-featured">Get Started &rarr;</button>
+        </div>
+
+        <!-- Business Professional -->
+        <div class="m365-plan-card">
+          <div class="m365-plan-name">Business Professional</div>
+          <div class="m365-plan-price">&#8377;1,099<span>/user/mo</span></div>
+          <p class="m365-plan-tagline">Full desktop Office apps + advanced security &amp; compliance</p>
+          <ul class="m365-plan-features">
+            <li>50 GB mailbox storage</li>
+            <li>Desktop Office apps (installable)</li>
+            <li>Install on up to 5 devices</li>
+            <li>Microsoft Teams + video conferencing</li>
+            <li>Microsoft Defender security</li>
+            <li>Advanced compliance controls</li>
+            <li>Admin &amp; user management support</li>
+          </ul>
+          <button class="m365-plan-btn">Contact Sales &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — PRODUCTIVITY FEATURES (12 CARDS) ════ -->
+  <section id="m365-features" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">FEATURES</span>
+      <h2 class="title" data-animate="fade-up">More Than Software &mdash; A Complete Productivity Solution</h2>
+      <p class="subtitle" data-animate="fade-up">ICSDC brings expert setup, seamless migration, and ongoing support
+        &mdash; ensuring every Microsoft 365 feature adds real value to your business.</p>
+
+      <div class="m365-features-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <h3>Expert Plan Selection</h3>
+          <p>ICSDC helps you choose the right Microsoft 365 plan based on your team size, workflow, and security needs
+            &mdash; so you pay only for what truly adds value.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Hassle-Free Setup &amp; Migration</h3>
+          <p>From initial configuration to smooth email and data migration, our experts ensure zero data loss and
+            minimal downtime during the transition.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+          <h3>Secure Business Email With Outlook</h3>
+          <p>Professional, ad-free business email with enterprise-grade security, spam filtering, and reliable access
+            across all devices.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+          <h3>Seamless Team Collaboration</h3>
+          <p>Enable real-time collaboration with Microsoft Teams, SharePoint, and OneDrive, allowing teams to
+            communicate, share files, and work together efficiently.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Centralized Admin Control</h3>
+          <p>Manage users, licenses, devices, and permissions from a single admin dashboard, making IT management
+            simple and structured.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Enterprise-Level Security</h3>
+          <p>Protect your organization with multi-factor authentication, data loss prevention, and built-in threat
+            protection against phishing and malware.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <h3>Anywhere, Anytime Access</h3>
+          <p>Work securely from office, home, or on the go with cloud-based access to emails, documents, and meetings
+            on any device.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Automatic Updates &amp; Reliability</h3>
+          <p>Stay up to date with the latest features, security patches, and performance improvements without manual
+            upgrades or maintenance.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Scalable for Growing Teams</h3>
+          <p>Easily add or remove users and upgrade plans as your business evolves, ensuring Microsoft 365 grows along
+            with your organization.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+          <h3>Data Backup &amp; Recovery Support</h3>
+          <p>Reduce the risk of data loss with retention policies and recovery options that safeguard critical
+            business information.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <h3>Compliance-Ready Infrastructure</h3>
+          <p>Meet industry standards and regulatory requirements with Microsoft's built-in compliance tools and
+            governance features.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-phone" aria-hidden="true"></i></div>
+          <h3>Dedicated ICSDC Support</h3>
+          <p>Get ongoing assistance from ICSDC experts for licensing, troubleshooting, optimization, and day-to-day
+            queries &mdash; so your teams stay productive at all times.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — BACKUP PROTECTION (7 CARDS) ════ -->
+  <section id="m365-backup" class="section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">BACKUP PROTECTION</span>
+      <h2 class="title" data-animate="fade-up">Why Choose ICSDC Microsoft 365 Backup Protection</h2>
+      <p class="subtitle" data-animate="fade-up">Your Microsoft 365 data deserves an extra layer of protection beyond
+        native retention &mdash; automated backups, encrypted storage, and granular recovery.</p>
+
+      <div class="m365-backup-grid" data-stagger>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Comprehensive Backup for Microsoft 365 Data</h3>
+          <p>Safeguard your critical emails, files, calendars, contacts, and attachments across Microsoft 365 with
+            complete and reliable data protection.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Automated Triple Backups Daily</h3>
+          <p>Your data is automatically backed up three times a day, protecting it from accidental deletion, malware,
+            ransomware attacks, and third-party failures.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i></div>
+          <h3>Continuous Retention With Smart Snapshots</h3>
+          <p>Round-the-clock data availability using multiple, easy-to-manage snapshot schedules that cover all
+            employee files and email attachments.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+          <h3>Granular Search &amp; Recovery</h3>
+          <p>Quickly locate and restore individual files, folders, emails, images, videos, contacts, or calendars
+            without affecting the rest of your data.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-rotate" aria-hidden="true"></i></div>
+          <h3>Company-Wide Visibility &amp; Restore Control</h3>
+          <p>Search, monitor, and restore data across the entire organization from a single centralized platform
+            &mdash; ideal for audits, compliance, and governance.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Enterprise-Grade Three-Fold Data Security</h3>
+          <p>Triple-layer protection: automated backups, AES-256-bit encrypted data transfer and storage, and
+            controls aligned with industry security standards.</p>
+        </div>
+        <div class="cloud-use-card">
+          <div class="cloud-use-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <h3>Multi-Domain Backup Management</h3>
+          <p>Configure and manage backups for multiple Microsoft 365 domains, assign admin access, and control
+            domain-specific backups with full flexibility.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band">
+    <div class="cloud-cta-inner">
+      <h2>Simplify Your Microsoft 365 Setup With ICSDC</h2>
+      <p>Get expert guidance, secure configuration, and seamless onboarding &mdash; without the complexity of
+        managing Microsoft 365 on your own.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Get Started With Microsoft 365 &rarr;</button>
+        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — WHO SHOULD CHOOSE ════ -->
+  <section id="m365-who" class="section cloud-power-section">
+    <div class="container">
+      <span class="cloud-section-label" data-animate="fade-up">WHO IT&rsquo;S FOR</span>
+      <h2 class="title" data-animate="fade-up">Who Should Choose Microsoft 365 Services?</h2>
+      <p class="subtitle" data-animate="fade-up">Microsoft 365 is ideal for organizations that need secure
+        communication, structured collaboration, and flexible productivity tools without managing complex IT
+        infrastructure.</p>
+
+      <div class="cloud-power-grid" data-stagger>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>Growing Businesses &amp; Startups</h3>
+          <p>Teams that need professional email, document collaboration, and scalable tools that grow as the business
+            expands.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Enterprises &amp; Corporate Teams</h3>
+          <p>Organizations requiring secure access control, compliance-ready tools, centralized administration, and
+            reliable communication across departments.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <h3>Remote &amp; Hybrid Workforces</h3>
+          <p>Companies with distributed teams that rely on real-time collaboration, virtual meetings, and secure
+            cloud access from any location.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+          <h3>IT &amp; Operations Teams</h3>
+          <p>Businesses looking for centralized user, device, and license management with reduced administrative
+            overhead.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+          <h3>Education &amp; Training Providers</h3>
+          <p>Institutions that need collaboration tools, file sharing, and communication platforms for instructors,
+            students, and staff.</p>
+        </div>
+        <div class="cloud-power-card">
+          <div class="cloud-power-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+          <h3>Organizations Handling Sensitive Data</h3>
+          <p>Businesses that require advanced security, data protection, and compliance support for emails,
+            documents, and user access.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="m365-testi-heading">
+    <div class="testi-container">
+      <h2 id="m365-testi-heading" class="testi-title">What Our Microsoft 365 Clients Say</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — FAQ ════ -->
+  <section class="faq-section" id="m365-faq" aria-labelledby="m365-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="m365-faq-heading" class="faq-title">FAQs About ICSDC Microsoft 365</h2>
+        <dl class="faq-accordions" id="faq-accordions"></dl>
+      </div>
+      <aside class="faq-contact-card">
+        <h3 class="faq-contact-title">Talk to Our Microsoft 365 Specialists</h3>
+        <p class="faq-contact-desc">Our Microsoft 365 team is available to help with plan selection, migration,
+          security setup, and ongoing support for your organization.<br><br>&#128222; +91 98109 58857</p>
+        <a href="/contact-us.html" class="faq-contact-btn">Talk to a Specialist <i class="fa-solid fa-shield-halved"
+            aria-hidden="true"></i></a>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Ready to Move Smarter With Microsoft 365?</h2>
+      <p>Let ICSDC handle licensing, migration, security, and ongoing support while your teams focus on productivity
+        and growth.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Get Started With ICSDC Microsoft 365 Today &rarr;</button>
+        <button class="cloud-cta-btn-outline">Talk to an Expert</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  <script src="assets/js/config.js"></script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/microsoft-365.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="assets/js/theme-init.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Dedicated Server Hosting | Built for Modern Workloads | ICSDC</title>
+    <meta name="description"
+        content="Get full control, stability &amp; security with ICSDC Windows Dedicated Server Hosting. Enterprise Intel Xeon processors, NVMe storage, full RDP access &amp; 24/7 expert support.">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/windows-dedicated-server.css">
+
+    <link rel="stylesheet" href="assets/css/dark-mode.css">
+</head>
+
+<body>
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Loading...</p>
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div id="dropdown-wrap">
+        <div id="dropdown">
+            <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+            <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+                <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+                <div>
+                    <h3 data-strapi-dd="flatTitle"></h3>
+                    <p data-strapi-dd="flatDesc"></p>
+                </div>
+            </div>
+            <div id="dd-content">
+                <div id="dd-top-bar">
+                    <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div><button class="dd-close"
+                        onclick="closeDropdown()">&#x2715;</button>
+                </div>
+                <div data-strapi-dd="grid" id="dd-grid"></div>
+            </div>
+        </div>
+    </div>
+    <nav>
+        <div class="nav-inner"><a href="/" class="logo"><img data-strapi-mainLogo data-strapi="mainLogo" src=""
+                    alt="ICSDC logo" class="logo-icon"></a>
+            <ul data-strapi-nav class="nav-links" id="nav-links"></ul><button
+                class="btn-login desktop-login-btn">Login</button><button class="hamburger" id="hamburger"
+                aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        </div>
+        <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+            <ul data-strapi-nav-mobile class="mobile-nav-links" id="mobile-nav-links"></ul><button
+                class="btn-login mobile-login-btn">Login</button>
+        </div>
+    </nav>
+
+    <!-- ════════ HERO ════════ -->
+    <section class="hero-section">
+        <div class="hero">
+            <div class="hero-content">
+                <span class="wds-eyebrow"><span class="wds-eyebrow-dot"></span> Windows Dedicated Server</span>
+                <h1 class="hero-title">Windows Dedicated Server Hosting Built for Modern Workloads</h1>
+                <p class="hero-sub">Give Your Business the Control, Stability &amp; Security It Can&rsquo;t Compromise
+                    On</p>
+                <p class="hero-desc">Get a dedicated Windows environment built for consistent speed, zero disruption,
+                    and complete control. Perfect for businesses that can&rsquo;t afford risks or shared resources.</p>
+                <div class="hero-btns">
+                    <button class="btn-primary">Start with ICSDC Windows Servers &rarr;</button>
+                    <button class="btn-outline">View Plans</button>
+                </div>
+            </div>
+            <div class="hero-right">
+                <img class="hero-right-image" alt="" style="display:none">
+                <div class="wds-hero-visual">
+                    <div class="wds-tech-badge">&#129695; Windows Server 2022</div>
+                    <div class="wds-server-rack">
+                        <div class="wds-rack-unit">
+                            <div class="wds-rack-led"></div>
+                            <div class="wds-rack-bars">
+                                <div class="wds-rack-bar" style="flex:4"></div>
+                                <div class="wds-rack-bar" style="flex:2"></div>
+                                <div class="wds-rack-bar" style="flex:5"></div>
+                            </div><span class="wds-rack-label">CPU</span><span class="wds-rack-stat">Intel Xeon</span>
+                        </div>
+                        <div class="wds-rack-unit">
+                            <div class="wds-rack-led"></div>
+                            <div class="wds-rack-bars">
+                                <div class="wds-rack-bar" style="flex:6"></div>
+                                <div class="wds-rack-bar" style="flex:1"></div>
+                                <div class="wds-rack-bar" style="flex:3"></div>
+                            </div><span class="wds-rack-label">RAM</span><span class="wds-rack-stat">128 GB</span>
+                        </div>
+                        <div class="wds-rack-unit">
+                            <div class="wds-rack-led"></div>
+                            <div class="wds-rack-bars">
+                                <div class="wds-rack-bar" style="flex:3"></div>
+                                <div class="wds-rack-bar" style="flex:5"></div>
+                                <div class="wds-rack-bar" style="flex:2"></div>
+                            </div><span class="wds-rack-label">NVMe</span><span class="wds-rack-stat">4 TB</span>
+                        </div>
+                        <div class="wds-rack-unit">
+                            <div class="wds-rack-led"></div>
+                            <div class="wds-rack-bars">
+                                <div class="wds-rack-bar" style="flex:5"></div>
+                                <div class="wds-rack-bar" style="flex:3"></div>
+                                <div class="wds-rack-bar" style="flex:1"></div>
+                            </div><span class="wds-rack-label">NET</span><span class="wds-rack-stat">1 Gbps</span>
+                        </div>
+                    </div>
+                    <div class="wds-status-badge">
+                        <div class="wds-status-dot"></div>
+                        <div>
+                            <div class="wds-badge-text">All Systems Online</div>
+                            <div class="wds-badge-sub">Full RDP Admin Access</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ 4 PILLARS ════════ -->
+    <section class="why-us section">
+        <div class="container">
+            <div class="why-grid" data-stagger>
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+                    <h3>Full Root-Level Control</h3>
+                    <p>Complete administrative access to configure, customize, and manage your Windows server exactly
+                        the way your applications require.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
+                    <h3>High-Performance Hardware</h3>
+                    <p>Enterprise-grade CPU, RAM, and SSD storage designed to handle heavy workloads, databases, and
+                        mission-critical applications with ease.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+                    <h3>Advanced Security &amp; Isolation</h3>
+                    <p>Your server resources are fully dedicated &mdash; ensuring stronger protection, isolated
+                        environments, and zero interference from other users.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+                    <h3>Guaranteed Uptime &amp; Reliability</h3>
+                    <p>Stable, predictable hosting with consistent performance backed by robust infrastructure and
+                        proactive monitoring.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ PRICING PLACEHOLDER ════════ -->
+    <section id="wds-pricing" class="section cloud-pricing-section">
+        <div class="container">
+            <span class="cloud-section-label" data-animate="fade-up">Pricing</span>
+            <h2 class="title" data-animate="fade-up">Find a Windows Dedicated Server Plan That Fits Your Workload</h2>
+            <p class="subtitle" data-animate="fade-up">Select the ideal server setup with scalable resources and
+                transparent pricing.</p>
+            <div class="wds-pricing-placeholder" data-animate="fade-up">
+                <div class="wds-pricing-icon"><i class="fa-solid fa-server" aria-hidden="true"></i></div>
+                <h3>Custom Pricing Available</h3>
+                <p>Windows Dedicated Server plans are tailored to your workload &mdash; CPU cores, RAM, storage, and
+                    Windows edition. Contact our team for a personalized quote.</p>
+                <div class="hero-btns" style="justify-content:center; margin-top:24px;">
+                    <button class="btn-primary">Get a Custom Quote &rarr;</button>
+                    <button class="btn-outline">Call +91 98109 58857</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ FEATURES ════════ -->
+
+    <!-- WHO WE ARE SECTION -->
+    <section id="wds-about" class="section" aria-labelledby="wds-about-heading">
+        <div class="container">
+            <span class="cloud-section-label" data-animate="fade-up">About ICSDC</span>
+            <h2 id="wds-about-heading" class="section-title" data-animate="fade-up">Who We Are?</h2>
+            <p class="section-subtitle" data-animate="fade-up">ICSDC delivers reliable, high-performance Windows
+                Dedicated Server solutions built for businesses that demand power, stability, and complete control. With
+                enterprise-grade infrastructure and expert support, we ensure your workloads run smoothly, securely, and
+                without disruption.</p>
+            <ul class="wds-about-list" data-stagger>
+                <li class="wds-about-item" data-animate="fade-up">
+                    <span class="wds-about-check" aria-hidden="true">&#10003;</span>
+                    <span>Windows server specialists</span>
+                </li>
+                <li class="wds-about-item" data-animate="fade-up">
+                    <span class="wds-about-check" aria-hidden="true">&#10003;</span>
+                    <span>Enterprise-grade collaborative data center</span>
+                </li>
+                <li class="wds-about-item" data-animate="fade-up">
+                    <span class="wds-about-check" aria-hidden="true">&#10003;</span>
+                    <span>Proven expertise in performance optimization</span>
+                </li>
+                <li class="wds-about-item" data-animate="fade-up">
+                    <span class="wds-about-check" aria-hidden="true">&#10003;</span>
+                    <span>Strong security and compliance standards</span>
+                </li>
+                <li class="wds-about-item" data-animate="fade-up">
+                    <span class="wds-about-check" aria-hidden="true">&#10003;</span>
+                    <span>24/7 technical support</span>
+                </li>
+                <li class="wds-about-item" data-animate="fade-up">
+                    <span class="wds-about-check" aria-hidden="true">&#10003;</span>
+                    <span>Managed &amp; unmanaged server configurations</span>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="wds-features" class="section cloud-power-section">
+        <div class="container">
+            <span class="cloud-section-label" data-animate="fade-up">Infrastructure</span>
+            <h2 class="title" data-animate="fade-up">Experience the Real Power of Dedicated Windows Infrastructure</h2>
+            <p class="subtitle" data-animate="fade-up">Every capability engineered for Windows workloads &mdash; from
+                ERPs to SQL databases to remote desktop teams.</p>
+            <div class="cloud-power-grid" data-stagger>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
+                    <h3>Enterprise-Grade Intel Xeon &amp; Gold Processors</h3>
+                    <p>High-performance Xeon and Gold series processors ensure smooth execution of heavy applications,
+                        large databases, ERPs, CRMs, and multi-user workloads.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+                    <h3>High-Speed NVMe Storage Architecture</h3>
+                    <p>NVMe storage enables faster data access, quicker application response times, and reliable
+                        handling of large file operations essential for enterprise tasks.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+                    <h3>1 Gbps Dedicated Network Throughput</h3>
+                    <p>Consistent network performance with dedicated 1 Gbps throughput &mdash; ideal for remote teams,
+                        large data transfers, and workload-intensive environments.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></div>
+                    <h3>Fully Isolated Single-Tenant Environment</h3>
+                    <p>CPU, RAM, and storage reserved solely for your workloads &mdash; eliminating bottlenecks,
+                        interference, and shared-resource performance issues entirely.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+                    <h3>Hardware-Level Security &amp; Dedicated Firewalls</h3>
+                    <p>Every Windows server includes dedicated firewall configurations with strict access rules,
+                        offering enhanced protection against unauthorized access and threats.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+                    <h3>Remote Desktop (RDP) with Full Admin Control</h3>
+                    <p>Access and manage your server with full administrative rights via secure RDP. Install
+                        applications, configure services, and maintain complete control.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+                    <h3>Advanced L3 Switching &amp; Segregated Network</h3>
+                    <p>Layer 3 switching segregates and secures network traffic, ensuring low latency, clean routing,
+                        and improved protection for sensitive data.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+                    <h3>Automated Backups with Snapshot Support</h3>
+                    <p>Scheduled backups and snapshot support safeguard your critical data. In case of issues or
+                        accidental deletions, restore quickly with minimal downtime.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+                    <h3>High Availability with Redundant Power</h3>
+                    <p>Hosted in Tier III/IV data centers with redundant power, cooling systems, and carrier
+                        connectivity to ensure uninterrupted uptime and consistent operations.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+                    <h3>Optional Private VLAN &amp; Internal Network</h3>
+                    <p>For multi-server deployments, ICSDC creates private VLANs enabling secure, isolated communication
+                        between servers &mdash; perfect for clustered applications.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-file-lines" aria-hidden="true"></i></div>
+                    <h3>Windows Licensing, Updates &amp; Patch Management</h3>
+                    <p>We manage all Windows Server licenses, security patches, and OS updates to keep your environment
+                        secure and compliant.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-house" aria-hidden="true"></i></div>
+                    <h3>24/7 Monitoring, Alerts &amp; Expert Support</h3>
+                    <p>Our team continuously monitors hardware health, network performance, and server stability.
+                        Round-the-clock assistance from trained engineers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ MANAGED VS SELF-MANAGED ════════ -->
+    <section id="wds-comparison" class="section">
+        <div class="container">
+            <span class="cloud-section-label" data-animate="fade-up">Management Options</span>
+            <h2 class="title" data-animate="fade-up">Fully Managed vs Self-Managed Windows Dedicated Server</h2>
+            <p class="subtitle" data-animate="fade-up">Choose the management style that matches your team&rsquo;s
+                expertise and time availability.</p>
+            <div class="wds-compare-wrap" data-animate="fade-up">
+                <table class="wds-compare-table" aria-label="Managed vs Self-Managed comparison">
+                    <thead>
+                        <tr>
+                            <th scope="col">Feature</th>
+                            <th scope="col" class="wds-col-managed">Fully Managed</th>
+                            <th scope="col">Self-Managed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>24/7 Server Monitoring</td>
+                            <td class="wds-col-managed"><span class="wds-check">&#10003;</span></td>
+                            <td><span class="wds-cross">&#10007;</span></td>
+                        </tr>
+                        <tr>
+                            <td>OS Installation &amp; Updates</td>
+                            <td class="wds-col-managed"><span class="wds-check">&#10003;</span></td>
+                            <td><span class="wds-note">User-managed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Security Hardening (Firewall, Patching)</td>
+                            <td class="wds-col-managed"><span class="wds-check">&#10003;</span></td>
+                            <td><span class="wds-cross">&#10007;</span></td>
+                        </tr>
+                        <tr>
+                            <td>Application Installation</td>
+                            <td class="wds-col-managed"><span class="wds-check">&#10003;</span></td>
+                            <td><span class="wds-cross">&#10007;</span></td>
+                        </tr>
+                        <tr>
+                            <td>Troubleshooting &amp; Issue Resolution</td>
+                            <td class="wds-col-managed"><span class="wds-check">&#10003;</span></td>
+                            <td><span class="wds-note">Basic guidance only</span></td>
+                        </tr>
+                        <tr>
+                            <td>Backup Setup &amp; Management</td>
+                            <td class="wds-col-managed"><span class="wds-check">&#10003;</span></td>
+                            <td><span class="wds-cross">&#10007;</span></td>
+                        </tr>
+                        <tr>
+                            <td>Control Panel Configuration</td>
+                            <td class="wds-col-managed"><span class="wds-check">&#10003;</span></td>
+                            <td><span class="wds-check">&#10003;</span></td>
+                        </tr>
+                        <tr>
+                            <td>Root / Admin Access</td>
+                            <td class="wds-col-managed"><span class="wds-check">&#10003;</span></td>
+                            <td><span class="wds-check">&#10003;</span></td>
+                        </tr>
+                        <tr>
+                            <td>Technical Skill Required</td>
+                            <td class="wds-col-managed"><span class="wds-cross">&#10007;</span></td>
+                            <td><span class="wds-check">&#10003;</span></td>
+                        </tr>
+                        <tr>
+                            <td>Ideal For</td>
+                            <td class="wds-col-managed" style="color:var(--text);font-size:13px;">Businesses wanting
+                                zero IT load</td>
+                            <td style="font-size:13px;">Teams comfortable managing servers</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align:center; margin-top:32px;">
+                <button class="btn-primary">View Plans &rarr;</button>
+                <button class="btn-outline" style="margin-left:12px;">Talk to an Expert</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ CTA BAND ════════ -->
+    <section class="cloud-cta-band">
+        <div class="cloud-cta-inner">
+            <h2>Need a Hassle-Free Windows Server? Talk to Our Experts &amp; Go Fully Managed</h2>
+            <p>Our team will design the right dedicated Windows setup for your workloads, budget, and compliance needs.
+            </p>
+            <div class="cloud-cta-btns">
+                <button class="cloud-cta-btn-primary">Get a Custom Quote &rarr;</button>
+                <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ WHY ICSDC ════════ -->
+    <section id="wds-why" class="section cloud-power-section">
+        <div class="container">
+            <span class="cloud-section-label" data-animate="fade-up">Why ICSDC</span>
+            <h2 class="title" data-animate="fade-up">Why Choose ICSDC Windows Dedicated Servers?</h2>
+            <p class="subtitle" data-animate="fade-up">ICSDC gives you a fast, secure, and reliable Windows server
+                environment designed to support your applications and business operations without interruptions.</p>
+            <div class="cloud-power-grid" data-stagger>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+                    <h3>Works Perfectly with Windows Tools</h3>
+                    <p>Use your Windows apps and tools without any changes. Everything runs smoothly because the server
+                        is designed for Windows workloads from the ground up.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+                    <h3>Easy and Secure Remote Access</h3>
+                    <p>Connect to your server from anywhere using Remote Desktop. Manage users easily and keep access
+                        secure for your entire distributed team.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+                    <h3>For .NET and Web Applications</h3>
+                    <p>Run .NET, ASP.NET, IIS, and other Windows-based applications without extra setup. Your
+                        development and deployment process becomes much simpler.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
+                    <h3>Scales as Your Business Grows</h3>
+                    <p>Add more power or storage whenever you need it. Ideal for growing apps like CRM, ERP, SharePoint,
+                        or large SQL databases.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-house" aria-hidden="true"></i></div>
+                    <h3>Supports Older Software Too</h3>
+                    <p>If your organization still uses older Windows applications, they will run smoothly here without
+                        needing upgrades or complex migration.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+                    <h3>Stable Database Performance</h3>
+                    <p>Run SQL Server and other databases with consistent speed. Your data and applications stay
+                        reliable and responsive under any workload.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ USE CASES ════════ -->
+
+    <!-- READY FOR A SERVER SECTION -->
+    <section id="wds-ready" class="section cloud-power-section" aria-labelledby="wds-ready-heading">
+        <div class="container">
+            <span class="cloud-section-label" data-animate="fade-up">Why ICSDC</span>
+            <h2 id="wds-ready-heading" class="section-title" data-animate="fade-up">Ready for a Server That Actually
+                Keeps Up With You?</h2>
+            <p class="section-subtitle" data-animate="fade-up">Choose ICSDC Windows Dedicated Server when performance,
+                security, and reliability become non-negotiable.</p>
+            <div class="cloud-power-grid" data-stagger>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon" aria-hidden="true">
+                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                    </div>
+                    <h3>Pricing Built Around Your Needs</h3>
+                    <p>Get flexible, transparent pricing without long-term commitments. Choose a plan that fits your
+                        budget and scale as your workload grows.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon" aria-hidden="true">
+                        <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                    </div>
+                    <h3>Strong Network &amp; Reliable Connectivity</h3>
+                    <p>Stay connected with high-speed bandwidth, secure routing, and robust data center infrastructure.
+                        Enjoy smooth performance with low latency and stable network access.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon" aria-hidden="true">
+                        <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                    </div>
+                    <h3>Security That Works in the Background &mdash; 24/7</h3>
+                    <p>Your server is protected with strict access controls, dedicated firewalls, and continuous
+                        monitoring. ICSDC ensures your Windows environment stays safe, compliant, and disruption-free.
+                    </p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon" aria-hidden="true">
+                        <i class="fa-solid fa-download" aria-hidden="true"></i>
+                    </div>
+                    <h3>Simple Backup &amp; Fast Recovery Options</h3>
+                    <p>Backup your data easily with automated or customized options. Restore files or entire systems
+                        quickly to keep your operations running without unnecessary downtime.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon" aria-hidden="true">
+                        <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                    </div>
+                    <h3>Powerful Hardware for Growing Workloads</h3>
+                    <p>Run demanding Windows applications with enterprise-grade hardware, NVMe storage, high-performance
+                        processors, and expandable resources whenever you need more power.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon" aria-hidden="true">
+                        <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+                    </div>
+                    <h3>Consistent Uptime You Can Count On</h3>
+                    <p>With redundant power, stable infrastructure, and proactive monitoring, ICSDC keeps your Windows
+                        server &mdash; and your business &mdash; running reliably day and night.</p>
+                </div>
+                <div class="cloud-power-card">
+                    <div class="cloud-power-icon" aria-hidden="true">
+                        <i class="fa-solid fa-star" aria-hidden="true"></i>
+                    </div>
+                    <h3>Global Reach, Local Performance</h3>
+                    <p>Host your Windows server in our secure data center and deliver fast, consistent performance to
+                        users and teams across regions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="wds-usecases" class="section cloud-use-section">
+        <div class="container">
+            <span class="cloud-section-label" data-animate="fade-up">Who Needs It</span>
+            <h2 class="title" data-animate="fade-up">Who Needs to Switch to ICSDC Windows Dedicated Server Hosting?</h2>
+            <p class="subtitle" data-animate="fade-up">If your business runs applications that must stay fast, stable,
+                and uninterrupted, a Windows Dedicated Server isn&rsquo;t optional &mdash; it&rsquo;s the core engine
+                that keeps everything running.</p>
+            <div class="cloud-use-grid" data-stagger>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
+                    <h3>ERP &amp; CRM Systems</h3>
+                    <p>Tally, SAP B1, Microsoft Dynamics, Zoho On-Premise &mdash; finance, sales, and inventory systems
+                        that must stay responsive and secure at all times.</p>
+                </div>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+                    <h3>SQL &amp; Database-Heavy Applications</h3>
+                    <p>Businesses handling large SQL Server databases, real-time analytics, or transaction-heavy
+                        workloads that need consistent dedicated speed.</p>
+                </div>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+                    <h3>Remote Desktop &amp; Virtual Workspace</h3>
+                    <p>Teams depending on RDP-based work setups, shared desktop environments, or remote workforce
+                        operations requiring reliable uptime.</p>
+                </div>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+                    <h3>.NET, ASP.NET &amp; IIS Web Applications</h3>
+                    <p>Organizations hosting custom-built applications that rely on Microsoft&rsquo;s tech stack and
+                        require stable performance and full admin access.</p>
+                </div>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
+                    <h3>Medical, Legal &amp; Enterprise Records</h3>
+                    <p>Industries storing confidential files that require strict security, compliance with regulations,
+                        and isolated dedicated environments.</p>
+                </div>
+                <div class="cloud-use-card">
+                    <div class="cloud-use-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
+                    <h3>Financial &amp; Trading Applications</h3>
+                    <p>Brokerage, fintech, and trading desks needing fast, uninterrupted, and secure server performance
+                        with zero tolerance for downtime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+     SECTION 8 — TESTIMONIALS
+════════════════════════════════════ -->
+    <section class="testi-section" aria-labelledby="testi-heading">
+        <div class="testi-container">
+            <h2 id="testi-heading" class="testi-title">See our Clients Stories</h2>
+
+            <!-- Cards rendered by components.js -->
+            <div class="testi-scroll-viewport">
+                <div class="testi-grid" role="list" id="testi-grid"></div>
+            </div>
+
+            <!-- Pagination dots rendered by components.js -->
+            <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
+
+            <div class="testi-nav">
+                <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>
+                <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ FAQ ════════ -->
+    <section class="faq-section" id="acr-faq" aria-labelledby="acr-faq-heading">
+        <div class="faq-container">
+            <div class="faq-col">
+                <h2 id="acr-faq-heading" class="faq-title">FAQs About ICSDC Acronis Backup</h2>
+                <dl class="faq-accordions" id="faq-accordions"></dl>
+            </div>
+            <aside class="faq-contact-card">
+                <h3 class="faq-contact-title">Talk to Our Backup Experts</h3>
+                <p class="faq-contact-desc">Our certified engineers are available 24/7 to help you design the right
+                    backup and
+                    disaster recovery strategy for your workloads.<br><br>&#128222; +91 98109 58857</p>
+                <a href="/contact-us.html" class="faq-contact-btn">Talk to an Expert <i class="fa-solid fa-headset"
+                        aria-hidden="true"></i></a>
+            </aside>
+        </div>
+    </section>
+
+
+    <!-- ════════ FINAL CTA ════════ -->
+    <section class="cloud-cta-band cloud-cta-dark">
+        <div class="cloud-cta-inner">
+            <h2>Start Your Windows Server Journey &mdash; Call Us at +91 98109 58857</h2>
+            <p>Ready for a server that actually keeps up with you? Choose ICSDC Windows Dedicated Server.</p>
+            <div class="cloud-cta-btns">
+                <button class="cloud-cta-btn-primary">Get Started Today &rarr;</button>
+                <button class="cloud-cta-btn-outline">View All Plans</button>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
+
+    <script>
+        (function () {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+                observer.observe(el);
+            });
+        })();
+    </script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/main.js" type="module"></script>
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/polish.js" defer></script>
+    <script src="assets/js/windows-dedicated-server.js" type="module"></script>
+    <script>
+        (function () {
+            var el = document.getElementById('footer-year');
+            if (el) el.textContent = new Date().getFullYear();
+        })();
+    </script>
+
+</body>
+
+</html>
