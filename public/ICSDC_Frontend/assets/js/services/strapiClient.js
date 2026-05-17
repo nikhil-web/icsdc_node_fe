@@ -5,17 +5,12 @@
 // ══════════════════════════════════════════════════════════
 
 // ── Config ───────────────────────────────────────────────
-// Priority: global STRAPI_URL variable → remote server → localhost fallback
-const _STRAPI_CANDIDATES = [
-    "http://13.126.9.248:1337",
-    "http://localhost:1337",
-];
-const BASE_URL = (typeof STRAPI_URL !== "undefined" ? STRAPI_URL : _STRAPI_CANDIDATES[0]);
-const API_TOKEN = (typeof TOKEN !== "undefined" ? TOKEN : "");
+// API calls go through the local Express proxy (/api/strapi) — token is server-side only.
+// STRAPI_URL is still used by uploadURL() to resolve media file paths.
+const BASE_URL = (typeof STRAPI_URL !== "undefined" ? STRAPI_URL : "http://localhost:1337");
 
 const DEFAULT_HEADERS = {
     "Content-Type": "application/json",
-    ...(API_TOKEN ? { Authorization: `Bearer ${API_TOKEN}` } : {}),
 };
 
 // ── Core fetch helper ─────────────────────────────────────
@@ -26,32 +21,16 @@ const DEFAULT_HEADERS = {
  * @throws  on non-2xx HTTP status
  */
 export async function fetchAPI(path) {
-    // If STRAPI_URL is explicitly set, use only that — no fallback.
-    const candidates = (typeof STRAPI_URL !== "undefined")
-        ? [STRAPI_URL]
-        : _STRAPI_CANDIDATES;
-
-    let lastErr;
-    for (const base of candidates) {
-        const url = `${base}${path}`;
-        try {
-            const response = await fetch(url, { headers: DEFAULT_HEADERS });
-            if (!response.ok) {
-                lastErr = new Error(`[strapiClient] HTTP ${response.status} on "${path}" — ${response.statusText}`);
-                continue; // try next candidate
-            }
-            try {
-                return await response.json();
-            } catch (parseErr) {
-                throw new Error(`[strapiClient] Failed to parse JSON from "${path}": ${parseErr.message}`);
-            }
-        } catch (networkErr) {
-            if (networkErr.message.startsWith("[strapiClient]")) throw networkErr; // re-throw parse errors
-            lastErr = new Error(`[strapiClient] Network error fetching "${path}" from ${base}: ${networkErr.message}`);
-        }
+    const url = `/api/strapi${path}`;
+    const response = await fetch(url, { headers: DEFAULT_HEADERS });
+    if (!response.ok) {
+        throw new Error(`[strapiClient] HTTP ${response.status} on "${path}" — ${response.statusText}`);
     }
-
-    throw lastErr;
+    try {
+        return await response.json();
+    } catch (parseErr) {
+        throw new Error(`[strapiClient] Failed to parse JSON from "${path}": ${parseErr.message}`);
+    }
 }
 
 // ── Media URL helper ──────────────────────────────────────
@@ -85,7 +64,7 @@ export function uploadURL(mediaObj, format = "medium") {
  * @returns {Promise<object>}
  */
 export async function postAPI(path, payload) {
-    const url = `${BASE_URL}${path}`;
+    const url = `/api/strapi${path}`;
     const response = await fetch(url, {
         method: "POST",
         headers: DEFAULT_HEADERS,
