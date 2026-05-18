@@ -124,7 +124,9 @@
   /* default — JS overrides to fixed/absolute */
   margin-top: 20px;
   width: 220px;
-  /* max-height: 80vh; */
+  /* Cap height so it never exceeds the viewport (minus navbar + breathing room).
+     Internal overflow-y scroll kicks in automatically when content is taller. */
+  max-height: calc(100vh - var(--nav-height) - 32px);
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;

@@ -118,10 +118,13 @@
   function updateSidebarPhase() {
     if (!sidebar || !sidebarWrap || !prContent) return;
 
+    const navH      = parseInt(getComputedStyle(document.documentElement)
+                        .getPropertyValue('--nav-height')) || 72;
     const sidebarH  = sidebar.offsetHeight;
     const viewH     = window.innerHeight;
     const sidebarW  = sidebarWrap.offsetWidth || 220;
-    const centreTop = Math.round((viewH - sidebarH) / 2);
+    // Centre vertically, but never let the top cross the navbar (16px breathing room).
+    const centreTop = Math.max(navH + 16, Math.round((viewH - sidebarH) / 2));
     const ref       = prContent.getBoundingClientRect();
 
     if (ref.top > centreTop) {
