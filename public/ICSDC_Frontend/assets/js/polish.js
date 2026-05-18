@@ -29,45 +29,7 @@
     })();
 
 
-    /* ── 2. FAQ SMOOTH ACCORDION (overrides display:none) ─────── */
-    (function initFaqAccordion() {
-        // Wait for components.js to render FAQ items
-        function attachFaqListeners() {
-            const items = document.querySelectorAll('.faq-item');
-            if (!items.length) return;
-
-            items.forEach(function (item) {
-                const btn = item.querySelector('.faq-question');
-                const answer = item.querySelector('.faq-answer');
-                if (!btn || !answer) return;
-
-                // We switch from display:none to max-height CSS animation
-                // Ensure answer is in block state so max-height transition works
-                answer.style.display = 'block';
-                answer.style.overflow = 'hidden';
-
-                btn.addEventListener('click', function () {
-                    const isOpen = item.classList.contains('faq-open');
-
-                    // Close all others
-                    document.querySelectorAll('.faq-item.faq-open').forEach(function (openItem) {
-                        if (openItem !== item) {
-                            openItem.classList.remove('faq-open');
-                        }
-                    });
-
-                    if (isOpen) {
-                        item.classList.remove('faq-open');
-                    } else {
-                        item.classList.add('faq-open');
-                    }
-                });
-            });
-        }
-
-        // Run after components.js fires (300ms grace)
-        setTimeout(attachFaqListeners, 400);
-    })();
+    /* ── 2. FAQ ACCORDION — handled by homepage-cms.js / cms-helpers.js ── */
 
 
     /* ── 3. FLOATING CARDS — PAUSE FLOAT ON HOVER ──────────────── */
@@ -103,45 +65,7 @@
     })();
 
 
-    /* ── 4. CONTACT FORM — SUBMIT WITH LOADING STATE ───────────── */
-    (function initContactForm() {
-        function attachForm() {
-            const form = document.getElementById('contact-form');
-            const submitBtn = form && form.querySelector('.contact-submit');
-            const successEl = document.getElementById('contact-success');
-
-            if (!form || !submitBtn) return;
-
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                // Loading state
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Sending…';
-                submitBtn.disabled = true;
-                submitBtn.style.opacity = '0.75';
-
-                // Simulate async submission
-                setTimeout(function () {
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                    submitBtn.style.opacity = '';
-
-                    // Show success
-                    if (successEl) {
-                        form.style.display = 'none';
-                        successEl.classList.add('contact-success-visible');
-                    }
-                }, 1200);
-            });
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', attachForm);
-        } else {
-            attachForm();
-        }
-    })();
+    /* ── 4. CONTACT FORM — handled by components.js ── */
 
 
     /* ── 5. WHY-CARD GRADIENT SHIFT ON HOVER ───────────────────── */

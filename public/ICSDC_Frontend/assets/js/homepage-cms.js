@@ -420,20 +420,27 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
                 </dd>
             </div>`).join('');
 
-        // Accordion toggle
+        // Accordion toggle — drives the `.faq-open` class that the CSS uses
+        // to animate max-height. Also keeps aria-expanded + hidden in sync.
         dl.querySelectorAll('.faq-question').forEach(btn => {
             btn.addEventListener('click', () => {
-                const expanded = btn.getAttribute('aria-expanded') === 'true';
+                const item = btn.closest('.faq-item');
+                const wasOpen = item.classList.contains('faq-open');
+
                 // Close all
-                dl.querySelectorAll('.faq-question').forEach(b => {
-                    b.setAttribute('aria-expanded', 'false');
-                    const ans = document.getElementById(b.getAttribute('aria-controls'));
+                dl.querySelectorAll('.faq-item').forEach(it => {
+                    it.classList.remove('faq-open');
+                    const b = it.querySelector('.faq-question');
+                    if (b) b.setAttribute('aria-expanded', 'false');
+                    const ans = it.querySelector('.faq-answer');
                     if (ans) ans.hidden = true;
                 });
+
                 // Open clicked (unless it was already open)
-                if (!expanded) {
+                if (!wasOpen) {
+                    item.classList.add('faq-open');
                     btn.setAttribute('aria-expanded', 'true');
-                    const ans = document.getElementById(btn.getAttribute('aria-controls'));
+                    const ans = item.querySelector('.faq-answer');
                     if (ans) ans.hidden = false;
                 }
             });

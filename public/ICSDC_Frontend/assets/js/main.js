@@ -234,6 +234,43 @@ function initLoginButton(menuData) {
     });
 }
 
+function initCtaButton(menuData) {
+    const cta = menuData?.data?.ctaButton;
+    if (!cta?.label || !cta?.link) return;
+
+    const target = cta.openInNewTab !== false ? '_blank' : '_self';
+
+    function makeBtn(extraClass) {
+        const a = document.createElement('a');
+        a.href = cta.link;
+        a.className = 'btn-cta-nav' + (extraClass ? ' ' + extraClass : '');
+        if (cta.bgColor)   a.style.background = cta.bgColor;
+        if (cta.textColor) a.style.color = cta.textColor;
+        if (target === '_blank') a.rel = 'noopener noreferrer';
+        a.target = target;
+        a.setAttribute('aria-label', cta.label);
+
+        if (cta.icon) {
+            a.insertAdjacentHTML('beforeend', resolveIcon(cta.icon));
+            a.appendChild(document.createTextNode(' ' + cta.label));
+        } else {
+            a.textContent = cta.label;
+        }
+
+        return a;
+    }
+
+    const desktopLogin = document.querySelector('.desktop-login-btn');
+    if (desktopLogin) {
+        desktopLogin.insertAdjacentElement('afterend', makeBtn(''));
+    }
+
+    const mobileLogin = document.querySelector('.mobile-login-btn');
+    if (mobileLogin) {
+        mobileLogin.insertAdjacentElement('afterend', makeBtn('mobile-cta-btn'));
+    }
+}
+
 // ══════════════════════════════════════════════════════════
 //  INIT — orchestrates the full render pipeline
 // ══════════════════════════════════════════════════════════
@@ -331,6 +368,7 @@ async function init() {
         initNav(menuData);
         initMainLogo(menuData);
         initLoginButton(menuData);
+        initCtaButton(menuData);
 
         // Inject footer template into the placeholder element
         const footerEl = document.getElementById('site-footer');

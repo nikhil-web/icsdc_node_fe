@@ -180,42 +180,51 @@
   });
 
   /* ─────────────────────────────────────
-     4. BILLING ROW STICKY
-     Same 2-phase approach as the sidebar:
+     4. BILLING ROW STICKY (3-phase)
        Phase 1 — relative (wrap still above nav)
-       Phase 2 — fixed at top of viewport (below nav)
-     A spaceholder (.pr-billing-wrap) keeps
-     the layout from collapsing when fixed.
+       Phase 2 — fixed below nav (sticky while tables scroll)
+       Phase 3 — absolute at bottom of pr-content (rides off with last table)
+     A spaceholder (.pr-billing-wrap) keeps the layout from collapsing.
   ───────────────────────────────────── */
   let billingWrap = null;   // set after pricing:ready
   let billingRow  = null;
 
   function updateBillingPhase() {
-    if (!billingWrap || !billingRow) return;
+    if (!billingWrap || !billingRow || !prContent) return;
 
-    const navH    = parseInt(getComputedStyle(document.documentElement)
-                      .getPropertyValue('--nav-height')) || 72;
-    const rowH    = billingRow.offsetHeight;
-    const wrapTop = billingWrap.getBoundingClientRect().top;
+    const navH          = parseInt(getComputedStyle(document.documentElement)
+                            .getPropertyValue('--nav-height')) || 72;
+    const rowH          = billingRow.offsetHeight;
+    const wrapTop       = billingWrap.getBoundingClientRect().top;
+    const contentRect   = prContent.getBoundingClientRect();
+    const contentBottom = contentRect.bottom;
 
-    if (wrapTop <= navH) {
-      // Phase 2 — fix it below the navbar
-      if (billingRow.style.position !== 'fixed') {
-        billingWrap.style.paddingTop = rowH + 'px';
-        billingRow.style.position   = 'fixed';
-        billingRow.style.top        = navH + 'px';
-        billingRow.style.left       = prContent.getBoundingClientRect().left + 'px';
-        billingRow.style.width      = prContent.offsetWidth + 'px';
-      }
+    if (wrapTop > navH) {
+      // Phase 1 — normal flow
+      billingWrap.style.paddingTop = '';
+      billingRow.style.position    = 'relative';
+      billingRow.style.top         = '';
+      billingRow.style.bottom      = '';
+      billingRow.style.left        = '';
+      billingRow.style.width       = '';
+
+    } else if (contentBottom > navH + rowH) {
+      // Phase 2 — fixed below the navbar
+      billingWrap.style.paddingTop = rowH + 'px';
+      billingRow.style.position    = 'fixed';
+      billingRow.style.top         = navH + 'px';
+      billingRow.style.bottom      = '';
+      billingRow.style.left        = contentRect.left + 'px';
+      billingRow.style.width       = prContent.offsetWidth + 'px';
+
     } else {
-      // Phase 1 — back to normal flow
-      if (billingRow.style.position === 'fixed') {
-        billingWrap.style.paddingTop = '';
-        billingRow.style.position   = 'relative';
-        billingRow.style.top        = '';
-        billingRow.style.left       = '';
-        billingRow.style.width      = '';
-      }
+      // Phase 3 — pinned to bottom of pr-content; scrolls away with last table
+      billingWrap.style.paddingTop = rowH + 'px';
+      billingRow.style.position    = 'absolute';
+      billingRow.style.top         = 'auto';
+      billingRow.style.bottom      = '0';
+      billingRow.style.left        = '0';
+      billingRow.style.width       = '100%';
     }
   }
 

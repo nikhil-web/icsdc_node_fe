@@ -38,8 +38,11 @@ html {
     --muted-alt: #5f6b85;
     --muted-light: #4c4c4c;
     --border: #e2e8f0;
+    --border-soft: rgba(26, 86, 219, 0.15);
+    --bg: #f5f7fb;
     --bg-light: #f8fafc;
     --white: #ffffff;
+    --ink: #0a1230;
     --accent-teal: #4fd1c5;
 
     /* ── IMPROVED SHADOW SYSTEM ── */
@@ -419,6 +422,42 @@ nav.scrolled {
     width: 100%;
     padding: 14px 28px;
     font-size: 15px;
+}
+
+/* ── CTA Nav Button (Strapi-driven, e.g. WhatsApp) ──────── */
+.btn-cta-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    flex-shrink: 0;
+    min-height: 44px;
+    letter-spacing: -0.01em;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-cta-nav:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+.btn-cta-nav:active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.mobile-cta-btn {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+    padding: 14px 28px;
+    font-size: 15px;
+    justify-content: center;
 }
 
 /* ══════════════════════════════════════

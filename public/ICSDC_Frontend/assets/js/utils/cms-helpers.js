@@ -188,7 +188,7 @@ export var FA_ICONS = {
 };
 
 /* Brand icons that use fa-brands instead of fa-solid */
-var FA_BRANDS = { linux:1, windows:1, microsoft:1, google:1, aws:1, apple:1, android:1, github:1, gitlab:1, docker:1 };
+var FA_BRANDS = { linux:1, windows:1, microsoft:1, google:1, aws:1, apple:1, android:1, github:1, gitlab:1, docker:1, whatsapp:1, facebook:1, twitter:1, instagram:1, linkedin:1, youtube:1, tiktok:1, slack:1, discord:1, telegram:1, wordpress:1, shopify:1, stripe:1, paypal:1, dropbox:1, spotify:1 };
 
 /* Legacy SVG map kept for backward compat — empty, all resolved via FA now */
 export var ICONS = {};
