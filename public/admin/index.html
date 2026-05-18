@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ICSDC Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script>
+        (function () {
+            var t = localStorage.getItem('icsdc-theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+    <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+    <!-- ── Login ── -->
+    <div id="view-login" class="view">
+        <div class="admin-login-page">
+            <div class="admin-login-card">
+                <div class="admin-login-logo">
+                    <img src="/assets/images/main_logo.png" alt="ICSDC" class="admin-login-logo-img" />
+                </div>
+
+                <h1 class="admin-login-title">Sign in to Dashboard</h1>
+                <p class="admin-login-sub">Use your Strapi admin credentials to access the control panel.</p>
+
+                <form id="login-form" class="admin-login-form" novalidate>
+                    <div class="admin-field">
+                        <label for="login-email">Email</label>
+                        <input id="login-email" type="email" placeholder="admin@icsdc.com" autocomplete="username" required />
+                    </div>
+
+                    <div class="admin-field">
+                        <label for="login-password">Password</label>
+                        <div class="admin-password-wrap">
+                            <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" required />
+                            <button type="button" id="eye-toggle" class="admin-eye-btn" aria-label="Show password">
+                                <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="login-error" class="admin-error-msg" hidden>
+                        <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                        <span id="login-error-text"></span>
+                    </div>
+
+                    <button type="submit" id="login-btn" class="admin-login-btn">Sign In &rarr;</button>
+                </form>
+
+                <p class="admin-login-note">Access restricted to authorised ICSDC administrators only.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Dashboard ── -->
+    <div id="view-dashboard" class="view" hidden>
+
+        <nav class="admin-nav">
+            <div class="nav-inner">
+                <a href="/" class="logo">
+                    <img src="/assets/images/main_logo.png" alt="ICSDC" class="logo-icon" />
+                </a>
+                <div class="admin-nav-right">
+                    <button id="theme-toggle" class="btn-theme" aria-label="Toggle theme">
+                        <i class="fa-solid fa-moon" aria-hidden="true"></i>
+                    </button>
+                    <span class="admin-user-badge">
+                        <i class="fa-solid fa-circle-user" aria-hidden="true"></i>
+                        <span id="header-user"></span>
+                    </span>
+                    <button id="logout-btn" class="btn-signout">
+                        <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sign Out
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="admin-main">
+
+            <!-- Contact Submissions -->
+            <section class="admin-section">
+                <div class="admin-page-header">
+                    <div>
+                        <h2 class="admin-page-title">Contact Submissions</h2>
+                        <p class="admin-page-sub">Enquiries submitted via the website contact form.</p>
+                    </div>
+                    <div class="admin-header-actions">
+                        <input id="search-submissions" class="admin-search" type="search" placeholder="Search submissions…" />
+                        <button class="admin-refresh-btn" id="refresh-submissions" aria-label="Refresh">
+                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Subject</th>
+                                <th>Company</th>
+                                <th>Received</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="submissions-body">
+                            <tr><td colspan="5" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Page Registry -->
+            <section class="admin-section">
+                <div class="admin-page-header">
+                    <div>
+                        <h2 class="admin-page-title">Page Registry</h2>
+                        <p class="admin-page-sub">Manage which pages are live or hidden on the public website.</p>
+                    </div>
+                    <div class="admin-header-actions">
+                        <input id="search-pages" class="admin-search" type="search" placeholder="Search pages…" />
+                        <div class="admin-filter-btns">
+                            <button class="admin-filter-btn active" data-filter="all">All (<span id="count-all">0</span>)</button>
+                            <button class="admin-filter-btn" data-filter="live">Live (<span id="count-live">0</span>)</button>
+                            <button class="admin-filter-btn" data-filter="hidden">Hidden (<span id="count-hidden">0</span>)</button>
+                        </div>
+                        <button class="admin-refresh-btn" id="refresh-pages" aria-label="Refresh">
+                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Page Name</th>
+                                <th>Slug</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pages-body">
+                            <tr><td colspan="4" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Health -->
+            <section class="admin-section">
+                <h2 class="admin-page-title" style="margin-bottom:1rem;">System Health</h2>
+                <div class="admin-health-chips">
+                    <div class="admin-chip admin-chip-ok">
+                        <span class="admin-chip-dot"></span>
+                        Express &nbsp;<strong>OK</strong>
+                    </div>
+                    <div id="chip-strapi" class="admin-chip admin-chip-checking">
+                        <span class="admin-chip-dot"></span>
+                        Strapi &nbsp;<strong id="strapi-status">Checking…</strong>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

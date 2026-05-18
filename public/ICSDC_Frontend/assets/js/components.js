@@ -299,35 +299,76 @@
        CONTACT FORM
     ───────────────────────────────────────────────────────── */
     function initContactForm() {
-        const form = document.getElementById('contact-form');
+        const form      = document.getElementById('contact-form');
         const successEl = document.getElementById('contact-success');
-        if (!form || !successEl) return;
+        const submitBtn = document.getElementById('hp-contact-submit');
+        if (!form || !successEl || !submitBtn) return;
 
-        form.addEventListener('submit', async function (e) {
+        // Remove any previous inline error
+        function clearError() {
+            form.querySelectorAll('.contact-form-error').forEach(el => el.remove());
+        }
+
+        function showError(msg) {
+            clearError();
+            const p = document.createElement('p');
+            p.className = 'contact-form-error';
+            p.style.cssText = 'color:#ef4444;font-size:13px;margin:0 0 8px;font-weight:500;';
+            p.textContent = msg;
+            submitBtn.before(p);
+        }
+
+        function validateEmail(v) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        }
+
+        form.onsubmit = async function (e) {
             e.preventDefault();
+            clearError();
 
-            const payload = {
-                name: form.elements['name']?.value ?? '',
-                email: form.elements['email']?.value ?? '',
-                website: form.elements['website']?.value ?? '',
-                message: form.elements['message']?.value ?? '',
-            };
+            const name    = form.elements['name']?.value.trim() ?? '';
+            const email   = form.elements['email']?.value.trim() ?? '';
+            const website = form.elements['website']?.value.trim() ?? '';
+            const message = form.elements['message']?.value.trim() ?? '';
 
-            // Attempt to POST to Strapi contact-submissions endpoint if it exists
+            if (!name)                  { showError('Please enter your name.'); return; }
+            if (!validateEmail(email))  { showError('Please enter a valid email address.'); return; }
+            if (!message)               { showError('Please enter a message.'); return; }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending…';
+
             try {
-                await fetch(`${BASE_URL}/api/contact-submissions`, {
-                    method: "POST",
-                    headers: headers,
-                    body: JSON.stringify({ data: payload }),
+                const res = await fetch('/api/strapi/api/contact-submissions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        data: {
+                            name,
+                            email,
+                            company: website,
+                            subject: 'Homepage Enquiry',
+                            message,
+                        },
+                    }),
                 });
-            } catch (err) {
-                // Silent fail — form feedback is UX-level, not dependent on this
-                console.warn("[components.js] Contact form POST failed:", err.message);
-            }
 
-            form.style.display = 'none';
-            successEl.classList.add('contact-success-visible');
-        });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err?.error?.message || `Server error ${res.status}`);
+                }
+
+                form.style.display = 'none';
+                successEl.classList.add('contact-success-visible');
+
+            } catch (err) {
+                showError('Something went wrong. Please try again or email us directly.');
+                console.error('[contact-form]', err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit';
+            }
+        };
     }
 
     /* ─────────────────────────────────────────────────────────

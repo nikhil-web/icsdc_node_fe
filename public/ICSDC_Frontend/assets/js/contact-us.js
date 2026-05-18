@@ -3,6 +3,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getContactUsPage } from './services/contentService.js';
+import { postAPI } from './services/strapiClient.js';
 import {
     populateSEO,
     populateIconCards,
@@ -44,16 +45,60 @@ import {
         }
     }
 
-    // Basic form submission handler
+    function validateForm(payload) {
+        if (!payload.name)    return 'Please enter your name.';
+        if (!payload.email)   return 'Please enter your email address.';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return 'Please enter a valid email address.';
+        if (!payload.subject) return 'Please select a subject.';
+        if (!payload.message) return 'Please enter your message.';
+        return null;
+    }
+
+    function showFieldError(form, message) {
+        var errEl = document.createElement('p');
+        errEl.className = 'cu-form-error';
+        errEl.style.cssText = 'color:#e53e3e;margin-top:0.75rem;font-size:0.9rem;';
+        errEl.textContent = message;
+        form.querySelector('[type=submit]').insertAdjacentElement('beforebegin', errEl);
+    }
+
     function initContactForm() {
         var form = document.getElementById('cu-form');
         var successMsg = document.getElementById('cu-form-success');
         if (!form) return;
-        form.addEventListener('submit', function (e) {
+
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
-            // Show success state (real integration can be added later)
-            form.style.display = 'none';
-            if (successMsg) successMsg.style.display = 'flex';
+
+            var submitBtn = form.querySelector('[type=submit]');
+            form.querySelectorAll('.cu-form-error').forEach(function (el) { el.remove(); });
+
+            var payload = {
+                name:    document.getElementById('cu-name').value.trim(),
+                email:   document.getElementById('cu-email').value.trim(),
+                phone:   document.getElementById('cu-phone').value.trim(),
+                company: document.getElementById('cu-company').value.trim(),
+                subject: document.getElementById('cu-subject').value,
+                message: document.getElementById('cu-message').value.trim(),
+            };
+
+            var validationError = validateForm(payload);
+            if (validationError) {
+                showFieldError(form, validationError);
+                return;
+            }
+
+            submitBtn.disabled = true;
+
+            try {
+                await postAPI('/api/contact-submissions', payload);
+                form.style.display = 'none';
+                if (successMsg) successMsg.style.display = 'flex';
+            } catch (err) {
+                submitBtn.disabled = false;
+                showFieldError(form, 'Something went wrong. Please try again or email us directly.');
+                console.error('[contact-us] Submission failed:', err);
+            }
         });
     }
 

@@ -595,20 +595,24 @@
 
                 <div class="contact-cards">
                     <div class="contact-info-card">
+                        <div class="contact-card-icon">
+                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                        </div>
                         <h3 class="contact-card-title">Email Address</h3>
                         <hr class="contact-card-divider">
                         <p class="contact-card-detail" id="hp-contact-email">info@icsdc.com</p>
                         <p class="contact-card-meta" id="hp-contact-email-hours">
-                            Assistance hours:<br>
                             Monday &ndash; Friday: 9:00 AM &ndash; 6:00 PM IST
                         </p>
                     </div>
                     <div class="contact-info-card">
+                        <div class="contact-card-icon">
+                            <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                        </div>
                         <h3 class="contact-card-title">Phone Number</h3>
                         <hr class="contact-card-divider">
                         <p class="contact-card-detail" id="hp-contact-phone">+91 98109 58857</p>
                         <p class="contact-card-meta" id="hp-contact-phone-hours">
-                            Assistance hours:<br>
                             Monday &ndash; Friday: 9:00 AM &ndash; 6:00 PM IST
                         </p>
                     </div>
@@ -620,27 +624,26 @@
 
                 <!-- Success message (hidden until form submitted) -->
                 <div class="contact-success" id="contact-success" role="alert">
-                    <i class="fa-solid fa-circle-dot" aria-hidden="true"></i>
+                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
                     <h3>Message Sent!</h3>
                     <p>Thank you for reaching out. Our team will contact you within 24 hours.</p>
                 </div>
 
                 <form id="contact-form" class="contact-form" novalidate>
 
-                    <div class="contact-field">
-                        <input type="text" id="contact-name" name="name" placeholder=" " required class="contact-input"
-                            aria-required="true">
-                        <label for="contact-name" class="contact-label">
-                            Name <span class="contact-required" aria-hidden="true">*</span>
-                        </label>
-                    </div>
-
-                    <div class="contact-field">
-                        <input type="email" id="contact-email" name="email" placeholder=" " required
-                            class="contact-input" aria-required="true">
-                        <label for="contact-email" class="contact-label">
-                            Email <span class="contact-required" aria-hidden="true">*</span>
-                        </label>
+                    <div class="contact-field-row">
+                        <div class="contact-field">
+                            <input type="text" id="contact-name" name="name" placeholder=" " required class="contact-input" aria-required="true">
+                            <label for="contact-name" class="contact-label">
+                                Name <span class="contact-required" aria-hidden="true">*</span>
+                            </label>
+                        </div>
+                        <div class="contact-field">
+                            <input type="email" id="contact-email" name="email" placeholder=" " required class="contact-input" aria-required="true">
+                            <label for="contact-email" class="contact-label">
+                                Email <span class="contact-required" aria-hidden="true">*</span>
+                            </label>
+                        </div>
                     </div>
 
                     <div class="contact-field">
@@ -793,6 +796,7 @@
     <script src="assets/js/main.js" type="module"></script>
     <script src="assets/js/polish.js" defer></script>
     <script src="assets/js/homepage-cms.js" type="module"></script>
+    <script src="assets/js/components.js" defer></script>
 
     <script>
         // Footer: inject current year

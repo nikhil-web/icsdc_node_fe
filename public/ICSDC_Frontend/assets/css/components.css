@@ -5,8 +5,8 @@
     --c-blue: #1a56db;
     --c-blue-bright: #1e5eff;
     --c-dark: #0a1f44;
-    --c-footer-bg: #1b1b2e;
-    --c-footer-bar: #111118;
+    --c-footer-bg: #0a1230;
+    --c-footer-bar: #060a20;
     --c-text-dark: #0a1f44;
     --c-text-mid: #4a5568;
     --c-text-muted: #64748b;
@@ -508,9 +508,9 @@
     border: none;
     cursor: pointer;
     transition: background 0.2s ease,
-                width 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                border-radius 0.25s ease,
-                transform 0.2s ease;
+        width 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+        border-radius 0.25s ease,
+        transform 0.2s ease;
 }
 
 .testi-dot:hover {
@@ -753,7 +753,7 @@
    CONTACT SECTION
 ══════════════════════════════════════ */
 .contact-section {
-    padding: 88px 0;
+    padding: 56px 0;
     background: linear-gradient(-67.63deg, rgba(0, 100, 255, 0.10) 1.33%, rgba(74, 145, 255, 0.10) 48.93%, rgba(255, 255, 255, 0.10) 88.47%);
 }
 
@@ -765,13 +765,13 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 80px;
-    align-items: start;
+    align-items: stretch;
 }
 
 .contact-left {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 20px;
 }
 
 .contact-title {
@@ -785,10 +785,10 @@
 
 .contact-subtitle {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: clamp(18px, 2vw, 24px);
-    font-weight: 300;
-    color: var(--c-text-dark);
-    line-height: 1.5;
+    font-size: clamp(16px, 1.5vw, 20px);
+    font-weight: 400;
+    color: var(--c-text-mid);
+    line-height: 1.6;
     letter-spacing: 0.01em;
 }
 
@@ -798,66 +798,92 @@
     gap: 24px;
 }
 
-/* IMPROVED: contact info cards with hover lift */
 .contact-info-card {
     background: var(--c-white);
-    border-radius: var(--c-r-md);
-    padding: 32px;
+    border-radius: var(--c-r-lg);
+    padding: 55px 40px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    /* Subtle shadow added */
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    gap: 8px;
+    box-shadow: var(--c-shadow-card);
+    border: 1px solid var(--c-border);
     transition: transform var(--c-ease), box-shadow var(--c-ease);
 }
 
 .contact-info-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 28px rgba(26, 86, 219, 0.09);
+    transform: translateY(-4px);
+    box-shadow: var(--c-shadow-card-hover);
+}
+
+.contact-card-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    color: var(--c-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    margin-bottom: 2px;
 }
 
 .contact-card-title {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
     color: var(--c-dark);
-    line-height: 1;
+    line-height: 1.2;
     letter-spacing: -0.01em;
 }
 
 .contact-card-divider {
-    width: 27px;
+    width: 24px;
     height: 3px;
-    background: var(--c-dark);
+    background: var(--c-blue);
     border: none;
     border-radius: 2px;
 }
 
 .contact-card-detail {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 600;
-    color: #434343;
+    color: var(--c-dark);
     letter-spacing: -0.01em;
 }
 
 .contact-card-meta {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 400;
-    color: #434343;
-    line-height: 1.8;
+    color: var(--c-text-muted);
+    line-height: 1.7;
 }
 
 /* Contact Form */
 .contact-form-col {
-    border-radius: var(--c-r-md);
+    background: var(--c-white);
+    border-radius: var(--c-r-lg);
+    padding: 28px;
+    box-shadow: var(--c-shadow-card);
+    border: 1px solid var(--c-border);
 }
 
 .contact-form {
     display: flex;
     flex-direction: column;
     gap: 0;
+}
+
+.contact-field-row {
+    display: flex;
+    gap: 12px;
+}
+
+.contact-field-row .contact-field {
+    flex: 1;
 }
 
 .contact-field {
@@ -868,10 +894,11 @@
 /* IMPROVED: smoother focus + floating label */
 .contact-input {
     width: 100%;
+    min-height: 56px;
     background: var(--c-white);
     border: 1.5px solid var(--c-border);
     border-radius: var(--c-r-sm);
-    padding: 28px 24px 12px;
+    padding: 28px 24px 16px;
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 16px;
     color: #494949;
@@ -879,7 +906,7 @@
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     resize: none;
     display: block;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     box-sizing: border-box;
 }
 
@@ -893,7 +920,7 @@
 }
 
 .contact-textarea {
-    min-height: 177px;
+    min-height: 120px;
 }
 
 .contact-label {
@@ -959,6 +986,11 @@
     align-items: center;
     gap: 16px;
     animation: successEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.contact-success .fa-circle-check {
+    font-size: 52px;
+    color: #22c55e;
 }
 
 @keyframes successEnter {

@@ -20,6 +20,7 @@ export function getNavigation() {
         "/api/navigation?" +
         "&populate[navLogo][populate]=*" +
         "&populate[LoginButton][populate]=*" +
+        "&populate[ctaButton][populate]=*" +
         "&populate[menus][populate][sections][populate]=items&populate[menus][populate]=items"
     );
 }
