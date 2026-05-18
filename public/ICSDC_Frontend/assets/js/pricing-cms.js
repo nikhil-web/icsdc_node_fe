@@ -225,8 +225,13 @@ import { populateSEO } from './utils/cms-helpers.js';
        cells are matched to columns by array index.
     ───────────────────────────────────────────────────────── */
 
-    function renderTable(table) {
+    function renderTable(table, page) {
         if (!table) return '';
+
+        page = page || {};
+        var monthlyLabel = (table.priceLabel && table.priceLabel.trim())
+            || page.billingMonthlyLabel || 'Monthly';
+        var annualLabel  = page.billingAnnualLabel || 'Annual';
 
         var cols, rows;
 
@@ -247,8 +252,7 @@ import { populateSEO } from './utils/cms-helpers.js';
 
         if (!cols.length && !rows.length) return '';
 
-        var hasPrice   = rows.some(function (r) { return r.monthlyPrice; });
-        var priceLabel = table.priceLabel || 'Monthly';
+        var hasPrice   = rows.some(function (r) { return r.monthlyPrice || r.annualPrice; });
 
         // ── thead ──────────────────────────────────────────
         var headCells = '<th class="pr-sc-th pr-sc-th-name">Plan</th>';
@@ -261,7 +265,10 @@ import { populateSEO } from './utils/cms-helpers.js';
         });
         if (hasPrice) {
             headCells += '<th class="pr-sc-th pr-sc-th-price">' +
-                '<i class="fa-solid fa-tag"></i><span>' + esc(priceLabel) + '</span></th>';
+                '<i class="fa-solid fa-tag"></i>' +
+                '<span data-price-monthly>' + esc(monthlyLabel) + '</span>' +
+                '<span data-price-annual>'  + esc(annualLabel)  + '</span>' +
+                '</th>';
         }
         headCells += '<th class="pr-sc-th pr-sc-th-action"></th>';
 
@@ -302,7 +309,7 @@ import { populateSEO } from './utils/cms-helpers.js';
                     pInner +=
                         '<span class="pr-sc-price" data-price-annual>' +
                         esc(row.annualPrice) +
-                        '<span class="pr-sc-price-sub">/mo</span></span>';
+                        '<span class="pr-sc-price-sub">/yr</span></span>';
                 }
                 priceTd = '<td class="pr-sc-td-price">' + pInner + '</td>';
             }
@@ -340,14 +347,14 @@ import { populateSEO } from './utils/cms-helpers.js';
        SECTIONS
     ───────────────────────────────────────────────────────── */
 
-    function buildSections(sections, contentEl) {
+    function buildSections(sections, contentEl, page) {
         if (!sections || !sections.length) return;
 
         sections.forEach(function (sec) {
             var tablesHTML = '';
             if (Array.isArray(sec.tables)) {
                 sec.tables.forEach(function (tbl) {
-                    tablesHTML += renderTable(tbl);
+                    tablesHTML += renderTable(tbl, page);
                 });
             }
 
@@ -448,7 +455,7 @@ import { populateSEO } from './utils/cms-helpers.js';
                     buildBillingToggle(page, contentEl);
 
                     // Then all sections
-                    buildSections(page.sections || [], contentEl);
+                    buildSections(page.sections || [], contentEl, page);
                 }
 
                 // 5. CTA band
