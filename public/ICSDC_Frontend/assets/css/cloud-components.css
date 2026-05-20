@@ -392,6 +392,7 @@
 }
 
 .cloud-use-card {
+    align-items: center;
     background: var(--bg-light);
     border: 1.5px solid var(--border);
     border-radius: var(--radius-lg);
@@ -539,6 +540,7 @@
     cursor: pointer;
     font-family: inherit;
     letter-spacing: -0.01em;
+    text-decoration: none;
     transition: background var(--transition-base) ease,
         transform var(--transition-fast) ease,
         box-shadow var(--transition-base) ease;
@@ -564,6 +566,7 @@
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
+    text-decoration: none;
     transition: border-color var(--transition-base) ease,
         background var(--transition-base) ease,
         transform var(--transition-fast) ease;
@@ -644,5 +647,48 @@
 
     .cloud-fw-name {
         font-size: 12px;
+    }
+}
+
+/* ══════════════════════════════════════
+   HOSTING SPLIT SECTION (image + text)
+   Shared by cPanel, Reseller, WordPress
+══════════════════════════════════════ */
+.hosting-split-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+}
+
+.hosting-split-text .title {
+    margin-bottom: 16px;
+}
+
+.hosting-split-text .subtitle {
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.hosting-split-img {
+    display: flex;
+    justify-content: center;
+}
+
+.hosting-split-img img {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .hosting-split-row {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .hosting-split-img {
+        order: -1;
     }
 }

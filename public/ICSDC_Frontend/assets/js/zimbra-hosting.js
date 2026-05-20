@@ -80,40 +80,32 @@ import {
     }
 
     function initZimbraFAQ(faqItems) {
-        var dl = document.getElementById('zimbra-faq-accordions');
-        if (!dl || !faqItems || !faqItems.length) return;
+        var container = document.getElementById('zimbra-faq-accordions');
+        if (!container || !faqItems || !faqItems.length) return;
 
         var sorted = faqItems.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-        var openIndex = 0;
+        var chev = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 
-        function render() {
-            dl.innerHTML = sorted.map(function (faq, i) {
-                var isOpen = i === openIndex;
-                return '<div class="faq-item' + (isOpen ? ' faq-open' : '') + '" data-faq-index="' + i + '">' +
-                    '<dt>' +
-                    '<button class="faq-question" aria-expanded="' + isOpen + '" aria-controls="zfaq-' + i + '">' +
-                    '<span>' + faq.question + '</span>' +
-                    '<svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">' +
-                    '<path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-                    '</svg>' +
-                    '</button>' +
-                    '</dt>' +
-                    '<dd class="faq-answer" id="zfaq-' + i + '" role="region">' +
-                    '<p>' + faq.answer + '</p>' +
-                    '</dd>' +
-                    '</div>';
-            }).join('');
+        container.innerHTML = sorted.map(function (faq, i) {
+            var num = String(i + 1).padStart(2, '0');
+            return '<details class="faq-item"' + (i === 0 ? ' open' : '') + '>' +
+                '<summary class="faq-q">' +
+                '<span class="faq-num">' + num + '</span>' +
+                '<span class="faq-q-text">' + (faq.question || '') + '</span>' +
+                '<span class="faq-chev">' + chev + '</span>' +
+                '</summary>' +
+                '<div class="faq-a-wrap"><div class="faq-a">' + (faq.answer || '') + '</div></div>' +
+                '</details>';
+        }).join('');
 
-            dl.querySelectorAll('.faq-question').forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    var index = parseInt(btn.closest('.faq-item').dataset.faqIndex, 10);
-                    openIndex = openIndex === index ? null : index;
-                    render();
-                });
+        var items = container.querySelectorAll('.faq-item');
+        items.forEach(function (item) {
+            item.addEventListener('toggle', function () {
+                if (item.open) {
+                    items.forEach(function (o) { if (o !== item) o.open = false; });
+                }
             });
-        }
-
-        render();
+        });
     }
 
     function populateFaqContact(page) {

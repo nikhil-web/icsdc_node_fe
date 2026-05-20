@@ -67,7 +67,7 @@ import {
                 priceHtml +
                 taglineHtml +
                 featuresHtml +
-                '<a href="#" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '<a href="/contact-us.html" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
                 '</div>';
         }).join('');
     }
@@ -105,6 +105,22 @@ import {
             populateSectionHeader('#rh-plans', page.plansLabel, page.plansTitle, page.plansSubtitle);
             populatePlans(page.plans);
 
+            // What Is ICSDC Reseller Hosting
+            if (page.aboutTitle) setText(document, '#rh-about-title', page.aboutTitle);
+            if (page.aboutDesc) setHTML(document, '#rh-about-desc', page.aboutDesc);
+            if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
+                var aboutImg = document.querySelector('#rh-about-img');
+                if (aboutImg) {
+                    var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
+                    var _m = page.aboutImage.image;
+                    var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)
+                        ? (_m.formats.large || _m.formats.medium || _m.formats.small).url
+                        : _m.url) || '';
+                    if (_url && !_url.startsWith('http')) _url = _base + _url;
+                    if (_url) { aboutImg.src = _url; aboutImg.alt = _m.alternativeText || ''; aboutImg.style.display = ''; }
+                }
+            }
+
             // Features — what you get
             populateSectionHeader('#rh-features', page.featuresLabel, page.featuresTitle, page.featuresSubtitle);
             populateIconCards('#rh-features .rh-features-grid', page.features, 'cloud-power-card');
@@ -117,8 +133,13 @@ import {
             populateSectionHeader('#rh-tools', page.toolsLabel, page.toolsTitle, page.toolsSubtitle);
             populateIconCards('#rh-tools .cloud-power-grid', page.toolsCards, 'cloud-power-card');
 
-            // CTA Band 1
-            populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
+            // 24/7/365 Support
+            populateSectionHeader('#rh-support', page.supportLabel, page.supportTitle, page.supportSubtitle);
+            populateIconCards('#rh-support .rh-support-grid', page.supportCards, 'cloud-use-card');
+
+            // Related Hosting Services
+            populateSectionHeader('#rh-related', page.relatedLabel, page.relatedTitle, page.relatedSubtitle);
+            populateIconCards('#rh-related .rh-related-grid', page.relatedCards, 'cloud-power-card');
 
             // Testimonials
             if (page.testimonialTitle) setText(document, '#rh-testi-heading', page.testimonialTitle);
@@ -127,9 +148,6 @@ import {
             // FAQ
             if (page.faqTitle) setText(document, '#rh-faq-heading', page.faqTitle);
             initFAQ(page.faq);
-
-            // CTA Band 2 (dark)
-            populateCtaBand('.cloud-cta-dark', page.ctaBand2);
 
         } catch (err) {
             console.error('[reseller-hosting] CMS load failed:', err);

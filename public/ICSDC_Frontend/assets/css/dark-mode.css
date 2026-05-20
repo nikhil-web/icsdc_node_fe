@@ -549,16 +549,30 @@ html[data-theme="dark"] .gws-plan-card {
     background: #111827;
 }
 
-html[data-theme="dark"] .faq-contact-card {
+html[data-theme="dark"] .faq-item {
     background: #1e293b;
     border-color: #334155;
 }
 
-html[data-theme="dark"] dt[class*="faq"],
-html[data-theme="dark"] [class*="faq-q"],
-html[data-theme="dark"] [class*="faq-item"] {
-    border-color: #334155;
+html[data-theme="dark"] .faq-item:hover {
+    background: #243149;
+    border-color: rgba(59, 130, 246, 0.3);
 }
+
+html[data-theme="dark"] .faq-item[open] {
+    background: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+html[data-theme="dark"] .faq-q { color: #cbd5e1; }
+html[data-theme="dark"] .faq-item[open] .faq-q,
+html[data-theme="dark"] .faq-q:hover { color: #60a5fa; }
+html[data-theme="dark"] .faq-a { color: #94a3b8; }
+html[data-theme="dark"] .faq-chev { background: rgba(255,255,255,0.04); border-color: #334155; }
+html[data-theme="dark"] .faq-item[open] .faq-chev { background: #3b82f6; border-color: #3b82f6; color: white; }
+html[data-theme="dark"] .faq-aside-h { color: #e6eaf2; }
+html[data-theme="dark"] .faq-aside-p { color: rgba(230, 234, 242, 0.55); }
+html[data-theme="dark"] .faq-aside-link { color: #60a5fa; }
 
 /* ══════════════════════════════════════════════════════
    13. CLOUD SOLUTIONS SECTION — FLOATING CARDS
@@ -716,10 +730,15 @@ html[data-theme="dark"] .footer-bar {
 }
 
 /* ══════════════════════════════════════════════════════
-   17. SCROLLBAR (Webkit)
+   17. SCROLLBAR (Webkit + Firefox)
 ══════════════════════════════════════════════════════ */
+html[data-theme="dark"] * {
+    scrollbar-color: #334155 #0f172a;
+}
+
 html[data-theme="dark"] ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
 }
 
 html[data-theme="dark"] ::-webkit-scrollbar-track {

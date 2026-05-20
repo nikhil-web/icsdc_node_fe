@@ -72,7 +72,25 @@ import {
                 priceHtml +
                 descHtml +
                 featuresHtml +
-                '<a href="#" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '<a href="/contact-us.html" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '</div>';
+        }).join('');
+    }
+
+    function populateSupportCards(cards) {
+        if (!cards || !cards.length) return;
+        var el = document.querySelector('#cp-support-cards');
+        if (!el) return;
+        el.innerHTML = cards.map(function (card) {
+            var icon = card.icon ? '<i class="' + card.icon + '" aria-hidden="true"></i>' : '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>';
+            var title = card.title || card.name || '';
+            var desc = card.desc || card.description || '';
+            return '<div class="cp-support-feat-card">' +
+                '<div class="cp-support-feat-icon">' + icon + '</div>' +
+                '<div class="cp-support-feat-body">' +
+                '<h3>' + title + '</h3>' +
+                (desc ? '<p>' + desc + '</p>' : '') +
+                '</div>' +
                 '</div>';
         }).join('');
     }
@@ -114,8 +132,21 @@ import {
             populateSectionHeader('#cp-features', page.featuresLabel, page.featuresTitle, page.featuresSubtitle);
             populateIconCards('#cp-features .cp-features-grid', page.features, 'cloud-power-card');
 
-            // CTA Band 1
-            populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
+            // Who We Are
+            if (page.aboutTitle) setText(document, '#cp-about-title', page.aboutTitle);
+            if (page.aboutDesc) setHTML(document, '#cp-about-desc', page.aboutDesc);
+            if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
+                var aboutImg = document.querySelector('#cp-about-img');
+                if (aboutImg) {
+                    var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
+                    var _m = page.aboutImage.image;
+                    var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)
+                        ? (_m.formats.large || _m.formats.medium || _m.formats.small).url
+                        : _m.url) || '';
+                    if (_url && !_url.startsWith('http')) _url = _base + _url;
+                    if (_url) { aboutImg.src = _url; aboutImg.alt = _m.alternativeText || ''; aboutImg.style.display = ''; }
+                }
+            }
 
             // Why ICSDC
             populateSectionHeader('#cp-why', page.whyLabel, page.whyTitle, page.whySubtitle);
@@ -125,9 +156,26 @@ import {
             populateSectionHeader('#cp-who', page.whoLabel, page.whoTitle, page.whoSubtitle);
             populateIconCards('#cp-who .cp-who-grid', page.whoCards, 'cloud-use-card');
 
-            // Built-in Features
-            populateSectionHeader('#cp-builtin', page.builtinLabel, page.builtinTitle, page.builtinSubtitle);
-            populateIconCards('#cp-builtin .cp-builtin-grid', page.builtinFeatures, 'cloud-power-card');
+            // Stress-Free Support
+            if (page.supportTitle) setText(document, '#cp-support-title', page.supportTitle);
+            if (page.supportDesc) setHTML(document, '#cp-support-desc', page.supportDesc);
+            populateSupportCards(page.supportCards);
+            if (page.supportImage && page.supportImage.image && page.supportImage.image.url) {
+                var supportImg = document.querySelector('#cp-support-img');
+                if (supportImg) {
+                    var _base2 = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
+                    var _m2 = page.supportImage.image;
+                    var _url2 = (_m2.formats && (_m2.formats.large || _m2.formats.medium || _m2.formats.small)
+                        ? (_m2.formats.large || _m2.formats.medium || _m2.formats.small).url
+                        : _m2.url) || '';
+                    if (_url2 && !_url2.startsWith('http')) _url2 = _base2 + _url2;
+                    if (_url2) { supportImg.src = _url2; supportImg.alt = _m2.alternativeText || ''; }
+                }
+            }
+
+            // When to Choose cPanel
+            populateSectionHeader('#cp-when', page.whenLabel, page.whenTitle, page.whenSubtitle);
+            populateIconCards('#cp-when .cp-when-grid', page.whenCards, 'cloud-use-card');
 
             // Testimonials
             if (page.testimonialTitle) setText(document, '#cp-testi-heading', page.testimonialTitle);
