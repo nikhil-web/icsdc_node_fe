@@ -86,7 +86,7 @@ app.post('/api/admin/login', async (req, res) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 identifier: req.body.identifier,
-                password:   req.body.password,
+                password: req.body.password,
             }),
         });
         const data = await r.json();
