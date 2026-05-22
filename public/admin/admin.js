@@ -49,7 +49,55 @@
             document.getElementById('header-user').textContent =
                 user.username || user.email || 'Admin';
         }
-        loadDashboard();
+        // Route to either the dashboard tables or the builder view
+        applyRoute();
+    }
+
+    function isBuilderPath() {
+        return window.location.pathname.startsWith('/admin/builder');
+    }
+
+    function applyRoute() {
+        const mainDash = document.getElementById('view-dashboard-main');
+        const mainBld  = document.getElementById('view-builder');
+        if (!mainDash || !mainBld) return;
+
+        // Sync nav tab "active" styling
+        document.querySelectorAll('.admin-nav-tab').forEach(function (a) {
+            const isActive =
+                (a.dataset.tab === 'builder' && isBuilderPath()) ||
+                (a.dataset.tab === 'dashboard' && !isBuilderPath());
+            a.classList.toggle('active', isActive);
+        });
+
+        if (isBuilderPath()) {
+            mainDash.hidden = true;
+            mainBld.hidden = false;
+            // Let builder-editor.js mount itself
+            window.dispatchEvent(new CustomEvent('icsdc:show-builder'));
+        } else {
+            mainBld.hidden = true;
+            mainDash.hidden = false;
+            // Lazy: only load dashboard data the first time we land here
+            if (!window.__icsdc_dashLoaded) {
+                window.__icsdc_dashLoaded = true;
+                loadDashboard();
+            }
+        }
+    }
+
+    // Intercept nav tab clicks for SPA-style navigation
+    function initNavTabs() {
+        document.querySelectorAll('.admin-nav-tab').forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = a.getAttribute('href');
+                if (href === window.location.pathname) return;
+                window.history.pushState({}, '', href);
+                applyRoute();
+            });
+        });
+        window.addEventListener('popstate', applyRoute);
     }
 
     // ── Login ─────────────────────────────────────────────────
@@ -416,6 +464,7 @@
         initTheme();
         initSubmissionsSearch();
         initPagesControls();
+        initNavTabs();
 
         if (getJwt()) {
             showDashboard();

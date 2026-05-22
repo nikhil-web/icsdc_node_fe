@@ -1,0 +1,56 @@
+/* ══════════════════════════════════════════════════════════
+   BUILDER PAGE — Minimal overrides for builder-rendered pages
+   ══════════════════════════════════════════════════════════ */
+
+/* Eyebrow inside the builder hero (matches existing .wp-eyebrow pattern) */
+#builder-page-root .builder-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(26, 86, 219, 0.15);
+}
+
+/* Builder hero CTAs use existing .btn-primary / .btn-outline classes — no overrides needed. */
+
+/* Anchor styling for plan card CTAs (avoid default underlines) */
+#builder-page-root .wp-plan-btn {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Preview-mode banner — pinned to the top of the body when previewing drafts */
+.builder-preview-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--blue);
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    z-index: 9999;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.builder-preview-banner i { font-size: 14px; }
+
+body:has(.builder-preview-banner) nav {
+    top: 36px;
+}

@@ -1,5 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+/* ── Nav tabs (Dashboard / Builder) ── */
+.admin-nav-left-tabs {
+    display: flex;
+    gap: 0.25rem;
+    margin-left: 1.5rem;
+}
+
+.admin-nav-tab {
+    color: var(--muted, #64748b);
+    text-decoration: none;
+    padding: 0.55rem 0.95rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+}
+
+.admin-nav-tab:hover {
+    background: rgba(26, 86, 219, 0.08);
+    color: var(--blue, #1a56db);
+}
+
+.admin-nav-tab.active {
+    background: var(--blue, #1a56db);
+    color: #fff;
+}
+
+[data-theme="dark"] .admin-nav-tab { color: #94a3b8; }
+[data-theme="dark"] .admin-nav-tab:hover { background: rgba(26, 86, 219, 0.18); color: #93c5fd; }
+
 /* ── Tokens ── */
 :root {
     --blue:       #1a56db;

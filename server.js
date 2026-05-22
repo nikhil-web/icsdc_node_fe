@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const app = express();
 
@@ -10,7 +11,8 @@ const publicPath = path.join(__dirname, 'public/ICSDC_Frontend');
 const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
 const STRAPI_TOKEN = process.env.STRAPI_TOKEN || '';
 
-app.use(express.json());
+// Allow large JSON bodies for builder pages (sections array can be sizeable).
+app.use(express.json({ limit: '2mb' }));
 
 // ── Page registry cache ───────────────────────────────────
 // slug → isLive (boolean). Populated on startup, refreshed on every toggle.
@@ -161,7 +163,356 @@ app.patch('/api/admin/pages/:id', requireAdminAuth, async (req, res) => {
     }
 });
 
-// ── Admin panel SPA ───────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+//  BUILDER PAGES — Admin API + Public Renderer
+// ══════════════════════════════════════════════════════════
+
+// Strapi helper — wraps fetch + bearer token
+async function strapi(reqPath, opts = {}) {
+    const target = `${STRAPI_URL}${reqPath}`;
+    const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${STRAPI_TOKEN}`,
+        ...(opts.headers || {}),
+    };
+    return fetch(target, { ...opts, headers });
+}
+
+// ── Builder: list all pages (drafts + published) ─────────
+app.get('/api/admin/builder/pages', requireAdminAuth, async (req, res) => {
+    try {
+        const r = await strapi(
+            '/api/builder-pages?sort=updatedAt:desc&pagination[pageSize]=200&status=draft'
+        );
+        const data = await r.json();
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Failed to fetch builder pages', detail: err.message });
+    }
+});
+
+// ── Builder: get single page (returns draft if exists, else published) ──
+app.get('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req, res) => {
+    try {
+        const r = await strapi(
+            `/api/builder-pages/${req.params.documentId}?status=draft`
+        );
+        const data = await r.json();
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Failed to fetch builder page', detail: err.message });
+    }
+});
+
+// ── Builder: create new page ─────────────────────────────
+app.post('/api/admin/builder/pages', requireAdminAuth, async (req, res) => {
+    try {
+        const { title, slug, sections, metaTitle, metaDescription, templateId } = req.body || {};
+        if (!title || !slug) {
+            return res.status(400).json({ error: 'title and slug are required' });
+        }
+        const r = await strapi('/api/builder-pages', {
+            method: 'POST',
+            body: JSON.stringify({
+                data: {
+                    title,
+                    slug,
+                    sections: Array.isArray(sections) ? sections : [],
+                    metaTitle: metaTitle || title,
+                    metaDescription: metaDescription || '',
+                    templateId: templateId || null,
+                    currentVersion: 1,
+                    publishedVersion: 0,
+                },
+            }),
+        });
+        const data = await r.json();
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Failed to create builder page', detail: err.message });
+    }
+});
+
+// ── Builder: update (save draft) ─────────────────────────
+app.put('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req, res) => {
+    try {
+        const { title, sections, metaTitle, metaDescription, changeSummary } = req.body || {};
+        const documentId = req.params.documentId;
+
+        // Fetch current document to read currentVersion
+        const cur = await strapi(`/api/builder-pages/${documentId}?status=draft`);
+        const curData = await cur.json();
+        const currentDoc = curData?.data || {};
+        const nextVersion = (currentDoc.currentVersion || 1) + 1;
+
+        // PUT update to Strapi
+        const r = await strapi(`/api/builder-pages/${documentId}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                data: {
+                    title: title !== undefined ? title : currentDoc.title,
+                    sections: Array.isArray(sections) ? sections : currentDoc.sections,
+                    metaTitle: metaTitle !== undefined ? metaTitle : currentDoc.metaTitle,
+                    metaDescription: metaDescription !== undefined ? metaDescription : currentDoc.metaDescription,
+                    currentVersion: nextVersion,
+                },
+            }),
+        });
+        const data = await r.json();
+
+        // Write version snapshot (best-effort — never block save if it fails)
+        if (r.ok) {
+            writeVersionSnapshot({
+                documentId,
+                versionNumber: nextVersion,
+                sections: Array.isArray(sections) ? sections : currentDoc.sections || [],
+                title: title || currentDoc.title || '',
+                changeSummary: changeSummary || 'Draft saved',
+                createdById: req.adminUser?.id || null,
+            }).catch((err) => console.error('[builder] snapshot write failed:', err.message));
+        }
+
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Failed to update builder page', detail: err.message });
+    }
+});
+
+// ── Builder: publish page ────────────────────────────────
+app.post('/api/admin/builder/pages/:documentId/publish', requireAdminAuth, async (req, res) => {
+    try {
+        const documentId = req.params.documentId;
+
+        // Read current doc
+        const cur = await strapi(`/api/builder-pages/${documentId}?status=draft`);
+        const curData = await cur.json();
+        const currentDoc = curData?.data;
+        if (!currentDoc) return res.status(404).json({ error: 'Page not found' });
+
+        // Strapi 5: trigger publish action
+        const r = await strapi(`/api/builder-pages/${documentId}/actions/publish`, {
+            method: 'POST',
+            body: JSON.stringify({}),
+        });
+        // If the actions/publish endpoint is not available in this Strapi config,
+        // fall back to PUT with publishedAt:
+        let data;
+        if (r.status === 404 || r.status === 405) {
+            const fallback = await strapi(`/api/builder-pages/${documentId}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    data: {
+                        publishedAt: new Date().toISOString(),
+                        publishedVersion: currentDoc.currentVersion || 1,
+                    },
+                }),
+            });
+            data = await fallback.json();
+            res.status(fallback.status).json(data);
+        } else {
+            data = await r.json();
+            // Also bump publishedVersion field
+            await strapi(`/api/builder-pages/${documentId}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    data: { publishedVersion: currentDoc.currentVersion || 1 },
+                }),
+            }).catch(() => {});
+            res.status(r.status).json(data);
+        }
+
+        // Write a "published" snapshot
+        writeVersionSnapshot({
+            documentId,
+            versionNumber: currentDoc.currentVersion || 1,
+            sections: currentDoc.sections || [],
+            title: currentDoc.title || '',
+            changeSummary: 'Published',
+            createdById: req.adminUser?.id || null,
+        }).catch((err) => console.error('[builder] publish snapshot failed:', err.message));
+    } catch (err) {
+        res.status(502).json({ error: 'Failed to publish builder page', detail: err.message });
+    }
+});
+
+// ── Builder: delete page ─────────────────────────────────
+app.delete('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req, res) => {
+    try {
+        const r = await strapi(`/api/builder-pages/${req.params.documentId}`, {
+            method: 'DELETE',
+        });
+        if (r.status === 204) return res.status(204).end();
+        const data = await r.json();
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Failed to delete builder page', detail: err.message });
+    }
+});
+
+// ── Builder: list versions for a page ────────────────────
+app.get('/api/admin/builder/pages/:documentId/versions', requireAdminAuth, async (req, res) => {
+    try {
+        const knex = global.__builderKnex || null;
+        if (!knex) return res.json({ data: [] });
+        const rows = await knex('builder_page_versions')
+            .where({ page_document_id: req.params.documentId })
+            .orderBy('version_number', 'desc')
+            .limit(50);
+        res.json({ data: rows });
+    } catch (err) {
+        res.status(502).json({ error: 'Failed to fetch versions', detail: err.message });
+    }
+});
+
+// ── Builder: rollback to a specific version ──────────────
+app.post('/api/admin/builder/pages/:documentId/rollback', requireAdminAuth, async (req, res) => {
+    try {
+        const { versionNumber } = req.body || {};
+        if (!versionNumber) return res.status(400).json({ error: 'versionNumber is required' });
+
+        const knex = global.__builderKnex || null;
+        if (!knex) return res.status(500).json({ error: 'Version store not initialised' });
+
+        const snap = await knex('builder_page_versions')
+            .where({ page_document_id: req.params.documentId, version_number: versionNumber })
+            .first();
+        if (!snap) return res.status(404).json({ error: 'Version not found' });
+
+        // Restore as a new draft version
+        const cur = await strapi(`/api/builder-pages/${req.params.documentId}?status=draft`);
+        const curDoc = (await cur.json())?.data || {};
+        const nextVersion = (curDoc.currentVersion || 1) + 1;
+
+        const r = await strapi(`/api/builder-pages/${req.params.documentId}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                data: {
+                    title: snap.title_snapshot,
+                    sections: snap.sections_snapshot,
+                    currentVersion: nextVersion,
+                },
+            }),
+        });
+        const data = await r.json();
+
+        writeVersionSnapshot({
+            documentId: req.params.documentId,
+            versionNumber: nextVersion,
+            sections: snap.sections_snapshot,
+            title: snap.title_snapshot,
+            changeSummary: `Rolled back to version ${versionNumber}`,
+            createdById: req.adminUser?.id || null,
+        }).catch(() => {});
+
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Rollback failed', detail: err.message });
+    }
+});
+
+// ── Builder: preview tokens (in-memory; replace with Redis in Phase 3) ──
+const previewTokens = new Map(); // token → { sections, title, expiresAt }
+const PREVIEW_TTL_MS = 15 * 60 * 1000;
+
+function cleanupExpiredTokens() {
+    const now = Date.now();
+    for (const [token, entry] of previewTokens) {
+        if (entry.expiresAt < now) previewTokens.delete(token);
+    }
+}
+
+app.post('/api/admin/builder/preview-token', requireAdminAuth, (req, res) => {
+    cleanupExpiredTokens();
+    const { slug, sections, title, metaTitle, metaDescription } = req.body || {};
+    if (!slug || !Array.isArray(sections)) {
+        return res.status(400).json({ error: 'slug and sections are required' });
+    }
+    const token = 'pbk_' + crypto.randomBytes(16).toString('hex');
+    previewTokens.set(token, {
+        slug,
+        sections,
+        title: title || '',
+        metaTitle: metaTitle || '',
+        metaDescription: metaDescription || '',
+        expiresAt: Date.now() + PREVIEW_TTL_MS,
+    });
+    res.json({ token, expiresInMs: PREVIEW_TTL_MS });
+});
+
+// Public preview endpoint — token IS the auth
+app.get('/api/builder/preview/:slug', (req, res) => {
+    cleanupExpiredTokens();
+    const token = req.query.token;
+    const entry = previewTokens.get(token);
+    if (!entry || entry.expiresAt < Date.now() || entry.slug !== req.params.slug) {
+        return res.status(401).json({ error: 'Preview token expired or invalid' });
+    }
+    res.json({
+        data: {
+            slug: entry.slug,
+            title: entry.title,
+            metaTitle: entry.metaTitle,
+            metaDescription: entry.metaDescription,
+            sections: entry.sections,
+            _isPreview: true,
+        },
+    });
+});
+
+// ── Builder: public page renderer (must come BEFORE /:page catch-all) ──
+app.get('/builder/:slug', (req, res) => {
+    res.sendFile(path.join(publicPath, 'builder-template.html'));
+});
+
+// Also serve preview URLs through the same template
+app.get('/builder/preview/:slug', (req, res) => {
+    res.sendFile(path.join(publicPath, 'builder-template.html'));
+});
+
+// ── Version snapshot writer (uses Strapi's knex via global) ──
+async function writeVersionSnapshot({ documentId, versionNumber, sections, title, changeSummary, createdById }) {
+    const knex = global.__builderKnex;
+    if (!knex) return;
+    try {
+        await knex('builder_page_versions').insert({
+            page_document_id: documentId,
+            version_number: versionNumber,
+            sections_snapshot: JSON.stringify(sections),
+            title_snapshot: title,
+            change_summary: changeSummary,
+            created_by_id: createdById,
+        });
+    } catch (err) {
+        // ON CONFLICT — silently skip if (documentId, version) already exists
+        if (!/unique|duplicate/i.test(err.message)) throw err;
+    }
+}
+
+// ── Lazy knex acquisition for the versions table ─────────
+// We connect to the same Postgres DB Strapi uses, via DATABASE_URL.
+// If the env var is not set (dev SQLite), version history is disabled silently.
+(function initBuilderKnex() {
+    const dbUrl = process.env.DATABASE_URL;
+    if (!dbUrl) {
+        console.log('[builder] DATABASE_URL not set — version history disabled');
+        return;
+    }
+    try {
+        const knex = require('knex')({
+            client: 'pg',
+            connection: dbUrl,
+            pool: { min: 0, max: 4 },
+        });
+        global.__builderKnex = knex;
+        console.log('[builder] knex connection established for versions table');
+    } catch (err) {
+        console.warn('[builder] knex unavailable — version history disabled:', err.message);
+    }
+})();
+
+// ══════════════════════════════════════════════════════════
+//  ADMIN SPA (existing)
+// ══════════════════════════════════════════════════════════
 const adminPath = path.join(__dirname, 'public/admin');
 app.use('/admin', express.static(adminPath));
 app.get('/admin', (req, res) => res.sendFile(path.join(adminPath, 'index.html')));

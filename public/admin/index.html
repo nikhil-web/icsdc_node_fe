@@ -13,6 +13,7 @@
         })();
     </script>
     <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="builder/builder-editor.css" />
 </head>
 <body>
 
@@ -64,6 +65,10 @@
                 <a href="/" class="logo">
                     <img src="/assets/images/main_logo.png" alt="ICSDC" class="logo-icon" />
                 </a>
+                <div class="admin-nav-left-tabs">
+                    <a href="/admin"          class="admin-nav-tab" data-tab="dashboard">Dashboard</a>
+                    <a href="/admin/builder"  class="admin-nav-tab" data-tab="builder">Page Builder</a>
+                </div>
                 <div class="admin-nav-right">
                     <button id="theme-toggle" class="btn-theme" aria-label="Toggle theme">
                         <i class="fa-solid fa-moon" aria-hidden="true"></i>
@@ -79,7 +84,7 @@
             </div>
         </nav>
 
-        <main class="admin-main">
+        <main class="admin-main" id="view-dashboard-main">
 
             <!-- Contact Submissions -->
             <section class="admin-section">
@@ -166,8 +171,12 @@
             </section>
 
         </main>
+
+        <!-- Builder view (shown when path is /admin/builder*) -->
+        <main class="admin-main" id="view-builder" hidden></main>
     </div>
 
     <script src="admin.js"></script>
+    <script type="module" src="builder/builder-editor.js"></script>
 </body>
 </html>
