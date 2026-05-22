@@ -13,8 +13,8 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #f0fdfa;
-    color: #0f766e;
+    background: #eff6ff;
+    color: #1a56db;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -22,7 +22,7 @@
     padding: 6px 14px;
     border-radius: var(--radius-xl);
     margin-bottom: 20px;
-    border: 1px solid rgba(15, 118, 110, 0.18);
+    border: 1px solid rgba(26, 86, 219, 0.18);
 }
 
 /* ══════════════════════════════════════
@@ -33,13 +33,13 @@
     max-width: 560px;
     aspect-ratio: 4 / 3;
     border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, #ccfbf1 0%, #f0fdfa 55%, #f8fffe 100%);
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 55%, #f0f7ff 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 24px 64px rgba(15, 118, 110, 0.13), 0 4px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 24px 64px rgba(26, 86, 219, 0.13), 0 4px 16px rgba(0, 0, 0, 0.06);
     animation: heroImageFloat 8s ease-in-out 1s infinite;
 }
 
@@ -48,8 +48,8 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 65% 30%, rgba(15, 118, 110, 0.08) 0%, transparent 55%),
-        radial-gradient(circle at 25% 70%, rgba(20, 184, 166, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 65% 30%, rgba(26, 86, 219, 0.08) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(26, 86, 219, 0.05) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -69,14 +69,14 @@
     top: 20px;
     left: 20px;
     background: var(--white);
-    border: 1px solid rgba(15, 118, 110, 0.16);
+    border: 1px solid rgba(26, 86, 219, 0.16);
     border-radius: 12px;
     padding: 8px 14px;
     font-size: 11px;
     font-weight: 700;
-    color: #0f766e;
+    color: #1a56db;
     letter-spacing: 0.04em;
-    box-shadow: 0 4px 16px rgba(15, 118, 110, 0.12);
+    box-shadow: 0 4px 16px rgba(26, 86, 219, 0.12);
     z-index: 2;
     animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
 }
@@ -86,13 +86,13 @@
     bottom: 20px;
     right: 20px;
     background: var(--white);
-    border: 1px solid rgba(15, 118, 110, 0.12);
+    border: 1px solid rgba(26, 86, 219, 0.12);
     border-radius: 12px;
     padding: 10px 16px;
     display: flex;
     align-items: center;
     gap: 10px;
-    box-shadow: 0 8px 24px rgba(15, 118, 110, 0.12);
+    box-shadow: 0 8px 24px rgba(26, 86, 219, 0.12);
     z-index: 2;
     animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
 }
@@ -147,11 +147,11 @@
 .cp-plan-card:hover {
     transform: translateY(-6px);
     box-shadow: var(--shadow-card-hover);
-    border-color: rgba(15, 118, 110, 0.28);
+    border-color: rgba(26, 86, 219, 0.28);
 }
 
 .cp-plan-card.cp-plan-popular {
-    border-color: #0f766e;
+    border-color: #1a56db;
     border-width: 2px;
 }
 
@@ -161,7 +161,7 @@
     top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    background: #0f766e;
+    background: #1a56db;
     color: var(--white);
     font-size: 11px;
     font-weight: 700;
@@ -170,7 +170,7 @@
     padding: 4px 16px;
     border-radius: var(--radius-xl);
     white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(15, 118, 110, 0.32);
+    box-shadow: 0 4px 12px rgba(26, 86, 219, 0.32);
 }
 
 .cp-plan-name {
@@ -178,14 +178,14 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #0f766e;
+    color: #1a56db;
     margin-bottom: 8px;
 }
 
 .cp-plan-price {
     font-size: 32px;
     font-weight: 800;
-    color: #0f766e;
+    color: #1a56db;
     letter-spacing: -0.03em;
     line-height: 1.1;
     margin-bottom: 4px;
@@ -229,7 +229,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    color: #0f766e;
+    color: #1a56db;
     font-weight: 700;
     font-size: 13px;
 }
@@ -256,26 +256,26 @@
 
 .cp-plan-btn-outline {
     background: transparent;
-    color: #0f766e;
-    border: 2px solid #0f766e;
+    color: #1a56db;
+    border: 2px solid #1a56db;
 }
 
 .cp-plan-btn-outline:hover {
-    background: #f0fdfa;
+    background: #eff6ff;
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(15, 118, 110, 0.14);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.14);
 }
 
 .cp-plan-btn-primary {
-    background: #0f766e;
+    background: #1a56db;
     color: var(--white);
-    border: 2px solid #0f766e;
+    border: 2px solid #1a56db;
 }
 
 .cp-plan-btn-primary:hover {
     background: #0d6460;
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(15, 118, 110, 0.28);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.28);
 }
 
 /* ══════════════════════════════════════
@@ -332,7 +332,7 @@
    STRESS-FREE SUPPORT SECTION
 ══════════════════════════════════════ */
 .cp-support-section {
-    background: linear-gradient(135deg, #f0fdfa 0%, #f8fffe 60%, #f0fdfa 100%);
+    background: linear-gradient(135deg, #eff6ff 0%, #f0f7ff 60%, #eff6ff 100%);
 }
 
 .cp-support-inner {
@@ -416,23 +416,23 @@
     align-items: flex-start;
     gap: 16px;
     background: var(--white);
-    border: 1px solid rgba(15, 118, 110, 0.12);
+    border: 1px solid rgba(26, 86, 219, 0.12);
     border-radius: 14px;
     padding: 18px 20px;
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .cp-support-feat-card:hover {
-    box-shadow: 0 4px 20px rgba(15, 118, 110, 0.1);
-    border-color: rgba(15, 118, 110, 0.25);
+    box-shadow: 0 4px 20px rgba(26, 86, 219, 0.1);
+    border-color: rgba(26, 86, 219, 0.25);
 }
 
 .cp-support-feat-icon {
     width: 44px;
     height: 44px;
     border-radius: 10px;
-    background: #f0fdfa;
-    border: 1px solid rgba(15, 118, 110, 0.15);
+    background: #eff6ff;
+    border: 1px solid rgba(26, 86, 219, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -441,7 +441,7 @@
 
 .cp-support-feat-icon i {
     font-size: 17px;
-    color: #0f766e;
+    color: #1a56db;
 }
 
 .cp-support-feat-body {
@@ -477,7 +477,7 @@
 }
 
 .cp-support-feat-body strong {
-    color: #0f766e;
+    color: #1a56db;
     font-weight: 700;
 }
 
@@ -504,13 +504,13 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: #f0fdfa;
-    color: #0f766e;
+    background: #eff6ff;
+    color: #1a56db;
     font-size: 11px;
     font-weight: 600;
     padding: 4px 11px;
     border-radius: 999px;
-    border: 1px solid rgba(15, 118, 110, 0.2);
+    border: 1px solid rgba(26, 86, 219, 0.2);
 }
 
 /* ══════════════════════════════════════
