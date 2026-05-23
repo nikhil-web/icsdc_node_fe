@@ -91,15 +91,32 @@ const hero = {
 };
 
 /* ════ ICON CARDS ════════════════════════════════════════════ */
+// Card-style → emitted card class + icon class. These exactly match the patterns
+// used across the existing hardcoded pages (cloud-hosting.html, web-hosting.html,
+// cpanel-hosting.html, shared-hosting.html, windows-dedicated-server.html, etc.).
+const CARD_STYLES = {
+    'cloud-power': { card: 'cloud-power-card',     icon: 'cloud-power-icon',     gridClass: 'cloud-power-grid' },
+    'cloud-use':   { card: 'cloud-use-card',       icon: 'cloud-use-icon',       gridClass: 'cloud-use-grid'   },
+    'why':         { card: 'why-card',             icon: 'why-icon',             gridClass: 'why-grid'         },
+    'framework':   { card: 'cloud-framework-badge', icon: 'cloud-framework-icon', gridClass: 'cloud-frameworks-grid' },
+    'support':     { card: 'cp-support-feat-card', icon: 'cp-support-feat-icon', gridClass: 'cp-support-features' },
+};
+
 const iconCards = {
     label: 'Icon Cards Grid',
     icon: 'grid',
-    description: 'A grid of icon + title + description cards. Great for features and benefits.',
+    description: 'Flexible grid of icon + title + description cards. Choose card style to match any existing page.',
     schema: [
         { key: 'label',    label: 'Section Label (eyebrow)', type: 'text' },
         { key: 'title',    label: 'Section Title',           type: 'text', required: true },
         { key: 'subtitle', label: 'Section Subtitle',        type: 'textarea' },
-        { key: 'columns',  label: 'Columns',                 type: 'number', default: 3, min: 2, max: 4 },
+        {
+            key: 'cardStyle', label: 'Card Style', type: 'select',
+            options: ['cloud-power', 'cloud-use', 'why', 'framework', 'support'],
+            default: 'cloud-power',
+        },
+        { key: 'numbered', label: 'Numbered Cards (01, 02…)', type: 'toggle', default: false },
+        { key: 'columns',  label: 'Columns',                  type: 'number', default: 3, min: 2, max: 4 },
         {
             key: 'cards', label: 'Cards', type: 'repeater',
             itemSchema: [
@@ -113,6 +130,8 @@ const iconCards = {
         label: 'Features',
         title: 'Why Choose Us',
         subtitle: '',
+        cardStyle: 'cloud-power',
+        numbered: false,
         columns: 3,
         cards: [
             { icon: 'bolt',          title: 'Fast Performance',   desc: 'Blazing fast infrastructure tuned for speed.' },
@@ -121,23 +140,32 @@ const iconCards = {
         ],
     },
     renderer(container, p) {
+        const style = CARD_STYLES[p.cardStyle] || CARD_STYLES['cloud-power'];
         const label = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
         const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
         const cols = Math.min(4, Math.max(2, Number(p.columns) || 3));
-        const cardsHtml = (p.cards || []).map((c) =>
-            '<div class="cloud-power-card">' +
-                '<div class="cloud-power-icon"><i class="' + resolveFaIcon(c.icon, 'check') + '" aria-hidden="true"></i></div>' +
+        const numbered = p.numbered === true;
+        const cardsHtml = (p.cards || []).map((c, i) => {
+            const num = numbered
+                ? '<div class="sh-when-card-num">' + String(i + 1).padStart(2, '0') + '</div>'
+                : '';
+            const iconHtml = c.icon
+                ? '<div class="' + style.icon + '"><i class="' + resolveFaIcon(c.icon, 'check') + '" aria-hidden="true"></i></div>'
+                : '';
+            return '<div class="' + style.card + '">' +
+                num +
+                iconHtml +
                 '<h3>' + esc(c.title) + '</h3>' +
-                '<p>' + esc(c.desc) + '</p>' +
-            '</div>'
-        ).join('');
+                (c.desc ? '<p>' + esc(c.desc) + '</p>' : '') +
+                '</div>';
+        }).join('');
         container.innerHTML =
             '<section class="section">' +
                 '<div class="container">' +
                     label +
                     '<h2 class="title">' + esc(p.title) + '</h2>' +
                     sub +
-                    '<div class="cloud-power-grid" style="grid-template-columns:repeat(' + cols + ',1fr)">' + cardsHtml + '</div>' +
+                    '<div class="' + style.gridClass + '" style="grid-template-columns:repeat(' + cols + ',1fr)">' + cardsHtml + '</div>' +
                 '</div>' +
             '</section>';
     },
@@ -252,19 +280,23 @@ const faq = {
 const pricing = {
     label: 'Pricing Plans',
     icon: 'tag',
-    description: '3-column pricing plans with optional "popular" badge.',
+    description: '3-column pricing plans with optional "popular" badge. Choose WP style (default) or Cloud style.',
     schema: [
         { key: 'label',    label: 'Section Label',    type: 'text' },
         { key: 'title',    label: 'Section Title',    type: 'text', required: true },
         { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
         {
+            key: 'style', label: 'Card Style', type: 'select',
+            options: ['wp', 'cloud'], default: 'wp',
+        },
+        {
             key: 'plans', label: 'Plans', type: 'repeater',
             itemSchema: [
-                { key: 'name',     label: 'Plan Name',  type: 'text' },
+                { key: 'name',     label: 'Plan Name / Tier',  type: 'text' },
                 { key: 'price',    label: 'Price',      type: 'text' },
                 { key: 'period',   label: 'Period',     type: 'text', default: '/mo' },
                 { key: 'currency', label: 'Currency',   type: 'text', default: '₹' },
-                { key: 'desc',     label: 'Description',type: 'textarea' },
+                { key: 'desc',     label: 'Description / Tagline', type: 'textarea' },
                 { key: 'features', label: 'Features (one per line)', type: 'textarea' },
                 { key: 'popular',  label: 'Mark as Popular', type: 'toggle', default: false },
                 { key: 'ctaText',  label: 'Button Text', type: 'text', default: 'Get Started' },
@@ -276,6 +308,7 @@ const pricing = {
         label: 'Our Plans',
         title: 'Choose the Plan That Fits',
         subtitle: 'Transparent pricing. No surprises.',
+        style: 'wp',
         plans: [
             { name: 'Starter',  price: '99',  period: '/mo', currency: '₹', desc: 'For personal projects.',  features: '1 Site\n5GB Storage\nFree SSL\n24/7 Support', popular: false, ctaText: 'Get Started', ctaLink: '/contact-us' },
             { name: 'Business', price: '249', period: '/mo', currency: '₹', desc: 'For growing teams.',      features: '5 Sites\n20GB Storage\nFree SSL + Domain\nDaily Backups\nPriority Support', popular: true, ctaText: 'Get Started', ctaLink: '/contact-us' },
@@ -285,20 +318,227 @@ const pricing = {
     renderer(container, p) {
         const label = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
         const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
+        const style = p.style === 'cloud' ? 'cloud' : 'wp';
+
         const cardsHtml = (p.plans || []).map((plan) => {
             const isPop = plan.popular === true;
+            const feats = String(plan.features || '').split('\n').map((f) => f.trim()).filter(Boolean);
+
+            if (style === 'cloud') {
+                // Exact .cloud-plan-card markup from cloud-hosting.html
+                const cls = 'cloud-plan-card' + (isPop ? ' cloud-featured' : '');
+                const badge = isPop ? '<span class="cloud-plan-badge">Most Popular</span>' : '';
+                const featsHtml = feats.map((f) =>
+                    '<li class="cloud-plan-feature">' +
+                        '<span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>' +
+                        esc(f) +
+                    '</li>'
+                ).join('');
+                const btnCls = isPop ? 'cloud-plan-cta cloud-plan-cta-primary' : 'cloud-plan-cta cloud-plan-cta-outline';
+                const btnLabel = esc(plan.ctaText || 'Get Started') + (isPop ? ' &rarr;' : '');
+                return '<div class="' + cls + '">' +
+                    badge +
+                    '<div class="cloud-plan-tier">' + esc(plan.name) + '</div>' +
+                    '<div class="cloud-plan-price-wrap">' +
+                        '<span class="cloud-plan-currency">' + esc(plan.currency || '₹') + '</span>' +
+                        '<span class="cloud-plan-price">' + esc(plan.price) + '</span>' +
+                        '<span class="cloud-plan-period">' + esc(plan.period || '/mo') + '</span>' +
+                    '</div>' +
+                    (plan.desc ? '<p class="cloud-plan-tagline">' + esc(plan.desc) + '</p>' : '') +
+                    '<hr class="cloud-plan-divider">' +
+                    '<ul class="cloud-plan-features">' + featsHtml + '</ul>' +
+                    '<a href="' + esc(plan.ctaLink || '/contact-us') + '" class="' + btnCls + '">' + btnLabel + '</a>' +
+                    '</div>';
+            }
+
+            // wp style (existing default)
             const popularCls = isPop ? ' wp-plan-popular' : '';
             const badge = isPop ? '<div class="wp-plan-badge">Most Popular</div>' : '';
-            const feats = String(plan.features || '').split('\n').map((f) => f.trim()).filter(Boolean)
-                .map((f) => '<li>' + esc(f) + '</li>').join('');
+            const featsHtml = feats.map((f) => '<li>' + esc(f) + '</li>').join('');
             return '<div class="wp-plan-card' + popularCls + '">' +
                 badge +
                 '<div class="wp-plan-name">' + esc(plan.name) + '</div>' +
                 '<div class="wp-plan-price">' + esc(plan.currency || '₹') + esc(plan.price) + '<span>' + esc(plan.period || '/mo') + '</span></div>' +
                 '<p class="wp-plan-desc">' + esc(plan.desc) + '</p>' +
-                '<ul class="wp-plan-features">' + feats + '</ul>' +
+                '<ul class="wp-plan-features">' + featsHtml + '</ul>' +
                 '<a href="' + esc(plan.ctaLink || '/contact-us') + '" class="wp-plan-btn">' + esc(plan.ctaText || 'Get Started') + ' &rarr;</a>' +
                 '</div>';
+        }).join('');
+
+        const gridCls = style === 'cloud' ? 'cloud-pricing-grid' : 'wp-plans-grid';
+        container.innerHTML =
+            '<section class="section' + (style === 'cloud' ? ' cloud-pricing-section' : '') + '">' +
+                '<div class="container">' +
+                    label +
+                    '<h2 class="title">' + esc(p.title) + '</h2>' +
+                    sub +
+                    '<div class="' + gridCls + '">' + cardsHtml + '</div>' +
+                '</div>' +
+            '</section>';
+    },
+};
+
+/* ════ STATS BAND ════════════════════════════════════════════ */
+const statsBand = {
+    label: 'Stats / Metrics Band',
+    icon: 'chart',
+    description: 'A row of large metric numbers with sub-labels. e.g. 99.9% Uptime · 24/7 Support · 2-Hr RPO.',
+    schema: [
+        { key: 'label',    label: 'Section Label',    type: 'text' },
+        { key: 'title',    label: 'Section Title',    type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'metrics', label: 'Metrics', type: 'repeater',
+            itemSchema: [
+                { key: 'value', label: 'Big Value (e.g. 99.9%)', type: 'text' },
+                { key: 'label', label: 'Sub-label',              type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        label: '',
+        title: '',
+        subtitle: '',
+        metrics: [
+            { value: '99.9%', label: 'Uptime SLA' },
+            { value: '2-Hr',  label: 'RPO Guarantee' },
+            { value: '100%',  label: 'India-Hosted' },
+            { value: '24/7',  label: 'Expert Support' },
+        ],
+    },
+    renderer(container, p) {
+        const label = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
+        const title = p.title ? '<h2 class="title">' + esc(p.title) + '</h2>' : '';
+        const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
+        const items = (p.metrics || []).map((m) =>
+            '<div class="cloud-wl-metric">' +
+                '<strong>' + esc(m.value) + '</strong>' +
+                '<span>' + esc(m.label) + '</span>' +
+            '</div>'
+        ).join('');
+        container.innerHTML =
+            '<section class="section cloud-workload-section">' +
+                '<div class="container">' +
+                    label + title + sub +
+                    '<div class="cloud-wl-metrics">' + items + '</div>' +
+                '</div>' +
+            '</section>';
+    },
+};
+
+/* ════ COMPARISON TABLE ══════════════════════════════════════ */
+const comparisonTable = {
+    label: 'Comparison Table',
+    icon: 'compare',
+    description: 'ICSDC vs Typical Providers — feature-by-feature comparison table.',
+    schema: [
+        { key: 'label',     label: 'Section Label',         type: 'text' },
+        { key: 'title',     label: 'Section Title',         type: 'text', required: true },
+        { key: 'subtitle',  label: 'Section Subtitle',      type: 'textarea' },
+        { key: 'colFeature',label: 'Feature Column Header', type: 'text', default: 'Feature' },
+        { key: 'colOurs',   label: 'Our Column Header',     type: 'text', default: 'ICSDC' },
+        { key: 'colTheirs', label: 'Their Column Header',   type: 'text', default: 'Typical Providers' },
+        { key: 'mode',      label: 'Cell Mode', type: 'select', options: ['text', 'checkmark'], default: 'text' },
+        {
+            key: 'rows', label: 'Rows', type: 'repeater',
+            itemSchema: [
+                { key: 'feature', label: 'Feature',       type: 'text' },
+                { key: 'ours',    label: 'Our Value (text or "yes"/"no")', type: 'text' },
+                { key: 'theirs',  label: 'Their Value (text or "yes"/"no")', type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        label: '',
+        title: 'How We Compare',
+        subtitle: '',
+        colFeature: 'Feature',
+        colOurs: 'ICSDC',
+        colTheirs: 'Typical Providers',
+        mode: 'text',
+        rows: [
+            { feature: 'Infrastructure Quality',  ours: 'Enterprise-grade servers tuned for stability', theirs: 'Mass-market shared servers oversold for cost' },
+            { feature: 'Performance Consistency', ours: 'Predictable speed even during traffic spikes', theirs: 'Performance drops during peak usage' },
+            { feature: 'Security Approach',       ours: 'Security-first architecture with isolation',   theirs: 'Basic security with limited visibility' },
+            { feature: 'Uptime Reliability',      ours: 'High availability with proactive monitoring',  theirs: 'Reactive uptime with limited redundancy' },
+        ],
+    },
+    renderer(container, p) {
+        const label = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
+        const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
+        const mode = p.mode === 'checkmark' ? 'checkmark' : 'text';
+        function cell(v) {
+            if (mode !== 'checkmark') return esc(v);
+            const yes = /^(yes|true|✓|y|1)$/i.test(String(v || '').trim());
+            return yes
+                ? '<i class="fa-solid fa-check" style="color:#16a34a" aria-hidden="true"></i>'
+                : '<i class="fa-solid fa-xmark" style="color:#94a3b8" aria-hidden="true"></i>';
+        }
+        const rowsHtml = (p.rows || []).map((r) =>
+            '<tr>' +
+                '<td>' + esc(r.feature) + '</td>' +
+                '<td class="webh-col-icsdc">' + cell(r.ours) + '</td>' +
+                '<td>' + cell(r.theirs) + '</td>' +
+            '</tr>'
+        ).join('');
+        container.innerHTML =
+            '<section class="section">' +
+                '<div class="container">' +
+                    label +
+                    '<h2 class="title">' + esc(p.title) + '</h2>' +
+                    sub +
+                    '<div class="webh-compare-table-wrap">' +
+                        '<table class="webh-compare-table">' +
+                            '<thead><tr><th>' + esc(p.colFeature) + '</th><th class="webh-col-icsdc">' + esc(p.colOurs) + '</th><th>' + esc(p.colTheirs) + '</th></tr></thead>' +
+                            '<tbody>' + rowsHtml + '</tbody>' +
+                        '</table>' +
+                    '</div>' +
+                '</div>' +
+            '</section>';
+    },
+};
+
+/* ════ PROCESS STEPS ═════════════════════════════════════════ */
+const processSteps = {
+    label: 'Process Steps',
+    icon: 'steps',
+    description: 'Horizontal flow of numbered steps. e.g. "What Happens Next" — 01 → 02 → 03.',
+    schema: [
+        { key: 'label',    label: 'Section Label',    type: 'text' },
+        { key: 'title',    label: 'Section Title',    type: 'text', required: true },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'steps', label: 'Steps', type: 'repeater',
+            itemSchema: [
+                { key: 'title', label: 'Step Title', type: 'text' },
+                { key: 'desc',  label: 'Step Description (optional)', type: 'textarea' },
+            ],
+        },
+    ],
+    defaultProps: {
+        label: '',
+        title: 'What Happens Next',
+        subtitle: '',
+        steps: [
+            { title: 'Share Your Requirement',     desc: '' },
+            { title: 'We Review Your Use Case',    desc: '' },
+            { title: 'We Suggest the Right Solution', desc: '' },
+            { title: 'Setup & Beyond',             desc: '' },
+        ],
+    },
+    renderer(container, p) {
+        const label = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
+        const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
+        const steps = p.steps || [];
+        const stepsHtml = steps.map((s, i) => {
+            const stepEl =
+                '<div class="cu-step">' +
+                    '<div class="cu-step-number">' + String(i + 1).padStart(2, '0') + '</div>' +
+                    '<h3 class="cu-step-title">' + esc(s.title) + '</h3>' +
+                    (s.desc ? '<p class="cu-step-desc" style="text-align:center;color:var(--muted);margin-top:8px">' + esc(s.desc) + '</p>' : '') +
+                '</div>';
+            const connector = (i < steps.length - 1) ? '<div class="cu-step-connector" aria-hidden="true"></div>' : '';
+            return stepEl + connector;
         }).join('');
         container.innerHTML =
             '<section class="section">' +
@@ -306,7 +546,59 @@ const pricing = {
                     label +
                     '<h2 class="title">' + esc(p.title) + '</h2>' +
                     sub +
-                    '<div class="wp-plans-grid">' + cardsHtml + '</div>' +
+                    '<div class="cu-steps-flow">' + stepsHtml + '</div>' +
+                '</div>' +
+            '</section>';
+    },
+};
+
+/* ════ LOGO CLOUD (Partners) ═════════════════════════════════ */
+const logoCloud = {
+    label: 'Logo Cloud / Partners',
+    icon: 'partners',
+    description: 'Grid of partner / client logos or text badges.',
+    schema: [
+        { key: 'label',    label: 'Section Label',    type: 'text' },
+        { key: 'title',    label: 'Section Title',    type: 'text', required: true },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'logos', label: 'Logos', type: 'repeater',
+            itemSchema: [
+                { key: 'name',     label: 'Name (shown as text fallback)', type: 'text' },
+                { key: 'imageUrl', label: 'Logo Image (optional)',         type: 'image' },
+                { key: 'link',     label: 'Link URL (optional)',           type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        label: '',
+        title: 'Our Partners',
+        subtitle: '',
+        logos: [
+            { name: 'Partner A', imageUrl: '', link: '' },
+            { name: 'Partner B', imageUrl: '', link: '' },
+            { name: 'Partner C', imageUrl: '', link: '' },
+            { name: 'Partner D', imageUrl: '', link: '' },
+        ],
+    },
+    renderer(container, p) {
+        const label = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
+        const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
+        const itemsHtml = (p.logos || []).map((l) => {
+            const inner = l.imageUrl
+                ? '<img src="' + esc(l.imageUrl) + '" alt="' + esc(l.name || '') + '" style="max-width:140px;max-height:60px;object-fit:contain">'
+                : '<span class="au-partner-name">' + esc(l.name) + '</span>';
+            return l.link
+                ? '<a href="' + esc(l.link) + '" class="au-partner-box" style="text-decoration:none">' + inner + '</a>'
+                : '<div class="au-partner-box">' + inner + '</div>';
+        }).join('');
+        container.innerHTML =
+            '<section class="section au-partners-section">' +
+                '<div class="container">' +
+                    label +
+                    '<h2 class="title">' + esc(p.title) + '</h2>' +
+                    sub +
+                    '<div class="au-partners-grid">' + itemsHtml + '</div>' +
                 '</div>' +
             '</section>';
     },
@@ -429,10 +721,26 @@ export const COMPONENT_REGISTRY = {
     hero,
     iconCards,
     imageText,
+    statsBand,
+    comparisonTable,
+    processSteps,
     ctaBand,
     pricing,
     testimonials,
+    logoCloud,
     faq,
 };
 
-export const COMPONENT_ORDER = ['hero', 'iconCards', 'imageText', 'ctaBand', 'pricing', 'testimonials', 'faq'];
+export const COMPONENT_ORDER = [
+    'hero',
+    'iconCards',
+    'imageText',
+    'statsBand',
+    'comparisonTable',
+    'processSteps',
+    'ctaBand',
+    'pricing',
+    'testimonials',
+    'logoCloud',
+    'faq',
+];

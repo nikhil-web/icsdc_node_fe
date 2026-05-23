@@ -8,13 +8,17 @@
 import { COMPONENT_REGISTRY, COMPONENT_ORDER } from '/assets/js/builder/componentRegistry.js';
 
 const ICON_MAP = {
-    rocket: 'fa-rocket',
-    grid: 'fa-table-cells',
-    arrow: 'fa-arrow-up-right-from-square',
+    rocket:   'fa-rocket',
+    grid:     'fa-table-cells',
+    arrow:    'fa-arrow-up-right-from-square',
     question: 'fa-circle-question',
-    tag: 'fa-tag',
-    star: 'fa-star',
-    image: 'fa-image',
+    tag:      'fa-tag',
+    star:     'fa-star',
+    image:    'fa-image',
+    chart:    'fa-chart-simple',
+    compare:  'fa-scale-balanced',
+    steps:    'fa-list-ol',
+    partners: 'fa-handshake',
 };
 
 export function renderComponentLibrary(containerEl, onAdd) {

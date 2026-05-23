@@ -3,7 +3,11 @@
    ══════════════════════════════════════════════════════════ */
 
 /* ── List view ─────────────────────────────────────────── */
-.bld-list-wrap { padding: 0; }
+.bld-list-wrap {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
 
 .bld-list-head {
     display: flex;
@@ -102,7 +106,7 @@
 /* ── Three-panel body ──────────────────────────────────── */
 .bld-editor-body {
     display: grid;
-    grid-template-columns: 240px 1fr 340px;
+    grid-template-columns: 240px 1fr minmax(480px, 40vw);
     flex: 1;
     overflow: hidden;
     min-height: 0;
@@ -716,6 +720,10 @@
     text-align: left;
     font: inherit;
     color: inherit;
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    height: 220px;
 }
 .bld-media-card:hover { border-color: var(--blue, #1a56db); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(26, 86, 219, 0.12); }
 .bld-media-card.is-selected { border-color: var(--blue, #1a56db); box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.22); }
@@ -723,8 +731,8 @@
 
 .bld-media-thumb {
     width: 100%;
-    aspect-ratio: 1;
-    min-height: 140px;
+    height: 160px;
+    flex-shrink: 0;
     overflow: hidden;
     background: var(--bg-light, #f1f5f9);
     display: flex;
@@ -738,6 +746,11 @@
     display: block;
 }
 [data-theme="dark"] .bld-media-thumb { background: #0f172a; }
+
+/* Make sure meta + thumb stack vertically inside the button card */
+.bld-media-card > .bld-media-thumb,
+.bld-media-card > .bld-media-meta { width: 100%; }
+.bld-media-meta { flex: 1 0 auto; }
 .bld-media-thumb-file { font-size: 2rem; color: var(--muted, #94a3b8); }
 
 .bld-media-meta {
