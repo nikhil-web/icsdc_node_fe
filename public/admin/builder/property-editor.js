@@ -11,6 +11,7 @@
  */
 
 import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js';
+import { pickMedia } from './media-picker.js';
 
 let activeSection = null;
 let onChangeCallback = null;
@@ -65,6 +66,23 @@ function fieldText(field, value, path) {
         '<span class="bld-field-label">' + esc(field.label) + (field.required ? ' *' : '') + '</span>' +
         '<input type="text" class="bld-input" data-path="' + path.join('.') + '" value="' + esc(value) + '">' +
         '</label>';
+}
+
+function fieldImage(field, value, path) {
+    const url = value || '';
+    const preview = url
+        ? '<img src="' + esc(url) + '" alt="" class="bld-img-preview">'
+        : '<div class="bld-img-preview bld-img-preview-empty"><i class="fa-solid fa-image"></i></div>';
+    return '<div class="bld-field bld-field-image">' +
+        '<span class="bld-field-label">' + esc(field.label) + (field.required ? ' *' : '') + '</span>' +
+        preview +
+        '<div class="bld-img-controls">' +
+            '<input type="text" class="bld-input bld-img-url" data-path="' + path.join('.') + '" value="' + esc(url) + '" placeholder="Image URL">' +
+            '<button type="button" class="bld-icon-btn bld-img-browse" data-path="' + path.join('.') + '" title="Browse media library">' +
+                '<i class="fa-solid fa-folder-open"></i> Browse' +
+            '</button>' +
+        '</div>' +
+        '</div>';
 }
 
 function fieldTextarea(field, value, path) {
@@ -150,6 +168,7 @@ function fieldRepeater(field, value, path) {
 function renderField(field, value, path) {
     switch (field.type) {
         case 'text':     return fieldText(field, value, path);
+        case 'image':    return fieldImage(field, value, path);
         case 'textarea': return fieldTextarea(field, value, path);
         case 'number':   return fieldNumber(field, value, path);
         case 'toggle':   return fieldToggle(field, value, path);
@@ -253,4 +272,18 @@ function bindHandlers(rootEl, entry) {
     }
     rootEl.querySelectorAll('.bld-repeater-up').forEach((btn) => btn.addEventListener('click', () => move(btn, -1)));
     rootEl.querySelectorAll('.bld-repeater-down').forEach((btn) => btn.addEventListener('click', () => move(btn, +1)));
+
+    // Image Browse → open media picker
+    rootEl.querySelectorAll('.bld-img-browse').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+            const path = btn.dataset.path.split('.').map((p) => /^\d+$/.test(p) ? Number(p) : p);
+            const current = getByPath(activeSection.props || {}, path) || '';
+            const chosen = await pickMedia({ initialUrl: current });
+            if (!chosen) return;
+            const newProps = setByPath(activeSection.props || {}, path, chosen);
+            emitChange(newProps);
+            // Re-render so preview thumb + text input both reflect the new URL
+            renderPropertyEditor(activeRoot, activeSection, onChangeCallback);
+        });
+    });
 }

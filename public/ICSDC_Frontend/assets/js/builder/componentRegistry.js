@@ -28,7 +28,7 @@ const hero = {
         { key: 'title',       label: 'Heading',         type: 'text', required: true },
         { key: 'subtitle',    label: 'Sub-heading',     type: 'text' },
         { key: 'description', label: 'Description',     type: 'textarea' },
-        { key: 'imageUrl',    label: 'Hero Image URL',  type: 'text' },
+        { key: 'imageUrl',    label: 'Hero Image',      type: 'image' },
         { key: 'imageAlt',    label: 'Image Alt Text',  type: 'text' },
         { key: 'imageSide',   label: 'Image Side',      type: 'select', options: ['left', 'right'], default: 'left' },
         {
@@ -375,7 +375,7 @@ const imageText = {
         { key: 'eyebrow',    label: 'Eyebrow (small label)', type: 'text' },
         { key: 'title',      label: 'Heading',               type: 'text', required: true },
         { key: 'body',       label: 'Body Text',             type: 'textarea' },
-        { key: 'imageUrl',   label: 'Image URL',             type: 'text' },
+        { key: 'imageUrl',   label: 'Image',                 type: 'image' },
         { key: 'imageAlt',   label: 'Image Alt Text',        type: 'text' },
         { key: 'imageSide',  label: 'Image Side',            type: 'select', options: ['left', 'right'], default: 'left' },
         {

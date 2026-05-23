@@ -93,4 +93,22 @@ export const BuilderAPI = {
         });
         return jsonOrThrow(r);
     },
+    // ── Media library ──────────────────────────────────────────
+    listMedia: async (search) => {
+        const qs = search ? '?search=' + encodeURIComponent(search) : '';
+        const r = await fetch('/api/admin/builder/media' + qs, { headers: authHeaders() });
+        return jsonOrThrow(r);
+    },
+    uploadMedia: async (file) => {
+        const jwt = sessionStorage.getItem(JWT_KEY);
+        const fd = new FormData();
+        fd.append('file', file);
+        // NB: don't set Content-Type manually — the browser sets multipart boundary.
+        const r = await fetch('/api/admin/builder/media', {
+            method: 'POST',
+            headers: { Authorization: 'Bearer ' + (jwt || '') },
+            body: fd,
+        });
+        return jsonOrThrow(r);
+    },
 };

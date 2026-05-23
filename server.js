@@ -421,6 +421,80 @@ function cleanupExpiredTokens() {
     }
 }
 
+// ── Admin: media library (Strapi upload proxy) ───────────────────────
+function absolutifyMediaUrls(file) {
+    if (!file || typeof file !== 'object') return file;
+    if (file.url && !/^https?:/i.test(file.url)) file.url = STRAPI_URL.replace(/\/$/, '') + file.url;
+    // Also handle formats { thumbnail, small, medium, large }
+    if (file.formats && typeof file.formats === 'object') {
+        Object.keys(file.formats).forEach((k) => {
+            const f = file.formats[k];
+            if (f && f.url && !/^https?:/i.test(f.url)) f.url = STRAPI_URL.replace(/\/$/, '') + f.url;
+        });
+    }
+    return file;
+}
+
+// List uploaded files (supports ?search= and ?folder=)
+app.get('/api/admin/builder/media', requireAdminAuth, async (req, res) => {
+    try {
+        const qs = new URLSearchParams();
+        if (req.query.search) qs.set('_q', String(req.query.search));
+        qs.set('sort', 'createdAt:desc');
+        const r = await fetch(`${STRAPI_URL}/api/upload/files?${qs}`, {
+            headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
+        });
+        const data = await r.json();
+        // Strapi /upload/files returns either an array or a paginated object
+        if (Array.isArray(data)) data.forEach(absolutifyMediaUrls);
+        else if (data && Array.isArray(data.results)) data.results.forEach(absolutifyMediaUrls);
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Media list failed', detail: err.message });
+    }
+});
+
+// Upload file → Strapi /upload (multipart forwarding)
+const multer = require('multer');
+const uploadMW = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
+
+app.post('/api/admin/builder/media', requireAdminAuth, uploadMW.single('file'), async (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'file is required' });
+    try {
+        const fd = new FormData();
+        // Wrap the multer buffer in a Blob so undici's FormData accepts it with a filename.
+        const blob = new Blob([req.file.buffer], { type: req.file.mimetype || 'application/octet-stream' });
+        fd.append('files', blob, req.file.originalname);
+
+        const r = await fetch(`${STRAPI_URL}/api/upload`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
+            body: fd,
+        });
+        const text = await r.text();
+        let data;
+        try { data = JSON.parse(text); } catch { data = { raw: text }; }
+        if (Array.isArray(data)) data.forEach(absolutifyMediaUrls);
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Upload failed', detail: err.message });
+    }
+});
+
+// Delete media file
+app.delete('/api/admin/builder/media/:id', requireAdminAuth, async (req, res) => {
+    try {
+        const r = await fetch(`${STRAPI_URL}/api/upload/files/${encodeURIComponent(req.params.id)}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
+        });
+        const data = await r.json().catch(() => ({}));
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Delete failed', detail: err.message });
+    }
+});
+
 app.post('/api/admin/builder/preview-token', requireAdminAuth, (req, res) => {
     cleanupExpiredTokens();
     const { slug, sections, title, metaTitle, metaDescription } = req.body || {};
