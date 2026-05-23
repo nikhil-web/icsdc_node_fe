@@ -1,4 +1,4 @@
-/**
+﻿/**
  * componentRegistry.js
  * ────────────────────
  * The single source of truth for the page builder.
@@ -17,6 +17,7 @@
  */
 
 import { esc, resolveFaIcon, ctaButtonHtml } from './builder-utils.js';
+import { initTestimonials as sharedInitTestimonials } from '../utils/cms-helpers.js';
 
 /* ════ HERO ══════════════════════════════════════════════════ */
 const hero = {
@@ -605,131 +606,67 @@ const logoCloud = {
 };
 
 /* ════ TESTIMONIALS ══════════════════════════════════════════ */
-// Matches the canonical structure used by components.js renderTestimonials():
-// .testi-section > .testi-container > [h2, .testi-scroll-viewport > .testi-grid, .testi-pagination, .testi-nav]
-// Each .testi-card has split .testi-body + .testi-footer with SVG stars and the
-// big quote-mark glyph. Carousel (dots + prev/next + scroll-snap) is wired up
-// scoped to this section, so multiple testimonial sections can coexist on a page.
-const TESTI_STAR_SVG = '<svg class="testi-star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
-
+// Uses the SHARED initTestimonials helper from utils/cms-helpers.js — the same
+// renderer every hand-built hosting page calls. We just emit the .testi-section
+// scaffold with the global IDs the helper expects (#testi-grid, #testi-dots,
+// #testi-prev, #testi-next) and hand it the items.
 const testimonials = {
     label: 'Testimonials',
     icon: 'star',
-    description: 'Carousel of customer quotes with name, role, rating and optional avatar.',
+    description: 'Carousel of customer quotes — uses the shared cms-helpers.initTestimonials() renderer.',
     schema: [
         { key: 'title', label: 'Section Title', type: 'text', default: 'What Our Customers Say' },
         {
             key: 'items', label: 'Testimonials', type: 'repeater',
             itemSchema: [
-                { key: 'quote',     label: 'Quote',                type: 'textarea' },
-                { key: 'name',      label: 'Name',                 type: 'text' },
-                { key: 'jobTitle',  label: 'Job Title',            type: 'text' },
-                { key: 'company',   label: 'Company',              type: 'text' },
-                { key: 'rating',    label: 'Rating (1-5)',         type: 'number', min: 1, max: 5, default: 5 },
-                { key: 'avatarUrl', label: 'Avatar Image (optional)', type: 'image' },
+                { key: 'quote',   label: 'Quote',          type: 'textarea' },
+                { key: 'name',    label: 'Name',           type: 'text' },
+                { key: 'title',   label: 'Job Title',      type: 'text' },
+                { key: 'company', label: 'Company',        type: 'text' },
+                { key: 'rating',  label: 'Rating (1-5)',   type: 'number', min: 1, max: 5, default: 5 },
             ],
         },
     ],
     defaultProps: {
         title: 'What Our Customers Say',
         items: [
-            { quote: 'ICSDC has transformed how we manage our infrastructure. Reliable, fast, and the support is second-to-none.', name: 'Aarav Sharma', jobTitle: 'CTO',             company: 'FinTech Co.',   rating: 5, avatarUrl: '' },
-            { quote: 'Migrated our entire stack to ICSDC last year. Zero downtime, dramatic performance improvement, and the team made it painless.', name: 'Priya Patel',  jobTitle: 'Engineering Lead', company: 'ShopStack',     rating: 5, avatarUrl: '' },
-            { quote: 'The cPanel hosting just works. No more chasing tickets — issues get resolved before we even notice them.', name: 'Rahul Verma',   jobTitle: 'Founder',         company: 'DesignLab',     rating: 5, avatarUrl: '' },
+            { quote: "Switching to ICSDC was a defining strategic move. Our previous cloud provider's outages were costing us dearly. Since migrating, our verified uptime has been flawless. They deliver the high performance and reliability they promise.", name: 'Aarav Sharma', title: 'Chief Technology Officer', company: 'reputable IT Firm', rating: 5 },
+            { quote: "The complexity of billing from our last provider was a nightmare. It's a genuine partnership built on clarity, and the performance for our core banking applications is consistently superior.", name: 'Priya Singh', title: 'Head of IT Infrastructure', company: 'FinTech Solution Provider', rating: 5 },
+            { quote: 'The zero-downtime migration guarantee was the reason we chose ICSDC. They delivered on that promise, making the transition seamless and risk-free.', name: 'Rajesh Menon', title: 'Director of Digital Transformation', company: 'Logistic Partner', rating: 5 },
         ],
     },
     renderer(container, p) {
-        const items = (p.items || []);
-        const cardsHtml = items.map((t, i) => {
-            const rating = Math.max(1, Math.min(5, Number(t.rating) || 5));
-            const stars  = TESTI_STAR_SVG.repeat(rating);
-            const initials = String(t.name || '?').split(/\s+/).map((w) => w[0] || '').slice(0, 2).join('').toUpperCase();
-            const avatarHtml = t.avatarUrl
-                ? '<img src="' + esc(t.avatarUrl) + '" alt="' + esc(t.name) + '" class="testi-avatar-img" loading="lazy">'
-                : '<span class="testi-avatar-initials">' + esc(initials) + '</span>';
-            const jobLine = [t.jobTitle || '', t.company || ''].filter(Boolean).join(' · ');
-            return '<article class="testi-card" role="listitem" data-testi-index="' + i + '" aria-label="Testimonial from ' + esc(t.name) + '">' +
-                '<div class="testi-body">' +
-                    '<span class="testi-quote-mark" aria-hidden="true">&#10077;</span>' +
-                    '<blockquote class="testi-quote">' + esc(t.quote) + '</blockquote>' +
-                    '<div class="testi-rating" aria-label="Rating: ' + rating + ' out of 5 stars">' + stars + '</div>' +
-                '</div>' +
-                '<div class="testi-footer">' +
-                    '<div class="testi-avatar" aria-hidden="true">' + avatarHtml + '</div>' +
-                    '<div class="testi-client-info">' +
-                        '<p class="testi-name">' + esc(t.name) + '</p>' +
-                        '<p class="testi-job">' + esc(jobLine) + '</p>' +
-                    '</div>' +
-                '</div>' +
-                '</article>';
-        }).join('');
+        // Map prior draft shapes (jobTitle / role) onto `title` so the helper sees them.
+        const items = (p.items || []).map((t) => ({
+            quote:   t.quote || '',
+            name:    t.name  || '',
+            title:   t.title || t.jobTitle || t.role || '',
+            company: t.company || '',
+            rating:  Math.max(1, Math.min(5, Number(t.rating) || 5)),
+        }));
 
-        const dotsHtml = items.map((_, i) =>
-            '<button class="testi-dot' + (i === 0 ? ' testi-dot-active' : '') + '" role="tab" aria-selected="' + (i === 0 ? 'true' : 'false') + '" aria-label="Go to testimonial ' + (i + 1) + '" data-dot="' + i + '"></button>'
-        ).join('');
-
+        // Emit the exact scaffold initTestimonials expects (with global IDs).
         container.innerHTML =
-            '<section class="testi-section">' +
+            '<section class="testi-section" aria-labelledby="bld-testi-heading">' +
                 '<div class="testi-container">' +
-                    '<h2 class="testi-title">' + esc(p.title) + '</h2>' +
+                    '<h2 id="bld-testi-heading" class="testi-title">' + esc(p.title) + '</h2>' +
                     '<div class="testi-scroll-viewport">' +
-                        '<div class="testi-grid" role="list" aria-label="Customer testimonials">' + cardsHtml + '</div>' +
+                        '<div class="testi-grid" id="testi-grid" role="list" aria-label="Customer testimonials"></div>' +
                     '</div>' +
-                    '<div class="testi-pagination" role="tablist" aria-label="Testimonial navigation">' + dotsHtml + '</div>' +
+                    '<div class="testi-pagination" id="testi-dots" role="tablist" aria-label="Testimonial navigation"></div>' +
                     '<div class="testi-nav">' +
-                        '<button class="testi-nav-btn testi-prev-btn" aria-label="Previous testimonial">&#8249;</button>' +
-                        '<button class="testi-nav-btn testi-next-btn" aria-label="Next testimonial">&#8250;</button>' +
+                        '<button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>' +
+                        '<button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>' +
                     '</div>' +
                 '</div>' +
             '</section>';
 
-        // ── Carousel interactions (scoped to this container, no global IDs) ──
-        const grid    = container.querySelector('.testi-grid');
-        const dotsWrap= container.querySelector('.testi-pagination');
-        const prevBtn = container.querySelector('.testi-prev-btn');
-        const nextBtn = container.querySelector('.testi-next-btn');
-        if (!grid || !dotsWrap) return;
-        const cards = Array.from(grid.querySelectorAll('.testi-card'));
-        const dots  = Array.from(dotsWrap.querySelectorAll('.testi-dot'));
-
-        function scrollToCard(idx) {
-            const card = cards[idx];
-            if (!card) return;
-            grid.scrollTo({ left: card.offsetLeft - 4, behavior: 'smooth' });
-        }
-        function currentIndex() {
-            const scrollLeft = grid.scrollLeft;
-            let closest = 0, min = Infinity;
-            cards.forEach((c, i) => {
-                const d = Math.abs(c.offsetLeft - scrollLeft);
-                if (d < min) { min = d; closest = i; }
-            });
-            return closest;
-        }
-        dots.forEach((d, i) => d.addEventListener('click', () => scrollToCard(i)));
-        prevBtn && prevBtn.addEventListener('click', () => {
-            const i = currentIndex();
-            scrollToCard(i === 0 ? cards.length - 1 : i - 1);
-        });
-        nextBtn && nextBtn.addEventListener('click', () => {
-            const i = currentIndex();
-            scrollToCard(i === cards.length - 1 ? 0 : i + 1);
-        });
-        let scrollTimer;
-        grid.addEventListener('scroll', () => {
-            clearTimeout(scrollTimer);
-            scrollTimer = setTimeout(() => {
-                const i = currentIndex();
-                dots.forEach((d, k) => {
-                    d.classList.toggle('testi-dot-active', k === i);
-                    d.setAttribute('aria-selected', k === i ? 'true' : 'false');
-                });
-            }, 80);
-        });
+        // Defer one microtask so the DOM is queryable, then run the shared helper —
+        // the same code path every hand-built hosting page uses.
+        Promise.resolve().then(() => sharedInitTestimonials(items));
     },
 };
 
-/* ════ IMAGE + TEXT (Who-We-Are split) ══════════════════════ */
 const imageText = {
     label: 'Image + Text Split',
     icon: 'image',
