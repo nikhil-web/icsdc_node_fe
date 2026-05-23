@@ -424,11 +424,12 @@ function cleanupExpiredTokens() {
 // ── Admin: media library (Strapi upload proxy) ───────────────────────
 function absolutifyMediaUrls(file) {
     if (!file || typeof file !== 'object') return file;
-    if (file.url && !/^https?:/i.test(file.url)) file.url = STRAPI_URL.replace(/\/$/, '') + file.url;
-    // Also handle formats { thumbnail, small, medium, large }
-    if (file.formats && typeof file.formats === 'object') {
-        Object.keys(file.formats).forEach((k) => {
-            const f = file.formats[k];
+    // Strapi 5 sometimes wraps responses as { id, attributes: {...} }
+    const target = file.attributes && typeof file.attributes === 'object' ? file.attributes : file;
+    if (target.url && !/^https?:/i.test(target.url)) target.url = STRAPI_URL.replace(/\/$/, '') + target.url;
+    if (target.formats && typeof target.formats === 'object') {
+        Object.keys(target.formats).forEach((k) => {
+            const f = target.formats[k];
             if (f && f.url && !/^https?:/i.test(f.url)) f.url = STRAPI_URL.replace(/\/$/, '') + f.url;
         });
     }

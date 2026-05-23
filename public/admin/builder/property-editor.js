@@ -71,17 +71,16 @@ function fieldText(field, value, path) {
 function fieldImage(field, value, path) {
     const url = value || '';
     const preview = url
-        ? '<img src="' + esc(url) + '" alt="" class="bld-img-preview">'
+        ? '<img src="' + esc(url) + '" alt="" class="bld-img-preview" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+          '<div class="bld-img-preview bld-img-preview-empty" style="display:none"><i class="fa-solid fa-triangle-exclamation"></i></div>'
         : '<div class="bld-img-preview bld-img-preview-empty"><i class="fa-solid fa-image"></i></div>';
     return '<div class="bld-field bld-field-image">' +
         '<span class="bld-field-label">' + esc(field.label) + (field.required ? ' *' : '') + '</span>' +
         preview +
-        '<div class="bld-img-controls">' +
-            '<input type="text" class="bld-input bld-img-url" data-path="' + path.join('.') + '" value="' + esc(url) + '" placeholder="Image URL">' +
-            '<button type="button" class="bld-icon-btn bld-img-browse" data-path="' + path.join('.') + '" title="Browse media library">' +
-                '<i class="fa-solid fa-folder-open"></i> Browse' +
-            '</button>' +
-        '</div>' +
+        '<button type="button" class="bld-img-browse-btn bld-img-browse" data-path="' + path.join('.') + '">' +
+            '<i class="fa-solid fa-folder-open"></i>&nbsp; Browse media library' +
+        '</button>' +
+        '<input type="text" class="bld-input bld-img-url" data-path="' + path.join('.') + '" value="' + esc(url) + '" placeholder="Or paste a URL…">' +
         '</div>';
 }
 

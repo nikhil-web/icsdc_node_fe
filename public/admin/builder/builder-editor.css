@@ -593,15 +593,24 @@
     font-size: 28px;
 }
 [data-theme="dark"] .bld-img-preview { background: #0f172a; border-color: #334155; }
-.bld-img-controls {
+/* Full-width Browse button (clear-CTA style) */
+.bld-img-browse-btn {
     display: flex;
-    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.55rem 0.85rem;
+    background: var(--blue, #1a56db);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
 }
-.bld-img-controls .bld-img-url { flex: 1; }
-.bld-img-browse {
-    white-space: nowrap;
-    padding: 0 0.75rem !important;
-}
+.bld-img-browse-btn:hover { background: #1740b0; }
+.bld-img-url { font-size: 0.78rem; }
 
 /* ══════════════════════════════════════════════════════════
    MEDIA PICKER MODAL
@@ -715,13 +724,20 @@
 .bld-media-thumb {
     width: 100%;
     aspect-ratio: 1;
+    min-height: 140px;
     overflow: hidden;
     background: var(--bg-light, #f1f5f9);
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.bld-media-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.bld-media-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+[data-theme="dark"] .bld-media-thumb { background: #0f172a; }
 .bld-media-thumb-file { font-size: 2rem; color: var(--muted, #94a3b8); }
 
 .bld-media-meta {

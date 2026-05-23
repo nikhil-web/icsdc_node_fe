@@ -74,13 +74,22 @@ export function pickMedia(opts = {}) {
             resolve(result);
         }
 
+        function normaliseFile(raw) {
+            // Strapi 5 may wrap each file in { id, attributes: {...} } (v4 returned flat).
+            if (raw && raw.attributes && typeof raw.attributes === 'object') {
+                return Object.assign({ id: raw.id }, raw.attributes);
+            }
+            return raw || {};
+        }
+
         async function refresh(q) {
             grid.innerHTML = '';
             status.textContent = 'Loading…';
             try {
                 const data = await BuilderAPI.listMedia(q);
-                // Strapi returns an array directly for /upload/files
-                files = Array.isArray(data) ? data : (data?.results || data?.data || []);
+                // /upload/files returns an array (v4) or { results: [...] } / { data: [...] } (v5).
+                const list = Array.isArray(data) ? data : (data?.results || data?.data || []);
+                files = list.map(normaliseFile);
                 renderGrid();
                 status.textContent = files.length + ' file' + (files.length === 1 ? '' : 's');
             } catch (err) {
@@ -125,8 +134,9 @@ export function pickMedia(opts = {}) {
             status.textContent = 'Uploading "' + file.name + '"…';
             try {
                 const arr = await BuilderAPI.uploadMedia(file);
-                const newFile = Array.isArray(arr) ? arr[0] : arr;
-                if (newFile) {
+                const raw = Array.isArray(arr) ? arr[0] : arr;
+                const newFile = normaliseFile(raw);
+                if (newFile && newFile.id) {
                     files.unshift(newFile);
                     renderGrid();
                     // auto-select

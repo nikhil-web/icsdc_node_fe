@@ -340,6 +340,14 @@ code {
 /* HTML5 `hidden` attribute must win over .admin-main display:flex */
 [hidden] { display: none !important; }
 
+/* The Page Builder needs the full viewport — drop the 1100px cap + padding */
+#view-builder {
+    max-width: none;
+    width: 100%;
+    padding: 0;
+    gap: 0;
+}
+
 .admin-section {
     background: var(--white);
     border: 1px solid var(--border);
