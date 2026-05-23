@@ -234,7 +234,29 @@
     display: flex;
     align-items: center;
     gap: 0.6rem;
+    cursor: grab;
+    user-select: none;
 }
+
+.bld-card-head:active { cursor: grabbing; }
+
+/* SortableJS drag-state classes */
+.bld-card-ghost {
+    opacity: 0.4;
+    background: var(--blue-light, #eff6ff) !important;
+    border-style: dashed !important;
+}
+
+.bld-card-chosen {
+    box-shadow: 0 8px 24px rgba(26, 86, 219, 0.25);
+}
+
+.bld-card-dragging {
+    transform: rotate(1.5deg);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.22);
+}
+
+[data-theme="dark"] .bld-card-ghost { background: #1e3a8a40 !important; }
 
 .bld-card-num {
     font-size: 0.7rem;

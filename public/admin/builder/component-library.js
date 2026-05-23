@@ -13,6 +13,8 @@ const ICON_MAP = {
     arrow: 'fa-arrow-up-right-from-square',
     question: 'fa-circle-question',
     tag: 'fa-tag',
+    star: 'fa-star',
+    image: 'fa-image',
 };
 
 export function renderComponentLibrary(containerEl, onAdd) {

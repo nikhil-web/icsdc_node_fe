@@ -294,13 +294,127 @@ const pricing = {
     },
 };
 
+/* ════ TESTIMONIALS ══════════════════════════════════════════ */
+const testimonials = {
+    label: 'Testimonials',
+    icon: 'star',
+    description: 'Carousel of customer quotes with name, role and rating.',
+    schema: [
+        { key: 'title', label: 'Section Title', type: 'text', default: 'What Our Customers Say' },
+        {
+            key: 'items', label: 'Testimonials', type: 'repeater',
+            itemSchema: [
+                { key: 'quote',  label: 'Quote',          type: 'textarea' },
+                { key: 'name',   label: 'Name',           type: 'text' },
+                { key: 'role',   label: 'Role / Company', type: 'text' },
+                { key: 'rating', label: 'Rating (1-5)',   type: 'number', min: 1, max: 5, default: 5 },
+            ],
+        },
+    ],
+    defaultProps: {
+        title: 'What Our Customers Say',
+        items: [
+            { quote: 'ICSDC has transformed how we manage our infrastructure. Reliable, fast, and the support is second-to-none.', name: 'Aarav Sharma', role: 'CTO, FinTech Co.', rating: 5 },
+            { quote: 'Migrated our entire stack to ICSDC last year. Zero downtime, dramatic performance improvement, and the team made it painless.', name: 'Priya Patel', role: 'Engineering Lead, ShopStack', rating: 5 },
+            { quote: 'The cPanel hosting just works. No more chasing tickets — issues get resolved before we even notice them.', name: 'Rahul Verma', role: 'Founder, DesignLab', rating: 5 },
+        ],
+    },
+    renderer(container, p) {
+        const cardsHtml = (p.items || []).map((t) => {
+            const rating = Math.max(1, Math.min(5, Number(t.rating) || 5));
+            const stars = '<i class="fa-solid fa-star" aria-hidden="true"></i>'.repeat(rating);
+            const initials = String(t.name || '?').split(/\s+/).map((w) => w[0] || '').slice(0, 2).join('').toUpperCase();
+            return '<article class="testi-card" role="listitem">' +
+                '<div class="testi-rating" aria-label="Rated ' + rating + ' out of 5">' + stars + '</div>' +
+                '<blockquote class="testi-quote">"' + esc(t.quote) + '"</blockquote>' +
+                '<div class="testi-person">' +
+                    '<div class="testi-avatar">' + esc(initials) + '</div>' +
+                    '<div class="testi-meta">' +
+                        '<div class="testi-name">' + esc(t.name) + '</div>' +
+                        '<div class="testi-role">' + esc(t.role) + '</div>' +
+                    '</div>' +
+                '</div>' +
+                '</article>';
+        }).join('');
+        container.innerHTML =
+            '<section class="testi-section">' +
+                '<div class="testi-container">' +
+                    '<h2 class="testi-title">' + esc(p.title) + '</h2>' +
+                    '<div class="testi-scroll-viewport">' +
+                        '<div class="testi-grid" role="list">' + cardsHtml + '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</section>';
+    },
+};
+
+/* ════ IMAGE + TEXT (Who-We-Are split) ══════════════════════ */
+const imageText = {
+    label: 'Image + Text Split',
+    icon: 'image',
+    description: 'Two-column layout: image on one side, headline + paragraph + optional CTA on the other.',
+    schema: [
+        { key: 'eyebrow',    label: 'Eyebrow (small label)', type: 'text' },
+        { key: 'title',      label: 'Heading',               type: 'text', required: true },
+        { key: 'body',       label: 'Body Text',             type: 'textarea' },
+        { key: 'imageUrl',   label: 'Image URL',             type: 'text' },
+        { key: 'imageAlt',   label: 'Image Alt Text',        type: 'text' },
+        { key: 'imageSide',  label: 'Image Side',            type: 'select', options: ['left', 'right'], default: 'left' },
+        {
+            key: 'cta', label: 'Call-to-Action (optional)', type: 'cta',
+            fields: [
+                { key: 'text', label: 'Button Text', type: 'text' },
+                { key: 'link', label: 'URL',         type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        eyebrow: 'About ICSDC',
+        title: 'Who We Are?',
+        body: 'At ICSDC, we are redefining reliability and performance in web hosting. From shared hosting to enterprise cloud, we are a trusted provider in India, built for the world with enterprise-grade performance at every tier.',
+        imageUrl: '/assets/images/trusted-cloud-service-provider 1.png',
+        imageAlt: 'ICSDC Team',
+        imageSide: 'left',
+        cta: { text: '', link: '' },
+    },
+    renderer(container, p) {
+        const eyebrow = p.eyebrow ? '<span class="cloud-section-label">' + esc(p.eyebrow) + '</span>' : '';
+        const body    = p.body ? '<p class="who-we-are-paragraph">' + esc(p.body) + '</p>' : '';
+        const cta     = (p.cta && p.cta.text)
+            ? '<a class="btn-primary" style="margin-top:18px;align-self:flex-start" href="' + esc(p.cta.link || '#') + '">' + esc(p.cta.text) + '</a>'
+            : '';
+        const imageHtml =
+            '<div class="who-we-are-image">' +
+                (p.imageUrl
+                    ? '<img src="' + esc(p.imageUrl) + '" alt="' + esc(p.imageAlt || '') + '">'
+                    : '<div style="aspect-ratio:4/3;background:var(--blue-light);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--blue);font-weight:600">No image</div>') +
+            '</div>';
+        const contentHtml =
+            '<div class="blue-container">' +
+                eyebrow +
+                '<h2 class="title" style="text-align:left;margin-top:8px">' + esc(p.title) + '</h2>' +
+                body +
+                cta +
+            '</div>';
+        const inner = p.imageSide === 'right'
+            ? contentHtml + imageHtml
+            : imageHtml + contentHtml;
+        container.innerHTML =
+            '<section class="who-we-are section">' +
+                '<div class="who-we-are-inner">' + inner + '</div>' +
+            '</section>';
+    },
+};
+
 /* ════ EXPORT ════════════════════════════════════════════════ */
 export const COMPONENT_REGISTRY = {
     hero,
     iconCards,
+    imageText,
     ctaBand,
-    faq,
     pricing,
+    testimonials,
+    faq,
 };
 
-export const COMPONENT_ORDER = ['hero', 'iconCards', 'ctaBand', 'pricing', 'faq'];
+export const COMPONENT_ORDER = ['hero', 'iconCards', 'imageText', 'ctaBand', 'pricing', 'testimonials', 'faq'];

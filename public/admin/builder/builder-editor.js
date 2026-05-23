@@ -309,6 +309,36 @@ function renderCanvas() {
     canvas.querySelectorAll('.bld-down').forEach((b) => b.addEventListener('click', () => moveSection(b.dataset.id, +1)));
     canvas.querySelectorAll('.bld-dup').forEach((b) => b.addEventListener('click', () => duplicateSection(b.dataset.id)));
     canvas.querySelectorAll('.bld-del').forEach((b) => b.addEventListener('click', () => deleteSection(b.dataset.id)));
+
+    initSortable(canvas);
+}
+
+/* ── Drag-and-drop (SortableJS) ──────────────────────────── */
+let _sortableInstance = null;
+function initSortable(canvas) {
+    if (typeof window.Sortable === 'undefined') return; // graceful fallback to up/down buttons
+    if (_sortableInstance) {
+        try { _sortableInstance.destroy(); } catch (_) {}
+        _sortableInstance = null;
+    }
+    _sortableInstance = window.Sortable.create(canvas, {
+        animation: 160,
+        ghostClass: 'bld-card-ghost',
+        chosenClass: 'bld-card-chosen',
+        dragClass: 'bld-card-dragging',
+        handle: '.bld-card-head',
+        filter: '.bld-icon-btn',  // don't start drag from action buttons
+        preventOnFilter: false,
+        onEnd(evt) {
+            if (evt.oldIndex === evt.newIndex) return;
+            const arr = state.page.sections;
+            const [moved] = arr.splice(evt.oldIndex, 1);
+            arr.splice(evt.newIndex, 0, moved);
+            arr.forEach((s, i) => (s.order = i));
+            markDirty();
+            renderCanvas();
+        },
+    });
 }
 
 function summariseSection(sec) {
