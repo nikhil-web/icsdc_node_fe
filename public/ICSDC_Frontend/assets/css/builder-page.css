@@ -21,6 +21,44 @@
 
 /* Builder hero CTAs use existing .btn-primary / .btn-outline classes — no overrides needed. */
 
+/* ══════════════════════════════════════════════════════════
+   BUILDER HERO — single-column, centered
+   Existing .hero uses a 2-col grid (content left, image right);
+   builder hero has no image, so collapse to a single centered column.
+   ══════════════════════════════════════════════════════════ */
+.builder-hero .hero {
+    grid-template-columns: 1fr;
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.builder-hero .hero-content {
+    align-items: center;
+}
+
+.builder-hero .hero-title {
+    max-width: 740px;
+}
+
+.builder-hero .hero-sub,
+.builder-hero .hero-desc {
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.builder-hero .hero-btns {
+    justify-content: center;
+}
+
+/* Section spacing inside the builder root — ensure CTAs and section blocks aren't
+   crammed against each other when sections are stacked back-to-back. */
+#builder-page-root > div + div { margin-top: 0; }
+#builder-page-root .section,
+#builder-page-root .faq-section,
+#builder-page-root .cloud-cta-band { padding-top: 60px; padding-bottom: 60px; }
+
 /* Anchor styling for plan card CTAs (avoid default underlines) */
 #builder-page-root .wp-plan-btn {
     text-decoration: none;

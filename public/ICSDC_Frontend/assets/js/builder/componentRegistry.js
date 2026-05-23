@@ -58,7 +58,7 @@ const hero = {
         const primary = ctaButtonHtml(p.ctaPrimary, 'btn-primary');
         const secondary = ctaButtonHtml(p.ctaSecondary, 'btn-outline');
         container.innerHTML =
-            '<section class="hero-section">' +
+            '<section class="hero-section builder-hero">' +
                 '<div class="hero">' +
                     '<div class="hero-content">' +
                         eyebrow +
