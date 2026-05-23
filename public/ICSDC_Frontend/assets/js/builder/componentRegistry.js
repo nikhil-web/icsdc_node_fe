@@ -22,12 +22,15 @@ import { esc, resolveFaIcon, ctaButtonHtml } from './builder-utils.js';
 const hero = {
     label: 'Hero Section',
     icon: 'rocket',
-    description: 'Page-opening hero with headline, sub-heading, description, and CTAs.',
+    description: 'Page-opening hero with image, headline, sub-heading, description, and CTAs.',
     schema: [
         { key: 'eyebrow',     label: 'Eyebrow Text',    type: 'text' },
         { key: 'title',       label: 'Heading',         type: 'text', required: true },
         { key: 'subtitle',    label: 'Sub-heading',     type: 'text' },
         { key: 'description', label: 'Description',     type: 'textarea' },
+        { key: 'imageUrl',    label: 'Hero Image URL',  type: 'text' },
+        { key: 'imageAlt',    label: 'Image Alt Text',  type: 'text' },
+        { key: 'imageSide',   label: 'Image Side',      type: 'select', options: ['left', 'right'], default: 'left' },
         {
             key: 'ctaPrimary', label: 'Primary CTA', type: 'cta',
             fields: [
@@ -48,26 +51,41 @@ const hero = {
         title: 'Your Headline Here',
         subtitle: 'A short supporting sub-heading.',
         description: 'A longer description that explains the offering. Replace this with your own content.',
+        imageUrl: '/assets/images/trusted-cloud-service-provider 1.png',
+        imageAlt: 'Hero illustration',
+        imageSide: 'left',
         ctaPrimary:   { text: 'Get Started', link: '/contact-us' },
         ctaSecondary: { text: 'Learn More',  link: '#' },
     },
     renderer(container, p) {
-        const eyebrow = p.eyebrow ? '<div class="builder-eyebrow">' + esc(p.eyebrow) + '</div>' : '';
-        const subtitle = p.subtitle ? '<p class="hero-sub">' + esc(p.subtitle) + '</p>' : '';
-        const desc = p.description ? '<p class="hero-desc">' + esc(p.description) + '</p>' : '';
-        const primary = ctaButtonHtml(p.ctaPrimary, 'btn-primary');
+        const eyebrow   = p.eyebrow ? '<div class="builder-eyebrow">' + esc(p.eyebrow) + '</div>' : '';
+        const subtitle  = p.subtitle ? '<p class="hero-sub">' + esc(p.subtitle) + '</p>' : '';
+        const desc      = p.description ? '<p class="hero-desc">' + esc(p.description) + '</p>' : '';
+        const primary   = ctaButtonHtml(p.ctaPrimary, 'btn-primary');
         const secondary = ctaButtonHtml(p.ctaSecondary, 'btn-outline');
+
+        const contentHtml =
+            '<div class="hero-content">' +
+                eyebrow +
+                '<h1 class="hero-title">' + esc(p.title) + '</h1>' +
+                subtitle +
+                desc +
+                '<div class="hero-btns">' + primary + secondary + '</div>' +
+            '</div>';
+
+        const imageHtml = p.imageUrl
+            ? '<div class="hero-right">' +
+                  '<img class="hero-right-image" src="' + esc(p.imageUrl) + '" alt="' + esc(p.imageAlt || '') + '">' +
+              '</div>'
+            : '';
+
+        // Image side controls grid order. Default = image left.
+        const sideClass = (p.imageSide === 'right') ? ' builder-hero-img-right' : ' builder-hero-img-left';
+        const inner = (p.imageSide === 'right') ? contentHtml + imageHtml : imageHtml + contentHtml;
+
         container.innerHTML =
-            '<section class="hero-section builder-hero">' +
-                '<div class="hero">' +
-                    '<div class="hero-content">' +
-                        eyebrow +
-                        '<h1 class="hero-title">' + esc(p.title) + '</h1>' +
-                        subtitle +
-                        desc +
-                        '<div class="hero-btns">' + primary + secondary + '</div>' +
-                    '</div>' +
-                '</div>' +
+            '<section class="hero-section builder-hero' + sideClass + '">' +
+                '<div class="hero">' + inner + '</div>' +
             '</section>';
     },
 };

@@ -22,34 +22,61 @@
 /* Builder hero CTAs use existing .btn-primary / .btn-outline classes — no overrides needed. */
 
 /* ══════════════════════════════════════════════════════════
-   BUILDER HERO — single-column, centered
-   Existing .hero uses a 2-col grid (content left, image right);
-   builder hero has no image, so collapse to a single centered column.
+   BUILDER HERO
+   - Full viewport-height feel (matches the homepage hero)
+   - 2-column layout: image one side, content the other
+   - Image side configurable via .builder-hero-img-left / -img-right
    ══════════════════════════════════════════════════════════ */
+.builder-hero {
+    min-height: calc(100vh - 80px); /* full screen minus nav */
+    display: flex;
+    align-items: center;
+}
+
 .builder-hero .hero {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+/* Default = image left, content right. Flip via order when imageSide='right'. */
+.builder-hero-img-right .hero-right { order: 2; }
+.builder-hero-img-right .hero-content { order: 1; }
+.builder-hero-img-left  .hero-right { order: 1; }
+.builder-hero-img-left  .hero-content { order: 2; }
+
+.builder-hero .hero-right-image {
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    display: block;
+}
+
+/* If the image fails or no URL was given, the content should still fill the row. */
+.builder-hero .hero:has(.hero-content:only-child) {
     grid-template-columns: 1fr;
     max-width: 880px;
     margin: 0 auto;
     text-align: center;
 }
 
-.builder-hero .hero-content {
-    align-items: center;
-}
-
-.builder-hero .hero-title {
-    max-width: 740px;
-}
-
-.builder-hero .hero-sub,
-.builder-hero .hero-desc {
-    max-width: 640px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.builder-hero .hero-btns {
-    justify-content: center;
+/* ─── Tablet / mobile ─── */
+@media (max-width: 900px) {
+    .builder-hero {
+        min-height: auto;
+    }
+    .builder-hero .hero {
+        grid-template-columns: 1fr;
+    }
+    .builder-hero-img-left  .hero-right,
+    .builder-hero-img-right .hero-right {
+        order: 0;
+    }
+    .builder-hero-img-left  .hero-content,
+    .builder-hero-img-right .hero-content {
+        order: 1;
+    }
+    .builder-hero .hero-right-image { margin: 0 auto; }
 }
 
 /* Section spacing inside the builder root — ensure CTAs and section blocks aren't
