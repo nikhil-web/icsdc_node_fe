@@ -19,6 +19,10 @@ const ICON_MAP = {
     compare:  'fa-scale-balanced',
     steps:    'fa-list-ol',
     partners: 'fa-handshake',
+    gallery:  'fa-images',
+    info:     'fa-address-card',
+    envelope: 'fa-envelope',
+    map:      'fa-map-location-dot',
 };
 
 export function renderComponentLibrary(containerEl, onAdd) {

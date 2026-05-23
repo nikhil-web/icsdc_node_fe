@@ -716,6 +716,243 @@ const imageText = {
     },
 };
 
+/* ════ GALLERY (Life @ ICSDC) ════════════════════════════════ */
+const gallery = {
+    label: 'Image Gallery',
+    icon: 'gallery',
+    description: 'Grid of images with overlay labels — like the "Life @ ICSDC" section on About Us.',
+    schema: [
+        { key: 'title',    label: 'Section Title',    type: 'text', required: true },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'items', label: 'Images', type: 'repeater',
+            itemSchema: [
+                { key: 'imageUrl', label: 'Image',         type: 'image' },
+                { key: 'imageAlt', label: 'Alt Text',      type: 'text' },
+                { key: 'label',    label: 'Overlay Label', type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        title: 'Life @ ICSDC',
+        subtitle: 'Where ideas, collaboration, and everyday moments come together.',
+        items: [
+            { imageUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80', imageAlt: 'Team event', label: 'Team Events' },
+            { imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80', imageAlt: 'Celebrations', label: 'Celebrations' },
+            { imageUrl: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80', imageAlt: 'Collaboration', label: 'Collaboration' },
+            { imageUrl: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80', imageAlt: 'Office culture', label: 'Culture' },
+            { imageUrl: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80', imageAlt: 'Growth', label: 'Growth' },
+        ],
+    },
+    renderer(container, p) {
+        const sub = p.subtitle ? '<p class="au-life-desc">' + esc(p.subtitle) + '</p>' : '';
+        const cardsHtml = (p.items || []).map((it) =>
+            '<div class="au-life-card">' +
+                '<img src="' + esc(it.imageUrl) + '" alt="' + esc(it.imageAlt || '') + '" loading="lazy">' +
+                (it.label
+                    ? '<div class="au-life-card-overlay"><span class="au-life-card-label">' + esc(it.label) + '</span></div>'
+                    : '') +
+            '</div>'
+        ).join('');
+        container.innerHTML =
+            '<section class="section au-life-section">' +
+                '<div class="container">' +
+                    '<h2 class="title">' + esc(p.title) + '</h2>' +
+                    sub +
+                '</div>' +
+                '<div class="au-life-gallery">' + cardsHtml + '</div>' +
+            '</section>';
+    },
+};
+
+/* ════ CONTACT INFO CARDS ════════════════════════════════════ */
+const contactInfo = {
+    label: 'Contact Info Cards',
+    icon: 'info',
+    description: 'Stack of icon + label + value cards. Email, phone, address, office hours.',
+    schema: [
+        { key: 'title',    label: 'Section Title',    type: 'text', default: 'Get in Touch' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'items', label: 'Contact Items', type: 'repeater',
+            itemSchema: [
+                { key: 'icon',  label: 'Icon Key (FA name)', type: 'text' },
+                { key: 'label', label: 'Label',              type: 'text' },
+                { key: 'value', label: 'Value',              type: 'textarea' },
+                { key: 'link',  label: 'Link (optional, e.g. mailto: or tel:)', type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        title: 'Get in Touch',
+        subtitle: "We're always ready to help. Reach out through any of the channels below.",
+        items: [
+            { icon: 'envelope',  label: 'Email Address', value: 'info@icsdc.com',              link: 'mailto:info@icsdc.com' },
+            { icon: 'phone',     label: 'Phone Number',  value: '+91 98109 58857',             link: 'tel:+919810958857' },
+            { icon: 'map-pin',   label: 'Our Address',   value: 'Plot No. 21 & 21A, 6th Floor, Sector 142, Noida, UP 201304', link: '' },
+            { icon: 'clock',     label: 'Office Hours',  value: 'Monday – Friday: 9:00 AM – 6:00 PM IST | 24/7 Support for active clients', link: '' },
+        ],
+    },
+    renderer(container, p) {
+        const subtitle = p.subtitle ? '<p class="cu-info-subtitle">' + esc(p.subtitle) + '</p>' : '';
+        const cardsHtml = (p.items || []).map((it) => {
+            const inner =
+                '<div class="cu-info-icon"><i class="' + resolveFaIcon(it.icon, 'circle-info') + '" aria-hidden="true"></i></div>' +
+                '<div class="cu-info-text">' +
+                    '<span class="cu-info-label">' + esc(it.label) + '</span>' +
+                    '<span class="cu-info-value">' + esc(it.value) + '</span>' +
+                '</div>';
+            return it.link
+                ? '<a href="' + esc(it.link) + '" class="cu-info-card" style="text-decoration:none">' + inner + '</a>'
+                : '<div class="cu-info-card">' + inner + '</div>';
+        }).join('');
+        container.innerHTML =
+            '<section class="section cu-contact-section">' +
+                '<div class="container">' +
+                    '<div class="cu-info-col">' +
+                        '<h3 class="cu-info-title">' + esc(p.title) + '</h3>' +
+                        subtitle +
+                        '<div class="cu-info-cards">' + cardsHtml + '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</section>';
+    },
+};
+
+/* ════ CONTACT FORM ══════════════════════════════════════════ */
+const contactForm = {
+    label: 'Contact Form',
+    icon: 'envelope',
+    description: 'Full contact form with name/email/phone/company/subject/message. Submits to /api/strapi/api/contact-submissions.',
+    schema: [
+        { key: 'title',    label: 'Section Title',    type: 'text', default: 'Send Us a Message' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        { key: 'subjectOptions', label: 'Subject Options (one per line; blank for free-text field)', type: 'textarea' },
+        { key: 'successMessage', label: 'Success Message', type: 'textarea', default: 'Thank you for reaching out. Our team will get back to you shortly.' },
+    ],
+    defaultProps: {
+        title: 'Send Us a Message',
+        subtitle: '',
+        subjectOptions: 'VPS / Cloud Hosting Questions\nInfrastructure Planning\nMigration & Performance\nSecurity & Compliance\nPricing & Plans\nPartnerships & Reseller\nTechnical Support\nOther / General Inquiry',
+        successMessage: 'Thank you for reaching out. Our team will get back to you shortly.',
+    },
+    renderer(container, p) {
+        const subtitle = p.subtitle ? '<p class="subtitle" style="margin-bottom:24px">' + esc(p.subtitle) + '</p>' : '';
+        const opts = String(p.subjectOptions || '').split('\n').map((s) => s.trim()).filter(Boolean);
+        const subjectField = opts.length
+            ? '<select id="bld-cf-subject" name="subject" class="cu-input cu-select" required>' +
+                '<option value="" disabled selected>Select a topic…</option>' +
+                opts.map((o) => '<option value="' + esc(o) + '">' + esc(o) + '</option>').join('') +
+              '</select>'
+            : '<input type="text" id="bld-cf-subject" name="subject" class="cu-input" placeholder="What is this about?" required>';
+
+        // Unique form ID so multiple contact forms on one page don't collide
+        const formId = 'bld-cf-' + Math.random().toString(36).slice(2, 9);
+
+        container.innerHTML =
+            '<section class="section">' +
+                '<div class="container" style="max-width:760px">' +
+                    '<div class="cu-hero-form-wrap">' +
+                        '<h3 class="cu-hero-form-title">' + esc(p.title) + '</h3>' +
+                        subtitle +
+                        '<form id="' + formId + '" class="cu-form" novalidate>' +
+                            '<div class="cu-form-row">' +
+                                '<div class="cu-field"><label class="cu-label">Your Name <span class="cu-required">*</span></label>' +
+                                    '<input type="text" name="name" class="cu-input" placeholder="John Smith" required></div>' +
+                                '<div class="cu-field"><label class="cu-label">Email Address <span class="cu-required">*</span></label>' +
+                                    '<input type="email" name="email" class="cu-input" placeholder="john@company.com" required></div>' +
+                            '</div>' +
+                            '<div class="cu-form-row">' +
+                                '<div class="cu-field"><label class="cu-label">Phone Number</label>' +
+                                    '<input type="tel" name="phone" class="cu-input" placeholder="+91 98765 43210"></div>' +
+                                '<div class="cu-field"><label class="cu-label">Company / Organization</label>' +
+                                    '<input type="text" name="company" class="cu-input" placeholder="Your Company Ltd."></div>' +
+                            '</div>' +
+                            '<div class="cu-field"><label class="cu-label">What Can We Help You With? <span class="cu-required">*</span></label>' +
+                                subjectField +
+                            '</div>' +
+                            '<div class="cu-field"><label class="cu-label">Your Message <span class="cu-required">*</span></label>' +
+                                '<textarea name="message" class="cu-input cu-textarea" rows="4" placeholder="Tell us about your requirement…" required></textarea>' +
+                            '</div>' +
+                            '<button type="submit" class="cu-submit-btn">Send Message &rarr;</button>' +
+                        '</form>' +
+                        '<div class="cu-form-success" style="display:none">' +
+                            '<div class="cu-success-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>' +
+                            '<h3>Message Sent!</h3>' +
+                            '<p>' + esc(p.successMessage) + '</p>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</section>';
+
+        // Wire submission to the existing /api/strapi proxy that the hand-built contact-us page uses
+        const form = container.querySelector('#' + formId);
+        const success = container.querySelector('.cu-form-success');
+        if (form && success) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitBtn = form.querySelector('.cu-submit-btn');
+                const orig = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Sending…';
+                const fd = new FormData(form);
+                const payload = {
+                    name:    String(fd.get('name')    || '').trim(),
+                    email:   String(fd.get('email')   || '').trim(),
+                    phone:   String(fd.get('phone')   || '').trim(),
+                    company: String(fd.get('company') || '').trim(),
+                    subject: String(fd.get('subject') || '').trim(),
+                    message: String(fd.get('message') || '').trim(),
+                };
+                try {
+                    const r = await fetch('/api/strapi/api/contact-submissions', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ data: payload }),
+                    });
+                    if (!r.ok) throw new Error('submit failed (' + r.status + ')');
+                    form.style.display = 'none';
+                    success.style.display = 'block';
+                } catch (err) {
+                    submitBtn.innerHTML = orig;
+                    submitBtn.disabled = false;
+                    alert('Could not send your message: ' + err.message);
+                }
+            });
+        }
+    },
+};
+
+/* ════ MAP EMBED ═════════════════════════════════════════════ */
+const mapEmbed = {
+    label: 'Map Embed',
+    icon: 'map',
+    description: 'Google Maps iframe — full-bleed location embed.',
+    schema: [
+        { key: 'title',    label: 'Section Title (optional)',    type: 'text' },
+        { key: 'embedUrl', label: 'Google Maps Embed URL', type: 'textarea', required: true },
+        { key: 'height',   label: 'Height (px)',           type: 'number', default: 420, min: 200, max: 800 },
+    ],
+    defaultProps: {
+        title: '',
+        embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.7!2d77.4100!3d28.5850!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce8b12345678%3A0xabcdef1234567890!2sSector%20142%2C%20Noida%2C%20Uttar%20Pradesh%20201304!5e0!3m2!1sen!2sin!4v1700000000001!5m2!1sen!2sin',
+        height: 420,
+    },
+    renderer(container, p) {
+        const h = Math.max(200, Math.min(800, Number(p.height) || 420));
+        const title = p.title ? '<h2 class="title" style="text-align:center;margin-bottom:24px">' + esc(p.title) + '</h2>' : '';
+        container.innerHTML =
+            '<section class="section">' +
+                '<div class="container">' +
+                    title +
+                    '<div class="cu-map-col" style="height:' + h + 'px;border-radius:12px;overflow:hidden">' +
+                        '<iframe src="' + esc(p.embedUrl) + '" width="100%" height="100%" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map"></iframe>' +
+                    '</div>' +
+                '</div>' +
+            '</section>';
+    },
+};
+
 /* ════ EXPORT ════════════════════════════════════════════════ */
 export const COMPONENT_REGISTRY = {
     hero,
@@ -728,6 +965,10 @@ export const COMPONENT_REGISTRY = {
     pricing,
     testimonials,
     logoCloud,
+    gallery,
+    contactInfo,
+    contactForm,
+    mapEmbed,
     faq,
 };
 
@@ -742,5 +983,9 @@ export const COMPONENT_ORDER = [
     'pricing',
     'testimonials',
     'logoCloud',
+    'gallery',
+    'contactInfo',
+    'contactForm',
+    'mapEmbed',
     'faq',
 ];
