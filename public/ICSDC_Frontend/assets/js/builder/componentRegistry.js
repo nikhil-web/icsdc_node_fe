@@ -17,7 +17,20 @@
  */
 
 import { esc, resolveFaIcon, ctaButtonHtml } from './builder-utils.js';
-import { initTestimonials as sharedInitTestimonials } from '../utils/cms-helpers.js';
+import {
+    populateHero,
+    populateIconCards,
+    populateCtaBand,
+    populatePricingPlans,
+    populatePricingPlansCloud,
+    initFAQ as sharedInitFAQ,
+    initTestimonials as sharedInitTestimonials,
+} from '../utils/cms-helpers.js';
+
+// Each builder section gets a unique id so multiple instances of the same
+// component on a page never collide when the helpers query by selector.
+let _bldSeq = 0;
+function bldId(prefix) { return prefix + '-' + Date.now().toString(36) + '-' + (_bldSeq++); }
 
 /* ════ HERO ══════════════════════════════════════════════════ */
 const hero = {
@@ -59,35 +72,49 @@ const hero = {
         ctaSecondary: { text: 'Learn More',  link: '#' },
     },
     renderer(container, p) {
-        const eyebrow   = p.eyebrow ? '<div class="builder-eyebrow">' + esc(p.eyebrow) + '</div>' : '';
-        const subtitle  = p.subtitle ? '<p class="hero-sub">' + esc(p.subtitle) + '</p>' : '';
-        const desc      = p.description ? '<p class="hero-desc">' + esc(p.description) + '</p>' : '';
-        const primary   = ctaButtonHtml(p.ctaPrimary, 'btn-primary');
-        const secondary = ctaButtonHtml(p.ctaSecondary, 'btn-outline');
-
+        // Emit the same scaffold the hand-built hosting pages use, then hand it
+        // to the shared populateHero() helper. Identical code path = identical output.
+        const sideClass   = (p.imageSide === 'right') ? ' builder-hero-img-right' : ' builder-hero-img-left';
+        const heroRight   = p.imageUrl
+            ? '<div class="hero-right"><img class="hero-right-image" alt="' + esc(p.imageAlt || '') + '"></div>'
+            : '';
         const contentHtml =
             '<div class="hero-content">' +
-                eyebrow +
-                '<h1 class="hero-title">' + esc(p.title) + '</h1>' +
-                subtitle +
-                desc +
-                '<div class="hero-btns">' + primary + secondary + '</div>' +
+                (p.eyebrow ? '<div class="eyebrow-badge"></div>' : '') +
+                '<h1 class="hero-title"></h1>' +
+                '<p class="hero-sub"></p>' +
+                '<p class="hero-desc"></p>' +
+                '<div class="hero-btns">' +
+                    '<button class="btn-outline"></button>' +
+                    '<button class="btn-primary"></button>' +
+                '</div>' +
             '</div>';
-
-        const imageHtml = p.imageUrl
-            ? '<div class="hero-right">' +
-                  '<img class="hero-right-image" src="' + esc(p.imageUrl) + '" alt="' + esc(p.imageAlt || '') + '">' +
-              '</div>'
-            : '';
-
-        // Image side controls grid order. Default = image left.
-        const sideClass = (p.imageSide === 'right') ? ' builder-hero-img-right' : ' builder-hero-img-left';
-        const inner = (p.imageSide === 'right') ? contentHtml + imageHtml : imageHtml + contentHtml;
-
+        const inner = (p.imageSide === 'right') ? contentHtml + heroRight : heroRight + contentHtml;
         container.innerHTML =
             '<section class="hero-section builder-hero' + sideClass + '">' +
                 '<div class="hero">' + inner + '</div>' +
             '</section>';
+
+        const section = container.querySelector('.hero-section');
+        // populateHero expects Strapi nested heroImage shape; fake it from a plain URL.
+        const heroImagePayload = p.imageUrl
+            ? { image: { url: p.imageUrl } }
+            : null;
+        populateHero(section, {
+            eyebrow:     p.eyebrow,
+            title:       p.title,
+            subtitle:    p.subtitle,
+            description: p.description,
+            ctaPrimary:  p.ctaPrimary,
+            ctaSecondary: p.ctaSecondary,
+            heroImage:   heroImagePayload,
+        });
+
+        // Clean up empty optional elements so we don't leave hollow tags behind.
+        ['.hero-sub', '.hero-desc', '.eyebrow-badge'].forEach((sel) => {
+            const el = section.querySelector(sel);
+            if (el && !el.textContent.trim() && !el.innerHTML.trim()) el.remove();
+        });
     },
 };
 
@@ -141,34 +168,38 @@ const iconCards = {
         ],
     },
     renderer(container, p) {
-        const style = CARD_STYLES[p.cardStyle] || CARD_STYLES['cloud-power'];
-        const label = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
-        const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
-        const cols = Math.min(4, Math.max(2, Number(p.columns) || 3));
+        const style    = CARD_STYLES[p.cardStyle] || CARD_STYLES['cloud-power'];
+        const label    = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
+        const sub      = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
+        const cols     = Math.min(4, Math.max(2, Number(p.columns) || 3));
         const numbered = p.numbered === true;
-        const cardsHtml = (p.cards || []).map((c, i) => {
-            const num = numbered
-                ? '<div class="sh-when-card-num">' + String(i + 1).padStart(2, '0') + '</div>'
-                : '';
-            const iconHtml = c.icon
-                ? '<div class="' + style.icon + '"><i class="' + resolveFaIcon(c.icon, 'check') + '" aria-hidden="true"></i></div>'
-                : '';
-            return '<div class="' + style.card + '">' +
-                num +
-                iconHtml +
-                '<h3>' + esc(c.title) + '</h3>' +
-                (c.desc ? '<p>' + esc(c.desc) + '</p>' : '') +
-                '</div>';
-        }).join('');
+        const gridId   = bldId('bld-cards');
+
+        // Emit just the section + empty grid; populateIconCards fills the grid.
         container.innerHTML =
             '<section class="section">' +
                 '<div class="container">' +
                     label +
                     '<h2 class="title">' + esc(p.title) + '</h2>' +
                     sub +
-                    '<div class="' + style.gridClass + '" style="grid-template-columns:repeat(' + cols + ',1fr)">' + cardsHtml + '</div>' +
+                    '<div id="' + gridId + '" class="' + style.gridClass + '" style="grid-template-columns:repeat(' + cols + ',1fr)"></div>' +
                 '</div>' +
             '</section>';
+
+        if (numbered) {
+            // No shared helper for the numbered .sh-when-card pattern — emit it directly.
+            const grid = container.querySelector('#' + gridId);
+            grid.innerHTML = (p.cards || []).map((c, i) =>
+                '<div class="' + style.card + '">' +
+                    '<div class="sh-when-card-num">' + String(i + 1).padStart(2, '0') + '</div>' +
+                    '<h3>' + esc(c.title) + '</h3>' +
+                    (c.desc ? '<p>' + esc(c.desc) + '</p>' : '') +
+                '</div>'
+            ).join('');
+        } else {
+            // Delegate to the canonical helper used by every hand-built hosting page.
+            populateIconCards('#' + gridId, p.cards || [], style.card);
+        }
     },
 };
 
@@ -204,19 +235,30 @@ const ctaBand = {
         ctaSecondary: { text: 'Learn More',  link: '#' },
     },
     renderer(container, p) {
+        // Emit the empty .cloud-cta-band scaffold the shared populateCtaBand() expects,
+        // then delegate. Same code path the hardcoded hosting pages use.
         const isDark = p.variant === 'dark';
-        const cls = 'cloud-cta-band' + (isDark ? ' cloud-cta-dark' : '');
-        const sub = p.description ? '<p>' + esc(p.description) + '</p>' : '';
-        const primary = ctaButtonHtml(p.ctaPrimary, isDark ? 'cloud-cta-btn-primary' : 'btn-primary');
-        const secondary = ctaButtonHtml(p.ctaSecondary, isDark ? 'cloud-cta-btn-outline' : 'btn-outline');
+        const id     = bldId('bld-cta');
+        const cls    = 'cloud-cta-band' + (isDark ? ' cloud-cta-dark' : '');
+        const btnPrimaryCls   = isDark ? 'cloud-cta-btn-primary' : 'btn-primary';
+        const btnSecondaryCls = isDark ? 'cloud-cta-btn-outline' : 'btn-outline';
         container.innerHTML =
-            '<section class="' + cls + '">' +
+            '<section id="' + id + '" class="' + cls + '">' +
                 '<div class="cloud-cta-inner">' +
-                    '<h2>' + esc(p.title) + '</h2>' +
-                    sub +
-                    '<div class="cloud-cta-btns">' + primary + secondary + '</div>' +
+                    '<h2></h2>' +
+                    '<p></p>' +
+                    '<div class="cloud-cta-btns">' +
+                        '<button class="' + btnSecondaryCls + '"></button>' +
+                        '<button class="' + btnPrimaryCls + '"></button>' +
+                    '</div>' +
                 '</div>' +
             '</section>';
+        populateCtaBand('#' + id, {
+            title: p.title,
+            description: p.description,
+            ctaPrimary: p.ctaPrimary,
+            ctaSecondary: p.ctaSecondary,
+        });
     },
 };
 
@@ -244,36 +286,20 @@ const faq = {
         ],
     },
     renderer(container, p) {
-        const chev = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
-        const items = (p.items || []).map((it, i) => {
-            const num = String(i + 1).padStart(2, '0');
-            const open = i === 0 ? ' open' : '';
-            return '<details class="faq-item"' + open + '>' +
-                '<summary class="faq-q">' +
-                '<span class="faq-num">' + num + '</span>' +
-                '<span class="faq-q-text">' + esc(it.question) + '</span>' +
-                '<span class="faq-chev">' + chev + '</span>' +
-                '</summary>' +
-                '<div class="faq-a-wrap"><div class="faq-a">' + esc(it.answer).replace(/\n/g, '<br>') + '</div></div>' +
-                '</details>';
-        }).join('');
+        // Emit the exact scaffold the shared initFAQ() helper expects (hardcoded id="faq-accordions")
+        // then hand it the items. Identical to every hand-built hosting page's FAQ.
         container.innerHTML =
             '<section class="faq-section">' +
                 '<div class="faq-container">' +
                     '<div class="faq-col">' +
                         '<h2 class="faq-title">' + esc(p.title) + '</h2>' +
                         '<div class="faq-grid">' +
-                            '<div class="faq-accordions">' + items + '</div>' +
+                            '<div class="faq-accordions" id="faq-accordions"></div>' +
                         '</div>' +
                     '</div>' +
                 '</div>' +
             '</section>';
-
-        // Single-open accordion behaviour
-        const all = container.querySelectorAll('.faq-item');
-        all.forEach((it) => it.addEventListener('toggle', () => {
-            if (it.open) all.forEach((o) => { if (o !== it) o.open = false; });
-        }));
+        Promise.resolve().then(() => sharedInitFAQ(p.items || []));
     },
 };
 
@@ -318,64 +344,67 @@ const pricing = {
     },
     renderer(container, p) {
         const label = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
-        const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
+        const sub   = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
         const style = p.style === 'cloud' ? 'cloud' : 'wp';
+        const gridId = bldId('bld-pricing');
 
-        const cardsHtml = (p.plans || []).map((plan) => {
-            const isPop = plan.popular === true;
-            const feats = String(plan.features || '').split('\n').map((f) => f.trim()).filter(Boolean);
+        // Map the builder's plain plan schema onto the shape the canonical
+        // populatePricingPlans / populatePricingPlansCloud helpers expect.
+        const plans = (p.plans || []).map((plan) => ({
+            tier:     plan.name || plan.tier || '',
+            currency: plan.currency || '₹',
+            price:    plan.price || '',
+            period:   plan.period || '/mo',
+            tagline:  plan.desc || plan.tagline || '',
+            features: String(plan.features || '').split('\n').map((f) => f.trim()).filter(Boolean).map((f) => ({ label: f })),
+            isFeatured: plan.popular === true,
+            badge:    plan.badgeLabel || 'Most Popular',
+            ctaText:  plan.ctaText || 'Get Started',
+            ctaStyle: (plan.popular === true) ? 'primary' : 'outline',
+            // ctaLink carried through and applied post-render (the helpers emit <button>)
+            _ctaLink: plan.ctaLink || '/contact-us',
+        }));
 
-            if (style === 'cloud') {
-                // Exact .cloud-plan-card markup from cloud-hosting.html
-                const cls = 'cloud-plan-card' + (isPop ? ' cloud-featured' : '');
-                const badge = isPop ? '<span class="cloud-plan-badge">Most Popular</span>' : '';
-                const featsHtml = feats.map((f) =>
-                    '<li class="cloud-plan-feature">' +
-                        '<span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>' +
-                        esc(f) +
-                    '</li>'
-                ).join('');
-                const btnCls = isPop ? 'cloud-plan-cta cloud-plan-cta-primary' : 'cloud-plan-cta cloud-plan-cta-outline';
-                const btnLabel = esc(plan.ctaText || 'Get Started') + (isPop ? ' &rarr;' : '');
-                return '<div class="' + cls + '">' +
-                    badge +
-                    '<div class="cloud-plan-tier">' + esc(plan.name) + '</div>' +
-                    '<div class="cloud-plan-price-wrap">' +
-                        '<span class="cloud-plan-currency">' + esc(plan.currency || '₹') + '</span>' +
-                        '<span class="cloud-plan-price">' + esc(plan.price) + '</span>' +
-                        '<span class="cloud-plan-period">' + esc(plan.period || '/mo') + '</span>' +
-                    '</div>' +
-                    (plan.desc ? '<p class="cloud-plan-tagline">' + esc(plan.desc) + '</p>' : '') +
-                    '<hr class="cloud-plan-divider">' +
-                    '<ul class="cloud-plan-features">' + featsHtml + '</ul>' +
-                    '<a href="' + esc(plan.ctaLink || '/contact-us') + '" class="' + btnCls + '">' + btnLabel + '</a>' +
-                    '</div>';
-            }
-
-            // wp style (existing default)
-            const popularCls = isPop ? ' wp-plan-popular' : '';
-            const badge = isPop ? '<div class="wp-plan-badge">Most Popular</div>' : '';
-            const featsHtml = feats.map((f) => '<li>' + esc(f) + '</li>').join('');
-            return '<div class="wp-plan-card' + popularCls + '">' +
-                badge +
-                '<div class="wp-plan-name">' + esc(plan.name) + '</div>' +
-                '<div class="wp-plan-price">' + esc(plan.currency || '₹') + esc(plan.price) + '<span>' + esc(plan.period || '/mo') + '</span></div>' +
-                '<p class="wp-plan-desc">' + esc(plan.desc) + '</p>' +
-                '<ul class="wp-plan-features">' + featsHtml + '</ul>' +
-                '<a href="' + esc(plan.ctaLink || '/contact-us') + '" class="wp-plan-btn">' + esc(plan.ctaText || 'Get Started') + ' &rarr;</a>' +
-                '</div>';
-        }).join('');
-
-        const gridCls = style === 'cloud' ? 'cloud-pricing-grid' : 'wp-plans-grid';
+        const gridCls    = style === 'cloud' ? 'cloud-pricing-grid' : 'wp-plans-grid';
+        const sectionCls = style === 'cloud' ? 'section cloud-pricing-section' : 'section';
         container.innerHTML =
-            '<section class="section' + (style === 'cloud' ? ' cloud-pricing-section' : '') + '">' +
+            '<section class="' + sectionCls + '">' +
                 '<div class="container">' +
                     label +
                     '<h2 class="title">' + esc(p.title) + '</h2>' +
                     sub +
-                    '<div class="' + gridCls + '">' + cardsHtml + '</div>' +
+                    '<div id="' + gridId + '" class="' + gridCls + '"></div>' +
                 '</div>' +
             '</section>';
+
+        const grid = container.querySelector('#' + gridId);
+
+        if (style === 'cloud') {
+            // Delegate to the canonical helper used by cloud-hosting/pricing pages.
+            populatePricingPlansCloud('#' + gridId, plans);
+            const btns = grid.querySelectorAll('.cloud-plan-cta');
+            btns.forEach((btn, i) => {
+                const link = plans[i] && plans[i]._ctaLink;
+                if (link) btn.setAttribute('onclick', "window.location.href='" + link + "'");
+            });
+        } else {
+            // .wp-plan-card has no shared populate helper — emit markup that
+            // matches wordpress-hosting.css exactly (same shape WP CMS produces).
+            grid.innerHTML = plans.map((plan) => {
+                const isPop = plan.isFeatured;
+                const popularCls = isPop ? ' wp-plan-popular' : '';
+                const badge = isPop ? '<div class="wp-plan-badge">' + esc(plan.badge) + '</div>' : '';
+                const featsHtml = (plan.features || []).map((f) => '<li>' + esc(f.label) + '</li>').join('');
+                return '<div class="wp-plan-card' + popularCls + '">' +
+                    badge +
+                    '<div class="wp-plan-name">' + esc(plan.tier) + '</div>' +
+                    '<div class="wp-plan-price">' + esc(plan.currency) + esc(plan.price) + '<span>' + esc(plan.period) + '</span></div>' +
+                    (plan.tagline ? '<p class="wp-plan-desc">' + esc(plan.tagline) + '</p>' : '') +
+                    '<ul class="wp-plan-features">' + featsHtml + '</ul>' +
+                    '<a href="' + esc(plan._ctaLink) + '" class="wp-plan-btn">' + esc(plan.ctaText) + ' &rarr;</a>' +
+                    '</div>';
+            }).join('');
+        }
     },
 };
 
