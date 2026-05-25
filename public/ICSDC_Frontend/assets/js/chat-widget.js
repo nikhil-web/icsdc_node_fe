@@ -102,6 +102,8 @@ function openChat() {
     isOpen = true;
     chatWindow.classList.add('is-open');
     bubble.setAttribute('aria-label', 'Close chat');
+    // On mobile: hide bubble so it doesn't overlap the fullscreen chat
+    if (window.innerWidth <= 640) bubble.classList.add('chat-bubble--hidden');
     clearUnread();
     scrollToBottom();
     // Delay focus so animation completes
@@ -112,6 +114,7 @@ function closeChat() {
     isOpen = false;
     chatWindow.classList.remove('is-open');
     bubble.setAttribute('aria-label', 'Open chat');
+    bubble.classList.remove('chat-bubble--hidden');
 }
 
 // ── Unread badge ──────────────────────────────────────────
@@ -321,6 +324,47 @@ function connectSocket() {
 
     socket.on('admin:typing-stop', function () {
         removeAdminTyping();
+    });
+
+    // Restore full history when the visitor reconnects (prevents duplicate messages)
+    socket.on('chat:restore', function (payload) {
+        removeTyping();
+        removeAdminTyping();
+        messagesEl.innerHTML = '';   // wipe anything shown before the restore arrived
+
+        (payload.messages || []).forEach(function (msg) {
+            appendMsg(msg.role, msg.text);
+        });
+
+        var s = payload.status;
+        var step = payload.currentStep;
+
+        if (s === 'bot') {
+            if (step) {
+                setInputState(step);           // re-show correct input / chips
+            } else {
+                // Bot finished, waiting for admin takeover
+                inputEl.style.display = 'none';
+                sendBtn.style.display = 'none';
+                skipBtn.style.display = 'none';
+                chipsRow.style.display = 'none';
+                inputLocked = true;
+            }
+        } else if (s === 'live') {
+            inputEl.style.display = '';
+            sendBtn.style.display = '';
+            chipsRow.style.display = 'none';
+            skipBtn.style.display = 'none';
+            inputEl.placeholder = 'Type your message…';
+            inputLocked = false;
+            sendBtn.disabled = false;
+        } else {
+            // closed / ended
+            setInputState(null);
+        }
+
+        sendBtn.disabled = false;
+        scrollToBottom();
     });
 
     socket.on('chat:complete', function (data) {

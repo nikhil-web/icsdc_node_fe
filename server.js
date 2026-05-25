@@ -944,26 +944,23 @@ function initSocketIO(io) {
                 io.to('room:admins').emit('admin:visitor-status', { sessionId, online: true });
             }
 
-            if (session.status === 'bot') {
+            if (isNew) {
+                // Brand-new session — ask the first bot question fresh
                 const step = currentStep(session);
                 if (step) {
-                    // Pending question — only store the message on first ask
                     const q = buildBotQuestion(step, session.data);
-                    if (isNew) addMsg(session, 'bot', q.question);
+                    addMsg(session, 'bot', q.question);
                     socket.emit('chat:bot-message', q);
-                } else {
-                    // Bot finished all questions — resend completion notice on reconnect
-                    const lastMsg = session.messages[session.messages.length - 1];
-                    if (!isNew && lastMsg && lastMsg.role === 'bot') {
-                        socket.emit('chat:complete', { text: lastMsg.text });
-                    }
                 }
-            } else if (session.status === 'live') {
-                // Reconnecting to an active live session
-                socket.emit('chat:agent-joined', { text: "You're reconnected with our support agent. 👤" });
-            } else if (session.status === 'closed') {
-                const lastMsg = session.messages[session.messages.length - 1];
-                socket.emit('chat:ended', { text: (lastMsg && lastMsg.role !== 'visitor' ? lastMsg.text : null) || 'This chat session has ended.' });
+            } else {
+                // Reconnecting visitor — send full history so the widget can
+                // re-render cleanly without duplicating any messages
+                const step = currentStep(session);
+                socket.emit('chat:restore', {
+                    messages:    session.messages,
+                    status:      session.status,
+                    currentStep: step ? buildBotQuestion(step, session.data) : null,
+                });
             }
         });
 
