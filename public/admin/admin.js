@@ -55,42 +55,51 @@
 
     function isBuilderPath()  { return window.location.pathname.startsWith('/admin/builder'); }
     function isSitemapPath()  { return window.location.pathname.startsWith('/admin/sitemap'); }
+    function isChatPath()     { return window.location.pathname.startsWith('/admin/chat'); }
 
     function applyRoute() {
         const mainDash    = document.getElementById('view-dashboard-main');
         const mainBld     = document.getElementById('view-builder');
         const mainSitemap = document.getElementById('view-sitemap');
-        if (!mainDash || !mainBld || !mainSitemap) return;
-
-        const path = window.location.pathname;
+        const mainChat    = document.getElementById('view-chat');
+        if (!mainDash || !mainBld || !mainSitemap || !mainChat) return;
 
         // Sync nav tab "active" styling
         document.querySelectorAll('.admin-nav-tab').forEach(function (a) {
             const tab = a.dataset.tab;
             const isActive =
-                (tab === 'builder'   && isBuilderPath())  ||
-                (tab === 'sitemap'   && isSitemapPath())   ||
-                (tab === 'dashboard' && !isBuilderPath() && !isSitemapPath());
+                (tab === 'builder'   && isBuilderPath()) ||
+                (tab === 'sitemap'   && isSitemapPath()) ||
+                (tab === 'chat'      && isChatPath())    ||
+                (tab === 'dashboard' && !isBuilderPath() && !isSitemapPath() && !isChatPath());
             a.classList.toggle('active', isActive);
         });
 
+        // Hide all, show active
+        mainDash.hidden    = true;
+        mainBld.hidden     = true;
+        mainSitemap.hidden = true;
+        mainChat.hidden    = true;
+
         if (isBuilderPath()) {
-            mainDash.hidden    = true;
-            mainBld.hidden     = false;
-            mainSitemap.hidden = true;
+            mainBld.hidden = false;
             window.dispatchEvent(new CustomEvent('icsdc:show-builder'));
         } else if (isSitemapPath()) {
-            mainDash.hidden    = true;
-            mainBld.hidden     = true;
             mainSitemap.hidden = false;
             if (!window.__icsdc_sitemapLoaded) {
                 window.__icsdc_sitemapLoaded = true;
                 loadSitemap();
             }
+        } else if (isChatPath()) {
+            mainChat.hidden = false;
+            if (!window.__icsdc_chatLoaded) {
+                window.__icsdc_chatLoaded = true;
+                if (typeof window.initChatPanel === 'function') {
+                    window.initChatPanel(mainChat);
+                }
+            }
         } else {
-            mainBld.hidden     = true;
-            mainSitemap.hidden = true;
-            mainDash.hidden    = false;
+            mainDash.hidden = false;
             if (!window.__icsdc_dashLoaded) {
                 window.__icsdc_dashLoaded = true;
                 loadDashboard();

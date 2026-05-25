@@ -1,6 +1,8 @@
 require('dotenv').config();
 
 const express = require('express');
+const http    = require('http');
+const { Server: SocketServer } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
@@ -769,9 +771,279 @@ app.get('/:page', (req, res) => {
     });
 });
 
-const PORT = process.env.PORT || 3000;
+// ══════════════════════════════════════════════════════════
+//  LIVE CHAT — Socket.io + bot state machine
+// ══════════════════════════════════════════════════════════
 
-app.listen(PORT, () => {
+const BOT_STEPS = [
+    { field: 'name',        type: 'text',     question: "Hi! 👋 Welcome to ICSDC. I'm here to help. What's your name?" },
+    { field: 'phone',       type: 'tel',      question: null },   // dynamic — set at runtime
+    { field: 'service',     type: 'chips',    question: 'Which service are you interested in?',
+      options: ['Cloud Hosting', 'VPS Hosting', 'Dedicated Server', 'Email Hosting', 'Domain & SSL', 'Security', 'Other'] },
+    { field: 'company',     type: 'text',     question: 'Your company name? (optional)', optional: true },
+    { field: 'requirement', type: 'textarea', question: 'Tell us about your requirement:' },
+    { field: 'budget',      type: 'chips',    question: 'Approximate monthly budget?',
+      options: ['Under ₹5K', '₹5K–₹20K', '₹20K–₹50K', '₹50K+', 'Not sure'] },
+];
+
+// In-memory chat sessions  { sessionId → session }
+const chatSessions = new Map();
+
+function makeSession(sessionId) {
+    return {
+        sessionId,
+        step: 0,
+        status: 'bot',
+        data: { name: '', phone: '', service: '', company: '', requirement: '', budget: '' },
+        messages: [],
+        visitorSocketId: null,
+        adminSocketId:   null,
+        strapiDocId:     null,
+        createdAt:       new Date().toISOString(),
+    };
+}
+
+function addMsg(session, role, text) {
+    session.messages.push({ role, text, ts: new Date().toISOString() });
+}
+
+function currentStep(session) {
+    return BOT_STEPS[session.step] || null;
+}
+
+function buildBotQuestion(step, data) {
+    if (step.field === 'phone') {
+        return { ...step, question: `Nice to meet you, ${data.name}! What's your phone number?` };
+    }
+    return step;
+}
+
+// Persist / update in Strapi
+async function upsertChatSession(session) {
+    try {
+        const body = {
+            data: {
+                sessionId:   session.sessionId,
+                name:        session.data.name,
+                phone:       session.data.phone,
+                service:     session.data.service,
+                company:     session.data.company,
+                requirement: session.data.requirement,
+                budget:      session.data.budget,
+                status:      session.status,
+                messages:    session.messages,
+            },
+        };
+        if (session.strapiDocId) {
+            // Update existing
+            await fetch(
+                `${STRAPI_URL}/api/chat-sessions/${session.strapiDocId}`,
+                { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${STRAPI_TOKEN}` }, body: JSON.stringify(body) }
+            );
+        } else {
+            // Create new
+            const r = await fetch(
+                `${STRAPI_URL}/api/chat-sessions`,
+                { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${STRAPI_TOKEN}` }, body: JSON.stringify(body) }
+            );
+            if (r.ok) {
+                const json = await r.json();
+                session.strapiDocId = (json.data && (json.data.documentId || json.data.id)) || null;
+            }
+        }
+    } catch (err) {
+        console.error('[chat] Strapi upsert failed:', err.message);
+    }
+}
+
+// Broadcast a summary of a session to all connected admins
+function broadcastSessionToAdmins(io, session, event) {
+    io.to('room:admins').emit(event, serializeSession(session));
+}
+
+function serializeSession(session) {
+    return {
+        sessionId:  session.sessionId,
+        name:       session.data.name,
+        phone:      session.data.phone,
+        service:    session.data.service,
+        company:    session.data.company,
+        requirement:session.data.requirement,
+        budget:     session.data.budget,
+        status:     session.status,
+        messages:   session.messages,
+        createdAt:  session.createdAt,
+        visitorOnline: !!session.visitorSocketId,
+    };
+}
+
+// ── Socket.io setup ───────────────────────────────────────
+function initSocketIO(io) {
+    io.on('connection', function (socket) {
+
+        // ── VISITOR EVENTS ────────────────────────────────
+        socket.on('chat:init', function ({ sessionId }) {
+            if (!sessionId) return;
+
+            let session = chatSessions.get(sessionId);
+            if (!session) {
+                session = makeSession(sessionId);
+                chatSessions.set(sessionId, session);
+            }
+            session.visitorSocketId = socket.id;
+            socket.join('session:' + sessionId);
+
+            // Send the current (or first) bot question
+            const step = currentStep(session);
+            if (step && session.status === 'bot') {
+                const q = buildBotQuestion(step, session.data);
+                socket.emit('chat:bot-message', q);
+            }
+        });
+
+        socket.on('chat:message', async function ({ sessionId, text }) {
+            if (!sessionId || !text) return;
+            const session = chatSessions.get(sessionId);
+            if (!session) return;
+
+            addMsg(session, 'visitor', text);
+
+            if (session.status === 'live') {
+                // Forward to admin
+                if (session.adminSocketId) {
+                    io.to(session.adminSocketId).emit('admin:visitor-message', { sessionId, text });
+                }
+                broadcastSessionToAdmins(io, session, 'admin:session-update');
+                return;
+            }
+
+            // Bot mode — record answer and advance
+            const step = currentStep(session);
+            if (step) {
+                session.data[step.field] = text;
+                session.step += 1;
+            }
+
+            const nextStep = currentStep(session);
+            if (nextStep) {
+                const q = buildBotQuestion(nextStep, session.data);
+                addMsg(session, 'bot', q.question);
+                socket.emit('chat:bot-message', q);
+            } else {
+                // All steps complete
+                const doneMsg = `Thanks ${session.data.name}! 🎉 Our team will reach out to you at ${session.data.phone} shortly.`;
+                addMsg(session, 'bot', doneMsg);
+                socket.emit('chat:complete', { text: doneMsg });
+                session.status = 'closed';
+                await upsertChatSession(session);
+                broadcastSessionToAdmins(io, session, 'admin:session-new');
+                return;
+            }
+
+            // Upsert progress every step so data isn't lost
+            await upsertChatSession(session);
+            broadcastSessionToAdmins(io, session,
+                session.messages.length <= 3 ? 'admin:session-new' : 'admin:session-update');
+        });
+
+        // ── ADMIN EVENTS ──────────────────────────────────
+        socket.on('admin:auth', async function ({ token }) {
+            if (!token) return;
+            try {
+                const r = await fetch(`${STRAPI_URL}/api/users/me`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                if (!r.ok) { socket.emit('admin:auth-fail'); return; }
+                socket.join('room:admins');
+                socket.emit('admin:auth-ok');
+                // Send current session list
+                const sessions = [...chatSessions.values()].map(serializeSession)
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                socket.emit('admin:session-list', sessions);
+            } catch { socket.emit('admin:auth-fail'); }
+        });
+
+        socket.on('admin:takeover', function ({ sessionId }) {
+            const session = chatSessions.get(sessionId);
+            if (!session) return;
+            session.status = 'live';
+            session.adminSocketId = socket.id;
+            socket.join('session:' + sessionId);
+            // Notify visitor
+            if (session.visitorSocketId) {
+                io.to(session.visitorSocketId).emit('chat:agent-joined', {
+                    text: "You're now connected with a support agent. 👤",
+                });
+            }
+            broadcastSessionToAdmins(io, session, 'admin:session-update');
+        });
+
+        socket.on('admin:message', async function ({ sessionId, text }) {
+            if (!sessionId || !text) return;
+            const session = chatSessions.get(sessionId);
+            if (!session) return;
+            addMsg(session, 'admin', text);
+            if (session.visitorSocketId) {
+                io.to(session.visitorSocketId).emit('chat:admin-message', { text });
+            }
+            await upsertChatSession(session);
+            broadcastSessionToAdmins(io, session, 'admin:session-update');
+        });
+
+        socket.on('admin:close', async function ({ sessionId }) {
+            const session = chatSessions.get(sessionId);
+            if (!session) return;
+            session.status = 'closed';
+            if (session.visitorSocketId) {
+                io.to(session.visitorSocketId).emit('chat:ended', {
+                    text: 'This chat has been closed by our support team. We\'ll follow up soon!',
+                });
+            }
+            session.adminSocketId   = null;
+            await upsertChatSession(session);
+            broadcastSessionToAdmins(io, session, 'admin:session-update');
+        });
+
+        // ── DISCONNECT ────────────────────────────────────
+        socket.on('disconnect', function () {
+            // Find any session this socket owned as visitor
+            for (const session of chatSessions.values()) {
+                if (session.visitorSocketId === socket.id) {
+                    session.visitorSocketId = null;
+                    io.to('room:admins').emit('admin:visitor-status', { sessionId: session.sessionId, online: false });
+                }
+                if (session.adminSocketId === socket.id) {
+                    session.adminSocketId = null;
+                }
+            }
+        });
+    });
+}
+
+// ── Admin REST endpoints for chat ─────────────────────────
+app.get('/api/admin/chat/sessions', requireAdminAuth, function (req, res) {
+    const sessions = [...chatSessions.values()]
+        .map(serializeSession)
+        .sort(function (a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+    res.json({ data: sessions });
+});
+
+app.get('/api/admin/chat/sessions/:sessionId', requireAdminAuth, function (req, res) {
+    const session = chatSessions.get(req.params.sessionId);
+    if (!session) return res.status(404).json({ error: 'Session not found' });
+    res.json({ data: serializeSession(session) });
+});
+
+// ══════════════════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════════════════
+const PORT   = process.env.PORT || 3000;
+const server = http.createServer(app);
+const io     = new SocketServer(server, { cors: { origin: '*' } });
+initSocketIO(io);
+
+server.listen(PORT, function () {
     console.log(`Server running at http://localhost:${PORT}`);
+    console.log('[socket.io] Live chat ready');
     refreshPageCache();
 });

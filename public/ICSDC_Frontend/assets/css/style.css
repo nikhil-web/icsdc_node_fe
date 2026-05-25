@@ -1,6 +1,7 @@
 ﻿/* ══════════════════════════════════════
    GLOBAL WIDGETS — loaded on every page via style.css
 ══════════════════════════════════════ */
+@import url('chat-widget.css');
 @import url('whatsapp-widget.css');
 
 /* ══════════════════════════════════════

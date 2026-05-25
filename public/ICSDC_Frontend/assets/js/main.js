@@ -517,6 +517,9 @@ async function init() {
 
 init();
 
+// Load chat widget after main init (dynamic import keeps main.js lean)
+import('./chat-widget.js').then(function (m) { m.initChatWidget(); }).catch(function () {});
+
 // ══════════════════════════════════════════════════════
 //  THEME TOGGLE
 // ══════════════════════════════════════════════════════

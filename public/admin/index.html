@@ -69,6 +69,9 @@
                     <a href="/admin"          class="admin-nav-tab" data-tab="dashboard">Dashboard</a>
                     <a href="/admin/builder"  class="admin-nav-tab" data-tab="builder">Page Builder</a>
                     <a href="/admin/sitemap"  class="admin-nav-tab" data-tab="sitemap">Sitemap</a>
+                    <a href="/admin/chat"    class="admin-nav-tab" data-tab="chat">
+                        Live Chat <span class="acp-nav-badge" id="acp-nav-badge" hidden>0</span>
+                    </a>
                 </div>
                 <div class="admin-nav-right">
                     <button id="theme-toggle" class="btn-theme" aria-label="Toggle theme">
@@ -176,6 +179,9 @@
         <!-- Builder view (shown when path is /admin/builder*) -->
         <main class="admin-main" id="view-builder" hidden></main>
 
+        <!-- Chat view (shown when path is /admin/chat) -->
+        <main class="admin-main admin-main-chat" id="view-chat" hidden></main>
+
         <!-- Sitemap view (shown when path is /admin/sitemap) -->
         <main class="admin-main" id="view-sitemap" hidden>
             <section class="admin-section sitemap-section">
@@ -256,9 +262,12 @@
         </main>
     </div>
 
+    <!-- Socket.io client — served automatically by the Node server -->
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/admin/admin.js"></script>
     <!-- SortableJS for drag-and-drop reordering in the builder canvas -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <script type="module" src="/admin/builder/builder-editor.js"></script>
+    <script src="/admin/chat/chat-panel.js"></script>
 </body>
 </html>

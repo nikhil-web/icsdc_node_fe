@@ -1,0 +1,334 @@
+/**
+ * chat-panel.js
+ * ─────────────
+ * Admin Live Chat panel. Loaded as ES module from index.html.
+ * Requires socket.io client at /socket.io/socket.io.js (auto-served by Node server).
+ *
+ * Exposes:  window.initChatPanel()
+ */
+
+(function () {
+    'use strict';
+
+    const JWT_KEY = 'icsdc_admin_jwt';
+
+    function getJwt() { return sessionStorage.getItem(JWT_KEY); }
+
+    function esc(s) {
+        return String(s == null ? '' : s)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function fmtTime(iso) {
+        if (!iso) return '';
+        return new Date(iso).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function fmtDate(iso) {
+        if (!iso) return '';
+        return new Date(iso).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+    }
+
+    // ── State ────────────────────────────────────────────────
+    let socket        = null;
+    let sessions      = [];      // full session list
+    let activeSession = null;    // currently selected session object
+    let filterStatus  = 'all';   // 'all' | 'bot' | 'live' | 'closed'
+    let searchQuery   = '';
+
+    // ── DOM refs ─────────────────────────────────────────────
+    let sessionListEl, convAreaEl, convNameEl, convMetaEl, convBubblesEl,
+        replyBox, replyInput, replySendBtn, takeoverBtn, closeSessionBtn,
+        filterBtns, searchInput, emptyState, convPanel;
+
+    // ── Mount ────────────────────────────────────────────────
+    function mount(container) {
+        container.innerHTML = `
+<div class="acp-layout">
+
+  <!-- Left: session list -->
+  <aside class="acp-sidebar">
+    <div class="acp-sidebar-head">
+      <h2 class="acp-sidebar-title">Live Chat</h2>
+      <span class="acp-live-dot" id="acp-socket-dot" title="Connecting…"></span>
+    </div>
+    <input class="admin-search acp-search" type="search" placeholder="Search sessions…" id="acp-search" />
+    <div class="admin-filter-btns acp-filters">
+      <button class="admin-filter-btn active" data-acp-filter="all">All</button>
+      <button class="admin-filter-btn" data-acp-filter="live">Live</button>
+      <button class="admin-filter-btn" data-acp-filter="bot">Bot</button>
+      <button class="admin-filter-btn" data-acp-filter="closed">Closed</button>
+    </div>
+    <div class="acp-session-list" id="acp-session-list"></div>
+  </aside>
+
+  <!-- Right: conversation -->
+  <main class="acp-conv" id="acp-conv-panel">
+    <div class="acp-empty-state" id="acp-empty">
+      <i class="fa-solid fa-comments" aria-hidden="true"></i>
+      <p>Select a chat session to view the conversation.</p>
+    </div>
+
+    <div class="acp-conv-inner" id="acp-conv-inner" hidden>
+      <div class="acp-conv-head">
+        <div>
+          <div class="acp-conv-name" id="acp-conv-name">—</div>
+          <div class="acp-conv-meta" id="acp-conv-meta"></div>
+        </div>
+        <div class="acp-conv-actions">
+          <button class="admin-btn admin-btn-primary" id="acp-takeover-btn" hidden>
+            <i class="fa-solid fa-headset"></i> Take Over
+          </button>
+          <button class="admin-btn admin-btn-secondary" id="acp-close-btn" hidden>
+            <i class="fa-solid fa-xmark"></i> Close Chat
+          </button>
+        </div>
+      </div>
+
+      <div class="acp-bubbles" id="acp-bubbles"></div>
+
+      <div class="acp-reply-box" id="acp-reply-box" hidden>
+        <textarea class="acp-reply-input" id="acp-reply-input" rows="1" placeholder="Type a reply…"></textarea>
+        <button class="acp-reply-send" id="acp-reply-send" type="button">
+          <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </main>
+
+</div>`;
+
+        // Bind refs
+        sessionListEl   = container.querySelector('#acp-session-list');
+        convAreaEl      = container.querySelector('#acp-conv-inner');
+        convNameEl      = container.querySelector('#acp-conv-name');
+        convMetaEl      = container.querySelector('#acp-conv-meta');
+        convBubblesEl   = container.querySelector('#acp-bubbles');
+        replyBox        = container.querySelector('#acp-reply-box');
+        replyInput      = container.querySelector('#acp-reply-input');
+        replySendBtn    = container.querySelector('#acp-reply-send');
+        takeoverBtn     = container.querySelector('#acp-takeover-btn');
+        closeSessionBtn = container.querySelector('#acp-close-btn');
+        emptyState      = container.querySelector('#acp-empty');
+        filterBtns      = container.querySelectorAll('[data-acp-filter]');
+        searchInput     = container.querySelector('#acp-search');
+
+        // Filter
+        filterBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                filterStatus = btn.dataset.acpFilter;
+                filterBtns.forEach(function (b) { b.classList.toggle('active', b === btn); });
+                renderSessionList();
+            });
+        });
+
+        // Search
+        searchInput.addEventListener('input', function () {
+            searchQuery = searchInput.value.toLowerCase().trim();
+            renderSessionList();
+        });
+
+        // Takeover
+        takeoverBtn.addEventListener('click', function () {
+            if (!activeSession) return;
+            socket && socket.emit('admin:takeover', { sessionId: activeSession.sessionId });
+            takeoverBtn.hidden = true;
+        });
+
+        // Close session
+        closeSessionBtn.addEventListener('click', function () {
+            if (!activeSession) return;
+            socket && socket.emit('admin:close', { sessionId: activeSession.sessionId });
+        });
+
+        // Reply send
+        replySendBtn.addEventListener('click', sendReply);
+        replyInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendReply(); }
+        });
+        replyInput.addEventListener('input', function () {
+            replyInput.style.height = 'auto';
+            replyInput.style.height = Math.min(replyInput.scrollHeight, 96) + 'px';
+        });
+    }
+
+    function sendReply() {
+        if (!activeSession || !replyInput.value.trim()) return;
+        const text = replyInput.value.trim();
+        socket && socket.emit('admin:message', { sessionId: activeSession.sessionId, text });
+        replyInput.value = '';
+        replyInput.style.height = '';
+        // Optimistically render
+        appendBubble({ role: 'admin', text, ts: new Date().toISOString() });
+    }
+
+    // ── Session list rendering ────────────────────────────────
+    function renderSessionList() {
+        const filtered = sessions.filter(function (s) {
+            if (filterStatus !== 'all' && s.status !== filterStatus) return false;
+            if (searchQuery) {
+                const hay = (s.name + ' ' + s.phone + ' ' + s.service).toLowerCase();
+                return hay.includes(searchQuery);
+            }
+            return true;
+        });
+
+        if (!filtered.length) {
+            sessionListEl.innerHTML = '<div class="acp-no-sessions">No sessions found.</div>';
+            return;
+        }
+
+        sessionListEl.innerHTML = filtered.map(function (s) {
+            const lastMsg = s.messages && s.messages.length
+                ? s.messages[s.messages.length - 1]
+                : null;
+            const preview = lastMsg ? lastMsg.text.slice(0, 50) + (lastMsg.text.length > 50 ? '…' : '') : 'No messages yet';
+            const statusClass = { bot: 'acp-badge--bot', live: 'acp-badge--live', closed: 'acp-badge--closed' }[s.status] || '';
+            const isActive = activeSession && activeSession.sessionId === s.sessionId;
+            const onlineDot = s.visitorOnline ? '<span class="acp-online-dot" title="Visitor online"></span>' : '';
+            return `<button type="button" class="acp-session-card${isActive ? ' is-active' : ''}" data-sid="${esc(s.sessionId)}">
+  <div class="acp-card-top">
+    <span class="acp-card-name">${esc(s.name || 'Anonymous')} ${onlineDot}</span>
+    <span class="acp-badge ${statusClass}">${esc(s.status)}</span>
+  </div>
+  <div class="acp-card-phone">${esc(s.phone || '—')}</div>
+  <div class="acp-card-preview">${esc(preview)}</div>
+  <div class="acp-card-time">${fmtDate(s.createdAt)}</div>
+</button>`;
+        }).join('');
+
+        sessionListEl.querySelectorAll('.acp-session-card').forEach(function (card) {
+            card.addEventListener('click', function () {
+                const sid = card.dataset.sid;
+                const s   = sessions.find(function (x) { return x.sessionId === sid; });
+                if (s) openSession(s);
+            });
+        });
+    }
+
+    // ── Conversation view ─────────────────────────────────────
+    function openSession(session) {
+        activeSession = session;
+        emptyState.hidden  = true;
+        convAreaEl.hidden  = false;
+
+        // Header
+        convNameEl.textContent = session.name || 'Anonymous';
+        convMetaEl.textContent = [
+            session.phone   ? '📞 ' + session.phone   : '',
+            session.service ? '🔧 ' + session.service : '',
+            session.company ? '🏢 ' + session.company : '',
+            session.budget  ? '💰 ' + session.budget  : '',
+        ].filter(Boolean).join(' · ');
+
+        // Takeover / close buttons
+        takeoverBtn.hidden    = session.status !== 'bot';
+        closeSessionBtn.hidden = session.status === 'closed';
+        replyBox.hidden        = session.status !== 'live';
+
+        // Render messages
+        convBubblesEl.innerHTML = '';
+        (session.messages || []).forEach(function (msg) { appendBubble(msg); });
+
+        // Mark active in list
+        renderSessionList();
+    }
+
+    function appendBubble(msg) {
+        const div = document.createElement('div');
+        div.className = 'acp-bubble acp-bubble--' + (msg.role || 'bot');
+
+        const labelMap = { bot: 'Bot', admin: 'Support (You)', visitor: 'Visitor' };
+        div.innerHTML =
+            '<div class="acp-bubble-label">' + esc(labelMap[msg.role] || msg.role) + ' · ' + fmtTime(msg.ts) + '</div>' +
+            '<div class="acp-bubble-text">' + esc(msg.text) + '</div>';
+
+        convBubblesEl.appendChild(div);
+        convBubblesEl.scrollTop = convBubblesEl.scrollHeight;
+    }
+
+    // ── Socket.io ─────────────────────────────────────────────
+    function connectSocket() {
+        const dot = document.getElementById('acp-socket-dot');
+
+        if (typeof io === 'undefined') {
+            console.warn('[chat-panel] socket.io not loaded');
+            return;
+        }
+
+        socket = io({ transports: ['websocket', 'polling'] });
+
+        socket.on('connect', function () {
+            if (dot) { dot.classList.add('is-connected'); dot.title = 'Connected'; }
+            socket.emit('admin:auth', { token: getJwt() });
+        });
+
+        socket.on('disconnect', function () {
+            if (dot) { dot.classList.remove('is-connected'); dot.title = 'Disconnected'; }
+        });
+
+        socket.on('admin:auth-ok', function () {
+            console.log('[chat-panel] authenticated');
+        });
+
+        socket.on('admin:session-list', function (list) {
+            sessions = list;
+            renderSessionList();
+        });
+
+        socket.on('admin:session-new', function (session) {
+            // Add to top of list if not already present
+            const idx = sessions.findIndex(function (s) { return s.sessionId === session.sessionId; });
+            if (idx === -1) sessions.unshift(session);
+            else            sessions[idx] = session;
+            renderSessionList();
+            showToast('New chat from ' + (session.name || 'a visitor'));
+        });
+
+        socket.on('admin:session-update', function (session) {
+            const idx = sessions.findIndex(function (s) { return s.sessionId === session.sessionId; });
+            if (idx === -1) sessions.unshift(session);
+            else            sessions[idx] = session;
+
+            // If this is the open session, refresh conv view
+            if (activeSession && activeSession.sessionId === session.sessionId) {
+                activeSession = session;
+                // Sync new messages
+                const existing = convBubblesEl.querySelectorAll('.acp-bubble').length;
+                (session.messages || []).slice(existing).forEach(function (msg) { appendBubble(msg); });
+                // Sync button states
+                takeoverBtn.hidden     = session.status !== 'bot';
+                closeSessionBtn.hidden = session.status === 'closed';
+                replyBox.hidden        = session.status !== 'live';
+            }
+            renderSessionList();
+        });
+
+        socket.on('admin:visitor-status', function (data) {
+            const s = sessions.find(function (x) { return x.sessionId === data.sessionId; });
+            if (s) { s.visitorOnline = data.online; renderSessionList(); }
+        });
+
+        socket.on('admin:visitor-message', function (data) {
+            if (activeSession && activeSession.sessionId === data.sessionId) {
+                appendBubble({ role: 'visitor', text: data.text, ts: new Date().toISOString() });
+            }
+        });
+    }
+
+    // ── Toast notification ────────────────────────────────────
+    function showToast(msg) {
+        const t = document.createElement('div');
+        t.className = 'acp-toast';
+        t.innerHTML = '<i class="fa-solid fa-comment-dots" aria-hidden="true"></i> ' + esc(msg);
+        document.body.appendChild(t);
+        setTimeout(function () { t.classList.add('is-visible'); }, 50);
+        setTimeout(function () { t.classList.remove('is-visible'); setTimeout(function () { t.remove(); }, 300); }, 3500);
+    }
+
+    // ── Public init ───────────────────────────────────────────
+    window.initChatPanel = function (container) {
+        mount(container);
+        connectSocket();
+    };
+})();
