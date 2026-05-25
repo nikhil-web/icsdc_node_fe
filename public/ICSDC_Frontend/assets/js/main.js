@@ -284,25 +284,41 @@ function initWhatsappWidget(menuData) {
     const cfg = menuData?.data?.whatsappWidget;
     if (!cfg || cfg.enabled === false || !cfg.phoneNumber) return;
 
-    // Don't mount twice if init runs more than once for any reason
-    if (document.getElementById('wa-bubble')) return;
+    // Don't mount twice
+    if (document.getElementById('wa-nav-btn')) return;
 
     const cleanPhone = String(cfg.phoneNumber).replace(/[^0-9]/g, '');
     if (!cleanPhone) return;
 
-    const position = cfg.bubblePosition === 'bottom-left' ? 'bottom-left' : 'bottom-right';
-    const title    = cfg.popoverTitle    || 'Chat with us on WhatsApp';
-    const subtitle = cfg.popoverSubtitle || "Send us a quick message and we'll get back to you.";
-    const defaultMessage = cfg.defaultMessage || "Hi, I'd like to know more about ICSDC services.";
+    const title          = cfg.popoverTitle    || 'Chat with us on WhatsApp';
+    const subtitle       = cfg.popoverSubtitle || "Send us a quick message and we'll get back to you.";
+    const defaultMessage = cfg.defaultMessage  || "Hi, I'd like to know more about ICSDC services.";
 
-    // ── Bubble ──────────────────────────────────────────────
-    const bubble = document.createElement('button');
-    bubble.id = 'wa-bubble';
-    bubble.className = 'wa-bubble wa-pos-' + position;
-    bubble.type = 'button';
-    bubble.setAttribute('aria-label', 'Open WhatsApp chat');
-    bubble.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i>';
-    document.body.appendChild(bubble);
+    // ── Navbar buttons (desktop + mobile menu) ──────────────
+    function makeWaBtn(id, extraClass) {
+        const btn = document.createElement('button');
+        btn.id   = id;
+        btn.type = 'button';
+        btn.className = 'btn-wa-nav' + (extraClass ? ' ' + extraClass : '');
+        btn.setAttribute('aria-label', 'Chat on WhatsApp');
+        btn.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span> WhatsApp</span>';
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            popover ? closePopover() : openPopover();
+        });
+        return btn;
+    }
+
+    // Desktop nav — insert after .desktop-login-btn
+    const desktopLogin = document.querySelector('.desktop-login-btn');
+    if (desktopLogin) desktopLogin.insertAdjacentElement('afterend', makeWaBtn('wa-nav-btn', ''));
+
+    // Mobile menu — insert after .mobile-login-btn
+    const mobileLogin = document.querySelector('.mobile-login-btn');
+    if (mobileLogin) mobileLogin.insertAdjacentElement('afterend', makeWaBtn('wa-nav-btn-mobile', 'btn-wa-nav--mobile'));
+
+    // bubble ref kept for popover open/close (use desktop btn as anchor)
+    const bubble = document.getElementById('wa-nav-btn') || document.getElementById('wa-nav-btn-mobile');
 
     let popover = null;
 
@@ -391,10 +407,7 @@ function initWhatsappWidget(menuData) {
             ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
 
-    bubble.addEventListener('click', (e) => {
-        e.stopPropagation();
-        popover ? closePopover() : openPopover();
-    });
+    // Click handlers are attached inside makeWaBtn — nothing extra needed here.
 }
 
 // ══════════════════════════════════════════════════════════

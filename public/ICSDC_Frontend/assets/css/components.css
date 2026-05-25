@@ -2347,6 +2347,76 @@ summary.faq-q::marker { display: none; content: ''; }
     }
 }
 
+/* Hide the desktop search icon on mobile — replaced by hamburger search bar */
+@media (max-width: 1024px) {
+    .nav-search { display: none; }
+}
+
+/* ── Mobile hamburger search bar ──────────────────────────── */
+.mobile-search-bar {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--c-border, #e5e7eb);
+}
+
+.mobile-search-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--c-bg, #f8fafc);
+    border: 1.5px solid var(--c-border, #e5e7eb);
+    border-radius: 10px;
+    padding: 11px 14px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.mobile-search-input-wrap:focus-within {
+    border-color: var(--c-blue, #1a56db);
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+    background: #fff;
+}
+
+.mobile-search-input-wrap svg {
+    color: var(--c-text-muted, #9ca3af);
+    flex-shrink: 0;
+}
+
+.mobile-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    font-family: inherit;
+    background: transparent;
+    color: var(--c-text-dark, #0f172a);
+    min-width: 0;
+}
+
+.mobile-search-input::placeholder { color: var(--c-text-muted, #9ca3af); }
+
+.mobile-search-results {
+    margin-top: 6px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.mobile-search-results .nav-search-item {
+    padding: 10px 12px;
+    border-radius: 0;
+    border-bottom: 1px solid var(--c-border, #f1f5f9);
+}
+
+.mobile-search-results .nav-search-item:last-child { border-bottom: none; }
+
+/* Dark mode */
+html[data-theme="dark"] .mobile-search-input-wrap {
+    background: #0f172a;
+    border-color: #334155;
+}
+html[data-theme="dark"] .mobile-search-input-wrap:focus-within { background: #0f172a; }
+html[data-theme="dark"] .mobile-search-input { color: #e6eaf2; }
+html[data-theme="dark"] .mobile-search-bar { border-color: #334155; }
+html[data-theme="dark"] .mobile-search-results .nav-search-item { border-color: #1e293b; }
+
 /* Dark mode */
 html[data-theme="dark"] .nav-search-trigger {
     border-color: #334155;

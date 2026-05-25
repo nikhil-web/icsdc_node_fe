@@ -11,7 +11,51 @@
     --wa-radius: 16px;
 }
 
-/* ── Bubble ───────────────────────────────────────────────── */
+/* ── Navbar WhatsApp button ───────────────────────────────── */
+.btn-wa-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    background: var(--wa-green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    flex-shrink: 0;
+    min-height: 40px;
+    transition: background 0.18s ease, transform 0.15s ease, box-shadow 0.18s ease;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+}
+.btn-wa-nav i { font-size: 17px; }
+.btn-wa-nav:hover {
+    background: var(--wa-green-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+}
+.btn-wa-nav:active { transform: translateY(0); }
+
+/* On small navbars hide the text label, show icon only */
+@media (max-width: 1100px) {
+    .btn-wa-nav:not(.btn-wa-nav--mobile) span { display: none; }
+    .btn-wa-nav:not(.btn-wa-nav--mobile) { padding: 9px 12px; }
+}
+
+/* Mobile menu variant — full width */
+.btn-wa-nav--mobile {
+    width: 100%;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 15px;
+    margin: 4px 0 8px;
+}
+
+/* ── Bubble (kept for backward compat, no longer used) ─────── */
 .wa-bubble {
     position: fixed;
     bottom: 24px;
