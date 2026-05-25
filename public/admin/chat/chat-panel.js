@@ -30,6 +30,7 @@
     }
 
     // ── State ────────────────────────────────────────────────
+    let adminTypingTimer = null;
     let socket        = null;
     let sessions      = [];      // full session list
     let activeSession = null;    // currently selected session object
@@ -149,12 +150,47 @@
         replyInput.addEventListener('input', function () {
             replyInput.style.height = 'auto';
             replyInput.style.height = Math.min(replyInput.scrollHeight, 96) + 'px';
+            emitAdminTyping();
         });
+    }
+
+    function emitAdminTyping() {
+        if (!socket || !activeSession) return;
+        socket.emit('admin:typing', { sessionId: activeSession.sessionId });
+        clearTimeout(adminTypingTimer);
+        adminTypingTimer = setTimeout(function () {
+            socket.emit('admin:typing-stop', { sessionId: activeSession.sessionId });
+        }, 2000);
+    }
+
+    function showVisitorTyping() {
+        if (document.getElementById('acp-visitor-typing')) return;
+        const t = document.createElement('div');
+        t.className = 'acp-typing';
+        t.id = 'acp-visitor-typing';
+        const label = document.createElement('span');
+        label.className = 'acp-typing-label';
+        label.textContent = 'Visitor';
+        t.appendChild(label);
+        const dots = document.createElement('div');
+        dots.className = 'acp-typing-dots';
+        dots.innerHTML = '<span></span><span></span><span></span>';
+        t.appendChild(dots);
+        convBubblesEl.appendChild(t);
+        convBubblesEl.scrollTop = convBubblesEl.scrollHeight;
+    }
+
+    function removeVisitorTyping() {
+        const t = document.getElementById('acp-visitor-typing');
+        if (t) t.remove();
     }
 
     function sendReply() {
         if (!activeSession || !replyInput.value.trim()) return;
         const text = replyInput.value.trim();
+        // Stop typing indicator immediately on send
+        clearTimeout(adminTypingTimer);
+        socket && socket.emit('admin:typing-stop', { sessionId: activeSession.sessionId });
         socket && socket.emit('admin:message', { sessionId: activeSession.sessionId, text });
         replyInput.value = '';
         replyInput.style.height = '';
@@ -318,7 +354,20 @@
 
         socket.on('admin:visitor-message', function (data) {
             if (activeSession && activeSession.sessionId === data.sessionId) {
+                removeVisitorTyping();
                 appendBubble({ role: 'visitor', text: data.text, ts: new Date().toISOString() });
+            }
+        });
+
+        socket.on('visitor:typing', function (data) {
+            if (activeSession && activeSession.sessionId === data.sessionId) {
+                showVisitorTyping();
+            }
+        });
+
+        socket.on('visitor:typing-stop', function (data) {
+            if (activeSession && activeSession.sessionId === data.sessionId) {
+                removeVisitorTyping();
             }
         });
     }

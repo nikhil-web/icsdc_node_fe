@@ -1094,6 +1094,50 @@ code {
 .acp-toast.is-visible { opacity: 1; transform: translateY(0); }
 [data-theme="dark"] .acp-toast { background: #f1f5f9; color: #0f172a; }
 
+/* ── Visitor typing indicator (admin panel) ────────────────── */
+.acp-typing {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    margin: 4px 0;
+    width: fit-content;
+    max-width: 160px;
+}
+.acp-typing-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+.acp-typing-dots {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 6px 10px;
+}
+.acp-typing-dots span {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #94a3b8;
+    animation: acpTypingBounce 1.2s ease-in-out infinite;
+}
+.acp-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.acp-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes acpTypingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30%           { transform: translateY(-5px); opacity: 1; }
+}
+[data-theme="dark"] .acp-typing-dots { background: #334155; }
+[data-theme="dark"] .acp-typing-dots span { background: #64748b; }
+[data-theme="dark"] .acp-typing-label { color: #94a3b8; }
+
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 768px) {
     .acp-layout    { flex-direction: column; }

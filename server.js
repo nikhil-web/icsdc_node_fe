@@ -1013,6 +1013,31 @@ function initSocketIO(io) {
             broadcastSessionToAdmins(io, session, 'admin:session-update');
         });
 
+        // ── TYPING INDICATORS ─────────────────────────────
+        socket.on('visitor:typing', function ({ sessionId }) {
+            const session = chatSessions.get(sessionId);
+            if (!session || !session.adminSocketId) return;
+            io.to(session.adminSocketId).emit('visitor:typing', { sessionId });
+        });
+
+        socket.on('visitor:typing-stop', function ({ sessionId }) {
+            const session = chatSessions.get(sessionId);
+            if (!session || !session.adminSocketId) return;
+            io.to(session.adminSocketId).emit('visitor:typing-stop', { sessionId });
+        });
+
+        socket.on('admin:typing', function ({ sessionId }) {
+            const session = chatSessions.get(sessionId);
+            if (!session || !session.visitorSocketId) return;
+            io.to(session.visitorSocketId).emit('admin:typing');
+        });
+
+        socket.on('admin:typing-stop', function ({ sessionId }) {
+            const session = chatSessions.get(sessionId);
+            if (!session || !session.visitorSocketId) return;
+            io.to(session.visitorSocketId).emit('admin:typing-stop');
+        });
+
         // ── DISCONNECT ────────────────────────────────────
         socket.on('disconnect', function () {
             // Find any session this socket owned as visitor

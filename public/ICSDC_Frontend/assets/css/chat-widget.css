@@ -236,6 +236,16 @@
     width: fit-content;
 }
 
+/* Label shown above the dots for admin typing indicator */
+.chat-typing-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 2px;
+}
+
 .chat-typing span {
     width: 7px;
     height: 7px;

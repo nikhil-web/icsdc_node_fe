@@ -74,10 +74,11 @@ function renderWidget() {
     inputEl.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
     });
-    // Auto-grow textarea
+    // Auto-grow textarea + emit typing
     inputEl.addEventListener('input', function () {
         inputEl.style.height = 'auto';
         inputEl.style.height = Math.min(inputEl.scrollHeight, 96) + 'px';
+        emitVisitorTyping();
     });
     // ESC to close
     document.addEventListener('keydown', function (e) {
@@ -157,6 +158,37 @@ function showTyping() {
 function removeTyping() {
     const t = document.getElementById('chat-typing-indicator');
     if (t) t.remove();
+}
+
+// Admin typing indicator (separate from bot typing indicator)
+function showAdminTyping() {
+    if (document.getElementById('chat-admin-typing')) return;
+    const t = document.createElement('div');
+    t.className = 'chat-typing chat-typing--admin';
+    t.id = 'chat-admin-typing';
+    const label = document.createElement('span');
+    label.className = 'chat-typing-label';
+    label.textContent = 'Support';
+    t.innerHTML = '<span></span><span></span><span></span>';
+    t.prepend(label);
+    messagesEl.appendChild(t);
+    scrollToBottom();
+}
+
+function removeAdminTyping() {
+    const t = document.getElementById('chat-admin-typing');
+    if (t) t.remove();
+}
+
+// Visitor typing — debounced emit
+let visitorTypingTimer = null;
+function emitVisitorTyping() {
+    if (!socket || !sessionId || inputLocked) return;
+    socket.emit('visitor:typing', { sessionId });
+    clearTimeout(visitorTypingTimer);
+    visitorTypingTimer = setTimeout(function () {
+        socket.emit('visitor:typing-stop', { sessionId });
+    }, 2000);
 }
 
 function scrollToBottom() {
@@ -271,9 +303,18 @@ function connectSocket() {
     });
 
     socket.on('chat:admin-message', function (data) {
-        removeTyping();
+        removeAdminTyping();
         appendMsg('admin', data.text);
         if (!isOpen) incrementUnread();
+    });
+
+    socket.on('admin:typing', function () {
+        removeAdminTyping();
+        showAdminTyping();
+    });
+
+    socket.on('admin:typing-stop', function () {
+        removeAdminTyping();
     });
 
     socket.on('chat:complete', function (data) {
