@@ -53,32 +53,44 @@
         applyRoute();
     }
 
-    function isBuilderPath() {
-        return window.location.pathname.startsWith('/admin/builder');
-    }
+    function isBuilderPath()  { return window.location.pathname.startsWith('/admin/builder'); }
+    function isSitemapPath()  { return window.location.pathname.startsWith('/admin/sitemap'); }
 
     function applyRoute() {
-        const mainDash = document.getElementById('view-dashboard-main');
-        const mainBld  = document.getElementById('view-builder');
-        if (!mainDash || !mainBld) return;
+        const mainDash    = document.getElementById('view-dashboard-main');
+        const mainBld     = document.getElementById('view-builder');
+        const mainSitemap = document.getElementById('view-sitemap');
+        if (!mainDash || !mainBld || !mainSitemap) return;
+
+        const path = window.location.pathname;
 
         // Sync nav tab "active" styling
         document.querySelectorAll('.admin-nav-tab').forEach(function (a) {
+            const tab = a.dataset.tab;
             const isActive =
-                (a.dataset.tab === 'builder' && isBuilderPath()) ||
-                (a.dataset.tab === 'dashboard' && !isBuilderPath());
+                (tab === 'builder'   && isBuilderPath())  ||
+                (tab === 'sitemap'   && isSitemapPath())   ||
+                (tab === 'dashboard' && !isBuilderPath() && !isSitemapPath());
             a.classList.toggle('active', isActive);
         });
 
         if (isBuilderPath()) {
-            mainDash.hidden = true;
-            mainBld.hidden = false;
-            // Let builder-editor.js mount itself
+            mainDash.hidden    = true;
+            mainBld.hidden     = false;
+            mainSitemap.hidden = true;
             window.dispatchEvent(new CustomEvent('icsdc:show-builder'));
+        } else if (isSitemapPath()) {
+            mainDash.hidden    = true;
+            mainBld.hidden     = true;
+            mainSitemap.hidden = false;
+            if (!window.__icsdc_sitemapLoaded) {
+                window.__icsdc_sitemapLoaded = true;
+                loadSitemap();
+            }
         } else {
-            mainBld.hidden = true;
-            mainDash.hidden = false;
-            // Lazy: only load dashboard data the first time we land here
+            mainBld.hidden     = true;
+            mainSitemap.hidden = true;
+            mainDash.hidden    = false;
             if (!window.__icsdc_dashLoaded) {
                 window.__icsdc_dashLoaded = true;
                 loadDashboard();
@@ -447,6 +459,124 @@
         });
     }
 
+    // ── Sitemap ───────────────────────────────────────────────
+    let allSitemapEntries   = [];
+    let sitemapActiveFilter = 'all';
+    let sitemapUrl          = '/sitemap.xml';
+
+    async function loadSitemap() {
+        const tbody = document.getElementById('sitemap-body');
+        tbody.innerHTML = '<tr><td colspan="5" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>';
+        try {
+            const res  = await apiFetch('/api/admin/sitemap');
+            const data = await res.json();
+            allSitemapEntries = data.entries || [];
+            sitemapUrl        = data.sitemapUrl || '/sitemap.xml';
+
+            // Stats
+            document.getElementById('stat-total').textContent    = data.counts.total;
+            document.getElementById('stat-static').textContent   = data.counts.static;
+            document.getElementById('stat-builder').textContent  = data.counts.builder;
+            document.getElementById('stat-generated').textContent =
+                data.generatedAt
+                    ? new Date(data.generatedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                    : '—';
+
+            renderSitemap();
+        } catch (err) {
+            if (err.message !== 'Session expired') {
+                tbody.innerHTML = '<tr><td colspan="5" class="admin-loading-cell">Failed to load sitemap data.</td></tr>';
+            }
+        }
+    }
+
+    function renderSitemap() {
+        const query  = (document.getElementById('sitemap-search').value || '').toLowerCase();
+        const tbody  = document.getElementById('sitemap-body');
+
+        const filtered = allSitemapEntries.filter(function (e) {
+            if (sitemapActiveFilter === 'static'  && e.type !== 'static')  return false;
+            if (sitemapActiveFilter === 'builder' && e.type !== 'builder') return false;
+            if (query) return e.loc.toLowerCase().includes(query);
+            return true;
+        });
+
+        if (!filtered.length) {
+            tbody.innerHTML = '<tr><td colspan="5" class="admin-loading-cell">No URLs match.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(function (e) {
+            const typeBadge = e.type === 'builder'
+                ? '<span class="sitemap-type-badge sitemap-type-builder">Builder</span>'
+                : '<span class="sitemap-type-badge sitemap-type-static">Static</span>';
+            const path = e.loc.replace(/^https?:\/\/[^/]+/, '');
+            return `<tr>
+                <td class="sitemap-url-cell">
+                    <a href="${esc(e.loc)}" target="_blank" rel="noopener noreferrer" class="sitemap-url-link">${esc(path)}</a>
+                </td>
+                <td>${typeBadge}</td>
+                <td>${e.priority.toFixed(1)}</td>
+                <td>${esc(e.changefreq)}</td>
+                <td>${esc(e.lastmod)}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    function initSitemapControls() {
+        const searchInput = document.getElementById('sitemap-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', renderSitemap);
+        }
+
+        // Filter buttons
+        document.querySelectorAll('[data-sitemap-filter]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                sitemapActiveFilter = btn.dataset.sitemapFilter;
+                document.querySelectorAll('[data-sitemap-filter]').forEach(function (b) {
+                    b.classList.toggle('active', b === btn);
+                });
+                renderSitemap();
+            });
+        });
+
+        // Refresh button
+        const refreshBtn = document.getElementById('sitemap-refresh-btn');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', async function () {
+                refreshBtn.disabled = true;
+                window.__icsdc_sitemapLoaded = false;
+                await loadSitemap();
+                window.__icsdc_sitemapLoaded = true;
+                refreshBtn.disabled = false;
+            });
+        }
+
+        // Copy sitemap URL
+        const copyBtn = document.getElementById('sitemap-copy-btn');
+        const toast   = document.getElementById('sitemap-toast');
+        if (copyBtn && toast) {
+            copyBtn.addEventListener('click', async function () {
+                const url = sitemapUrl || window.location.origin + '/sitemap.xml';
+                try {
+                    await navigator.clipboard.writeText(url);
+                } catch (_) {
+                    // Fallback for non-secure contexts
+                    const ta = document.createElement('textarea');
+                    ta.value = url;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity  = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                }
+                toast.hidden = false;
+                setTimeout(function () { toast.hidden = true; }, 2400);
+            });
+        }
+    }
+
     // ── Utility ───────────────────────────────────────────────
     function esc(str) {
         return String(str || '')
@@ -464,6 +594,7 @@
         initTheme();
         initSubmissionsSearch();
         initPagesControls();
+        initSitemapControls();
         initNavTabs();
 
         if (getJwt()) {

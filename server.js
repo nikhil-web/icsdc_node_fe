@@ -586,6 +586,147 @@ async function writeVersionSnapshot({ documentId, versionNumber, sections, title
 })();
 
 // ══════════════════════════════════════════════════════════
+//  SITEMAP
+// ══════════════════════════════════════════════════════════
+
+const STATIC_PAGES = [
+    // Home
+    { path: '/',                            priority: 1.0, changefreq: 'weekly'  },
+    // Core hosting
+    { path: '/cloud-hosting',               priority: 0.9, changefreq: 'weekly'  },
+    { path: '/cpanel-hosting',              priority: 0.9, changefreq: 'weekly'  },
+    { path: '/reseller-hosting',            priority: 0.9, changefreq: 'weekly'  },
+    { path: '/wordpress-hosting',           priority: 0.9, changefreq: 'weekly'  },
+    { path: '/shared-hosting',              priority: 0.9, changefreq: 'weekly'  },
+    { path: '/web-hosting',                 priority: 0.9, changefreq: 'weekly'  },
+    // VPS
+    { path: '/vps-hosting',                 priority: 0.9, changefreq: 'weekly'  },
+    { path: '/linux-vps-hosting',           priority: 0.8, changefreq: 'weekly'  },
+    { path: '/windows-vps-hosting',         priority: 0.8, changefreq: 'weekly'  },
+    { path: '/managed-vps-hosting',         priority: 0.8, changefreq: 'weekly'  },
+    { path: '/vps-cpanel',                  priority: 0.8, changefreq: 'weekly'  },
+    { path: '/vps-hosting-trial',           priority: 0.7, changefreq: 'weekly'  },
+    // Dedicated
+    { path: '/dedicated-server',            priority: 0.9, changefreq: 'weekly'  },
+    { path: '/bare-metal-server',           priority: 0.8, changefreq: 'weekly'  },
+    { path: '/linux-dedicated-server',      priority: 0.8, changefreq: 'weekly'  },
+    { path: '/windows-dedicated-server',    priority: 0.8, changefreq: 'weekly'  },
+    { path: '/managed-dedicated-server',    priority: 0.8, changefreq: 'weekly'  },
+    { path: '/gpu-dedicated-server',        priority: 0.8, changefreq: 'weekly'  },
+    { path: '/nvme-dedicated-servers',      priority: 0.7, changefreq: 'weekly'  },
+    // Cloud
+    { path: '/managed-cloud-hosting',       priority: 0.8, changefreq: 'weekly'  },
+    { path: '/linux-cloud-hosting',         priority: 0.8, changefreq: 'weekly'  },
+    { path: '/windows-cloud-hosting',       priority: 0.8, changefreq: 'weekly'  },
+    { path: '/gpu-cloud-hosting',           priority: 0.8, changefreq: 'weekly'  },
+    { path: '/aws-cloud-hosting',           priority: 0.8, changefreq: 'weekly'  },
+    { path: '/azure-cloud-hosting',         priority: 0.8, changefreq: 'weekly'  },
+    { path: '/google-cloud-hosting',        priority: 0.8, changefreq: 'weekly'  },
+    { path: '/virtual-machine',             priority: 0.7, changefreq: 'weekly'  },
+    { path: '/cloud-storage',               priority: 0.7, changefreq: 'weekly'  },
+    // Email & Workspace
+    { path: '/email-hosting',               priority: 0.8, changefreq: 'weekly'  },
+    { path: '/google-workspace',            priority: 0.8, changefreq: 'weekly'  },
+    { path: '/microsoft-365',               priority: 0.8, changefreq: 'weekly'  },
+    { path: '/zimbra-hosting',              priority: 0.7, changefreq: 'weekly'  },
+    // Domain & SSL
+    { path: '/domain-registration',         priority: 0.8, changefreq: 'weekly'  },
+    { path: '/domain-transfer',             priority: 0.7, changefreq: 'weekly'  },
+    { path: '/ssl-certificate',             priority: 0.7, changefreq: 'weekly'  },
+    // Security
+    { path: '/firewall-security',           priority: 0.7, changefreq: 'weekly'  },
+    { path: '/vapt',                        priority: 0.7, changefreq: 'weekly'  },
+    { path: '/pam-mfa',                     priority: 0.7, changefreq: 'weekly'  },
+    // Backup
+    { path: '/acronis-backup',              priority: 0.7, changefreq: 'weekly'  },
+    { path: '/veeam-backup',               priority: 0.7, changefreq: 'weekly'  },
+    // Specialty
+    { path: '/forex-vps',                   priority: 0.7, changefreq: 'weekly'  },
+    { path: '/tally-on-cloud',              priority: 0.7, changefreq: 'weekly'  },
+    // Info
+    { path: '/about-us',                    priority: 0.6, changefreq: 'monthly' },
+    { path: '/contact-us',                  priority: 0.8, changefreq: 'monthly' },
+    { path: '/pricing',                     priority: 0.7, changefreq: 'weekly'  },
+];
+
+async function buildSitemapEntries(req) {
+    const baseUrl = process.env.SITE_URL ||
+        (req ? `${req.protocol}://${req.get('host')}` : 'https://icsdc.in');
+    const today = new Date().toISOString().split('T')[0];
+
+    const entries = STATIC_PAGES.map(function (p) {
+        return {
+            loc:        baseUrl + p.path,
+            lastmod:    today,
+            changefreq: p.changefreq,
+            priority:   p.priority,
+            type:       'static',
+        };
+    });
+
+    // Append published builder pages
+    try {
+        const r = await fetch(
+            `${STRAPI_URL}/api/builder-pages?` +
+            `publicationState=live&fields[0]=slug&fields[1]=updatedAt&pagination[pageSize]=500`,
+            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+        );
+        if (r.ok) {
+            const { data } = await r.json();
+            (data || []).forEach(function (item) {
+                const d = item.attributes || item;
+                if (!d.slug) return;
+                entries.push({
+                    loc:        baseUrl + '/builder/' + d.slug,
+                    lastmod:    d.updatedAt ? d.updatedAt.split('T')[0] : today,
+                    changefreq: 'weekly',
+                    priority:   0.7,
+                    type:       'builder',
+                });
+            });
+        }
+    } catch (_) { /* builder pages unavailable — skip */ }
+
+    return entries;
+}
+
+// Public: serve sitemap.xml
+app.get('/sitemap.xml', async function (req, res) {
+    try {
+        const entries = await buildSitemapEntries(req);
+        const rows = entries.map(function (e) {
+            return `  <url>\n    <loc>${e.loc}</loc>\n    <lastmod>${e.lastmod}</lastmod>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority.toFixed(1)}</priority>\n  </url>`;
+        }).join('\n');
+        const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${rows}\n</urlset>`;
+        res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+        res.send(xml);
+    } catch (err) {
+        console.error('[sitemap] error:', err.message);
+        res.status(500).send('Error generating sitemap');
+    }
+});
+
+// Admin: return sitemap data as JSON
+app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
+    try {
+        const entries     = await buildSitemapEntries(req);
+        const sitemapUrl  = (process.env.SITE_URL || `${req.protocol}://${req.get('host')}`) + '/sitemap.xml';
+        res.json({
+            entries,
+            sitemapUrl,
+            generatedAt: new Date().toISOString(),
+            counts: {
+                total:   entries.length,
+                static:  entries.filter(function (e) { return e.type === 'static';  }).length,
+                builder: entries.filter(function (e) { return e.type === 'builder'; }).length,
+            },
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to generate sitemap data' });
+    }
+});
+
+// ══════════════════════════════════════════════════════════
 //  ADMIN SPA (existing)
 // ══════════════════════════════════════════════════════════
 const adminPath = path.join(__dirname, 'public/admin');

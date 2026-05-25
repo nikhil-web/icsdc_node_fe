@@ -68,6 +68,7 @@
                 <div class="admin-nav-left-tabs">
                     <a href="/admin"          class="admin-nav-tab" data-tab="dashboard">Dashboard</a>
                     <a href="/admin/builder"  class="admin-nav-tab" data-tab="builder">Page Builder</a>
+                    <a href="/admin/sitemap"  class="admin-nav-tab" data-tab="sitemap">Sitemap</a>
                 </div>
                 <div class="admin-nav-right">
                     <button id="theme-toggle" class="btn-theme" aria-label="Toggle theme">
@@ -174,6 +175,85 @@
 
         <!-- Builder view (shown when path is /admin/builder*) -->
         <main class="admin-main" id="view-builder" hidden></main>
+
+        <!-- Sitemap view (shown when path is /admin/sitemap) -->
+        <main class="admin-main" id="view-sitemap" hidden>
+            <section class="admin-section sitemap-section">
+
+                <!-- Header -->
+                <div class="admin-page-header">
+                    <div>
+                        <h2 class="admin-page-title">Sitemap Manager</h2>
+                        <p class="admin-page-sub">All public URLs submitted to search engines via <code>/sitemap.xml</code>.</p>
+                    </div>
+                    <div class="admin-header-actions">
+                        <button class="admin-refresh-btn" id="sitemap-refresh-btn" aria-label="Refresh">
+                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        </button>
+                        <button class="admin-btn admin-btn-secondary" id="sitemap-copy-btn">
+                            <i class="fa-solid fa-link" aria-hidden="true"></i> Copy URL
+                        </button>
+                        <a id="sitemap-download-btn" href="/sitemap.xml" target="_blank" class="admin-btn admin-btn-primary">
+                            <i class="fa-solid fa-download" aria-hidden="true"></i> Download XML
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Stat cards -->
+                <div class="sitemap-stats" id="sitemap-stats">
+                    <div class="sitemap-stat-card">
+                        <span class="sitemap-stat-value" id="stat-total">—</span>
+                        <span class="sitemap-stat-label">Total URLs</span>
+                    </div>
+                    <div class="sitemap-stat-card">
+                        <span class="sitemap-stat-value" id="stat-static">—</span>
+                        <span class="sitemap-stat-label">Static Pages</span>
+                    </div>
+                    <div class="sitemap-stat-card">
+                        <span class="sitemap-stat-value" id="stat-builder">—</span>
+                        <span class="sitemap-stat-label">Builder Pages</span>
+                    </div>
+                    <div class="sitemap-stat-card sitemap-stat-card--wide">
+                        <span class="sitemap-stat-value sitemap-stat-value--sm" id="stat-generated">—</span>
+                        <span class="sitemap-stat-label">Last Generated</span>
+                    </div>
+                </div>
+
+                <!-- Search + filter -->
+                <div class="sitemap-toolbar">
+                    <input id="sitemap-search" class="admin-search" type="search" placeholder="Filter URLs…" />
+                    <div class="admin-filter-btns">
+                        <button class="admin-filter-btn active" data-sitemap-filter="all">All</button>
+                        <button class="admin-filter-btn" data-sitemap-filter="static">Static</button>
+                        <button class="admin-filter-btn" data-sitemap-filter="builder">Builder</button>
+                    </div>
+                </div>
+
+                <!-- URL table -->
+                <div class="admin-table-wrap">
+                    <table class="admin-table sitemap-table">
+                        <thead>
+                            <tr>
+                                <th>URL</th>
+                                <th>Type</th>
+                                <th>Priority</th>
+                                <th>Change Freq</th>
+                                <th>Last Modified</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sitemap-body">
+                            <tr><td colspan="5" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Copy toast -->
+                <div class="sitemap-toast" id="sitemap-toast" hidden>
+                    <i class="fa-solid fa-check" aria-hidden="true"></i> Sitemap URL copied!
+                </div>
+
+            </section>
+        </main>
     </div>
 
     <script src="/admin/admin.js"></script>

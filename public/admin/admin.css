@@ -631,3 +631,162 @@ code {
 .admin-chip-checking .admin-chip-dot { background: #f59e0b; animation: pulse 1s infinite; }
 
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+/* ══════════════════════════════════════════════════════════
+   SHARED BUTTON PRIMITIVES
+   ══════════════════════════════════════════════════════════ */
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.1s, opacity 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.admin-btn:hover  { transform: translateY(-1px); opacity: 0.9; }
+.admin-btn:active { transform: translateY(0); }
+
+.admin-btn-primary {
+    background: var(--blue);
+    color: #fff;
+}
+.admin-btn-primary:hover { background: var(--blue-dark); opacity: 1; }
+
+.admin-btn-secondary {
+    background: var(--blue-light, #ebf2fc);
+    color: var(--blue);
+    border: 1px solid rgba(26, 86, 219, 0.2);
+}
+.admin-btn-secondary:hover { background: #dce8fb; opacity: 1; }
+
+[data-theme="dark"] .admin-btn-secondary {
+    background: rgba(26, 86, 219, 0.12);
+    color: #93c5fd;
+    border-color: rgba(26, 86, 219, 0.3);
+}
+[data-theme="dark"] .admin-btn-secondary:hover { background: rgba(26, 86, 219, 0.22); }
+
+/* ══════════════════════════════════════════════════════════
+   SITEMAP PAGE
+   ══════════════════════════════════════════════════════════ */
+.sitemap-section { padding-bottom: 3rem; }
+
+/* ── Stat cards ── */
+.sitemap-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 0 1.5rem 1.5rem;
+}
+
+.sitemap-stat-card {
+    background: var(--bg, #f8fafc);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sitemap-stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--blue);
+    line-height: 1;
+}
+.sitemap-stat-value--sm { font-size: 1rem; font-weight: 600; }
+
+.sitemap-stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted, #64748b);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.sitemap-stat-card--wide { grid-column: span 1; }
+
+[data-theme="dark"] .sitemap-stat-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+/* ── Toolbar ── */
+.sitemap-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1.5rem 1rem;
+    flex-wrap: wrap;
+}
+
+/* ── Table ── */
+.sitemap-table td { vertical-align: middle; }
+
+.sitemap-url-cell { max-width: 480px; }
+
+.sitemap-url-link {
+    color: var(--blue);
+    text-decoration: none;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.8rem;
+    word-break: break-all;
+}
+.sitemap-url-link:hover { text-decoration: underline; }
+
+/* Type badges */
+.sitemap-type-badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.sitemap-type-static  { background: #e0f2fe; color: #0369a1; }
+.sitemap-type-builder { background: #fef3c7; color: #92400e; }
+
+[data-theme="dark"] .sitemap-type-static  { background: rgba(3, 105, 161, 0.2); color: #7dd3fc; }
+[data-theme="dark"] .sitemap-type-builder { background: rgba(146, 64, 14, 0.2); color: #fcd34d; }
+
+/* ── Copy toast ── */
+.sitemap-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0f172a;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    z-index: 99999;
+    animation: sitemap-toast-in 0.2s ease;
+}
+@keyframes sitemap-toast-in {
+    from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+[data-theme="dark"] .sitemap-toast { background: #f1f5f9; color: #0f172a; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .sitemap-stats { grid-template-columns: repeat(2, 1fr); }
+    .sitemap-stat-card--wide { grid-column: span 2; }
+}
