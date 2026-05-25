@@ -273,6 +273,8 @@
     function appendBubble(msg) {
         const div = document.createElement('div');
         div.className = 'acp-bubble acp-bubble--' + (msg.role || 'bot');
+        // Bug 4: stamp a composite key so dedup can avoid re-rendering the same message
+        div.dataset.msgId = (msg.ts || '') + '|' + (msg.role || '');
 
         const labelMap = { bot: 'Bot', admin: 'Support (You)', visitor: 'Visitor' };
         div.innerHTML =
@@ -325,13 +327,23 @@
             const idx = sessions.findIndex(function (s) { return s.sessionId === session.sessionId; });
             if (idx === -1) sessions.unshift(session);
             else            sessions[idx] = session;
+            // Bug 9: keep list sorted newest-first so status changes bubble to correct position
+            sessions.sort(function (a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
 
             // If this is the open session, refresh conv view
             if (activeSession && activeSession.sessionId === session.sessionId) {
-                const prevMsgCount = convBubblesEl.querySelectorAll('.acp-bubble').length;
                 activeSession = session;
-                // Sync only new messages (avoid duplicates)
-                (session.messages || []).slice(prevMsgCount).forEach(function (msg) { appendBubble(msg); });
+                // Bug 4: use timestamp+role key to avoid duplicating messages
+                const existing = new Set(
+                    Array.from(convBubblesEl.querySelectorAll('.acp-bubble')).map(function (el) { return el.dataset.msgId; })
+                );
+                (session.messages || []).forEach(function (msg) {
+                    const id = (msg.ts || '') + '|' + (msg.role || '');
+                    if (!existing.has(id)) {
+                        appendBubble(msg);
+                        existing.add(id);
+                    }
+                });
                 // Sync button + reply-box state
                 takeoverBtn.hidden     = session.status !== 'bot';
                 closeSessionBtn.hidden = session.status === 'closed';
@@ -369,6 +381,13 @@
             if (activeSession && activeSession.sessionId === data.sessionId) {
                 removeVisitorTyping();
             }
+        });
+
+        // Bug 3: another admin already took over this session
+        socket.on('admin:takeover-fail', function (data) {
+            showToast('⚠️ ' + (data.reason || 'Could not take over this chat.'));
+            // Re-show the takeover button so they can see the session is already live
+            if (takeoverBtn) takeoverBtn.hidden = false;
         });
     }
 

@@ -23,7 +23,13 @@ function setSid(id) { sessionStorage.setItem('icsdc_chat_sid', id); }
 
 // ── Unique session ID generator ───────────────────────────
 function generateSid() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+        const arr = new Uint8Array(16);
+        crypto.getRandomValues(arr);
+        return 'sid_' + Array.from(arr, function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+    }
+    // Fallback for very old browsers
+    return 'sid_' + Date.now().toString(36) + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
 }
 
 // ── Render widget DOM ─────────────────────────────────────
@@ -321,12 +327,12 @@ function connectSocket() {
         removeTyping();
         appendMsg('bot', data.text);
         if (!isOpen) incrementUnread();
-        // Hide input but do NOT permanently lock — admin may still take over
+        // Hide input and lock — chat:agent-joined will unlock when admin takes over
         inputEl.style.display = 'none';
         sendBtn.style.display = 'none';
         skipBtn.style.display = 'none';
         chipsRow.style.display = 'none';
-        inputLocked = false;  // stays unlocked so chat:agent-joined can re-enable
+        inputLocked = true;
     });
 
     socket.on('chat:ended', function (data) {
@@ -336,7 +342,23 @@ function connectSocket() {
         setInputState(null);
     });
 
+    // Bug 1: admin dropped mid-live-chat — session reverts to bot on server
+    socket.on('chat:admin-disconnected', function (data) {
+        removeAdminTyping();
+        appendMsg('admin', data.text || 'The support agent disconnected. Our team will follow up shortly.');
+        if (!isOpen) incrementUnread();
+        // Hide input — they are no longer in a live session
+        inputEl.style.display = 'none';
+        sendBtn.style.display = 'none';
+        skipBtn.style.display = 'none';
+        chipsRow.style.display = 'none';
+        inputLocked = true;
+    });
+
     socket.on('disconnect', function () {
+        // Bug 2: clear typing debounce so no stale emit fires on reconnect
+        clearTimeout(visitorTypingTimer);
+        visitorTypingTimer = null;
         console.warn('[chat] disconnected from server');
     });
 }

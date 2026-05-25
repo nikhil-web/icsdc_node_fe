@@ -872,7 +872,7 @@ function serializeSession(session) {
         budget:     session.data.budget,
         status:     session.status,
         messages:   session.messages,
-        createdAt:  session.createdAt,
+        createdAt:  session.createdAt || new Date().toISOString(),
         visitorOnline: !!session.visitorSocketId,
     };
 }
@@ -880,8 +880,10 @@ function serializeSession(session) {
 // ── Restore sessions from Strapi on startup ───────────────
 async function loadSessionsFromStrapi() {
     try {
+        // Only restore sessions that are still active (not closed) or closed within the last 24h
+        const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
         const r = await fetch(
-            `${STRAPI_URL}/api/chat-sessions?sort=createdAt:desc&pagination[pageSize]=500`,
+            `${STRAPI_URL}/api/chat-sessions?filters[$or][0][status][$ne]=closed&filters[$or][1][updatedAt][$gt]=${since}&sort=createdAt:desc&pagination[pageSize]=200`,
             { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
         );
         if (!r.ok) { console.warn('[chat] Could not load sessions from Strapi:', r.status); return; }
@@ -1030,6 +1032,11 @@ function initSocketIO(io) {
         socket.on('admin:takeover', function ({ sessionId }) {
             const session = chatSessions.get(sessionId);
             if (!session) return;
+            // Bug 3: prevent two admins from taking over the same session
+            if (session.status === 'live' && session.adminSocketId && session.adminSocketId !== socket.id) {
+                socket.emit('admin:takeover-fail', { reason: 'Another agent is already handling this chat.' });
+                return;
+            }
             session.status = 'live';
             session.adminSocketId = socket.id;
             socket.join('session:' + sessionId);
@@ -1095,14 +1102,30 @@ function initSocketIO(io) {
 
         // ── DISCONNECT ────────────────────────────────────
         socket.on('disconnect', function () {
-            // Find any session this socket owned as visitor
             for (const session of chatSessions.values()) {
+
                 if (session.visitorSocketId === socket.id) {
                     session.visitorSocketId = null;
                     io.to('room:admins').emit('admin:visitor-status', { sessionId: session.sessionId, online: false });
+                    // Bug 2: clear any lingering typing indicator on the admin side
+                    if (session.adminSocketId) {
+                        io.to(session.adminSocketId).emit('visitor:typing-stop', { sessionId: session.sessionId });
+                    }
                 }
+
                 if (session.adminSocketId === socket.id) {
                     session.adminSocketId = null;
+                    // Bug 1: if admin drops during live chat, revert session so visitor is
+                    // notified and the session re-appears as available in the admin list
+                    if (session.status === 'live') {
+                        session.status = 'bot';
+                        if (session.visitorSocketId) {
+                            io.to(session.visitorSocketId).emit('chat:admin-disconnected', {
+                                text: "Our support agent disconnected. Someone will follow up with you shortly. 🙏",
+                            });
+                        }
+                        broadcastSessionToAdmins(io, session, 'admin:session-update');
+                    }
                 }
             }
         });
@@ -1130,6 +1153,19 @@ const PORT   = process.env.PORT || 3000;
 const server = http.createServer(app);
 const io     = new SocketServer(server, { cors: { origin: '*' } });
 initSocketIO(io);
+
+// Bug 5: purge old closed sessions from memory every hour
+setInterval(function () {
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    let purged = 0;
+    for (const [sid, sess] of chatSessions) {
+        if (sess.status === 'closed' && new Date(sess.createdAt).getTime() < cutoff) {
+            chatSessions.delete(sid);
+            purged++;
+        }
+    }
+    if (purged) console.log(`[chat] Purged ${purged} stale closed session(s) from memory`);
+}, 60 * 60 * 1000);
 
 (async function boot() {
     await loadSessionsFromStrapi();   // restore persisted sessions before accepting connections
