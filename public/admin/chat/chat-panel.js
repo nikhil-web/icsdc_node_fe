@@ -194,8 +194,10 @@
         socket && socket.emit('admin:message', { sessionId: activeSession.sessionId, text });
         replyInput.value = '';
         replyInput.style.height = '';
-        // Optimistically render
-        appendBubble({ role: 'admin', text, ts: new Date().toISOString() });
+        // NOTE: no optimistic append — the server echo via admin:session-update
+        // is the single source of truth. Optimistic rendering with a client
+        // timestamp caused duplicate bubbles because the dedup key (ts|role)
+        // would never match the server's authoritative timestamp.
     }
 
     // ── Session list rendering ────────────────────────────────
@@ -367,7 +369,9 @@
         socket.on('admin:visitor-message', function (data) {
             if (activeSession && activeSession.sessionId === data.sessionId) {
                 removeVisitorTyping();
-                appendBubble({ role: 'visitor', text: data.text, ts: new Date().toISOString() });
+                // No optimistic append here either — admin:session-update arrives
+                // immediately after with the server timestamp, and renders the
+                // visitor's message authoritatively (avoids duplicate bubbles).
             }
         });
 

@@ -225,7 +225,10 @@ function initLoginButton(menuData) {
 
     const { btnText, Link } = menuData.data.LoginButton;
     loginButtons.forEach((loginBtn) => {
-        loginBtn.textContent = btnText || "Login";
+        // Prepend a user icon so the button matches the icon+label style of .btn-wa-nav
+        loginBtn.innerHTML =
+            '<i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i>' +
+            '<span>' + (btnText || 'Login') + '</span>';
         if (Link) {
             loginBtn.addEventListener("click", () => {
                 window.location.href = Link;
@@ -290,11 +293,15 @@ function initWhatsappWidget(menuData) {
     const cleanPhone = String(cfg.phoneNumber).replace(/[^0-9]/g, '');
     if (!cleanPhone) return;
 
+    const position       = cfg.bubblePosition  || 'bottom-right';
     const title          = cfg.popoverTitle    || 'Chat with us on WhatsApp';
     const subtitle       = cfg.popoverSubtitle || "Send us a quick message and we'll get back to you.";
     const defaultMessage = cfg.defaultMessage  || "Hi, I'd like to know more about ICSDC services.";
 
     // ── Navbar buttons (desktop + mobile menu) ──────────────
+    let popover     = null;
+    let activeAnchor = null;
+
     function makeWaBtn(id, extraClass) {
         const btn = document.createElement('button');
         btn.id   = id;
@@ -304,7 +311,7 @@ function initWhatsappWidget(menuData) {
         btn.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span> WhatsApp</span>';
         btn.addEventListener('click', function (e) {
             e.stopPropagation();
-            popover ? closePopover() : openPopover();
+            popover ? closePopover() : openPopover(btn);
         });
         return btn;
     }
@@ -313,19 +320,37 @@ function initWhatsappWidget(menuData) {
     const desktopLogin = document.querySelector('.desktop-login-btn');
     if (desktopLogin) desktopLogin.insertAdjacentElement('afterend', makeWaBtn('wa-nav-btn', ''));
 
-    // Mobile menu — insert after .mobile-login-btn
+    // Mobile menu — wrap login + WA in a flex row so they sit side by side
     const mobileLogin = document.querySelector('.mobile-login-btn');
-    if (mobileLogin) mobileLogin.insertAdjacentElement('afterend', makeWaBtn('wa-nav-btn-mobile', 'btn-wa-nav--mobile'));
+    if (mobileLogin) {
+        const row = document.createElement('div');
+        row.className = 'mobile-cta-row';
+        mobileLogin.parentNode.insertBefore(row, mobileLogin);
+        row.appendChild(mobileLogin);
+        row.appendChild(makeWaBtn('wa-nav-btn-mobile', 'btn-wa-nav--mobile'));
+    }
 
-    // bubble ref kept for popover open/close (use desktop btn as anchor)
-    const bubble = document.getElementById('wa-nav-btn') || document.getElementById('wa-nav-btn-mobile');
+    // ── Position popover anchored to the button that opened it ──
+    function positionPopover(anchorEl) {
+        if (!popover || !anchorEl) return;
+        const rect = anchorEl.getBoundingClientRect();
+        const popW = Math.min(340, window.innerWidth - 24);
+        // Fixed 80 px from the top of the viewport; right edge aligns with the button
+        let right = window.innerWidth - rect.right;
+        right = Math.max(right, 8);
+        if (window.innerWidth - right < popW) right = window.innerWidth - popW - 8;
 
-    let popover = null;
+        popover.style.top    = '80px';
+        popover.style.right  = right + 'px';
+        popover.style.bottom = 'auto';
+        popover.style.left   = 'auto';
+    }
 
-    function openPopover() {
+    function openPopover(anchorEl) {
         if (popover) return;
+        activeAnchor = anchorEl;
         popover = document.createElement('div');
-        popover.className = 'wa-popover wa-pos-' + position;
+        popover.className = 'wa-popover';
         popover.setAttribute('role', 'dialog');
         popover.setAttribute('aria-labelledby', 'wa-pop-title');
         popover.innerHTML =
@@ -350,14 +375,16 @@ function initWhatsappWidget(menuData) {
                 '<div class="wa-pop-success-text">Opening WhatsApp…</div>' +
             '</div>';
         document.body.appendChild(popover);
+        positionPopover(anchorEl);
         // Trigger CSS open transition
         requestAnimationFrame(() => popover.classList.add('is-open'));
-        bubble.classList.add('is-open');
+        if (activeAnchor) activeAnchor.classList.add('is-open');
 
         popover.querySelector('.wa-pop-close').addEventListener('click', closePopover);
         popover.querySelector('.wa-pop-form').addEventListener('submit', onSubmit);
         document.addEventListener('keydown', onEsc);
         document.addEventListener('click', onOutsideClick);
+        window.addEventListener('resize', onResize);
         // Focus message textarea so visitor can start typing immediately
         setTimeout(() => {
             const ta = popover.querySelector('.wa-textarea');
@@ -369,17 +396,20 @@ function initWhatsappWidget(menuData) {
         if (!popover) return;
         document.removeEventListener('keydown', onEsc);
         document.removeEventListener('click', onOutsideClick);
+        window.removeEventListener('resize', onResize);
         popover.classList.remove('is-open');
-        bubble.classList.remove('is-open');
+        if (activeAnchor) activeAnchor.classList.remove('is-open');
         const ref = popover;
         popover = null;
+        activeAnchor = null;
         setTimeout(() => ref.remove(), 200);
     }
 
     function onEsc(e) { if (e.key === 'Escape') closePopover(); }
+    function onResize() { positionPopover(activeAnchor); }
     function onOutsideClick(e) {
         if (!popover) return;
-        if (popover.contains(e.target) || bubble.contains(e.target)) return;
+        if (popover.contains(e.target) || (activeAnchor && activeAnchor.contains(e.target))) return;
         closePopover();
     }
 
@@ -509,6 +539,12 @@ async function init() {
         initLoginButton(menuData);
         initCtaButton(menuData);
         initWhatsappWidget(menuData);
+
+        // Contact popup modal — lazy-loaded; available site-wide via
+        // window.openContactPopup() and on any <a href="contact-popup">.
+        import('/assets/js/contact-modal.js')
+            .then(function (m) { m.initContactModal(); })
+            .catch(function (err) { console.warn('[main] contact-modal load failed', err); });
 
         // Inject footer template into the placeholder element
         const footerEl = document.getElementById('site-footer');

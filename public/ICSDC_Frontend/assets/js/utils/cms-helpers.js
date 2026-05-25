@@ -8,6 +8,22 @@
 
 import { CUSTOM_ICONS } from './custom-icons.js';
 
+/**
+ * Wire a CTA button's click. If `link` is the magic value 'contact-popup'
+ * (or '#contact-popup'), opens the site-wide contact modal via
+ * window.openContactPopup() instead of navigating. Anything else navigates
+ * to that link via window.location.href.
+ */
+export function wireCtaLink(btn, link) {
+    if (!btn || !link) return;
+    if (link === 'contact-popup' || link === '#contact-popup') {
+        btn.setAttribute('onclick',
+            "if(window.openContactPopup){window.openContactPopup();}return false;");
+    } else {
+        btn.setAttribute('onclick', "window.location.href='" + link + "'");
+    }
+}
+
 /* ═══════════════════════════════════════════════════════════════
    FA ICONS MAP  (key → fa icon name, all fa-solid)
    ═══════════════════════════════════════════════════════════════ */
@@ -334,11 +350,11 @@ export function populateHero(section, data) {
     if (btns.length >= 1 && data.ctaPrimary) {
         var primaryBtn = btns.length >= 2 ? btns[1] : btns[0];
         primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' &rarr;';
-        if (data.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + data.ctaPrimary.link + "'");
+        wireCtaLink(primaryBtn, data.ctaPrimary.link);
     }
     if (btns.length >= 2 && data.ctaSecondary) {
         btns[0].textContent = data.ctaSecondary.text || '';
-        if (data.ctaSecondary.link) btns[0].setAttribute('onclick', "window.location.href='" + data.ctaSecondary.link + "'");
+        wireCtaLink(btns[0], data.ctaSecondary.link);
     }
 
     if (data.heroImage && data.heroImage.image) {
@@ -413,7 +429,7 @@ export function populateCtaBand(selector, cta) {
         if (primaryBtn) {
             if (cta.ctaPrimary && cta.ctaPrimary.text) {
                 primaryBtn.innerHTML = cta.ctaPrimary.text + ' &rarr;';
-                if (cta.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
+                wireCtaLink(primaryBtn, cta.ctaPrimary.link);
             } else {
                 primaryBtn.remove();
             }
@@ -421,7 +437,7 @@ export function populateCtaBand(selector, cta) {
         if (secondaryBtn) {
             if (cta.ctaSecondary && cta.ctaSecondary.text) {
                 secondaryBtn.textContent = cta.ctaSecondary.text;
-                if (cta.ctaSecondary.link) secondaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
+                wireCtaLink(secondaryBtn, cta.ctaSecondary.link);
             } else {
                 secondaryBtn.remove();
             }

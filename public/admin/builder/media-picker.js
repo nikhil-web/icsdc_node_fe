@@ -37,33 +37,33 @@ export function pickMedia(opts = {}) {
         modal.className = 'bld-media-modal';
         modal.innerHTML =
             '<div class="bld-media-head">' +
-                '<h3>Media Library</h3>' +
-                '<button class="bld-media-close" aria-label="Close">&times;</button>' +
+            '<h3>Media Library</h3>' +
+            '<button class="bld-media-close" aria-label="Close">&times;</button>' +
             '</div>' +
             '<div class="bld-media-toolbar">' +
-                '<input type="search" class="bld-media-search" placeholder="Search files…" />' +
-                '<label class="bld-media-upload-btn">' +
-                    '<i class="fa-solid fa-cloud-arrow-up"></i> Upload' +
-                    '<input type="file" hidden accept="image/*" />' +
-                '</label>' +
+            '<input type="search" class="bld-media-search" placeholder="Search files…" />' +
+            '<label class="bld-media-upload-btn">' +
+            '<i class="fa-solid fa-cloud-arrow-up"></i> Upload' +
+            '<input type="file" hidden accept="image/*" />' +
+            '</label>' +
             '</div>' +
             '<div class="bld-media-grid" tabindex="0"></div>' +
             '<div class="bld-media-foot">' +
-                '<span class="bld-media-status">Loading…</span>' +
-                '<div>' +
-                    '<button class="bld-media-cancel admin-toggle-btn">Cancel</button>' +
-                    '<button class="bld-media-confirm admin-login-btn" disabled>Use Selected</button>' +
-                '</div>' +
+            '<span class="bld-media-status">Loading…</span>' +
+            '<div>' +
+            '<button class="bld-media-cancel admin-toggle-btn">Cancel</button>' +
+            '<button class="bld-media-confirm admin-login-btn" disabled>Use Selected</button>' +
+            '</div>' +
             '</div>';
         backdrop.appendChild(modal);
         document.body.appendChild(backdrop);
 
-        const grid     = modal.querySelector('.bld-media-grid');
-        const search   = modal.querySelector('.bld-media-search');
-        const upload   = modal.querySelector('input[type="file"]');
-        const status   = modal.querySelector('.bld-media-status');
-        const confirm  = modal.querySelector('.bld-media-confirm');
-        const cancel   = modal.querySelector('.bld-media-cancel');
+        const grid = modal.querySelector('.bld-media-grid');
+        const search = modal.querySelector('.bld-media-search');
+        const upload = modal.querySelector('input[type="file"]');
+        const status = modal.querySelector('.bld-media-status');
+        const confirm = modal.querySelector('.bld-media-confirm');
+        const cancel = modal.querySelector('.bld-media-cancel');
         const closeBtn = modal.querySelector('.bld-media-close');
 
         let selected = null;
@@ -112,10 +112,10 @@ export function pickMedia(opts = {}) {
                 return '<button type="button" class="bld-media-card" data-id="' + esc(f.id) + '" data-url="' + esc(url) + '" data-name="' + esc(f.name || '') + '" title="' + esc(f.name || '') + '">' +
                     '<div class="bld-media-thumb">' + thumb + '</div>' +
                     '<div class="bld-media-meta">' +
-                        '<div class="bld-media-name">' + esc(f.name || f.hash || '(unnamed)') + '</div>' +
-                        '<div class="bld-media-sub">' + esc(sizeKb) + ' · ' + esc(f.ext || '') + '</div>' +
+                    '<div class="bld-media-name">' + esc(f.name || f.hash || '(unnamed)') + '</div>' +
+                    '<div class="bld-media-sub">' + esc(sizeKb) + ' · ' + esc(f.ext || '') + '</div>' +
                     '</div>' +
-                '</button>';
+                    '</button>';
             }).join('');
 
             grid.querySelectorAll('.bld-media-card').forEach((card) => {

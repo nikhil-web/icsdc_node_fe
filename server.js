@@ -798,7 +798,6 @@ function makeSession(sessionId) {
         messages: [],
         visitorSocketId: null,
         adminSocketId:   null,
-        strapiDocId:     null,
         createdAt:       new Date().toISOString(),
     };
 }
@@ -818,41 +817,60 @@ function buildBotQuestion(step, data) {
     return step;
 }
 
-// Persist / update in Strapi
-async function upsertChatSession(session) {
+// ── Chat DB helpers (direct PostgreSQL via knex) ──────────
+// Reuses global.__builderKnex which is initialised by initBuilderKnex() above.
+// Falls back to a no-op if DATABASE_URL is not set (dev without pg).
+
+async function initChatDb() {
+    const knex = global.__builderKnex;
+    if (!knex) { console.warn('[chat] DATABASE_URL not set — chat sessions will not persist across restarts'); return; }
     try {
-        const body = {
-            data: {
-                sessionId:   session.sessionId,
-                name:        session.data.name,
-                phone:       session.data.phone,
-                service:     session.data.service,
-                company:     session.data.company,
-                requirement: session.data.requirement,
-                budget:      session.data.budget,
-                status:      session.status,
-                messages:    session.messages,
-            },
-        };
-        if (session.strapiDocId) {
-            // Update existing
-            await fetch(
-                `${STRAPI_URL}/api/chat-sessions/${session.strapiDocId}`,
-                { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${STRAPI_TOKEN}` }, body: JSON.stringify(body) }
-            );
-        } else {
-            // Create new
-            const r = await fetch(
-                `${STRAPI_URL}/api/chat-sessions`,
-                { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${STRAPI_TOKEN}` }, body: JSON.stringify(body) }
-            );
-            if (r.ok) {
-                const json = await r.json();
-                session.strapiDocId = (json.data && (json.data.documentId || json.data.id)) || null;
-            }
-        }
+        await knex.schema.createTableIfNotExists('app_chat_sessions', function (t) {
+            t.text('session_id').primary();
+            t.text('name');
+            t.text('phone');
+            t.text('service');
+            t.text('company');
+            t.text('requirement');
+            t.text('budget');
+            t.text('status').notNullable().defaultTo('bot');
+            t.integer('step').notNullable().defaultTo(0);
+            t.jsonb('messages').notNullable().defaultTo('[]');
+            t.timestamp('created_at', { useTz: true }).notNullable().defaultTo(knex.fn.now());
+            t.timestamp('updated_at', { useTz: true }).notNullable().defaultTo(knex.fn.now());
+        });
+        console.log('[chat] app_chat_sessions table ready');
+        // Table is named app_chat_sessions (not chat_sessions) so it does NOT
+        // collide with the legacy Strapi chat-session collection's table.
     } catch (err) {
-        console.error('[chat] Strapi upsert failed:', err.message);
+        console.warn('[chat] Could not create app_chat_sessions table:', err.message);
+    }
+}
+
+async function upsertChatSession(session) {
+    const knex = global.__builderKnex;
+    if (!knex) return;
+    try {
+        await knex('app_chat_sessions')
+            .insert({
+                session_id:  session.sessionId,
+                name:        session.data.name        || null,
+                phone:       session.data.phone       || null,
+                service:     session.data.service     || null,
+                company:     session.data.company     || null,
+                requirement: session.data.requirement || null,
+                budget:      session.data.budget      || null,
+                status:      session.status,
+                step:        session.step,
+                messages:    JSON.stringify(session.messages),
+                created_at:  session.createdAt || new Date().toISOString(),
+                updated_at:  new Date().toISOString(),
+            })
+            .onConflict('session_id')
+            .merge(['name', 'phone', 'service', 'company', 'requirement', 'budget',
+                    'status', 'step', 'messages', 'updated_at']);
+    } catch (err) {
+        console.error('[chat] DB upsert failed:', err.message);
     }
 }
 
@@ -877,44 +895,41 @@ function serializeSession(session) {
     };
 }
 
-// ── Restore sessions from Strapi on startup ───────────────
-async function loadSessionsFromStrapi() {
+// ── Restore sessions from PostgreSQL on startup ───────────
+async function loadSessionsFromDB() {
+    const knex = global.__builderKnex;
+    if (!knex) return;
     try {
-        // Only restore sessions that are still active (not closed) or closed within the last 24h
         const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-        const r = await fetch(
-            `${STRAPI_URL}/api/chat-sessions?filters[$or][0][status][$ne]=closed&filters[$or][1][updatedAt][$gt]=${since}&sort=createdAt:desc&pagination[pageSize]=200`,
-            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-        );
-        if (!r.ok) { console.warn('[chat] Could not load sessions from Strapi:', r.status); return; }
-        const json = await r.json();
-        const items = Array.isArray(json.data) ? json.data : [];
-        for (const item of items) {
-            const sessionId = item.sessionId;
-            if (!sessionId || chatSessions.has(sessionId)) continue;
-            const messages = Array.isArray(item.messages) ? item.messages : [];
-            // Compute how many bot steps the visitor has answered
-            const step = messages.filter(function (m) { return m.role === 'visitor'; }).length;
-            chatSessions.set(sessionId, {
-                sessionId,
-                step,
-                status:     item.status     || 'bot',
+        const rows = await knex('app_chat_sessions')
+            .where(function () {
+                this.where('status', '!=', 'closed')
+                    .orWhere('updated_at', '>', since);
+            })
+            .orderBy('created_at', 'desc')
+            .limit(200);
+        for (const row of rows) {
+            if (chatSessions.has(row.session_id)) continue;
+            const messages = Array.isArray(row.messages) ? row.messages : (JSON.parse(row.messages || '[]'));
+            chatSessions.set(row.session_id, {
+                sessionId:      row.session_id,
+                step:           row.step || 0,
+                status:         row.status || 'bot',
                 data: {
-                    name:        item.name        || '',
-                    phone:       item.phone       || '',
-                    service:     item.service     || '',
-                    company:     item.company     || '',
-                    requirement: item.requirement || '',
-                    budget:      item.budget      || '',
+                    name:        row.name        || '',
+                    phone:       row.phone       || '',
+                    service:     row.service     || '',
+                    company:     row.company     || '',
+                    requirement: row.requirement || '',
+                    budget:      row.budget      || '',
                 },
                 messages,
                 visitorSocketId: null,
                 adminSocketId:   null,
-                strapiDocId:     item.documentId || item.id || null,
-                createdAt:       item.createdAt  || new Date().toISOString(),
+                createdAt:       row.created_at ? row.created_at.toISOString() : new Date().toISOString(),
             });
         }
-        if (chatSessions.size) console.log(`[chat] Restored ${chatSessions.size} session(s) from Strapi`);
+        console.log(`[chat] Restored ${chatSessions.size} session(s) from PostgreSQL`);
     } catch (err) {
         console.warn('[chat] Session restore failed:', err.message);
     }
@@ -968,6 +983,14 @@ function initSocketIO(io) {
             if (!sessionId || !text) return;
             const session = chatSessions.get(sessionId);
             if (!session) return;
+
+            // Defensive dedup: drop an identical visitor message arriving
+            // within 1.5s of the previous one (covers double-emit cases).
+            const last = session.messages[session.messages.length - 1];
+            if (last && last.role === 'visitor' && last.text === text &&
+                (Date.now() - new Date(last.ts).getTime()) < 1500) {
+                return;
+            }
 
             addMsg(session, 'visitor', text);
 
@@ -1050,6 +1073,14 @@ function initSocketIO(io) {
             if (!sessionId || !text) return;
             const session = chatSessions.get(sessionId);
             if (!session) return;
+            // Defensive dedup: drop an identical admin message arriving within
+            // 1.5s of the previous one (covers double-click / cached optimistic
+            // append re-emit / network retry). Doesn't block legitimate repeats.
+            const last = session.messages[session.messages.length - 1];
+            if (last && last.role === 'admin' && last.text === text &&
+                (Date.now() - new Date(last.ts).getTime()) < 1500) {
+                return;
+            }
             addMsg(session, 'admin', text);
             if (session.visitorSocketId) {
                 io.to(session.visitorSocketId).emit('chat:admin-message', { text });
@@ -1165,7 +1196,8 @@ setInterval(function () {
 }, 60 * 60 * 1000);
 
 (async function boot() {
-    await loadSessionsFromStrapi();   // restore persisted sessions before accepting connections
+    await initChatDb();          // create chat_sessions table if it doesn't exist
+    await loadSessionsFromDB();  // restore persisted sessions before accepting connections
     server.listen(PORT, function () {
         console.log(`Server running at http://localhost:${PORT}`);
         console.log('[socket.io] Live chat ready');

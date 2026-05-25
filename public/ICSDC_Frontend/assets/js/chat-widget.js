@@ -11,6 +11,7 @@ let sessionId = null;
 let isOpen = false;
 let unreadCount = 0;
 let inputLocked = false;
+let isLiveMode = false;    // true after admin takes over; changes sendMessage() behaviour
 let currentStepType = 'text';  // 'text' | 'tel' | 'textarea' | 'chips'
 let currentOptional = false;
 
@@ -154,7 +155,10 @@ function appendMsg(role, text) {
     scrollToBottom();
 }
 
+let _typingTimer = null;   // tracks the 300 ms delayed showTyping call
+
 function showTyping() {
+    if (document.getElementById('chat-typing-indicator')) return; // already showing
     const t = document.createElement('div');
     t.className = 'chat-typing';
     t.id = 'chat-typing-indicator';
@@ -164,7 +168,18 @@ function showTyping() {
     return t;
 }
 
+function showTypingDelayed() {
+    clearTimeout(_typingTimer);
+    _typingTimer = setTimeout(function () {
+        _typingTimer = null;
+        showTyping();
+    }, 300);
+}
+
 function removeTyping() {
+    // Cancel pending delayed show — prevents the indicator appearing AFTER the reply arrives
+    clearTimeout(_typingTimer);
+    _typingTimer = null;
     const t = document.getElementById('chat-typing-indicator');
     if (t) t.remove();
 }
@@ -266,11 +281,16 @@ function sendMessage(text) {
     appendMsg('visitor', display);
     inputEl.value = '';
     inputEl.style.height = '';
-    inputLocked = true;
-    sendBtn.disabled = true;
 
-    // Show typing indicator with small delay to feel natural
-    setTimeout(function () { showTyping(); }, 300);
+    if (!isLiveMode) {
+        // Bot mode: lock input while waiting for the bot's next question.
+        // In live mode we leave input open — the server just forwards the
+        // message to the admin and sends nothing back to the visitor.
+        inputLocked = true;
+        sendBtn.disabled = true;
+        showTypingDelayed();
+    }
+
     socket.emit('chat:message', { sessionId, text: display });
 }
 
@@ -299,6 +319,7 @@ function connectSocket() {
 
     socket.on('chat:agent-joined', function (data) {
         removeTyping();
+        isLiveMode = true;
         appendMsg('admin', data.text || "You're connected with a support agent. 👤");
         if (!isOpen) incrementUnread();
         // Enable input for live chat
@@ -338,6 +359,7 @@ function connectSocket() {
 
         var s = payload.status;
         var step = payload.currentStep;
+        isLiveMode = (s === 'live');   // sync flag to server-side truth
 
         if (s === 'bot') {
             if (step) {
@@ -381,6 +403,7 @@ function connectSocket() {
 
     socket.on('chat:ended', function (data) {
         removeTyping();
+        isLiveMode = false;
         appendMsg('admin', data.text || 'Chat closed. We\'ll follow up soon!');
         if (!isOpen) incrementUnread();
         setInputState(null);
@@ -389,6 +412,7 @@ function connectSocket() {
     // Bug 1: admin dropped mid-live-chat — session reverts to bot on server
     socket.on('chat:admin-disconnected', function (data) {
         removeAdminTyping();
+        isLiveMode = false;
         appendMsg('admin', data.text || 'The support agent disconnected. Our team will follow up shortly.');
         if (!isOpen) incrementUnread();
         // Hide input — they are no longer in a live session
