@@ -21,6 +21,7 @@ export function getNavigation() {
         "&populate[navLogo][populate]=*" +
         "&populate[LoginButton][populate]=*" +
         "&populate[ctaButton][populate]=*" +
+        "&populate[whatsappWidget][populate]=*" +
         "&populate[menus][populate][sections][populate]=items&populate[menus][populate]=items"
     );
 }

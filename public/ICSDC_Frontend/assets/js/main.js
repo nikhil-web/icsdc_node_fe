@@ -272,6 +272,189 @@ function initCtaButton(menuData) {
 }
 
 // ══════════════════════════════════════════════════════════
+//  WHATSAPP FLOATING WIDGET
+//  Bubble bottom-right of every page. Click → popover collects
+//  phone + optional name/message, posts to /api/whatsapp-leads,
+//  then opens wa.me/<number> (universal link — app if installed,
+//  web.whatsapp.com otherwise).
+//  Config comes from the Strapi navigation single type's
+//  `whatsappWidget` component. If missing or enabled=false, no-op.
+// ══════════════════════════════════════════════════════════
+function initWhatsappWidget(menuData) {
+    const cfg = menuData?.data?.whatsappWidget;
+    if (!cfg || cfg.enabled === false || !cfg.phoneNumber) return;
+
+    // Don't mount twice if init runs more than once for any reason
+    if (document.getElementById('wa-bubble')) return;
+
+    const cleanPhone = String(cfg.phoneNumber).replace(/[^0-9]/g, '');
+    if (!cleanPhone) return;
+
+    const position = cfg.bubblePosition === 'bottom-left' ? 'bottom-left' : 'bottom-right';
+    const title    = cfg.popoverTitle    || 'Chat with us on WhatsApp';
+    const subtitle = cfg.popoverSubtitle || "Drop your number and we'll continue on WhatsApp — we usually reply within minutes.";
+    const defaultMessage = cfg.defaultMessage || "Hi, I'd like to know more about ICSDC services.";
+
+    // ── Bubble ──────────────────────────────────────────────
+    const bubble = document.createElement('button');
+    bubble.id = 'wa-bubble';
+    bubble.className = 'wa-bubble wa-pos-' + position;
+    bubble.type = 'button';
+    bubble.setAttribute('aria-label', 'Open WhatsApp chat');
+    bubble.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i>';
+    document.body.appendChild(bubble);
+
+    let popover = null;
+
+    function openPopover() {
+        if (popover) return;
+        popover = document.createElement('div');
+        popover.className = 'wa-popover wa-pos-' + position;
+        popover.setAttribute('role', 'dialog');
+        popover.setAttribute('aria-labelledby', 'wa-pop-title');
+        popover.innerHTML =
+            '<div class="wa-pop-head">' +
+                '<div class="wa-pop-avatar"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>' +
+                '<div class="wa-pop-head-text">' +
+                    '<div id="wa-pop-title" class="wa-pop-title">' + escapeHtml(title) + '</div>' +
+                    '<div class="wa-pop-sub">' + escapeHtml(subtitle) + '</div>' +
+                '</div>' +
+                '<button class="wa-pop-close" type="button" aria-label="Close">&times;</button>' +
+            '</div>' +
+            '<form class="wa-pop-form" novalidate>' +
+                '<label class="wa-field">' +
+                    '<span class="wa-label">Your name (optional)</span>' +
+                    '<input type="text" name="name" class="wa-input" placeholder="John Smith" autocomplete="name">' +
+                '</label>' +
+                '<label class="wa-field">' +
+                    '<span class="wa-label">Phone number <span class="wa-req">*</span></span>' +
+                    '<div class="wa-phone-wrap">' +
+                        '<span class="wa-phone-cc">+91</span>' +
+                        '<input type="tel" name="phone" class="wa-input wa-input-phone" placeholder="98765 43210" required autocomplete="tel-national" inputmode="numeric">' +
+                    '</div>' +
+                '</label>' +
+                '<label class="wa-field">' +
+                    '<span class="wa-label">Message (optional)</span>' +
+                    '<textarea name="message" class="wa-input wa-textarea" rows="3" placeholder="">' + escapeHtml(defaultMessage) + '</textarea>' +
+                '</label>' +
+                '<button type="submit" class="wa-submit"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Continue on WhatsApp</button>' +
+                '<p class="wa-trust">Your details are sent securely to ICSDC.</p>' +
+            '</form>' +
+            '<div class="wa-pop-success" hidden>' +
+                '<div class="wa-pop-success-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>' +
+                '<div class="wa-pop-success-text">Opening WhatsApp…</div>' +
+            '</div>';
+        document.body.appendChild(popover);
+        // Trigger CSS open transition
+        requestAnimationFrame(() => popover.classList.add('is-open'));
+        bubble.classList.add('is-open');
+
+        popover.querySelector('.wa-pop-close').addEventListener('click', closePopover);
+        popover.querySelector('.wa-pop-form').addEventListener('submit', onSubmit);
+        document.addEventListener('keydown', onEsc);
+        document.addEventListener('click', onOutsideClick);
+        // Focus phone for fast entry
+        setTimeout(() => popover.querySelector('.wa-input-phone')?.focus(), 60);
+    }
+
+    function closePopover() {
+        if (!popover) return;
+        document.removeEventListener('keydown', onEsc);
+        document.removeEventListener('click', onOutsideClick);
+        popover.classList.remove('is-open');
+        bubble.classList.remove('is-open');
+        const ref = popover;
+        popover = null;
+        setTimeout(() => ref.remove(), 200);
+    }
+
+    function onEsc(e) { if (e.key === 'Escape') closePopover(); }
+    function onOutsideClick(e) {
+        if (!popover) return;
+        if (popover.contains(e.target) || bubble.contains(e.target)) return;
+        closePopover();
+    }
+
+    async function onSubmit(e) {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const submitBtn = form.querySelector('.wa-submit');
+        const data = new FormData(form);
+        const name    = String(data.get('name')    || '').trim();
+        const phoneRaw= String(data.get('phone')   || '').trim();
+        const message = String(data.get('message') || '').trim() || defaultMessage;
+
+        if (!phoneRaw) {
+            const phoneInput = form.querySelector('.wa-input-phone');
+            phoneInput?.focus();
+            phoneInput?.classList.add('wa-input-error');
+            return;
+        }
+
+        // Normalise visitor's number — strip spaces/dashes, keep digits only,
+        // assume +91 if 10 digits (matches the +91 prefix shown in the UI)
+        const visitorPhoneDigits = phoneRaw.replace(/[^0-9]/g, '');
+        const visitorPhoneE164 = visitorPhoneDigits.length === 10
+            ? '+91' + visitorPhoneDigits
+            : '+' + visitorPhoneDigits;
+
+        const origLabel = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving…';
+
+        // Capture the lead (don't block WhatsApp handoff on a failed POST — the user
+        // expectation is "the chat opens"; lead capture is best-effort.)
+        try {
+            await fetch('/api/strapi/api/whatsapp-leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    data: {
+                        phone: visitorPhoneE164,
+                        name: name || null,
+                        message: message || null,
+                        sourceUrl: location.href,
+                        userAgent: navigator.userAgent,
+                    },
+                }),
+            });
+        } catch (err) {
+            // Log only — still proceed with WhatsApp handoff so the user isn't blocked.
+            console.warn('[wa-widget] lead POST failed:', err);
+        }
+
+        // Build the universal wa.me link with a pre-filled message that includes
+        // the visitor's number, so the chat starts with full context for our team.
+        const prefilled = name
+            ? `Hi, I'm ${name}. ${message}\n\n(My number: ${visitorPhoneE164})`
+            : `${message}\n\n(My number: ${visitorPhoneE164})`;
+        const waUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(prefilled);
+
+        // Show success state, then open WhatsApp in a new tab
+        form.style.display = 'none';
+        popover.querySelector('.wa-pop-success').hidden = false;
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
+
+        // Auto-dismiss after a short pause so the success state is visible
+        setTimeout(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = origLabel;
+            closePopover();
+        }, 1500);
+    }
+
+    function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, (c) =>
+            ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    bubble.addEventListener('click', (e) => {
+        e.stopPropagation();
+        popover ? closePopover() : openPopover();
+    });
+}
+
+// ══════════════════════════════════════════════════════════
 //  INIT — orchestrates the full render pipeline
 // ══════════════════════════════════════════════════════════
 
@@ -369,6 +552,7 @@ async function init() {
         initMainLogo(menuData);
         initLoginButton(menuData);
         initCtaButton(menuData);
+        initWhatsappWidget(menuData);
 
         // Inject footer template into the placeholder element
         const footerEl = document.getElementById('site-footer');
