@@ -877,6 +877,47 @@ function serializeSession(session) {
     };
 }
 
+// ── Restore sessions from Strapi on startup ───────────────
+async function loadSessionsFromStrapi() {
+    try {
+        const r = await fetch(
+            `${STRAPI_URL}/api/chat-sessions?sort=createdAt:desc&pagination[pageSize]=500`,
+            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+        );
+        if (!r.ok) { console.warn('[chat] Could not load sessions from Strapi:', r.status); return; }
+        const json = await r.json();
+        const items = Array.isArray(json.data) ? json.data : [];
+        for (const item of items) {
+            const sessionId = item.sessionId;
+            if (!sessionId || chatSessions.has(sessionId)) continue;
+            const messages = Array.isArray(item.messages) ? item.messages : [];
+            // Compute how many bot steps the visitor has answered
+            const step = messages.filter(function (m) { return m.role === 'visitor'; }).length;
+            chatSessions.set(sessionId, {
+                sessionId,
+                step,
+                status:     item.status     || 'bot',
+                data: {
+                    name:        item.name        || '',
+                    phone:       item.phone       || '',
+                    service:     item.service     || '',
+                    company:     item.company     || '',
+                    requirement: item.requirement || '',
+                    budget:      item.budget      || '',
+                },
+                messages,
+                visitorSocketId: null,
+                adminSocketId:   null,
+                strapiDocId:     item.documentId || item.id || null,
+                createdAt:       item.createdAt  || new Date().toISOString(),
+            });
+        }
+        if (chatSessions.size) console.log(`[chat] Restored ${chatSessions.size} session(s) from Strapi`);
+    } catch (err) {
+        console.warn('[chat] Session restore failed:', err.message);
+    }
+}
+
 // ── Socket.io setup ───────────────────────────────────────
 function initSocketIO(io) {
     io.on('connection', function (socket) {
@@ -894,19 +935,33 @@ function initSocketIO(io) {
             session.visitorSocketId = socket.id;
             socket.join('session:' + sessionId);
 
-            // Notify admins that a new visitor is online
+            // Notify admins
             if (isNew) {
                 broadcastSessionToAdmins(io, session, 'admin:session-new');
             } else {
                 io.to('room:admins').emit('admin:visitor-status', { sessionId, online: true });
             }
 
-            // Send the current (or first) bot question
-            const step = currentStep(session);
-            if (step && session.status === 'bot') {
-                const q = buildBotQuestion(step, session.data);
-                addMsg(session, 'bot', q.question);
-                socket.emit('chat:bot-message', q);
+            if (session.status === 'bot') {
+                const step = currentStep(session);
+                if (step) {
+                    // Pending question — only store the message on first ask
+                    const q = buildBotQuestion(step, session.data);
+                    if (isNew) addMsg(session, 'bot', q.question);
+                    socket.emit('chat:bot-message', q);
+                } else {
+                    // Bot finished all questions — resend completion notice on reconnect
+                    const lastMsg = session.messages[session.messages.length - 1];
+                    if (!isNew && lastMsg && lastMsg.role === 'bot') {
+                        socket.emit('chat:complete', { text: lastMsg.text });
+                    }
+                }
+            } else if (session.status === 'live') {
+                // Reconnecting to an active live session
+                socket.emit('chat:agent-joined', { text: "You're reconnected with our support agent. 👤" });
+            } else if (session.status === 'closed') {
+                const lastMsg = session.messages[session.messages.length - 1];
+                socket.emit('chat:ended', { text: (lastMsg && lastMsg.role !== 'visitor' ? lastMsg.text : null) || 'This chat session has ended.' });
             }
         });
 
@@ -939,13 +994,13 @@ function initSocketIO(io) {
                 addMsg(session, 'bot', q.question);
                 socket.emit('chat:bot-message', q);
             } else {
-                // All steps complete
-                const doneMsg = `Thanks ${session.data.name}! 🎉 Our team will reach out to you at ${session.data.phone} shortly.`;
+                // All steps complete — notify visitor but keep status 'bot' so admin can still take over
+                const doneMsg = `Thanks ${session.data.name}! 🎉 Our team will reach out to you at ${session.data.phone} shortly. Feel free to wait if you'd like to chat with us now.`;
                 addMsg(session, 'bot', doneMsg);
                 socket.emit('chat:complete', { text: doneMsg });
-                session.status = 'closed';
+                // status stays 'bot' — admin can take over anytime
                 await upsertChatSession(session);
-                broadcastSessionToAdmins(io, session, 'admin:session-new');
+                broadcastSessionToAdmins(io, session, 'admin:session-update');
                 return;
             }
 
@@ -1076,8 +1131,11 @@ const server = http.createServer(app);
 const io     = new SocketServer(server, { cors: { origin: '*' } });
 initSocketIO(io);
 
-server.listen(PORT, function () {
-    console.log(`Server running at http://localhost:${PORT}`);
-    console.log('[socket.io] Live chat ready');
-    refreshPageCache();
-});
+(async function boot() {
+    await loadSessionsFromStrapi();   // restore persisted sessions before accepting connections
+    server.listen(PORT, function () {
+        console.log(`Server running at http://localhost:${PORT}`);
+        console.log('[socket.io] Live chat ready');
+        refreshPageCache();
+    });
+}());

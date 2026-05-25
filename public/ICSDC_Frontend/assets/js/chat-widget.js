@@ -321,7 +321,12 @@ function connectSocket() {
         removeTyping();
         appendMsg('bot', data.text);
         if (!isOpen) incrementUnread();
-        setInputState(null);
+        // Hide input but do NOT permanently lock — admin may still take over
+        inputEl.style.display = 'none';
+        sendBtn.style.display = 'none';
+        skipBtn.style.display = 'none';
+        chipsRow.style.display = 'none';
+        inputLocked = false;  // stays unlocked so chat:agent-joined can re-enable
     });
 
     socket.on('chat:ended', function (data) {
