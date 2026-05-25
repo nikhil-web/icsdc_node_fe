@@ -292,14 +292,21 @@
 
             // If this is the open session, refresh conv view
             if (activeSession && activeSession.sessionId === session.sessionId) {
+                const prevMsgCount = convBubblesEl.querySelectorAll('.acp-bubble').length;
                 activeSession = session;
-                // Sync new messages
-                const existing = convBubblesEl.querySelectorAll('.acp-bubble').length;
-                (session.messages || []).slice(existing).forEach(function (msg) { appendBubble(msg); });
-                // Sync button states
+                // Sync only new messages (avoid duplicates)
+                (session.messages || []).slice(prevMsgCount).forEach(function (msg) { appendBubble(msg); });
+                // Sync button + reply-box state
                 takeoverBtn.hidden     = session.status !== 'bot';
                 closeSessionBtn.hidden = session.status === 'closed';
                 replyBox.hidden        = session.status !== 'live';
+                // Update header meta in case new fields arrived
+                convMetaEl.textContent = [
+                    session.phone   ? '📞 ' + session.phone   : '',
+                    session.service ? '🔧 ' + session.service : '',
+                    session.company ? '🏢 ' + session.company : '',
+                    session.budget  ? '💰 ' + session.budget  : '',
+                ].filter(Boolean).join(' · ');
             }
             renderSessionList();
         });
@@ -331,4 +338,19 @@
         mount(container);
         connectSocket();
     };
+
+    // ── Auto-init guard ───────────────────────────────────────
+    // admin.js runs applyRoute() before this script finishes loading,
+    // so if the user lands directly on /admin/chat the initChatPanel
+    // call in applyRoute() finds window.initChatPanel === undefined.
+    // This self-init fires after the IIFE sets window.initChatPanel.
+    if (!window.__icsdc_chatLoaded &&
+        window.location.pathname.startsWith('/admin/chat')) {
+        const mainChat = document.getElementById('view-chat');
+        if (mainChat) {
+            window.__icsdc_chatLoaded = true;
+            mainChat.hidden = false;
+            window.initChatPanel(mainChat);
+        }
+    }
 })();

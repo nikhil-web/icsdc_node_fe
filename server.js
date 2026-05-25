@@ -885,6 +885,7 @@ function initSocketIO(io) {
         socket.on('chat:init', function ({ sessionId }) {
             if (!sessionId) return;
 
+            const isNew = !chatSessions.has(sessionId);
             let session = chatSessions.get(sessionId);
             if (!session) {
                 session = makeSession(sessionId);
@@ -893,10 +894,18 @@ function initSocketIO(io) {
             session.visitorSocketId = socket.id;
             socket.join('session:' + sessionId);
 
+            // Notify admins that a new visitor is online
+            if (isNew) {
+                broadcastSessionToAdmins(io, session, 'admin:session-new');
+            } else {
+                io.to('room:admins').emit('admin:visitor-status', { sessionId, online: true });
+            }
+
             // Send the current (or first) bot question
             const step = currentStep(session);
             if (step && session.status === 'bot') {
                 const q = buildBotQuestion(step, session.data);
+                addMsg(session, 'bot', q.question);
                 socket.emit('chat:bot-message', q);
             }
         });
