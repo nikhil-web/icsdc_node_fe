@@ -67,6 +67,7 @@
                 </a>
                 <div class="admin-nav-left-tabs">
                     <a href="/admin"          class="admin-nav-tab" data-tab="dashboard">Dashboard</a>
+                    <a href="/admin/leads"    class="admin-nav-tab" data-tab="leads">Leads</a>
                     <a href="/admin/builder"  class="admin-nav-tab" data-tab="builder">Page Builder</a>
                     <a href="/admin/sitemap"  class="admin-nav-tab" data-tab="sitemap">Sitemap</a>
                     <a href="/admin/chat"    class="admin-nav-tab" data-tab="chat">
@@ -89,39 +90,6 @@
         </nav>
 
         <main class="admin-main" id="view-dashboard-main">
-
-            <!-- Contact Submissions -->
-            <section class="admin-section">
-                <div class="admin-page-header">
-                    <div>
-                        <h2 class="admin-page-title">Contact Submissions</h2>
-                        <p class="admin-page-sub">Enquiries submitted via the website contact form.</p>
-                    </div>
-                    <div class="admin-header-actions">
-                        <input id="search-submissions" class="admin-search" type="search" placeholder="Search submissions…" />
-                        <button class="admin-refresh-btn" id="refresh-submissions" aria-label="Refresh">
-                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="admin-table-wrap">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Subject</th>
-                                <th>Company</th>
-                                <th>Received</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="submissions-body">
-                            <tr><td colspan="5" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
 
             <!-- Page Registry -->
             <section class="admin-section">
@@ -174,6 +142,80 @@
                 </div>
             </section>
 
+        </main>
+
+        <!-- Leads view (shown when path is /admin/leads) -->
+        <main class="admin-main" id="view-leads" hidden>
+            <section class="admin-section">
+                <div class="admin-page-header">
+                    <div>
+                        <h2 class="admin-page-title">Leads</h2>
+                        <p class="admin-page-sub">All inbound enquiries from the contact form, WhatsApp widget, and chatbot — in one place.</p>
+                    </div>
+                    <div class="admin-header-actions">
+                        <input id="search-leads" class="admin-search" type="search" placeholder="Search leads…" />
+                        <button class="admin-refresh-btn" id="refresh-leads" aria-label="Refresh">
+                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stat cards: count per source -->
+                <div class="lead-stats" id="lead-stats">
+                    <div class="lead-stat-card lead-stat-card--contact">
+                        <div class="lead-stat-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+                        <div class="lead-stat-body">
+                            <div class="lead-stat-label">Contact Form</div>
+                            <div class="lead-stat-total" id="stat-contact-total">0</div>
+                            <div class="lead-stat-sub"><span id="stat-contact-week">0</span> this week</div>
+                        </div>
+                    </div>
+                    <div class="lead-stat-card lead-stat-card--whatsapp">
+                        <div class="lead-stat-icon"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+                        <div class="lead-stat-body">
+                            <div class="lead-stat-label">WhatsApp</div>
+                            <div class="lead-stat-total" id="stat-whatsapp-total">0</div>
+                            <div class="lead-stat-sub"><span id="stat-whatsapp-week">0</span> this week</div>
+                        </div>
+                    </div>
+                    <div class="lead-stat-card lead-stat-card--chat">
+                        <div class="lead-stat-icon"><i class="fa-solid fa-comments" aria-hidden="true"></i></div>
+                        <div class="lead-stat-body">
+                            <div class="lead-stat-label">Chatbot</div>
+                            <div class="lead-stat-total" id="stat-chat-total">0</div>
+                            <div class="lead-stat-sub"><span id="stat-chat-week">0</span> this week</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Source filter chips -->
+                <div class="admin-filter-btns" id="lead-filter-chips" style="margin-bottom:1rem;">
+                    <button class="admin-filter-btn active" data-source="all">All (<span id="lead-count-all">0</span>)</button>
+                    <button class="admin-filter-btn" data-source="contact">Contact (<span id="lead-count-contact">0</span>)</button>
+                    <button class="admin-filter-btn" data-source="whatsapp">WhatsApp (<span id="lead-count-whatsapp">0</span>)</button>
+                    <button class="admin-filter-btn" data-source="chat">Chat (<span id="lead-count-chat">0</span>)</button>
+                </div>
+
+                <!-- Unified leads table -->
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Source</th>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Status</th>
+                                <th>Received</th>
+                                <th>Actions</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="leads-body">
+                            <tr><td colspan="7" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading leads…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </main>
 
         <!-- Builder view (shown when path is /admin/builder*) -->
@@ -233,6 +275,9 @@
                         <button class="admin-filter-btn" data-sitemap-filter="static">Static</button>
                         <button class="admin-filter-btn" data-sitemap-filter="builder">Builder</button>
                     </div>
+                    <button class="admin-btn admin-btn-primary" id="sitemap-regenerate-btn" type="button" style="margin-left:auto;">
+                        <i class="fa-solid fa-rotate" aria-hidden="true"></i> Regenerate
+                    </button>
                 </div>
 
                 <!-- URL table -->

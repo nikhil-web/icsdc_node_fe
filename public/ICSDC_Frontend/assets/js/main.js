@@ -634,6 +634,6 @@ function initThemeToggle() {
     // Insert mobile row inside mobile-menu, before the mobile login button
     var mobileMenu = document.getElementById('mobile-menu');
     var mobileLoginBtn = mobileMenu && mobileMenu.querySelector('.mobile-login-btn');
-    if (mobileLoginBtn) mobileMenu.insertBefore(mobileRow, mobileLoginBtn);
+    if (mobileLoginBtn && mobileLoginBtn.parentNode === mobileMenu) mobileMenu.insertBefore(mobileRow, mobileLoginBtn);
     else if (mobileMenu) mobileMenu.appendChild(mobileRow);
 }

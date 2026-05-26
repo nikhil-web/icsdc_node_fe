@@ -1229,19 +1229,50 @@ summary.faq-q::marker { display: none; content: ''; }
     transform: translateY(-2px) scale(1.08);
 }
 
-/* ── Copyright bar ── */
+/* ── Bottom bar — copyright + legal links ── */
 .footer-bottom {
     background: var(--c-footer-bar);
-    padding: 16px var(--c-px);
-    text-align: center;
+    padding: 14px var(--c-px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
 .footer-bottom p {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.45);
-    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.40);
+    line-height: 1.5;
     margin: 0;
+}
+
+.footer-legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    list-style: none;
+}
+
+.footer-legal-links a {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.40);
+    text-decoration: none;
+    padding: 0 10px;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    line-height: 1;
+    transition: color 0.18s;
+}
+
+.footer-legal-links a:last-child {
+    border-right: none;
+}
+
+.footer-legal-links a:hover {
+    color: rgba(255, 255, 255, 0.80);
 }
 
 /* ── Responsive ── */

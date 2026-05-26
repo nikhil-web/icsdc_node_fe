@@ -156,8 +156,11 @@ app.patch('/api/admin/pages/:id', requireAdminAuth, async (req, res) => {
         );
         const data = await r.json();
         if (r.ok) {
-            // Keep cache in sync without a full round-trip
-            refreshPageCache();
+            // Keep cache in sync, THEN rewrite the static sitemap so the
+            // hide/unhide takes effect for crawlers within seconds.
+            refreshPageCache()
+                .then(function () { return writeSitemapFile(req); })
+                .catch(function (e) { console.warn('[sitemap] post-toggle regen failed:', e.message); });
         }
         res.status(r.status).json(data);
     } catch (err) {
@@ -651,22 +654,43 @@ const STATIC_PAGES = [
     { path: '/pricing',                     priority: 0.7, changefreq: 'weekly'  },
 ];
 
+// Derive a page-registry slug from a STATIC_PAGES path so we can consult pageCache.
+// '/'                   → 'index'  (matches index.html — the homepage file)
+// '/dedicated-server'   → 'dedicated-server'
+// If no matching row exists in pageCache, isPageLive() defaults to include,
+// so the homepage stays in the sitemap whether or not it has a registry row.
+function slugFromPath(p) {
+    if (!p || p === '/' || p === '') return 'index';
+    return p.replace(/^\//, '').replace(/\/$/, '');
+}
+
+// Page-registry: include unless explicitly toggled to isLive=false.
+// Pages absent from the cache default to visible (preserves current behaviour
+// for any page not yet registered in Strapi).
+function isPageLive(slug) {
+    return pageCache.has(slug) ? pageCache.get(slug) !== false : true;
+}
+
 async function buildSitemapEntries(req) {
     const baseUrl = process.env.SITE_URL ||
         (req ? `${req.protocol}://${req.get('host')}` : 'https://icsdc.in');
     const today = new Date().toISOString().split('T')[0];
 
-    const entries = STATIC_PAGES.map(function (p) {
-        return {
-            loc:        baseUrl + p.path,
-            lastmod:    today,
-            changefreq: p.changefreq,
-            priority:   p.priority,
-            type:       'static',
-        };
-    });
+    const entries = STATIC_PAGES
+        // Homepage ('/') is always included regardless of Page Registry state.
+        // Every other static page passes through the registry filter.
+        .filter(function (p) { return p.path === '/' || isPageLive(slugFromPath(p.path)); })
+        .map(function (p) {
+            return {
+                loc:        baseUrl + p.path,
+                lastmod:    today,
+                changefreq: p.changefreq,
+                priority:   p.priority,
+                type:       'static',
+            };
+        });
 
-    // Append published builder pages
+    // Append published builder pages (also filtered by Page Registry)
     try {
         const r = await fetch(
             `${STRAPI_URL}/api/builder-pages?` +
@@ -678,6 +702,7 @@ async function buildSitemapEntries(req) {
             (data || []).forEach(function (item) {
                 const d = item.attributes || item;
                 if (!d.slug) return;
+                if (!isPageLive(d.slug)) return;        // honour Page Registry hidden state
                 entries.push({
                     loc:        baseUrl + '/builder/' + d.slug,
                     lastmod:    d.updatedAt ? d.updatedAt.split('T')[0] : today,
@@ -692,19 +717,53 @@ async function buildSitemapEntries(req) {
     return entries;
 }
 
-// Public: serve sitemap.xml
-app.get('/sitemap.xml', async function (req, res) {
+// ── Write public/sitemap.xml ──────────────────────────────
+// Called on server boot, after Page Registry toggles, and from the manual
+// "Regenerate" admin button. Express's static middleware then serves the
+// file with proper Last-Modified / ETag headers (SEO win — free 304s).
+async function writeSitemapFile(req) {
     try {
         const entries = await buildSitemapEntries(req);
         const rows = entries.map(function (e) {
             return `  <url>\n    <loc>${e.loc}</loc>\n    <lastmod>${e.lastmod}</lastmod>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority.toFixed(1)}</priority>\n  </url>`;
         }).join('\n');
         const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${rows}\n</urlset>`;
-        res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-        res.send(xml);
+        const file = path.join(publicPath, 'sitemap.xml');
+        await fs.promises.writeFile(file, xml, 'utf8');
+        console.log(`[sitemap] wrote ${entries.length} entries to ${file}`);
+        return { count: entries.length, file };
     } catch (err) {
-        console.error('[sitemap] error:', err.message);
-        res.status(500).send('Error generating sitemap');
+        console.error('[sitemap] write failed:', err.message);
+        throw err;
+    }
+}
+
+// Public: serve sitemap.xml
+// Normal path: express.static(publicPath) (registered later) serves the real
+// file at public/ICSDC_Frontend/sitemap.xml with Last-Modified + ETag for free.
+// This route is a one-shot fallback that fires only if the file is missing
+// (e.g. the moment between server boot and the first write).
+app.get('/sitemap.xml', async function (req, res, next) {
+    const file = path.join(publicPath, 'sitemap.xml');
+    if (fs.existsSync(file)) return next();          // fall through to static middleware
+    try {
+        await writeSitemapFile(req);
+        return res.sendFile(file);
+    } catch (err) {
+        return res.status(500).send('Error generating sitemap');
+    }
+});
+
+// Admin: force-regenerate the static sitemap.xml file.
+// Refreshes the page-registry cache first so any in-flight CMS edits are
+// reflected, then rewrites the file.
+app.post('/api/admin/sitemap/regenerate', requireAdminAuth, async function (req, res) {
+    try {
+        await refreshPageCache();
+        const result = await writeSitemapFile(req);
+        res.json({ ok: true, generatedAt: new Date().toISOString(), count: result.count });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to regenerate sitemap', detail: err.message });
     }
 });
 
@@ -751,6 +810,16 @@ app.use(express.static(publicPath));
 // Homepage
 app.get('/', (req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+// Legal pages — serve from legal/ subdirectory
+app.get('/legal/:page', (req, res) => {
+    const slug = req.params.page;
+    const filePath = path.join(publicPath, 'legal', `${slug}.html`);
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) return res.status(404).sendFile(path.join(publicPath, '404.html'));
+        res.sendFile(filePath);
+    });
 });
 
 // Dynamic routes — gate on page registry cache
@@ -1160,6 +1229,119 @@ function initSocketIO(io) {
     });
 }
 
+// ── Admin: WhatsApp leads (Strapi proxy) ──────────────────
+app.get('/api/admin/whatsapp-leads', requireAdminAuth, async (req, res) => {
+    try {
+        const r = await fetch(
+            `${STRAPI_URL}/api/whatsapp-leads?sort=createdAt:desc&pagination[pageSize]=100`,
+            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+        );
+        const data = await r.json();
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Failed to fetch WhatsApp leads', detail: err.message });
+    }
+});
+
+// ── Admin: unified leads aggregator ───────────────────────
+// Merges contact submissions + WhatsApp leads + chat sessions into one stream
+// sorted by createdAt desc. Each item carries a `source` discriminator so the
+// admin UI can render a per-source badge and per-source action buttons.
+app.get('/api/admin/leads', requireAdminAuth, async (req, res) => {
+    const headers = { Authorization: `Bearer ${STRAPI_TOKEN}` };
+
+    async function safeJson(url) {
+        try {
+            const r = await fetch(url, { headers });
+            if (!r.ok) return { data: [] };
+            return r.json();
+        } catch { return { data: [] }; }
+    }
+
+    try {
+        const [submissionsResp, whatsappResp] = await Promise.all([
+            safeJson(`${STRAPI_URL}/api/contact-submissions?sort=createdAt:desc&pagination[pageSize]=100`),
+            safeJson(`${STRAPI_URL}/api/whatsapp-leads?sort=createdAt:desc&pagination[pageSize]=100`),
+        ]);
+
+        const contactRows = (submissionsResp.data || []).map((it) => {
+            const d = it.attributes || it;
+            return {
+                id:        'contact-' + (it.id || d.id || ''),
+                source:    'contact',
+                name:      d.name || '',
+                email:     d.email || null,
+                phone:     d.phone || null,
+                company:   d.company || null,
+                subject:   d.subject || null,
+                message:   d.message || '',
+                status:    'new',
+                createdAt: d.createdAt || new Date().toISOString(),
+                raw:       d,
+            };
+        });
+
+        const waRows = (whatsappResp.data || []).map((it) => {
+            const d = it.attributes || it;
+            return {
+                id:        'whatsapp-' + (it.id || d.id || ''),
+                source:    'whatsapp',
+                name:      d.name || '',
+                email:     null,
+                phone:     d.phone || null,
+                company:   null,
+                subject:   null,
+                message:   d.message || '',
+                status:    d.status || 'new',
+                sourceUrl: d.sourceUrl || null,
+                createdAt: d.createdAt || new Date().toISOString(),
+                raw:       d,
+            };
+        });
+
+        const chatRows = [...chatSessions.values()].slice(0, 100).map((session) => {
+            const s = serializeSession(session);
+            return {
+                id:         'chat-' + s.sessionId,
+                source:     'chat',
+                name:       s.name || 'Visitor',
+                email:      null,
+                phone:      s.phone || null,
+                company:    s.company || null,
+                subject:    s.service || null,
+                message:    s.requirement || (s.messages && s.messages.length ? s.messages[s.messages.length - 1].text : ''),
+                status:     s.status,
+                sessionId:  s.sessionId,
+                createdAt:  s.createdAt || new Date().toISOString(),
+                raw:        s,
+            };
+        });
+
+        const all = contactRows.concat(waRows).concat(chatRows)
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        const counts = {
+            contact:  contactRows.length,
+            whatsapp: waRows.length,
+            chat:     chatRows.length,
+            total:    all.length,
+        };
+
+        // This-week counts (last 7 days)
+        const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+        const inWeek = (r) => new Date(r.createdAt).getTime() > weekAgo;
+        const weekCounts = {
+            contact:  contactRows.filter(inWeek).length,
+            whatsapp: waRows.filter(inWeek).length,
+            chat:     chatRows.filter(inWeek).length,
+        };
+
+        res.json({ data: all, counts, weekCounts });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to aggregate leads', detail: err.message });
+    }
+});
+
 // ── Admin REST endpoints for chat ─────────────────────────
 app.get('/api/admin/chat/sessions', requireAdminAuth, function (req, res) {
     const sessions = [...chatSessions.values()]
@@ -1201,6 +1383,11 @@ setInterval(function () {
     server.listen(PORT, function () {
         console.log(`Server running at http://localhost:${PORT}`);
         console.log('[socket.io] Live chat ready');
-        refreshPageCache();
+        // Refresh page-registry cache, then write the static sitemap. The
+        // sitemap is gated on the cache being populated so hidden pages are
+        // excluded from the very first version on disk.
+        refreshPageCache()
+            .then(function () { return writeSitemapFile(null); })
+            .catch(function (e) { console.warn('[sitemap] boot write failed:', e.message); });
     });
 }());

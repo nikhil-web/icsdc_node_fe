@@ -19,7 +19,7 @@
 .chat-bubble {
     position: fixed;
     bottom: 24px;
-    left: 24px;
+    right: 24px;
     width: var(--chat-bubble-sz);
     height: var(--chat-bubble-sz);
     border-radius: 50%;
@@ -77,7 +77,7 @@
 .chat-window {
     position: fixed;
     bottom: 92px;
-    left: 24px;
+    right: 24px;
     width: 360px;
     max-width: calc(100vw - 32px);
     height: 520px;
