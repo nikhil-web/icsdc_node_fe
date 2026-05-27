@@ -125,6 +125,7 @@ html {
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: var(--text);
+    line-height: 1.65;
     overflow-x: hidden;
     width: 100%;
     -webkit-font-smoothing: antialiased;
@@ -939,7 +940,7 @@ nav.scrolled {
 .hero-desc {
     font-size: 15px;
     color: var(--muted);
-    line-height: 1.75;
+    line-height: 1.65;
     margin-bottom: 32px;
     max-width: 480px;
 }
@@ -1013,7 +1014,7 @@ nav.scrolled {
     padding: 11px 22px;
     border: 2px solid var(--border);
     border-radius: var(--radius-sm);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     background: var(--white);
@@ -1047,7 +1048,7 @@ nav.scrolled {
     color: var(--white);
     border: none;
     border-radius: var(--radius-sm);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
@@ -1172,7 +1173,7 @@ nav.scrolled {
 }
 
 .why-card p {
-    font-size: 14.5px;
+    font-size: 15px;
     line-height: 1.65;
     color: var(--muted-alt);
 }
@@ -1285,7 +1286,7 @@ nav.scrolled {
     font-weight: 400;
     margin: 20px 0 24px 0;
     color: var(--muted-light);
-    line-height: 1.75;
+    line-height: 1.65;
 }
 
 .who-we-are-btns {

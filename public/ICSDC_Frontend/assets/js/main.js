@@ -293,7 +293,6 @@ function initWhatsappWidget(menuData) {
     const cleanPhone = String(cfg.phoneNumber).replace(/[^0-9]/g, '');
     if (!cleanPhone) return;
 
-    const position       = cfg.bubblePosition  || 'bottom-right';
     const title          = cfg.popoverTitle    || 'Chat with us on WhatsApp';
     const subtitle       = cfg.popoverSubtitle || "Send us a quick message and we'll get back to you.";
     const defaultMessage = cfg.defaultMessage  || "Hi, I'd like to know more about ICSDC services.";

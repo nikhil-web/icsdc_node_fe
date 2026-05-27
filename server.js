@@ -652,6 +652,13 @@ const STATIC_PAGES = [
     { path: '/about-us',                    priority: 0.6, changefreq: 'monthly' },
     { path: '/contact-us',                  priority: 0.8, changefreq: 'monthly' },
     { path: '/pricing',                     priority: 0.7, changefreq: 'weekly'  },
+    // Legal
+    { path: '/legal/terms-conditions',      priority: 0.3, changefreq: 'yearly'  },
+    { path: '/legal/privacy-policy',        priority: 0.3, changefreq: 'yearly'  },
+    { path: '/legal/refund-policy',         priority: 0.3, changefreq: 'yearly'  },
+    { path: '/legal/msa',                   priority: 0.3, changefreq: 'yearly'  },
+    { path: '/legal/aup',                   priority: 0.3, changefreq: 'yearly'  },
+    { path: '/legal/sla',                   priority: 0.3, changefreq: 'yearly'  },
 ];
 
 // Derive a page-registry slug from a STATIC_PAGES path so we can consult pageCache.
@@ -677,9 +684,13 @@ async function buildSitemapEntries(req) {
     const today = new Date().toISOString().split('T')[0];
 
     const entries = STATIC_PAGES
-        // Homepage ('/') is always included regardless of Page Registry state.
-        // Every other static page passes through the registry filter.
-        .filter(function (p) { return p.path === '/' || isPageLive(slugFromPath(p.path)); })
+        // Homepage ('/') and legal pages are always included regardless of
+        // Page Registry state. Every other static page passes through the
+        // registry filter.
+        .filter(function (p) {
+            if (p.path === '/' || p.path.startsWith('/legal/')) return true;
+            return isPageLive(slugFromPath(p.path));
+        })
         .map(function (p) {
             return {
                 loc:        baseUrl + p.path,

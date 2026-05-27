@@ -40,6 +40,9 @@
     position: relative;
     width: 100%;
     padding: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
 
 .hp-map-wrap {
@@ -49,6 +52,7 @@
     aspect-ratio: 2000 / 857;
     max-height: 520px;
     overflow: visible;
+    max-width: 1800px;
 }
 
 .hp-map-img {
