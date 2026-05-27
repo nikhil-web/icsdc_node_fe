@@ -16,7 +16,7 @@
     --c-bg-grey: #f4f6f9;
     --c-white: #ffffff;
     --c-red: #ef4444;
-    --c-container: 1800px;
+    --c-container: 1280px;
     --c-px: clamp(20px, 5vw, 80px);
     --c-r-sm: 8px;
     --c-r-md: 10px;
@@ -34,7 +34,7 @@
 ══════════════════════════════════════ */
 /* PARTNERSHIPS SECTION */
 .best-cloud-services {
-    padding: 88px 0;
+    padding: 80px 0;
     background:
         radial-gradient(circle at top right, rgba(30, 94, 255, 0.12), transparent 32%),
         linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
@@ -89,7 +89,7 @@
 }
 
 .business-needs-cloud {
-    padding: 80px 0 88px;
+    padding: 80px 0;
     background: #efefef;
 }
 
@@ -282,7 +282,7 @@
    TESTIMONIALS SECTION
 ══════════════════════════════════════ */
 .testi-section {
-    padding: 88px 0;
+    padding: 80px 0;
     background: var(--bg-light, #f8fafc);
 }
 
@@ -569,7 +569,7 @@
    FAQ SECTION
 ══════════════════════════════════════ */
 .faq-section {
-    padding: 88px 0;
+    padding: 80px 0;
     background: var(--c-white);
 }
 
