@@ -8,6 +8,22 @@
 
 import { CUSTOM_ICONS } from './custom-icons.js';
 
+/**
+ * Wire a CTA button's click. If `link` is the magic value 'contact-popup'
+ * (or '#contact-popup'), opens the site-wide contact modal via
+ * window.openContactPopup() instead of navigating. Anything else navigates
+ * to that link via window.location.href.
+ */
+export function wireCtaLink(btn, link) {
+    if (!btn || !link) return;
+    if (link === 'contact-popup' || link === '#contact-popup') {
+        btn.setAttribute('onclick',
+            "if(window.openContactPopup){window.openContactPopup();}return false;");
+    } else {
+        btn.setAttribute('onclick', "window.location.href='" + link + "'");
+    }
+}
+
 /* ═══════════════════════════════════════════════════════════════
    FA ICONS MAP  (key → fa icon name, all fa-solid)
    ═══════════════════════════════════════════════════════════════ */
@@ -119,11 +135,26 @@ export var FA_ICONS = {
     tag:            'tag',
     // OS / Platform brands (fa-brands)
     linux:          'linux',
+    ubuntu:         'ubuntu',
+    centos:         'centos',
+    debian:         'debian',
+    almalinux:      'linux',
+    rocky:          'linux',
+    fedora:         'fedora',
+    redhat:         'redhat',
+    freebsd:        'freebsd',
     windows:        'windows',
     microsoft:      'microsoft',
     google:         'google',
     aws:            'aws',
     azure:          'microsoft',
+    // Control panels (no FA brand — map to solid icons)
+    cpanel:         'sliders',
+    solusvms:       'server',
+    webmin:         'terminal',
+    plesk:          'sliders',
+    directadmin:    'gauge',
+    'whm':          'sliders',
     // Misc
     settings:       'gear',
     manage:         'gear',
@@ -180,15 +211,28 @@ export var FA_ICONS = {
     api:            'code',
     developer:      'code',
     linux:          'linux',
+    ubuntu:         'ubuntu',
+    centos:         'centos',
+    debian:         'debian',
+    almalinux:      'linux',
+    rocky:          'linux',
+    fedora:         'fedora',
+    redhat:         'redhat',
+    freebsd:        'freebsd',
     windows:        'windows',
     microsoft:      'microsoft',
     google:         'google',
     aws:            'aws',
     azure:          'microsoft',
+    cpanel:         'sliders',
+    solusvms:       'server',
+    webmin:         'terminal',
+    plesk:          'sliders',
+    directadmin:    'gauge',
 };
 
 /* Brand icons that use fa-brands instead of fa-solid */
-var FA_BRANDS = { linux:1, windows:1, microsoft:1, google:1, aws:1, apple:1, android:1, github:1, gitlab:1, docker:1, whatsapp:1, facebook:1, twitter:1, instagram:1, linkedin:1, youtube:1, tiktok:1, slack:1, discord:1, telegram:1, wordpress:1, shopify:1, stripe:1, paypal:1, dropbox:1, spotify:1 };
+var FA_BRANDS = { linux:1, ubuntu:1, centos:1, debian:1, fedora:1, redhat:1, freebsd:1, windows:1, microsoft:1, google:1, aws:1, apple:1, android:1, github:1, gitlab:1, docker:1, whatsapp:1, facebook:1, twitter:1, instagram:1, linkedin:1, youtube:1, tiktok:1, slack:1, discord:1, telegram:1, wordpress:1, shopify:1, stripe:1, paypal:1, dropbox:1, spotify:1 };
 
 /* Legacy SVG map kept for backward compat — empty, all resolved via FA now */
 export var ICONS = {};
@@ -334,11 +378,11 @@ export function populateHero(section, data) {
     if (btns.length >= 1 && data.ctaPrimary) {
         var primaryBtn = btns.length >= 2 ? btns[1] : btns[0];
         primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' &rarr;';
-        if (data.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + data.ctaPrimary.link + "'");
+        wireCtaLink(primaryBtn, data.ctaPrimary.link);
     }
     if (btns.length >= 2 && data.ctaSecondary) {
         btns[0].textContent = data.ctaSecondary.text || '';
-        if (data.ctaSecondary.link) btns[0].setAttribute('onclick', "window.location.href='" + data.ctaSecondary.link + "'");
+        wireCtaLink(btns[0], data.ctaSecondary.link);
     }
 
     if (data.heroImage && data.heroImage.image) {
@@ -369,16 +413,21 @@ export function populateIconCards(gridSelector, cards, cardClass, customIcons) {
 
     var cls = cardClass || 'why-card';
     var iconCls = cls.replace('-card', '-icon');
+    var linkCls = cls.replace('-card', '-link');
 
     var sorted = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
 
     grid.innerHTML = sorted.map(function (card) {
+        var linkHtml = card.link
+            ? '<a href="' + card.link + '" class="' + linkCls + '">Learn more &rarr;</a>'
+            : '';
         return '<div class="' + cls + '">' +
             '<div class="' + iconCls + '" aria-hidden="true">' +
             resolveIcon(card.icon, customIcons) +
             '</div>' +
             '<h3>' + (card.title || '') + '</h3>' +
             '<p>' + (card.desc || card.description || '') + '</p>' +
+            linkHtml +
             '</div>';
     }).join('');
 }
@@ -413,7 +462,7 @@ export function populateCtaBand(selector, cta) {
         if (primaryBtn) {
             if (cta.ctaPrimary && cta.ctaPrimary.text) {
                 primaryBtn.innerHTML = cta.ctaPrimary.text + ' &rarr;';
-                if (cta.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
+                wireCtaLink(primaryBtn, cta.ctaPrimary.link);
             } else {
                 primaryBtn.remove();
             }
@@ -421,7 +470,7 @@ export function populateCtaBand(selector, cta) {
         if (secondaryBtn) {
             if (cta.ctaSecondary && cta.ctaSecondary.text) {
                 secondaryBtn.textContent = cta.ctaSecondary.text;
-                if (cta.ctaSecondary.link) secondaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
+                wireCtaLink(secondaryBtn, cta.ctaSecondary.link);
             } else {
                 secondaryBtn.remove();
             }

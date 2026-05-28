@@ -15,11 +15,34 @@ import {
     setText,
     setHTML,
     initFAQ,
-    initTestimonials
+    initTestimonials,
+    resolveIcon
 } from './utils/cms-helpers.js';
 
 (function () {
     'use strict';
+
+    /**
+     * Render the Related Hosting Services link-strip.
+     * Each card is an <a> with icon bubble, label, and diagonal arrow.
+     * Uses the rh-related-link CSS class from reseller-hosting.css.
+     */
+    function populateRelatedStrip(cards) {
+        if (!cards || !cards.length) return;
+        var strip = document.querySelector('#rh-related .rh-related-strip');
+        if (!strip) return;
+        var sorted = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+        strip.innerHTML = sorted.map(function (card) {
+            var href = card.link || '#';
+            var iconHtml = resolveIcon(card.icon || 'server');
+            var label = card.title || card.name || '';
+            return '<a class="rh-related-link" href="' + href + '">' +
+                '<span class="rh-related-icon-wrap">' + iconHtml + '</span>' +
+                '<span class="rh-related-label">' + label + '</span>' +
+                '<span class="rh-related-arrow">&#x2197;</span>' +
+                '</a>';
+        }).join('');
+    }
 
     /**
      * Render the 3-column reseller plans grid.
@@ -121,7 +144,11 @@ import {
                 }
             }
 
-            // Features — what you get
+            // What You Get With ICSDC Reseller Hosting
+            populateSectionHeader('#rh-whatyouget', page.whatYouGetLabel, page.whatYouGetTitle, page.whatYouGetSubtitle);
+            populateIconCards('#rh-whatyouget .rh-whatyouget-grid', page.whatYouGetCards, 'cloud-use-card');
+
+            // Features — everything you need
             populateSectionHeader('#rh-features', page.featuresLabel, page.featuresTitle, page.featuresSubtitle);
             populateIconCards('#rh-features .rh-features-grid', page.features, 'cloud-power-card');
 
@@ -138,8 +165,8 @@ import {
             populateIconCards('#rh-support .rh-support-grid', page.supportCards, 'cloud-use-card');
 
             // Related Hosting Services
-            populateSectionHeader('#rh-related', page.relatedLabel, page.relatedTitle, page.relatedSubtitle);
-            populateIconCards('#rh-related .rh-related-grid', page.relatedCards, 'cloud-power-card');
+            if (page.relatedTitle) setText(document, '#rh-related .title', page.relatedTitle);
+            populateRelatedStrip(page.relatedCards);
 
             // Testimonials
             if (page.testimonialTitle) setText(document, '#rh-testi-heading', page.testimonialTitle);

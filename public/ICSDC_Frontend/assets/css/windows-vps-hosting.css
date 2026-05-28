@@ -1,3 +1,45 @@
+/* ══════════════════════════════════════
+   WHO WE ARE — WHY BUSINESSES SUB-SECTION
+══════════════════════════════════════ */
+.wvps-about-why {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(26, 86, 219, 0.15);
+}
+
+.wvps-about-why-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+}
+
+.wvps-about-points {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.wvps-about-point {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-dark);
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.wvps-about-point i {
+    color: #0078d4;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
 .win-badge {
       display: inline-flex;
       align-items: center;
@@ -83,12 +125,173 @@
       color: var(--muted);
     }
 
-    /* Tech stack grid */
+    /* ══════════════════════════════════════
+       TECH STACK — TABBED DESIGN
+    ══════════════════════════════════════ */
     .win-stack-section {
       background: var(--bg-light);
       padding: 80px 0;
     }
 
+    /* Tab navigation row */
+    .wvps-stack-tabs {
+      margin-top: 40px;
+    }
+
+    .wvps-stack-tab-nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .wvps-stack-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border-radius: 50px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--text-dark);
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      white-space: nowrap;
+    }
+
+    .wvps-stack-tab-btn:hover:not(.is-active) {
+      border-color: #0078d4;
+      color: #0078d4;
+      background: #e3f2fd;
+    }
+
+    .wvps-stack-tab-btn.is-active {
+      background: #0078d4;
+      border-color: #0078d4;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(0, 120, 212, 0.28);
+    }
+
+    /* Tab content card */
+    .wvps-stack-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 40px 40px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .wvps-stack-card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0078d4;
+      margin-bottom: 8px;
+    }
+
+    .wvps-stack-card-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    /* 2-column item grid */
+    .wvps-stack-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .wvps-stack-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+
+    /* Remove bottom border on last row */
+    .wvps-stack-item:nth-last-child(-n+2) {
+      border-bottom: none;
+    }
+
+    /* Odd items in left column get right padding; even get left padding for column gap */
+    .wvps-stack-item:nth-child(odd) {
+      padding-right: 32px;
+    }
+
+    .wvps-stack-item:nth-child(even) {
+      padding-left: 24px;
+      border-left: 1px solid var(--border);
+    }
+
+    .wvps-stack-item i {
+      color: #0078d4;
+      font-size: 16px;
+      flex-shrink: 0;
+      width: 18px;
+      text-align: center;
+    }
+
+    /* Deploy CTA inside card */
+    .wvps-stack-cta {
+      display: flex;
+      justify-content: center;
+      margin-top: 32px;
+    }
+
+    .wvps-stack-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0078d4;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 32px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 16px rgba(0, 120, 212, 0.25);
+    }
+
+    .wvps-stack-cta-btn:hover {
+      background: #005a9e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 120, 212, 0.35);
+    }
+
+    /* Responsive */
+    @media (max-width: 767px) {
+      .wvps-stack-items {
+        grid-template-columns: 1fr;
+      }
+      .wvps-stack-item:nth-child(even) {
+        padding-left: 0;
+        border-left: none;
+      }
+      .wvps-stack-item:nth-last-child(-n+2) {
+        border-bottom: 1px solid var(--border);
+      }
+      .wvps-stack-item:last-child {
+        border-bottom: none;
+      }
+      .wvps-stack-card {
+        padding: 24px 20px 28px;
+      }
+    }
+
+    /* (Legacy grid kept for graceful fallback — hidden once JS renders tabs) */
     .win-stack-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -163,6 +366,179 @@
       border-radius: 50%;
       background: #0078d4;
       flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════
+       VPS PLANS GRID — 3 COLUMNS
+    ══════════════════════════════════════ */
+    .wvps-plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .wvps-plan-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px 24px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--transition-base) ease,
+          box-shadow var(--transition-base) ease,
+          border-color var(--transition-base) ease;
+    }
+
+    .wvps-plan-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-card-hover);
+      border-color: rgba(0, 120, 212, 0.28);
+    }
+
+    .wvps-plan-card.wvps-plan-featured {
+      border-color: #0078d4;
+      border-width: 2px;
+    }
+
+    .wvps-plan-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0078d4;
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 16px;
+      border-radius: var(--radius-xl);
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0, 120, 212, 0.30);
+    }
+
+    .wvps-plan-name {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #0078d4;
+      margin-bottom: 8px;
+    }
+
+    .wvps-plan-price {
+      font-size: 32px;
+      font-weight: 800;
+      color: #0078d4;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .wvps-plan-price span {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0;
+    }
+
+    .wvps-plan-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .wvps-plan-features li {
+      font-size: 13px;
+      color: var(--text-dark);
+      padding-left: 22px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .wvps-plan-features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #0078d4;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .wvps-plan-btn {
+      width: 100%;
+      padding: 12px 20px;
+      background: transparent;
+      color: #0078d4;
+      border: 2px solid #0078d4;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      margin-top: auto;
+      transition: background var(--transition-base) ease,
+          transform var(--transition-fast) ease,
+          box-shadow var(--transition-base) ease;
+      min-height: 44px;
+      text-align: center;
+      display: block;
+      text-decoration: none;
+    }
+
+    .wvps-plan-btn:hover {
+      background: #e3f2fd;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 120, 212, 0.14);
+    }
+
+    .wvps-plan-btn-featured {
+      width: 100%;
+      padding: 12px 20px;
+      background: #0078d4;
+      color: var(--white);
+      border: 2px solid #0078d4;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      margin-top: auto;
+      transition: background var(--transition-base) ease,
+          transform var(--transition-fast) ease,
+          box-shadow var(--transition-base) ease;
+      min-height: 44px;
+      text-align: center;
+      display: block;
+      text-decoration: none;
+    }
+
+    .wvps-plan-btn-featured:hover {
+      background: #005a9e;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 120, 212, 0.30);
+    }
+
+    @media (max-width: 1023px) {
+      .wvps-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .wvps-plans-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* Security grid */
