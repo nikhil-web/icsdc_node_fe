@@ -177,6 +177,10 @@ import {
             populateSectionHeader('#cp-when', page.whenLabel, page.whenTitle, page.whenSubtitle);
             populateIconCards('#cp-when .cp-when-grid', page.whenCards, 'cloud-use-card');
 
+            // Built-In Features
+            populateSectionHeader('#cp-builtin', page.builtinLabel, page.builtinTitle, page.builtinSubtitle);
+            populateIconCards('#cp-builtin .cp-builtin-grid', page.builtinFeatures, 'cloud-power-card');
+
             // Testimonials
             if (page.testimonialTitle) setText(document, '#cp-testi-heading', page.testimonialTitle);
             initTestimonials(page.testimonials);

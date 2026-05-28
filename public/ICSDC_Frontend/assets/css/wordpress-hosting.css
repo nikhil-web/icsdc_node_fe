@@ -368,6 +368,82 @@
 }
 
 /* ══════════════════════════════════════
+   RELATED HOSTING CARDS (#wp-related)
+   Richer card: title + tagline + desc + CTA
+══════════════════════════════════════ */
+.wp-related-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    transition: transform 0.22s var(--ease-out-expo, ease),
+                box-shadow 0.22s ease,
+                border-color 0.22s ease;
+    box-shadow: var(--shadow-card, 0 2px 12px rgba(0,0,0,0.06));
+}
+
+.wp-related-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover, 0 12px 32px rgba(26,86,219,0.12));
+    border-color: rgba(26, 86, 219, 0.22);
+}
+
+.wp-related-card-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.025em;
+    margin: 0 0 10px;
+}
+
+.wp-related-tagline {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--blue);
+    line-height: 1.5;
+    margin: 0 0 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.wp-related-desc {
+    font-size: 14.5px;
+    line-height: 1.72;
+    color: var(--muted);
+    margin: 0 0 28px;
+    flex: 1;
+}
+
+.wp-related-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    align-self: flex-start;
+    padding: 11px 22px;
+    border: 1.5px solid var(--blue);
+    border-radius: var(--radius-md, 8px);
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--blue);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    background: transparent;
+    transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    margin-top: auto;
+}
+
+.wp-related-cta:hover {
+    background: var(--blue);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(26, 86, 219, 0.28);
+}
+
+/* ══════════════════════════════════════
    FAST SECTION (#wp-fast)
 ══════════════════════════════════════ */
 .wp-fast-section {

@@ -135,11 +135,26 @@ export var FA_ICONS = {
     tag:            'tag',
     // OS / Platform brands (fa-brands)
     linux:          'linux',
+    ubuntu:         'ubuntu',
+    centos:         'centos',
+    debian:         'debian',
+    almalinux:      'linux',
+    rocky:          'linux',
+    fedora:         'fedora',
+    redhat:         'redhat',
+    freebsd:        'freebsd',
     windows:        'windows',
     microsoft:      'microsoft',
     google:         'google',
     aws:            'aws',
     azure:          'microsoft',
+    // Control panels (no FA brand — map to solid icons)
+    cpanel:         'sliders',
+    solusvms:       'server',
+    webmin:         'terminal',
+    plesk:          'sliders',
+    directadmin:    'gauge',
+    'whm':          'sliders',
     // Misc
     settings:       'gear',
     manage:         'gear',
@@ -196,15 +211,28 @@ export var FA_ICONS = {
     api:            'code',
     developer:      'code',
     linux:          'linux',
+    ubuntu:         'ubuntu',
+    centos:         'centos',
+    debian:         'debian',
+    almalinux:      'linux',
+    rocky:          'linux',
+    fedora:         'fedora',
+    redhat:         'redhat',
+    freebsd:        'freebsd',
     windows:        'windows',
     microsoft:      'microsoft',
     google:         'google',
     aws:            'aws',
     azure:          'microsoft',
+    cpanel:         'sliders',
+    solusvms:       'server',
+    webmin:         'terminal',
+    plesk:          'sliders',
+    directadmin:    'gauge',
 };
 
 /* Brand icons that use fa-brands instead of fa-solid */
-var FA_BRANDS = { linux:1, windows:1, microsoft:1, google:1, aws:1, apple:1, android:1, github:1, gitlab:1, docker:1, whatsapp:1, facebook:1, twitter:1, instagram:1, linkedin:1, youtube:1, tiktok:1, slack:1, discord:1, telegram:1, wordpress:1, shopify:1, stripe:1, paypal:1, dropbox:1, spotify:1 };
+var FA_BRANDS = { linux:1, ubuntu:1, centos:1, debian:1, fedora:1, redhat:1, freebsd:1, windows:1, microsoft:1, google:1, aws:1, apple:1, android:1, github:1, gitlab:1, docker:1, whatsapp:1, facebook:1, twitter:1, instagram:1, linkedin:1, youtube:1, tiktok:1, slack:1, discord:1, telegram:1, wordpress:1, shopify:1, stripe:1, paypal:1, dropbox:1, spotify:1 };
 
 /* Legacy SVG map kept for backward compat — empty, all resolved via FA now */
 export var ICONS = {};
@@ -385,16 +413,21 @@ export function populateIconCards(gridSelector, cards, cardClass, customIcons) {
 
     var cls = cardClass || 'why-card';
     var iconCls = cls.replace('-card', '-icon');
+    var linkCls = cls.replace('-card', '-link');
 
     var sorted = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
 
     grid.innerHTML = sorted.map(function (card) {
+        var linkHtml = card.link
+            ? '<a href="' + card.link + '" class="' + linkCls + '">Learn more &rarr;</a>'
+            : '';
         return '<div class="' + cls + '">' +
             '<div class="' + iconCls + '" aria-hidden="true">' +
             resolveIcon(card.icon, customIcons) +
             '</div>' +
             '<h3>' + (card.title || '') + '</h3>' +
             '<p>' + (card.desc || card.description || '') + '</p>' +
+            linkHtml +
             '</div>';
     }).join('');
 }

@@ -301,6 +301,23 @@
     margin: 0;
 }
 
+.cloud-power-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    text-decoration: none;
+    transition: gap 0.2s ease, opacity 0.2s ease;
+}
+
+.cloud-power-link:hover {
+    gap: 7px;
+    opacity: 0.85;
+}
+
 /* ══════════════════════════════════════
    CLOUD FRAMEWORKS STRIP
 ══════════════════════════════════════ */
