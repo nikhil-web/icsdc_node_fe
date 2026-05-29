@@ -782,19 +782,20 @@ export function getManagedVpsHostingPage() {
         "?populate[seo]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
-        "&populate[pillars]=*" +
-        "&populate[plans][populate]=features" +
-        "&populate[features]=*" +
-        "&populate[whatWeManage]=*" +
-        "&populate[whyManagedCards]=*" +
-        "&populate[useCases]=*" +
+        "&populate[heroImage][populate][image]=true" +
+        "&populate[pillars][populate]=*" +
+        "&populate[plans][populate][features]=*" +
+        "&populate[aboutImage][populate][image]=true" +
+        "&populate[advantages][populate]=*" +
+        "&populate[whyCards][populate]=*" +
+        "&populate[whatYouGetCards][populate]=*" +
+        "&populate[useCaseCards][populate]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
-        "&populate[ctaBand2][populate][ctaPrimary]=*" +
-        "&populate[ctaBand2][populate][ctaSecondary]=*" +
+        "&populate[testimonials][populate]=*" +
         "&populate[faq][populate]=*" +
-        "&populate[heroImage][populate][image]=true" +
-        "&populate[testimonials][populate]=*"
+        "&populate[ctaBand2][populate][ctaPrimary]=*" +
+        "&populate[ctaBand2][populate][ctaSecondary]=*"
     );
 }
 
@@ -1154,14 +1155,16 @@ export function getVpsCpanelPage() {
         "populate[seo]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
+        "&populate[heroImage][populate][image]=true" +
         "&populate[pillars][populate]=*" +
+        "&populate[plans][populate][features]=*" +
+        "&populate[aboutImage][populate][image]=true" +
         "&populate[advantages][populate]=*" +
         "&populate[whyCards][populate]=*" +
-        "&populate[ctaBand1][populate][ctaPrimary]=*" +
-        "&populate[ctaBand1][populate][ctaSecondary]=*" +
-        "&populate[heroImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
         "&populate[faq][populate]=*" +
+        "&populate[ctaBand1][populate][ctaPrimary]=*" +
+        "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[ctaBand2][populate][ctaPrimary]=*" +
         "&populate[ctaBand2][populate][ctaSecondary]=*"
     );
