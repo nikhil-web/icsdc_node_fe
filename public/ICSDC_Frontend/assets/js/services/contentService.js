@@ -58,6 +58,7 @@ export function getDedicatedServerPage() {
         "&populate[shieldVisual]=*" +
         "&populate[securityCards]=*" +
         "&populate[serviceButtons]=*" +
+        "&populate[servicesImage2][populate][image]=true" +
         "&populate[comparisonRows]=*" +
         "&populate[performanceChecklist]=*" +
         "&populate[performanceCtaPrimary]=*" +
