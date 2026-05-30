@@ -505,6 +505,7 @@ export function getLinuxDedicatedServerPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
+        "&populate[whatImage][populate][image]=true" +
         "&populate[pricingPlans][populate]=features" +
         "&populate[whyCards]=*" +
         "&populate[comparisonRows]=*" +
