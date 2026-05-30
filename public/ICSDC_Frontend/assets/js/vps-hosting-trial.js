@@ -93,31 +93,6 @@ import {
         }).join('');
     }
 
-    function populateMoreServices(page) {
-        if (page.moreServicesTitle) setText(document, '#vht-more-services h2', page.moreServicesTitle);
-        if (page.moreServicesSubtitle) setText(document, '#vht-more-services .subtitle', page.moreServicesSubtitle);
-
-        var cards = page.moreServicesCards;
-        if (!cards || !cards.length) return;
-        var grid = document.querySelector('#vht-more-services .vht-services-grid');
-        if (!grid) return;
-
-        var sorted = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-
-        grid.innerHTML = sorted.map(function (card) {
-            var parts = (card.desc || '').split('||');
-            var description = parts[0] ? parts[0].trim() : '';
-            var ctaText = parts[1] ? parts[1].trim() : (card.title ? card.title + ' Plans' : 'Learn More');
-            var ctaHref = (card.link || '#').trim();
-
-            return '<div class="vht-service-card">' +
-                '<h3 class="vht-service-title">' + (card.title || '') + '</h3>' +
-                (description ? '<p class="vht-service-desc">' + description + '</p>' : '') +
-                '<a href="' + ctaHref + '" class="vht-service-cta">' + ctaText + ' &rarr;</a>' +
-                '</div>';
-        }).join('');
-    }
-
     async function init() {
         markActiveNavLink();
 
@@ -159,8 +134,8 @@ import {
             populateSectionHeader('#vht-when', page.whenLabel, page.whenTitle, page.whenSubtitle);
             populateWhenCards(page.whenCards);
 
-            // More ICSDC Services
-            populateMoreServices(page);
+            // CTA Band 1
+            populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
 
             // How to Get Free VPS
             populateSectionHeader('#vht-how', page.howLabel, page.howTitle, page.howSubtitle);

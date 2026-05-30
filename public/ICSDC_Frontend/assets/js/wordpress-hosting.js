@@ -16,6 +16,11 @@ import {
 (function () {
     'use strict';
 
+    // ──────────────────────────────────────────────────────
+    //  populatePlans
+    //  Renders the 3-column .wp-plans-grid from CMS data.
+    //  Marks the "popular" plan with .wp-plan-badge.
+    // ──────────────────────────────────────────────────────
     function populatePlans(plans) {
         if (!plans || !plans.length) return;
         var grid = document.querySelector('#wp-plans .wp-plans-grid');
@@ -24,11 +29,10 @@ import {
         var sorted = plans.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
 
         grid.innerHTML = sorted.map(function (plan) {
-            var isFeatured = plan.isFeatured || plan.popular || plan.isPopular || false;
-            var featuredClass = isFeatured ? ' wp-plan-popular' : '';
-            var badgeLabel = plan.badge || plan.badgeLabel || (isFeatured ? 'Most Popular' : '');
-            var badgeHtml = badgeLabel
-                ? '<div class="wp-plan-badge">' + badgeLabel + '</div>'
+            var isPopular = plan.popular === true || plan.isPopular === true;
+            var popularClass = isPopular ? ' wp-plan-popular' : '';
+            var badgeHtml = isPopular
+                ? '<div class="wp-plan-badge">' + (plan.badgeLabel || 'Most Popular') + '</div>'
                 : '';
 
             var features = (plan.features || []).map(function (f) {
@@ -36,51 +40,63 @@ import {
                 return '<li>' + label + '</li>';
             }).join('');
 
-            var ctaStyle = plan.ctaStyle || 'outline';
-            var btnClass = ctaStyle === 'primary' ? 'wp-plan-btn wp-plan-btn-primary' : 'wp-plan-btn';
-
-            return '<div class="wp-plan-card' + featuredClass + '">' +
+            return '<div class="wp-plan-card' + popularClass + '">' +
                 badgeHtml +
-                '<div class="wp-plan-name">' + (plan.tier || plan.name || '') + '</div>' +
+                '<div class="wp-plan-name">' + (plan.name || '') + '</div>' +
                 '<div class="wp-plan-price">' + (plan.price || '') + '<span>' + (plan.period || '/mo') + '</span></div>' +
-                '<p class="wp-plan-desc">' + (plan.tagline || plan.description || '') + '</p>' +
-                (features ? '<ul class="wp-plan-features">' + features + '</ul>' : '') +
-                '<a href="/contact-us.html" class="' + btnClass + '">' + (plan.ctaText || plan.ctaLabel || 'Get Started') + ' &rarr;</a>' +
+                '<p class="wp-plan-desc">' + (plan.description || plan.tagline || '') + '</p>' +
+                '<ul class="wp-plan-features">' + features + '</ul>' +
+                '<button class="wp-plan-btn">' + (plan.ctaLabel || 'Get Started') + ' &rarr;</button>' +
                 '</div>';
         }).join('');
     }
 
-    function populateRelatedHosting(cards) {
-        if (!cards || !cards.length) return;
-        var grid = document.querySelector('#wp-related .wp-related-grid');
+    // ──────────────────────────────────────────────────────
+    //  populateManagedFeatures
+    //  Renders the #managed section using why-card style.
+    // ──────────────────────────────────────────────────────
+    function populateManagedFeatures(features) {
+        if (!features || !features.length) return;
+        var grid = document.querySelector('#managed .managed-why-grid');
         if (!grid) return;
 
-        var sorted = cards.slice().sort(function (a, b) {
-            return (a.order || 0) - (b.order || 0);
-        });
+        var sorted = features.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
 
-        grid.innerHTML = sorted.map(function (card) {
-            var parts = (card.desc || '').split('||');
-            var tagline = parts[0] ? parts[0].trim() : '';
-            var description = parts[1] ? parts[1].trim() : '';
-            var ctaText = 'Explore ' + (card.title || 'More');
-            var ctaHref = (card.link || '#').trim();
-
-            return '<div class="wp-related-card">' +
-                '<h3 class="wp-related-card-title">' + (card.title || '') + '</h3>' +
-                (tagline ? '<p class="wp-related-tagline">' + tagline + '</p>' : '') +
-                (description ? '<p class="wp-related-desc">' + description + '</p>' : '') +
-                '<a href="' + ctaHref + '" class="wp-related-cta">' + ctaText + ' &rarr;</a>' +
+        grid.innerHTML = sorted.map(function (feat) {
+            var iconKey = feat.icon || 'zap';
+            return '<div class="why-card">' +
+                '<div class="why-icon">' + resolveCardIcon(iconKey) + '</div>' +
+                '<h3>' + (feat.title || '') + '</h3>' +
+                '<p>' + (feat.description || '') + '</p>' +
                 '</div>';
         }).join('');
     }
 
+    // ──────────────────────────────────────────────────────
+    //  resolveCardIcon
+    //  Minimal inline icon resolver for why-card icons.
+    //  Falls back to a generic zap icon.
+    // ──────────────────────────────────────────────────────
+    function resolveCardIcon(key) {
+        var icons = {
+            refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>',
+            upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
+            shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>',
+            pulse: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+            zap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>'
+        };
+        return icons[key] || icons['zap'];
+    }
+
+    // ──────────────────────────────────────────────────────
+    //  populateFaqContact
+    // ──────────────────────────────────────────────────────
     function populateFaqContact(page) {
         var card = document.querySelector('.faq-contact-card');
         if (!card) return;
 
         if (page.faqContactTitle) setHTML(card, '.faq-contact-title', page.faqContactTitle);
-        if (page.faqContactDesc) setHTML(card, '.faq-contact-desc', page.faqContactDesc);
+        if (page.faqContactDescription) setHTML(card, '.faq-contact-desc', page.faqContactDescription);
 
         if (page.faqContactBtnLabel) {
             var btn = card.querySelector('.faq-contact-btn');
@@ -93,6 +109,9 @@ import {
         }
     }
 
+    // ──────────────────────────────────────────────────────
+    //  init
+    // ──────────────────────────────────────────────────────
     async function init() {
         markActiveNavLink();
 
@@ -112,7 +131,7 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-                heroImage: page.heroImage
+            heroImage: page.heroImage
             });
 
             // 3. Hero badges
@@ -127,62 +146,37 @@ import {
             populateSectionHeader('#wp-plans', page.plansLabel, page.plansTitle, page.plansSubtitle);
             populatePlans(page.plans);
 
-            // 6. Who We Are
-            if (page.aboutTitle) setText(document, '#wp-about-title', page.aboutTitle);
-            if (page.aboutDesc) setHTML(document, '#wp-about-desc', page.aboutDesc);
-            if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
-                var aboutImg = document.querySelector('#wp-about-img');
-                if (aboutImg) {
-                    var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
-                    var _m = page.aboutImage.image;
-                    var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)
-                        ? (_m.formats.large || _m.formats.medium || _m.formats.small).url
-                        : _m.url) || '';
-                    if (_url && !_url.startsWith('http')) _url = _base + _url;
-                    if (_url) { aboutImg.src = _url; aboutImg.alt = _m.alternativeText || ''; }
-                }
-            }
-
-            // 7. Everything Your WP Needs (features — 12 cards)
+            // 6. Features (cloud-power-grid)
             populateSectionHeader('#features', page.featuresLabel, page.featuresTitle, page.featuresSubtitle);
             populateIconCards('#features .cloud-power-grid', page.features, 'cloud-power-card');
 
-            // 8. Why You Should Consider WP Hosting (performanceCards — 6 cards)
-            populateSectionHeader('#wp-why-consider', page.performanceLabel, page.performanceTitle, page.performanceSubtitle);
-            populateIconCards('#wp-why-consider .wp-why-consider-grid', page.performanceCards, 'cloud-use-card');
+            // 7. CTA Band 1
+            populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
 
-            // 9. Packed with Powerful Features
-            populateSectionHeader('#wp-packed', page.packedLabel, page.packedTitle, page.packedSubtitle);
-            populateIconCards('#wp-packed .wp-packed-grid', page.packedCards, 'cloud-power-card');
+            // 8. Performance (cloud-use-grid)
+            populateSectionHeader('#performance', page.performanceLabel, page.performanceTitle, page.performanceSubtitle);
+            populateIconCards('#performance .cloud-use-grid', page.performanceCards, 'cloud-use-card');
 
-            // 10. Related Hosting Options
-            populateSectionHeader('#wp-related', page.relatedLabel, page.relatedTitle, page.relatedSubtitle);
-            populateRelatedHosting(page.relatedCards);
+            // 9. Managed features
+            populateSectionHeader('#managed', page.managedLabel, page.managedTitle, page.managedSubtitle);
+            populateManagedFeatures(page.managedFeatures);
 
-            // 11. Fast WP Hosting (text only)
-            if (page.fastTitle) setText(document, '#wp-fast-title', page.fastTitle);
-            if (page.fastDesc) setHTML(document, '#wp-fast-desc', page.fastDesc);
+            // 10. Why Choose (cloud-power-grid)
+            populateSectionHeader('#why-choose', page.whyChooseLabel, page.whyChooseTitle, page.whyChooseSubtitle);
+            populateIconCards('#why-choose .cloud-power-grid', page.whyChooseCards, 'cloud-power-card');
 
-            // 12. One Control Center (managedFeatures — 7 cards)
-            populateSectionHeader('#wp-control', page.managedLabel, page.managedTitle, page.managedSubtitle);
-            populateIconCards('#wp-control .wp-control-grid', page.managedFeatures, 'cloud-power-card');
-
-            // 13. Why Choose ICSDC WP Hosting
-            populateSectionHeader('#wp-why-choose', page.whyChooseLabel, page.whyChooseTitle, page.whyChooseSubtitle);
-            populateIconCards('#wp-why-choose .wp-why-choose-grid', page.whyChooseCards, 'cloud-power-card');
-
-            // 14. Testimonials
+            // 11. Testimonials
             if (page.testimonialTitle) setText(document, '#wp-testi-heading', page.testimonialTitle);
             initTestimonials(page.testimonials);
 
-            // 15. FAQ
+            // 12. FAQ
             if (page.faqTitle) setText(document, '#wp-faq-heading', page.faqTitle);
             initFAQ(page.faq);
 
-            // 16. FAQ contact card
+            // 13. FAQ contact card
             populateFaqContact(page);
 
-            // 17. CTA Band (dark)
+            // 14. CTA Band 2 (dark)
             populateCtaBand('.cloud-cta-dark', page.ctaBand2);
 
         } catch (err) {

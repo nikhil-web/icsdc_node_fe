@@ -12,8 +12,7 @@
             document.documentElement.setAttribute('data-theme', t);
         })();
     </script>
-    <link rel="stylesheet" href="/admin/admin.css" />
-    <link rel="stylesheet" href="/admin/builder/builder-editor.css" />
+    <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
 
@@ -65,15 +64,6 @@
                 <a href="/" class="logo">
                     <img src="/assets/images/main_logo.png" alt="ICSDC" class="logo-icon" />
                 </a>
-                <div class="admin-nav-left-tabs">
-                    <a href="/admin"          class="admin-nav-tab" data-tab="dashboard">Dashboard</a>
-                    <a href="/admin/leads"    class="admin-nav-tab" data-tab="leads">Leads</a>
-                    <a href="/admin/builder"  class="admin-nav-tab" data-tab="builder">Page Builder</a>
-                    <a href="/admin/sitemap"  class="admin-nav-tab" data-tab="sitemap">Sitemap</a>
-                    <a href="/admin/chat"    class="admin-nav-tab" data-tab="chat">
-                        Live Chat <span class="acp-nav-badge" id="acp-nav-badge" hidden>0</span>
-                    </a>
-                </div>
                 <div class="admin-nav-right">
                     <button id="theme-toggle" class="btn-theme" aria-label="Toggle theme">
                         <i class="fa-solid fa-moon" aria-hidden="true"></i>
@@ -89,7 +79,40 @@
             </div>
         </nav>
 
-        <main class="admin-main" id="view-dashboard-main">
+        <main class="admin-main">
+
+            <!-- Contact Submissions -->
+            <section class="admin-section">
+                <div class="admin-page-header">
+                    <div>
+                        <h2 class="admin-page-title">Contact Submissions</h2>
+                        <p class="admin-page-sub">Enquiries submitted via the website contact form.</p>
+                    </div>
+                    <div class="admin-header-actions">
+                        <input id="search-submissions" class="admin-search" type="search" placeholder="Search submissions…" />
+                        <button class="admin-refresh-btn" id="refresh-submissions" aria-label="Refresh">
+                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Subject</th>
+                                <th>Company</th>
+                                <th>Received</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="submissions-body">
+                            <tr><td colspan="5" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
             <!-- Page Registry -->
             <section class="admin-section">
@@ -143,169 +166,8 @@
             </section>
 
         </main>
-
-        <!-- Leads view (shown when path is /admin/leads) -->
-        <main class="admin-main" id="view-leads" hidden>
-            <section class="admin-section">
-                <div class="admin-page-header">
-                    <div>
-                        <h2 class="admin-page-title">Leads</h2>
-                        <p class="admin-page-sub">All inbound enquiries from the contact form, WhatsApp widget, and chatbot — in one place.</p>
-                    </div>
-                    <div class="admin-header-actions">
-                        <input id="search-leads" class="admin-search" type="search" placeholder="Search leads…" />
-                        <button class="admin-refresh-btn" id="refresh-leads" aria-label="Refresh">
-                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Stat cards: count per source -->
-                <div class="lead-stats" id="lead-stats">
-                    <div class="lead-stat-card lead-stat-card--contact">
-                        <div class="lead-stat-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
-                        <div class="lead-stat-body">
-                            <div class="lead-stat-label">Contact Form</div>
-                            <div class="lead-stat-total" id="stat-contact-total">0</div>
-                            <div class="lead-stat-sub"><span id="stat-contact-week">0</span> this week</div>
-                        </div>
-                    </div>
-
-                    <div class="lead-stat-card lead-stat-card--chat">
-                        <div class="lead-stat-icon"><i class="fa-solid fa-comments" aria-hidden="true"></i></div>
-                        <div class="lead-stat-body">
-                            <div class="lead-stat-label">Chatbot</div>
-                            <div class="lead-stat-total" id="stat-chat-total">0</div>
-                            <div class="lead-stat-sub"><span id="stat-chat-week">0</span> this week</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Source filter chips -->
-                <div class="admin-filter-btns" id="lead-filter-chips" style="margin-bottom:1rem;">
-                    <button class="admin-filter-btn active" data-source="all">All (<span id="lead-count-all">0</span>)</button>
-                    <button class="admin-filter-btn" data-source="contact">Contact (<span id="lead-count-contact">0</span>)</button>
-
-                    <button class="admin-filter-btn" data-source="chat">Chat (<span id="lead-count-chat">0</span>)</button>
-                </div>
-
-                <!-- Unified leads table -->
-                <div class="admin-table-wrap">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Source</th>
-                                <th>Name</th>
-                                <th>Contact</th>
-                                <th>Status</th>
-                                <th>Received</th>
-                                <th>Actions</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="leads-body">
-                            <tr><td colspan="7" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading leads…</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
-
-        <!-- Builder view (shown when path is /admin/builder*) -->
-        <main class="admin-main" id="view-builder" hidden></main>
-
-        <!-- Chat view (shown when path is /admin/chat) -->
-        <main class="admin-main admin-main-chat" id="view-chat" hidden></main>
-
-        <!-- Sitemap view (shown when path is /admin/sitemap) -->
-        <main class="admin-main" id="view-sitemap" hidden>
-            <section class="admin-section sitemap-section">
-
-                <!-- Header -->
-                <div class="admin-page-header">
-                    <div>
-                        <h2 class="admin-page-title">Sitemap Manager</h2>
-                        <p class="admin-page-sub">All public URLs submitted to search engines via <code>/sitemap.xml</code>.</p>
-                    </div>
-                    <div class="admin-header-actions">
-                        <button class="admin-refresh-btn" id="sitemap-refresh-btn" aria-label="Refresh">
-                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
-                        </button>
-                        <button class="admin-btn admin-btn-secondary" id="sitemap-copy-btn">
-                            <i class="fa-solid fa-link" aria-hidden="true"></i> Copy URL
-                        </button>
-                        <a id="sitemap-download-btn" href="/sitemap.xml" target="_blank" class="admin-btn admin-btn-primary">
-                            <i class="fa-solid fa-download" aria-hidden="true"></i> Download XML
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Stat cards -->
-                <div class="sitemap-stats" id="sitemap-stats">
-                    <div class="sitemap-stat-card">
-                        <span class="sitemap-stat-value" id="stat-total">—</span>
-                        <span class="sitemap-stat-label">Total URLs</span>
-                    </div>
-                    <div class="sitemap-stat-card">
-                        <span class="sitemap-stat-value" id="stat-static">—</span>
-                        <span class="sitemap-stat-label">Static Pages</span>
-                    </div>
-                    <div class="sitemap-stat-card">
-                        <span class="sitemap-stat-value" id="stat-builder">—</span>
-                        <span class="sitemap-stat-label">Builder Pages</span>
-                    </div>
-                    <div class="sitemap-stat-card sitemap-stat-card--wide">
-                        <span class="sitemap-stat-value sitemap-stat-value--sm" id="stat-generated">—</span>
-                        <span class="sitemap-stat-label">Last Generated</span>
-                    </div>
-                </div>
-
-                <!-- Search + filter -->
-                <div class="sitemap-toolbar">
-                    <input id="sitemap-search" class="admin-search" type="search" placeholder="Filter URLs…" />
-                    <div class="admin-filter-btns">
-                        <button class="admin-filter-btn active" data-sitemap-filter="all">All</button>
-                        <button class="admin-filter-btn" data-sitemap-filter="static">Static</button>
-                        <button class="admin-filter-btn" data-sitemap-filter="builder">Builder</button>
-                    </div>
-                    <button class="admin-btn admin-btn-primary" id="sitemap-regenerate-btn" type="button" style="margin-left:auto;">
-                        <i class="fa-solid fa-rotate" aria-hidden="true"></i> Regenerate
-                    </button>
-                </div>
-
-                <!-- URL table -->
-                <div class="admin-table-wrap">
-                    <table class="admin-table sitemap-table">
-                        <thead>
-                            <tr>
-                                <th>URL</th>
-                                <th>Type</th>
-                                <th>Priority</th>
-                                <th>Change Freq</th>
-                                <th>Last Modified</th>
-                            </tr>
-                        </thead>
-                        <tbody id="sitemap-body">
-                            <tr><td colspan="5" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Copy toast -->
-                <div class="sitemap-toast" id="sitemap-toast" hidden>
-                    <i class="fa-solid fa-check" aria-hidden="true"></i> Sitemap URL copied!
-                </div>
-
-            </section>
-        </main>
     </div>
 
-    <!-- Socket.io client — served automatically by the Node server -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/admin/admin.js"></script>
-    <!-- SortableJS for drag-and-drop reordering in the builder canvas -->
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
-    <script type="module" src="/admin/builder/builder-editor.js"></script>
-    <script src="/admin/chat/chat-panel.js"></script>
+    <script src="admin.js"></script>
 </body>
 </html>
