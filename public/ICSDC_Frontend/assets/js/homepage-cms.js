@@ -395,53 +395,29 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
 
     function populateFAQ(items) {
         if (!Array.isArray(items) || !items.length) return;
-        const dl = document.getElementById('faq-accordions');
-        if (!dl) return;
+        const container = document.getElementById('faq-accordions');
+        if (!container) return;
 
-        // Sort by the `order` field if present
         const sorted = [...items].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        const chev = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 
-        dl.innerHTML = sorted.map((faq, idx) => `
-            <div class="faq-item" id="faq-item-${idx}">
-                <dt>
-                    <button class="faq-question" aria-expanded="false"
-                            aria-controls="faq-answer-${idx}"
-                            id="faq-btn-${idx}">
-                        ${faq.question}
-                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </button>
-                </dt>
-                <dd class="faq-answer" id="faq-answer-${idx}"
-                    role="region" aria-labelledby="faq-btn-${idx}" hidden>
-                    <p>${faq.answer}</p>
-                </dd>
-            </div>`).join('');
+        container.innerHTML = sorted.map((faq, i) => {
+            const num = String(i + 1).padStart(2, '0');
+            return `<details class="faq-item"${i === 0 ? ' open' : ''}>
+                <summary class="faq-q">
+                    <span class="faq-num">${num}</span>
+                    <span class="faq-q-text">${faq.question || ''}</span>
+                    <span class="faq-chev">${chev}</span>
+                </summary>
+                <div class="faq-a-wrap"><div class="faq-a">${faq.answer || ''}</div></div>
+            </details>`;
+        }).join('');
 
-        // Accordion toggle — drives the `.faq-open` class that the CSS uses
-        // to animate max-height. Also keeps aria-expanded + hidden in sync.
-        dl.querySelectorAll('.faq-question').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const item = btn.closest('.faq-item');
-                const wasOpen = item.classList.contains('faq-open');
-
-                // Close all
-                dl.querySelectorAll('.faq-item').forEach(it => {
-                    it.classList.remove('faq-open');
-                    const b = it.querySelector('.faq-question');
-                    if (b) b.setAttribute('aria-expanded', 'false');
-                    const ans = it.querySelector('.faq-answer');
-                    if (ans) ans.hidden = true;
-                });
-
-                // Open clicked (unless it was already open)
-                if (!wasOpen) {
-                    item.classList.add('faq-open');
-                    btn.setAttribute('aria-expanded', 'true');
-                    const ans = item.querySelector('.faq-answer');
-                    if (ans) ans.hidden = false;
+        const detailsAll = container.querySelectorAll('.faq-item');
+        detailsAll.forEach(item => {
+            item.addEventListener('toggle', () => {
+                if (item.open) {
+                    detailsAll.forEach(o => { if (o !== item) o.open = false; });
                 }
             });
         });

@@ -2,3 +2,7 @@ node_modules/
 node_modules/*
 .env
 node_modules/.package-lock.json
+.env.*
+*.log
+# Claude Code context file — local only
+CLAUDE.md

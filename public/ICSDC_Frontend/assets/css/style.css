@@ -1,4 +1,11 @@
 ﻿/* ══════════════════════════════════════
+   GLOBAL WIDGETS — loaded on every page via style.css
+══════════════════════════════════════ */
+@import url('chat-widget.css');
+@import url('whatsapp-widget.css');
+@import url('contact-modal.css');
+
+/* ══════════════════════════════════════
    RESET
 ══════════════════════════════════════ */
 *,
@@ -11,7 +18,8 @@
 
 
 html {
-    overflow-x: hidden;
+    overflow-x: clip;
+    /* clip prevents horizontal scroll without creating a scroll container — keeps position:sticky working */
 }
 
 [data-strapi] {
@@ -21,6 +29,37 @@ html {
 
 .hidden {
     display: none;
+}
+
+/* ══════════════════════════════════════
+   SCROLLBAR (light mode default — dark mode
+   overrides in dark-mode.css)
+══════════════════════════════════════ */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
 }
 
 /* ══════════════════════════════════════
@@ -87,7 +126,9 @@ html {
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: var(--text);
-    overflow-x: hidden;
+    line-height: 1.65;
+    overflow-x: clip;
+    /* clip (not hidden) — doesn't create a scroll container, keeps position:sticky working */
     width: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -293,12 +334,18 @@ nav.scrolled {
 
 .btn-login {
     margin-left: auto;
-    padding: 10px 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    /* match .btn-wa-nav */
     background: var(--blue);
     color: var(--white);
     border: none;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
+    border-radius: 8px;
+    /* match .btn-wa-nav */
+    font-size: 13.5px;
+    /* match .btn-wa-nav */
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
@@ -306,9 +353,15 @@ nav.scrolled {
         transform var(--transition-base) var(--ease-out-back),
         box-shadow var(--transition-base) ease;
     flex-shrink: 0;
-    min-height: 44px;
+    min-height: 40px;
+    /* match .btn-wa-nav */
     letter-spacing: -0.01em;
+    white-space: nowrap;
     box-shadow: 0 2px 8px rgba(26, 86, 219, 0.25);
+}
+
+.btn-login i {
+    font-size: 15px;
 }
 
 .btn-login:hover {
@@ -896,7 +949,7 @@ nav.scrolled {
 .hero-desc {
     font-size: 15px;
     color: var(--muted);
-    line-height: 1.75;
+    line-height: 1.65;
     margin-bottom: 32px;
     max-width: 480px;
 }
@@ -970,7 +1023,7 @@ nav.scrolled {
     padding: 11px 22px;
     border: 2px solid var(--border);
     border-radius: var(--radius-sm);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     background: var(--white);
@@ -1004,7 +1057,7 @@ nav.scrolled {
     color: var(--white);
     border: none;
     border-radius: var(--radius-sm);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
@@ -1032,7 +1085,7 @@ nav.scrolled {
    SECTIONS
 ══════════════════════════════════════ */
 .section {
-    padding: 60px 0 60px;
+    padding: 80px 0;
 }
 
 .section .container {
@@ -1065,6 +1118,7 @@ nav.scrolled {
 ══════════════════════════════════════ */
 .why-us {
     display: block;
+    background: var(--c-bg-grey);
 }
 
 .why-grid {
@@ -1129,7 +1183,7 @@ nav.scrolled {
 }
 
 .why-card p {
-    font-size: 14.5px;
+    font-size: 15px;
     line-height: 1.65;
     color: var(--muted-alt);
 }
@@ -1199,7 +1253,7 @@ nav.scrolled {
     margin: 0 auto;
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-items: center;
     justify-content: space-between;
 }
 
@@ -1242,7 +1296,7 @@ nav.scrolled {
     font-weight: 400;
     margin: 20px 0 24px 0;
     color: var(--muted-light);
-    line-height: 1.75;
+    line-height: 1.65;
 }
 
 .who-we-are-btns {
@@ -1279,6 +1333,7 @@ nav.scrolled {
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding: 35px 0;
 }
 
 .blue-container-left {
