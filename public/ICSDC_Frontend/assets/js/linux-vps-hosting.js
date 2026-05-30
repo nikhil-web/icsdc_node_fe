@@ -10,18 +10,15 @@ import {
     setText,
     setHTML,
     initFAQ,
-    initTestimonials,
-    resolveIcon
+    initTestimonials
 } from './utils/cms-helpers.js';
 
 (function () {
     'use strict';
 
     /**
-     * Render the VPS plans grid.
-     * Cards match the standard pricing-plan card style used site-wide:
-     * name → price → checkmark feature list → CTA button.
-     * Spec fields (vcpu, ram, storage, bandwidth) are rendered as feature list items.
+     * Render the 4-column VPS plans grid.
+     * Each plan card uses the lvps-plan-card pattern with a 2-column spec sub-grid.
      */
     function populatePlans(plans) {
         if (!plans || !plans.length) return;
@@ -30,54 +27,31 @@ import {
 
         var sorted = plans.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
         grid.innerHTML = sorted.map(function (plan) {
-            var isFeatured = plan.isPopular || false;
-            var featuredClass = isFeatured ? ' lvps-plan-featured' : '';
-            var badgeHtml = isFeatured
+            var popularBadge = plan.isPopular
                 ? '<div class="lvps-plan-badge">Most Popular</div>'
                 : '';
+            var popularClass = plan.isPopular ? ' lvps-plan-popular' : '';
 
-            var priceHtml = plan.price
-                ? '<div class="lvps-plan-price">&#8377;' + plan.price + ' <span>' + (plan.priceNote || '/mo') + '</span></div>'
-                : '';
+            var specs = [
+                { label: 'vCPU', value: plan.vcpu || plan.cpu || '' },
+                { label: 'RAM', value: plan.ram || plan.memory || '' },
+                { label: 'SSD Storage', value: plan.storage || plan.ssd || '' },
+                { label: 'Bandwidth', value: plan.bandwidth || plan.bw || '' }
+            ];
 
-            // Build checkmark feature list from spec fields
-            var featureItems = [];
-            if (plan.vcpu)      featureItems.push(plan.vcpu);
-            if (plan.ram)       featureItems.push(plan.ram + ' RAM');
-            if (plan.storage)   featureItems.push(plan.storage + ' Storage');
-            if (plan.bandwidth) featureItems.push(plan.bandwidth + ' Bandwidth');
+            var specsHtml = specs.map(function (spec) {
+                return '<div class="lvps-plan-spec">' +
+                    '<span class="lvps-plan-spec-label">' + spec.label + '</span>' +
+                    '<span class="lvps-plan-spec-value">' + (spec.value || '&mdash;') + '</span>' +
+                    '</div>';
+            }).join('');
 
-            var featuresHtml = featureItems.length
-                ? '<ul class="lvps-plan-features">' +
-                    featureItems.map(function (f) { return '<li>' + f + '</li>'; }).join('') +
-                  '</ul>'
-                : '';
-
-            var btnClass = isFeatured ? 'lvps-plan-btn-featured' : 'lvps-plan-btn';
-
-            return '<div class="lvps-plan-card' + featuredClass + '">' +
-                badgeHtml +
+            return '<div class="lvps-plan-card' + popularClass + '">' +
+                popularBadge +
                 '<div class="lvps-plan-name">' + (plan.name || '') + '</div>' +
-                priceHtml +
-                featuresHtml +
-                '<a href="/contact-us.html" class="' + btnClass + '">Get Started &rarr;</a>' +
-                '</div>';
-        }).join('');
-    }
-
-    /**
-     * Render the "Why Choose ICSDC" checklist.
-     * Each card title becomes one checkbox item — no descriptions, exact DOCX text.
-     */
-    function populateWhyChooseCards(cards) {
-        if (!cards || !cards.length) return;
-        var grid = document.querySelector('#lvps-why-choose .lvps-checklist-grid');
-        if (!grid) return;
-        var sorted = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-        grid.innerHTML = sorted.map(function (card) {
-            return '<div class="lvps-checklist-item" data-animate="fade-up">' +
-                '<i class="fa-solid fa-square-check" aria-hidden="true"></i>' +
-                '<span>' + (card.title || '') + '</span>' +
+                '<div class="lvps-plan-price">' + (plan.price || '') + ' <span>/mo</span></div>' +
+                '<div class="lvps-plan-specs">' + specsHtml + '</div>' +
+                '<button class="lvps-plan-btn">Get ' + (plan.name || 'Plan') + ' &rarr;</button>' +
                 '</div>';
         }).join('');
     }
@@ -93,7 +67,7 @@ import {
         var sorted = osOptions.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
         grid.innerHTML = sorted.map(function (os) {
             return '<div class="lvps-os-card">' +
-                '<div class="lvps-os-icon">' + resolveIcon(os.icon || 'linux') + '</div>' +
+                '<div class="lvps-os-icon">' + (os.icon || '&#128192;') + '</div>' +
                 '<div class="lvps-os-name">' + (os.name || '') + '</div>' +
                 '<div class="lvps-os-desc">' + (os.description || os.desc || '') + '</div>' +
                 '</div>';
@@ -111,7 +85,7 @@ import {
         var sorted = panels.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
         grid.innerHTML = sorted.map(function (panel) {
             return '<div class="lvps-cp-card">' +
-                '<div class="lvps-os-icon">' + resolveIcon(panel.icon || 'server') + '</div>' +
+                '<div class="lvps-os-icon">' + (panel.icon || '&#9881;') + '</div>' +
                 '<div class="lvps-os-name">' + (panel.name || '') + '</div>' +
                 '<div class="lvps-os-desc">' + (panel.description || panel.desc || '') + '</div>' +
                 '</div>';
@@ -151,22 +125,6 @@ import {
             populateSectionHeader('#lvps-plans', page.plansLabel, page.plansTitle, page.plansSubtitle);
             populatePlans(page.plans);
 
-            // Who We Are
-            if (page.aboutTitle) setText(document, '#lvps-about-title', page.aboutTitle);
-            if (page.aboutDesc)  setHTML(document, '#lvps-about-desc', '<p>' + page.aboutDesc + '</p>');
-            if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
-                var aboutImg = document.querySelector('#lvps-about-img');
-                if (aboutImg) {
-                    var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
-                    var _m = page.aboutImage.image;
-                    var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)
-                        ? (_m.formats.large || _m.formats.medium || _m.formats.small).url
-                        : _m.url) || '';
-                    if (_url && !_url.startsWith('http')) _url = _base + _url;
-                    if (_url) { aboutImg.src = _url; aboutImg.alt = _m.alternativeText || 'ICSDC Linux VPS Hosting'; }
-                }
-            }
-
             // Power Features
             populateSectionHeader('#power', page.powerLabel, page.powerTitle, page.powerSubtitle);
             populateIconCards('#power .cloud-power-grid', page.powerFeatures, 'cloud-power-card');
@@ -189,10 +147,6 @@ import {
             // Use Cases
             populateSectionHeader('#use-cases', page.useCasesLabel, page.useCasesTitle, page.useCasesSubtitle);
             populateIconCards('#use-cases .cloud-use-grid', page.useCases, 'cloud-use-card');
-
-            // Why Choose ICSDC
-            populateSectionHeader('#lvps-why-choose', page.whyChooseLabel, page.whyChooseTitle, page.whyChooseSubtitle);
-            populateWhyChooseCards(page.whyChooseCards);
 
             // Testimonials
             if (page.testimonialTitle) setText(document, '#lvps-testi-heading', page.testimonialTitle);

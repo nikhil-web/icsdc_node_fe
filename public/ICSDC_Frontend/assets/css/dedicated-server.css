@@ -568,24 +568,18 @@
 .ds-security-text {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
 }
 
 .ds-security-text .title {
-    text-align: center;
-    margin-top: 8px;
-}
-
-.ds-security-text .who-we-are-paragraph {
-    margin: 16px 0 0;
+    text-align: left;
+    margin-top: 0;
 }
 
 .ds-security-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
+    margin-top: 32px;
 }
 
 .ds-security-card {
@@ -1249,12 +1243,16 @@
 ══════════════════════════════════════ */
 .ds-perf-visual {
     width: 100%;
+    max-width: 520px;
+    aspect-ratio: 4 / 3;
     border-radius: var(--radius-lg);
     background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 60%, #e0f2fe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     overflow: hidden;
     box-shadow: 0 16px 48px rgba(26, 86, 219, 0.10);
-    padding: 28px;
 }
 
 .ds-perf-visual::before {
@@ -1262,7 +1260,6 @@
     position: absolute;
     inset: 0;
     background: radial-gradient(circle at 60% 40%, rgba(26, 86, 219, 0.08) 0%, transparent 60%);
-    pointer-events: none;
 }
 
 .ds-perf-stats {
@@ -1270,32 +1267,21 @@
     z-index: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 12px;
+    padding: 24px;
 }
 
 .ds-perf-stat {
     background: var(--white);
     border: 1px solid rgba(26, 86, 219, 0.10);
-    border-radius: 14px;
-    padding: 32px 20px;
+    border-radius: 12px;
+    padding: 20px 16px;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 130px;
-    box-shadow: 0 4px 16px rgba(26, 86, 219, 0.06);
-    transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease;
-}
-
-.ds-perf-stat:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(26, 86, 219, 0.14);
+    box-shadow: var(--shadow-sm);
 }
 
 .ds-perf-stat-val {
-    font-size: clamp(28px, 3vw, 38px);
+    font-size: clamp(22px, 2.5vw, 32px);
     font-weight: 800;
     color: var(--blue);
     letter-spacing: -0.04em;
@@ -1304,27 +1290,12 @@
 }
 
 .ds-perf-stat-label {
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 600;
     color: var(--muted);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    display: block;
-}
-
-/* ══════════════════════════════════════
-   MORE SERVICES — stacked image pair
-══════════════════════════════════════ */
-.ds-services-images {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.ds-services-images img {
-    width: 60%;
-    height: auto;
-    border-radius: var(--radius-lg);
+    margin-top: 6px;
     display: block;
 }
 
@@ -1386,6 +1357,15 @@
     .ds-security-inner {
         grid-template-columns: 1fr;
         padding: 60px var(--c-px);
+    }
+
+    .ds-security-visual {
+        max-width: 360px;
+        margin: 0 auto;
+    }
+
+    .ds-security-text .title {
+        text-align: center;
     }
 
     .ds-when-grid {
