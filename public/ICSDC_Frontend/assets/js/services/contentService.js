@@ -984,6 +984,7 @@ export function getBareMetalServerPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
+        "&populate[strategicCards][populate]=*" +
         "&populate[serverConfigs][populate]=*" +
         "&populate[managedFeatures][populate]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +

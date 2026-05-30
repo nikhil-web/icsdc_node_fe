@@ -123,6 +123,11 @@ import {
             // Pillars — 4 cards
             populateIconCards('#bms-pillars-grid', page.pillars, 'why-card');
 
+            // Strategic Choice — 12 cards
+            if (page.strategicLabel) setText(document, '#bms-strategic-label', page.strategicLabel);
+            if (page.strategicTitle) setText(document, '#bms-strategic-title', page.strategicTitle);
+            populateIconCards('#bms-strategic-grid', page.strategicCards, 'cloud-power-card');
+
             // Server Configs Table
             populateSectionHeader('#bms-configs', page.configsLabel, page.configsTitle, page.configsSubtitle);
             populateConfigsTable(page.serverConfigs);

@@ -1388,6 +1388,10 @@
         padding: 60px var(--c-px);
     }
 
+    .ds-security-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
     .ds-when-grid {
         grid-template-columns: repeat(2, 1fr);
     }
