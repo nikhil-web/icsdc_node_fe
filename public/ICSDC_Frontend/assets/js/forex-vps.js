@@ -10,6 +10,7 @@ import {
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
+    populatePricingPlans,
     hidePageLoader,
     markActiveNavLink,
     setText,
@@ -21,50 +22,35 @@ import {
     'use strict';
 
     /**
-     * Render the Forex VPS pricing grid.
-     * Uses fvps-plan-* classes and isPopular (not plan.popular).
+     * Adapt forex-vps plan fields (vcpu/ram/storage/bandwidth/isPopular)
+     * into the standard ds-plan-card format used by populatePricingPlans().
      */
-    function populatePlans(plans) {
-        if (!plans || !plans.length) return;
-        var section = document.getElementById('fvps-plans');
-        if (!section) return;
+    function normalisePlans(plans) {
+        if (!plans || !plans.length) return [];
+        return plans.map(function (plan) {
+            // Strip currency symbol so ds-plan-currency renders it separately
+            var rawPrice = (plan.price || '').replace(/[₹₹]/g, '').trim();
 
-        var sorted = plans.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-        var grid = section.querySelector('.fvps-plans-grid');
-        if (!grid) return;
+            var features = [];
+            if (plan.vcpu)      features.push({ label: plan.vcpu      + ' vCPU' });
+            if (plan.ram)       features.push({ label: plan.ram       + ' RAM' });
+            if (plan.storage)   features.push({ label: plan.storage   + ' SSD Storage' });
+            if (plan.bandwidth) features.push({ label: plan.bandwidth + ' Bandwidth' });
 
-        grid.innerHTML = sorted.map(function (plan) {
-            var popularBadge = plan.isPopular
-                ? '<div class="fvps-plan-badge">Most Popular</div>'
-                : '';
-            var popularClass = plan.isPopular ? ' fvps-plan-popular' : '';
-            var priceNote = plan.priceNote
-                ? '<div class="fvps-plan-price-note">' + plan.priceNote + '</div>'
-                : '';
-
-            var specs = [
-                { label: 'vCPU',        value: plan.vcpu      || '' },
-                { label: 'RAM',         value: plan.ram       || '' },
-                { label: 'SSD Storage', value: plan.storage   || '' },
-                { label: 'Bandwidth',   value: plan.bandwidth || '' }
-            ];
-
-            var specsHtml = specs.map(function (s) {
-                return '<div class="fvps-plan-spec">' +
-                    '<span class="fvps-plan-spec-label">' + s.label + '</span>' +
-                    '<span class="fvps-plan-spec-value">' + (s.value || '&mdash;') + '</span>' +
-                    '</div>';
-            }).join('');
-
-            return '<div class="fvps-plan-card' + popularClass + '">' +
-                popularBadge +
-                '<div class="fvps-plan-name">' + (plan.name || '') + '</div>' +
-                '<div class="fvps-plan-price">' + (plan.price || '') + ' <span>/mo</span></div>' +
-                priceNote +
-                '<div class="fvps-plan-specs">' + specsHtml + '</div>' +
-                '<button class="fvps-plan-btn" onclick="location.href=\'/contact-us.html\'">Get ' + (plan.name || 'Plan') + ' &rarr;</button>' +
-                '</div>';
-        }).join('');
+            return {
+                order:      plan.order || 0,
+                tier:       plan.name  || '',
+                currency:   '₹',
+                price:      rawPrice,
+                period:     '/mo',
+                tagline:    plan.priceNote || null,
+                isFeatured: !!plan.isPopular,
+                badge:      plan.isPopular ? 'Most Popular' : null,
+                ctaText:    'Get Started',
+                ctaStyle:   plan.isPopular ? 'primary' : 'outline',
+                features:   features
+            };
+        });
     }
 
     async function init() {
@@ -117,7 +103,7 @@ import {
                 var plansSub = document.getElementById('fvps-plans-subtitle');
                 if (plansSub) plansSub.textContent = page.plansSubtitle;
             }
-            populatePlans(page.plans);
+            populatePricingPlans('#fvps-plans .ds-plan-grid', normalisePlans(page.plans));
 
             // Features section (9 cards)
             populateSectionHeader('#fvps-features', page.featuresLabel, page.featuresTitle, null);

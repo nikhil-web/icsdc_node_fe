@@ -25,7 +25,7 @@
  */
 
 import { getDedicatedServerPage } from './services/contentService.js';
-import { initFAQ } from './utils/cms-helpers.js';
+import { initFAQ, initTestimonials } from './utils/cms-helpers.js';
 
 (function () {
     'use strict';
@@ -351,7 +351,7 @@ import { initFAQ } from './utils/cms-helpers.js';
     }
 
     /** 8. More Services */
-    function populateServices(label, title, desc, image, imageAlt, buttons, footerText) {
+    function populateServices(label, title, desc, image, imageAlt, buttons, footerText, image2) {
         var section = document.getElementById('ds-services');
         if (!section) return;
 
@@ -362,12 +362,30 @@ import { initFAQ } from './utils/cms-helpers.js';
             if (desc) setHTML(blueContainer, '.who-we-are-paragraph', desc);
         }
 
-        // Image (stored as plain string path)
+        // Image 1 (stored as plain string path)
         if (image) {
-            var imgEl = section.querySelector('.who-we-are-image img');
+            var imgEl = section.querySelector('.ds-services-img1');
             if (imgEl) {
                 imgEl.src = image;
                 imgEl.alt = imageAlt || 'ICSDC dedicated server services';
+            }
+        }
+
+        // Image 2 (Strapi common.image component — media library upload)
+        if (image2 && image2.image && image2.image.url) {
+            var img2El = section.querySelector('.ds-services-img2');
+            if (img2El) {
+                var _m = image2.image;
+                var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
+                var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)
+                    ? (_m.formats.large || _m.formats.medium || _m.formats.small).url
+                    : _m.url) || '';
+                if (_url && !_url.startsWith('http')) _url = _base + _url;
+                if (_url) {
+                    img2El.src = _url;
+                    img2El.alt = _m.alternativeText || 'ICSDC dedicated server services';
+                    img2El.style.display = '';
+                }
             }
         }
 
@@ -554,87 +572,8 @@ import { initFAQ } from './utils/cms-helpers.js';
         }).join('');
     }
 
-    /** 14. Testimonials */
-    function buildTestiCard(t, index) {
-        var initials = getInitials(t.name);
-        var stars = '';
-        for (var s = 0; s < (t.rating || 5); s++) { stars += starSVG(); }
-
-        var jobLine = [t.title || t.jobTitle || '', t.company || ''].filter(Boolean).join(' · ');
-        return '<article class="testi-card" role="listitem" data-testi-index="' + index + '" aria-label="Testimonial from ' + (t.name || '') + '">' +
-            '<div class="testi-body">' +
-            '<span class="testi-quote-mark" aria-hidden="true">&#10077;</span>' +
-            '<blockquote class="testi-quote">' + (t.quote || '') + '</blockquote>' +
-            '<div class="testi-rating" aria-label="Rating: ' + (t.rating || 5) + ' out of 5 stars">' + stars + '</div>' +
-            '</div>' +
-            '<div class="testi-footer">' +
-            '<div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">' + initials + '</span></div>' +
-            '<div class="testi-client-info">' +
-            '<p class="testi-name">' + (t.name || '') + '</p>' +
-            '<p class="testi-job">' + jobLine + '</p>' +
-            '</div>' +
-            '</div>' +
-            '</article>';
-    }
-
-    function initDSTestimonials(items) {
-        var grid = document.getElementById('ds-testi-grid');
-        var dotsWrap = document.getElementById('ds-testi-dots');
-        var prevBtn = document.getElementById('ds-testi-prev');
-        var nextBtn = document.getElementById('ds-testi-next');
-        if (!grid || !dotsWrap || !items || !items.length) return;
-
-        grid.innerHTML = items.map(function (t, i) { return buildTestiCard(t, i); }).join('');
-
-        dotsWrap.innerHTML = items.map(function (_, i) {
-            return '<button class="testi-dot' + (i === 0 ? ' testi-dot-active' : '') + '" role="tab" aria-selected="' + (i === 0) + '" aria-label="Go to testimonial ' + (i + 1) + '" data-dot="' + i + '"></button>';
-        }).join('');
-
-        var cards = Array.from(grid.querySelectorAll('.testi-card'));
-        var dots = Array.from(dotsWrap.querySelectorAll('.testi-dot'));
-
-        function scrollToCard(index) {
-            var card = cards[index];
-            if (!card) return;
-            grid.scrollTo({ left: card.offsetLeft - 4, behavior: 'smooth' });
-        }
-
-        dots.forEach(function (btn, i) {
-            btn.addEventListener('click', function () { scrollToCard(i); });
-        });
-
-        function currentIndex() {
-            var scrollLeft = grid.scrollLeft;
-            var closest = 0, minDist = Infinity;
-            cards.forEach(function (card, i) {
-                var dist = Math.abs(card.offsetLeft - scrollLeft);
-                if (dist < minDist) { minDist = dist; closest = i; }
-            });
-            return closest;
-        }
-
-        if (prevBtn) prevBtn.addEventListener('click', function () {
-            var idx = currentIndex();
-            scrollToCard(idx === 0 ? items.length - 1 : idx - 1);
-        });
-
-        if (nextBtn) nextBtn.addEventListener('click', function () {
-            var idx = currentIndex();
-            scrollToCard(idx === items.length - 1 ? 0 : idx + 1);
-        });
-
-        var scrollTimer;
-        grid.addEventListener('scroll', function () {
-            clearTimeout(scrollTimer);
-            scrollTimer = setTimeout(function () {
-                var idx = currentIndex();
-                dots.forEach(function (d, i) {
-                    d.classList.toggle('testi-dot-active', i === idx);
-                    d.setAttribute('aria-selected', i === idx ? 'true' : 'false');
-                });
-            }, 80);
-        });
-    }
+    /* 14. Testimonials — handled by the shared initTestimonials() helper
+       from cms-helpers.js for visual consistency across all pages. */
 
     /** 15. FAQ Accordion */
     function initDSFAQ(faqItems) {
@@ -876,7 +815,7 @@ import { initFAQ } from './utils/cms-helpers.js';
             populateSecurity(page.securityLabel, page.securityTitle, page.securityDescription, page.shieldVisual, page.securityCards);
 
             // 8. More Services
-            populateServices(page.servicesLabel, page.servicesTitle, page.servicesDescription, page.servicesImage, page.servicesImageAlt, page.serviceButtons, page.servicesFooterText);
+            populateServices(page.servicesLabel, page.servicesTitle, page.servicesDescription, page.servicesImage, page.servicesImageAlt, page.serviceButtons, page.servicesFooterText, page.servicesImage2);
 
             // 9. Comparison
             populateComparison(page.comparisonLabel, page.comparisonTitle, page.comparisonSubtitle, page.comparisonColumns, page.comparisonRows);
@@ -893,11 +832,11 @@ import { initFAQ } from './utils/cms-helpers.js';
             // 13. Who Can Use
             populateUseCases(page.useCasesLabel, page.useCasesTitle, page.useCasesSubtitle, page.useCaseCards);
 
-            // 14. Testimonials
+            // 14. Testimonials — shared helper for consistency across pages
             if (page.testimonialTitle) {
                 setText(document, '.testi-title', page.testimonialTitle);
             }
-            initDSTestimonials(page.testimonials);
+            initTestimonials(page.testimonials);
 
             // 15. FAQ
             if (page.faqTitle) {
