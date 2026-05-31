@@ -15,7 +15,8 @@ import {
     setText,
     setHTML,
     initFAQ,
-    initTestimonials
+    initTestimonials,
+    initHeroContactForm
 } from './utils/cms-helpers.js';
 
 (function () {
@@ -40,8 +41,10 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage,
+                heroFormEnabled: page.heroFormEnabled
             });
+            if (page.heroFormEnabled) initHeroContactForm('hf-form', 'hf-success');
 
             // Pillars (4 cards)
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');

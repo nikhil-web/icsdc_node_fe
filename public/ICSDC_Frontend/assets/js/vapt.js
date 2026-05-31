@@ -10,12 +10,14 @@ import {
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
+    populatePricingPlans,
     hidePageLoader,
     markActiveNavLink,
     setText,
     setHTML,
     initFAQ,
-    initTestimonials
+    initTestimonials,
+    initHeroContactForm
 } from './utils/cms-helpers.js';
 
 (function () {
@@ -41,6 +43,27 @@ import {
         }).join('');
     }
 
+    /**
+     * Render the "When Should You Choose VAPT?" numbered points.
+     * whenPoints is ds.numbered-tip[] — the full sentence lives in `title`
+     * (description optional). Renders number badge + sentence.
+     */
+    function populateWhenPoints(points) {
+        if (!points || !points.length) return;
+        var grid = document.getElementById('vapt-when-grid');
+        if (!grid) return;
+
+        var sorted = points.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+        grid.innerHTML = sorted.map(function (p, idx) {
+            var num = p.number || (idx + 1);
+            var text = p.description || p.title || '';
+            return '<div class="vapt-when-card">' +
+                '<div class="vapt-when-num">' + num + '</div>' +
+                '<p>' + text + '</p>' +
+                '</div>';
+        }).join('');
+    }
+
     async function init() {
         markActiveNavLink();
 
@@ -60,8 +83,10 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage,
+                heroFormEnabled: page.heroFormEnabled
             });
+            if (page.heroFormEnabled) initHeroContactForm('hf-form', 'hf-success');
 
             if (page.heroTopBadge) setHTML(document, '.vapt-top-badge', page.heroTopBadge);
             if (page.heroStatusTitle) setText(document, '.vapt-bt', page.heroStatusTitle);
@@ -70,22 +95,31 @@ import {
             // Pillars (4 cards)
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
+            // Pricing
+            populateSectionHeader('#vapt-pricing', page.pricingLabel, page.pricingTitle, page.pricingDesc);
+            populatePricingPlans('#vapt-pricing-grid', page.pricingPlans);
+
             // Why ICSDC VAPT (8 cards)
             populateSectionHeader('#vapt-why', page.whyLabel, page.whyTitle, page.whySubtitle);
             populateIconCards('#vapt-why-grid', page.whyCards, 'cloud-power-card');
 
             // What VAPT Means (narrative section)
-            if (page.whatLabel) {
-                var whatLabel = document.querySelector('#vapt-what .vapt-label-light');
-                if (whatLabel) whatLabel.textContent = page.whatLabel;
+            if (page.whatTitle) setText(document, '#vapt-what-title', page.whatTitle);
+            if (page.whatDesc) setText(document, '#vapt-what-description', page.whatDesc);
+            if (page.whatLayers && page.whatLayers.length) {
+                var layersEl = document.getElementById('vapt-what-layers');
+                if (layersEl) {
+                    layersEl.innerHTML = page.whatLayers.map(function (l, idx) {
+                        return '<div class="vapt-what-layer">' +
+                            '<div class="vapt-what-layer-num">' + (l.number || idx + 1) + '</div>' +
+                            '<p>' + (l.text || '') + '</p>' +
+                            '</div>';
+                    }).join('');
+                }
             }
-            if (page.whatTitle) {
-                var whatTitle = document.querySelector('#vapt-what .title');
-                if (whatTitle) whatTitle.textContent = page.whatTitle;
-            }
-            if (page.whatDesc) {
-                var whatDesc = document.getElementById('vapt-what-description');
-                if (whatDesc) whatDesc.innerHTML = page.whatDesc.replace(/\n\n/g, '</p><p>');
+            if (page.whatClosing) {
+                var closingEl = document.getElementById('vapt-what-closing');
+                if (closingEl) closingEl.innerHTML = '<em>' + page.whatClosing + '</em>';
             }
 
             // Why Choose ICSDC (7 cards)
@@ -100,8 +134,13 @@ import {
             populateIconCards('#vapt-offerings-grid', page.offeringsCards, 'cloud-power-card');
 
             // VAPT Process (6 steps)
-            populateSectionHeader('#vapt-process', page.processLabel, page.processTitle, null);
+            populateSectionHeader('#vapt-process', page.processLabel, page.processTitle, page.processSubtitle);
             populateSteps(page.steps);
+
+            // When to Choose VAPT
+            populateSectionHeader('#vapt-when', page.whenLabel, page.whenTitle, page.whenSubtitle);
+            populateWhenPoints(page.whenPoints);
+            if (page.whenClosing) setText(document, '#vapt-when-closing', page.whenClosing);
 
             // Testimonials
             if (page.testimonialTitle) setText(document, '#vapt-testi-heading', page.testimonialTitle);

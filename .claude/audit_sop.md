@@ -1,0 +1,114 @@
+# Page Audit SOP — DOCX → Strapi → JS/HTML
+
+Standard Operating Procedure for auditing ICSDC pages against source DOCX files.
+Learned from auditing: dedicated-server, linux-dedicated-server, windows-dedicated-server, vps-cpanel, managed-vps-hosting, bare-metal-server, gpu-dedicated-server, forex-vps, and others.
+
+---
+
+## The Correct Audit Order
+
+1. **Read DOCX** — extract all sections, note orange-highlighted auditor findings
+2. **Fetch live Strapi API** — field-by-field comparison against DOCX
+3. **Read JS** — verify every section has a render call with the CORRECT selector
+4. **Read HTML** — verify every JS-targeted ID/class actually exists in the HTML
+5. **Fix missing sections** — schema → Strapi data → HTML → JS → CSS
+6. **Fix selector mismatches** — JS targeting wrong IDs/classes (most common bug)
+7. **Fix Strapi content issues** — wrong values, trailing dashes, empty fields
+
+---
+
+## Critical Rules
+
+### NEVER change content without explicit user approval
+CSS-only means CSS-only. Content changes (heading text, description, list items) require the user to say so explicitly. This is a hard rule.
+
+### JSON fields do NOT go in populate query
+`json` type Strapi fields are returned by default. Adding `?populate[field]=*` for a JSON field causes a **400 ValidationError**. Only components, relations, and media need populate.
+
+### Always check BOTH src and dist schemas
+Before adding a field, grep both:
+- `src/api/<page>/content-types/<page>/schema.json`
+- `dist/src/api/<page>/content-types/<page>/schema.json`
+The dist sometimes already has fields the src is missing, or vice versa. User said: skip dist changes — they happen on build.
+
+### Strapi restart required for new schema fields
+New fields added to schema need Strapi to restart before they appear in Content Manager or accept PUT data. JSON/string fields need DB columns created on restart.
+
+---
+
+## Most Common Bugs Found
+
+| Bug | Example | Fix |
+|---|---|---|
+| JS targets wrong section ID | `#pricing` vs `id="wds-pricing"` | Update JS to match HTML |
+| JS targets wrong card grid class | `.wds-why-grid` vs `.cloud-power-grid` | Use `#section-id .class` selector |
+| Wrong CSS class on heading | `section-title` has no CSS | Change to `title` class |
+| Missing `section` class on `<section>` | `.section .title { color: var(--blue) }` doesn't apply | Add `class="section"` |
+| `populateChecklist` vs HTML fallback class | Renders `ds-checklist-item`, CSS targets `wds-about-item` | Render with correct class in JS |
+| Strapi `description: '-'` | Items render as "label text -" | Clear description to empty string |
+| Swapped Strapi displayNames | Clicking "Managed VPS Hosting Page" edits vps-cpanel-page | Fix `displayName` in both schemas |
+| JSON field in populate query | `populate[whenPoints]=*` → 400 error | Remove from populate |
+| Linter reverts HTML edits | Changes disappear silently | Re-verify file after editing |
+| `populateSectionHeader` misses title | Targets `.title` but HTML has `class="wds-about-heading"` | Add `title` class to the element |
+
+---
+
+## Strapi Schema Rules
+
+- `json` type — no populate needed, returned automatically
+- `component` type — needs `populate[field][populate]=*` or `populate[field][populate][subfield]=true`
+- `media` inside component — needs `populate[field][populate][image]=true`
+- dist changes are skipped (handled by build); only update `src`
+- Strapi restart needed after schema changes for DB columns to be created
+
+---
+
+## The "Who We Are" / About Section Pattern
+
+Every page must have:
+1. Image+text layout using `who-we-are` / `blue-container` classes (from `style.css`)
+2. Strapi `aboutImage: { type: "component", component: "common.image" }` field
+3. `&populate[aboutImage][populate][image]=true` in the contentService query
+4. JS renders image: checks `page.aboutImage.image.url`, prepends `http://localhost:1337` if relative
+5. Fallback `<img>` with `style="display:none"` shown when Strapi image is set
+
+---
+
+## Section Label Removal Rule
+
+User preference: **remove all `cloud-section-label` / `lds-section-label` eyebrow labels** from HTML. They add noise and the user doesn't want them populated. When auditing, strip these from pages.
+
+---
+
+## Testimonials — Standard IDs
+
+`initTestimonials()` in cms-helpers.js targets hardcoded IDs:
+- `testi-grid` — the carousel grid
+- `testi-dots` — pagination dots
+- `testi-prev` / `testi-next` — nav buttons
+
+Any page that passes custom IDs as options to `initTestimonials()` is wasted code — the function ignores extra arguments.
+
+---
+
+## populateSectionHeader Target Classes
+
+`populateSectionHeader(selector, label, title, subtitle)` targets:
+- `.cloud-section-label` or `.ds-section-label` for the label
+- `.title` for the heading
+- `.subtitle` for the subtitle paragraph
+
+If the heading uses any other class, `populateSectionHeader` silently does nothing.
+
+---
+
+## DOCX Orange Highlights = Missing Sections
+
+When a human auditor highlights content orange in the DOCX, it means that section is missing from the page. These always require:
+1. New Strapi schema field(s)
+2. Push verbatim content via Python script
+3. New HTML section in correct DOCX order
+4. New JS render call
+5. CSS for the new section
+
+Always add missing sections verbatim from the DOCX — no content changes.

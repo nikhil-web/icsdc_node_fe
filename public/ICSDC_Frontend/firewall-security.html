@@ -23,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/cloud-components.css">
   <link rel="stylesheet" href="assets/css/firewall-security.css">
+  <link rel="stylesheet" href="assets/css/contact-us.css">
   <link rel="stylesheet" href="assets/css/dark-mode.css">
 </head>
 
@@ -99,6 +100,58 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="hero-right">
         <img class="hero-right-image" alt="" style="display:none">
+        <div class="hero-form-wrap" style="display:none">
+          <div class="cu-hero-form-wrap">
+            <h3 class="cu-hero-form-title">Get a Free Consultation</h3>
+            <form id="hf-form" class="cu-form" novalidate>
+              <div class="cu-form-row">
+                <div class="cu-field">
+                  <label for="hf-name" class="cu-label">Your Name <span class="cu-required">*</span></label>
+                  <input type="text" id="hf-name" name="name" class="cu-input" placeholder="John Smith" required>
+                </div>
+                <div class="cu-field">
+                  <label for="hf-email" class="cu-label">Email Address <span class="cu-required">*</span></label>
+                  <input type="email" id="hf-email" name="email" class="cu-input" placeholder="john@company.com" required>
+                </div>
+              </div>
+              <div class="cu-form-row">
+                <div class="cu-field">
+                  <label for="hf-phone" class="cu-label">Phone Number</label>
+                  <input type="tel" id="hf-phone" name="phone" class="cu-input" placeholder="+91 98765 43210">
+                </div>
+                <div class="cu-field">
+                  <label for="hf-company" class="cu-label">Company / Organization</label>
+                  <input type="text" id="hf-company" name="company" class="cu-input" placeholder="Your Company Ltd.">
+                </div>
+              </div>
+              <div class="cu-field">
+                <label for="hf-subject" class="cu-label">What Can We Help You With? <span class="cu-required">*</span></label>
+                <select id="hf-subject" name="subject" class="cu-input cu-select" required>
+                  <option value="" disabled selected>Select a topic&hellip;</option>
+                  <option value="vps-cloud">VPS / Cloud Hosting Questions</option>
+                  <option value="infrastructure">Infrastructure Planning</option>
+                  <option value="migration">Migration &amp; Performance</option>
+                  <option value="security">Security &amp; Compliance</option>
+                  <option value="pricing">Pricing &amp; Plans</option>
+                  <option value="partnerships">Partnerships &amp; Reseller</option>
+                  <option value="support">Technical Support</option>
+                  <option value="other">Other / General Inquiry</option>
+                </select>
+              </div>
+              <div class="cu-field">
+                <label for="hf-message" class="cu-label">Your Message <span class="cu-required">*</span></label>
+                <textarea id="hf-message" name="message" class="cu-input cu-textarea" rows="3"
+                  placeholder="Tell us about your requirement&hellip;" required></textarea>
+              </div>
+              <button type="submit" class="cu-submit-btn">Send Message &rarr;</button>
+            </form>
+            <div id="hf-success" class="cu-form-success" style="display:none">
+              <div class="cu-success-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+              <h3>Message Sent!</h3>
+              <p>Thank you for reaching out. Our team will get back to you shortly.</p>
+            </div>
+          </div>
+        </div>
         <div class="fw-hero-visual">
           <div class="fw-top-badge">&#128293; ICSDC Firewall Security</div>
           <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">

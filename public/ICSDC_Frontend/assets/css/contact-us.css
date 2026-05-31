@@ -30,12 +30,12 @@
 ══════════════════════════════════════ */
 .cu-hero-section {
     background: linear-gradient(135deg, #ffffff 0%, #f0f6ff 55%, #ebf2fc 100%);
-    padding-top: 120px;
+    padding-top: 72px;
 }
 
 .cu-hero-section .hero {
     align-items: center;
-    padding: 60px var(--c-px) 64px;
+    padding: 0px var(--c-px) 64px;
 }
 
 .cu-hero-section .hero-right {

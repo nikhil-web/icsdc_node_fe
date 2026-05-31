@@ -1111,12 +1111,14 @@ export function getVaptPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
+        "&populate[pricingPlans][populate]=features" +
         "&populate[whyCards][populate]=*" +
         "&populate[whyChooseCards][populate]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[offeringsCards][populate]=*" +
         "&populate[steps][populate]=*" +
+        "&populate[whenPoints][populate]=*" +
         "&populate[heroImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
         "&populate[faq][populate]=*" +
@@ -1226,6 +1228,8 @@ export function getManagedDedicatedServerPage() {
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[heroImage][populate][image]=true" +
+        "&populate[aboutImage][populate][image]=true" +
+        "&populate[osImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
         "&populate[faq][populate]=*"
     );
