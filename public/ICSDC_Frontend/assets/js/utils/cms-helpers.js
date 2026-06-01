@@ -376,14 +376,23 @@ export function populateHero(section, data) {
     if (data.priceNote) setHTML(section, '.price-note', data.priceNote);
 
     var btns = section.querySelectorAll('.hero-btns button');
-    if (btns.length >= 1 && data.ctaPrimary) {
+    if (btns.length >= 1) {
         var primaryBtn = btns.length >= 2 ? btns[1] : btns[0];
-        primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' &rarr;';
-        wireCtaLink(primaryBtn, data.ctaPrimary.link);
+        if (data.ctaPrimary && data.ctaPrimary.text) {
+            primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' &rarr;';
+            wireCtaLink(primaryBtn, data.ctaPrimary.link);
+        } else {
+            primaryBtn.style.display = 'none';
+        }
     }
-    if (btns.length >= 2 && data.ctaSecondary) {
-        btns[0].textContent = data.ctaSecondary.text || '';
-        wireCtaLink(btns[0], data.ctaSecondary.link);
+    if (btns.length >= 2) {
+        var secondaryBtn = btns[0];
+        if (data.ctaSecondary && data.ctaSecondary.text) {
+            secondaryBtn.textContent = data.ctaSecondary.text || '';
+            wireCtaLink(secondaryBtn, data.ctaSecondary.link);
+        } else {
+            secondaryBtn.style.display = 'none';
+        }
     }
 
     if (data.heroImage && data.heroImage.image) {

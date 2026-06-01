@@ -10,6 +10,7 @@ import {
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
+    populatePricingPlans,
     hidePageLoader,
     markActiveNavLink,
     setText,
@@ -63,19 +64,28 @@ import {
                 if (threatTitle) threatTitle.textContent = page.threatTitle;
             }
             if (page.threatDesc) {
-                var threatDescEl = document.getElementById('fw-threat-description');
-                if (threatDescEl) threatDescEl.innerHTML = page.threatDesc.replace(/\n\n/g, '</p><p>');
+                var threatBodyEl = document.getElementById('fw-threat-body');
+                if (threatBodyEl) {
+                    threatBodyEl.innerHTML = page.threatDesc
+                        .split(/\n{2,}/)
+                        .map(function (p) { var t = p.trim(); return t ? '<p>' + t + '</p>' : ''; })
+                        .join('');
+                }
             }
 
             // Environment cards (3 cards)
-            populateSectionHeader('#fw-env', page.envLabel, page.envTitle, null);
+            populateSectionHeader('#fw-env', page.envLabel, page.envTitle, page.envSubtitle);
             populateIconCards('#fw-env-grid', page.envCards, 'cloud-power-card');
+
+            // Pricing
+            populateSectionHeader('#fw-pricing', page.pricingLabel, page.pricingTitle, page.pricingDesc);
+            populatePricingPlans('#fw-pricing-grid', page.pricingPlans);
 
             // CTA Band 1
             populateCtaBand('#fw-cta1', page.ctaBand1);
 
             // Managed Firewall Services (10 cards)
-            populateSectionHeader('#fw-services', page.servicesLabel, page.servicesTitle, null);
+            populateSectionHeader('#fw-services', page.servicesLabel, page.servicesTitle, page.servicesSubtitle);
             populateIconCards('#fw-services-grid', page.servicesCards, 'cloud-power-card');
 
             // Use Cases (8 cards)

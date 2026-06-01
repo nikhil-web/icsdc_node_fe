@@ -1039,6 +1039,7 @@ export function getFirewallSecurityPage() {
         "&populate[strengthCards][populate]=*" +
         "&populate[adaptsCards][populate]=*" +
         "&populate[envCards][populate]=*" +
+        "&populate[pricingPlans][populate]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[servicesCards][populate]=*" +
