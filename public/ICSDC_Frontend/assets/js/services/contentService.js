@@ -1294,6 +1294,7 @@ export function getSslCertificatePage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
+        "&populate[pricingPlans][populate]=*" +
         "&populate[offersCards][populate]=*" +
         "&populate[sslTypes][populate]=*" +
         "&populate[typesGlanceCards][populate]=*" +
