@@ -10,6 +10,7 @@ import {
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
+    populatePricingPlans,
     hidePageLoader,
     markActiveNavLink,
     setText,
@@ -66,12 +67,9 @@ import {
             // Pillars (4 why-us cards)
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
-            // Pricing section text
-            if (page.pricingTitle) setText(document, '.ssl-pricing-title', page.pricingTitle);
-            if (page.pricingDesc) {
-                var pricingDescEl = document.querySelector('.ssl-pricing-desc');
-                if (pricingDescEl) pricingDescEl.textContent = page.pricingDesc;
-            }
+            // Pricing section
+            populateSectionHeader('#pricing', null, page.pricingTitle, page.pricingDesc);
+            populatePricingPlans('#ssl-pricing-grid', page.pricingPlans);
 
             // What We Offer (5 cards)
             populateSectionHeader('#ssl-offers', page.offersLabel, page.offersTitle, null);

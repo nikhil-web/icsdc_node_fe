@@ -505,6 +505,7 @@ export function getLinuxDedicatedServerPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
+        "&populate[whatImage][populate][image]=true" +
         "&populate[pricingPlans][populate]=features" +
         "&populate[whyCards]=*" +
         "&populate[comparisonRows]=*" +
@@ -984,6 +985,7 @@ export function getBareMetalServerPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
+        "&populate[strategicCards][populate]=*" +
         "&populate[serverConfigs][populate]=*" +
         "&populate[managedFeatures][populate]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
@@ -1037,6 +1039,7 @@ export function getFirewallSecurityPage() {
         "&populate[strengthCards][populate]=*" +
         "&populate[adaptsCards][populate]=*" +
         "&populate[envCards][populate]=*" +
+        "&populate[pricingPlans][populate]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[servicesCards][populate]=*" +
@@ -1109,12 +1112,14 @@ export function getVaptPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
+        "&populate[pricingPlans][populate]=features" +
         "&populate[whyCards][populate]=*" +
         "&populate[whyChooseCards][populate]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[offeringsCards][populate]=*" +
         "&populate[steps][populate]=*" +
+        "&populate[whenPoints][populate]=*" +
         "&populate[heroImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
         "&populate[faq][populate]=*" +
@@ -1224,6 +1229,8 @@ export function getManagedDedicatedServerPage() {
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[heroImage][populate][image]=true" +
+        "&populate[aboutImage][populate][image]=true" +
+        "&populate[osImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
         "&populate[faq][populate]=*"
     );
@@ -1287,6 +1294,7 @@ export function getSslCertificatePage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
+        "&populate[pricingPlans][populate]=*" +
         "&populate[offersCards][populate]=*" +
         "&populate[sslTypes][populate]=*" +
         "&populate[typesGlanceCards][populate]=*" +

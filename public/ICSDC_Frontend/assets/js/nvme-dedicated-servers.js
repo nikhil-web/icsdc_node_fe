@@ -122,6 +122,18 @@ import {
             populateSectionHeader('#nds-infra', page.infraLabel, page.infraTitle, page.infraSubtitle);
             populateIconCards('#nds-infra .nds-infra-grid', page.infraFeatures, 'cloud-power-card');
 
+            // Upgrade text section
+            if (page.upgradeTitle) setText(document, '#nds-upgrade-title', page.upgradeTitle);
+            if (page.upgradeDesc) {
+                var upgradeBody = document.getElementById('nds-upgrade-body');
+                if (upgradeBody) {
+                    upgradeBody.innerHTML = page.upgradeDesc.split(/\n{2,}/).map(function (p) {
+                        var t = p.trim();
+                        return t ? '<p>' + t + '</p>' : '';
+                    }).join('');
+                }
+            }
+
             // Why NVMe
             populateSectionHeader('#nds-why', page.whyNvmeLabel, page.whyNvmeTitle, page.whyNvmeSubtitle);
             populateIconCards('#nds-why .nds-why-grid', page.whyNvmeCards, 'cloud-power-card');

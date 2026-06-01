@@ -2560,3 +2560,16 @@ html[data-theme="dark"] .nav-search-item:hover,
 html[data-theme="dark"] .nav-search-item.is-active {
     background: rgba(59, 130, 246, 0.12);
 }
+
+/* ══════════════════════════════════════
+   HERO EMBEDDED CONTACT FORM
+   Toggled via Strapi heroFormEnabled boolean.
+   The inner .cu-hero-form-wrap card is styled
+   by contact-us.css (loaded on those pages).
+══════════════════════════════════════ */
+.hero-form-wrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

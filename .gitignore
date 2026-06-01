@@ -6,3 +6,5 @@ node_modules/.package-lock.json
 *.log
 # Claude Code context file — local only
 CLAUDE.md
+public/ICSDC_Frontend/sitemap.xml
+*.py

@@ -7,6 +7,7 @@
  */
 
 import { CUSTOM_ICONS } from './custom-icons.js';
+import { postAPI } from '../services/strapiClient.js';
 
 /**
  * Wire a CTA button's click. If `link` is the magic value 'contact-popup'
@@ -375,14 +376,23 @@ export function populateHero(section, data) {
     if (data.priceNote) setHTML(section, '.price-note', data.priceNote);
 
     var btns = section.querySelectorAll('.hero-btns button');
-    if (btns.length >= 1 && data.ctaPrimary) {
+    if (btns.length >= 1) {
         var primaryBtn = btns.length >= 2 ? btns[1] : btns[0];
-        primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' &rarr;';
-        wireCtaLink(primaryBtn, data.ctaPrimary.link);
+        if (data.ctaPrimary && data.ctaPrimary.text) {
+            primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' &rarr;';
+            wireCtaLink(primaryBtn, data.ctaPrimary.link);
+        } else {
+            primaryBtn.style.display = 'none';
+        }
     }
-    if (btns.length >= 2 && data.ctaSecondary) {
-        btns[0].textContent = data.ctaSecondary.text || '';
-        wireCtaLink(btns[0], data.ctaSecondary.link);
+    if (btns.length >= 2) {
+        var secondaryBtn = btns[0];
+        if (data.ctaSecondary && data.ctaSecondary.text) {
+            secondaryBtn.textContent = data.ctaSecondary.text || '';
+            wireCtaLink(secondaryBtn, data.ctaSecondary.link);
+        } else {
+            secondaryBtn.style.display = 'none';
+        }
     }
 
     if (data.heroImage && data.heroImage.image) {
@@ -400,6 +410,19 @@ export function populateHero(section, data) {
                 heroImg.style.display = '';
                 Array.from(heroRight.children).forEach(function (child) {
                     if (!child.classList.contains('hero-right-image')) child.style.display = 'none';
+                });
+            }
+        }
+    }
+
+    // Hero form toggle — takes precedence over heroImage
+    if (data.heroFormEnabled) {
+        var heroRightEl = section.querySelector('.hero-right');
+        if (heroRightEl) {
+            var formWrap = heroRightEl.querySelector('.hero-form-wrap');
+            if (formWrap) {
+                Array.from(heroRightEl.children).forEach(function (child) {
+                    child.style.display = child === formWrap ? '' : 'none';
                 });
             }
         }
@@ -857,5 +880,70 @@ export function initTestimonials(items) {
             currentIdx = closest;
             updateDots(closest);
         }, 80);
+    });
+}
+
+/**
+ * initHeroContactForm(formId, successId)
+ * ──────────────────────────────────────
+ * Attaches a validated submit handler to a hero-embedded contact form.
+ * Used on pages where heroFormEnabled is toggled on in Strapi.
+ * POSTs to /api/contact-submissions — same endpoint as the /contact-us page.
+ *
+ * @param {string} formId    - id of the <form> element (e.g. 'hf-form')
+ * @param {string} successId - id of the success state div  (e.g. 'hf-success')
+ */
+export function initHeroContactForm(formId, successId) {
+    var form = document.getElementById(formId);
+    var successMsg = document.getElementById(successId);
+    if (!form) return;
+
+    function validatePayload(p) {
+        if (!p.name)    return 'Please enter your name.';
+        if (!p.email)   return 'Please enter your email address.';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)) return 'Please enter a valid email address.';
+        if (!p.subject) return 'Please select a subject.';
+        if (!p.message) return 'Please enter your message.';
+        return null;
+    }
+
+    function showError(message) {
+        form.querySelectorAll('.cu-form-error').forEach(function (el) { el.remove(); });
+        var errEl = document.createElement('p');
+        errEl.className = 'cu-form-error';
+        errEl.style.cssText = 'color:#e53e3e;margin-top:0.75rem;font-size:0.9rem;';
+        errEl.textContent = message;
+        var submitBtn = form.querySelector('[type=submit]');
+        if (submitBtn) submitBtn.insertAdjacentElement('beforebegin', errEl);
+    }
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        form.querySelectorAll('.cu-form-error').forEach(function (el) { el.remove(); });
+
+        var payload = {
+            name:    (form.querySelector('[name=name]')    || {}).value.trim(),
+            email:   (form.querySelector('[name=email]')   || {}).value.trim(),
+            phone:   (form.querySelector('[name=phone]')   || {}).value.trim(),
+            company: (form.querySelector('[name=company]') || {}).value.trim(),
+            subject: (form.querySelector('[name=subject]') || {}).value,
+            message: (form.querySelector('[name=message]') || {}).value.trim(),
+        };
+
+        var err = validatePayload(payload);
+        if (err) { showError(err); return; }
+
+        var submitBtn = form.querySelector('[type=submit]');
+        if (submitBtn) submitBtn.disabled = true;
+
+        try {
+            await postAPI('/api/contact-submissions', payload);
+            form.style.display = 'none';
+            if (successMsg) successMsg.style.display = 'flex';
+        } catch (e) {
+            if (submitBtn) submitBtn.disabled = false;
+            showError('Something went wrong. Please try again or email us directly.');
+            console.error('[hero-form] Submission failed:', e);
+        }
     });
 }

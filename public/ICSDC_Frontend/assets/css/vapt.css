@@ -13,8 +13,8 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #ede9fe;
-    color: #7c3aed;
+    background: #ebf2fc;
+    color: #1a56db;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -22,7 +22,7 @@
     padding: 6px 14px;
     border-radius: var(--radius-xl);
     margin-bottom: 20px;
-    border: 1px solid rgba(124, 58, 237, 0.22);
+    border: 1px solid rgba(26, 86, 219, 0.22);
 }
 
 /* ══════════════════════════════════════
@@ -33,13 +33,13 @@
     max-width: 560px;
     aspect-ratio: 4 / 3;
     border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, #ddd6fe 0%, #ede9fe 50%, #f5f3ff 100%);
+    background: linear-gradient(135deg, #dbeafe 0%, #ebf2fc 50%, #eff6ff 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 24px 64px rgba(124, 58, 237, 0.14), 0 4px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 24px 64px rgba(26, 86, 219, 0.14), 0 4px 16px rgba(0, 0, 0, 0.06);
     animation: heroImageFloat 8s ease-in-out 1s infinite;
 }
 
@@ -48,8 +48,8 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 65% 30%, rgba(124, 58, 237, 0.10) 0%, transparent 55%),
-        radial-gradient(circle at 25% 70%, rgba(139, 92, 246, 0.07) 0%, transparent 50%);
+        radial-gradient(circle at 65% 30%, rgba(26, 86, 219, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(26, 86, 219, 0.07) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -69,14 +69,14 @@
     top: 20px;
     left: 20px;
     background: var(--white);
-    border: 1px solid rgba(124, 58, 237, 0.18);
+    border: 1px solid rgba(26, 86, 219, 0.18);
     border-radius: 12px;
     padding: 8px 14px;
     font-size: 11px;
     font-weight: 700;
-    color: #7c3aed;
+    color: #1a56db;
     letter-spacing: 0.04em;
-    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.14);
+    box-shadow: 0 4px 16px rgba(26, 86, 219, 0.14);
     z-index: 2;
     animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
 }
@@ -86,13 +86,13 @@
     bottom: 20px;
     right: 20px;
     background: var(--white);
-    border: 1px solid rgba(124, 58, 237, 0.14);
+    border: 1px solid rgba(26, 86, 219, 0.14);
     border-radius: 12px;
     padding: 10px 16px;
     display: flex;
     align-items: center;
     gap: 10px;
-    box-shadow: 0 8px 24px rgba(124, 58, 237, 0.13);
+    box-shadow: 0 8px 24px rgba(26, 86, 219, 0.13);
     z-index: 2;
     animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
 }
@@ -101,16 +101,16 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #7c3aed;
-    box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.50);
+    background: #1a56db;
+    box-shadow: 0 0 0 0 rgba(26, 86, 219, 0.50);
     flex-shrink: 0;
     animation: vapt-pulse 2s ease-in-out infinite;
 }
 
 @keyframes vapt-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.55); }
-    70%  { box-shadow: 0 0 0 8px rgba(124, 58, 237, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
+    0%   { box-shadow: 0 0 0 0 rgba(26, 86, 219, 0.55); }
+    70%  { box-shadow: 0 0 0 8px rgba(26, 86, 219, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(26, 86, 219, 0); }
 }
 
 .vapt-bt {
@@ -140,34 +140,86 @@
    WHAT VAPT MEANS — NARRATIVE SECTION
 ══════════════════════════════════════ */
 .vapt-what-section {
-    background: #f5f3ff;
+    background: #eff6ff;
 }
 
 .vapt-label-light {
-    color: #7c3aed !important;
+    color: #1a56db !important;
 }
 
-.vapt-what-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: start;
-    margin-top: 40px;
+.vapt-what-content {
+    max-width: 820px;
+    margin: 0 auto;
+    text-align: center;
 }
 
-.vapt-what-label-col .title {
-    margin-top: 16px;
+.vapt-what-content .title {
+    margin-bottom: 20px;
 }
 
-.vapt-what-text-col p {
+.vapt-what-intro {
     font-size: 16px;
-    color: var(--muted);
     line-height: 1.75;
-    margin: 0 0 18px;
+    color: var(--text-mid, #4a5568);
+    margin: 0 0 36px;
 }
 
-.vapt-what-text-col p:last-child {
-    margin-bottom: 0;
+/* Two numbered strips */
+.vapt-what-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 36px;
+    text-align: left;
+}
+
+.vapt-what-layer {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--white);
+    border: 1.5px solid rgba(26, 86, 219, 0.18);
+    border-radius: var(--radius-lg);
+    padding: 18px 24px;
+    box-shadow: 0 2px 12px rgba(26, 86, 219, 0.07);
+    transition: border-color var(--transition-base) ease, box-shadow var(--transition-base) ease;
+}
+
+.vapt-what-layer:hover {
+    border-color: rgba(26, 86, 219, 0.40);
+    box-shadow: 0 4px 20px rgba(26, 86, 219, 0.12);
+}
+
+.vapt-what-layer-num {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1a56db;
+    color: var(--white);
+    font-size: 17px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: -0.02em;
+    box-shadow: 0 4px 12px rgba(26, 86, 219, 0.30);
+}
+
+.vapt-what-layer p {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-dark);
+    line-height: 1.55;
+    margin: 0;
+}
+
+.vapt-what-closing {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-mid, #4a5568);
+    margin: 0;
+    font-style: italic;
 }
 
 /* ══════════════════════════════════════
@@ -205,7 +257,7 @@
 .vapt-step-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-card-hover);
-    border-color: rgba(124, 58, 237, 0.30);
+    border-color: rgba(26, 86, 219, 0.30);
 }
 
 .vapt-step-num {
@@ -215,13 +267,13 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #7c3aed;
+    background: #1a56db;
     color: var(--white);
     font-size: 16px;
     font-weight: 800;
     margin: 0 auto 16px;
     letter-spacing: -0.02em;
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.30);
+    box-shadow: 0 4px 12px rgba(26, 86, 219, 0.30);
 }
 
 .vapt-step-card h3 {
@@ -237,6 +289,83 @@
     color: var(--muted);
     line-height: 1.6;
     margin: 0;
+}
+
+/* ══════════════════════════════════════
+   PRICING GRID (3 columns, shared ds-plan-card)
+══════════════════════════════════════ */
+.vapt-pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+    align-items: stretch;
+}
+
+/* ══════════════════════════════════════
+   WHEN TO CHOOSE VAPT
+══════════════════════════════════════ */
+.vapt-when-section {
+    background: var(--bg-light, #f9fafb);
+}
+
+.vapt-when-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.vapt-when-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px 22px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+}
+
+.vapt-when-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26, 86, 219, 0.30);
+}
+
+.vapt-when-num {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #1a56db;
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    box-shadow: 0 4px 12px rgba(26, 86, 219, 0.30);
+}
+
+.vapt-when-card p {
+    font-size: 14px;
+    color: var(--text-mid, #4a5568);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.vapt-when-closing {
+    max-width: 760px;
+    margin: 36px auto 0;
+    text-align: center;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-dark);
 }
 
 /* ══════════════════════════════════════
@@ -256,9 +385,8 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .vapt-what-inner {
-        grid-template-columns: 1fr;
-        gap: 32px;
+    .vapt-what-content {
+        max-width: 100%;
     }
 
     .vapt-offerings-grid {
@@ -268,10 +396,25 @@
     .vapt-steps-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .vapt-pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 460px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .vapt-when-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* 640px — single column */
 @media (max-width: 767px) {
+    .vapt-when-grid {
+        grid-template-columns: 1fr;
+    }
+
     .vapt-cards-grid {
         grid-template-columns: 1fr;
     }

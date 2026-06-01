@@ -872,11 +872,12 @@ nav.scrolled {
     width: 100%;
     max-width: var(--c-container);
     margin: 0 auto;
-    padding: 75px var(--c-px) 64px;
+    padding: calc(var(--nav-height) + 24px) var(--c-px) 64px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 48px;
     align-items: center;
+    min-height: 100vh;
 }
 
 .hero::before {
@@ -1098,7 +1099,7 @@ nav.scrolled {
 
 .section .title {
     font-size: clamp(24px, 3vw, 34px);
-    margin: 16px 0;
+    margin: 30px 0;
     color: var(--blue);
     font-weight: 800;
     letter-spacing: -0.025em;

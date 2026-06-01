@@ -13,8 +13,8 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #fff1f2;
-    color: #e11d48;
+    background: #eff6ff;
+    color: #1a56db;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -33,7 +33,7 @@
     max-width: 560px;
     aspect-ratio: 4 / 3;
     border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, #ffe4e6 0%, #fff1f2 55%, #fff5f5 100%);
+    background: linear-gradient(135deg, #ffe4e6 0%, #eff6ff 55%, #fff5f5 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -74,7 +74,7 @@
     padding: 8px 14px;
     font-size: 11px;
     font-weight: 700;
-    color: #e11d48;
+    color: #1a56db;
     letter-spacing: 0.04em;
     box-shadow: 0 4px 16px rgba(225, 29, 72, 0.12);
     z-index: 2;
@@ -151,7 +151,7 @@
 }
 
 .gds-plan-card.gds-plan-featured {
-    border-color: #e11d48;
+    border-color: #1a56db;
     border-width: 2px;
 }
 
@@ -161,7 +161,7 @@
     top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    background: #e11d48;
+    background: #1a56db;
     color: var(--white);
     font-size: 11px;
     font-weight: 700;
@@ -178,14 +178,14 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #e11d48;
+    color: #1a56db;
     margin-bottom: 8px;
 }
 
 .gds-plan-price {
     font-size: 32px;
     font-weight: 800;
-    color: #e11d48;
+    color: #1a56db;
     letter-spacing: -0.03em;
     line-height: 1.1;
     margin-bottom: 4px;
@@ -229,7 +229,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    color: #e11d48;
+    color: #1a56db;
     font-weight: 700;
     font-size: 13px;
 }
@@ -239,8 +239,8 @@
     width: 100%;
     padding: 12px 20px;
     background: transparent;
-    color: #e11d48;
-    border: 2px solid #e11d48;
+    color: #1a56db;
+    border: 2px solid #1a56db;
     border-radius: var(--radius-sm);
     font-size: 14px;
     font-weight: 600;
@@ -258,7 +258,7 @@
 }
 
 .gds-plan-btn:hover {
-    background: #fff1f2;
+    background: #eff6ff;
     transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(225, 29, 72, 0.14);
 }
@@ -266,9 +266,9 @@
 .gds-plan-btn-featured {
     width: 100%;
     padding: 12px 20px;
-    background: #e11d48;
+    background: #1a56db;
     color: var(--white);
-    border: 2px solid #e11d48;
+    border: 2px solid #1a56db;
     border-radius: var(--radius-sm);
     font-size: 14px;
     font-weight: 600;
@@ -381,4 +381,214 @@
         font-size: 10px;
         padding: 6px 10px;
     }
+
+    .gds-compare-table {
+        font-size: 12px;
+    }
+
+    .gds-compare-table th,
+    .gds-compare-table td {
+        padding: 10px 12px;
+    }
+
+    .gds-when-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ══════════════════════════════════════
+   GPU COMPARISON TABLE
+══════════════════════════════════════ */
+#gds-compare {
+    background: var(--bg-light, #f8fafc);
+}
+
+.gds-compare-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    margin-top: 40px;
+    box-shadow: var(--shadow-card);
+}
+
+.gds-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    background: var(--white);
+}
+
+.gds-compare-table thead tr {
+    background: var(--blue);
+}
+
+.gds-compare-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.gds-compare-table td {
+    padding: 13px 16px;
+    color: var(--text-dark);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.gds-compare-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.gds-compare-table tbody tr:nth-child(even) td {
+    background: var(--bg-light, #f8fafc);
+}
+
+.gds-compare-table tbody tr:hover td {
+    background: rgba(26, 86, 219, 0.04);
+}
+
+.gds-compare-table td:first-child {
+    font-weight: 700;
+    color: var(--blue);
+    white-space: nowrap;
+}
+
+/* ══════════════════════════════════════
+   WHEN SHOULD YOU CHOOSE — bullet grid
+══════════════════════════════════════ */
+.gds-when-list {
+    list-style: none;
+    padding: 0;
+    margin: 40px 0 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.gds-when-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-dark);
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease;
+}
+
+.gds-when-list li:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.gds-when-list li i {
+    color: var(--blue);
+    font-size: 17px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* ══════════════════════════════════════
+   RELATED SERVICES — minimal 2-column
+══════════════════════════════════════ */
+#gds-related {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.gds-related-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+}
+
+.gds-related-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 56px 48px;
+    gap: 16px;
+}
+
+.gds-related-card:first-child {
+    border-right: 1px solid var(--border);
+}
+
+.gds-related-card-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.gds-related-card h3 {
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    max-width: 380px;
+}
+
+.gds-related-card p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 400px;
+    flex: 1;
+}
+
+.gds-related-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: transparent;
+    color: var(--text-dark);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 8px;
+    transition: border-color var(--transition-base) ease,
+                color var(--transition-base) ease,
+                background var(--transition-base) ease;
+}
+
+.gds-related-btn:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: rgba(26, 86, 219, 0.04);
+}
+
+html[data-theme="dark"] .gds-related-card:first-child {
+    border-right-color: #334155;
+}
+
+html[data-theme="dark"] .gds-related-btn {
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+@media (max-width: 767px) {
+    .gds-related-grid { grid-template-columns: 1fr; }
+    .gds-related-card:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+    .gds-related-card { padding: 40px 24px; }
 }

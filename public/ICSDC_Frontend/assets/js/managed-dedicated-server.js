@@ -170,9 +170,26 @@ import {
             if (page.aboutNote) {
                 var noteEl = document.getElementById('mds-about-note');
                 if (noteEl) {
-                    var noteIcon = noteEl.querySelector('svg');
+                    var noteIcon = noteEl.querySelector('i');
                     noteEl.textContent = page.aboutNote;
                     if (noteIcon) noteEl.prepend(noteIcon);
+                }
+            }
+            // About image from Strapi
+            if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
+                var aboutImg = document.getElementById('mds-about-img');
+                if (aboutImg) {
+                    var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
+                    var _m = page.aboutImage.image;
+                    var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)
+                        ? (_m.formats.large || _m.formats.medium || _m.formats.small).url
+                        : _m.url) || '';
+                    if (_url && !_url.startsWith('http')) _url = _base + _url;
+                    if (_url) {
+                        aboutImg.src = _url;
+                        aboutImg.alt = _m.alternativeText || 'ICSDC Managed Dedicated Servers';
+                        aboutImg.style.display = '';
+                    }
                 }
             }
 
@@ -203,6 +220,22 @@ import {
             // ── OS section ──
             setText(document, '#mds-os-title', page.osTitle);
             setText(document, '#mds-os-desc',  page.osDesc);
+            if (page.osImage && page.osImage.image && page.osImage.image.url) {
+                var osImg = document.getElementById('mds-os-img');
+                if (osImg) {
+                    var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
+                    var _m = page.osImage.image;
+                    var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)
+                        ? (_m.formats.large || _m.formats.medium || _m.formats.small).url
+                        : _m.url) || '';
+                    if (_url && !_url.startsWith('http')) _url = _base + _url;
+                    if (_url) {
+                        osImg.src = _url;
+                        osImg.alt = _m.alternativeText || 'ICSDC Managed Dedicated Server OS Options';
+                        osImg.style.display = '';
+                    }
+                }
+            }
 
             // ── Compare table ──
             setText(document, '#mds-compare-title', page.compareTitle);
