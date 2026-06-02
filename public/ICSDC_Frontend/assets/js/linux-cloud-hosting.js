@@ -5,6 +5,7 @@ import {
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
+    populatePricingPlans,
     hidePageLoader,
     markActiveNavLink,
     setText,
@@ -14,84 +15,6 @@ import {
 
 (function () {
     'use strict';
-
-    // ─────────────────────────────────────────────
-    //  populatePlans
-    //  Renders .lch-plans-grid with spec cards
-    //  showing vCPU / RAM / SSD / Bandwidth
-    // ─────────────────────────────────────────────
-    function populatePlans(plans) {
-        if (!plans || !plans.length) return;
-        var grid = document.querySelector('#lch-plans .lch-plans-grid');
-        if (!grid) return;
-
-        var sorted = plans.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-
-        grid.innerHTML = sorted.map(function (plan, i) {
-            var isFeatured = plan.isPopular || false;
-            var cardClass = 'lch-plan-card' + (isFeatured ? ' lch-plan-featured' : '');
-            var btnClass = 'lch-plan-btn' + (isFeatured ? ' lch-plan-btn-featured' : '');
-            var badge = isFeatured ? '<div class="lch-plan-badge">' + (plan.badgeLabel || 'Most Popular') + '</div>' : '';
-
-            var specs = plan.specs || [];
-            var specLabels = ['vCPU', 'RAM', 'NVMe SSD', 'Bandwidth'];
-            var specKeys = ['vcpu', 'ram', 'ssd', 'bandwidth'];
-
-            var specHTML = '';
-            if (specs.length) {
-                specHTML = specs.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); })
-                    .map(function (spec) {
-                        return '<div class="lch-plan-spec">' +
-                            '<span class="lch-plan-spec-label">' + (spec.label || '') + '</span>' +
-                            '<span class="lch-plan-spec-value">' + (spec.value || '') + '</span>' +
-                            '</div>';
-                    }).join('');
-            } else {
-                // fallback: render inline spec fields if no component array
-                var fallbackSpecs = [
-                    { label: 'vCPU',      value: plan.vcpu || '' },
-                    { label: 'RAM',       value: plan.ram || '' },
-                    { label: 'NVMe SSD',  value: plan.storage || '' },
-                    { label: 'Bandwidth', value: plan.bandwidth || '' }
-                ];
-                specHTML = fallbackSpecs.map(function (s) {
-                    if (!s.value) return '';
-                    return '<div class="lch-plan-spec">' +
-                        '<span class="lch-plan-spec-label">' + s.label + '</span>' +
-                        '<span class="lch-plan-spec-value">' + s.value + '</span>' +
-                        '</div>';
-                }).join('');
-            }
-
-            var price = plan.price ? '&#8377;' + plan.price + '<span>/mo</span>' : '';
-
-            return '<div class="' + cardClass + '">' +
-                badge +
-                '<div class="lch-plan-name">' + (plan.name || '') + '</div>' +
-                '<div class="lch-plan-price">' + price + '</div>' +
-                (plan.tagline ? '<p class="lch-plan-tagline">' + plan.tagline + '</p>' : '') +
-                '<div class="lch-plan-specs">' + specHTML + '</div>' +
-                '<button class="' + btnClass + '">' + (plan.ctaLabel || 'Get Started') + ' &rarr;</button>' +
-                '</div>';
-        }).join('');
-    }
-
-
-    // ─────────────────────────────────────────────
-    //  populateFrameworkBadges
-    //  Renders .lch-frameworks-grid with tech badges
-    // ─────────────────────────────────────────────
-    function populateFrameworkBadges(frameworks) {
-        if (!frameworks || !frameworks.length) return;
-        var grid = document.querySelector('#frameworks .lch-frameworks-grid');
-        if (!grid) return;
-
-        var sorted = frameworks.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-        grid.innerHTML = sorted.map(function (fw) {
-            return '<div class="lch-framework-badge">' + (fw.name || fw.label || fw.text || '') + '</div>';
-        }).join('');
-    }
-
 
     // ─────────────────────────────────────────────
     //  init
@@ -128,7 +51,19 @@ import {
 
             // 5 — Plans
             populateSectionHeader('#lch-plans', page.plansLabel, page.plansTitle, page.plansSubtitle);
-            populatePlans(page.plans);
+            populatePricingPlans('#lch-pricing-grid', page.plans);
+
+            // 4 — Why Need (prose)
+            if (page.whyNeedTitle) setText(document, '#lch-why-need .title', page.whyNeedTitle);
+            if (page.whyNeedDesc) {
+                var whyNeedEl = document.getElementById('lch-why-need-body');
+                if (whyNeedEl) {
+                    whyNeedEl.innerHTML = page.whyNeedDesc
+                        .split(/\n{2,}/)
+                        .map(function (p) { var t = p.trim(); return t ? '<p>' + t + '</p>' : ''; })
+                        .join('');
+                }
+            }
 
             // 6 — Power features
             populateSectionHeader('#power', page.powerLabel, page.powerTitle, page.powerSubtitle);
@@ -137,21 +72,44 @@ import {
             // 7 — CTA Band 1
             populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
 
-            // 8 — Frameworks
-            populateSectionHeader('#frameworks', page.frameworksLabel, page.frameworksTitle, page.frameworksSubtitle);
-            populateFrameworkBadges(page.frameworks);
+            // 8 — Why Choose ICSDC (prose + bullets)
+            if (page.whyChooseTitle) setText(document, '#lch-why-choose .title', page.whyChooseTitle);
+            if (page.whyChooseDesc) setText(document, '#lch-why-choose-desc', page.whyChooseDesc);
+            if (page.whyChoosePoints && page.whyChoosePoints.length) {
+                var wcList = document.getElementById('lch-why-choose-list');
+                if (wcList) {
+                    wcList.innerHTML = page.whyChoosePoints.map(function (point) {
+                        return '<li><span class="lch-wc-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>' +
+                            point + '</li>';
+                    }).join('');
+                }
+            }
 
-            // 9 — Why Linux
-            populateSectionHeader('#why-linux', page.whyLinuxLabel, page.whyLinuxTitle, page.whyLinuxSubtitle);
-            populateIconCards('#why-linux .cloud-use-grid', page.whyLinuxCards, 'cloud-use-card');
-
-            // 10 — Use Cases
+            // 9 — Use Cases
             populateSectionHeader('#use-cases', page.useCasesLabel, page.useCasesTitle, page.useCasesSubtitle);
             populateIconCards('#use-cases .cloud-use-grid', page.useCases, 'cloud-use-card');
 
-            // 11 — Workloads / Specs
+            // 10 — Workloads / Specs
             populateSectionHeader('#workloads', page.workloadsLabel, page.workloadsTitle, page.workloadsSubtitle);
             populateIconCards('#workloads .cloud-power-grid', page.workloadFeatures, 'cloud-power-card');
+
+            // 11b — Related services cards
+            if (page.relatedCards && page.relatedCards.length) {
+                var relatedGrid = document.getElementById('lch-related-grid');
+                if (relatedGrid) {
+                    var arrowSVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
+                    relatedGrid.innerHTML = page.relatedCards.map(function (card) {
+                        var iconClass = card.icon ? 'fa-solid fa-' + card.icon : 'fa-solid fa-cloud';
+                        return '<div class="lch-related-card">' +
+                            '<div class="lch-related-icon"><i class="' + iconClass + '" aria-hidden="true"></i></div>' +
+                            '<p class="lch-related-desc">' + (card.desc || '') + '</p>' +
+                            '<a href="' + (card.ctaLink || '#') + '" class="lch-related-btn">' +
+                            (card.ctaText || '') + ' ' + arrowSVG +
+                            '</a>' +
+                            '</div>';
+                    }).join('');
+                }
+            }
 
             // 12 — Testimonials
             if (page.testimonialTitle) setText(document, '#lch-testi-heading', page.testimonialTitle);

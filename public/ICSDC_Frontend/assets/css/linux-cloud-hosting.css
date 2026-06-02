@@ -144,7 +144,27 @@
 
 
 /* ══════════════════════════════════════
-   PLANS GRID
+   PRICING GRID — uses common ds-plan-card
+══════════════════════════════════════ */
+.lch-pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+    align-items: stretch;
+}
+
+@media (max-width: 1023px) {
+    .lch-pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* ══════════════════════════════════════
+   PLANS GRID (legacy — kept for reference)
 ══════════════════════════════════════ */
 .lch-plans-grid {
     display: grid;
@@ -353,6 +373,155 @@
 
 
 /* ══════════════════════════════════════
+   WHY NEED SECTION — prose narrative
+══════════════════════════════════════ */
+.lch-why-need-section {
+    background: #f0f9ff;
+}
+
+.lch-why-need-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.lch-why-need-content .title {
+    margin-bottom: 28px;
+}
+
+.lch-why-need-body {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background: var(--white);
+    border: 1px solid rgba(26, 86, 219, 0.10);
+    border-radius: var(--radius-lg);
+    padding: 36px 40px;
+    box-shadow: 0 4px 24px rgba(26, 86, 219, 0.07);
+}
+
+.lch-why-need-body p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-mid, #4a5568);
+    margin: 0;
+}
+
+.lch-why-need-body p:first-child {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+
+/* ══════════════════════════════════════
+   WHY CHOOSE SECTION — prose + bullet chips
+══════════════════════════════════════ */
+.lch-why-choose-section {
+    background: #f0f9ff;
+}
+
+#lch-why-choose .title {
+    text-align: center;
+    margin-bottom: 44px;
+}
+
+.lch-why-choose-inner {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 48px;
+    align-items: start;
+    margin-top: 0;
+}
+
+.lch-why-choose-desc {
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--text-mid, #4a5568);
+    margin: 0;
+    text-align: left;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--blue);
+    padding: 32px 28px;
+    box-shadow: 0 4px 24px rgba(26, 86, 219, 0.07);
+}
+
+.lch-why-choose-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.lch-why-choose-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-dark);
+    background: var(--white);
+    border: 1px solid rgba(26, 86, 219, 0.10);
+    border-radius: var(--radius-sm);
+    padding: 13px 14px;
+    box-shadow: 0 2px 8px rgba(26, 86, 219, 0.05);
+    transition: border-color var(--transition-base) ease,
+                box-shadow var(--transition-base) ease,
+                transform var(--transition-fast) ease;
+}
+
+.lch-why-choose-list li:hover {
+    border-color: rgba(26, 86, 219, 0.28);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.11);
+    transform: translateY(-2px);
+}
+
+.lch-wc-check {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 9px;
+    box-shadow: 0 2px 6px rgba(26, 86, 219, 0.30);
+}
+
+@media (max-width: 1279px) {
+    .lch-why-choose-inner {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 1023px) {
+    .lch-why-choose-inner {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+    .lch-why-choose-list {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 599px) {
+    .lch-why-choose-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    .lch-why-need-body {
+        padding: 24px 20px;
+    }
+}
+
+
+/* ══════════════════════════════════════
    FRAMEWORKS GRID
 ══════════════════════════════════════ */
 .lch-frameworks-grid {
@@ -385,6 +554,96 @@
     box-shadow: var(--shadow-card-hover);
     border-color: rgba(26, 86, 219, 0.25);
     color: var(--blue);
+}
+
+
+/* ══════════════════════════════════════
+   RELATED SERVICES — 2 cards (light, centered)
+══════════════════════════════════════ */
+.lch-related-section {
+    background: #f0f9ff;
+}
+
+.lch-related-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.lch-related-card {
+    background: var(--white);
+    border: 1.5px solid rgba(26, 86, 219, 0.10);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    box-shadow: 0 4px 20px rgba(26, 86, 219, 0.07);
+    transition: border-color var(--transition-base) ease,
+                box-shadow var(--transition-base) ease,
+                transform var(--transition-fast) ease;
+}
+
+.lch-related-card:hover {
+    border-color: rgba(26, 86, 219, 0.28);
+    box-shadow: 0 10px 36px rgba(26, 86, 219, 0.12);
+    transform: translateY(-4px);
+}
+
+.lch-related-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--blue-light, #ebf2fc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--blue);
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.lch-related-desc {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--muted);
+    margin: 0;
+    flex: 1;
+}
+
+.lch-related-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    padding: 10px 22px;
+    border: 2px solid var(--blue);
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-base) ease,
+                color var(--transition-base) ease,
+                gap var(--transition-base) ease;
+    margin-top: 4px;
+}
+
+.lch-related-btn:hover {
+    background: var(--blue);
+    color: var(--white);
+    gap: 10px;
+}
+
+@media (max-width: 767px) {
+    .lch-related-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+    }
 }
 
 
