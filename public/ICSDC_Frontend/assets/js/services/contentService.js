@@ -843,8 +843,12 @@ export function getGpuCloudHostingPage() {
         "&populate[builtinFeatures][populate]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
+        "&populate[deployCards][populate]=*" +
+        "&populate[portfolioImage][populate][image]=true" +
         "&populate[gpuPortfolio][populate]=*" +
+        "&populate[toolsCards][populate]=*" +
         "&populate[whyCards][populate]=*" +
+        "&populate[whoCards][populate]=*" +
         "&populate[faq][populate]=*" +
         "&populate[heroImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
