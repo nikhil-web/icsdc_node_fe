@@ -1,204 +1,440 @@
 .wincloud-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 50px;
-      margin-bottom: 14px;
-    }
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 50px;
+  margin-bottom: 14px;
+}
 
-    .wincloud-hero-visual {
-      width: 100%;
-      max-width: 560px;
-      aspect-ratio: 4/3;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 55%, #e8f5fd 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 24px 64px rgba(0, 120, 212, .15), 0 4px 16px rgba(0, 0, 0, .06);
-      animation: heroImageFloat 8s ease-in-out 1s infinite;
-    }
+.wincloud-hero-visual {
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 4/3;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 55%, #e8f5fd 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 120, 212, .15), 0 4px 16px rgba(0, 0, 0, .06);
+  animation: heroImageFloat 8s ease-in-out 1s infinite;
+}
 
-    .wincloud-hero-visual svg {
-      width: 74%;
-      height: 74%;
-    }
+.wincloud-hero-visual svg {
+  width: 74%;
+  height: 74%;
+}
 
-    .wincloud-top-badge {
-      position: absolute;
-      top: 22px;
-      left: 22px;
-      background: #fff;
-      border: 1px solid rgba(0, 120, 212, .2);
-      border-radius: 12px;
-      padding: 8px 14px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #0078d4;
-      box-shadow: 0 4px 16px rgba(0, 120, 212, .12);
-      animation: cloud-badge-float 6s ease-in-out .2s infinite;
-    }
+.wincloud-top-badge {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  background: #fff;
+  border: 1px solid rgba(0, 120, 212, .2);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #0078d4;
+  box-shadow: 0 4px 16px rgba(0, 120, 212, .12);
+  animation: cloud-badge-float 6s ease-in-out .2s infinite;
+}
 
-    .wincloud-status-badge {
-      position: absolute;
-      bottom: 22px;
-      right: 22px;
-      background: #fff;
-      border: 1px solid rgba(0, 120, 212, .15);
-      border-radius: 12px;
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 8px 24px rgba(0, 120, 212, .12);
-      animation: cloud-badge-float 5s ease-in-out .8s infinite;
-    }
+.wincloud-status-badge {
+  position: absolute;
+  bottom: 22px;
+  right: 22px;
+  background: #fff;
+  border: 1px solid rgba(0, 120, 212, .15);
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(0, 120, 212, .12);
+  animation: cloud-badge-float 5s ease-in-out .8s infinite;
+}
 
-    .wincloud-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 8px rgba(34, 197, 94, .5);
-    }
+.wincloud-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, .5);
+}
 
-    .wincloud-bt {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-dark);
-    }
+.wincloud-bt {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
 
-    .wincloud-bs {
-      font-size: 10px;
-      color: var(--muted);
-    }
+.wincloud-bs {
+  font-size: 10px;
+  color: var(--muted);
+}
 
-    /* Use-case list */
-    .wincloud-apps-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 32px;
-    }
+/* Use-case list */
+.wincloud-apps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 32px;
+}
 
-    @media (max-width: 1023px) {
-      .wincloud-apps-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .wincloud-split {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-    }
+@media (max-width: 1023px) {
+  .wincloud-apps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-    @media (max-width: 767px) {
-      .wincloud-apps-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+  .wincloud-split {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
 
-    .wincloud-app-badge {
-      background: #fff;
-      border: 1px solid rgba(0, 120, 212, .12);
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 13px;
-      color: var(--text);
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: var(--shadow-sm);
-      transition: all .2s;
-    }
+@media (max-width: 767px) {
+  .wincloud-apps-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
-    .wincloud-app-badge:hover {
-      border-color: rgba(0, 120, 212, .3);
-      box-shadow: var(--shadow-card);
-      transform: translateY(-2px);
-    }
+.wincloud-app-badge {
+  background: #fff;
+  border: 1px solid rgba(0, 120, 212, .12);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+  transition: all .2s;
+}
 
-    .wincloud-app-badge::before {
-      content: '';
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #0078d4;
-      flex-shrink: 0;
-    }
+.wincloud-app-badge:hover {
+  border-color: rgba(0, 120, 212, .3);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-2px);
+}
 
-    /* 2-col feature section */
-    .wincloud-split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
+.wincloud-app-badge::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0078d4;
+  flex-shrink: 0;
+}
 
-    .wincloud-feature-list {
-      list-style: none;
-      margin-top: 24px;
-    }
+/* 2-col feature section */
+.wincloud-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
 
-    .wincloud-feature-list li {
-      padding: 11px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 15px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+.wincloud-feature-list {
+  list-style: none;
+  margin-top: 24px;
+}
 
-    .wincloud-feature-list li:last-child {
-      border-bottom: none;
-    }
+.wincloud-feature-list li {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-    .wincloud-feature-list li::before {
-      content: '✓';
-      color: #0078d4;
-      font-weight: 800;
-      flex-shrink: 0;
-    }
+.wincloud-feature-list li:last-child {
+  border-bottom: none;
+}
 
-    .wincloud-stats {
-      background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
-      border-radius: 20px;
-      padding: 36px;
-      color: #fff;
-    }
+.wincloud-feature-list li::before {
+  content: '✓';
+  color: #0078d4;
+  font-weight: 800;
+  flex-shrink: 0;
+}
 
-    .wincloud-stat {
-      margin-bottom: 28px;
-      padding-bottom: 28px;
-      border-bottom: 1px solid rgba(255, 255, 255, .15);
-    }
+.wincloud-stats {
+  background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+  border-radius: 20px;
+  padding: 36px;
+  color: #fff;
+}
 
-    .wincloud-stat:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
+.wincloud-stat {
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, .15);
+}
 
-    .wincloud-stat strong {
-      display: block;
-      font-size: 36px;
-      font-weight: 800;
-      letter-spacing: -.02em;
-    }
+.wincloud-stat:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
 
-    .wincloud-stat span {
-      font-size: 14px;
-      opacity: .75;
-      margin-top: 4px;
-      display: block;
-    }
+.wincloud-stat strong {
+  display: block;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+.wincloud-stat span {
+  font-size: 14px;
+  opacity: .75;
+  margin-top: 4px;
+  display: block;
+}
+
+
+/* ══════════════════════════════════════
+   PLANS / PRICING GRID (common ds-plan-card)
+══════════════════════════════════════ */
+.wincloud-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+  align-items: stretch;
+}
+
+@media (max-width: 1023px) {
+  .wincloud-pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+
+/* ══════════════════════════════════════
+   WHO WE ARE
+══════════════════════════════════════ */
+.wincloud-about-section {
+  background: #f0f9ff;
+}
+
+.wincloud-about-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.wincloud-about-text .title {
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.wincloud-about-desc {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--muted, #5b6b86);
+  margin: 0 0 24px;
+  text-align: left;
+}
+
+.wincloud-about-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+}
+
+.wincloud-about-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--text-dark, #0f1c2e);
+  text-align: left;
+  flex-direction: row;
+}
+
+.wincloud-about-check {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--blue, #1a56db);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  margin-top: 1px;
+}
+
+.wincloud-about-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.wincloud-about-stat {
+  background: var(--white, #fff);
+  border: 1.5px solid rgba(26, 86, 219, 0.10);
+  border-radius: var(--radius-lg, 16px);
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(26, 86, 219, 0.06);
+}
+
+.wincloud-about-stat strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--blue, #1a56db);
+  letter-spacing: -0.02em;
+}
+
+.wincloud-about-stat span {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted, #5b6b86);
+  line-height: 1.4;
+}
+
+#wincloud-about-img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 8px 30px rgba(26, 86, 219, 0.12);
+}
+
+@media (max-width: 900px) {
+  .wincloud-about-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .wincloud-about-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ══════════════════════════════════════
+   ADVANCED FEATURES (Elevate) — 2 wide cards
+══════════════════════════════════════ */
+.wincloud-advanced-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+@media (max-width: 767px) {
+  .wincloud-advanced-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ══════════════════════════════════════
+   RELATED SERVICES — 2 cards (light, centered)
+══════════════════════════════════════ */
+.wincloud-related-section {
+  background: #f0f9ff;
+}
+
+.wincloud-related-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 860px;
+  margin: 40px auto 0;
+}
+
+.wincloud-related-card {
+  background: var(--white, #fff);
+  border: 1.5px solid rgba(26, 86, 219, 0.10);
+  border-radius: var(--radius-lg, 16px);
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  box-shadow: 0 4px 20px rgba(26, 86, 219, 0.07);
+  transition: border-color .25s ease, box-shadow .25s ease, transform .15s ease;
+}
+
+.wincloud-related-card:hover {
+  border-color: rgba(26, 86, 219, 0.28);
+  box-shadow: 0 10px 36px rgba(26, 86, 219, 0.12);
+  transform: translateY(-4px);
+}
+
+.wincloud-related-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--blue-light, #ebf2fc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue, #1a56db);
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.wincloud-related-desc {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--muted, #5b6b86);
+  margin: 0;
+  flex: 1;
+}
+
+.wincloud-related-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blue, #1a56db);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  padding: 10px 22px;
+  border: 2px solid var(--blue, #1a56db);
+  border-radius: var(--radius-sm, 8px);
+  transition: background .25s ease, color .25s ease, gap .25s ease;
+  margin-top: 4px;
+}
+
+.wincloud-related-btn:hover {
+  background: var(--blue, #1a56db);
+  color: var(--white, #fff);
+  gap: 10px;
+}
+
+@media (max-width: 767px) {
+  .wincloud-related-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+}

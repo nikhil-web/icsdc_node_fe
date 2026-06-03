@@ -409,8 +409,11 @@ export function getWindowsCloudHostingPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
+        "&populate[plans][populate]=*" +
+        "&populate[aboutImage][populate][image]=true" +
         "&populate[features]=*" +
         "&populate[whyCards]=*" +
+        "&populate[advancedCards]=*" +
         "&populate[useCaseItems]=*" +
         "&populate[appCards]=*" +
 
