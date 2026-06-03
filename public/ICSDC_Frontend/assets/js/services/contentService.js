@@ -655,9 +655,8 @@ export function getLinuxCloudHostingPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
-        "&populate[plans]=*" +
+        "&populate[plans][populate]=*" +
         "&populate[powerFeatures]=*" +
-        "&populate[frameworks]=*" +
         "&populate[whyLinuxCards]=*" +
         "&populate[useCases]=*" +
         "&populate[workloadFeatures]=*" +

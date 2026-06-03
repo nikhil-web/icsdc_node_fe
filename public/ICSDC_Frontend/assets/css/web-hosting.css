@@ -108,9 +108,17 @@
 }
 
 @keyframes webh-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.55); }
-    70%  { box-shadow: 0 0 0 8px rgba(37, 99, 235, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+    0% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.55);
+    }
+
+    70% {
+        box-shadow: 0 0 0 8px rgba(37, 99, 235, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+    }
 }
 
 .webh-bt {
@@ -198,6 +206,7 @@
 
 .webh-compare-table thead tr {
     background: #2563eb;
+    text-align: left;
 }
 
 .webh-compare-table thead th {
@@ -221,6 +230,7 @@
 .webh-compare-table tbody tr {
     border-bottom: 1px solid rgba(37, 99, 235, 0.08);
     transition: background var(--transition-base) ease;
+    text-align: left;
 }
 
 .webh-compare-table tbody tr:last-child {

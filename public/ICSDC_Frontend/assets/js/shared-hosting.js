@@ -50,37 +50,16 @@ import { uploadURL } from './services/strapiClient.js';
         populateSEO(page.seo);
 
         /* 2. Hero */
-        var heroSection = document.querySelector('.hero-section');
-        if (heroSection) {
-            // Eyebrow
-            if (page.heroEyebrow) {
-                var eyebrow = heroSection.querySelector('.cloud-eyebrow');
-                if (eyebrow) {
-                    var dot = eyebrow.querySelector('.cloud-eyebrow-dot');
-                    eyebrow.textContent = '';
-                    if (dot) eyebrow.appendChild(dot);
-                    eyebrow.appendChild(document.createTextNode(' ' + page.heroEyebrow));
-                }
-            }
-
-            setText(heroSection, '.hero-title', page.heroTitle);
-            setText(heroSection, '.hero-sub', page.heroSubtitle);
-            setHTML(heroSection, '.hero-desc', page.heroDescription);
-
-            // CTA buttons
-            var heroBtns = heroSection.querySelectorAll('.hero-btns button');
-            if (heroBtns.length >= 2) {
-                if (page.heroCtaPrimary) {
-                    heroBtns[0].innerHTML = page.heroCtaPrimary.text || '';
-                    if (page.heroCtaPrimary.link) heroBtns[0].setAttribute('onclick', "window.location.href='" + page.heroCtaPrimary.link + "'");
-                }
-                if (page.heroCtaSecondary) {
-                    heroBtns[1].textContent = page.heroCtaSecondary.text || '';
-                    if (page.heroCtaSecondary.link) heroBtns[1].setAttribute('onclick', "window.location.href='" + page.heroCtaSecondary.link + "'");
-                }
-            }
-        }
-        populateHero('.hero-section', { heroImage: page.heroImage });
+        populateHero('.hero-section', {
+            eyebrow: page.heroEyebrow,
+            eyebrowSelector: '.cloud-eyebrow',
+            title: page.heroTitle,
+            subtitle: page.heroSubtitle,
+            description: page.heroDescription,
+            ctaPrimary: page.heroCtaPrimary,
+            ctaSecondary: page.heroCtaSecondary,
+            heroImage: page.heroImage
+        });
 
         /* 3. Pillars (4 icon cards) */
         populateIconCards('.why-us .why-grid', page.pillars, 'why-card');

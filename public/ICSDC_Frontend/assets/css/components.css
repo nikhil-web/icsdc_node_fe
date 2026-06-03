@@ -1073,7 +1073,7 @@ summary.faq-q::marker {
 
 .contact-success .fa-circle-check {
     font-size: 52px;
-    color: #22c55e;
+    color: #1a56db;
 }
 
 @keyframes successEnter {
@@ -2236,7 +2236,7 @@ summary.faq-q::marker {
 /* Comparison table icons */
 .ds-check-icon i.fa-solid {
     font-size: 13px;
-    color: #16a34a;
+    color: #1a56db;
 }
 
 .ds-partial-icon i.fa-solid {
