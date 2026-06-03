@@ -252,7 +252,8 @@
     transition: transform var(--transition-base) ease,
         box-shadow var(--transition-base) ease,
         border-color var(--transition-base) ease;
-    align-items: center;
+    align-items: self-start;
+    justify-content: start;
 }
 
 .cloud-power-card:hover {
@@ -299,6 +300,7 @@
     line-height: 1.65;
     color: var(--muted-alt);
     margin: 0;
+    text-align: left;
 }
 
 .cloud-power-link {

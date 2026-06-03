@@ -8,3 +8,5 @@ node_modules/.package-lock.json
 CLAUDE.md
 public/ICSDC_Frontend/sitemap.xml
 *.py
+sitemap.xml
+public/ICSDC_Frontend/sitemap.xml
