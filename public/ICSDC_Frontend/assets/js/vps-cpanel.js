@@ -154,7 +154,7 @@ import {
                 if (aboutImg) {
                     var _m = page.aboutImage.image;
                     var _url = _m.url
-                        ? (_m.url.startsWith('http') ? _m.url : 'http://localhost:1337' + _m.url)
+                        ? (_m.url.startsWith('http') ? _m.url : (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : '') + _m.url)
                         : null;
                     if (_url) { aboutImg.src = _url; aboutImg.alt = _m.alternativeText || 'ICSDC VPS cPanel Hosting'; }
                 }
