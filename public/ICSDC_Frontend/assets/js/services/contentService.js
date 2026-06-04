@@ -352,11 +352,15 @@ export function getAwsCloudHostingPage() {
         "&populate[pillars]=*" +
         "&populate[aboutImage]=true" +
         "&populate[aboutItems]=*" +
+        "&populate[aboutLink]=*" +
         "&populate[strengths]=*" +
         "&populate[services]=*" +
+        "&populate[plans][populate][features]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[comparisonRows]=*" +
+        "&populate[dedicatedImage][populate][image]=true" +
+        "&populate[whyChooseImage][populate][image]=true" +
         "&populate[ctaBand2][populate][ctaPrimary]=*" +
         "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
@@ -377,17 +381,25 @@ export function getAzureCloudHostingPage() {
     return fetchAPI(
         "/api/azure-cloud-hosting-page" +
         "?populate[seo]=*" +
+        "&populate[heroCtaPrimary]=*" +
+        "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
         "&populate[aboutImage]=true" +
+        "&populate[aboutItems]=*" +
         "&populate[advantages]=*" +
         "&populate[comparisonRows]=*" +
         "&populate[whyCards]=*" +
         "&populate[processSteps]=*" +
+        "&populate[processImage][populate][image]=true" +
         "&populate[techBadges]=*" +
         "&populate[securityFeatures]=*" +
+        "&populate[securityImage][populate][image]=true" +
+        "&populate[plans][populate][features]=*" +
         "&populate[pricingCtaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
+        "&populate[ctaBand2][populate][ctaPrimary]=*" +
+        "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
         "&populate[heroImage][populate][image]=true" +
         "&populate[testimonials][populate]=*"

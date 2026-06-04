@@ -1283,12 +1283,12 @@ nav.scrolled {
     flex: 1;
     background-color: var(--blue-light);
     text-align: left;
-    border-radius: var(--radius-xl) 0 0 var(--radius-xl);
-    padding: 52px 80px 52px 48px;
+    border-radius: var(--radius-xl);
+    padding: 52px 48px 52px 48px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 440px;
+    min-height: 440px;
     /* max-width: 60%; */
 }
 
