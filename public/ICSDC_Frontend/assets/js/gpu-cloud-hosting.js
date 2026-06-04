@@ -181,8 +181,9 @@ import {
 
             // Portfolio image (between subtitle and H3)
             if (page.portfolioImage && page.portfolioImage.image && page.portfolioImage.image.url) {
+                var strapiBase = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : '');
                 var pImgUrl = page.portfolioImage.image.url;
-                if (!/^https?:\/\//.test(pImgUrl)) pImgUrl = 'http://localhost:1337' + pImgUrl;
+                if (!/^https?:\/\//.test(pImgUrl)) pImgUrl = strapiBase + pImgUrl;
                 var pImg = document.getElementById('gpu-portfolio-img');
                 var pWrap = document.getElementById('gpu-portfolio-img-wrap');
                 if (pImg) { pImg.src = pImgUrl; }

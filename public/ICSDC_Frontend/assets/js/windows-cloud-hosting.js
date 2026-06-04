@@ -39,7 +39,8 @@ import { getWindowsCloudHostingPage } from './services/contentService.js';
         }
         if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
             var aboutImgUrl = page.aboutImage.image.url;
-            if (!/^https?:\/\//.test(aboutImgUrl)) aboutImgUrl = 'http://localhost:1337' + aboutImgUrl;
+            var _strapiBase = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : '');
+            if (!/^https?:\/\//.test(aboutImgUrl)) aboutImgUrl = _strapiBase + aboutImgUrl;
             var aboutImg = document.getElementById('wincloud-about-img');
             var aboutFallback = document.getElementById('wincloud-about-fallback');
             if (aboutImg) { aboutImg.src = aboutImgUrl; aboutImg.style.display = ''; }
