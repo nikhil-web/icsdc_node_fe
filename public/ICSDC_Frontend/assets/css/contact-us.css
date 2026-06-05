@@ -620,6 +620,38 @@
     }
 }
 
+/* ── Hero-embedded form: responsive adjustments ── */
+@media (max-width: 1023px) {
+    /* Tighter card padding on tablet */
+    .hero-form-wrap .cu-hero-form-wrap {
+        padding: 24px 20px 20px;
+        max-width: 100%;
+        box-shadow: 0 8px 32px rgba(26, 86, 219, 0.12);
+    }
+
+    /* Stack form field pairs to 1-col inside hero (contact-us page keeps 2-col until 767px) */
+    .hero-form-wrap .cu-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .hero-form-wrap .cu-form {
+        gap: 14px;
+    }
+
+    .hero-form-wrap .cu-hero-form-title {
+        font-size: 17px;
+        margin-bottom: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Even tighter on phones */
+    .hero-form-wrap .cu-hero-form-wrap {
+        padding: 20px 16px 16px;
+    }
+}
+
 /* 1024px */
 @media (max-width: 1023px) {
     .cu-contact-inner {

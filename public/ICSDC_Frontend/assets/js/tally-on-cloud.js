@@ -10,12 +10,14 @@ import {
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
+    populatePricingPlansCloud,
     hidePageLoader,
     markActiveNavLink,
     setText,
     initFAQ,
     initTestimonials
 } from './utils/cms-helpers.js';
+import { uploadURL } from './services/strapiClient.js';
 
 (function () {
     'use strict';
@@ -49,25 +51,33 @@ import {
             // SEO
             populateSEO(page.seo);
 
+            // ── About / Who We Are (rendered FIRST — not dependent on hero) ──
+            var aboutTitleEl = document.getElementById('toc-about-title');
+            if (aboutTitleEl) aboutTitleEl.textContent = page.aboutTitle || '';
+            var aboutDescEl = document.getElementById('toc-about-desc');
+            if (aboutDescEl) aboutDescEl.textContent = page.aboutDesc || '';
+            if (page.aboutImage && page.aboutImage.image) {
+                var aboutImg = document.getElementById('toc-about-img');
+                if (aboutImg) {
+                    var aboutImgUrl = uploadURL(page.aboutImage.image);
+                    if (aboutImgUrl) aboutImg.src = aboutImgUrl;
+                }
+            }
+
             // Hero
             populateHero('.hero-section', {
-                eyebrowSelector: '.toc-eyebrow',
                 title: page.heroTitle,
                 subtitle: page.heroSubtitle,
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
             if (page.heroStatusTitle) setText(document, '.toc-bt', page.heroStatusTitle);
             if (page.heroStatusSubtitle) setText(document, '.toc-bs', page.heroStatusSubtitle);
 
             // Pillars
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
-
-            // About / Who We Are
-            if (page.aboutTitle) setText(document, '#toc-about-title', page.aboutTitle);
-            if (page.aboutDesc) setText(document, '#toc-about-desc', page.aboutDesc);
 
             // Improvements (12 cards)
             populateSectionHeader('#toc-improvements', page.improvementsLabel, page.improvementsTitle, null);
@@ -87,6 +97,14 @@ import {
                 if (ct) ct.textContent = page.compareTitle;
             }
             populateCompareTable(page.compareRows);
+
+            // Pricing
+            populateSectionHeader('#toc-pricing', page.plansLabel, page.plansTitle, page.plansSubtitle);
+            populatePricingPlansCloud('#toc-pricing .cloud-pricing-grid', page.plans);
+            // Wire plan CTAs to /contact-us
+            document.querySelectorAll('#toc-pricing .cloud-plan-cta').forEach(function (btn) {
+                btn.addEventListener('click', function () { window.location.href = '/contact-us'; });
+            });
 
             // CTA Band 1
             populateCtaBand('#toc-cta1', page.ctaBand1);
