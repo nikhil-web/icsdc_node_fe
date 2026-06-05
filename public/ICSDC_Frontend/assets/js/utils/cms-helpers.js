@@ -423,6 +423,9 @@ export function populateHero(section, data) {
     if (data.heroFormEnabled) {
         var heroRightEl = section.querySelector('.hero-right');
         if (heroRightEl) {
+            // Mark for CSS: keeps hero-right visible on mobile (overrides display:none)
+            heroRightEl.classList.add('hero-right--has-form');
+            heroRightEl.style.display = 'flex'; // force visible even at ≤1023px
             var formWrap = heroRightEl.querySelector('.hero-form-wrap');
             if (formWrap) {
                 Array.from(heroRightEl.children).forEach(function (child) {

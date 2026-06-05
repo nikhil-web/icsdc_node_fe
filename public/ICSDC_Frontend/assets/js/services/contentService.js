@@ -1161,9 +1161,11 @@ export function getTallyOnCloudPage() {
         "&populate[improvements][populate]=*" +
         "&populate[whyCards][populate]=*" +
         "&populate[compareRows][populate]=*" +
+        "&populate[plans][populate][features]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[whoCanCards][populate]=*" +
+        "&populate[aboutImage][populate][image]=true" +
         "&populate[heroImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
         "&populate[faq][populate]=*" +

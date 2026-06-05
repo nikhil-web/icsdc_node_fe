@@ -108,9 +108,17 @@
 }
 
 @keyframes toc-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.55); }
-    70%  { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+    0% {
+        box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.55);
+    }
+
+    70% {
+        box-shadow: 0 0 0 8px rgba(79, 70, 229, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+    }
 }
 
 .toc-bt {
@@ -245,6 +253,7 @@
 .toc-compare-table tbody tr {
     border-bottom: 1px solid rgba(79, 70, 229, 0.10);
     transition: background var(--transition-fast) ease;
+    text-align: left;
 }
 
 .toc-compare-table tbody tr:last-child {
