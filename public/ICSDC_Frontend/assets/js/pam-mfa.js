@@ -15,7 +15,8 @@ import {
     setText,
     setHTML,
     initFAQ,
-    initTestimonials
+    initTestimonials,
+    initHeroContactForm
 } from './utils/cms-helpers.js';
 
 (function () {
@@ -85,22 +86,31 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage,
+                heroFormEnabled: page.heroFormEnabled
             });
+            if (page.heroFormEnabled) initHeroContactForm('hf-form', 'hf-success');
 
             if (page.heroCtaPrimary) {
                 var primaryBtn = document.getElementById('pam-cta-primary');
                 if (primaryBtn) {
-                    primaryBtn.innerHTML = (page.heroCtaPrimary.text || '') + ' &rarr;';
+                    primaryBtn.innerHTML = (page.heroCtaPrimary.text || '');
                     if (page.heroCtaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + page.heroCtaPrimary.link + "'");
                 }
             }
             if (page.heroCtaSecondary) {
-                var secondaryBtn = document.getElementById('pam-cta-secondary');
-                if (secondaryBtn) {
-                    secondaryBtn.textContent = page.heroCtaSecondary.text || '';
-                    if (page.heroCtaSecondary.link) secondaryBtn.setAttribute('onclick', "window.location.href='" + page.heroCtaSecondary.link + "'");
+
+                if (page.heroCtaSecondary.text != null) {
+                    var secondaryBtn = document.getElementById('pam-cta-secondary');
+                    if (secondaryBtn) {
+                        secondaryBtn.textContent = page.heroCtaSecondary.text || '';
+                        if (page.heroCtaSecondary.link) secondaryBtn.setAttribute('onclick', "window.location.href='" + page.heroCtaSecondary.link + "'");
+                    }
+                } else {
+                    var secondaryBtn = document.getElementById('pam-cta-secondary');
+                    secondaryBtn.style.display = 'none';
                 }
+
             }
 
             // Pillars (4 cards)
@@ -167,4 +177,12 @@ import {
     } else {
         init();
     }
+
+
+    //hide every cloud-section-label ??
+    var cloudSectionLabels = document.getElementsByClassName("cloud-section-label");
+    for (var i = 0; i < cloudSectionLabels.length; i++) {
+        cloudSectionLabels[i].style.display = "none";
+    }
+
 })();

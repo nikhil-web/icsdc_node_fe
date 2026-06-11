@@ -1,7 +1,17 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-MXV9SGZS');</script>
+  <!-- End Google Tag Manager -->
   <script src="assets/js/theme-init.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,11 +25,15 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/cloud-components.css">
-
+  <link rel="stylesheet" href="assets/css/aws-cloud-hosting.css">
   <link rel="stylesheet" href="assets/css/dark-mode.css">
 </head>
 
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MXV9SGZS" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
   <!-- PAGE LOADER -->
   <div id="page-loader">
@@ -45,7 +59,7 @@
       <div id="dd-content">
         <div id="dd-top-bar">
           <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
-          <button class="dd-close" onclick="closeDropdown()">✕</button>
+          <button class="dd-close" onclick="closeDropdown()">&#10005;</button>
         </div>
         <div data-strapi-dd="grid" id="dd-grid"></div>
       </div>
@@ -55,11 +69,11 @@
   <!-- NAVBAR -->
   <nav>
     <div class="nav-inner">
-      <a href="#" class="logo">
+      <a href="/" class="logo">
         <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
       </a>
       <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
-      <button class="btn-login desktop-login-btn">NO STRAPI DATA</button>
+      <button class="btn-login desktop-login-btn">Login</button>
       <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -70,13 +84,16 @@
     </div>
   </nav>
 
+
+  <!-- ════ SECTION 1 — HERO ════ -->
   <section class="hero-section">
     <div class="hero">
       <div class="hero-content">
-        <div class="eyebrow-badge"> AWS Powered by ICSDC</div>
+        <div class="aws-eyebrow-badge">&#9729; AWS Powered by ICSDC</div>
         <h1 class="hero-title">AWS Cloud Excellence for High-Growth Businesses with ICSDC</h1>
         <p class="hero-sub">Build, Deploy, and Grow Seamlessly on AWS powered with ICSDC</p>
-        <p class="hero-desc">Run your applications on a global, secure, and scalable AWS cloud platform — guided and
+        <p class="hero-desc">Run your applications on a global, secure, and scalable AWS cloud platform &mdash; guided
+          and
           supported by ICSDC experts at every step.</p>
         <div class="hero-btns">
           <button class="btn-primary">Explore AWS Solutions &rarr;</button>
@@ -102,12 +119,12 @@
             <circle class="cloud-node-circle" cx="220" cy="210" r="28" />
             <circle class="cloud-node-circle cloud-node-center" cx="160" cy="120" r="38" />
             <text x="160" y="127" text-anchor="middle" font-size="20" fill="white">&#9729;</text>
-            <text x="60" y="57" text-anchor="middle" font-size="14" fill="#e65c00">EC2</text>
-            <text x="260" y="57" text-anchor="middle" font-size="14" fill="#e65c00">S3</text>
-            <text x="40" y="157" text-anchor="middle" font-size="11" fill="#e65c00">VPC</text>
-            <text x="280" y="157" text-anchor="middle" font-size="11" fill="#e65c00">IAM</text>
-            <text x="100" y="217" text-anchor="middle" font-size="10" fill="#e65c00">EKS</text>
-            <text x="220" y="217" text-anchor="middle" font-size="10" fill="#e65c00">Lambda</text>
+            <text x="60" y="57" text-anchor="middle" font-size="14" fill="#1a56db">EC2</text>
+            <text x="260" y="57" text-anchor="middle" font-size="14" fill="#1a56db">S3</text>
+            <text x="40" y="157" text-anchor="middle" font-size="11" fill="#1a56db">VPC</text>
+            <text x="280" y="157" text-anchor="middle" font-size="11" fill="#1a56db">IAM</text>
+            <text x="100" y="217" text-anchor="middle" font-size="10" fill="#1a56db">EKS</text>
+            <text x="220" y="217" text-anchor="middle" font-size="10" fill="#1a56db">Lambda</text>
           </svg>
           <div class="aws-hero-badge">
             <div class="aws-badge-dot"></div>
@@ -122,168 +139,91 @@
   </section>
 
 
-  <!-- ════════════════════════════════════
-     SECTION 2 — 4 PILLARS
-════════════════════════════════════ -->
+  <!-- ════ SECTION 2 — 4 PILLARS ════ -->
   <section class="why-us section">
     <div class="container">
-      <div class="why-grid" data-stagger>
-        <div class="why-card">
-          <div class="why-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
-          <h3>Global Scalability</h3>
-          <p>Scale applications instantly with AWS' worldwide infrastructure spanning 30+ regions globally.</p>
+      <div class="why-grid" data-stagger></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — PRICING PLANS ════ -->
+  <section id="aws-plans" class="section cloud-pricing-section">
+    <div class="container">
+      <h2 class="title" data-animate="fade-up">Choose the AWS Plan That Works for You</h2>
+      <p class="subtitle" data-animate="fade-up">From simple setups to complex applications, our plans offer the right
+        mix of speed, flexibility, and affordability &mdash; all backed by expert support.</p>
+      <div class="aws-plans-grid" data-stagger></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — WHO WE ARE (band: text left, checklist right) ════ -->
+  <section id="who-we-are" class="section aws-whoweare-section">
+    <div class="container">
+      <div class="aws-whoweare-band" data-animate="fade-up">
+        <div class="aws-whoweare-left">
+          <h2 class="aws-whoweare-title" id="aws-about-title">Who We Are?</h2>
+          <p class="aws-whoweare-desc" id="aws-about-desc"></p>
+          <a href="/contact-us" class="aws-whoweare-cta" id="aws-about-cta">Talk to Our AWS Experts &rarr;</a>
         </div>
-        <div class="why-card">
-          <div class="why-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
-          <h3>High Security Standards</h3>
-          <p>Protect workloads with advanced, industry-leading cloud security including IAM, encryption, and compliance.
-          </p>
-        </div>
-        <div class="why-card">
-          <div class="why-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
-          <h3>Cost-Efficient Deployment</h3>
-          <p>Optimize resources and pay only for what you use. ICSDC helps track and reduce your AWS spend.</p>
-        </div>
-        <div class="why-card">
-          <div class="why-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
-          <h3>Faster Application Performance</h3>
-          <p>Experience low latency and high speed across global AWS regions with NIXI-peered connectivity for India.
-          </p>
+        <div class="aws-whoweare-right">
+          <ul class="aws-whoweare-grid" id="aws-about-items"></ul>
         </div>
       </div>
     </div>
   </section>
 
 
-  <!-- ════════════════════════════════════
-     SECTION 3 — WHO WE ARE
-════════════════════════════════════ -->
-  <section id="who-we-are" class="who-we-are section">
-    <div class="who-we-are-inner">
-      <div class="who-we-are-image" data-animate="fade-right">
-        <img src="assets/images/trusted-cloud-service-provider 1.png" alt="ICSDC Cloud Team">
-      </div>
-      <div class="blue-container" data-animate="fade-left">
-        <span class="cloud-section-label">About ICSDC</span>
-        <h2 class="title" style="text-align:left; margin-top:8px;">Who We Are?</h2>
-        <p class="who-we-are-paragraph">At ICSDC, we help companies move to AWS smoothly and manage their cloud
-          environments with ease. Our goal is to make your AWS journey simple, secure, and cost-effective — from the
-          first migration to long-term optimization.</p>
-        <div class="cloud-why-grid" style="margin-top:24px; grid-template-columns:1fr 1fr;" data-stagger>
-          <div class="cloud-why-item">
-            <div class="cloud-why-num">01</div>
-            <h3>AWS-Certified Cloud Experts</h3>
-          </div>
-          <div class="cloud-why-item">
-            <div class="cloud-why-num">02</div>
-            <h3>Proven Migration Experience</h3>
-          </div>
-          <div class="cloud-why-item">
-            <div class="cloud-why-num">03</div>
-            <h3>Secure &amp; Scalable Architecture</h3>
-          </div>
-          <div class="cloud-why-item">
-            <div class="cloud-why-num">04</div>
-            <h3>24/7 Technical Support</h3>
-          </div>
-          <div class="cloud-why-item">
-            <div class="cloud-why-num">05</div>
-            <h3>Cost-Optimized Solutions</h3>
-          </div>
-          <div class="cloud-why-item">
-            <div class="cloud-why-num">06</div>
-            <h3>Performance &amp; Reliability Focus</h3>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════
-     SECTION 4 — ICSDC CORE STRENGTHS (12 features)
-════════════════════════════════════ -->
+  <!-- ════ SECTION 5 — ICSDC CORE STRENGTHS (12) ════ -->
   <section id="strengths" class="section cloud-power-section">
     <div class="container">
-      <span class="cloud-section-label" data-animate="fade-up">Core Strengths</span>
       <h2 class="title" data-animate="fade-up">The ICSDC Core Strengths That Power Your AWS Cloud</h2>
       <p class="subtitle" data-animate="fade-up">Everything you need to deploy, manage, and scale confidently using AWS
         best practices.</p>
-      <div class="cloud-power-grid" data-stagger>
-
-      </div>
+      <div class="cloud-power-grid" data-stagger></div>
     </div>
   </section>
 
 
-  <!-- ════════════════════════════════════
-     SECTION 5 — AWS FEATURES (EC2, S3, VPC etc.)
-════════════════════════════════════ -->
-  <section id="services" class="section cloud-use-section">
-    <div class="container">
-      <span class="cloud-section-label" data-animate="fade-up">AWS Services</span>
-      <h2 class="title" data-animate="fade-up">Core AWS Public Cloud Features Delivered Through ICSDC</h2>
-      <p class="subtitle" data-animate="fade-up">Every key AWS capability — expertly configured, managed, and optimized
-        for your business.</p>
-      <div class="cloud-use-grid" data-stagger>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════
-     SECTION 6 — CTA BAND
-════════════════════════════════════ -->
-  <section class="cloud-cta-band" aria-label="Talk to expert CTA">
-    <div class="cloud-cta-inner">
-      <h2>Unlock Cloud Performance Crafted for You</h2>
-      <p>Talk to our AWS-certified cloud experts today and get a free architecture review for your business.</p>
-      <div class="cloud-cta-btns">
-        <button class="cloud-cta-btn-primary">Talk to Our Cloud Expert &rarr;</button>
-        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════
-     SECTION 7 — AWS vs ICSDC COMPARISON
-════════════════════════════════════ -->
+  <!-- ════ SECTION 6 — AWS vs ICSDC COMPARISON ════ -->
   <section id="comparison" class="section">
     <div class="container">
-      <span class="cloud-section-label" data-animate="fade-up">Comparison</span>
-      <h2 class="title" data-animate="fade-up">Amazon AWS vs ICSDC AWS — What's the Difference?</h2>
-      <p class="subtitle" data-animate="fade-up">ICSDC brings human expertise, local support, and managed simplicity on
-        top of AWS's global power.</p>
+      <h2 class="title" data-animate="fade-up"></h2>
+      <p class="subtitle" data-animate="fade-up"></p>
       <div style="overflow-x:auto;" data-animate="fade-up">
         <table class="aws-comparison">
           <thead>
             <tr>
               <th>Aspect</th>
-              <th>Amazon AWS Direct</th>
-              <th>ICSDC + AWS</th>
+              <th>Amazon AWS</th>
+              <th>ICSDC</th>
             </tr>
           </thead>
           <tbody>
             <tr>
+              <td>Focus</td>
+              <td>Global Cloud Ecosystem</td>
+              <td class="aws-check">&#10003; Global Cloud Ecosystem</td>
+            </tr>
+            <tr>
               <td>Setup Complexity</td>
-              <td>DIY, highly technical</td>
+              <td>DIY, technical</td>
               <td class="aws-check">&#10003; Fully managed, simplified</td>
             </tr>
             <tr>
               <td>Pricing</td>
-              <td>Pay-as-you-go, can get complex</td>
-              <td class="aws-check">&#10003; Cost-efficient, transparent plans</td>
+              <td>Pay-as-you-go, can get costly</td>
+              <td class="aws-check">&#10003; Cost-efficient, transparent plannings</td>
             </tr>
             <tr>
               <td>Support</td>
               <td>Generic, ticket-based</td>
-              <td class="aws-check">&#10003; Personalised, human-led 24/7</td>
+              <td class="aws-check">&#10003; Personalised, human-led</td>
             </tr>
             <tr>
               <td>Customisation</td>
-              <td>Wide but fully self-managed</td>
+              <td>Wide but self-managed</td>
               <td class="aws-check">&#10003; Tailor-made deployments</td>
             </tr>
             <tr>
@@ -298,8 +238,13 @@
             </tr>
             <tr>
               <td>Best For</td>
-              <td>Scalable global apps (self-managed)</td>
+              <td>Scalable global apps</td>
               <td class="aws-check">&#10003; Businesses needing local reliability</td>
+            </tr>
+            <tr>
+              <td>Advantage</td>
+              <td>Massive service portfolio</td>
+              <td class="aws-check">&#10003; Direct support + easy operations</td>
             </tr>
           </tbody>
         </table>
@@ -308,19 +253,85 @@
   </section>
 
 
-  <!-- ════════════════════════════════════
-     SECTION 8 — TESTIMONIALS
-════════════════════════════════════ -->
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band" aria-label="Talk to expert CTA">
+    <div class="cloud-cta-inner">
+      <h2>Unlock Cloud Performance Crafted for You</h2>
+      <p>Talk to our AWS-certified cloud experts today and get a free architecture review for your business.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary">Talk to Our Cloud Expert &rarr;</button>
+        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — NEED DEDICATED HARDWARE? (cross-sell) ════ -->
+  <section id="aws-dedicated" class="section aws-dedicated-section">
+    <div class="container">
+      <div class="aws-dedicated-inner">
+        <div class="aws-dedicated-content">
+          <h2 class="title" id="aws-dedicated-title">Need Dedicated Hardware Instead?</h2>
+          <p class="aws-dedicated-desc" id="aws-dedicated-desc">Get direct access to physical servers for workloads that
+            demand consistent, high-performance computing.</p>
+          <a href="/bare-metal-server" class="btn-primary" id="aws-dedicated-cta">Explore Bare Metal &rarr;</a>
+        </div>
+        <div class="aws-dedicated-image">
+          <img id="aws-dedicated-img" src="assets/images/bare-metal.png" alt="Dedicated bare metal servers"
+            onerror="this.style.display='none'">
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — CORE AWS PUBLIC CLOUD FEATURES (10) ════ -->
+  <section id="services" class="section cloud-use-section">
+    <div class="container">
+      <h2 class="title" data-animate="fade-up"></h2>
+      <p class="subtitle" data-animate="fade-up"></p>
+      <div class="cloud-use-grid" data-stagger></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — 4 LAYOUT FEATURE BLOCKS ════ -->
+  <section id="aws-blocks" class="section aws-blocks-section">
+    <div class="container">
+      <h2 class="title" data-animate="fade-up">Move Smarter with ICSDC + AWS</h2>
+      <p class="subtitle" data-animate="fade-up">Everything you need to launch, optimize, and scale &mdash; handled for
+        you, end to end.</p>
+      <div class="aws-blocks-grid" id="aws-blocks-grid" data-stagger></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 10 — WHY CHOOSE ICSDC FOR AWS (image + text) ════ -->
+  <section id="aws-why-choose" class="section aws-why-section">
+    <div class="container">
+      <div class="aws-why-inner">
+        <div class="aws-why-image">
+          <img id="aws-why-img" src="assets/images/aws-why-choose.png" alt="Why choose ICSDC for AWS"
+            onerror="this.style.display='none'">
+        </div>
+        <div class="aws-why-content">
+          <h2 class="title" id="aws-why-title" style="text-align:left;">Why Choose ICSDC for AWS Cloud Services?</h2>
+          <div class="aws-why-paras" id="aws-why-paras"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 11 — TESTIMONIALS ════ -->
   <section class="testi-section" aria-labelledby="testi-heading">
     <div class="testi-container">
       <h2 id="testi-heading" class="testi-title">Read our Client Stories for ICSDC AWS Cloud Hosting</h2>
 
-      <!-- Cards rendered by components.js -->
       <div class="testi-scroll-viewport">
         <div class="testi-grid" role="list" id="testi-grid"></div>
       </div>
 
-      <!-- Pagination dots rendered by components.js -->
       <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
 
       <div class="testi-nav">
@@ -331,120 +342,99 @@
   </section>
 
 
-  <!-- ════════════════════════════════════
-     SECTION 9 — FAQ
-════════════════════════════════════ -->
+  <!-- ════ SECTION 12 — FAQ ════ -->
   <section class="faq-section" id="faq" aria-labelledby="faq-heading">
     <div class="faq-container">
       <div class="faq-col">
         <h2 id="faq-heading" class="faq-title">FAQs About ICSDC AWS Cloud Hosting</h2>
-        <!-- Accordion items — self-contained, not populated by components.js -->
-        <dl class="faq-accordions" id="faq-accordions">
-          <div class="faq-item faq-open" data-faq-index="0">
-            <dt><button class="faq-question" aria-expanded="true" aria-controls="awsfaq-0"><span>What is AWS Cloud
-                  Hosting?</span><i class="fa-solid fa-chevron-down faq-chevron" aria-hidden="true"></i></button></dt>
-            <dd class="faq-answer" id="awsfaq-0" role="region">
-              <p>AWS Cloud Hosting allows you to run applications, websites, and workloads on Amazon Web Services'
-                global cloud infrastructure with pay-as-you-go pricing and enterprise-grade reliability.</p>
-            </dd>
-          </div>
-          <div class="faq-item" data-faq-index="1">
-            <dt><button class="faq-question" aria-expanded="false" aria-controls="awsfaq-1"><span>How does ICSDC help
-                  with AWS hosting?</span><i class="fa-solid fa-chevron-down faq-chevron"
-                  aria-hidden="true"></i></button></dt>
-            <dd class="faq-answer" id="awsfaq-1" role="region">
-              <p>ICSDC handles setup, migration, configuration, monitoring, and ongoing management so you can use AWS
-                without dealing with the technical complexity yourself.</p>
-            </dd>
-          </div>
-          <div class="faq-item" data-faq-index="2">
-            <dt><button class="faq-question" aria-expanded="false" aria-controls="awsfaq-2"><span>Can I migrate my
-                  existing servers to AWS?</span><i class="fa-solid fa-chevron-down faq-chevron"
-                  aria-hidden="true"></i></button></dt>
-            <dd class="faq-answer" id="awsfaq-2" role="region">
-              <p>Yes. ICSDC provides smooth and structured migration services with minimal downtime, handling the entire
-                process from assessment to go-live.</p>
-            </dd>
-          </div>
-          <div class="faq-item" data-faq-index="3">
-            <dt><button class="faq-question" aria-expanded="false" aria-controls="awsfaq-3"><span>Is AWS secure enough
-                  for sensitive data?</span><i class="fa-solid fa-chevron-down faq-chevron"
-                  aria-hidden="true"></i></button></dt>
-            <dd class="faq-answer" id="awsfaq-3" role="region">
-              <p>Yes. AWS offers strong security features like encryption, IAM controls, network isolation, and
-                compliance certifications. ICSDC adds additional layers on top.</p>
-            </dd>
-          </div>
-          <div class="faq-item" data-faq-index="4">
-            <dt><button class="faq-question" aria-expanded="false" aria-controls="awsfaq-4"><span>Will my AWS
-                  environment be fully managed by ICSDC?</span><i class="fa-solid fa-chevron-down faq-chevron"
-                  aria-hidden="true"></i></button></dt>
-            <dd class="faq-answer" id="awsfaq-4" role="region">
-              <p>Yes. ICSDC manages backups, updates, monitoring, optimization, and troubleshooting as part of our
-                managed AWS services.</p>
-            </dd>
-          </div>
-          <div class="faq-item" data-faq-index="5">
-            <dt><button class="faq-question" aria-expanded="false" aria-controls="awsfaq-5"><span>How is pricing
-                  calculated for AWS hosting?</span><i class="fa-solid fa-chevron-down faq-chevron"
-                  aria-hidden="true"></i></button></dt>
-            <dd class="faq-answer" id="awsfaq-5" role="region">
-              <p>AWS uses a pay-as-you-go model. ICSDC helps you track and optimize usage to avoid unnecessary costs,
-                with transparent plan pricing available.</p>
-            </dd>
-          </div>
-          <div class="faq-item" data-faq-index="6">
-            <dt><button class="faq-question" aria-expanded="false" aria-controls="awsfaq-6"><span>What kind of support
-                  does ICSDC offer?</span><i class="fa-solid fa-chevron-down faq-chevron"
-                  aria-hidden="true"></i></button></dt>
-            <dd class="faq-answer" id="awsfaq-6" role="region">
-              <p>ICSDC provides 24/7 technical support with certified cloud engineers available to help whenever you
-                need — no ticket loops or generic responses.</p>
-            </dd>
-          </div>
-          <div class="faq-item" data-faq-index="7">
-            <dt><button class="faq-question" aria-expanded="false" aria-controls="awsfaq-7"><span>Can I integrate AWS
-                  with my on-premise systems?</span><i class="fa-solid fa-chevron-down faq-chevron"
-                  aria-hidden="true"></i></button></dt>
-            <dd class="faq-answer" id="awsfaq-7" role="region">
-              <p>Yes. AWS supports hybrid cloud setups using VPNs, Direct Connect, and secure networking configurations
-                that ICSDC configures for you.</p>
-            </dd>
-          </div>
-        </dl>
+        <div class="faq-grid">
+          <div class="faq-accordions" id="faq-accordions"></div>
+          <aside class="faq-aside">
+            <div class="faq-illo">
+              <svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="faqCardAaws" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#1a56db" stop-opacity="0.35" />
+                    <stop offset="1" stop-color="#1a56db" stop-opacity="0.05" />
+                  </linearGradient>
+                  <linearGradient id="faqCardBaws" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#3b82f6" />
+                    <stop offset="1" stop-color="#1a56db" />
+                  </linearGradient>
+                  <radialGradient id="faqGlowaws" cx="0.5" cy="0.5" r="0.5">
+                    <stop offset="0" stop-color="#3b82f6" stop-opacity="0.20" />
+                    <stop offset="1" stop-color="#3b82f6" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <circle cx="160" cy="160" r="140" fill="url(#faqGlowaws)" />
+                <g transform="rotate(-8 160 160)">
+                  <rect x="60" y="100" width="200" height="60" rx="10" fill="url(#faqCardAaws)"
+                    stroke="rgba(59,130,246,0.30)" stroke-width="1.5" />
+                  <rect x="80" y="118" width="120" height="6" rx="3" fill="rgba(26,86,219,0.30)" />
+                  <rect x="80" y="132" width="80" height="6" rx="3" fill="rgba(26,86,219,0.18)" />
+                  <circle cx="230" cy="130" r="10" fill="rgba(59,130,246,0.25)" stroke="rgba(59,130,246,0.50)"
+                    stroke-width="1.5" />
+                  <path d="M226 130 L230 134 L236 126" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" fill="none" />
+                </g>
+                <g transform="rotate(3 160 160)">
+                  <rect x="55" y="140" width="210" height="64" rx="11" fill="rgba(26,86,219,0.05)"
+                    stroke="rgba(26,86,219,0.20)" stroke-width="1.5" />
+                  <rect x="76" y="159" width="140" height="6" rx="3" fill="rgba(26,86,219,0.35)" />
+                  <rect x="76" y="173" width="100" height="6" rx="3" fill="rgba(26,86,219,0.18)" />
+                  <circle cx="236" cy="172" r="10" fill="rgba(26,86,219,0.10)" stroke="rgba(26,86,219,0.25)"
+                    stroke-width="1.5" />
+                  <path d="M232 172 L236 176 L242 168" stroke="rgba(26,86,219,0.6)" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                </g>
+                <g transform="translate(0, 18)">
+                  <rect x="50" y="180" width="220" height="68" rx="12" fill="rgba(59,130,246,0.10)"
+                    stroke="rgba(59,130,246,0.55)" stroke-width="1.5" />
+                  <rect x="74" y="200" width="150" height="7" rx="3.5" fill="rgba(26,86,219,0.85)" />
+                  <rect x="74" y="216" width="110" height="6" rx="3" fill="rgba(26,86,219,0.40)" />
+                  <circle cx="244" cy="214" r="12" fill="url(#faqCardBaws)" />
+                  <path d="M238 217 L244 211 L250 217" stroke="white" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" fill="none" />
+                </g>
+                <g transform="translate(36 36)">
+                  <circle cx="0" cy="0" r="28" fill="url(#faqCardBaws)" stroke="rgba(59,130,246,0.40)"
+                    stroke-width="3" /><text x="0" y="10" text-anchor="middle"
+                    font-family="Plus Jakarta Sans, sans-serif" font-size="34" font-weight="800" fill="white">?</text>
+                </g>
+                <circle cx="278" cy="60" r="5" fill="#f59e0b" />
+                <circle cx="298" cy="80" r="3" fill="#f59e0b" opacity="0.6" />
+                <circle cx="40" cy="270" r="4" fill="#4fd1c5" opacity="0.8" />
+                <circle cx="280" cy="270" r="5" fill="#3b82f6" opacity="0.6" />
+              </svg>
+            </div>
+            <div class="faq-aside-copy">
+              <h3 class="faq-aside-h">Didn't find your answer?</h3>
+              <p class="faq-aside-p">Our team is happy to help — reach out and we'll respond within minutes.</p>
+              <a href="/contact-us.html" class="faq-aside-link">Talk to our team <svg width="14" height="14"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                  stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 5l7 7-7 7" />
+                </svg></a>
+            </div>
+          </aside>
+        </div>
       </div>
-      <!-- Sticky contact card -->
-      <aside class="faq-contact-card" aria-label="Contact us">
-        <h3 class="faq-contact-title">Chat with Our AWS<br>Experts</h3>
-        <p class="faq-contact-desc">
-          Our India-based AWS-certified engineers are available 24/7 to answer your questions, plan your migration, and
-          optimize your cloud costs.<br><br>
-          &#128222; +91 98109 58857
-        </p>
-        <a href="/contact-us.html" class="faq-contact-btn">
-          Talk to an Expert
-          <i class="fa-solid fa-headset" aria-hidden="true"></i>
-        </a>
-      </aside>
     </div>
   </section>
 
-  <!-- ════════════════════════════════════
-     SECTION 10 — FINAL CTA
-════════════════════════════════════ -->
+
+  <!-- ════ FINAL CTA DARK ════ -->
   <section class="cloud-cta-band cloud-cta-dark" aria-label="Start AWS journey">
     <div class="cloud-cta-inner">
-      <h2>Start Your AWS Cloud Journey with ICSDC</h2>
-      <p>Move smarter with ICSDC + AWS. Expert-managed, cost-optimised, and built for Indian businesses.</p>
+      <h2></h2>
+      <p></p>
       <div class="cloud-cta-btns">
-        <button class="cloud-cta-btn-primary">Get Started with AWS &rarr;</button>
-        <button class="cloud-cta-btn-outline">Call +91 98109 58857</button>
+        <button class="cloud-cta-btn-primary"></button>
+        <button class="cloud-cta-btn-outline"></button>
       </div>
     </div>
   </section>
 
-
-  <!-- FOOTER -->
 
   <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
 
@@ -471,14 +461,7 @@
   <script src="assets/js/components.js"></script>
   <script src="assets/js/polish.js" defer></script>
   <script type="module" src="assets/js/aws-cloud-hosting.js"></script>
-
-  <script>
-    (function () {
-      var el = document.getElementById('footer-year');
-      if (el) el.textContent = new Date().getFullYear();
-    })();
-  </script>
-
+  <script src="assets/js/nav-search.js" defer></script>
 </body>
 
 </html>

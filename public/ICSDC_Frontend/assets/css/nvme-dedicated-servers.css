@@ -454,6 +454,37 @@
 }
 
 /* ══════════════════════════════════════
+   UPGRADE TEXT SECTION (#nds-upgrade)
+══════════════════════════════════════ */
+.nds-upgrade-section {
+    background: var(--bg-light, #f8fafc);
+}
+
+.nds-upgrade-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.nds-upgrade-wrap .title {
+    margin-bottom: 28px;
+}
+
+.nds-upgrade-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.nds-upgrade-body p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-mid, #4a5568);
+    margin: 0;
+    text-align: left;
+}
+
+/* ══════════════════════════════════════
    RESPONSIVE BREAKPOINTS
 ══════════════════════════════════════ */
 
@@ -519,3 +550,4 @@
         padding: 6px 10px;
     }
 }
+

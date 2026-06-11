@@ -187,8 +187,8 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #22c55e;
-    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    background: #1a56db;
+    box-shadow: 0 0 8px rgba(26, 86, 219, 0.5);
     flex-shrink: 0;
 }
 
@@ -252,7 +252,8 @@
     transition: transform var(--transition-base) ease,
         box-shadow var(--transition-base) ease,
         border-color var(--transition-base) ease;
-    align-items: center;
+    align-items: self-start;
+    justify-content: start;
 }
 
 .cloud-power-card:hover {
@@ -299,6 +300,24 @@
     line-height: 1.65;
     color: var(--muted-alt);
     margin: 0;
+    text-align: left;
+}
+
+.cloud-power-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    text-decoration: none;
+    transition: gap 0.2s ease, opacity 0.2s ease;
+}
+
+.cloud-power-link:hover {
+    gap: 7px;
+    opacity: 0.85;
 }
 
 /* ══════════════════════════════════════
@@ -392,6 +411,7 @@
 }
 
 .cloud-use-card {
+    align-items: center;
     background: var(--bg-light);
     border: 1.5px solid var(--border);
     border-radius: var(--radius-lg);
@@ -539,6 +559,7 @@
     cursor: pointer;
     font-family: inherit;
     letter-spacing: -0.01em;
+    text-decoration: none;
     transition: background var(--transition-base) ease,
         transform var(--transition-fast) ease,
         box-shadow var(--transition-base) ease;
@@ -564,6 +585,7 @@
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
+    text-decoration: none;
     transition: border-color var(--transition-base) ease,
         background var(--transition-base) ease,
         transform var(--transition-fast) ease;
@@ -644,5 +666,321 @@
 
     .cloud-fw-name {
         font-size: 12px;
+    }
+}
+
+/* ══════════════════════════════════════
+   HOSTING SPLIT SECTION (image + text)
+   Shared by cPanel, Reseller, WordPress
+══════════════════════════════════════ */
+.hosting-split-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+}
+
+.hosting-split-text .title {
+    margin-bottom: 16px;
+}
+
+.hosting-split-text .subtitle {
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.hosting-split-img {
+    display: flex;
+    justify-content: center;
+}
+
+.hosting-split-img img {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .hosting-split-row {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .hosting-split-img {
+        order: -1;
+    }
+}
+
+/* ══════════════════════════════════════
+   DS-PLAN-* — Shared pricing card system
+   Used by populatePricingPlans() helper.
+   Loaded here so every page that uses
+   cloud-components.css gets it for free.
+══════════════════════════════════════ */
+.ds-plan-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+    margin-top: 8px;
+}
+
+.ds-plan-card {
+    position: relative;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px 32px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) var(--ease-out-expo),
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+}
+
+.ds-plan-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26, 86, 219, 0.20);
+}
+
+.ds-plan-card.ds-featured {
+    background: var(--blue);
+    border-color: var(--blue);
+    transform: translateY(-8px);
+    box-shadow: 0 24px 64px rgba(26, 86, 219, 0.32), 0 8px 24px rgba(26, 86, 219, 0.20);
+    z-index: 2;
+}
+
+.ds-plan-card.ds-featured:hover {
+    transform: translateY(-14px);
+    box-shadow: 0 32px 72px rgba(26, 86, 219, 0.38), 0 8px 24px rgba(26, 86, 219, 0.22);
+}
+
+.ds-plan-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--orange);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: var(--radius-xl);
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+}
+
+.ds-plan-tier {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 12px;
+}
+
+.ds-plan-card.ds-featured .ds-plan-tier {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.ds-plan-price-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 4px;
+    align-items: center;
+    justify-content: center;
+}
+
+.ds-plan-currency {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    align-self: flex-start;
+    margin-top: 8px;
+}
+
+.ds-plan-price {
+    font-size: clamp(36px, 4vw, 36px);
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+.ds-plan-period {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 2px;
+}
+
+.ds-plan-card.ds-featured .ds-plan-currency,
+.ds-plan-card.ds-featured .ds-plan-price,
+.ds-plan-card.ds-featured .ds-plan-period {
+    color: var(--white);
+}
+
+.ds-plan-card.ds-featured .ds-plan-period {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.ds-plan-tagline {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted-alt);
+    margin: 12px 0 0;
+}
+
+.ds-plan-card.ds-featured .ds-plan-tagline {
+    color: rgba(255, 255, 255, 0.80);
+}
+
+.ds-plan-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+    border: none;
+}
+
+.ds-plan-card.ds-featured .ds-plan-divider {
+    background: rgba(255, 255, 255, 0.20);
+}
+
+.ds-plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    margin-bottom: 28px;
+}
+
+.ds-plan-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+}
+
+.ds-plan-card.ds-featured .ds-plan-feature {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.ds-plan-check {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(26, 86, 219, 0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+}
+
+.ds-plan-card.ds-featured .ds-plan-check {
+    background: rgba(255, 255, 255, 0.20);
+}
+
+.ds-plan-check svg {
+    width: 10px;
+    height: 10px;
+    stroke: var(--blue);
+    stroke-width: 2.5;
+}
+
+.ds-plan-card.ds-featured .ds-plan-check svg {
+    stroke: var(--white);
+}
+
+.ds-plan-cta {
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+    transition: background var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 48px;
+    border: 2px solid transparent;
+}
+
+.ds-plan-cta-outline {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text);
+}
+
+.ds-plan-cta-outline:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: var(--blue-light);
+    transform: translateY(-1px);
+}
+
+.ds-plan-cta-primary {
+    background: var(--white);
+    color: var(--blue);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+}
+
+.ds-plan-cta-primary:hover {
+    background: var(--blue-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+}
+
+/* Dark mode */
+html[data-theme="dark"] .ds-plan-card {
+    background: var(--c-dark-card, #1e293b);
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .ds-plan-card.ds-featured {
+    background: var(--blue);
+    border-color: var(--blue);
+}
+
+html[data-theme="dark"] .ds-plan-currency,
+html[data-theme="dark"] .ds-plan-price {
+    color: #f1f5f9;
+}
+
+html[data-theme="dark"] .ds-plan-cta-outline {
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .ds-plan-cta-outline:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: rgba(26, 86, 219, 0.10);
+}
+
+/* Default responsive — overridden per-page as needed */
+@media (max-width: 1023px) {
+    .ds-plan-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .ds-plan-card.ds-featured {
+        transform: translateY(0);
     }
 }

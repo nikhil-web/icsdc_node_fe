@@ -49,7 +49,87 @@
             document.getElementById('header-user').textContent =
                 user.username || user.email || 'Admin';
         }
-        loadDashboard();
+        // Route to either the dashboard tables or the builder view
+        applyRoute();
+    }
+
+    function isBuilderPath()  { return window.location.pathname.startsWith('/admin/builder'); }
+    function isSitemapPath()  { return window.location.pathname.startsWith('/admin/sitemap'); }
+    function isChatPath()     { return window.location.pathname.startsWith('/admin/chat'); }
+    function isLeadsPath()    { return window.location.pathname.startsWith('/admin/leads'); }
+
+    function applyRoute() {
+        const mainDash    = document.getElementById('view-dashboard-main');
+        const mainBld     = document.getElementById('view-builder');
+        const mainSitemap = document.getElementById('view-sitemap');
+        const mainChat    = document.getElementById('view-chat');
+        const mainLeads   = document.getElementById('view-leads');
+        if (!mainDash || !mainBld || !mainSitemap || !mainChat || !mainLeads) return;
+
+        // Sync nav tab "active" styling
+        document.querySelectorAll('.admin-nav-tab').forEach(function (a) {
+            const tab = a.dataset.tab;
+            const isActive =
+                (tab === 'builder'   && isBuilderPath()) ||
+                (tab === 'sitemap'   && isSitemapPath()) ||
+                (tab === 'chat'      && isChatPath())    ||
+                (tab === 'leads'     && isLeadsPath())   ||
+                (tab === 'dashboard' && !isBuilderPath() && !isSitemapPath() && !isChatPath() && !isLeadsPath());
+            a.classList.toggle('active', isActive);
+        });
+
+        // Hide all, show active
+        mainDash.hidden    = true;
+        mainBld.hidden     = true;
+        mainSitemap.hidden = true;
+        mainChat.hidden    = true;
+        mainLeads.hidden   = true;
+
+        if (isBuilderPath()) {
+            mainBld.hidden = false;
+            window.dispatchEvent(new CustomEvent('icsdc:show-builder'));
+        } else if (isSitemapPath()) {
+            mainSitemap.hidden = false;
+            if (!window.__icsdc_sitemapLoaded) {
+                window.__icsdc_sitemapLoaded = true;
+                loadSitemap();
+            }
+        } else if (isChatPath()) {
+            mainChat.hidden = false;
+            if (!window.__icsdc_chatLoaded) {
+                window.__icsdc_chatLoaded = true;
+                if (typeof window.initChatPanel === 'function') {
+                    window.initChatPanel(mainChat);
+                }
+            }
+        } else if (isLeadsPath()) {
+            mainLeads.hidden = false;
+            if (!window.__icsdc_leadsLoaded) {
+                window.__icsdc_leadsLoaded = true;
+                initLeadsControls();
+                loadLeads();
+            }
+        } else {
+            mainDash.hidden = false;
+            if (!window.__icsdc_dashLoaded) {
+                window.__icsdc_dashLoaded = true;
+                loadDashboard();
+            }
+        }
+    }
+
+    // Intercept nav tab clicks for SPA-style navigation
+    function initNavTabs() {
+        document.querySelectorAll('.admin-nav-tab').forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = a.getAttribute('href');
+                if (href === window.location.pathname) return;
+                window.history.pushState({}, '', href);
+                applyRoute();
+            });
+        });
+        window.addEventListener('popstate', applyRoute);
     }
 
     // ── Login ─────────────────────────────────────────────────
@@ -153,7 +233,6 @@
     // ── Dashboard ─────────────────────────────────────────────
     async function loadDashboard() {
         loadHealth();
-        await loadSubmissions();
         await loadPages();
     }
 
@@ -271,7 +350,12 @@
         try {
             const res  = await apiFetch('/api/admin/pages');
             const data = await res.json();
-            allPages   = data?.data || [];
+            // Drop the homepage row — it must never be toggleable, so it
+            // shouldn't appear in the registry table.
+            allPages = (data?.data || []).filter(function (p) {
+                const slug = (p.attributes || p).slug || '';
+                return slug !== 'index' && slug !== 'home' && slug !== '' && slug !== '/';
+            });
             updatePageCounts();
             renderPages();
         } catch (err) {
@@ -399,6 +483,322 @@
         });
     }
 
+    // ── Leads ─────────────────────────────────────────────────
+    let allLeads          = [];
+    let leadsActiveSource = 'all';
+    let leadsSearchQ      = '';
+
+    async function loadLeads() {
+        const tbody = document.getElementById('leads-body');
+        tbody.innerHTML = '<tr><td colspan="7" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading leads…</td></tr>';
+        try {
+            const res  = await apiFetch('/api/admin/leads');
+            const data = await res.json();
+            allLeads = data?.data || [];
+            updateLeadStats(data.counts || {}, data.weekCounts || {});
+            renderLeads();
+        } catch (err) {
+            if (err.message !== 'Session expired') {
+                tbody.innerHTML = '<tr><td colspan="7" class="admin-loading-cell">Failed to load leads.</td></tr>';
+            }
+        }
+    }
+
+    function updateLeadStats(counts, weekCounts) {
+        const set = function (id, val) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val || 0;
+        };
+        set('stat-contact-total',  counts.contact);
+        set('stat-whatsapp-total', counts.whatsapp);
+        set('stat-chat-total',     counts.chat);
+        set('stat-contact-week',   weekCounts.contact);
+        set('stat-whatsapp-week',  weekCounts.whatsapp);
+        set('stat-chat-week',      weekCounts.chat);
+        set('lead-count-all',      counts.total);
+        set('lead-count-contact',  counts.contact);
+        set('lead-count-whatsapp', counts.whatsapp);
+        set('lead-count-chat',     counts.chat);
+    }
+
+    function filteredLeads() {
+        const q = leadsSearchQ.toLowerCase();
+        return allLeads.filter(function (l) {
+            if (leadsActiveSource !== 'all' && l.source !== leadsActiveSource) return false;
+            if (!q) return true;
+            return [l.name, l.email, l.phone, l.subject, l.message]
+                .some(function (v) { return String(v || '').toLowerCase().includes(q); });
+        });
+    }
+
+    function leadBadge(source) {
+        const map = {
+            contact:  { cls: 'contact',  icon: 'fa-solid fa-envelope',   label: 'Contact'  },
+            whatsapp: { cls: 'whatsapp', icon: 'fa-brands fa-whatsapp',  label: 'WhatsApp' },
+            chat:     { cls: 'chat',     icon: 'fa-solid fa-comments',   label: 'Chat'     },
+        };
+        const m = map[source] || { cls: 'chat', icon: 'fa-solid fa-circle', label: source };
+        return '<span class="lead-badge lead-badge--' + m.cls + '">' +
+               '<i class="' + m.icon + '" aria-hidden="true"></i> ' + m.label + '</span>';
+    }
+
+    function leadActions(l) {
+        const out = [];
+        if (l.source === 'contact') {
+            if (l.email) out.push('<a class="lead-action" title="Email" href="mailto:' + esc(l.email) + '"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>');
+            if (l.phone) out.push('<a class="lead-action" title="Call"  href="tel:' + esc(l.phone) + '"><i class="fa-solid fa-phone" aria-hidden="true"></i></a>');
+        } else if (l.source === 'whatsapp') {
+            if (l.phone) {
+                const clean = String(l.phone).replace(/[^0-9]/g, '');
+                out.push('<a class="lead-action lead-action--wa" title="Open WhatsApp" target="_blank" rel="noopener" href="https://wa.me/' + clean + '"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>');
+                out.push('<a class="lead-action" title="Call" href="tel:' + esc(l.phone) + '"><i class="fa-solid fa-phone" aria-hidden="true"></i></a>');
+            }
+        } else if (l.source === 'chat') {
+            out.push('<a class="lead-action lead-action--chat" title="Open in Live Chat" href="/admin/chat"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>');
+            if (l.phone) out.push('<a class="lead-action" title="Call" href="tel:' + esc(l.phone) + '"><i class="fa-solid fa-phone" aria-hidden="true"></i></a>');
+        }
+        return out.join('');
+    }
+
+    function leadContactCell(l) {
+        const parts = [];
+        if (l.email) parts.push('<a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a>');
+        if (l.phone) parts.push(esc(l.phone));
+        if (!parts.length) parts.push('<span class="muted">—</span>');
+        return parts.join('<br>');
+    }
+
+    function leadStatusBadge(l) {
+        if (!l.status) return '—';
+        const cls = String(l.status).toLowerCase();
+        return '<span class="lead-status lead-status--' + cls + '">' + esc(l.status) + '</span>';
+    }
+
+    function leadDetailBody(l) {
+        const rows = [];
+        if (l.subject) rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Subject</span><span>' + esc(l.subject) + '</span></div>');
+        if (l.company) rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Company</span><span>' + esc(l.company) + '</span></div>');
+        if (l.email)   rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Email</span><a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a></div>');
+        if (l.phone)   rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Phone</span><span>' + esc(l.phone) + '</span></div>');
+        if (l.source === 'whatsapp' && l.raw && l.raw.sourceUrl)
+            rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Page</span><a href="' + esc(l.raw.sourceUrl) + '" target="_blank" rel="noopener">' + esc(l.raw.sourceUrl) + '</a></div>');
+        if (l.source === 'chat' && l.raw && Array.isArray(l.raw.messages) && l.raw.messages.length) {
+            const last = l.raw.messages.slice(-3)
+                .map(function (m) { return '<div><strong>' + esc(m.role) + ':</strong> ' + esc(m.text) + '</div>'; })
+                .join('');
+            rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Last messages</span><div>' + last + '</div></div>');
+        }
+        if (l.message) {
+            rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Message</span><p class="sub-detail-message">' + esc(l.message) + '</p></div>');
+        }
+        return rows.join('');
+    }
+
+    function renderLeads() {
+        const tbody = document.getElementById('leads-body');
+        const items = filteredLeads();
+        if (!items.length) {
+            tbody.innerHTML = '<tr><td colspan="7" class="admin-loading-cell">No leads match the current filter.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = items.map(function (l, idx) {
+            const date = l.createdAt
+                ? new Date(l.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                : '—';
+            const detailId = 'lead-detail-' + idx;
+            return '<tr class="sub-main-row" data-detail="' + detailId + '">' +
+                '<td>' + leadBadge(l.source) + '</td>' +
+                '<td>' + esc(l.name || '—') + '</td>' +
+                '<td>' + leadContactCell(l) + '</td>' +
+                '<td>' + leadStatusBadge(l) + '</td>' +
+                '<td>' + date + '</td>' +
+                '<td class="lead-actions">' + leadActions(l) + '</td>' +
+                '<td><button class="sub-expand-btn" aria-expanded="false" aria-controls="' + detailId + '"><i class="fa-solid fa-chevron-down"></i></button></td>' +
+            '</tr>' +
+            '<tr id="' + detailId + '" class="sub-detail-panel" hidden>' +
+                '<td colspan="7"><div class="sub-detail-body">' + leadDetailBody(l) + '</div></td>' +
+            '</tr>';
+        }).join('');
+
+        tbody.querySelectorAll('.sub-expand-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const panel    = document.getElementById(btn.closest('tr').dataset.detail);
+                const expanded = btn.getAttribute('aria-expanded') === 'true';
+                btn.setAttribute('aria-expanded', !expanded);
+                btn.classList.toggle('open', !expanded);
+                panel.hidden = expanded;
+            });
+        });
+    }
+
+    function initLeadsControls() {
+        const search = document.getElementById('search-leads');
+        if (search) {
+            search.addEventListener('input', function () {
+                leadsSearchQ = search.value;
+                renderLeads();
+            });
+        }
+        document.querySelectorAll('#lead-filter-chips .admin-filter-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('#lead-filter-chips .admin-filter-btn').forEach(function (b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                leadsActiveSource = btn.dataset.source;
+                renderLeads();
+            });
+        });
+        const refresh = document.getElementById('refresh-leads');
+        if (refresh) {
+            refresh.addEventListener('click', async function () {
+                this.disabled = true;
+                if (search) search.value = '';
+                leadsSearchQ = '';
+                await loadLeads();
+                this.disabled = false;
+            });
+        }
+    }
+
+    // ── Sitemap ───────────────────────────────────────────────
+    let allSitemapEntries   = [];
+    let sitemapActiveFilter = 'all';
+    let sitemapUrl          = '/sitemap.xml';
+
+    async function loadSitemap() {
+        const tbody = document.getElementById('sitemap-body');
+        tbody.innerHTML = '<tr><td colspan="5" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>';
+        try {
+            const res  = await apiFetch('/api/admin/sitemap');
+            const data = await res.json();
+            allSitemapEntries = data.entries || [];
+            sitemapUrl        = data.sitemapUrl || '/sitemap.xml';
+
+            // Stats
+            document.getElementById('stat-total').textContent    = data.counts.total;
+            document.getElementById('stat-static').textContent   = data.counts.static;
+            document.getElementById('stat-builder').textContent  = data.counts.builder;
+            document.getElementById('stat-generated').textContent =
+                data.generatedAt
+                    ? new Date(data.generatedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                    : '—';
+
+            renderSitemap();
+        } catch (err) {
+            if (err.message !== 'Session expired') {
+                tbody.innerHTML = '<tr><td colspan="5" class="admin-loading-cell">Failed to load sitemap data.</td></tr>';
+            }
+        }
+    }
+
+    function renderSitemap() {
+        const query  = (document.getElementById('sitemap-search').value || '').toLowerCase();
+        const tbody  = document.getElementById('sitemap-body');
+
+        const filtered = allSitemapEntries.filter(function (e) {
+            if (sitemapActiveFilter === 'static'  && e.type !== 'static')  return false;
+            if (sitemapActiveFilter === 'builder' && e.type !== 'builder') return false;
+            if (query) return e.loc.toLowerCase().includes(query);
+            return true;
+        });
+
+        if (!filtered.length) {
+            tbody.innerHTML = '<tr><td colspan="5" class="admin-loading-cell">No URLs match.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(function (e) {
+            const typeBadge = e.type === 'builder'
+                ? '<span class="sitemap-type-badge sitemap-type-builder">Builder</span>'
+                : '<span class="sitemap-type-badge sitemap-type-static">Static</span>';
+            const path = e.loc.replace(/^https?:\/\/[^/]+/, '');
+            return `<tr>
+                <td class="sitemap-url-cell">
+                    <a href="${esc(e.loc)}" target="_blank" rel="noopener noreferrer" class="sitemap-url-link">${esc(path)}</a>
+                </td>
+                <td>${typeBadge}</td>
+                <td>${e.priority.toFixed(1)}</td>
+                <td>${esc(e.changefreq)}</td>
+                <td>${esc(e.lastmod)}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    function initSitemapControls() {
+        const searchInput = document.getElementById('sitemap-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', renderSitemap);
+        }
+
+        // Filter buttons
+        document.querySelectorAll('[data-sitemap-filter]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                sitemapActiveFilter = btn.dataset.sitemapFilter;
+                document.querySelectorAll('[data-sitemap-filter]').forEach(function (b) {
+                    b.classList.toggle('active', b === btn);
+                });
+                renderSitemap();
+            });
+        });
+
+        // Refresh button
+        const refreshBtn = document.getElementById('sitemap-refresh-btn');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', async function () {
+                refreshBtn.disabled = true;
+                window.__icsdc_sitemapLoaded = false;
+                await loadSitemap();
+                window.__icsdc_sitemapLoaded = true;
+                refreshBtn.disabled = false;
+            });
+        }
+
+        // Regenerate button — forces the server to rewrite public/sitemap.xml
+        const regenBtn = document.getElementById('sitemap-regenerate-btn');
+        if (regenBtn) {
+            regenBtn.addEventListener('click', async function () {
+                regenBtn.disabled = true;
+                const original = regenBtn.innerHTML;
+                regenBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Regenerating…';
+                try {
+                    const res = await apiFetch('/api/admin/sitemap/regenerate', { method: 'POST' });
+                    if (!res.ok) throw new Error('Regenerate failed');
+                    await loadSitemap();
+                } catch (err) {
+                    if (err.message !== 'Session expired') {
+                        alert('Could not regenerate sitemap. See server logs.');
+                    }
+                } finally {
+                    regenBtn.innerHTML = original;
+                    regenBtn.disabled = false;
+                }
+            });
+        }
+
+        // Copy sitemap URL
+        const copyBtn = document.getElementById('sitemap-copy-btn');
+        const toast   = document.getElementById('sitemap-toast');
+        if (copyBtn && toast) {
+            copyBtn.addEventListener('click', async function () {
+                const url = sitemapUrl || window.location.origin + '/sitemap.xml';
+                try {
+                    await navigator.clipboard.writeText(url);
+                } catch (_) {
+                    // Fallback for non-secure contexts
+                    const ta = document.createElement('textarea');
+                    ta.value = url;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity  = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                }
+                toast.hidden = false;
+                setTimeout(function () { toast.hidden = true; }, 2400);
+            });
+        }
+    }
+
     // ── Utility ───────────────────────────────────────────────
     function esc(str) {
         return String(str || '')
@@ -414,8 +814,9 @@
         initEyeToggle();
         initLogout();
         initTheme();
-        initSubmissionsSearch();
         initPagesControls();
+        initSitemapControls();
+        initNavTabs();
 
         if (getJwt()) {
             showDashboard();

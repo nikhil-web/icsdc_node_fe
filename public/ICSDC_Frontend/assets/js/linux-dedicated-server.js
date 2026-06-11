@@ -66,6 +66,25 @@ import { getLinuxDedicatedServerPage } from './services/contentService.js';
             }
         }
 
+        // whatImage — swap the lds-what-visual img src from Strapi
+        if (page.whatImage && page.whatImage.image && page.whatImage.image.url) {
+            var whatImg = document.querySelector('#lds-what .lds-what-visual img');
+            if (whatImg) {
+                var _m = page.whatImage.image;
+                var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
+                var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)
+                    ? (_m.formats.large || _m.formats.medium || _m.formats.small).url
+                    : _m.url) || '';
+                if (_url && !_url.startsWith('http')) _url = _base + _url;
+                if (_url) {
+                    whatImg.src = _url;
+                    whatImg.alt = _m.alternativeText || 'Linux Dedicated Server infrastructure';
+                    whatImg.style.display = '';
+                    whatImg.removeAttribute('onerror');
+                }
+            }
+        }
+
         // ── SECTION 5: WHY BUSINESSES CHOOSE ─────────────────────────────────────
         ldsPopulateSectionHeader('lds-why', page.whyLabel, page.whyTitle, page.whySubtitle);
         ldsUpdateCardTitles('.lds-why-grid .lds-why-card', page.whyCards);
@@ -77,6 +96,19 @@ import { getLinuxDedicatedServerPage } from './services/contentService.js';
         // ── SECTION 7: SPECS ─────────────────────────────────────────────────────
         ldsPopulateSectionHeader('lds-specs', page.specsLabel, page.specsTitle, page.specsDescription);
         ldsPopulateSpecsCards(page.specsItems);
+
+        // ── SECTION 7b: WHY CHOOSE ICSDC (8 bullets) ────────────────────────────
+        if (page.whyChooseLabel) setText(document, '#lds-why-choose-label', page.whyChooseLabel);
+        if (page.whyChooseTitle) setText(document, '#lds-why-choose-title', page.whyChooseTitle);
+        if (page.whyChooseDescription) setText(document, '#lds-why-choose-desc', page.whyChooseDescription);
+        if (page.whyChoosePoints && Array.isArray(page.whyChoosePoints) && page.whyChoosePoints.length) {
+            var list = document.getElementById('lds-why-choose-list');
+            if (list) {
+                list.innerHTML = page.whyChoosePoints.map(function (pt) {
+                    return '<li><i class="fa-solid fa-circle-check" aria-hidden="true"></i><span>' + pt + '</span></li>';
+                }).join('');
+            }
+        }
 
         // ── SECTION 8: SUPPORT ───────────────────────────────────────────────────
         ldsPopulateSectionHeader('lds-support', page.supportLabel, page.supportTitle, page.supportSubtitle);
@@ -233,11 +265,17 @@ function ldsPopulateSpecsCards(items) {
     sorted.forEach(function (item, i) {
         var card = cards[i];
         if (!card) return;
+        // Strapi component: label + description (ds.checklist-item)
         var h3 = card.querySelector('h3');
-        if (h3) h3.innerHTML = item.label || '';
+        if (h3) h3.innerHTML = item.label || item.title || '';
         var ul = card.querySelector('.lds-specs-list');
-        if (ul && item.description) {
-            ul.innerHTML = '<li>' + item.description + '</li>';
+        var rawDesc = item.description || item.desc || '';
+        if (ul && rawDesc) {
+            // Split on newline — each line becomes its own bullet with check icon
+            var lines = rawDesc.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+            ul.innerHTML = lines.map(function (line) {
+                return '<li><i class="fa-solid fa-circle-check"></i>' + line + '</li>';
+            }).join('');
         }
     });
 }

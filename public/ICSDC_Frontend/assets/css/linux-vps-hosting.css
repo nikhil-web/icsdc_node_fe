@@ -120,12 +120,14 @@
 }
 
 /* ══════════════════════════════════════
-   VPS PLANS GRID — 4 COLUMNS
+   VPS PLANS GRID — 3 COLUMNS
+   Card design matches site-wide pricing
+   plan style (same as vht-plan-card etc.)
 ══════════════════════════════════════ */
 .lvps-plans-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
     margin-top: 40px;
 }
 
@@ -133,12 +135,11 @@
     background: var(--white);
     border: 1.5px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 28px 22px;
+    padding: 32px 24px;
     box-shadow: var(--shadow-card);
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 0;
     transition: transform var(--transition-base) ease,
         box-shadow var(--transition-base) ease,
         border-color var(--transition-base) ease;
@@ -147,10 +148,10 @@
 .lvps-plan-card:hover {
     transform: translateY(-6px);
     box-shadow: var(--shadow-card-hover);
-    border-color: rgba(26, 86, 219, 0.22);
+    border-color: rgba(26, 86, 219, 0.28);
 }
 
-.lvps-plan-card.lvps-plan-popular {
+.lvps-plan-card.lvps-plan-featured {
     border-color: var(--blue);
     border-width: 2px;
 }
@@ -183,12 +184,12 @@
 }
 
 .lvps-plan-price {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 800;
     color: var(--blue);
     letter-spacing: -0.03em;
     line-height: 1.1;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .lvps-plan-price span {
@@ -198,44 +199,42 @@
     letter-spacing: 0;
 }
 
-/* Specs 2-column mini-grid */
-.lvps-plan-specs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin: 0 0 20px;
-}
-
-.lvps-plan-spec {
-    background: var(--bg-light);
-    border-radius: 8px;
-    padding: 8px 10px;
+/* Checkmark feature list */
+.lvps-plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 10px;
 }
 
-.lvps-plan-spec-label {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-}
-
-.lvps-plan-spec-value {
-    font-size: 14px;
-    font-weight: 700;
+.lvps-plan-features li {
+    font-size: 13px;
     color: var(--text-dark);
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.5;
 }
 
-/* Plan CTA button */
+.lvps-plan-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* Plan CTA buttons */
 .lvps-plan-btn {
     width: 100%;
     padding: 12px 20px;
-    background: var(--blue);
-    color: var(--white);
-    border: none;
+    background: transparent;
+    color: var(--blue);
+    border: 2px solid var(--blue);
     border-radius: var(--radius-sm);
     font-size: 14px;
     font-weight: 600;
@@ -247,12 +246,82 @@
         transform var(--transition-fast) ease,
         box-shadow var(--transition-base) ease;
     min-height: 44px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
 }
 
 .lvps-plan-btn:hover {
+    background: var(--blue-light, #eff6ff);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.14);
+}
+
+.lvps-plan-btn-featured {
+    width: 100%;
+    padding: 12px 20px;
+    background: var(--blue);
+    color: var(--white);
+    border: 2px solid var(--blue);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    margin-top: auto;
+    transition: background var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 44px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.lvps-plan-btn-featured:hover {
     background: var(--blue-dark, #1448b8);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.25);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.30);
+}
+
+/* ══════════════════════════════════════
+   WHY CHOOSE ICSDC — CHECKLIST GRID
+══════════════════════════════════════ */
+.lvps-checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px 40px;
+    margin-top: 40px;
+}
+
+.lvps-checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-dark);
+    line-height: 1.5;
+}
+
+.lvps-checklist-item i {
+    color: var(--blue);
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 1023px) {
+    .lvps-checklist-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .lvps-checklist-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
 }
 
 /* ══════════════════════════════════════
@@ -285,9 +354,10 @@
 }
 
 .lvps-os-icon {
-    font-size: 28px;
-    margin-bottom: 8px;
+    font-size: 32px;
+    margin-bottom: 10px;
     line-height: 1;
+    color: var(--blue);
 }
 
 .lvps-os-name {
@@ -336,13 +406,6 @@
    RESPONSIVE BREAKPOINTS
 ══════════════════════════════════════ */
 
-/* 1280px — plans start compressing */
-@media (max-width: 1279px) {
-    .lvps-plans-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
 /* 1024px — 2 columns for most grids */
 @media (max-width: 1023px) {
     .lvps-plans-grid {
@@ -358,7 +421,7 @@
     }
 }
 
-/* 640px — single column */
+/* 767px — single column */
 @media (max-width: 767px) {
     .lvps-plans-grid {
         grid-template-columns: 1fr;
@@ -370,10 +433,6 @@
 
     .lvps-cp-grid {
         grid-template-columns: 1fr;
-    }
-
-    .lvps-plan-specs {
-        grid-template-columns: 1fr 1fr;
     }
 
     .lvps-hero-visual {

@@ -1,0 +1,121 @@
+/* ══════════════════════════════════════════════════════════
+   BUILDER PAGE — Minimal overrides for builder-rendered pages
+   ══════════════════════════════════════════════════════════ */
+
+/* Eyebrow inside the builder hero (matches existing .wp-eyebrow pattern) */
+#builder-page-root .builder-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(26, 86, 219, 0.15);
+}
+
+/* Builder hero CTAs use existing .btn-primary / .btn-outline classes — no overrides needed. */
+
+/* ══════════════════════════════════════════════════════════
+   BUILDER HERO
+   - Full viewport-height feel (matches the homepage hero)
+   - 2-column layout: image one side, content the other
+   - Image side configurable via .builder-hero-img-left / -img-right
+   ══════════════════════════════════════════════════════════ */
+.builder-hero {
+    min-height: calc(100vh - 80px); /* full screen minus nav */
+    display: flex;
+    align-items: center;
+}
+
+.builder-hero .hero {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+/* Default = image left, content right. Flip via order when imageSide='right'. */
+.builder-hero-img-right .hero-right { order: 2; }
+.builder-hero-img-right .hero-content { order: 1; }
+.builder-hero-img-left  .hero-right { order: 1; }
+.builder-hero-img-left  .hero-content { order: 2; }
+
+.builder-hero .hero-right-image {
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    display: block;
+}
+
+/* If the image fails or no URL was given, the content should still fill the row. */
+.builder-hero .hero:has(.hero-content:only-child) {
+    grid-template-columns: 1fr;
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* ─── Tablet / mobile ─── */
+@media (max-width: 900px) {
+    .builder-hero {
+        min-height: auto;
+    }
+    .builder-hero .hero {
+        grid-template-columns: 1fr;
+    }
+    .builder-hero-img-left  .hero-right,
+    .builder-hero-img-right .hero-right {
+        order: 0;
+    }
+    .builder-hero-img-left  .hero-content,
+    .builder-hero-img-right .hero-content {
+        order: 1;
+    }
+    .builder-hero .hero-right-image { margin: 0 auto; }
+}
+
+/* Section spacing inside the builder root — ensure CTAs and section blocks aren't
+   crammed against each other when sections are stacked back-to-back. */
+#builder-page-root > div + div { margin-top: 0; }
+#builder-page-root .section,
+#builder-page-root .faq-section,
+#builder-page-root .cloud-cta-band { padding-top: 60px; padding-bottom: 60px; }
+
+/* Anchor styling for plan card CTAs (avoid default underlines) */
+#builder-page-root .wp-plan-btn {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Preview-mode banner — pinned to the top of the body when previewing drafts */
+.builder-preview-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--blue);
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    z-index: 9999;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.builder-preview-banner i { font-size: 14px; }
+
+body:has(.builder-preview-banner) nav {
+    top: 36px;
+}

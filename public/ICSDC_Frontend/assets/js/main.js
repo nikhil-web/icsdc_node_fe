@@ -225,7 +225,10 @@ function initLoginButton(menuData) {
 
     const { btnText, Link } = menuData.data.LoginButton;
     loginButtons.forEach((loginBtn) => {
-        loginBtn.textContent = btnText || "Login";
+        // Prepend a user icon so the button matches the icon+label style of .btn-wa-nav
+        loginBtn.innerHTML =
+            '<i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i>' +
+            '<span>' + (btnText || 'Login') + '</span>';
         if (Link) {
             loginBtn.addEventListener("click", () => {
                 window.location.href = Link;
@@ -269,6 +272,171 @@ function initCtaButton(menuData) {
     if (mobileLogin) {
         mobileLogin.insertAdjacentElement('afterend', makeBtn('mobile-cta-btn'));
     }
+}
+
+// ══════════════════════════════════════════════════════════
+//  WHATSAPP FLOATING WIDGET
+//  Bubble bottom-right of every page. Click → popover with an
+//  editable message → submit opens wa.me/<number>?text=<msg>.
+//  No phone/name capture — we already know the company number,
+//  and WhatsApp itself collects the visitor's identity on send.
+//  Config comes from the Strapi navigation single type's
+//  `whatsappWidget` component. If missing or enabled=false, no-op.
+// ══════════════════════════════════════════════════════════
+function initWhatsappWidget(menuData) {
+    const cfg = menuData?.data?.whatsappWidget;
+    if (!cfg || cfg.enabled === false || !cfg.phoneNumber) return;
+
+    // Don't mount twice
+    if (document.getElementById('wa-nav-btn')) return;
+
+    const cleanPhone = String(cfg.phoneNumber).replace(/[^0-9]/g, '');
+    if (!cleanPhone) return;
+
+    const title          = cfg.popoverTitle    || 'Chat with us on WhatsApp';
+    const subtitle       = cfg.popoverSubtitle || "Send us a quick message and we'll get back to you.";
+    const defaultMessage = cfg.defaultMessage  || "Hi, I'd like to know more about ICSDC services.";
+
+    // ── Navbar buttons (desktop + mobile menu) ──────────────
+    let popover     = null;
+    let activeAnchor = null;
+
+    function makeWaBtn(id, extraClass) {
+        const btn = document.createElement('button');
+        btn.id   = id;
+        btn.type = 'button';
+        btn.className = 'btn-wa-nav' + (extraClass ? ' ' + extraClass : '');
+        btn.setAttribute('aria-label', 'Chat on WhatsApp');
+        btn.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span> WhatsApp</span>';
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            popover ? closePopover() : openPopover(btn);
+        });
+        return btn;
+    }
+
+    // Desktop nav — insert after .desktop-login-btn
+    const desktopLogin = document.querySelector('.desktop-login-btn');
+    if (desktopLogin) desktopLogin.insertAdjacentElement('afterend', makeWaBtn('wa-nav-btn', ''));
+
+    // Mobile menu — wrap login + WA in a flex row so they sit side by side
+    const mobileLogin = document.querySelector('.mobile-login-btn');
+    if (mobileLogin) {
+        const row = document.createElement('div');
+        row.className = 'mobile-cta-row';
+        mobileLogin.parentNode.insertBefore(row, mobileLogin);
+        row.appendChild(mobileLogin);
+        row.appendChild(makeWaBtn('wa-nav-btn-mobile', 'btn-wa-nav--mobile'));
+    }
+
+    // ── Position popover anchored to the button that opened it ──
+    function positionPopover(anchorEl) {
+        if (!popover || !anchorEl) return;
+        const rect = anchorEl.getBoundingClientRect();
+        const popW = Math.min(340, window.innerWidth - 24);
+        // Fixed 80 px from the top of the viewport; right edge aligns with the button
+        let right = window.innerWidth - rect.right;
+        right = Math.max(right, 8);
+        if (window.innerWidth - right < popW) right = window.innerWidth - popW - 8;
+
+        popover.style.top    = '80px';
+        popover.style.right  = right + 'px';
+        popover.style.bottom = 'auto';
+        popover.style.left   = 'auto';
+    }
+
+    function openPopover(anchorEl) {
+        if (popover) return;
+        activeAnchor = anchorEl;
+        popover = document.createElement('div');
+        popover.className = 'wa-popover';
+        popover.setAttribute('role', 'dialog');
+        popover.setAttribute('aria-labelledby', 'wa-pop-title');
+        popover.innerHTML =
+            '<div class="wa-pop-head">' +
+                '<div class="wa-pop-avatar"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>' +
+                '<div class="wa-pop-head-text">' +
+                    '<div id="wa-pop-title" class="wa-pop-title">' + escapeHtml(title) + '</div>' +
+                    '<div class="wa-pop-sub">' + escapeHtml(subtitle) + '</div>' +
+                '</div>' +
+                '<button class="wa-pop-close" type="button" aria-label="Close">&times;</button>' +
+            '</div>' +
+            '<form class="wa-pop-form" novalidate>' +
+                '<label class="wa-field">' +
+                    '<span class="wa-label">Your message</span>' +
+                    '<textarea name="message" class="wa-input wa-textarea" rows="4" placeholder="Type your message…">' + escapeHtml(defaultMessage) + '</textarea>' +
+                '</label>' +
+                '<button type="submit" class="wa-submit"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Continue on WhatsApp</button>' +
+                '<p class="wa-trust">Opens a chat with our team.</p>' +
+            '</form>' +
+            '<div class="wa-pop-success" hidden>' +
+                '<div class="wa-pop-success-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>' +
+                '<div class="wa-pop-success-text">Opening WhatsApp…</div>' +
+            '</div>';
+        document.body.appendChild(popover);
+        positionPopover(anchorEl);
+        // Trigger CSS open transition
+        requestAnimationFrame(() => popover.classList.add('is-open'));
+        if (activeAnchor) activeAnchor.classList.add('is-open');
+
+        popover.querySelector('.wa-pop-close').addEventListener('click', closePopover);
+        popover.querySelector('.wa-pop-form').addEventListener('submit', onSubmit);
+        document.addEventListener('keydown', onEsc);
+        document.addEventListener('click', onOutsideClick);
+        window.addEventListener('resize', onResize);
+        // Focus message textarea so visitor can start typing immediately
+        setTimeout(() => {
+            const ta = popover.querySelector('.wa-textarea');
+            if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+        }, 60);
+    }
+
+    function closePopover() {
+        if (!popover) return;
+        document.removeEventListener('keydown', onEsc);
+        document.removeEventListener('click', onOutsideClick);
+        window.removeEventListener('resize', onResize);
+        popover.classList.remove('is-open');
+        if (activeAnchor) activeAnchor.classList.remove('is-open');
+        const ref = popover;
+        popover = null;
+        activeAnchor = null;
+        setTimeout(() => ref.remove(), 200);
+    }
+
+    function onEsc(e) { if (e.key === 'Escape') closePopover(); }
+    function onResize() { positionPopover(activeAnchor); }
+    function onOutsideClick(e) {
+        if (!popover) return;
+        if (popover.contains(e.target) || (activeAnchor && activeAnchor.contains(e.target))) return;
+        closePopover();
+    }
+
+    function onSubmit(e) {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const data = new FormData(form);
+        const message = String(data.get('message') || '').trim() || defaultMessage;
+
+        // Build the universal wa.me link — opens the WhatsApp app if installed,
+        // otherwise falls back to web.whatsapp.com. Either way the visitor lands
+        // in a chat with our number, with the message pre-filled.
+        const waUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(message);
+
+        // Brief success state, then hand off to WhatsApp.
+        form.style.display = 'none';
+        popover.querySelector('.wa-pop-success').hidden = false;
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
+
+        setTimeout(closePopover, 1100);
+    }
+
+    function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, (c) =>
+            ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    // Click handlers are attached inside makeWaBtn — nothing extra needed here.
 }
 
 // ══════════════════════════════════════════════════════════
@@ -369,6 +537,13 @@ async function init() {
         initMainLogo(menuData);
         initLoginButton(menuData);
         initCtaButton(menuData);
+        initWhatsappWidget(menuData);
+
+        // Contact popup modal — lazy-loaded; available site-wide via
+        // window.openContactPopup() and on any <a href="contact-popup">.
+        import('/assets/js/contact-modal.js')
+            .then(function (m) { m.initContactModal(); })
+            .catch(function (err) { console.warn('[main] contact-modal load failed', err); });
 
         // Inject footer template into the placeholder element
         const footerEl = document.getElementById('site-footer');
@@ -389,6 +564,9 @@ async function init() {
 }
 
 init();
+
+// Load chat widget after main init (dynamic import keeps main.js lean)
+import('./chat-widget.js').then(function (m) { m.initChatWidget(); }).catch(function () {});
 
 // ══════════════════════════════════════════════════════
 //  THEME TOGGLE
@@ -455,6 +633,6 @@ function initThemeToggle() {
     // Insert mobile row inside mobile-menu, before the mobile login button
     var mobileMenu = document.getElementById('mobile-menu');
     var mobileLoginBtn = mobileMenu && mobileMenu.querySelector('.mobile-login-btn');
-    if (mobileLoginBtn) mobileMenu.insertBefore(mobileRow, mobileLoginBtn);
+    if (mobileLoginBtn && mobileLoginBtn.parentNode === mobileMenu) mobileMenu.insertBefore(mobileRow, mobileLoginBtn);
     else if (mobileMenu) mobileMenu.appendChild(mobileRow);
 }

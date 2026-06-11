@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-MXV9SGZS');</script>
+    <!-- End Google Tag Manager -->
     <script src="assets/js/theme-init.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,11 +25,16 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/cloud-components.css">
+    <link rel="stylesheet" href="assets/css/contact-us.css">
     <link rel="stylesheet" href="assets/css/azure-cloud-hosting.css">
     <link rel="stylesheet" href="assets/css/dark-mode.css">
 </head>
 
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MXV9SGZS" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
     <!-- PAGE LOADER -->
     <div id="page-loader">
@@ -92,38 +107,95 @@
                 </div>
             </div>
 
-            <!-- Contact form on the right -->
+            <!-- Right column: contact form (toggled via heroFormEnabled) -->
             <div class="hero-right azure-hero-right">
-                <div class="azure-hero-visual">
-                    <h2 class="azure-hero-form-title">Talk to Our Azure Specialists</h2>
-                    <p class="azure-hero-form-sub">Get a custom architecture, migration plan, and cost estimate within
-                        24 hours.</p>
-                    <form class="azure-hero-form" id="azure-hero-form" novalidate>
-                        <div class="azure-form-field">
-                            <input type="text" class="azure-form-input" placeholder="Your Name *" required
-                                aria-label="Your name">
+
+                <!-- FORM (shown when heroFormEnabled === true) — shared security-page form -->
+                <div class="hero-form-wrap" style="display:none">
+                    <div class="cu-hero-form-wrap">
+                        <h3 class="cu-hero-form-title">Talk to Our Azure Specialists</h3>
+                        <form id="hf-form" class="cu-form" novalidate>
+                            <div class="cu-form-row">
+                                <div class="cu-field">
+                                    <label for="hf-name" class="cu-label">Your Name <span
+                                            class="cu-required">*</span></label>
+                                    <input type="text" id="hf-name" name="name" class="cu-input"
+                                        placeholder="John Smith" required>
+                                </div>
+                                <div class="cu-field">
+                                    <label for="hf-email" class="cu-label">Email Address <span
+                                            class="cu-required">*</span></label>
+                                    <input type="email" id="hf-email" name="email" class="cu-input"
+                                        placeholder="john@company.com" required>
+                                </div>
+                            </div>
+                            <div class="cu-form-row">
+                                <div class="cu-field">
+                                    <label for="hf-phone" class="cu-label">Phone Number</label>
+                                    <input type="tel" id="hf-phone" name="phone" class="cu-input"
+                                        placeholder="+91 98765 43210">
+                                </div>
+                                <div class="cu-field">
+                                    <label for="hf-company" class="cu-label">Company / Organization</label>
+                                    <input type="text" id="hf-company" name="company" class="cu-input"
+                                        placeholder="Your Company Ltd.">
+                                </div>
+                            </div>
+                            <div class="cu-field">
+                                <label for="hf-subject" class="cu-label">What Can We Help You With? <span
+                                        class="cu-required">*</span></label>
+                                <select id="hf-subject" name="subject" class="cu-input cu-select" required>
+                                    <option value="" disabled selected>Select a topic&hellip;</option>
+                                    <option value="vps-cloud">VPS / Cloud Hosting Questions</option>
+                                    <option value="infrastructure">Infrastructure Planning</option>
+                                    <option value="migration">Migration &amp; Performance</option>
+                                    <option value="security">Security &amp; Compliance</option>
+                                    <option value="pricing">Pricing &amp; Plans</option>
+                                    <option value="partnerships">Partnerships &amp; Reseller</option>
+                                    <option value="support">Technical Support</option>
+                                    <option value="other">Other / General Inquiry</option>
+                                </select>
+                            </div>
+                            <div class="cu-field">
+                                <label for="hf-message" class="cu-label">Your Message <span
+                                        class="cu-required">*</span></label>
+                                <textarea id="hf-message" name="message" class="cu-input cu-textarea" rows="3"
+                                    placeholder="Tell us about your requirement&hellip;" required></textarea>
+                            </div>
+                            <button type="submit" class="cu-submit-btn">Send Message &rarr;</button>
+                        </form>
+                        <div id="hf-success" class="cu-form-success" style="display:none">
+                            <div class="cu-success-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                            </div>
+                            <h3>Message Sent!</h3>
+                            <p>Thank you for reaching out. Our team will get back to you shortly.</p>
                         </div>
-                        <div class="azure-form-field">
-                            <input type="email" class="azure-form-input" placeholder="Business Email *" required
-                                aria-label="Business email">
+                    </div>
+                </div>
+
+                <!-- FALLBACK visual (shown when heroFormEnabled === false) -->
+                <div class="azure-hero-fallback">
+                    <div class="azure-hero-visual azure-hero-visual--fallback">
+                        <div class="azure-fallback-badge">&#9729; Microsoft Azure</div>
+                        <div class="azure-fallback-stats">
+                            <div class="azure-fallback-stat">
+                                <div class="azure-fallback-num">24&times;7</div>
+                                <div class="azure-fallback-label">Monitoring &amp; Support</div>
+                            </div>
+                            <div class="azure-fallback-stat">
+                                <div class="azure-fallback-num">99.9%</div>
+                                <div class="azure-fallback-label">Uptime SLA</div>
+                            </div>
+                            <div class="azure-fallback-stat">
+                                <div class="azure-fallback-num">30+</div>
+                                <div class="azure-fallback-label">Global Regions</div>
+                            </div>
+                            <div class="azure-fallback-stat">
+                                <div class="azure-fallback-num">100%</div>
+                                <div class="azure-fallback-label">Managed Service</div>
+                            </div>
                         </div>
-                        <div class="azure-form-field">
-                            <input type="tel" class="azure-form-input" placeholder="Phone Number *" required
-                                aria-label="Phone number">
-                        </div>
-                        <div class="azure-form-field">
-                            <input type="text" class="azure-form-input" placeholder="Company Name"
-                                aria-label="Company name">
-                        </div>
-                        <div class="azure-form-field">
-                            <textarea class="azure-form-input azure-form-textarea"
-                                placeholder="Describe your cloud requirements..."
-                                aria-label="Cloud requirements"></textarea>
-                        </div>
-                        <button type="submit" class="azure-form-submit">Request a Quote &rarr;</button>
-                        <p class="azure-form-privacy">Your data is safe. We never share your information with third
-                            parties.</p>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -189,7 +261,7 @@
                     adoption by providing structured guidance, precise engineering, and continuous operational
                     excellence. Our goal is to ensure your cloud works seamlessly — so your teams can innovate without
                     disruption.</p>
-                <ul class="azure-who-list">
+                <ul class="azure-who-list" id="azure-who-list">
                     <li>
                         <span class="azure-who-check" aria-hidden="true">
                             <i class="fa-solid fa-cloud" aria-hidden="true"></i>
@@ -350,7 +422,7 @@
          SECTION 5 — MICROSOFT AZURE vs ICSDC AZURE
     ════════════════════════════════════ -->
     <section id="azure-compare" class="azure-compare-section section">
-        <div class="azure-compare-container">
+        <div class="azure-compare-container container">
             <p class="azure-section-label azure-section-label-center">Comparison</p>
             <h2 class="title" data-animate="fade-up">Why Choose ICSDC Azure When Microsoft Azure Is There?</h2>
             <p class="subtitle azure-compare-subtitle">
@@ -435,9 +507,34 @@
                 </table>
             </div>
 
-            <div class="azure-compare-cta">
-                <button class="btn-primary">Get a Tailored Azure Plan &rarr;</button>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         CTA BAND — TAILORED PLAN (after comparison)
+    ════════════════════════════════════ -->
+    <section id="azure-quote-cta" class="azure-cta-band section" aria-label="Request a tailored Azure plan">
+        <div class="azure-cta-inner">
+            <h2 id="azure-quote-cta-title">Get a Tailored Azure Plan That Saves Cost &amp; Boosts Performance</h2>
+            <p id="azure-quote-cta-desc" class="azure-cta-desc" hidden></p>
+            <div class="azure-cta-btns">
+                <button class="azure-cta-btn-primary" id="azure-quote-cta-btn"
+                    onclick="window.location.href='/contact-us'">Request Your Quote &rarr;</button>
             </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SECTION — ICSDC AZURE CLOUD SERVICE PLANS
+    ════════════════════════════════════ -->
+    <section id="azure-plans" class="section azure-plans-section">
+        <div class="container">
+            <p class="azure-section-label" data-animate="fade-up">Pricing</p>
+            <h2 class="title" data-animate="fade-up">ICSDC Azure Cloud Service Plans</h2>
+            <p class="subtitle" data-animate="fade-up">Transparent, managed Azure plans built around your workloads
+                &mdash;
+                no surprise bills, no guesswork.</p>
+            <div class="azure-plans-grid" data-stagger></div>
         </div>
     </section>
 
@@ -447,9 +544,10 @@
     <section id="azure-why" class="azure-why-section section">
         <div class="container">
             <p class="azure-section-label">Why ICSDC</p>
-            <h2 class="title" data-animate="fade-up">What Sets Us Apart</h2>
-            <h2 class="subtitle">Choosing ICSDC means partnering with a team that understands how to build, manage, and
-                scale Azure environments with precision.</h2>
+            <h2 class="title" data-animate="fade-up">Why Choose Us?</h2>
+            <p class="subtitle">Choosing ICSDC means partnering with a team that understands how to build, manage, and
+                scale Azure environments with precision.</p>
+            <h2 class="azure-why-subheading" id="azure-why-subheading" data-animate="fade-up">What Sets Us Apart</h2>
 
             <div class="azure-why-grid" data-stagger>
 
@@ -503,53 +601,58 @@
             <h2 class="subtitle">Working with ICSDC means Azure becomes simpler, smoother, and business-driven — not
                 just a technical platform you&rsquo;re left to figure out alone.</h2>
 
-            <div class="azure-process-steps" data-animate="fade-up">
+            <div class="azure-process-layout">
+                <div class="azure-process-steps" data-animate="fade-up">
 
-                <div class="azure-step">
-                    <div class="azure-step-num" aria-hidden="true">1</div>
-                    <div class="azure-step-content">
-                        <h3>Understanding Your Workloads</h3>
-                        <p>We begin by studying your current environment, pain points, and future plans — something
-                            Microsoft doesn't do unless you're an enterprise spending huge budgets.</p>
+                    <div class="azure-step">
+                        <div class="azure-step-num" aria-hidden="true">1</div>
+                        <div class="azure-step-content">
+                            <h3>Understanding Your Workloads</h3>
+                            <p>We begin by studying your current environment, pain points, and future plans — something
+                                Microsoft doesn't do unless you're an enterprise spending huge budgets.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="azure-step">
-                    <div class="azure-step-num" aria-hidden="true">2</div>
-                    <div class="azure-step-content">
-                        <h3>Custom Azure Architecture</h3>
-                        <p>Our engineers build an Azure setup designed for your exact needs, not a general template.
-                            Every resource, every rule, every configuration is tailored to you.</p>
+                    <div class="azure-step">
+                        <div class="azure-step-num" aria-hidden="true">2</div>
+                        <div class="azure-step-content">
+                            <h3>Custom Azure Architecture</h3>
+                            <p>Our engineers build an Azure setup designed for your exact needs, not a general template.
+                                Every resource, every rule, every configuration is tailored to you.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="azure-step">
-                    <div class="azure-step-num" aria-hidden="true">3</div>
-                    <div class="azure-step-content">
-                        <h3>Zero-Stress Migration</h3>
-                        <p>You don't deal with scripts, configs, downtime windows, or data loss worries. We handle
-                            everything end-to-end with minimal disruption to your live operations.</p>
+                    <div class="azure-step">
+                        <div class="azure-step-num" aria-hidden="true">3</div>
+                        <div class="azure-step-content">
+                            <h3>Zero-Stress Migration</h3>
+                            <p>You don't deal with scripts, configs, downtime windows, or data loss worries. We handle
+                                everything end-to-end with minimal disruption to your live operations.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="azure-step">
-                    <div class="azure-step-num" aria-hidden="true">4</div>
-                    <div class="azure-step-content">
-                        <h3>Monitoring &amp; Optimization</h3>
-                        <p>We actively monitor your Azure consumption, performance, and security — without waiting for a
-                            ticket. Issues are caught and fixed before you notice them.</p>
+                    <div class="azure-step">
+                        <div class="azure-step-num" aria-hidden="true">4</div>
+                        <div class="azure-step-content">
+                            <h3>Monitoring &amp; Optimization</h3>
+                            <p>We actively monitor your Azure consumption, performance, and security — without waiting for a
+                                ticket. Issues are caught and fixed before you notice them.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="azure-step">
-                    <div class="azure-step-num" aria-hidden="true">5</div>
-                    <div class="azure-step-content">
-                        <h3>Continuous Improvement</h3>
-                        <p>As your business evolves, we expand and reshape your Azure infrastructure without forcing you
-                            to relearn cloud technology. We grow with you.</p>
+                    <div class="azure-step">
+                        <div class="azure-step-num" aria-hidden="true">5</div>
+                        <div class="azure-step-content">
+                            <h3>Continuous Improvement</h3>
+                            <p>As your business evolves, we expand and reshape your Azure infrastructure without forcing you
+                                to relearn cloud technology. We grow with you.</p>
+                        </div>
                     </div>
-                </div>
 
+                </div>
+                <div class="azure-process-visual" data-animate="fade-left">
+                    <img id="azure-process-img" src="" alt="ICSDC Azure process" loading="lazy" style="display:none">
+                </div>
             </div>
         </div>
     </section>
@@ -626,7 +729,7 @@
                 </blockquote>
             </div>
             <div class="azure-security-visual" data-animate="fade-left">
-                <img src="assets/images/azure-security.png" alt="Azure security architecture" loading="lazy">
+                <img id="azure-security-img" src="assets/images/azure-security.png" alt="Azure security architecture" loading="lazy">
             </div>
         </div>
     </section>
@@ -640,7 +743,7 @@
                 <h2>Pricing That Eliminates Surprise Bills</h2>
                 <p>Buying Azure directly can lead to unpredictable bills. But with ICSDC, companies love the clarity:
                 </p>
-                <ul class="azure-pricing-points">
+                <ul class="azure-pricing-points" id="azure-pricing-points">
                     <li>Transparent monthly cost structure</li>
                     <li>Alerts before any unusual spending spike</li>
                     <li>Regular cost reviews with clear reports</li>
@@ -649,12 +752,6 @@
                 <p class="azure-pricing-note">
                     Your cloud stays predictable — not a monthly shock.
                 </p>
-            </div>
-            <div class="azure-pricing-highlight" data-animate="fade-left">
-                <h3>Get a Custom Quote</h3>
-                <p>Tell us about your workloads and we&rsquo;ll design a cost-optimized Azure architecture specifically
-                    for your business.</p>
-                <a href="mailto:info@indiancloudservices.com">Get Your Quote &rarr;</a>
             </div>
         </div>
     </section>
@@ -705,19 +802,79 @@
 
             <div class="faq-col">
                 <h2 class="faq-title" data-animate="fade-up">FAQs about ICSDC Azure Cloud</h2>
-                <dl class="faq-accordions" id="faq-accordions">
-                    <!-- Populated by azure-cloud-hosting.js -->
-                </dl>
-            </div>
-
-            <div class="faq-contact-card" data-animate="fade-left">
-                <h3 class="faq-contact-title">Still have questions?</h3>
-                <p class="faq-contact-desc">Our certified Azure architects are available 24&times;7 to discuss your
-                    cloud requirements and help you make the right decision.</p>
-                <a href="/contact-us.html" class="faq-contact-btn">
-                    Talk to an Azure Expert
-                    <i class="fa-solid fa-headset" aria-hidden="true"></i>
-                </a>
+                <div class="faq-grid">
+                    <div class="faq-accordions" id="faq-accordions"></div>
+                    <aside class="faq-aside">
+                        <div class="faq-illo"><svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="faqCardAazurecloudhosting" x1="0" x2="1" y1="0" y2="1">
+                                        <stop offset="0" stop-color="#1a56db" stop-opacity="0.35" />
+                                        <stop offset="1" stop-color="#1a56db" stop-opacity="0.05" />
+                                    </linearGradient>
+                                    <linearGradient id="faqCardBazurecloudhosting" x1="0" x2="0" y1="0" y2="1">
+                                        <stop offset="0" stop-color="#3b82f6" />
+                                        <stop offset="1" stop-color="#1a56db" />
+                                    </linearGradient>
+                                    <radialGradient id="faqGlowazurecloudhosting" cx="0.5" cy="0.5" r="0.5">
+                                        <stop offset="0" stop-color="#3b82f6" stop-opacity="0.20" />
+                                        <stop offset="1" stop-color="#3b82f6" stop-opacity="0" />
+                                    </radialGradient>
+                                </defs>
+                                <circle cx="160" cy="160" r="140" fill="url(#faqGlowazurecloudhosting)" />
+                                <g transform="rotate(-8 160 160)">
+                                    <rect x="60" y="100" width="200" height="60" rx="10"
+                                        fill="url(#faqCardAazurecloudhosting)" stroke="rgba(59,130,246,0.30)"
+                                        stroke-width="1.5" />
+                                    <rect x="80" y="118" width="120" height="6" rx="3" fill="rgba(26,86,219,0.30)" />
+                                    <rect x="80" y="132" width="80" height="6" rx="3" fill="rgba(26,86,219,0.18)" />
+                                    <circle cx="230" cy="130" r="10" fill="rgba(59,130,246,0.25)"
+                                        stroke="rgba(59,130,246,0.50)" stroke-width="1.5" />
+                                    <path d="M226 130 L230 134 L236 126" stroke="#3b82f6" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                </g>
+                                <g transform="rotate(3 160 160)">
+                                    <rect x="55" y="140" width="210" height="64" rx="11" fill="rgba(26,86,219,0.05)"
+                                        stroke="rgba(26,86,219,0.20)" stroke-width="1.5" />
+                                    <rect x="76" y="159" width="140" height="6" rx="3" fill="rgba(26,86,219,0.35)" />
+                                    <rect x="76" y="173" width="100" height="6" rx="3" fill="rgba(26,86,219,0.18)" />
+                                    <circle cx="236" cy="172" r="10" fill="rgba(26,86,219,0.10)"
+                                        stroke="rgba(26,86,219,0.25)" stroke-width="1.5" />
+                                    <path d="M232 172 L236 176 L242 168" stroke="rgba(26,86,219,0.6)" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                </g>
+                                <g transform="translate(0, 18)">
+                                    <rect x="50" y="180" width="220" height="68" rx="12" fill="rgba(59,130,246,0.10)"
+                                        stroke="rgba(59,130,246,0.55)" stroke-width="1.5" />
+                                    <rect x="74" y="200" width="150" height="7" rx="3.5" fill="rgba(26,86,219,0.85)" />
+                                    <rect x="74" y="216" width="110" height="6" rx="3" fill="rgba(26,86,219,0.40)" />
+                                    <circle cx="244" cy="214" r="12" fill="url(#faqCardBazurecloudhosting)" />
+                                    <path d="M238 217 L244 211 L250 217" stroke="white" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                </g>
+                                <g transform="translate(36 36)">
+                                    <circle cx="0" cy="0" r="28" fill="url(#faqCardBazurecloudhosting)"
+                                        stroke="rgba(59,130,246,0.40)" stroke-width="3" /><text x="0" y="10"
+                                        text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="34"
+                                        font-weight="800" fill="white">?</text>
+                                </g>
+                                <circle cx="278" cy="60" r="5" fill="#f59e0b" />
+                                <circle cx="298" cy="80" r="3" fill="#f59e0b" opacity="0.6" />
+                                <circle cx="40" cy="270" r="4" fill="#4fd1c5" opacity="0.8" />
+                                <circle cx="280" cy="270" r="5" fill="#3b82f6" opacity="0.6" />
+                            </svg></div>
+                        <div class="faq-aside-copy">
+                            <h3 class="faq-aside-h">Didn't find your answer?</h3>
+                            <p class="faq-aside-p">Our team is happy to help — reach out and we'll respond within
+                                minutes.</p>
+                            <a href="/contact-us.html" class="faq-aside-link">Talk to our team <svg width="14"
+                                    height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M5 12h14M13 5l7 7-7 7" />
+                                </svg></a>
+                        </div>
+                    </aside>
+                </div>
             </div>
 
         </div>
@@ -761,6 +918,7 @@
         }());
     </script>
 
+    <script src="assets/js/nav-search.js" defer></script>
 </body>
 
 </html>

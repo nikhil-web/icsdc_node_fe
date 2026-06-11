@@ -9,7 +9,8 @@ import {
     populateCtaBand,
     populateTechBadges,
     initTestimonials,
-    initFAQ
+    initFAQ,
+    initHeroContactForm
 } from './utils/cms-helpers.js';
 import { getAzureCloudHostingPage } from './services/contentService.js';
 import { uploadURL } from './services/strapiClient.js';
@@ -50,19 +51,84 @@ import { uploadURL } from './services/strapiClient.js';
         var tbody = section.querySelector('.azure-compare-table tbody');
         if (!tbody) return;
 
+        function statusIcon(status) {
+            if (status === 'cross') return '<span class="azure-compare-cross"><i class="fa-solid fa-xmark" aria-hidden="true"></i></span>';
+            if (status === 'partial' || status === 'neutral') return '<span class="azure-compare-partial"><i class="fa-solid fa-minus" aria-hidden="true"></i></span>';
+            return '<span class="azure-compare-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>';
+        }
+        function cell(status, text) {
+            if (status) return statusIcon(status);
+            if (text) return '<span class="azure-compare-text">' + text + '</span>';
+            return '';
+        }
+
         var sorted = sortByOrder(rows);
         tbody.innerHTML = sorted.map(function (row) {
-            function statusIcon(status) {
-                if (status === 'check') return '<span class="azure-compare-check">✔️</span>';
-                if (status === 'cross') return '<span class="azure-compare-cross">❌</span>';
-                return '<span class="azure-compare-both">✔️</span>';
-            }
-
-            return '<tr>' +
+            // A row with no status enums but text values (e.g. "Best Suited For") is a text row
+            var isTextRow = !row.othersStatus && !row.icsdcStatus && (row.others || row.icsdc);
+            return '<tr' + (isTextRow ? ' class="azure-compare-textrow"' : '') + '>' +
                 '<td>' + (row.feature || '') + '</td>' +
-                '<td>' + (row.microsoftStatus ? statusIcon(row.microsoftStatus) : (row.microsoft || '')) + '</td>' +
-                '<td>' + (row.icsdcStatus ? statusIcon(row.icsdcStatus) : (row.icsdc || '')) + '</td>' +
+                '<td>' + cell(row.othersStatus, row.others) + '</td>' +
+                '<td>' + cell(row.icsdcStatus, row.icsdc) + '</td>' +
                 '</tr>';
+        }).join('');
+    }
+
+    function renderAzurePlans(plans) {
+        var grid = document.querySelector('#azure-plans .azure-plans-grid');
+        if (!grid || !plans || !plans.length) return;
+        var sorted = sortByOrder(plans);
+        grid.innerHTML = sorted.map(function (plan) {
+            var isFeatured = plan.isFeatured || plan.popular || false;
+            var featuredClass = isFeatured ? ' azure-plan-featured' : '';
+            var badgeLabel = plan.badge || (isFeatured ? 'Most Popular' : '');
+            var badgeHtml = badgeLabel ? '<div class="azure-plan-badge">' + badgeLabel + '</div>' : '';
+            var currency = plan.currency || '₹';
+            var period = plan.period || 'mo';
+            var priceHtml = plan.price
+                ? '<div class="azure-plan-price">' + currency + plan.price + ' <span>/' + period + '</span></div>' : '';
+            var taglineHtml = plan.tagline ? '<div class="azure-plan-tagline">' + plan.tagline + '</div>' : '';
+            var featuresArr = plan.features || [];
+            var featuresHtml = featuresArr.length
+                ? '<ul class="azure-plan-features">' + featuresArr.map(function (f) {
+                    return '<li>' + (f.label || f.text || f.name || f) + '</li>';
+                }).join('') + '</ul>' : '';
+            var ctaText = plan.ctaText || 'Get Started';
+            var btnClass = isFeatured ? 'azure-plan-btn-featured' : 'azure-plan-btn';
+            return '<div class="azure-plan-card' + featuredClass + '">' + badgeHtml +
+                '<div class="azure-plan-name">' + (plan.tier || plan.name || '') + '</div>' +
+                priceHtml + taglineHtml + featuresHtml +
+                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' &rarr;</a></div>';
+        }).join('');
+    }
+
+    function renderAzureAboutItems(items) {
+        var list = document.getElementById('azure-who-list');
+        if (!list || !items || !items.length) return;
+        var sorted = sortByOrder(items);
+        list.innerHTML = sorted.map(function (item) {
+            return '<li>' +
+                '<span class="azure-who-check" aria-hidden="true">' + resolveIcon(item.icon) + '</span>' +
+                (item.title || item.text || item.label || '') +
+                '</li>';
+        }).join('');
+    }
+
+    function renderAzurePricingPoints(points) {
+        var list = document.getElementById('azure-pricing-points');
+        if (!list || !points || !points.length) return;
+        list.innerHTML = points.map(function (pt) { return '<li>' + pt + '</li>'; }).join('');
+    }
+
+    function renderAzureSecurity(features) {
+        var list = document.querySelector('#azure-security .azure-security-list');
+        if (!list || !features || !features.length) return;
+        var sorted = sortByOrder(features);
+        list.innerHTML = sorted.map(function (f) {
+            return '<li>' +
+                '<span class="azure-who-check" aria-hidden="true">' + resolveIcon(f.icon) + '</span>' +
+                (f.title || f.text || f.label || '') +
+                '</li>';
         }).join('');
     }
 
@@ -114,16 +180,39 @@ import { uploadURL } from './services/strapiClient.js';
                 setText(hero, '.hero-title', page.heroTitle);
                 setText(hero, '.hero-sub', page.heroSubtitle);
                 setHTML(hero, '.hero-desc', page.heroDescription);
-                setText(hero, '.azure-hero-form-title', page.heroFormTitle);
-                setText(hero, '.azure-hero-form-sub', page.heroFormSubtitle);
-                if (page.heroCtaPrimary?.text) setText(hero, '.hero-btns .btn-primary', page.heroCtaPrimary.text);
-                if (page.heroCtaPrimary?.link) {
-                    var primaryLink = hero.querySelector('.hero-btns .btn-primary');
-                    if (primaryLink) primaryLink.setAttribute('href', page.heroCtaPrimary.link);
+                if (page.heroFormTitle) setText(hero, '.cu-hero-form-title', page.heroFormTitle);
+                // Primary CTA — render when present, hide the button when deleted/empty in Strapi
+                var primaryBtn = hero.querySelector('.hero-btns .btn-primary');
+                if (primaryBtn) {
+                    if (page.heroCtaPrimary && page.heroCtaPrimary.text) {
+                        primaryBtn.textContent = page.heroCtaPrimary.text;
+                        if (page.heroCtaPrimary.link) primaryBtn.setAttribute('href', page.heroCtaPrimary.link);
+                        primaryBtn.style.display = '';
+                    } else {
+                        primaryBtn.style.display = 'none';
+                    }
                 }
-                if (page.heroCtaSecondary?.text) setText(hero, '.hero-btns .btn-outline', page.heroCtaSecondary.text);
+                // Secondary CTA — same: hide when deleted/empty in Strapi
+                var secondaryBtn = hero.querySelector('.hero-btns .btn-outline');
+                if (secondaryBtn) {
+                    if (page.heroCtaSecondary && page.heroCtaSecondary.text) {
+                        secondaryBtn.textContent = page.heroCtaSecondary.text;
+                        if (page.heroCtaSecondary.link) {
+                            secondaryBtn.setAttribute('onclick', "window.location.href='" + page.heroCtaSecondary.link + "'");
+                        }
+                        secondaryBtn.style.display = '';
+                    } else {
+                        secondaryBtn.style.display = 'none';
+                    }
+                }
             }
-            populateHero('.hero-section', { heroImage: page.heroImage });
+            // Form visible by default; only hidden when explicitly set false in Strapi
+            var heroFormOn = page.heroFormEnabled !== false;
+            populateHero('.hero-section', {
+                heroImage: page.heroImage,
+                heroFormEnabled: heroFormOn
+            });
+            if (heroFormOn) initHeroContactForm('hf-form', 'hf-success');
 
             renderAzureCards('#azure-features .why-grid', page.pillars, 'why-card', 'why-icon');
 
@@ -141,6 +230,7 @@ import { uploadURL } from './services/strapiClient.js';
                     if (aboutImgUrl) aboutImg.src = aboutImgUrl;
                 }
             }
+            renderAzureAboutItems(page.aboutItems);
 
             setSectionHeader('azure-advantages', page.advantagesLabel, page.advantagesTitle, page.advantagesSubtitle, {
                 label: '.azure-section-label',
@@ -156,11 +246,32 @@ import { uploadURL } from './services/strapiClient.js';
             });
             renderAzureComparison(page.comparisonColumns, page.comparisonRows);
 
+            // Tailored-plan CTA band (after comparison)
+            if (page.ctaBand2) {
+                var qb = page.ctaBand2;
+                if (qb.title) setText(document, '#azure-quote-cta-title', qb.title);
+                var qDesc = document.getElementById('azure-quote-cta-desc');
+                if (qDesc && qb.description) { qDesc.textContent = qb.description; qDesc.hidden = false; }
+                var qBtn = document.getElementById('azure-quote-cta-btn');
+                if (qBtn && qb.ctaPrimary) {
+                    if (qb.ctaPrimary.text) qBtn.innerHTML = qb.ctaPrimary.text + ' &rarr;';
+                    if (qb.ctaPrimary.link) qBtn.setAttribute('onclick', "window.location.href='" + qb.ctaPrimary.link + "'");
+                }
+            }
+
+            setSectionHeader('azure-plans', page.plansLabel, page.plansTitle, page.plansSubtitle, {
+                label: '.azure-section-label',
+                title: '.title',
+                subtitle: '.subtitle'
+            });
+            renderAzurePlans(page.plans);
+
             setSectionHeader('azure-why', page.whyLabel, page.whyTitle, page.whySubtitle, {
                 label: '.azure-section-label',
                 title: '.title',
                 subtitle: '.subtitle'
             });
+            if (page.whySubheading) setText(document, '#azure-why-subheading', page.whySubheading);
             renderAzureCards('#azure-why .azure-why-grid', page.whyCards, 'azure-why-card', 'azure-adv-icon');
 
             setSectionHeader('azure-process', page.processLabel, page.processTitle, page.processSubtitle, {
@@ -169,6 +280,13 @@ import { uploadURL } from './services/strapiClient.js';
                 subtitle: '.subtitle'
             });
             renderAzureProcess(page.processSteps);
+            if (page.processImage && page.processImage.image) {
+                var procImg = document.getElementById('azure-process-img');
+                if (procImg) {
+                    var procImgUrl = uploadURL(page.processImage.image);
+                    if (procImgUrl) { procImg.src = procImgUrl; procImg.style.display = ''; }
+                }
+            }
 
             setSectionHeader('azure-stack', page.techLabel, page.techTitle, page.techSubtitle, {
                 label: '.azure-section-label',
@@ -182,9 +300,19 @@ import { uploadURL } from './services/strapiClient.js';
                 title: '.azure-security-title',
                 subtitle: '.azure-security-intro'
             });
+            renderAzureSecurity(page.securityFeatures);
+            if (page.securityImage && page.securityImage.image) {
+                var secImg = document.getElementById('azure-security-img');
+                if (secImg) {
+                    var secImgUrl = uploadURL(page.securityImage.image);
+                    if (secImgUrl) secImg.src = secImgUrl;
+                }
+            }
 
             if (page.pricingTitle) setText(document, '#azure-pricing-info h2', page.pricingTitle);
             if (page.pricingDescription) setHTML(document, '#azure-pricing-info .azure-pricing-callout-text > p', page.pricingDescription);
+            if (page.pricingNote) setText(document, '#azure-pricing-info .azure-pricing-note', page.pricingNote);
+            renderAzurePricingPoints(page.pricingPoints);
 
             populateCtaBand('.azure-cta-band', page.ctaBand1);
 

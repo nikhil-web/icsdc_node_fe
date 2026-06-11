@@ -7,6 +7,23 @@
  */
 
 import { CUSTOM_ICONS } from './custom-icons.js';
+import { postAPI } from '../services/strapiClient.js';
+
+/**
+ * Wire a CTA button's click. If `link` is the magic value 'contact-popup'
+ * (or '#contact-popup'), opens the site-wide contact modal via
+ * window.openContactPopup() instead of navigating. Anything else navigates
+ * to that link via window.location.href.
+ */
+export function wireCtaLink(btn, link) {
+    if (!btn || !link) return;
+    if (link === 'contact-popup' || link === '#contact-popup') {
+        btn.setAttribute('onclick',
+            "if(window.openContactPopup){window.openContactPopup();}return false;");
+    } else {
+        btn.setAttribute('onclick', "window.location.href='" + link + "'");
+    }
+}
 
 /* ═══════════════════════════════════════════════════════════════
    FA ICONS MAP  (key → fa icon name, all fa-solid)
@@ -119,11 +136,26 @@ export var FA_ICONS = {
     tag:            'tag',
     // OS / Platform brands (fa-brands)
     linux:          'linux',
+    ubuntu:         'ubuntu',
+    centos:         'centos',
+    debian:         'debian',
+    almalinux:      'linux',
+    rocky:          'linux',
+    fedora:         'fedora',
+    redhat:         'redhat',
+    freebsd:        'freebsd',
     windows:        'windows',
     microsoft:      'microsoft',
     google:         'google',
     aws:            'aws',
     azure:          'microsoft',
+    // Control panels (no FA brand — map to solid icons)
+    cpanel:         'sliders',
+    solusvms:       'server',
+    webmin:         'terminal',
+    plesk:          'sliders',
+    directadmin:    'gauge',
+    'whm':          'sliders',
     // Misc
     settings:       'gear',
     manage:         'gear',
@@ -180,15 +212,28 @@ export var FA_ICONS = {
     api:            'code',
     developer:      'code',
     linux:          'linux',
+    ubuntu:         'ubuntu',
+    centos:         'centos',
+    debian:         'debian',
+    almalinux:      'linux',
+    rocky:          'linux',
+    fedora:         'fedora',
+    redhat:         'redhat',
+    freebsd:        'freebsd',
     windows:        'windows',
     microsoft:      'microsoft',
     google:         'google',
     aws:            'aws',
     azure:          'microsoft',
+    cpanel:         'sliders',
+    solusvms:       'server',
+    webmin:         'terminal',
+    plesk:          'sliders',
+    directadmin:    'gauge',
 };
 
 /* Brand icons that use fa-brands instead of fa-solid */
-var FA_BRANDS = { linux:1, windows:1, microsoft:1, google:1, aws:1, apple:1, android:1, github:1, gitlab:1, docker:1, whatsapp:1, facebook:1, twitter:1, instagram:1, linkedin:1, youtube:1, tiktok:1, slack:1, discord:1, telegram:1, wordpress:1, shopify:1, stripe:1, paypal:1, dropbox:1, spotify:1 };
+var FA_BRANDS = { linux:1, ubuntu:1, centos:1, debian:1, fedora:1, redhat:1, freebsd:1, windows:1, microsoft:1, google:1, aws:1, apple:1, android:1, github:1, gitlab:1, docker:1, whatsapp:1, facebook:1, twitter:1, instagram:1, linkedin:1, youtube:1, tiktok:1, slack:1, discord:1, telegram:1, wordpress:1, shopify:1, stripe:1, paypal:1, dropbox:1, spotify:1 };
 
 /* Legacy SVG map kept for backward compat — empty, all resolved via FA now */
 export var ICONS = {};
@@ -331,14 +376,27 @@ export function populateHero(section, data) {
     if (data.priceNote) setHTML(section, '.price-note', data.priceNote);
 
     var btns = section.querySelectorAll('.hero-btns button');
-    if (btns.length >= 1 && data.ctaPrimary) {
-        var primaryBtn = btns.length >= 2 ? btns[1] : btns[0];
-        primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' &rarr;';
-        if (data.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + data.ctaPrimary.link + "'");
+    var ctaPrimaryProvided  = Object.prototype.hasOwnProperty.call(data, 'ctaPrimary');
+    var ctaSecondaryProvided = Object.prototype.hasOwnProperty.call(data, 'ctaSecondary');
+
+    // btns[0] = btn-primary (dark), btns[1] = btn-outline (secondary)
+    if (btns.length >= 1) {
+        var primaryBtn = btns[0];
+        if (data.ctaPrimary && data.ctaPrimary.text) {
+            primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' &rarr;';
+            wireCtaLink(primaryBtn, data.ctaPrimary.link);
+        } else if (ctaPrimaryProvided) {
+            primaryBtn.style.display = 'none';
+        }
     }
-    if (btns.length >= 2 && data.ctaSecondary) {
-        btns[0].textContent = data.ctaSecondary.text || '';
-        if (data.ctaSecondary.link) btns[0].setAttribute('onclick', "window.location.href='" + data.ctaSecondary.link + "'");
+    if (btns.length >= 2) {
+        var secondaryBtn = btns[1];
+        if (data.ctaSecondary && data.ctaSecondary.text) {
+            secondaryBtn.textContent = data.ctaSecondary.text || '';
+            wireCtaLink(secondaryBtn, data.ctaSecondary.link);
+        } else if (ctaSecondaryProvided) {
+            secondaryBtn.style.display = 'none';
+        }
     }
 
     if (data.heroImage && data.heroImage.image) {
@@ -360,6 +418,22 @@ export function populateHero(section, data) {
             }
         }
     }
+
+    // Hero form toggle — takes precedence over heroImage
+    if (data.heroFormEnabled) {
+        var heroRightEl = section.querySelector('.hero-right');
+        if (heroRightEl) {
+            // Mark for CSS: keeps hero-right visible on mobile (overrides display:none)
+            heroRightEl.classList.add('hero-right--has-form');
+            heroRightEl.style.display = 'flex'; // force visible even at ≤1023px
+            var formWrap = heroRightEl.querySelector('.hero-form-wrap');
+            if (formWrap) {
+                Array.from(heroRightEl.children).forEach(function (child) {
+                    child.style.display = child === formWrap ? '' : 'none';
+                });
+            }
+        }
+    }
 }
 
 export function populateIconCards(gridSelector, cards, cardClass, customIcons) {
@@ -369,16 +443,21 @@ export function populateIconCards(gridSelector, cards, cardClass, customIcons) {
 
     var cls = cardClass || 'why-card';
     var iconCls = cls.replace('-card', '-icon');
+    var linkCls = cls.replace('-card', '-link');
 
     var sorted = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
 
     grid.innerHTML = sorted.map(function (card) {
+        var linkHtml = card.link
+            ? '<a href="' + card.link + '" class="' + linkCls + '">Learn more &rarr;</a>'
+            : '';
         return '<div class="' + cls + '">' +
             '<div class="' + iconCls + '" aria-hidden="true">' +
             resolveIcon(card.icon, customIcons) +
             '</div>' +
             '<h3>' + (card.title || '') + '</h3>' +
             '<p>' + (card.desc || card.description || '') + '</p>' +
+            linkHtml +
             '</div>';
     }).join('');
 }
@@ -413,7 +492,7 @@ export function populateCtaBand(selector, cta) {
         if (primaryBtn) {
             if (cta.ctaPrimary && cta.ctaPrimary.text) {
                 primaryBtn.innerHTML = cta.ctaPrimary.text + ' &rarr;';
-                if (cta.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
+                wireCtaLink(primaryBtn, cta.ctaPrimary.link);
             } else {
                 primaryBtn.remove();
             }
@@ -421,7 +500,7 @@ export function populateCtaBand(selector, cta) {
         if (secondaryBtn) {
             if (cta.ctaSecondary && cta.ctaSecondary.text) {
                 secondaryBtn.textContent = cta.ctaSecondary.text;
-                if (cta.ctaSecondary.link) secondaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
+                wireCtaLink(secondaryBtn, cta.ctaSecondary.link);
             } else {
                 secondaryBtn.remove();
             }
@@ -680,38 +759,33 @@ export function markActiveNavLink() {
 }
 
 export function initFAQ(faqItems) {
-    var dl = document.getElementById('faq-accordions');
-    if (!dl || !faqItems || !faqItems.length) return;
+    var container = document.getElementById('faq-accordions');
+    if (!container || !faqItems || !faqItems.length) return;
 
+    var chevronSVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
     var sorted = faqItems.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-    var openIndex = 0;
 
-    function render() {
-        dl.innerHTML = sorted.map(function (faq, i) {
-            var isOpen = i === openIndex;
-            return '<div class="faq-item' + (isOpen ? ' faq-open' : '') + '" data-faq-index="' + i + '">' +
-                '<dt>' +
-                '<button class="faq-question" aria-expanded="' + isOpen + '" aria-controls="acr-faq-' + i + '">' +
-                '<span>' + faq.question + '</span>' +
-                '<i class="fa-solid fa-chevron-down faq-chevron" aria-hidden="true"></i>' +
-                '</button>' +
-                '</dt>' +
-                '<dd class="faq-answer" id="acr-faq-' + i + '" role="region">' +
-                '<p>' + faq.answer + '</p>' +
-                '</dd>' +
-                '</div>';
-        }).join('');
+    container.innerHTML = sorted.map(function (faq, i) {
+        var num = String(i + 1).padStart(2, '0');
+        return '<details class="faq-item"' + (i === 0 ? ' open' : '') + '>' +
+            '<summary class="faq-q">' +
+            '<span class="faq-num">' + num + '</span>' +
+            '<span class="faq-q-text">' + (faq.question || '') + '</span>' +
+            '<span class="faq-chev">' + chevronSVG + '</span>' +
+            '</summary>' +
+            '<div class="faq-a-wrap"><div class="faq-a">' + (faq.answer || '') + '</div></div>' +
+            '</details>';
+    }).join('');
 
-        dl.querySelectorAll('.faq-question').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var index = parseInt(btn.closest('.faq-item').dataset.faqIndex, 10);
-                openIndex = (openIndex === index) ? null : index;
-                render();
-            });
+    // Single-open accordion
+    var items = container.querySelectorAll('.faq-item');
+    items.forEach(function (item) {
+        item.addEventListener('toggle', function () {
+            if (item.open) {
+                items.forEach(function (other) { if (other !== item) other.open = false; });
+            }
         });
-    }
-
-    render();
+    });
 }
 
 export function initTestimonials(items) {
@@ -813,5 +887,70 @@ export function initTestimonials(items) {
             currentIdx = closest;
             updateDots(closest);
         }, 80);
+    });
+}
+
+/**
+ * initHeroContactForm(formId, successId)
+ * ──────────────────────────────────────
+ * Attaches a validated submit handler to a hero-embedded contact form.
+ * Used on pages where heroFormEnabled is toggled on in Strapi.
+ * POSTs to /api/contact-submissions — same endpoint as the /contact-us page.
+ *
+ * @param {string} formId    - id of the <form> element (e.g. 'hf-form')
+ * @param {string} successId - id of the success state div  (e.g. 'hf-success')
+ */
+export function initHeroContactForm(formId, successId) {
+    var form = document.getElementById(formId);
+    var successMsg = document.getElementById(successId);
+    if (!form) return;
+
+    function validatePayload(p) {
+        if (!p.name)    return 'Please enter your name.';
+        if (!p.email)   return 'Please enter your email address.';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)) return 'Please enter a valid email address.';
+        if (!p.subject) return 'Please select a subject.';
+        if (!p.message) return 'Please enter your message.';
+        return null;
+    }
+
+    function showError(message) {
+        form.querySelectorAll('.cu-form-error').forEach(function (el) { el.remove(); });
+        var errEl = document.createElement('p');
+        errEl.className = 'cu-form-error';
+        errEl.style.cssText = 'color:#e53e3e;margin-top:0.75rem;font-size:0.9rem;';
+        errEl.textContent = message;
+        var submitBtn = form.querySelector('[type=submit]');
+        if (submitBtn) submitBtn.insertAdjacentElement('beforebegin', errEl);
+    }
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        form.querySelectorAll('.cu-form-error').forEach(function (el) { el.remove(); });
+
+        var payload = {
+            name:    (form.querySelector('[name=name]')    || {}).value.trim(),
+            email:   (form.querySelector('[name=email]')   || {}).value.trim(),
+            phone:   (form.querySelector('[name=phone]')   || {}).value.trim(),
+            company: (form.querySelector('[name=company]') || {}).value.trim(),
+            subject: (form.querySelector('[name=subject]') || {}).value,
+            message: (form.querySelector('[name=message]') || {}).value.trim(),
+        };
+
+        var err = validatePayload(payload);
+        if (err) { showError(err); return; }
+
+        var submitBtn = form.querySelector('[type=submit]');
+        if (submitBtn) submitBtn.disabled = true;
+
+        try {
+            await postAPI('/api/contact-submissions', payload);
+            form.style.display = 'none';
+            if (successMsg) successMsg.style.display = 'flex';
+        } catch (e) {
+            if (submitBtn) submitBtn.disabled = false;
+            showError('Something went wrong. Please try again or email us directly.');
+            console.error('[hero-form] Submission failed:', e);
+        }
     });
 }

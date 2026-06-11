@@ -39,9 +39,17 @@ export function getFooterHTML() {
             </div>
         </div>
 
-        <!-- ── Copyright bar ────────────────────────────────── -->
+        <!-- ── Bottom bar — copyright + legal links ────────── -->
         <div class="footer-bottom">
             <p>&#169; Copyright <span data-strapi-year id="footer-year"></span> <span data-strapi-company-name>ICSDC</span>. All Rights Reserved</p>
+            <div class="footer-legal-links">
+                <a href="/legal/terms-conditions">Terms &amp; Conditions</a>
+                <a href="/legal/privacy-policy">Privacy Policy</a>
+                <a href="/legal/refund-policy">Refund Policy</a>
+                <a href="/legal/msa">MSA</a>
+                <a href="/legal/aup">AUP</a>
+                <a href="/legal/sla">SLA</a>
+            </div>
         </div>
     `;
 }

@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-MXV9SGZS');</script>
+  <!-- End Google Tag Manager -->
   <script src="assets/js/theme-init.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +31,10 @@
 </head>
 
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MXV9SGZS" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
   <!-- PAGE LOADER -->
   <div id="page-loader">
@@ -175,105 +189,38 @@
   <!-- ════ SECTION 3 — CLOUD PLANS ════ -->
   <section id="lch-plans" class="section cloud-pricing-section">
     <div class="container">
-      <span class="cloud-section-label" data-animate="fade-up">Pricing</span>
       <h2 class="title" data-animate="fade-up">Linux Cloud Plans Built for Every Scale</h2>
       <p class="subtitle" data-animate="fade-up">Transparent pricing with no hidden fees. Upgrade or downgrade anytime
         with zero downtime and zero hassle.</p>
 
-      <div class="lch-plans-grid" data-stagger>
+      <div class="lch-pricing-grid" id="lch-pricing-grid" data-stagger></div>
+    </div>
+  </section>
 
-        <!-- Starter Cloud -->
-        <div class="lch-plan-card">
-          <div class="lch-plan-name">Starter Cloud</div>
-          <div class="lch-plan-price">&#8377;399<span>/mo</span></div>
-          <p class="lch-plan-tagline">Perfect for developers and small projects that need reliable Linux cloud
-            hosting.</p>
-          <div class="lch-plan-specs">
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">vCPU</span>
-              <span class="lch-plan-spec-value">2 vCPU</span>
-            </div>
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">RAM</span>
-              <span class="lch-plan-spec-value">4 GB</span>
-            </div>
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">NVMe SSD</span>
-              <span class="lch-plan-spec-value">50 GB</span>
-            </div>
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">Bandwidth</span>
-              <span class="lch-plan-spec-value">1 TB</span>
-            </div>
-          </div>
-          <button class="lch-plan-btn">Get Started &rarr;</button>
+
+  <!-- ════ SECTION 4 — WHY DO YOU NEED LINUX CLOUD ════ -->
+  <section id="lch-why-need" class="section lch-why-need-section">
+    <div class="container">
+      <div class="lch-why-need-content">
+        <h2 class="title" data-animate="fade-up">Why Do You Need Linux Cloud Hosting?</h2>
+        <div class="lch-why-need-body" id="lch-why-need-body" data-animate="fade-up">
+          <p>Linux cloud hosting gives you a clean, stable, and efficient environment to run the applications that
+            matter. It's lightweight, secure by design, and flexible enough to fit projects of any size — from small
+            scripts to full-scale enterprise systems. No heavy licensing, no unnecessary complexity, just a reliable
+            base you can count on.</p>
+          <p>With ICSDC, you get all the strengths of Linux combined with fast hardware, strong security, and the
+            freedom to configure your server the way you prefer. If you want performance that stays consistent and a
+            cloud setup that grows at your pace, Linux is the smartest place to start.</p>
         </div>
-
-        <!-- Business Cloud (Featured) -->
-        <div class="lch-plan-card lch-plan-featured">
-          <div class="lch-plan-badge">Most Popular</div>
-          <div class="lch-plan-name">Business Cloud</div>
-          <div class="lch-plan-price">&#8377;999<span>/mo</span></div>
-          <p class="lch-plan-tagline">The complete Linux cloud stack for high-growth businesses and production
-            workloads.</p>
-          <div class="lch-plan-specs">
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">vCPU</span>
-              <span class="lch-plan-spec-value">4 vCPU</span>
-            </div>
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">RAM</span>
-              <span class="lch-plan-spec-value">8 GB</span>
-            </div>
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">NVMe SSD</span>
-              <span class="lch-plan-spec-value">100 GB</span>
-            </div>
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">Bandwidth</span>
-              <span class="lch-plan-spec-value">5 TB</span>
-            </div>
-          </div>
-          <button class="lch-plan-btn lch-plan-btn-featured">Get Started &rarr;</button>
-        </div>
-
-        <!-- Enterprise Cloud -->
-        <div class="lch-plan-card">
-          <div class="lch-plan-name">Enterprise Cloud</div>
-          <div class="lch-plan-price">&#8377;2,499<span>/mo</span></div>
-          <p class="lch-plan-tagline">Maximum performance and fully managed Linux cloud for enterprise and
-            mission-critical workloads.</p>
-          <div class="lch-plan-specs">
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">vCPU</span>
-              <span class="lch-plan-spec-value">8 vCPU</span>
-            </div>
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">RAM</span>
-              <span class="lch-plan-spec-value">16 GB</span>
-            </div>
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">NVMe SSD</span>
-              <span class="lch-plan-spec-value">250 GB</span>
-            </div>
-            <div class="lch-plan-spec">
-              <span class="lch-plan-spec-label">Bandwidth</span>
-              <span class="lch-plan-spec-value">Unlimited</span>
-            </div>
-          </div>
-          <button class="lch-plan-btn">Contact Sales &rarr;</button>
-        </div>
-
       </div>
     </div>
   </section>
 
 
-  <!-- ════ SECTION 4 — POWER FEATURES ════ -->
+  <!-- ════ SECTION 5 — POWER FEATURES ════ -->
   <section id="power" class="section cloud-power-section">
     <div class="container">
-      <span class="cloud-section-label" data-animate="fade-up">Features</span>
-      <h2 class="title" data-animate="fade-up">Infrastructure Engineered for Intelligence</h2>
+      <h2 class="title" data-animate="fade-up">What Makes ICSDC Linux Cloud Hosting So Powerful?</h2>
       <p class="subtitle" data-animate="fade-up">Every feature is purpose-built to give your Linux workloads the speed,
         security, and reliability they demand.</p>
 
@@ -332,77 +279,33 @@
   </section>
 
 
-  <!-- ════ SECTION 6 — SUPPORTED FRAMEWORKS ════ -->
-  <section id="frameworks" class="section">
+  <!-- ════ SECTION 7 — WHY CHOOSE ICSDC ════ -->
+  <section id="lch-why-choose" class="section lch-why-choose-section">
     <div class="container">
-      <span class="cloud-section-label" data-animate="fade-up">Frameworks</span>
-      <h2 class="title" data-animate="fade-up">Every Stack, Every Framework</h2>
-      <p class="subtitle" data-animate="fade-up">Deploy any language or framework on your Linux cloud. From monoliths to
-        microservices — ICSDC Linux Cloud supports it all out of the box.</p>
-
-      <div class="lch-frameworks-grid" data-stagger>
-        <div class="lch-framework-badge">Node.js</div>
-        <div class="lch-framework-badge">Python</div>
-        <div class="lch-framework-badge">PHP</div>
-        <div class="lch-framework-badge">Ruby</div>
-        <div class="lch-framework-badge">Go</div>
-        <div class="lch-framework-badge">Java</div>
-        <div class="lch-framework-badge">Django</div>
-        <div class="lch-framework-badge">Laravel</div>
-        <div class="lch-framework-badge">React</div>
-        <div class="lch-framework-badge">Next.js</div>
-        <div class="lch-framework-badge">Docker</div>
-        <div class="lch-framework-badge">Kubernetes</div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ════ SECTION 7 — WHY LINUX ════ -->
-  <section id="why-linux" class="section cloud-power-section">
-    <div class="container">
-      <span class="cloud-section-label" data-animate="fade-up">Why Linux</span>
-      <h2 class="title" data-animate="fade-up">The Advantages of Linux Cloud Hosting</h2>
-      <p class="subtitle" data-animate="fade-up">Linux is the foundation of the modern internet. Here is why the world's
-        most demanding infrastructure runs on Linux — and why yours should too.</p>
-
-      <div class="cloud-use-grid" data-stagger>
-        <div class="cloud-use-card">
-          <div class="cloud-use-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
-          <h3>Open Source Freedom</h3>
-          <p>No licensing fees, no vendor lock-in. Linux gives you complete freedom to customize your environment and
-            run any open-source software stack.</p>
-        </div>
-        <div class="cloud-use-card">
-          <div class="cloud-use-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
-          <h3>Better Performance</h3>
-          <p>Linux's lean kernel and minimal overhead translate to faster response times, higher concurrency, and more
-            efficient resource utilization across all workloads.</p>
-        </div>
-        <div class="cloud-use-card">
-          <div class="cloud-use-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></div>
-          <h3>Superior Security</h3>
-          <p>A mature permission model, rapid security patching, SELinux, AppArmor, and a transparent open-source
-            codebase make Linux the most secure server OS.</p>
-        </div>
-        <div class="cloud-use-card">
-          <div class="cloud-use-icon"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div>
-          <h3>Cost Effective</h3>
-          <p>Zero OS licensing costs combined with superior resource efficiency means you get more compute for every
-            rupee you spend on ICSDC Linux Cloud.</p>
-        </div>
-        <div class="cloud-use-card">
-          <div class="cloud-use-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
-          <h3>Massive Community</h3>
-          <p>Millions of developers, billions of packages, and decades of documentation. If you hit a challenge on
-            Linux, the answer already exists somewhere.</p>
-        </div>
-        <div class="cloud-use-card">
-          <div class="cloud-use-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div>
-          <h3>Enterprise Proven</h3>
-          <p>From Google and Amazon to NASA and the NYSE — Linux powers the world's most demanding infrastructure. It is
-            the enterprise-grade choice.</p>
-        </div>
+      <h2 class="title" data-animate="fade-up">Why Choose ICSDC for Linux Cloud Hosting?</h2>
+      <div class="lch-why-choose-inner">
+        <p class="lch-why-choose-desc" id="lch-why-choose-desc" data-animate="fade-up">ICSDC gives you a Linux cloud
+          environment that feels fast, clean, and built around real performance — not marketing buzz. With tuned
+          hardware, smarter networking, and a support team that actually understands Linux, you get a cloud platform
+          that stays reliable, scalable, and always in your control.</p>
+        <ul class="lch-why-choose-list" id="lch-why-choose-list" data-animate="fade-up">
+          <li><span class="lch-wc-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Purpose-built Linux
+            cloud architecture</li>
+          <li><span class="lch-wc-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Ultra-optimized
+            performance tuning</li>
+          <li><span class="lch-wc-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>True isolation with
+            zero resource sharing</li>
+          <li><span class="lch-wc-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Developer-first
+            environment design</li>
+          <li><span class="lch-wc-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Lightning-fast
+            internal networking</li>
+          <li><span class="lch-wc-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Instant,
+            disruption-free scaling</li>
+          <li><span class="lch-wc-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Transparent pricing
+            with no surprises</li>
+          <li><span class="lch-wc-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Dedicated engineers,
+            not ticket bots</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -411,10 +314,8 @@
   <!-- ════ SECTION 8 — USE CASES ════ -->
   <section id="use-cases" class="section">
     <div class="container">
-      <span class="cloud-section-label" data-animate="fade-up">Use Cases</span>
-      <h2 class="title" data-animate="fade-up">What Will You Build on ICSDC Linux Cloud?</h2>
-      <p class="subtitle" data-animate="fade-up">From startups to enterprise — Linux cloud hosting that adapts to every
-        workload, every team, every industry.</p>
+      <h2 class="title" data-animate="fade-up">What Can You Create with ICSDC Linux Cloud Hosting?</h2>
+      <p class="subtitle" data-animate="fade-up"></p>
 
       <div class="cloud-use-grid" data-stagger>
         <div class="cloud-use-card">
@@ -461,8 +362,7 @@
   <!-- ════ SECTION 9 — SPECS / WORKLOADS ════ -->
   <section id="workloads" class="section cloud-power-section">
     <div class="container">
-      <span class="cloud-section-label" data-animate="fade-up">Specifications</span>
-      <h2 class="title" data-animate="fade-up">Technical Specifications Built for Demanding Workloads</h2>
+      <h2 class="title" data-animate="fade-up">What Powers Your Cloud — A Deep Look Into ICSDC's Infrastructure</h2>
       <p class="subtitle" data-animate="fade-up">Enterprise-grade hardware and networking configured specifically to
         maximise Linux performance at every layer of the stack.</p>
 
@@ -508,6 +408,14 @@
   </section>
 
 
+  <!-- ════ SECTION 9B — RELATED SERVICES ════ -->
+  <section class="section lch-related-section" id="lch-related">
+    <div class="container">
+      <div class="lch-related-grid" id="lch-related-grid"></div>
+    </div>
+  </section>
+
+
   <!-- ════ SECTION 10 — TESTIMONIALS ════ -->
   <section class="testi-section" aria-labelledby="lch-testi-heading">
     <div class="testi-container">
@@ -532,16 +440,77 @@
     <div class="faq-container">
       <div class="faq-col">
         <h2 id="lch-faq-heading" class="faq-title">FAQs About ICSDC Linux Cloud Hosting</h2>
-        <dl class="faq-accordions" id="faq-accordions"></dl>
+        <div class="faq-grid">
+          <div class="faq-accordions" id="faq-accordions"></div>
+          <aside class="faq-aside">
+            <div class="faq-illo"><svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <defs>
+                  <linearGradient id="faqCardAlinuxcloudhosting" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#1a56db" stop-opacity="0.35" />
+                    <stop offset="1" stop-color="#1a56db" stop-opacity="0.05" />
+                  </linearGradient>
+                  <linearGradient id="faqCardBlinuxcloudhosting" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#3b82f6" />
+                    <stop offset="1" stop-color="#1a56db" />
+                  </linearGradient>
+                  <radialGradient id="faqGlowlinuxcloudhosting" cx="0.5" cy="0.5" r="0.5">
+                    <stop offset="0" stop-color="#3b82f6" stop-opacity="0.20" />
+                    <stop offset="1" stop-color="#3b82f6" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <circle cx="160" cy="160" r="140" fill="url(#faqGlowlinuxcloudhosting)" />
+                <g transform="rotate(-8 160 160)">
+                  <rect x="60" y="100" width="200" height="60" rx="10" fill="url(#faqCardAlinuxcloudhosting)"
+                    stroke="rgba(59,130,246,0.30)" stroke-width="1.5" />
+                  <rect x="80" y="118" width="120" height="6" rx="3" fill="rgba(26,86,219,0.30)" />
+                  <rect x="80" y="132" width="80" height="6" rx="3" fill="rgba(26,86,219,0.18)" />
+                  <circle cx="230" cy="130" r="10" fill="rgba(59,130,246,0.25)" stroke="rgba(59,130,246,0.50)"
+                    stroke-width="1.5" />
+                  <path d="M226 130 L230 134 L236 126" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" fill="none" />
+                </g>
+                <g transform="rotate(3 160 160)">
+                  <rect x="55" y="140" width="210" height="64" rx="11" fill="rgba(26,86,219,0.05)"
+                    stroke="rgba(26,86,219,0.20)" stroke-width="1.5" />
+                  <rect x="76" y="159" width="140" height="6" rx="3" fill="rgba(26,86,219,0.35)" />
+                  <rect x="76" y="173" width="100" height="6" rx="3" fill="rgba(26,86,219,0.18)" />
+                  <circle cx="236" cy="172" r="10" fill="rgba(26,86,219,0.10)" stroke="rgba(26,86,219,0.25)"
+                    stroke-width="1.5" />
+                  <path d="M232 172 L236 176 L242 168" stroke="rgba(26,86,219,0.6)" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                </g>
+                <g transform="translate(0, 18)">
+                  <rect x="50" y="180" width="220" height="68" rx="12" fill="rgba(59,130,246,0.10)"
+                    stroke="rgba(59,130,246,0.55)" stroke-width="1.5" />
+                  <rect x="74" y="200" width="150" height="7" rx="3.5" fill="rgba(26,86,219,0.85)" />
+                  <rect x="74" y="216" width="110" height="6" rx="3" fill="rgba(26,86,219,0.40)" />
+                  <circle cx="244" cy="214" r="12" fill="url(#faqCardBlinuxcloudhosting)" />
+                  <path d="M238 217 L244 211 L250 217" stroke="white" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" fill="none" />
+                </g>
+                <g transform="translate(36 36)">
+                  <circle cx="0" cy="0" r="28" fill="url(#faqCardBlinuxcloudhosting)" stroke="rgba(59,130,246,0.40)"
+                    stroke-width="3" /><text x="0" y="10" text-anchor="middle"
+                    font-family="Plus Jakarta Sans, sans-serif" font-size="34" font-weight="800" fill="white">?</text>
+                </g>
+                <circle cx="278" cy="60" r="5" fill="#f59e0b" />
+                <circle cx="298" cy="80" r="3" fill="#f59e0b" opacity="0.6" />
+                <circle cx="40" cy="270" r="4" fill="#4fd1c5" opacity="0.8" />
+                <circle cx="280" cy="270" r="5" fill="#3b82f6" opacity="0.6" />
+              </svg></div>
+            <div class="faq-aside-copy">
+              <h3 class="faq-aside-h">Didn't find your answer?</h3>
+              <p class="faq-aside-p">Our team is happy to help — reach out and we'll respond within minutes.</p>
+              <a href="/contact-us.html" class="faq-aside-link">Talk to our team <svg width="14" height="14"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                  stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 5l7 7-7 7" />
+                </svg></a>
+            </div>
+          </aside>
+        </div>
       </div>
-      <aside class="faq-contact-card">
-        <h3 class="faq-contact-title">Talk to Our Linux Cloud Experts</h3>
-        <p class="faq-contact-desc">Our Linux-certified engineers are available 24/7 to help you choose the right cloud
-          plan, migrate your workloads, and keep your infrastructure running at peak performance.<br><br>&#128222; +91
-          98109 58857</p>
-        <a href="/contact-us.html" class="faq-contact-btn">Talk to an Expert <i class="fa-solid fa-gauge-high"
-            aria-hidden="true"></i></a>
-      </aside>
     </div>
   </section>
 
@@ -586,6 +555,7 @@
   <script src="assets/js/polish.js" defer></script>
 
 
+  <script src="assets/js/nav-search.js" defer></script>
 </body>
 
 </html>

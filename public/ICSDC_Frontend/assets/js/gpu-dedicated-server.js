@@ -113,6 +113,27 @@ import {
             populateSectionHeader('#gds-usecases', page.usecasesLabel, page.usecasesTitle, page.usecasesSubtitle);
             populateIconCards('#gds-usecases .gds-usecases-grid', page.usecases, 'cloud-use-card');
 
+            // GPU Comparison Table (between Use Cases and CTA Band 1)
+            if (page.gpuCompareLabel) setText(document, '#gds-compare-label', page.gpuCompareLabel);
+            if (page.gpuCompareTitle) setText(document, '#gds-compare-title', page.gpuCompareTitle);
+            if (page.gpuCompareRows && Array.isArray(page.gpuCompareRows) && page.gpuCompareRows.length) {
+                var tbody = document.getElementById('gds-compare-tbody');
+                if (tbody) {
+                    tbody.innerHTML = page.gpuCompareRows.map(function (r) {
+                        return '<tr>' +
+                            '<td>' + (r.model || '') + '</td>' +
+                            '<td>' + (r.memory || '') + '</td>' +
+                            '<td>' + (r.bandwidth || '') + '</td>' +
+                            '<td>' + (r.power || '') + '</td>' +
+                            '<td>' + (r.fp64 || '') + '</td>' +
+                            '<td>' + (r.fp32 || '') + '</td>' +
+                            '<td>' + (r.int8 || '') + '</td>' +
+                            '<td>' + (r.useCases || '') + '</td>' +
+                            '</tr>';
+                    }).join('');
+                }
+            }
+
             // CTA Band 1
             populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
 
@@ -123,6 +144,33 @@ import {
             // GPU Models (6 cards)
             populateSectionHeader('#gds-models', page.modelsLabel, page.modelsTitle, page.modelsSubtitle);
             populateIconCards('#gds-models .gds-models-grid', page.models, 'cloud-use-card');
+
+            // When Should You Choose (between GPU Models and Testimonials)
+            if (page.whenLabel) setText(document, '#gds-when-label', page.whenLabel);
+            if (page.whenTitle) setText(document, '#gds-when-title', page.whenTitle);
+            if (page.whenPoints && Array.isArray(page.whenPoints) && page.whenPoints.length) {
+                var whenList = document.getElementById('gds-when-list');
+                if (whenList) {
+                    whenList.innerHTML = page.whenPoints.map(function (pt) {
+                        return '<li><i class="fa-solid fa-circle-check" aria-hidden="true"></i><span>' + pt + '</span></li>';
+                    }).join('');
+                }
+            }
+
+            // Related Services (NVMe DS + Managed Cloud)
+            if (page.relatedServices && Array.isArray(page.relatedServices) && page.relatedServices.length) {
+                var relGrid = document.getElementById('gds-related-grid');
+                if (relGrid) {
+                    relGrid.innerHTML = page.relatedServices.map(function (s) {
+                        return '<div class="gds-related-card">' +
+                            (s.label ? '<span class="gds-related-card-label">' + s.label + '</span>' : '') +
+                            '<h3>' + (s.title || '') + '</h3>' +
+                            '<p>' + (s.desc || '') + '</p>' +
+                            '<a href="' + (s.ctaLink || '#') + '" class="gds-related-btn">' + (s.ctaText || 'Learn More') + '</a>' +
+                            '</div>';
+                    }).join('');
+                }
+            }
 
             // Testimonials
             if (page.testimonialTitle) setText(document, '#gds-testi-heading', page.testimonialTitle);

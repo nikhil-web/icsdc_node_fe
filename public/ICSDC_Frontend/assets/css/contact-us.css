@@ -30,12 +30,12 @@
 ══════════════════════════════════════ */
 .cu-hero-section {
     background: linear-gradient(135deg, #ffffff 0%, #f0f6ff 55%, #ebf2fc 100%);
-    padding-top: 120px;
+    padding-top: 72px;
 }
 
 .cu-hero-section .hero {
     align-items: center;
-    padding: 60px var(--c-px) 64px;
+    padding: 0px var(--c-px) 64px;
 }
 
 .cu-hero-section .hero-right {
@@ -617,6 +617,38 @@
 @media (max-width: 1279px) {
     .cu-step-connector {
         width: 24px;
+    }
+}
+
+/* ── Hero-embedded form: responsive adjustments ── */
+@media (max-width: 1023px) {
+    /* Tighter card padding on tablet */
+    .hero-form-wrap .cu-hero-form-wrap {
+        padding: 24px 20px 20px;
+        max-width: 100%;
+        box-shadow: 0 8px 32px rgba(26, 86, 219, 0.12);
+    }
+
+    /* Stack form field pairs to 1-col inside hero (contact-us page keeps 2-col until 767px) */
+    .hero-form-wrap .cu-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .hero-form-wrap .cu-form {
+        gap: 14px;
+    }
+
+    .hero-form-wrap .cu-hero-form-title {
+        font-size: 17px;
+        margin-bottom: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Even tighter on phones */
+    .hero-form-wrap .cu-hero-form-wrap {
+        padding: 20px 16px 16px;
     }
 }
 

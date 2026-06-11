@@ -238,45 +238,30 @@
     ───────────────────────────────────────────────────────── */
 
     function renderFAQ(items) {
-        const dl = document.getElementById('faq-accordions');
-        if (!dl) return;
+        const container = document.getElementById('faq-accordions');
+        if (!container || !items || !items.length) return;
+        const chev = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 
-        let openIndex = 0;
+        container.innerHTML = items.map((faq, i) => {
+            const num = String(i + 1).padStart(2, '0');
+            return `<details class="faq-item"${i === 0 ? ' open' : ''}>
+                <summary class="faq-q">
+                    <span class="faq-num">${num}</span>
+                    <span class="faq-q-text">${faq.question || ''}</span>
+                    <span class="faq-chev">${chev}</span>
+                </summary>
+                <div class="faq-a-wrap"><div class="faq-a">${faq.answer || ''}</div></div>
+            </details>`;
+        }).join('');
 
-        function render() {
-            dl.innerHTML = items.map((faq, i) => {
-                const isOpen = i === openIndex;
-                return `
-                <div class="faq-item${isOpen ? ' faq-open' : ''}" data-faq-index="${i}">
-                    <dt>
-                        <button
-                            class="faq-question"
-                            aria-expanded="${isOpen}"
-                            aria-controls="faq-answer-${i}"
-                            id="faq-question-${i}"
-                        >
-                            <span>${faq.question}</span>
-                            <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </dt>
-                    <dd class="faq-answer" id="faq-answer-${i}" role="region" aria-labelledby="faq-question-${i}">
-                        <p>${faq.answer}</p>
-                    </dd>
-                </div>`;
-            }).join('');
-
-            dl.querySelectorAll('.faq-question').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const index = parseInt(btn.closest('.faq-item').dataset.faqIndex, 10);
-                    openIndex = (openIndex === index) ? null : index;
-                    render();
-                });
+        const detailsAll = container.querySelectorAll('.faq-item');
+        detailsAll.forEach(item => {
+            item.addEventListener('toggle', () => {
+                if (item.open) {
+                    detailsAll.forEach(o => { if (o !== item) o.open = false; });
+                }
             });
-        }
-
-        render();
+        });
     }
 
     async function initFAQ() {

@@ -1,7 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MXV9SGZS');</script>
+    <!-- End Google Tag Manager -->
     <script src="assets/js/theme-init.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +24,10 @@
 </head>
 
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MXV9SGZS"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
     <!-- PAGE LOADER -->
     <div id="page-loader">
@@ -271,16 +282,16 @@
 
     <!-- ISO section start -->
     <section class="iso-section" aria-labelledby="iso-heading">
-        <div class="iso-overlay">
-            <div class="iso-container">
+        <div class="iso-inner">
+            <div class="iso-text">
                 <h2 id="iso-heading" class="iso-title">Beyond Best Practice: Our ISO Standards</h2>
                 <p class="iso-subtitle">
-                    Global certifications that our security, quality, and commitment consistently meet
-                    the world's highest standard.
+                    Global certifications that our security, quality, and commitment consistently
+                    meet the world's highest standard.
                 </p>
             </div>
-            <div class="iso-image-wrapper" aria-hidden="true">
-                <img src="assets/images/beyondbest.png" alt="" class="iso-image" loading="lazy">
+            <div class="iso-badges-wrap" aria-hidden="true">
+                <img src="assets/images/beyondbest.png" alt="ISO certifications" class="iso-badges-img" loading="lazy">
             </div>
         </div>
     </section>
@@ -560,22 +571,32 @@
             <div class="faq-col">
                 <h2 id="faq-heading" class="faq-title">Frequently Asked Questions</h2>
                 <!-- Accordion items rendered by components.js -->
-                <dl class="faq-accordions" id="faq-accordions"></dl>
+                <div class="faq-grid">
+          <div class="faq-accordions" id="faq-accordions"></div>
+          <aside class="faq-aside">
+            <div class="faq-illo"><svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="faqCardAindex" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#1a56db" stop-opacity="0.35"/><stop offset="1" stop-color="#1a56db" stop-opacity="0.05"/></linearGradient>
+    <linearGradient id="faqCardBindex" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1a56db"/></linearGradient>
+    <radialGradient id="faqGlowindex" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#3b82f6" stop-opacity="0.20"/><stop offset="1" stop-color="#3b82f6" stop-opacity="0"/></radialGradient>
+  </defs>
+  <circle cx="160" cy="160" r="140" fill="url(#faqGlowindex)"/>
+  <g transform="rotate(-8 160 160)"><rect x="60" y="100" width="200" height="60" rx="10" fill="url(#faqCardAindex)" stroke="rgba(59,130,246,0.30)" stroke-width="1.5"/><rect x="80" y="118" width="120" height="6" rx="3" fill="rgba(26,86,219,0.30)"/><rect x="80" y="132" width="80" height="6" rx="3" fill="rgba(26,86,219,0.18)"/><circle cx="230" cy="130" r="10" fill="rgba(59,130,246,0.25)" stroke="rgba(59,130,246,0.50)" stroke-width="1.5"/><path d="M226 130 L230 134 L236 126" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g>
+  <g transform="rotate(3 160 160)"><rect x="55" y="140" width="210" height="64" rx="11" fill="rgba(26,86,219,0.05)" stroke="rgba(26,86,219,0.20)" stroke-width="1.5"/><rect x="76" y="159" width="140" height="6" rx="3" fill="rgba(26,86,219,0.35)"/><rect x="76" y="173" width="100" height="6" rx="3" fill="rgba(26,86,219,0.18)"/><circle cx="236" cy="172" r="10" fill="rgba(26,86,219,0.10)" stroke="rgba(26,86,219,0.25)" stroke-width="1.5"/><path d="M232 172 L236 176 L242 168" stroke="rgba(26,86,219,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g>
+  <g transform="translate(0, 18)"><rect x="50" y="180" width="220" height="68" rx="12" fill="rgba(59,130,246,0.10)" stroke="rgba(59,130,246,0.55)" stroke-width="1.5"/><rect x="74" y="200" width="150" height="7" rx="3.5" fill="rgba(26,86,219,0.85)"/><rect x="74" y="216" width="110" height="6" rx="3" fill="rgba(26,86,219,0.40)"/><circle cx="244" cy="214" r="12" fill="url(#faqCardBindex)"/><path d="M238 217 L244 211 L250 217" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g>
+  <g transform="translate(36 36)"><circle cx="0" cy="0" r="28" fill="url(#faqCardBindex)" stroke="rgba(59,130,246,0.40)" stroke-width="3"/><text x="0" y="10" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="34" font-weight="800" fill="white">?</text></g>
+  <circle cx="278" cy="60" r="5" fill="#f59e0b"/><circle cx="298" cy="80" r="3" fill="#f59e0b" opacity="0.6"/><circle cx="40" cy="270" r="4" fill="#4fd1c5" opacity="0.8"/><circle cx="280" cy="270" r="5" fill="#3b82f6" opacity="0.6"/>
+</svg></div>
+            <div class="faq-aside-copy">
+              <h3 class="faq-aside-h">Didn't find your answer?</h3>
+              <p class="faq-aside-p">Our team is happy to help — reach out and we'll respond within minutes.</p>
+              <a href="/contact-us.html" class="faq-aside-link">Talk to our team <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+            </div>
+          </aside>
+        </div>
             </div>
 
             <!-- Sticky contact card -->
-            <aside class="faq-contact-card" aria-label="Contact us">
-                <h3 class="faq-contact-title">Do you have more<br>Questions??</h3>
-                <p class="faq-contact-desc">
-                    We are here to answer all your queries.<br>
-                    Take a Test Drive of Our Cloud Now!<br><br>
-                    &#128222; +91 98109 58857
-                </p>
-                <a href="/contact-us.html" class="faq-contact-btn">
-                    Get In Touch
-                    <i class="fa-solid fa-cloud" aria-hidden="true"></i>
-                </a>
-            </aside>
 
         </div>
     </section>
@@ -585,83 +606,39 @@
     <section class="contact-section" aria-labelledby="contact-heading">
         <div class="contact-container">
 
-            <!-- Left: info -->
+            <!-- Left: heading + subtitle -->
             <div class="contact-left">
-                <h2 id="hp-contact-title" class="contact-title">Get In Touch...</h2>
+                <h2 id="hp-contact-title" class="contact-title">Get In Touch</h2>
                 <p class="contact-subtitle" id="hp-contact-subtitle">
                     Get the best price &amp; premium cloud services. Share your details and requirements,
                     and our team will get in touch with you shortly.
                 </p>
-
-                <div class="contact-cards">
-                    <div class="contact-info-card">
-                        <div class="contact-card-icon">
-                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-                        </div>
-                        <h3 class="contact-card-title">Email Address</h3>
-                        <hr class="contact-card-divider">
-                        <p class="contact-card-detail" id="hp-contact-email">info@icsdc.com</p>
-                        <p class="contact-card-meta" id="hp-contact-email-hours">
-                            Monday &ndash; Friday: 9:00 AM &ndash; 6:00 PM IST
-                        </p>
-                    </div>
-                    <div class="contact-info-card">
-                        <div class="contact-card-icon">
-                            <i class="fa-solid fa-phone" aria-hidden="true"></i>
-                        </div>
-                        <h3 class="contact-card-title">Phone Number</h3>
-                        <hr class="contact-card-divider">
-                        <p class="contact-card-detail" id="hp-contact-phone">+91 98109 58857</p>
-                        <p class="contact-card-meta" id="hp-contact-phone-hours">
-                            Monday &ndash; Friday: 9:00 AM &ndash; 6:00 PM IST
-                        </p>
-                    </div>
-                </div>
             </div>
 
-            <!-- Right: form -->
-            <div class="contact-form-col">
-
-                <!-- Success message (hidden until form submitted) -->
-                <div class="contact-success" id="contact-success" role="alert">
-                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                    <h3>Message Sent!</h3>
-                    <p>Thank you for reaching out. Our team will contact you within 24 hours.</p>
+            <!-- Right: contact info cards -->
+            <div class="contact-cards">
+                <div class="contact-info-card">
+                    <div class="contact-card-icon">
+                        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="contact-card-title">Email Address</h3>
+                    <hr class="contact-card-divider">
+                    <p class="contact-card-detail" id="hp-contact-email">info@icsdc.com</p>
+                    <p class="contact-card-meta" id="hp-contact-email-hours">
+                        Monday &ndash; Friday: 9:00 AM &ndash; 6:00 PM IST
+                    </p>
                 </div>
-
-                <form id="contact-form" class="contact-form" novalidate>
-
-                    <div class="contact-field-row">
-                        <div class="contact-field">
-                            <input type="text" id="contact-name" name="name" placeholder=" " required class="contact-input" aria-required="true">
-                            <label for="contact-name" class="contact-label">
-                                Name <span class="contact-required" aria-hidden="true">*</span>
-                            </label>
-                        </div>
-                        <div class="contact-field">
-                            <input type="email" id="contact-email" name="email" placeholder=" " required class="contact-input" aria-required="true">
-                            <label for="contact-email" class="contact-label">
-                                Email <span class="contact-required" aria-hidden="true">*</span>
-                            </label>
-                        </div>
+                <div class="contact-info-card">
+                    <div class="contact-card-icon">
+                        <i class="fa-solid fa-phone" aria-hidden="true"></i>
                     </div>
-
-                    <div class="contact-field">
-                        <input type="url" id="contact-website" name="website" placeholder=" " class="contact-input">
-                        <label for="contact-website" class="contact-label">
-                            Website <span class="contact-required" aria-hidden="true">*</span>
-                        </label>
-                    </div>
-
-                    <div class="contact-field">
-                        <textarea id="contact-message" name="message" placeholder=" " rows="5"
-                            class="contact-input contact-textarea"></textarea>
-                        <label for="contact-message" class="contact-label">Message</label>
-                    </div>
-
-                    <button type="submit" id="hp-contact-submit" class="contact-submit">Submit</button>
-
-                </form>
+                    <h3 class="contact-card-title">Phone Number</h3>
+                    <hr class="contact-card-divider">
+                    <p class="contact-card-detail" id="hp-contact-phone">+91 98109 58857</p>
+                    <p class="contact-card-meta" id="hp-contact-phone-hours">
+                        Monday &ndash; Friday: 9:00 AM &ndash; 6:00 PM IST
+                    </p>
+                </div>
             </div>
 
         </div>
@@ -805,6 +782,7 @@
             if (el) el.textContent = new Date().getFullYear();
         })();
     </script>
+  <script src="assets/js/nav-search.js" defer></script>
 </body>
 
 </html>

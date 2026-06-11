@@ -13,8 +13,8 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #dcfce7;
-    color: #15803d;
+    background: #eff6ff;
+    color: #1e40af;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -22,7 +22,7 @@
     padding: 6px 14px;
     border-radius: var(--radius-xl);
     margin-bottom: 20px;
-    border: 1px solid rgba(22, 163, 74, 0.22);
+    border: 1px solid rgba(26, 86, 219, 0.22);
 }
 
 /* ══════════════════════════════════════
@@ -33,13 +33,13 @@
     max-width: 560px;
     aspect-ratio: 4 / 3;
     border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, #bbf7d0 0%, #dcfce7 50%, #f0fdf4 100%);
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 50%, #f0f9ff 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 24px 64px rgba(22, 163, 74, 0.14), 0 4px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 24px 64px rgba(26, 86, 219, 0.14), 0 4px 16px rgba(0, 0, 0, 0.06);
     animation: heroImageFloat 8s ease-in-out 1s infinite;
 }
 
@@ -48,8 +48,8 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 65% 30%, rgba(22, 163, 74, 0.10) 0%, transparent 55%),
-        radial-gradient(circle at 25% 70%, rgba(34, 197, 94, 0.07) 0%, transparent 50%);
+        radial-gradient(circle at 65% 30%, rgba(26, 86, 219, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(59, 130, 246, 0.07) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -69,14 +69,14 @@
     top: 20px;
     left: 20px;
     background: var(--white);
-    border: 1px solid rgba(22, 163, 74, 0.18);
+    border: 1px solid rgba(26, 86, 219, 0.18);
     border-radius: 12px;
     padding: 8px 14px;
     font-size: 11px;
     font-weight: 700;
-    color: #16a34a;
+    color: #1a56db;
     letter-spacing: 0.04em;
-    box-shadow: 0 4px 16px rgba(22, 163, 74, 0.14);
+    box-shadow: 0 4px 16px rgba(26, 86, 219, 0.14);
     z-index: 2;
     animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
 }
@@ -86,13 +86,13 @@
     bottom: 20px;
     right: 20px;
     background: var(--white);
-    border: 1px solid rgba(22, 163, 74, 0.14);
+    border: 1px solid rgba(26, 86, 219, 0.14);
     border-radius: 12px;
     padding: 10px 16px;
     display: flex;
     align-items: center;
     gap: 10px;
-    box-shadow: 0 8px 24px rgba(22, 163, 74, 0.13);
+    box-shadow: 0 8px 24px rgba(26, 86, 219, 0.13);
     z-index: 2;
     animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
 }
@@ -101,16 +101,24 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #16a34a;
-    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.50);
+    background: #1a56db;
+    box-shadow: 0 0 0 0 rgba(26, 86, 219, 0.50);
     flex-shrink: 0;
     animation: ssl-pulse 2s ease-in-out infinite;
 }
 
 @keyframes ssl-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.55); }
-    70%  { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+    0% {
+        box-shadow: 0 0 0 0 rgba(26, 86, 219, 0.55);
+    }
+
+    70% {
+        box-shadow: 0 0 0 8px rgba(26, 86, 219, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(26, 86, 219, 0);
+    }
 }
 
 .ssl-bt {
@@ -146,10 +154,12 @@
     text-align: center;
 }
 
-.ssl-pricing-placeholder {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+.ssl-pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+    align-items: stretch;
 }
 
 .ssl-pricing-coming {
@@ -168,7 +178,7 @@
 }
 
 .ssl-pricing-coming svg {
-    color: #16a34a;
+    color: #1a56db;
     opacity: 0.7;
 }
 
@@ -193,7 +203,7 @@
    SSL TYPES SECTION
 ══════════════════════════════════════ */
 .ssl-types-section {
-    background: #f0fdf4;
+    background: #f0f9ff;
 }
 
 .ssl-types-title {
@@ -219,43 +229,44 @@
 
 .ssl-type-card {
     background: var(--white);
-    border: 1.5px solid rgba(22, 163, 74, 0.18);
+    border: 1.5px solid rgba(26, 86, 219, 0.18);
     border-radius: var(--radius-lg);
     padding: 36px 32px 32px;
     position: relative;
-    box-shadow: 0 4px 24px rgba(22, 163, 74, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 24px rgba(26, 86, 219, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
     transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease,
         border-color var(--transition-base) ease;
     display: flex;
     flex-direction: column;
     gap: 14px;
+    align-items: center;
+    justify-content: center;
 }
 
 .ssl-type-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 16px 48px rgba(22, 163, 74, 0.14), 0 4px 12px rgba(0, 0, 0, 0.06);
-    border-color: rgba(22, 163, 74, 0.35);
+    box-shadow: 0 16px 48px rgba(26, 86, 219, 0.14), 0 4px 12px rgba(0, 0, 0, 0.06);
+    border-color: rgba(26, 86, 219, 0.35);
 }
 
 .ssl-type-badge {
     display: inline-flex;
     align-items: center;
-    background: #dcfce7;
-    color: #15803d;
+    background: #eff6ff;
+    color: #1e40af;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     padding: 5px 12px;
     border-radius: var(--radius-xl);
-    border: 1px solid rgba(22, 163, 74, 0.20);
-    align-self: flex-start;
+    border: 1px solid rgba(26, 86, 219, 0.20);
 }
 
 .ssl-type-badge-ev {
-    background: #f0fdf4;
-    color: #166534;
-    border-color: rgba(22, 163, 74, 0.30);
+    background: #f0f9ff;
+    color: #1e40af;
+    border-color: rgba(26, 86, 219, 0.30);
 }
 
 .ssl-type-title {
@@ -278,7 +289,7 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: #16a34a;
+    color: #1a56db;
     font-size: 14px;
     font-weight: 700;
     text-decoration: none;
@@ -288,7 +299,7 @@
 }
 
 .ssl-type-cta:hover {
-    color: #15803d;
+    color: #1e40af;
     gap: 10px;
 }
 
@@ -307,7 +318,7 @@
 }
 
 .ssl-glance-card {
-    border-top: 3px solid #16a34a !important;
+    border-top: 3px solid #1a56db !important;
 }
 
 /* ══════════════════════════════════════
@@ -340,15 +351,15 @@
 #ssl-glance .cloud-power-card:hover,
 #ssl-power .cloud-power-card:hover,
 #ssl-why .cloud-power-card:hover {
-    border-color: rgba(22, 163, 74, 0.30);
+    border-color: rgba(26, 86, 219, 0.30);
 }
 
 #ssl-offers .cloud-power-icon,
 #ssl-glance .cloud-power-icon,
 #ssl-power .cloud-power-icon,
 #ssl-why .cloud-power-icon {
-    background: #dcfce7;
-    color: #16a34a;
+    background: #eff6ff;
+    color: #1a56db;
 }
 
 /* ══════════════════════════════════════
@@ -408,8 +419,11 @@
         padding: 6px 10px;
     }
 
-    .ssl-pricing-coming {
-        padding: 36px 20px;
+    .ssl-pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 460px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .ssl-type-card {
