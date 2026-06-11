@@ -787,6 +787,7 @@ export function getGoogleCloudHostingPage() {
         "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
         "&populate[heroImage][populate][image]=true" +
+        "&populate[aboutImage][populate][image]=true" +
         "&populate[testimonials][populate]=*"
     );
 }

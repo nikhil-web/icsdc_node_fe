@@ -503,6 +503,71 @@
 
 
 /* ══════════════════════════════════════
+   COMPARISON TABLE
+══════════════════════════════════════ */
+.gch-compare-wrap {
+    overflow-x: auto;
+    margin-top: 40px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1.5px solid var(--border);
+}
+
+.gch-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 560px;
+}
+
+.gch-compare-table thead tr {
+    background: var(--blue);
+    color: #fff;
+}
+
+.gch-compare-table th {
+    padding: 14px 20px;
+    font-weight: 700;
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+}
+
+.gch-compare-table th:first-child {
+    text-align: left;
+    width: 46%;
+}
+
+.gch-compare-table td {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dark);
+    text-align: center;
+    vertical-align: middle;
+}
+
+.gch-compare-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+}
+
+.gch-compare-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.gch-compare-table tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.gch-compare-table .gch-col-yes { color: #16a34a; font-size: 18px; }
+.gch-compare-table .gch-col-no  { color: #dc2626; font-size: 18px; }
+
+html[data-theme="dark"] .gch-compare-table tbody tr:nth-child(even) {
+    background: rgba(255,255,255,0.03);
+}
+
+
+/* ══════════════════════════════════════
    RESPONSIVE — 1280px breakpoint
 ══════════════════════════════════════ */
 @media (max-width: 1279px) {
