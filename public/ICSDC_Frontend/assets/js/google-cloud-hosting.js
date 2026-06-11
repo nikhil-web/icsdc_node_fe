@@ -10,67 +10,19 @@ import {
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
+    populatePricingPlansCloud,
     hidePageLoader,
     markActiveNavLink,
     setText,
     setHTML,
     initFAQ,
-    initTestimonials
+    initTestimonials,
+    initHeroContactForm
 } from './utils/cms-helpers.js';
+import { uploadURL } from './services/strapiClient.js';
 
 (function () {
     'use strict';
-
-    /**
-     * Render the Google Cloud plans grid.
-     * Each plan uses the gch-plan-card CSS classes.
-     * Strapi plan fields: tier, price, tagline,
-     *   isFeatured, badge, features (array of {label}), ctaText.
-     */
-    function populatePlans(plans) {
-        if (!plans || !plans.length) return;
-        var grid = document.querySelector('#gch-plans .gch-plans-grid');
-        if (!grid) return;
-
-        var sorted = plans.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-        grid.innerHTML = sorted.map(function (plan) {
-            var isFeatured = plan.isFeatured || plan.popular || false;
-            var featuredClass = isFeatured ? ' gch-plan-featured' : '';
-            var badgeLabel = plan.badge || (isFeatured ? 'Most Popular' : '');
-            var badgeHtml = badgeLabel
-                ? '<div class="gch-plan-badge">' + badgeLabel + '</div>'
-                : '';
-
-            var priceHtml = plan.price
-                ? '<div class="gch-plan-price">&#8377;' + plan.price + ' <span>/mo</span></div>'
-                : '';
-
-            var taglineHtml = plan.tagline
-                ? '<div class="gch-plan-tagline">' + plan.tagline + '</div>'
-                : '';
-
-            var featuresArr = plan.features || [];
-            var featuresHtml = featuresArr.length
-                ? '<ul class="gch-plan-features">' +
-                    featuresArr.map(function (f) {
-                        return '<li>' + (f.label || f.text || f.name || f) + '</li>';
-                    }).join('') +
-                  '</ul>'
-                : '';
-
-            var ctaText = plan.ctaText || 'Get Started';
-            var btnClass = isFeatured ? 'gch-plan-btn gch-plan-btn-primary' : 'gch-plan-btn gch-plan-btn-outline';
-
-            return '<div class="gch-plan-card' + featuredClass + '">' +
-                badgeHtml +
-                '<div class="gch-plan-name">' + (plan.tier || plan.name || '') + '</div>' +
-                priceHtml +
-                taglineHtml +
-                featuresHtml +
-                '<a href="#" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
-                '</div>';
-        }).join('');
-    }
 
     /**
      * Render migration steps as numbered cards.
@@ -90,6 +42,29 @@ import {
         }).join('');
     }
 
+    /**
+     * Render the comparison table rows.
+     * compareRows is a JSON array: [{ feature, direct, icsdc }]
+     * direct/icsdc: true = check, false = cross, or string for text values.
+     */
+    function renderGoogleCompareTable(rows) {
+        var tbody = document.getElementById('gch-compare-tbody');
+        if (!tbody || !rows || !rows.length) return;
+        tbody.innerHTML = rows.map(function (row) {
+            function cell(val, cls) {
+                if (val === true || val === 'yes') {
+                    return '<td class="gch-col-yes"><i class="fa-solid fa-circle-check"></i></td>';
+                }
+                if (val === false || val === 'no') {
+                    return '<td class="gch-col-no"><i class="fa-solid fa-circle-xmark"></i></td>';
+                }
+                return '<td class="' + (cls || '') + '">' + (val || '') + '</td>';
+            }
+            return '<tr><td>' + (row.feature || '') + '</td>' +
+                cell(row.direct) + cell(row.icsdc) + '</tr>';
+        }).join('');
+    }
+
     async function init() {
         markActiveNavLink();
 
@@ -100,7 +75,8 @@ import {
             // SEO
             populateSEO(page.seo);
 
-            // Hero
+            // Hero — form on by default, off only if explicitly false in Strapi
+            var heroFormOn = page.heroFormEnabled !== false;
             populateHero('.hero-section', {
                 eyebrow: page.heroEyebrow,
                 eyebrowSelector: '.gch-eyebrow',
@@ -109,8 +85,10 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage,
+                heroFormEnabled: heroFormOn
             });
+            if (heroFormOn) initHeroContactForm('hf-form', 'hf-success');
 
             if (page.heroTopBadge) setHTML(document, '.gch-top-badge', page.heroTopBadge);
             if (page.heroStatusTitle) setText(document, '.gch-bt', page.heroStatusTitle);
@@ -121,10 +99,27 @@ import {
 
             // Plans
             populateSectionHeader('#gch-plans', page.plansLabel, page.plansTitle, page.plansSubtitle);
-            populatePlans(page.plans);
+            populatePricingPlansCloud('#gch-plans .cloud-pricing-grid', page.plans);
+            document.querySelectorAll('#gch-plans .cloud-plan-cta').forEach(function (btn) {
+                btn.onclick = function () { window.location.href = '/contact-us'; };
+            });
 
-            // CTA Band 1
-            populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
+            // Migration Steps
+            populateSectionHeader('#gch-migration', page.migrationLabel, page.migrationTitle, page.migrationSubtitle);
+            populateMigrationSteps(page.migrationSteps);
+
+            // Who We Are
+            var aboutTitleEl = document.getElementById('gch-about-title');
+            if (aboutTitleEl && page.aboutTitle) aboutTitleEl.textContent = page.aboutTitle;
+            var aboutDescEl = document.getElementById('gch-about-desc');
+            if (aboutDescEl && page.aboutDesc) aboutDescEl.textContent = page.aboutDesc;
+            if (page.aboutImage && page.aboutImage.image) {
+                var aboutImg = document.getElementById('gch-about-img');
+                if (aboutImg) {
+                    var aboutImgUrl = uploadURL(page.aboutImage.image);
+                    if (aboutImgUrl) aboutImg.src = aboutImgUrl;
+                }
+            }
 
             // Why Google
             populateSectionHeader('#gch-why-google', page.whyGoogleLabel, page.whyGoogleTitle, page.whyGoogleSubtitle);
@@ -138,9 +133,12 @@ import {
             populateSectionHeader('#gch-use-cases', page.useCasesLabel, page.useCasesTitle, page.useCasesSubtitle);
             populateIconCards('#gch-use-cases .cloud-use-grid', page.useCases, 'cloud-use-card');
 
-            // Migration Steps
-            populateSectionHeader('#gch-migration', page.migrationLabel, page.migrationTitle, page.migrationSubtitle);
-            populateMigrationSteps(page.migrationSteps);
+            // Comparison Table
+            populateSectionHeader('#gch-compare', null, page.compareTitle, page.compareSubtitle);
+            renderGoogleCompareTable(page.compareRows);
+
+            // CTA Band 1
+            populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
 
             // Testimonials
             if (page.testimonialTitle) setText(document, '#gch-testi-heading', page.testimonialTitle);
