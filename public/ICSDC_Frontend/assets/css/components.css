@@ -728,8 +728,8 @@
 
 /* Aside column */
 .faq-aside {
-    position: sticky;
-    top: 110px;
+    /* position: sticky;
+    top: 110px; */
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -2284,7 +2284,8 @@ summary.faq-q::marker {
 }
 
 .nav-search-trigger {
-    display: none; /* hidden by default; shown on desktop via min-width: 1366px below */
+    display: none;
+    /* hidden by default; shown on desktop via min-width: 1366px below */
     align-items: center;
     justify-content: center;
     width: 40px;
