@@ -302,37 +302,277 @@
 }
 
 /* ══════════════════════════════════════
+   WHEN TO CHOOSE — 2-COL CHECKLIST
+══════════════════════════════════════ */
+.cs-when-list {
+    list-style: none;
+    padding: 0;
+    margin: 36px auto 0;
+    max-width: 920px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 32px;
+}
+
+.cs-when-list li {
+    position: relative;
+    padding: 16px 20px 16px 48px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-dark);
+    box-shadow: var(--shadow-card);
+}
+
+.cs-when-list li::before {
+    content: '\2713';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #f0f9ff;
+    color: #0369a1;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ══════════════════════════════════════
+   ONE PLATFORM FOR EVERY USER — 3 GROUPS
+══════════════════════════════════════ */
+.cs-audience-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.cs-audience-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-top: 3px solid #0369a1;
+    border-radius: var(--radius-lg);
+    padding: 28px 26px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease;
+}
+
+.cs-audience-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.cs-audience-title {
+    font-size: 19px;
+    font-weight: 800;
+    color: #0369a1;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+}
+
+.cs-audience-intro {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0 0 18px;
+}
+
+.cs-audience-points {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+}
+
+.cs-audience-points li {
+    position: relative;
+    padding-left: 24px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-dark);
+}
+
+.cs-audience-points li::before {
+    content: '\2713';
+    position: absolute;
+    left: 0;
+    top: 1px;
+    color: #0369a1;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* ══════════════════════════════════════
+   RELATED SERVICES — 2 CARDS
+══════════════════════════════════════ */
+.cs-related-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+    max-width: 920px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cs-related-card {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 1.5px solid rgba(3, 105, 161, 0.16);
+    border-radius: var(--radius-lg);
+    padding: 32px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease;
+}
+
+.cs-related-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 48px rgba(3, 105, 161, 0.14);
+}
+
+.cs-related-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0369a1;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.cs-related-desc {
+    font-size: 14px;
+    color: var(--text-dark);
+    line-height: 1.65;
+    margin: 0;
+    flex: 1;
+    text-align: left;
+}
+
+.cs-related-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    padding: 10px 22px;
+    background: #0369a1;
+    color: var(--white);
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background var(--transition-base) ease, transform var(--transition-fast) ease;
+}
+
+.cs-related-cta:hover {
+    background: #075985;
+    transform: translateY(-1px);
+}
+
+/* ── New sections: dark mode ── */
+html[data-theme="dark"] .cs-when-list li {
+    background: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .cs-when-list li::before {
+    background: rgba(96, 165, 250, 0.15);
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .cs-audience-card {
+    background: #0f172a;
+    border-color: #334155;
+    border-top-color: #60a5fa;
+}
+
+html[data-theme="dark"] .cs-audience-title,
+html[data-theme="dark"] .cs-related-title {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .cs-audience-points li {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .cs-audience-points li::before {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .cs-related-card {
+    background: #16203a;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .cs-related-desc {
+    color: #e2e8f0;
+}
+
+
+.who-we-are-image img {
+    width: 100%;
+    max-width: 440px;
+
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, #bae6fd 0%, #e0f2fe 55%, #f0f9ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(3, 105, 161, 0.13), 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+/* ══════════════════════════════════════
    RESPONSIVE BREAKPOINTS
 ══════════════════════════════════════ */
 
-/* 1280px — 2-col plans, 3-col features */
+/* Tablet — 2-col grids */
 @media (max-width: 1365px) {
     .cs-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
     .cs-features-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .cs-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .cs-features-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .cs-audience-grid {
+        grid-template-columns: 1fr;
+        max-width: 640px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
-/* 1024px — 2 columns for most grids */
-
-/* 640px — single column */
+/* Mobile — single column */
 @media (max-width: 767px) {
     .cs-plans-grid {
         grid-template-columns: 1fr;
     }
 
     .cs-features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cs-when-list {
+        grid-template-columns: 1fr;
+    }
+
+    .cs-related-grid {
         grid-template-columns: 1fr;
     }
 

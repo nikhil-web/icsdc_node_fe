@@ -984,6 +984,7 @@ export function getCloudStoragePage() {
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
         "&populate[plans][populate][features]=*" +
+        "&populate[aboutImage][populate][image]=true" +
         "&populate[features][populate]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
