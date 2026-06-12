@@ -6,7 +6,6 @@
    Zero overrides.
 ══════════════════════════════════════ */
 
-
 /* ══════════════════════════════════════
    EYEBROW
 ══════════════════════════════════════ */
@@ -25,7 +24,6 @@
     margin-bottom: 20px;
     border: 1px solid rgba(26, 86, 219, 0.15);
 }
-
 
 /* ══════════════════════════════════════
    HERO VISUAL — subtle green tint for Linux/open-source
@@ -64,7 +62,6 @@
     display: block;
 }
 
-
 /* ══════════════════════════════════════
    TOP BADGE (inside hero visual, top)
 ══════════════════════════════════════ */
@@ -91,7 +88,6 @@
     0%, 100% { transform: translateX(-50%) translateY(0); }
     50%       { transform: translateX(-50%) translateY(-5px); }
 }
-
 
 /* ══════════════════════════════════════
    STATUS BADGE (inside hero visual, bottom-right)
@@ -142,7 +138,6 @@
     line-height: 1.3;
 }
 
-
 /* ══════════════════════════════════════
    PRICING GRID — uses common ds-plan-card
 ══════════════════════════════════════ */
@@ -154,12 +149,44 @@
     align-items: stretch;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .lch-pricing-grid {
         grid-template-columns: 1fr;
         max-width: 480px;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .lch-why-choose-inner {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .lch-why-choose-inner {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+    .lch-why-choose-list {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .lch-plans-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .lch-plan-card.lch-plan-featured {
+        transform: none;
+        order: -1;
+    }
+
+    .lch-plan-card.lch-plan-featured:hover {
+        transform: translateY(-6px);
+    }
+
+    .lch-frameworks-grid {
+        gap: 10px;
     }
 }
 
@@ -278,7 +305,6 @@
     color: rgba(255, 255, 255, 0.80);
 }
 
-
 /* ══════════════════════════════════════
    PLAN SPECS — 2-column spec grid
 ══════════════════════════════════════ */
@@ -327,7 +353,6 @@
     color: var(--white);
 }
 
-
 /* ══════════════════════════════════════
    PLAN BUTTON
 ══════════════════════════════════════ */
@@ -371,7 +396,6 @@
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
 }
 
-
 /* ══════════════════════════════════════
    WHY NEED SECTION — prose narrative
 ══════════════════════════════════════ */
@@ -413,7 +437,6 @@
     font-weight: 500;
     color: var(--text-dark);
 }
-
 
 /* ══════════════════════════════════════
    WHY CHOOSE SECTION — prose + bullet chips
@@ -492,22 +515,6 @@
     box-shadow: 0 2px 6px rgba(26, 86, 219, 0.30);
 }
 
-@media (max-width: 1279px) {
-    .lch-why-choose-inner {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (max-width: 1023px) {
-    .lch-why-choose-inner {
-        grid-template-columns: 1fr;
-        gap: 28px;
-    }
-    .lch-why-choose-list {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
 @media (max-width: 599px) {
     .lch-why-choose-list {
         grid-template-columns: 1fr;
@@ -518,8 +525,62 @@
     .lch-why-need-body {
         padding: 24px 20px;
     }
-}
 
+    .lch-related-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+    }
+
+    .lch-eyebrow {
+        font-size: 11px;
+        padding: 5px 12px;
+    }
+
+    .lch-plans-grid {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+    }
+
+    .lch-plan-card {
+        padding: 28px 20px;
+    }
+
+    .lch-plan-specs {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .lch-plan-price {
+        font-size: 28px;
+    }
+
+    .lch-frameworks-grid {
+        gap: 8px;
+    }
+
+    .lch-framework-badge {
+        font-size: 12px;
+        padding: 7px 14px;
+    }
+
+    .lch-top-badge {
+        font-size: 10px;
+        padding: 5px 12px;
+    }
+
+    .lch-status-badge {
+        padding: 8px 12px;
+        bottom: 12px;
+        right: 12px;
+    }
+
+    .lch-bt {
+        font-size: 11px;
+    }
+
+    .lch-bs {
+        font-size: 9px;
+    }
+}
 
 /* ══════════════════════════════════════
    FRAMEWORKS GRID
@@ -555,7 +616,6 @@
     border-color: rgba(26, 86, 219, 0.25);
     color: var(--blue);
 }
-
 
 /* ══════════════════════════════════════
    RELATED SERVICES — 2 cards (light, centered)
@@ -639,91 +699,11 @@
     gap: 10px;
 }
 
-@media (max-width: 767px) {
-    .lch-related-grid {
-        grid-template-columns: 1fr;
-        max-width: 420px;
-    }
-}
-
-
 /* ══════════════════════════════════════
    RESPONSIVE — 1024px breakpoint
 ══════════════════════════════════════ */
-@media (max-width: 1023px) {
-    .lch-plans-grid {
-        grid-template-columns: 1fr;
-        max-width: 480px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .lch-plan-card.lch-plan-featured {
-        transform: none;
-        order: -1;
-    }
-
-    .lch-plan-card.lch-plan-featured:hover {
-        transform: translateY(-6px);
-    }
-
-    .lch-frameworks-grid {
-        gap: 10px;
-    }
-}
-
 
 /* ══════════════════════════════════════
    RESPONSIVE — 640px breakpoint
 ══════════════════════════════════════ */
-@media (max-width: 767px) {
-    .lch-eyebrow {
-        font-size: 11px;
-        padding: 5px 12px;
-    }
 
-    .lch-plans-grid {
-        grid-template-columns: 1fr;
-        max-width: 100%;
-    }
-
-    .lch-plan-card {
-        padding: 28px 20px;
-    }
-
-    .lch-plan-specs {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .lch-plan-price {
-        font-size: 28px;
-    }
-
-    .lch-frameworks-grid {
-        gap: 8px;
-    }
-
-    .lch-framework-badge {
-        font-size: 12px;
-        padding: 7px 14px;
-    }
-
-    .lch-top-badge {
-        font-size: 10px;
-        padding: 5px 12px;
-    }
-
-    .lch-status-badge {
-        padding: 8px 12px;
-        bottom: 12px;
-        right: 12px;
-    }
-
-    .lch-bt {
-        font-size: 11px;
-    }
-
-    .lch-bs {
-        font-size: 9px;
-    }
-}

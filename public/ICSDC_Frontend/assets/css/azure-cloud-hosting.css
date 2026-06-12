@@ -629,8 +629,6 @@
     overflow: hidden;
 }
 
-
-
 .azure-stack-inner {
     width: 100%;
     max-width: var(--c-container);
@@ -988,7 +986,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE BREAKPOINTS
 ══════════════════════════════════════ */
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .azure-who-inner {
         grid-template-columns: 1fr;
     }
@@ -1023,6 +1021,10 @@
         order: -1;
         max-width: 560px;
         margin: 0 auto;
+    }
+
+    .azure-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -1059,6 +1061,10 @@
 
     .azure-pricing-points {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .azure-plans-grid {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -1315,18 +1321,6 @@
     background: #1e429f;
     transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(26, 86, 219, .30);
-}
-
-@media (max-width: 1023px) {
-    .azure-plans-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 767px) {
-    .azure-plans-grid {
-        grid-template-columns: 1fr;
-    }
 }
 
 /* ══════════════════════════════════════

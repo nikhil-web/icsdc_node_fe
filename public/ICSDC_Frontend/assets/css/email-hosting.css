@@ -270,7 +270,7 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .email-solutions-grid {
         grid-template-columns: 1fr;
     }

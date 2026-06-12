@@ -1088,8 +1088,11 @@ export function getVirtualMachinePage() {
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[whyCards][populate]=*" +
+        "&populate[blockStorageCta]=*" +
+        "&populate[blockStorageImage][populate][image]=true" +
         "&populate[useCases][populate]=*" +
         "&populate[whenCards][populate]=*" +
+        "&populate[whyOverImage][populate][image]=true" +
         "&populate[heroImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
         "&populate[faq][populate]=*" +

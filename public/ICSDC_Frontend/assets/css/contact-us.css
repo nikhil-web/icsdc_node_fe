@@ -35,7 +35,7 @@
 
 .cu-hero-section .hero {
     align-items: center;
-    padding: 0px var(--c-px) 64px;
+    padding: 30px var(--c-px) 64px;
 }
 
 .cu-hero-section .hero-right {
@@ -386,6 +386,7 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
+    text-align: left;
 }
 
 .cu-form-row {
@@ -452,22 +453,9 @@
 
 .cu-textarea {
     resize: vertical;
-    min-height: 120px;
     line-height: 1.6;
-}
-
-/* On short viewports (laptops/tablets in landscape) shrink the textarea
-   so the full form stays within the hero without clipping */
-@media (max-height: 800px) {
-    .hero-form-wrap .cu-textarea {
-        min-height: 72px;
-    }
-}
-
-@media (max-height: 680px) {
-    .hero-form-wrap .cu-textarea {
-        min-height: 48px;
-    }
+    height: 88px;
+    /* default: 3 rows */
 }
 
 .cu-submit-btn {
@@ -627,95 +615,47 @@
    RESPONSIVE BREAKPOINTS
 ══════════════════════════════════════ */
 
-/* 1280px — tighten step connectors */
-@media (max-width: 1279px) {
-    .cu-step-connector {
-        width: 24px;
-    }
-}
-
-/* ── Hero-embedded form: responsive adjustments ── */
-@media (max-width: 1023px) {
-
-    /* Tighter card padding on tablet */
-    .hero-form-wrap .cu-hero-form-wrap {
-        padding: 24px 20px 20px;
-        max-width: 100%;
-        box-shadow: 0 8px 32px rgba(26, 86, 219, 0.12);
-        text-align: left;
-    }
-
-    /* Stack form field pairs to 1-col inside hero (contact-us page keeps 2-col until 767px) */
-    .hero-form-wrap .cu-form-row {
-        grid-template-columns: 1fr 1fr;
-        gap: 0;
-    }
-
-    .hero-form-wrap .cu-form {
-        gap: 14px;
-    }
-
-    .hero-form-wrap .cu-hero-form-title {
-        font-size: 17px;
-        margin-bottom: 16px;
-    }
-}
-
-@media (max-width: 600px) {
-
-    /* Even tighter on phones */
-    .hero-form-wrap .cu-hero-form-wrap {
-        padding: 20px 16px 16px;
-    }
-}
-
-/* 1024px */
-@media (max-width: 1023px) {
-    .cu-contact-inner {
-        grid-template-columns: 1fr;
-        gap: 48px;
-    }
-
-    .cu-info-col {
-        position: static;
-    }
-
-    .cu-steps-flow {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0;
-    }
-
-    .cu-step {
-        flex: 0 0 calc(50% - 12px);
-        padding: 0 16px 40px;
-    }
-
-    .cu-step-connector {
-        display: none;
-    }
-
-    /* Show step connectors as vertical lines on step cards */
-    .cu-step::after {
-        content: '';
-        position: absolute;
-        bottom: 16px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 2px;
-        height: 20px;
-        background: none;
-    }
-}
-
-/* 768px */
+/* Mobile */
 @media (max-width: 767px) {
+    .cu-textarea {
+        height: 88px;
+    }
+
     .cu-hero-section {
         padding-top: 80px;
     }
 
+    .cu-hero-section .hero {
+        padding: 16px var(--c-px) 32px;
+    }
+
+    .cu-hero-section .hero-title {
+        font-size: clamp(28px, 8vw, 40px);
+    }
+
+    .cu-hero-section .hero-content {
+        text-align: center;
+    }
+
+    .cu-hero-section .hero-btns {
+        justify-content: center;
+    }
+
+    .cu-hero-visual {
+        max-width: 100%;
+    }
+
+    .cu-hero-badge-top {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+
     .cu-help-grid {
         grid-template-columns: 1fr;
+    }
+
+    .cu-help-card {
+        padding: 24px 20px 20px;
     }
 
     .cu-steps-flow {
@@ -735,30 +675,23 @@
         display: none;
     }
 
+    .cu-step-number {
+        width: 48px;
+        height: 48px;
+        font-size: 16px;
+    }
+
     .cu-contact-inner {
         grid-template-columns: 1fr;
-        gap: 36px;
+        gap: 28px;
+    }
+
+    .cu-info-col {
+        position: static;
     }
 
     .cu-form-row {
         grid-template-columns: 1fr;
-    }
-
-    .cu-hero-visual {
-        max-width: 100%;
-    }
-
-    .cu-hero-badge-top {
-        font-size: 10px;
-        padding: 6px 10px;
-    }
-
-    .cu-help-card {
-        padding: 24px 20px 20px;
-    }
-
-    .cu-contact-inner {
-        gap: 28px;
     }
 
     .cu-form-title {
@@ -769,9 +702,79 @@
         font-size: 18px;
     }
 
-    .cu-step-number {
-        width: 48px;
-        height: 48px;
-        font-size: 16px;
+    .hero-form-wrap .cu-hero-form-wrap {
+        padding: 20px 16px 16px;
+        max-width: 100%;
+        box-shadow: 0 8px 32px rgba(26, 86, 219, 0.12);
+    }
+
+    .hero-form-wrap .cu-form {
+        gap: 14px;
+    }
+
+    .hero-form-wrap .cu-hero-form-title {
+        font-size: 17px;
+        margin-bottom: 16px;
     }
 }
+
+/* Tablet (768px – 1365px) */
+@media (min-width: 768px) and (max-width: 1365px) {
+    .cu-textarea {
+        height: 96px;
+    }
+
+    .cu-hero-section .hero-title {
+        font-size: clamp(36px, 5vw, 52px);
+    }
+
+    .cu-hero-section .hero {
+        padding: 20px var(--c-px) 48px;
+    }
+
+    .cu-steps-flow {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0;
+    }
+
+    .cu-step {
+        flex: 0 0 calc(50% - 12px);
+        padding: 0 16px 40px;
+    }
+
+    .cu-step-connector {
+        display: none;
+    }
+
+    .cu-contact-inner {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .cu-info-col {
+        position: static;
+    }
+
+    .hero-form-wrap .cu-hero-form-wrap {
+        padding: 24px 20px 20px;
+        box-shadow: 0 8px 32px rgba(26, 86, 219, 0.12);
+        text-align: left;
+    }
+
+    .hero-form-wrap .cu-form-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+    }
+
+    .hero-form-wrap .cu-form {
+        gap: 14px;
+    }
+
+    .hero-form-wrap .cu-hero-form-title {
+        font-size: 17px;
+        margin-bottom: 16px;
+    }
+}
+
+/* Desktop (≥1366px) — all defaults apply */

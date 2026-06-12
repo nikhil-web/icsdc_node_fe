@@ -6,7 +6,6 @@
    Zero overrides.
 ══════════════════════════════════════ */
 
-
 /* ══════════════════════════════════════
    HERO — EYEBROW PILL
 ══════════════════════════════════════ */
@@ -186,7 +185,6 @@
     font-weight: 400;
 }
 
-
 /* ══════════════════════════════════════
    SPECIALIZATIONS SECTION
 ══════════════════════════════════════ */
@@ -247,7 +245,6 @@
     line-height: 1.75;
     margin: 0;
 }
-
 
 /* ══════════════════════════════════════
    WHO WE ARE — DARK BLUE SECTION
@@ -315,7 +312,6 @@
     border-radius: var(--radius-xl);
     backdrop-filter: blur(4px);
 }
-
 
 /* ══════════════════════════════════════
    WHAT WE DO SECTION
@@ -396,7 +392,6 @@
     opacity: 0.8;
 }
 
-
 /* ══════════════════════════════════════
    VISION + MISSION — DUAL PANEL
 ══════════════════════════════════════ */
@@ -472,7 +467,6 @@
     color: var(--muted);
 }
 
-
 /* ══════════════════════════════════════
    WHY CHOOSE US SECTION
 ══════════════════════════════════════ */
@@ -489,7 +483,6 @@
     margin: 0 auto;
     padding-top: 8px;
 }
-
 
 /* ══════════════════════════════════════
    JOURNEY SECTION — 3 COLUMN CARDS
@@ -609,7 +602,6 @@
     border-radius: var(--radius-xl);
 }
 
-
 /* ══════════════════════════════════════
    LIFE @ ICSDC SECTION
 ══════════════════════════════════════ */
@@ -691,7 +683,6 @@
     text-transform: uppercase;
 }
 
-
 /* ══════════════════════════════════════
    PARTNERS SECTION
 ══════════════════════════════════════ */
@@ -748,7 +739,6 @@
     text-align: center;
 }
 
-
 /* ══════════════════════════════════════
    BLUE CARD ACCENT OVERRIDE FOR AU SPECS
    (scoped to au-specs section only)
@@ -762,13 +752,12 @@
     border-color: rgba(26, 86, 219, 0.28);
 }
 
-
 /* ══════════════════════════════════════
    RESPONSIVE BREAKPOINTS
 ══════════════════════════════════════ */
 
 /* 1024px */
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .au-specs-grid {
         grid-template-columns: 1fr;
     }

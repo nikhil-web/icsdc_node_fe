@@ -3,7 +3,6 @@
    Uses shared cloud-* classes from components.css.
 ══════════════════════════════════════ */
 
-
 /* ═══════════════════════════════════════════
    WHEN SHOULD YOU USE SHARED HOSTING SECTION
 ═══════════════════════════════════════════ */
@@ -118,9 +117,8 @@
     white-space: nowrap;
 }
 
-
 /* ── Responsive ── */
-@media (max-width: 1024px) {
+@media (max-width: 1365px) {
     .sh-when-grid {
         grid-template-columns: repeat(2, 1fr);
     }

@@ -375,7 +375,7 @@ export function populateHero(section, data) {
     if (data.priceUnit) setText(section, '.price-unit', data.priceUnit);
     if (data.priceNote) setHTML(section, '.price-note', data.priceNote);
 
-    var btns = section.querySelectorAll('.hero-btns button');
+    var btns = section.querySelectorAll('.hero-btns button, .hero-btns a');
     var ctaPrimaryProvided  = Object.prototype.hasOwnProperty.call(data, 'ctaPrimary');
     var ctaSecondaryProvided = Object.prototype.hasOwnProperty.call(data, 'ctaSecondary');
 

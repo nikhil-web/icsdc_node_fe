@@ -416,14 +416,11 @@ html[data-theme="dark"] .vpc-table-wrap {
 ══════════════════════════════════════ */
 
 /* 1280px — 4-col advantages → 3 */
-@media (max-width: 1279px) {
+@media (max-width: 1365px) {
     .vpc-advantages-grid {
         grid-template-columns: repeat(3, 1fr);
     }
-}
 
-/* 1024px — 2 columns for most grids; plan cards stack */
-@media (max-width: 1023px) {
     .vpc-advantages-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -439,6 +436,8 @@ html[data-theme="dark"] .vpc-table-wrap {
         transform: translateY(0);
     }
 }
+
+/* 1024px — 2 columns for most grids; plan cards stack */
 
 /* 640px — single column */
 @media (max-width: 767px) {

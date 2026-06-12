@@ -326,7 +326,7 @@
 ══════════════════════════════════════ */
 
 /* 1280px — 2-col plans, 3-col features */
-@media (max-width: 1279px) {
+@media (max-width: 1365px) {
     .gds-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -334,10 +334,7 @@
     .gds-features-grid {
         grid-template-columns: repeat(3, 1fr);
     }
-}
 
-/* 1024px — 2 columns for most grids */
-@media (max-width: 1023px) {
     .gds-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -354,6 +351,8 @@
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* 1024px — 2 columns for most grids */
 
 /* 640px — single column */
 @media (max-width: 767px) {
@@ -394,6 +393,13 @@
     .gds-when-list {
         grid-template-columns: 1fr;
     }
+
+    .gds-related-grid { grid-template-columns: 1fr; }
+    .gds-related-card:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+    .gds-related-card { padding: 40px 24px; }
 }
 
 /* ══════════════════════════════════════
@@ -584,11 +590,3 @@ html[data-theme="dark"] .gds-related-btn {
     color: #e2e8f0;
 }
 
-@media (max-width: 767px) {
-    .gds-related-grid { grid-template-columns: 1fr; }
-    .gds-related-card:first-child {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-    }
-    .gds-related-card { padding: 40px 24px; }
-}

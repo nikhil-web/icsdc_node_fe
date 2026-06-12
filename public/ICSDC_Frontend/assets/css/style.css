@@ -16,7 +16,6 @@
     padding: 0;
 }
 
-
 html {
     overflow-x: clip;
     /* clip prevents horizontal scroll without creating a scroll container — keeps position:sticky working */
@@ -1798,7 +1797,6 @@ nav.scrolled {
     position: static;
 }
 
-
 /* ── AWS page tweaks (extends cloud-hosting.css) ── */
 .eyebrow-badge {
     display: inline-flex;
@@ -1820,7 +1818,7 @@ nav.scrolled {
    Compress nav items to prevent overflow
    on ~1280/1366px screens before hamburger
 ══════════════════════════════════════ */
-@media (max-width: 1280px) {
+@media (max-width: 1365px) {
     .nav-inner {
         gap: 4px;
     }
@@ -1840,12 +1838,6 @@ nav.scrolled {
         font-size: 13px;
         gap: 5px;
     }
-}
-
-/* ══════════════════════════════════════
-   RESPONSIVE — TABLET (481–1024px)
-══════════════════════════════════════ */
-@media (max-width: 1023px) {
 
     .nav-links,
     .desktop-login-btn {
@@ -2140,6 +2132,10 @@ nav.scrolled {
         padding: 24px 32px 40px;
     }
 }
+
+/* ══════════════════════════════════════
+   RESPONSIVE — TABLET (481–1024px)
+══════════════════════════════════════ */
 
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET SMALL (≤ 768px)

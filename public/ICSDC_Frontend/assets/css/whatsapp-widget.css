@@ -49,15 +49,14 @@
 }
 
 /* On small navbars hide the text label, show icon only */
-@media (max-width: 1100px) {
+@media (max-width: 1365px) {
     .btn-wa-nav:not(.btn-wa-nav--mobile) span { display: none; }
     .btn-wa-nav:not(.btn-wa-nav--mobile) { padding: 9px 12px; }
+
+    .btn-wa-nav:not(.btn-wa-nav--mobile) { display: none; }
 }
 
 /* On mobile (hamburger active) hide the desktop nav button entirely */
-@media (max-width: 1024px) {
-    .btn-wa-nav:not(.btn-wa-nav--mobile) { display: none; }
-}
 
 /* Mobile menu variant — sits in the .mobile-cta-row alongside login */
 .btn-wa-nav--mobile {

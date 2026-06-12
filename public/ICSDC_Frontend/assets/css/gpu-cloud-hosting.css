@@ -359,7 +359,7 @@
     text-align: center;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .gpu-portfolio-intro {
         grid-template-columns: 1fr;
         gap: 32px;
@@ -373,6 +373,31 @@
     .gpu-portfolio-intro-text .subtitle {
         max-width: 600px;
         margin: 0 auto;
+    }
+
+    .gpu-infra-card {
+        grid-template-columns: 1fr;
+    }
+
+    .gpu-infra-left,
+    .gpu-infra-right {
+        padding: 36px 32px;
+    }
+
+    .gpu-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gpu-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gpu-features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gpu-deploy-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -516,17 +541,6 @@
     margin-right: auto;
 }
 
-@media (max-width: 1023px) {
-    .gpu-infra-card {
-        grid-template-columns: 1fr;
-    }
-
-    .gpu-infra-left,
-    .gpu-infra-right {
-        padding: 36px 32px;
-    }
-}
-
 /* ══════════════════════════════════════
    RELATED SERVICES — 2-COL CARDS
 ══════════════════════════════════════ */
@@ -605,26 +619,8 @@
 ══════════════════════════════════════ */
 
 /* 1280px — 2-col plans */
-@media (max-width: 1279px) {
-    .gpu-plans-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 
 /* 1024px — 2 columns for most grids */
-@media (max-width: 1023px) {
-    .gpu-plans-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .gpu-features-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .gpu-deploy-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 
 /* 640px — single column */
 @media (max-width: 767px) {

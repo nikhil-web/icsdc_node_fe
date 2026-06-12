@@ -1341,7 +1341,7 @@ html[data-theme="dark"] .pr-sc-btn-featured:hover {
 /* ══════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════ */
-@media (max-width: 1100px) {
+@media (max-width: 1365px) {
   .pr-sidebar-wrap {
     display: none;
   }
