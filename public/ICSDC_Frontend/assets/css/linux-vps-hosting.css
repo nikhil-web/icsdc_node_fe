@@ -311,8 +311,20 @@
     flex-shrink: 0;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .lvps-checklist-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lvps-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lvps-os-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lvps-cp-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
@@ -321,6 +333,27 @@
     .lvps-checklist-grid {
         grid-template-columns: 1fr;
         gap: 14px;
+    }
+
+    .lvps-plans-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lvps-os-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lvps-cp-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lvps-hero-visual {
+        max-width: 100%;
+    }
+
+    .lvps-top-badge {
+        font-size: 10px;
+        padding: 6px 10px;
     }
 }
 
@@ -407,40 +440,6 @@
 ══════════════════════════════════════ */
 
 /* 1024px — 2 columns for most grids */
-@media (max-width: 1023px) {
-    .lvps-plans-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .lvps-os-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .lvps-cp-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 
 /* 767px — single column */
-@media (max-width: 767px) {
-    .lvps-plans-grid {
-        grid-template-columns: 1fr;
-    }
 
-    .lvps-os-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .lvps-cp-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .lvps-hero-visual {
-        max-width: 100%;
-    }
-
-    .lvps-top-badge {
-        font-size: 10px;
-        padding: 6px 10px;
-    }
-}

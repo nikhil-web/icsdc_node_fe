@@ -339,7 +339,7 @@
 ══════════════════════════════════════ */
 
 /* 1280px */
-@media (max-width: 1279px) {
+@media (max-width: 1365px) {
     .fw-services-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -364,10 +364,7 @@
     .fw-stagger-grid .cloud-power-card:nth-child(6) { grid-column: span 2; }
     .fw-stagger-grid .cloud-power-card:nth-child(7) { grid-column: span 2; }
     .fw-stagger-grid .cloud-power-card:nth-child(8) { grid-column: span 2; }
-}
 
-/* 1024px — 2 columns for most grids */
-@media (max-width: 1023px) {
     /* Stagger: 2-col equal at tablet */
     .fw-stagger-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -403,6 +400,8 @@
         padding: 24px 22px;
     }
 }
+
+/* 1024px — 2 columns for most grids */
 
 /* 640px — single column */
 @media (max-width: 767px) {

@@ -90,7 +90,7 @@
   margin-top: 32px;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
   .wincloud-apps-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -99,11 +99,36 @@
     grid-template-columns: 1fr;
     gap: 32px;
   }
+
+  .wincloud-pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .wincloud-about-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .wincloud-about-list {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 767px) {
   .wincloud-apps-grid {
     grid-template-columns: 1fr;
+  }
+
+  .wincloud-advanced-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wincloud-related-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
   }
 }
 
@@ -204,7 +229,6 @@
   display: block;
 }
 
-
 /* ══════════════════════════════════════
    PLANS / PRICING GRID (common ds-plan-card)
 ══════════════════════════════════════ */
@@ -215,16 +239,6 @@
   margin-top: 40px;
   align-items: stretch;
 }
-
-@media (max-width: 1023px) {
-  .wincloud-pricing-grid {
-    grid-template-columns: 1fr;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
 
 /* ══════════════════════════════════════
    WHO WE ARE
@@ -325,18 +339,6 @@
   box-shadow: 0 8px 30px rgba(26, 86, 219, 0.12);
 }
 
-@media (max-width: 900px) {
-  .wincloud-about-grid {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-
-  .wincloud-about-list {
-    grid-template-columns: 1fr;
-  }
-}
-
-
 /* ══════════════════════════════════════
    ADVANCED FEATURES (Elevate) — 2 wide cards
 ══════════════════════════════════════ */
@@ -346,13 +348,6 @@
   gap: 24px;
   margin-top: 40px;
 }
-
-@media (max-width: 767px) {
-  .wincloud-advanced-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 
 /* ══════════════════════════════════════
    RELATED SERVICES — 2 cards (light, centered)
@@ -432,9 +427,3 @@
   gap: 10px;
 }
 
-@media (max-width: 767px) {
-  .wincloud-related-grid {
-    grid-template-columns: 1fr;
-    max-width: 420px;
-  }
-}

@@ -276,7 +276,7 @@
 /* ══════════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════════ */
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
   .dt-tips-grid {
     grid-template-columns: repeat(2, 1fr);
   }

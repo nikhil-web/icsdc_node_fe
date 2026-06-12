@@ -1671,7 +1671,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (≤ 1024px)
 ══════════════════════════════════════ */
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .cloud-pricing-grid {
         grid-template-columns: 1fr;
         max-width: 480px;

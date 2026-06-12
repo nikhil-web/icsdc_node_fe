@@ -939,14 +939,11 @@
 ══════════════════════════════════════ */
 
 /* 1280px: Innovation 4→3 columns */
-@media (max-width: 1279px) {
+@media (max-width: 1365px) {
     .lds-innovation-grid {
         grid-template-columns: repeat(3, 1fr);
     }
-}
 
-/* 1024px: most grids go 2-column */
-@media (max-width: 1023px) {
     .lds-pricing-grid {
         grid-template-columns: 1fr;
         max-width: 520px;
@@ -982,7 +979,13 @@
     .lds-support-grid {
         grid-template-columns: repeat(3, 1fr);
     }
+
+    .lds-why-choose-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
+
+/* 1024px: most grids go 2-column */
 
 /* 768px: support 3→1, innovation 2→2 */
 @media (max-width: 767px) {
@@ -1071,12 +1074,6 @@
     color: var(--blue);
     font-size: 18px;
     flex-shrink: 0;
-}
-
-@media (max-width: 1023px) {
-    .lds-why-choose-list {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 @media (max-width: 639px) {

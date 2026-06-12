@@ -1346,7 +1346,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (≤ 1024px)
 ══════════════════════════════════════ */
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .ds-pricing-grid {
         grid-template-columns: 1fr;
         max-width: 480px;
@@ -1441,14 +1441,22 @@
     .wds-compare-table th {
         padding: 0.65rem 0.75rem;
     }
+
+    .wds-about-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px 20px;
+    }
 }
 
 @media (max-width: 479px) {
     .ds-use-grid {
         grid-template-columns: 1fr;
     }
-}
 
+    .wds-about-list {
+        grid-template-columns: 1fr;
+    }
+}
 
 /* ====== windows-dedicated-server.css ====== */
 
@@ -1500,19 +1508,6 @@
 }
 
 /* Responsive */
-@media (max-width: 767px) {
-    .wds-about-list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px 20px;
-    }
-}
-
-@media (max-width: 479px) {
-    .wds-about-list {
-        grid-template-columns: 1fr;
-    }
-}
-
 
 /* ====== WDS Hero / Decorative / Misc ====== */
 .wds-hero-visual {
@@ -1689,7 +1684,6 @@
     color: var(--c-primary, #0078d4);
     opacity: 0.6;
 }
-
 
 /* ====== Comparison Table ====== */
 .wds-compare-wrap {

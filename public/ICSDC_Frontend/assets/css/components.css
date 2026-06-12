@@ -208,9 +208,6 @@
     color: #616161;
 }
 
-
-
-
 .iso-section {
     background: var(--c-blue);
     overflow: hidden;
@@ -605,7 +602,7 @@
     align-items: start;
 }
 
-@media (max-width: 920px) {
+@media (max-width: 1365px) {
     .faq-grid {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -613,6 +610,119 @@
 
     .faq-aside {
         order: -1;
+    }
+
+    .faq-aside {
+        position: static;
+    }
+
+    .faq-illo {
+        max-width: 220px;
+    }
+
+    .footer-links-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 28px 20px;
+    }
+
+    .footer-brand-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 40px;
+    }
+
+    .best-cloud-services {
+        padding: 72px 0;
+    }
+
+    .best-cloud-services-btns {
+        grid-template-columns: 1fr;
+    }
+
+    .business-needs-cloud {
+        padding: 72px 0;
+    }
+
+    .business-needs-cloud-inner {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .business-needs-visual {
+        max-width: 760px;
+        margin: 0 auto;
+    }
+
+    .business-needs-title {
+        max-width: 640px;
+    }
+
+    .iso-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        text-align: center;
+    }
+
+    .iso-subtitle {
+        max-width: 100%;
+    }
+
+    .iso-badges-wrap {
+        justify-content: center;
+    }
+
+    .iso-image-wrapper {
+        width: 100%;
+        height: 600px;
+    }
+
+    .testi-card {
+        flex: 0 0 340px;
+    }
+
+    .faq-container {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .faq-contact-card {
+        position: static;
+    }
+
+    .contact-container {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .cloud-pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cloud-plan-card.cloud-featured {
+        transform: translateY(0);
+    }
+
+    .cloud-power-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cloud-why-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cloud-use-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .nav-search {
+        display: none;
     }
 }
 
@@ -676,16 +786,6 @@
 .faq-aside-link svg {
     width: 14px;
     height: 14px;
-}
-
-@media (max-width: 920px) {
-    .faq-aside {
-        position: static;
-    }
-
-    .faq-illo {
-        max-width: 220px;
-    }
 }
 
 /* Accordion list */
@@ -1316,17 +1416,6 @@ summary.faq-q::marker {
 }
 
 /* ── Responsive ── */
-@media (max-width: 900px) {
-    .footer-links-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 28px 20px;
-    }
-
-    .footer-brand-inner {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
 
 @media (max-width: 600px) {
     .footer-links-section {
@@ -1343,8 +1432,15 @@ summary.faq-q::marker {
         gap: 20px;
         align-items: baseline;
     }
-}
 
+    .nav-search-panel {
+        position: fixed;
+        top: 70px;
+        right: 16px;
+        left: 16px;
+        width: auto;
+    }
+}
 
 /* ══════════════════════════════════════
    SHARED PAGE COMPONENTS
@@ -1965,13 +2061,6 @@ summary.faq-q::marker {
 
 /* ── Shared Cloud Responsive ── */
 
-@media (max-width: 1279px) {
-    .footer-container {
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 40px;
-    }
-}
-
 @media (max-width: 479px) {
     .footer-container {
         grid-template-columns: 1fr;
@@ -2093,94 +2182,6 @@ summary.faq-q::marker {
     }
 }
 
-@media (max-width: 1023px) {
-    .best-cloud-services {
-        padding: 72px 0;
-    }
-
-    .best-cloud-services-btns {
-        grid-template-columns: 1fr;
-    }
-
-    .business-needs-cloud {
-        padding: 72px 0;
-    }
-
-    .business-needs-cloud-inner {
-        grid-template-columns: 1fr;
-        gap: 48px;
-    }
-
-    .business-needs-visual {
-        max-width: 760px;
-        margin: 0 auto;
-    }
-
-    .business-needs-title {
-        max-width: 640px;
-    }
-
-    .iso-inner {
-        grid-template-columns: 1fr;
-        gap: 32px;
-        text-align: center;
-    }
-
-    .iso-subtitle {
-        max-width: 100%;
-    }
-
-    .iso-badges-wrap {
-        justify-content: center;
-    }
-
-    .iso-image-wrapper {
-        width: 100%;
-        height: 600px;
-    }
-
-    .testi-card {
-        flex: 0 0 340px;
-    }
-
-    .faq-container {
-        grid-template-columns: 1fr;
-        gap: 48px;
-    }
-
-    .faq-contact-card {
-        position: static;
-    }
-
-    .contact-container {
-        grid-template-columns: 1fr;
-        gap: 48px;
-    }
-
-    .cloud-pricing-grid {
-        grid-template-columns: 1fr;
-        max-width: 480px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .cloud-plan-card.cloud-featured {
-        transform: translateY(0);
-    }
-
-    .cloud-power-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .cloud-why-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .cloud-use-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
 /* ══════════════════════════════════════
    FONT AWESOME ICON SIZING
    All icon containers use FA icons — no inline SVGs.
@@ -2283,7 +2284,7 @@ summary.faq-q::marker {
 }
 
 .nav-search-trigger {
-    display: inline-flex;
+    display: none; /* hidden by default; shown on desktop via min-width: 1366px below */
     align-items: center;
     justify-content: center;
     width: 40px;
@@ -2294,6 +2295,12 @@ summary.faq-q::marker {
     color: var(--c-text-mid, #4b5563);
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+@media (min-width: 1366px) {
+    .nav-search-trigger {
+        display: inline-flex;
+    }
 }
 
 .nav-search-trigger:hover {
@@ -2422,22 +2429,7 @@ summary.faq-q::marker {
     font-size: 13px;
 }
 
-@media (max-width: 600px) {
-    .nav-search-panel {
-        position: fixed;
-        top: 70px;
-        right: 16px;
-        left: 16px;
-        width: auto;
-    }
-}
-
 /* Hide the desktop search icon on mobile — replaced by hamburger search bar */
-@media (max-width: 1024px) {
-    .nav-search {
-        display: none;
-    }
-}
 
 /* ── Mobile hamburger search bar ──────────────────────────── */
 .mobile-search-bar {

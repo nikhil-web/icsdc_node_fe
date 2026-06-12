@@ -309,14 +309,11 @@
 ══════════════════════════════════════ */
 
 /* 1280px */
-@media (max-width: 1279px) {
+@media (max-width: 1365px) {
     .toc-improvements-grid {
         grid-template-columns: repeat(3, 1fr);
     }
-}
 
-/* 1024px — 2 columns for most grids */
-@media (max-width: 1023px) {
     .toc-improvements-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -330,6 +327,8 @@
         white-space: normal;
     }
 }
+
+/* 1024px — 2 columns for most grids */
 
 /* 640px — single column */
 @media (max-width: 767px) {

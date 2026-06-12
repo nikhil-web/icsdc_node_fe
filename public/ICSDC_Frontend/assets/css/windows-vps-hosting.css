@@ -289,7 +289,19 @@
       .wvps-stack-card {
         padding: 24px 20px 28px;
       }
-    }
+    
+      .win-stack-grid {
+        grid-template-columns: 1fr;
+      }
+      .win-security-grid {
+        grid-template-columns: 1fr;
+      }
+    
+      .wvps-plans-grid {
+        grid-template-columns: 1fr;
+      }
+    
+}
 
     /* (Legacy grid kept for graceful fallback — hidden once JS renders tabs) */
     .win-stack-grid {
@@ -299,23 +311,21 @@
       margin-top: 40px;
     }
 
-    @media (max-width: 1023px) {
+    @media (max-width: 1365px) {
       .win-stack-grid {
         grid-template-columns: 1fr 1fr;
       }
       .win-security-grid {
         grid-template-columns: repeat(2, 1fr);
       }
-    }
+    
+      .wvps-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    
+}
 
-    @media (max-width: 767px) {
-      .win-stack-grid {
-        grid-template-columns: 1fr;
-      }
-      .win-security-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    
 
     .win-stack-card {
       background: #fff;
@@ -529,17 +539,9 @@
       box-shadow: 0 6px 20px rgba(0, 120, 212, 0.30);
     }
 
-    @media (max-width: 1023px) {
-      .wvps-plans-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
+    
 
-    @media (max-width: 767px) {
-      .wvps-plans-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    
 
     /* Security grid */
     .win-security-grid {

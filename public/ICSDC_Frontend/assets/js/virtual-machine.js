@@ -16,6 +16,7 @@ import {
     initFAQ,
     initTestimonials
 } from './utils/cms-helpers.js';
+import { uploadURL } from './services/strapiClient.js';
 
 (function () {
     'use strict';
@@ -46,11 +47,12 @@ import {
             var ram     = parts[1] || '';
             var storage = parts[2] || '';
             var xfer    = parts[3] || '';
+            var price   = parts[4] || 'Contact Us';
 
             // Inject category header if needed
             Object.keys(categories).forEach(function (cat) {
                 if (!categories[cat] && name.startsWith(cat)) {
-                    rows += '<tr class="vm-category-row"><td colspan="6">' + cat + '</td></tr>';
+                    rows += '<tr class="vm-category-row"><td colspan="7">' + cat + '</td></tr>';
                     categories[cat] = true;
                 }
             });
@@ -61,11 +63,29 @@ import {
                 '<td>' + ram + '</td>' +
                 '<td>' + storage + '</td>' +
                 '<td>' + xfer + '</td>' +
-                '<td><a href="#" class="vm-plan-btn">Get Started</a></td>' +
+                '<td class="vm-plan-price">' + price + '</td>' +
+                '<td><a href="/contact-us" class="vm-plan-btn">Get Started</a></td>' +
                 '</tr>';
         });
 
         tbody.innerHTML = rows;
+    }
+
+    /**
+     * Render the VM vs Shared Hosting comparison rows.
+     * compareRows is a JSON array: [{ criteria, shared, icsdc }]
+     */
+    function populateCompareTable(rows) {
+        if (!rows || !rows.length) return;
+        var tbody = document.getElementById('vm-compare-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = rows.map(function (row) {
+            return '<tr>' +
+                '<td class="vm-criteria">' + (row.criteria || '') + '</td>' +
+                '<td>' + (row.shared || '') + '</td>' +
+                '<td class="vm-col-good">' + (row.icsdc || '') + '</td>' +
+                '</tr>';
+        }).join('');
     }
 
     /**
@@ -138,10 +158,25 @@ import {
             populateSectionHeader('#vm-why', page.whyLabel, page.whyTitle, page.whySubtitle);
             populateIconCards('#vm-why .vm-why-grid', page.whyCards, 'cloud-power-card');
 
-            // Block Storage section — static, update text if provided
+            // Block Storage section
             if (page.blockStorageTitle) setText(document, '.vm-bs-title', page.blockStorageTitle);
             if (page.blockStorageSubtitle) setText(document, '.vm-bs-subtitle', page.blockStorageSubtitle);
+            if (page.blockStorageSubheading) setText(document, '.vm-bs-subheading', page.blockStorageSubheading);
             if (page.blockStorageDescription) setText(document, '.vm-bs-desc', page.blockStorageDescription);
+            if (page.blockStorageCta) {
+                var bsCta = document.querySelector('.vm-bs-cta');
+                if (bsCta) {
+                    if (page.blockStorageCta.text) bsCta.innerHTML = page.blockStorageCta.text + ' &rarr;';
+                    if (page.blockStorageCta.link) bsCta.href = page.blockStorageCta.link;
+                }
+            }
+            if (page.blockStorageImage && page.blockStorageImage.image) {
+                var bsImg = document.getElementById('vm-bs-img');
+                if (bsImg) {
+                    var bsImgUrl = uploadURL(page.blockStorageImage.image);
+                    if (bsImgUrl) bsImg.src = bsImgUrl;
+                }
+            }
 
             // Use Cases (8 cards)
             populateSectionHeader('#vm-usecases', page.useCasesLabel, page.useCasesTitle, page.useCasesSubtitle);
@@ -150,6 +185,33 @@ import {
             // When to Choose (7 cards)
             populateSectionHeader('#vm-when', page.whenLabel, page.whenTitle, page.whenSubtitle);
             populateWhenCards(page.whenCards);
+
+            // Comparison Table (VM vs Shared Hosting)
+            populateSectionHeader('#vm-compare', null, page.compareTitle, page.compareSubtitle);
+            populateCompareTable(page.compareRows);
+
+            // Why Choose VMs Over Shared Hosting
+            var whyOverTitleEl = document.getElementById('vm-whyover-title');
+            if (whyOverTitleEl && page.whyOverTitle) whyOverTitleEl.textContent = page.whyOverTitle;
+            var whyOverDescEl = document.getElementById('vm-whyover-desc');
+            if (whyOverDescEl && page.whyOverDesc) whyOverDescEl.textContent = page.whyOverDesc;
+            var whyOverLabelEl = document.getElementById('vm-whyover-points-label');
+            if (whyOverLabelEl && page.whyOverPointsLabel) whyOverLabelEl.textContent = page.whyOverPointsLabel;
+            if (page.whyOverPoints && page.whyOverPoints.length) {
+                var whyOverList = document.getElementById('vm-whyover-points');
+                if (whyOverList) {
+                    whyOverList.innerHTML = page.whyOverPoints.map(function (pt) {
+                        return '<li>' + pt + '</li>';
+                    }).join('');
+                }
+            }
+            if (page.whyOverImage && page.whyOverImage.image) {
+                var whyOverImg = document.getElementById('vm-whyover-img');
+                if (whyOverImg) {
+                    var whyOverImgUrl = uploadURL(page.whyOverImage.image);
+                    if (whyOverImgUrl) whyOverImg.src = whyOverImgUrl;
+                }
+            }
 
             // Testimonials
             if (page.testimonialTitle) setText(document, '#vm-testi-heading', page.testimonialTitle);

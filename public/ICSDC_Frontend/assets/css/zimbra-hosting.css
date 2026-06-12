@@ -90,7 +90,7 @@
       margin-top: 32px;
     }
 
-    @media (max-width: 1023px) {
+    @media (max-width: 1365px) {
       .zimbra-features-grid {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -100,7 +100,8 @@
       .zimbra-step-arrow {
         display: none;
       }
-    }
+    
+}
 
     @media (max-width: 767px) {
       .zimbra-features-grid {
@@ -109,7 +110,8 @@
       .zimbra-steps {
         grid-template-columns: 1fr;
       }
-    }
+    
+}
 
     .zimbra-feat-badge {
       background: #fff;
@@ -256,7 +258,6 @@
       color: var(--blue);
       z-index: 1;
     }
-
 
 .zimbra-compare-wrap {
   overflow-x: auto;

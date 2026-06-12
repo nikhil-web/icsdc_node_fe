@@ -140,14 +140,40 @@
     margin-top: 40px;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .aws-feature-grid {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .aws-plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .aws-dedicated-inner,
+    .aws-why-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .aws-dedicated-content .title,
+    .aws-why-content .title {
+        text-align: left;
+    }
+
+    .aws-whoweare-band {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 40px 32px;
     }
 }
 
 @media (max-width: 767px) {
     .aws-feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .aws-plans-grid,
+    .aws-blocks-grid {
         grid-template-columns: 1fr;
     }
 }
@@ -473,30 +499,6 @@
 /* ══════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════ */
-@media (max-width: 1023px) {
-    .aws-plans-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .aws-dedicated-inner,
-    .aws-why-inner {
-        grid-template-columns: 1fr;
-        gap: 32px;
-    }
-
-    .aws-dedicated-content .title,
-    .aws-why-content .title {
-        text-align: left;
-    }
-}
-
-@media (max-width: 767px) {
-
-    .aws-plans-grid,
-    .aws-blocks-grid {
-        grid-template-columns: 1fr;
-    }
-}
 
 /* ══════════════════════════════════════
    WHO WE ARE — BAND (text left, checklist right)
@@ -605,14 +607,6 @@
     align-items: center;
     justify-content: center;
     font-size: 11px;
-}
-
-@media (max-width: 1023px) {
-    .aws-whoweare-band {
-        grid-template-columns: 1fr;
-        gap: 32px;
-        padding: 40px 32px;
-    }
 }
 
 @media (max-width: 600px) {

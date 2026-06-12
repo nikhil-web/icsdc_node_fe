@@ -275,7 +275,7 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .dom-tld-grid {
         grid-template-columns: repeat(4, 1fr);
     }

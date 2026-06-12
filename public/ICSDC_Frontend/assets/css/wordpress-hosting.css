@@ -292,7 +292,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (≤1024px)
 ══════════════════════════════════════ */
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .wp-plans-grid {
         grid-template-columns: 1fr;
         max-width: 480px;
@@ -307,6 +307,12 @@
 
     .wp-plan-card.wp-plan-popular:hover {
         transform: translateY(-4px);
+    }
+
+    .wp-why-consider-grid,
+    .wp-control-grid,
+    .wp-why-choose-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -489,13 +495,6 @@
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (≤1023px) — new grids
 ══════════════════════════════════════ */
-@media (max-width: 1023px) {
-    .wp-why-consider-grid,
-    .wp-control-grid,
-    .wp-why-choose-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 
 /* ══════════════════════════════════════
    RESPONSIVE — MOBILE (≤640px)

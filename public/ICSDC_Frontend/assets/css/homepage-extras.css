@@ -173,7 +173,6 @@
     margin: 0;
 }
 
-
 /* ══════════════════════════════════════
    TECHNOLOGY PARTNERS SECTION
 ══════════════════════════════════════ */
@@ -270,17 +269,14 @@
     background: #ffffff;
 }
 
-
 /* ══════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════ */
-@media (max-width: 1279px) {
+@media (max-width: 1365px) {
     .hp-logo-grid {
         grid-template-columns: repeat(5, 1fr);
     }
-}
 
-@media (max-width: 1023px) {
     .hp-map-wrap {
         max-height: 380px;
     }

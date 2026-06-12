@@ -6,7 +6,6 @@
    Zero overrides.
 ══════════════════════════════════════ */
 
-
 /* ══════════════════════════════════════
    EYEBROW
 ══════════════════════════════════════ */
@@ -25,7 +24,6 @@
     margin-bottom: 20px;
     border: 1px solid rgba(26, 86, 219, 0.15);
 }
-
 
 /* ══════════════════════════════════════
    HERO VISUAL
@@ -61,7 +59,6 @@
     position: relative;
     z-index: 1;
 }
-
 
 /* ══════════════════════════════════════
    HERO BADGES
@@ -135,7 +132,6 @@
     font-weight: 400;
     margin-top: 2px;
 }
-
 
 /* ══════════════════════════════════════
    PLANS GRID
@@ -246,7 +242,6 @@
     background: var(--blue-dark, #1a56db);
 }
 
-
 /* ══════════════════════════════════════
    HOW IT WORKS STEPS
 ══════════════════════════════════════ */
@@ -319,7 +314,6 @@
     z-index: 2;
 }
 
-
 /* ══════════════════════════════════════
    CLOUD USE GRID (Why ICSDC cards)
    — reuses cloud-use-card pattern
@@ -359,11 +353,10 @@
     line-height: 1.65;
 }
 
-
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (max 1024px)
 ══════════════════════════════════════ */
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .gws-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -386,7 +379,6 @@
         grid-template-columns: repeat(2, 1fr);
     }
 }
-
 
 /* ══════════════════════════════════════
    RESPONSIVE — MOBILE (max 640px)

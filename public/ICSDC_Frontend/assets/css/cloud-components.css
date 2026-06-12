@@ -601,13 +601,24 @@
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (≤ 1024px)
 ══════════════════════════════════════ */
-@media (max-width: 1023px) {
+@media (max-width: 1365px) {
     .cloud-power-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
     .cloud-use-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ds-plan-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .ds-plan-card.ds-featured {
+        transform: translateY(0);
     }
 }
 
@@ -648,6 +659,15 @@
 
     .cloud-fw-icon i {
         font-size: 19px;
+    }
+
+    .hosting-split-row {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .hosting-split-img {
+        order: -1;
     }
 }
 
@@ -699,17 +719,6 @@
     max-width: 480px;
     border-radius: 16px;
     object-fit: cover;
-}
-
-@media (max-width: 768px) {
-    .hosting-split-row {
-        grid-template-columns: 1fr;
-        gap: 32px;
-    }
-
-    .hosting-split-img {
-        order: -1;
-    }
 }
 
 /* ══════════════════════════════════════
@@ -972,15 +981,3 @@ html[data-theme="dark"] .ds-plan-cta-outline:hover {
 }
 
 /* Default responsive — overridden per-page as needed */
-@media (max-width: 1023px) {
-    .ds-plan-grid {
-        grid-template-columns: 1fr;
-        max-width: 480px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .ds-plan-card.ds-featured {
-        transform: translateY(0);
-    }
-}
