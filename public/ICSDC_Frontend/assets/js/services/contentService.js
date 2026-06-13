@@ -259,17 +259,22 @@ export function getEmailHostingPage() {
         "?populate[seo]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
+        "&populate[heroImage][populate][image]=true" +
         "&populate[pillars]=*" +
+        "&populate[plans][populate]=features" +
+        "&populate[aboutCta]=*" +
+        "&populate[aboutImage][populate][image]=true" +
         "&populate[features]=*" +
+        "&populate[experienceImage][populate][image]=true" +
         "&populate[solutions]=*" +
+        "&populate[handshakeImage][populate][image]=true" +
         "&populate[useCases]=*" +
-
+        "&populate[whenImage][populate][image]=true" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[ctaBand2][populate][ctaPrimary]=*" +
         "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
-        "&populate[heroImage][populate][image]=true" +
         "&populate[testimonials][populate]=*"
     );
 }

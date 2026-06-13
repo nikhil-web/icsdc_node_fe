@@ -626,7 +626,7 @@
     }
 
     .footer-brand-inner {
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
     }
 
@@ -699,8 +699,7 @@
     }
 
     .cloud-pricing-grid {
-        grid-template-columns: 1fr;
-        max-width: 480px;
+        grid-template-columns: 1fr !important;
         margin-left: auto;
         margin-right: auto;
     }
