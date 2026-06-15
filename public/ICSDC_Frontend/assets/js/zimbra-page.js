@@ -403,7 +403,7 @@
                 '<h3>' + s.title + '</h3>' +
                 '<p>' + (s.desc || s.description || '') + '</p>' +
                 '</div>' +
-                (i < m.steps.length - 1 ? '<span class="zimbra-step-arrow">›</span>' : '') +
+                (i < m.steps.length - 1 ? '' : '') +
                 '</div>';
         }).join('');
     }
