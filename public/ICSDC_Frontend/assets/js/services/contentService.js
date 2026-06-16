@@ -960,7 +960,9 @@ export function getMicrosoft365Page() {
         "&populate[heroImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
         "&populate[ctaBand2][populate][ctaPrimary]=*" +
-        "&populate[ctaBand2][populate][ctaSecondary]=*"
+        "&populate[ctaBand2][populate][ctaSecondary]=*" +
+        "&populate[toolsCards][populate]=*" +
+        "&populate[whenImage][populate][image]=true"
     );
 }
 

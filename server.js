@@ -680,7 +680,7 @@ function isPageLive(slug) {
 
 async function buildSitemapEntries(req) {
     const baseUrl = process.env.SITE_URL ||
-        (req ? `${req.protocol}://${req.get('host')}` : 'https://icsdc.in');
+        (req ? `${req.protocol}://${req.get('host')}` : 'https://icsdc.com');
     const today = new Date().toISOString().split('T')[0];
 
     const entries = STATIC_PAGES
