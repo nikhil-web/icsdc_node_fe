@@ -1206,3 +1206,89 @@ html[data-theme="dark"] .gws-why-card:hover,
 html[data-theme="dark"] .gws-upgrade-card:hover {
     box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
 }
+
+/* ══════════════════════════════════════
+   HOMEPAGE NEW SECTIONS — Partner / Industry / Security
+══════════════════════════════════════ */
+html[data-theme="dark"] .hp-partner-section,
+html[data-theme="dark"] .hp-security-section {
+    background: #0f172a !important;
+}
+
+html[data-theme="dark"] .hp-industry-section {
+    background: #111827 !important;
+}
+
+html[data-theme="dark"] .hp-section-title {
+    color: var(--text) !important;
+}
+
+html[data-theme="dark"] .hp-eyebrow {
+    background: rgba(99, 153, 255, 0.12) !important;
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .hp-stat,
+html[data-theme="dark"] .hp-partner-card,
+html[data-theme="dark"] .hp-industry-tab,
+html[data-theme="dark"] .hp-industry-feature,
+html[data-theme="dark"] .hp-industry-cta,
+html[data-theme="dark"] .hp-compliance-badge,
+html[data-theme="dark"] .hp-security-card,
+html[data-theme="dark"] .hp-btn-ghost {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .hp-stat-num,
+html[data-theme="dark"] .hp-partner-card h3,
+html[data-theme="dark"] .hp-industry-tab,
+html[data-theme="dark"] .hp-industry-card-title,
+html[data-theme="dark"] .hp-industry-feature-title,
+html[data-theme="dark"] .hp-industry-usedby strong,
+html[data-theme="dark"] .hp-industry-cta,
+html[data-theme="dark"] .hp-compliance-badge,
+html[data-theme="dark"] .hp-security-card h3,
+html[data-theme="dark"] .hp-security-highlight h3,
+html[data-theme="dark"] .hp-btn-ghost {
+    color: var(--text) !important;
+}
+
+html[data-theme="dark"] .hp-industry-panel {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .hp-industry-card-foot {
+    border-top-color: #334155 !important;
+}
+
+html[data-theme="dark"] .hp-partner-tag,
+html[data-theme="dark"] .hp-security-chip {
+    background: rgba(99, 153, 255, 0.14) !important;
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .hp-security-icon {
+    background: rgba(99, 153, 255, 0.14) !important;
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .hp-security-highlight {
+    background: #16223a !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .hp-security-highlight .hp-security-icon {
+    background: #1e293b !important;
+}
+
+html[data-theme="dark"] .hp-industry-tab.is-active {
+    background: var(--blue, #1a56db) !important;
+    border-color: var(--blue, #1a56db) !important;
+    color: #fff !important;
+}
+
+html[data-theme="dark"] .hp-industry-tab.is-active i {
+    color: #fff !important;
+}

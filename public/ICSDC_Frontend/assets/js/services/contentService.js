@@ -308,11 +308,13 @@ export function getDomainRegistrationPage() {
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[whyCards]=*" +
         "&populate[tips]=*" +
-        "&populate[ctaBand2][populate][ctaPrimary]=*" +
-        "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
         "&populate[heroImage][populate][image]=true" +
-        "&populate[testimonials][populate]=*"
+        "&populate[testimonials][populate]=*" +
+        "&populate[whyChooseCards]=*" +
+        "&populate[whyImage][populate][image]=true" +
+        "&populate[privacyImage][populate][image]=true" +
+        "&populate[aboutImage][populate][image]=true"
     );
 }
 
@@ -584,7 +586,18 @@ export function getHomepagePage() {
         "&populate[heroImage][populate][image]=true" +
         "&populate[trustedPartners][populate][logo]=true" +
         "&populate[whyBusinessNeedsCloud][populate][image]=true" +
-        "&populate[whyBusinessNeedsCloud][populate][items]=*"
+        "&populate[whyBusinessNeedsCloud][populate][items]=*" +
+        "&populate[partnerStats]=*" +
+        "&populate[partnerCards]=*" +
+        "&populate[partnerCtaPrimary]=*" +
+        "&populate[partnerCtaSecondary]=*" +
+        "&populate[industries][populate][features]=*" +
+        "&populate[industries][populate][cta]=*" +
+        "&populate[complianceBadges]=*" +
+        "&populate[securityCards]=*" +
+        "&populate[securityHighlights]=*" +
+        "&populate[securityCtaPrimary]=*" +
+        "&populate[securityCtaSecondary]=*"
     );
 }
 

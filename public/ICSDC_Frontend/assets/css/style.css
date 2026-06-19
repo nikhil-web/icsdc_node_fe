@@ -1085,7 +1085,7 @@ nav.scrolled {
    SECTIONS
 ══════════════════════════════════════ */
 .section {
-    padding: 80px 0;
+    padding: 70px 0;
 }
 
 .section .container {
@@ -1132,7 +1132,7 @@ nav.scrolled {
     background:
         linear-gradient(var(--white), var(--white)) padding-box,
         linear-gradient(120deg, var(--blue), var(--accent-teal), var(--blue-dark)) border-box;
-    border: 2px solid transparent;
+    /* border: 2px solid transparent; */
     padding: 36px 24px 28px;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
@@ -1156,7 +1156,7 @@ nav.scrolled {
     right: -18px;
     width: 54px;
     height: 54px;
-    background: #8ABDFB;
+    background: #d4e7ff;
     color: var(--white);
     border-radius: var(--radius-lg);
     display: grid;
@@ -1283,12 +1283,12 @@ nav.scrolled {
     background-color: var(--blue-light);
     text-align: left;
     border-radius: var(--radius-xl);
-    padding: 52px 48px 52px 48px;
+    padding: 25px 48px 25px 48px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-height: 440px;
-    /* max-width: 60%; */
+    max-width: 60%;
 }
 
 .who-we-are-paragraph {
@@ -1333,7 +1333,7 @@ nav.scrolled {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 35px 0;
+    padding: 0px 0;
 }
 
 .blue-container-left {
@@ -1409,7 +1409,7 @@ nav.scrolled {
     width: 215px;
     background: #ffffff;
     border: 1.5px solid rgba(26, 86, 219, 0.13);
-    border-left: 3px solid #1a56db;
+    border-top: rgba(26, 86, 219, 0.25);
     border-radius: 14px;
     padding: 16px 18px 18px;
     box-shadow:
@@ -1785,8 +1785,9 @@ nav.scrolled {
     padding: 40px 80px 40px 32px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     overflow: visible;
+    order: -1;
 }
 
 .industry-validated .less-cloud-complex-image img {

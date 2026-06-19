@@ -296,4 +296,11 @@
   .dt-related-card {
     padding: 24px 20px;
   }
+
+  .cloud-power-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px;
+    text-align: left;
+  }
 }

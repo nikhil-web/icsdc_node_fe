@@ -4,18 +4,20 @@
  * CMS-driven version: fetches all page content from Strapi
  * and populates DOM sections dynamically.
  *
- * Sections handled:
- *   1.  SEO meta tags
- *   2.  Hero (eyebrow + search bar + TLD pills + globe visual)
- *   3.  4 Pillars (icon cards)
- *   4.  TLD Pricing (section header + TLD cards)
- *   5.  Features (section header + 12 icon cards)
- *   6.  CTA Band #1
- *   7.  Why Domain Matters (section header + 6 icon cards)
- *   8.  Smart Tips (section header + 6 icon cards)
- *   9.  Testimonials
- *   10. FAQ
- *   11. CTA Band #2
+ * DOCX section order:
+ *   1.  SEO
+ *   2.  Hero (eyebrow + search bar + TLD pills)
+ *   3.  4 Pillars
+ *   4.  Core Principles / Features (12 cards)
+ *   5.  Why Choose ICSDC (4 cards)  ← NEW
+ *   6.  TLD Pricing
+ *   7.  Why a Domain Name Matters (checklist + image)
+ *   8.  Own Your Domain / Privacy section (text + image)  ← NEW
+ *   9.  Smart Tips (6 cards)
+ *   10. Who We Are (checklist + image)  ← NEW
+ *   11. CTA Band
+ *   12. Testimonials
+ *   13. FAQ
  */
 
 import { getDomainRegistrationPage } from './services/contentService.js';
@@ -26,7 +28,6 @@ import {
     populateSectionHeader,
     populateCtaBand,
     populateTldCards,
-    populateStats,
     hidePageLoader,
     markActiveNavLink,
     setText,
@@ -42,51 +43,32 @@ import {
        LOCAL HELPERS
     ───────────────────────────────────────────────────────── */
 
-    function getInitials(name) {
-        if (!name) return '';
-        return name.split(' ').map(function (n) { return n[0]; }).join('').toUpperCase().slice(0, 2);
-    }
-
-    function starSVG() {
-        return '<svg class="testi-star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">' +
-            '<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>' +
-            '</svg>';
+    function uploadURL(url) {
+        if (!url) return '';
+        return /^https?:\/\//.test(url) ? url : ('http://localhost:1337' + url);
     }
 
     /* ─────────────────────────────────────────────────────────
        SECTION POPULATORS
     ───────────────────────────────────────────────────────── */
 
-    /** 2. Hero Section */
+    /** Hero section */
     function populateDomHero(page) {
         var section = document.querySelector('.hero-section');
         if (!section) return;
-
-        // Eyebrow
-        if (page.heroEyebrow) {
-            var eyebrow = section.querySelector('.dom-eyebrow');
-            if (eyebrow) {
-                var dot = eyebrow.querySelector('.dom-eyebrow-dot');
-                eyebrow.textContent = '';
-                if (dot) eyebrow.appendChild(dot);
-                eyebrow.appendChild(document.createTextNode(' ' + page.heroEyebrow));
-            }
-        }
 
         if (page.heroTitle) setText(section, '.hero-title', page.heroTitle);
         if (page.heroSubtitle) setText(section, '.hero-sub', page.heroSubtitle);
         if (page.heroDescription) setHTML(section, '.hero-desc', page.heroDescription);
 
-        // CTA / Search button
         var searchBtn = section.querySelector('.dom-search-btn');
         if (searchBtn && page.heroCtaPrimary) {
-            searchBtn.innerHTML = page.heroCtaPrimary.text || '';
+            searchBtn.innerHTML = page.heroCtaPrimary.text || searchBtn.innerHTML;
             if (page.heroCtaPrimary.link && page.heroCtaPrimary.link !== '#') {
                 searchBtn.setAttribute('onclick', "window.location.href='" + page.heroCtaPrimary.link + "'");
             }
         }
 
-        // TLD Pills
         if (page.tldPills && page.tldPills.length) {
             var pillsContainer = section.querySelector('.dom-tld-pills');
             if (pillsContainer) {
@@ -97,13 +79,29 @@ import {
         }
     }
 
-    /** 3. Pillars (4 icon cards in .why-us .why-grid) */
+    /** Pillars (4 icon cards) */
     function populatePillars(pillars) {
         if (!pillars || !pillars.length) return;
         populateIconCards('.why-us .why-grid', pillars, 'why-card');
     }
 
-    /** 4. TLD Pricing Cards */
+    /** Features — 12 icon cards */
+    function populateFeatures(label, title, subtitle, features) {
+        populateSectionHeader('#dom-features', label, title, subtitle);
+        if (features && features.length) {
+            populateIconCards('#dom-features .cloud-power-grid', features, 'cloud-power-card');
+        }
+    }
+
+    /** Why Choose ICSDC — 4 icon cards */
+    function populateWhyChoose(page) {
+        populateSectionHeader('#dom-why-choose', page.whyChooseLabel, page.whyChooseTitle, page.whyChooseSubtitle);
+        if (page.whyChooseCards && page.whyChooseCards.length) {
+            populateIconCards('#dom-why-choose .cloud-power-grid', page.whyChooseCards, 'cloud-power-card');
+        }
+    }
+
+    /** TLD Pricing */
     function populateTldPricing(label, title, subtitle, cards) {
         populateSectionHeader('#dom-pricing', label, title, subtitle);
 
@@ -112,38 +110,89 @@ import {
         if (!grid) return;
 
         var sorted = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-
         grid.innerHTML = sorted.map(function (card) {
+            var ext = card.extension || '';
             var featuredClass = card.badge ? ' dom-tld-featured' : '';
+
+            // Top badge (Popular / Trending / etc.)
             var badgeHTML = card.badge
                 ? '<span class="dom-tld-badge">' + card.badge + '</span>'
                 : '';
 
-            return '<div class="dom-tld-card' + featuredClass + '">' +
-                '<span class="dom-tld-ext">' + (card.extension || '') + '</span>' +
+            // Original price + SAVE % row
+            var priceRowHTML = '';
+            if (card.originalPrice) {
+                var origNum = parseFloat((card.originalPrice || '').replace(/[^\d.]/g, ''));
+                var currNum = parseFloat((card.price || '').replace(/[^\d.]/g, ''));
+                var saveHTML = '';
+                if (origNum && currNum && origNum > currNum) {
+                    var pct = Math.round((origNum - currNum) / origNum * 100);
+                    saveHTML = '<span class="dom-tld-save-badge">Save ' + pct + '%</span>';
+                }
+                priceRowHTML = '<div class="dom-tld-price-row">' +
+                    '<span class="dom-tld-orig-price">' + card.originalPrice + '</span>' +
+                    saveHTML +
+                    '</div>';
+            } else {
+                priceRowHTML = '<div class="dom-tld-price-row"></div>';
+            }
+
+            // Format current price — add /year class
+            var priceFormatted = (card.price || '').replace(/(\/yr(\.?)|\/year)/i,
+                '<span class="dom-tld-per">$&</span>');
+
+            var descHTML = card.description
+                ? '<p class="dom-tld-desc">' + card.description + '</p>'
+                : '<p class="dom-tld-desc"></p>';
+
+            return '<div class="dom-tld-card' + featuredClass + '" data-ext="' + ext + '">' +
                 badgeHTML +
-                '<span class="dom-tld-price">' + (card.price || '') + '</span>' +
+                '<div class="dom-tld-logo">' + ext + '</div>' +
+                descHTML +
+                priceRowHTML +
+                '<div class="dom-tld-curr-price">' + priceFormatted + '</div>' +
+                '<a href="/contact-us" class="dom-tld-register-btn">Register</a>' +
                 '</div>';
         }).join('');
     }
 
-    /** 5. Features (12 icon cards in #dom-features .cloud-power-grid) */
-    function populateFeatures(label, title, subtitle, features) {
-        populateSectionHeader('#dom-features', label, title, subtitle);
-        if (features && features.length) {
-            populateIconCards('#dom-features .cloud-power-grid', features, 'cloud-power-card');
+    /** Why a Domain Name Matters — checklist + image */
+    function populateDomWhy(page) {
+        if (page.whyTitle) setText(document, '#dom-why .title', page.whyTitle);
+
+        if (page.whyCards && page.whyCards.length) {
+            var list = document.querySelector('#dom-why .dom-why-list');
+            if (list) {
+                list.innerHTML = page.whyCards.map(function (c) {
+                    return '<li><i class="fa-solid fa-circle-check" aria-hidden="true"></i>' + (c.title || '') + '</li>';
+                }).join('');
+            }
+        }
+
+        if (page.whyImage && page.whyImage.image && page.whyImage.image.url) {
+            var img = document.getElementById('dom-why-img');
+            if (img) {
+                img.src = uploadURL(page.whyImage.image.url);
+                img.style.display = '';
+            }
         }
     }
 
-    /** 7. Why Domain Matters (6 icon cards in #dom-why .cloud-use-grid) */
-    function populateWhyCards(label, title, subtitle, cards) {
-        populateSectionHeader('#dom-why', label, title, subtitle);
-        if (cards && cards.length) {
-            populateIconCards('#dom-why .cloud-use-grid', cards, 'cloud-use-card');
+    /** Own Your Domain — Privacy section (text + image) */
+    function populateDomPrivacy(page) {
+        if (page.privacyTitle) setText(document, '#dom-privacy-title', page.privacyTitle);
+        if (page.privacyDesc) setHTML(document, '#dom-privacy-desc', page.privacyDesc);
+
+        if (page.privacyImage && page.privacyImage.image && page.privacyImage.image.url) {
+            var img = document.getElementById('dom-privacy-img');
+            if (img) {
+                img.src = uploadURL(page.privacyImage.image.url);
+                img.style.display = '';
+            }
         }
     }
 
-    /** 8. Smart Tips (6 icon cards in #dom-tips .cloud-power-grid) */
+    /** Smart Tips — 6 icon cards */
     function populateTips(label, title, subtitle, tips) {
         populateSectionHeader('#dom-tips', label, title, subtitle);
         if (tips && tips.length) {
@@ -151,36 +200,31 @@ import {
         }
     }
 
-    /** 9. Testimonials */
-    function buildTestiCard(t, index) {
-        var initials = getInitials(t.name);
-        var stars = '';
-        for (var s = 0; s < (t.rating || 5); s++) { stars += starSVG(); }
+    /** Who We Are — checklist + image */
+    function populateDomAbout(page) {
+        if (page.aboutTitle) setText(document, '#dom-about-title', page.aboutTitle);
+        if (page.aboutDesc) setText(document, '#dom-about-desc', page.aboutDesc);
 
-        return '<article class="testi-card" role="listitem" data-testi-index="' + index + '" aria-label="Testimonial from ' + t.name + '">' +
-            '<div class="testi-left">' +
-            '<div class="testi-avatar" aria-hidden="true">' +
-            '<span class="testi-avatar-initials">' + initials + '</span>' +
-            '</div>' +
-            '<div class="testi-client-info">' +
-            '<p class="testi-name">' + t.name + '</p>' +
-            '<p class="testi-job">' + (t.title || '') + '</p>' +
-            '<p class="testi-company">' + (t.company || '') + '</p>' +
-            '</div>' +
-            '<div class="testi-rating" aria-label="Rating: ' + (t.rating || 5) + ' out of 5 stars">' + stars + '</div>' +
-            '</div>' +
-            '<div class="testi-right">' +
-            '<blockquote class="testi-quote">' + t.quote + '</blockquote>' +
-            '</div>' +
-            '</article>';
+        if (page.aboutPoints && page.aboutPoints.length) {
+            var list = document.getElementById('dom-about-list');
+            if (list) {
+                list.innerHTML = page.aboutPoints.map(function (p) {
+                    return '<li>' + (p.text || p.label || p) + '</li>';
+                }).join('');
+            }
+        }
+
+        if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
+            var img = document.getElementById('dom-about-img');
+            if (img) {
+                img.src = uploadURL(page.aboutImage.image.url);
+                img.style.display = '';
+            }
+        }
     }
 
-
-
-
-
     /* ─────────────────────────────────────────────────────────
-       BOOT -- Fetch from CMS, then populate all sections
+       BOOT
     ───────────────────────────────────────────────────────── */
     async function init() {
         markActiveNavLink();
@@ -199,25 +243,32 @@ import {
             // 3. Pillars
             populatePillars(page.pillars);
 
-            // 4. TLD Pricing
-            populateTldPricing(page.tldLabel, page.tldTitle, page.tldSubtitle, page.tldCards);
-
-            // 5. Features
+            // 4. Features
             populateFeatures(page.featuresLabel, page.featuresTitle, page.featuresSubtitle, page.features);
 
-            // 6. CTA Band #1
-            populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
+            // 5. Why Choose ICSDC
+            populateWhyChoose(page);
 
-            // 7. Why Domain Matters
-            populateWhyCards(page.whyLabel, page.whyTitle, page.whySubtitle, page.whyCards);
+            // 6. TLD Pricing
+            populateTldPricing(page.tldLabel, page.tldTitle, page.tldSubtitle, page.tldCards);
 
-            // 8. Smart Tips
+            // 7. Why a Domain Name Matters
+            populateDomWhy(page);
+
+            // 8. Privacy section
+            populateDomPrivacy(page);
+
+            // 9. Smart Tips
             populateTips(page.tipsLabel, page.tipsTitle, page.tipsSubtitle, page.tips);
 
-            // 9. Testimonials
-            if (page.testimonialTitle) {
-                setText(document, '#dom-testi-heading', page.testimonialTitle);
-            }
+            // 10. Who We Are
+            populateDomAbout(page);
+
+            // 11. CTA Band
+            populateCtaBand('.cloud-cta-band', page.ctaBand1);
+
+            // 12. Testimonials
+            if (page.testimonialTitle) setText(document, '#dom-testi-heading', page.testimonialTitle);
             if (page.testimonials && page.testimonials.length) {
                 initTestimonials(page.testimonials);
             } else {
@@ -225,20 +276,14 @@ import {
                 if (testiSection) testiSection.style.display = 'none';
             }
 
-            // 10. FAQ
-            if (page.faqTitle) {
-                setText(document, '#acr-faq-heading', page.faqTitle);
-            }
+            // 13. FAQ
+            if (page.faqTitle) setText(document, '#dom-faq-heading', page.faqTitle);
             initFAQ(page.faq);
-
-            // 11. CTA Band #2
-            populateCtaBand('.cloud-cta-dark', page.ctaBand2);
 
         } catch (err) {
             console.error('[domain-registration] Failed to load CMS data:', err);
         }
 
-        // Always hide loader after content attempt
         hidePageLoader();
     }
 

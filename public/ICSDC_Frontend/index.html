@@ -355,28 +355,62 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
     <!-- Why Business Needs Cloud Services section end-->
 
-    <section class="best-cloud-services" aria-labelledby="best-cloud-services-heading">
-
-        <div class="best-cloud-services-container">
-            <h2 id="best-cloud-services-heading" class="best-cloud-services-title">Best Cloud Services: See Why Our
-                Partnerships Assure Excellence</h2>
-            <p class="best-cloud-services-subtitle">
-                ICSDC servers operate across multiple global regions with dedicated deployment points in India
-                (Noida & Mumbai) for unmatched speed and reliability.
-            </p>
-
-            <div class="best-cloud-services-btns" data-strapi-grid="ourPartnershipsCards" data-stagger>
-                <button class="btn-outline feature-cards">Ultra-fast and scalable cloud solutions built for
-                    growth</button>
-                <button class="btn-outline feature-cards">Enterprise-grade security with Least downtime</button>
-                <button class="btn-outline feature-cards">Real people, real support - available 24/7</button>
-                <button class="btn-outline feature-cards">Connect with a Cloud Architect Now</button>
+    <!-- ════ WHY PARTNER WITH US ════ (Strapi-driven via homepage-cms.js) -->
+    <section class="hp-partner-section" aria-labelledby="hp-partner-title">
+        <div class="hp-partner-inner">
+            <div class="hp-partner-header">
+                <span class="hp-eyebrow" data-strapi="partnerEyebrow"></span>
+                <h2 id="hp-partner-title" class="hp-section-title" data-strapi="partnerTitle" data-animate="fade-up">
+                </h2>
+                <p class="hp-section-sub" data-strapi="partnerSubtitle" data-animate="fade-up"></p>
             </div>
+
+            <div class="hp-partner-stats" data-strapi-grid="partnerStats" data-stagger></div>
+
+            <div class="hp-partner-grid" data-strapi-grid="partnerCards" data-stagger></div>
+
+            <div class="hp-partner-ctas" data-strapi-grid="partnerCtas"></div>
         </div>
-
-
     </section>
-    <!-- best-cloud-services section end -->
+    <!-- Why Partner With Us end -->
+
+    <!-- ════ SOLUTIONS BY INDUSTRY ════ (Strapi-driven via homepage-cms.js) -->
+    <section class="hp-industry-section" aria-labelledby="hp-industry-title">
+        <div class="hp-industry-inner">
+            <div class="hp-industry-header">
+                <span class="hp-eyebrow" data-strapi="industryEyebrow"></span>
+                <h2 id="hp-industry-title" class="hp-section-title" data-strapi="industryTitle" data-animate="fade-up">
+                </h2>
+                <p class="hp-section-sub" data-strapi="industrySubtitle" data-animate="fade-up"></p>
+            </div>
+
+            <div class="hp-industry-tabs" role="tablist" aria-label="Industries" data-strapi-grid="industryTabs"></div>
+
+            <div class="hp-industry-panel" id="hp-industry-panel" role="tabpanel"></div>
+        </div>
+    </section>
+    <!-- Solutions by Industry end -->
+
+    <!-- ════ SECURITY & COMPLIANCE ════ (Strapi-driven via homepage-cms.js) -->
+    <section class="hp-security-section" aria-labelledby="hp-security-title">
+        <div class="hp-security-inner">
+            <div class="hp-security-header">
+                <span class="hp-eyebrow" data-strapi="securityEyebrow"></span>
+                <h2 id="hp-security-title" class="hp-section-title" data-strapi="securityTitle" data-animate="fade-up">
+                </h2>
+                <p class="hp-section-sub" data-strapi="securitySubtitle" data-animate="fade-up"></p>
+            </div>
+
+            <div class="hp-compliance-badges" data-strapi-grid="complianceBadges" data-stagger></div>
+
+            <div class="hp-security-grid" data-strapi-grid="securityCards" data-stagger></div>
+
+            <div class="hp-security-highlights" data-strapi-grid="securityHighlights" data-stagger></div>
+
+            <div class="hp-security-ctas" data-strapi-grid="securityCtas"></div>
+        </div>
+    </section>
+    <!-- Security & Compliance end -->
 
     <!-- ════ GLOBAL PRESENCE / WORLD MAP ════ -->
     <section id="hp-global" class="hp-global-section" aria-labelledby="hp-global-title">
@@ -782,7 +816,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             if (el) el.textContent = new Date().getFullYear();
         })();
     </script>
-  <script src="assets/js/nav-search.js" defer></script>
+
+    <script src="assets/js/nav-search.js" defer></script>
 </body>
 
 </html>
