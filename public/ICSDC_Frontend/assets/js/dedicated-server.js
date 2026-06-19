@@ -25,7 +25,7 @@
  */
 
 import { getDedicatedServerPage } from './services/contentService.js';
-import { initFAQ, initTestimonials } from './utils/cms-helpers.js';
+import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
 
 (function () {
     'use strict';
@@ -116,15 +116,7 @@ import { initFAQ, initTestimonials } from './utils/cms-helpers.js';
        SECTION POPULATORS
     ───────────────────────────────────────────────────────── */
 
-    /** 1. SEO Meta */
-    function populateSEO(seo) {
-        if (!seo) return;
-        if (seo.metaTitle) document.title = seo.metaTitle;
-        if (seo.metaDescription) {
-            var meta = document.querySelector('meta[name="description"]');
-            if (meta) meta.setAttribute('content', seo.metaDescription);
-        }
-    }
+    /** 1. SEO Meta — handled by the shared populateSEO imported from cms-helpers.js */
 
     /** 2. Hero Section */
     function populateHero(hero) {

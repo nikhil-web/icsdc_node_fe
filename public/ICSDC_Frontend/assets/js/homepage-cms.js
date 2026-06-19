@@ -24,7 +24,7 @@
  */
 
 import { getHomepagePage } from "./services/contentService.js";
-import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-helpers.js";
+import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from "./utils/cms-helpers.js";
 
 (function () {
 
@@ -59,15 +59,8 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
         if (el) el.setAttribute(attr, val);
     }
 
-    // ═══════════════════════════════════════════════════════════
-    //  SEO
-    // ═══════════════════════════════════════════════════════════
-    function populateSEO(seo) {
-        if (!seo) return;
-        if (seo.metaTitle) document.title = seo.metaTitle;
-        const desc = document.querySelector('meta[name="description"]');
-        if (desc && seo.metaDescription) desc.setAttribute('content', seo.metaDescription);
-    }
+    // SEO (title + meta description + optional canonical override) is handled by
+    // the shared populateSEO imported from cms-helpers.js.
 
     function populateHeroSection(params) {
         setText('[data-strapi="mainHeading"]', params.mainHeading);

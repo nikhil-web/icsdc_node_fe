@@ -679,8 +679,11 @@ function isPageLive(slug) {
 }
 
 async function buildSitemapEntries(req) {
-    const baseUrl = process.env.SITE_URL ||
-        (req ? `${req.protocol}://${req.get('host')}` : 'https://icsdc.com');
+    // Always emit absolute https URLs for the canonical domain. req.protocol is
+    // unreliable — it is http when Node runs behind a TLS-terminating proxy or on
+    // localhost, which previously made regenerated sitemaps use http://. SITE_URL
+    // (https://icsdc.com) wins when set; otherwise fall back to the canonical https URL.
+    const baseUrl = process.env.SITE_URL || 'https://icsdc.com';
     const today = new Date().toISOString().split('T')[0];
 
     const entries = STATIC_PAGES
@@ -782,7 +785,7 @@ app.post('/api/admin/sitemap/regenerate', requireAdminAuth, async function (req,
 app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
     try {
         const entries     = await buildSitemapEntries(req);
-        const sitemapUrl  = (process.env.SITE_URL || `${req.protocol}://${req.get('host')}`) + '/sitemap.xml';
+        const sitemapUrl  = (process.env.SITE_URL || 'https://icsdc.com') + '/sitemap.xml';
         res.json({
             entries,
             sitemapUrl,

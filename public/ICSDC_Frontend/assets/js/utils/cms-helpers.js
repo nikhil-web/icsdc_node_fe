@@ -348,6 +348,22 @@ export function populateSEO(seo) {
         var meta = document.querySelector('meta[name="description"]');
         if (meta) meta.setAttribute('content', seo.metaDescription);
     }
+    // Optional per-page canonical override (Strapi SEO → canonicalUrl).
+    // Empty → leave the auto canonical from main.js setCanonical() in place.
+    // Accepts a full absolute URL (used as-is) or a path (prefixed with SITE_URL).
+    if (seo.canonicalUrl) {
+        var href = /^https?:\/\//.test(seo.canonicalUrl)
+            ? seo.canonicalUrl
+            : (window.SITE_URL || 'https://icsdc.com').replace(/\/+$/, '') +
+              (seo.canonicalUrl.charAt(0) === '/' ? '' : '/') + seo.canonicalUrl;
+        var link = document.querySelector('link[rel="canonical"]');
+        if (!link) {
+            link = document.createElement('link');
+            link.setAttribute('rel', 'canonical');
+            document.head.appendChild(link);
+        }
+        link.setAttribute('href', href);
+    }
 }
 
 export function populateHero(section, data) {

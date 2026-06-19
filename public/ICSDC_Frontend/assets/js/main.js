@@ -523,7 +523,35 @@ function initFooter(footer) {
 
 }
 
+/**
+ * Inject a self-referencing <link rel="canonical"> on every page.
+ * Builds the canonical from window.SITE_URL (config.js) + the clean pathname:
+ *   - strips a trailing ".html" / "index.html" (site uses clean URLs)
+ *   - drops query strings, hashes, and trailing slashes (except root)
+ * This consolidates duplicate URLs (.html, ?utm=…, www, http) onto the one
+ * canonical https://icsdc.com/<path> — matching what's in sitemap.xml.
+ */
+function setCanonical() {
+    try {
+        var base = (window.SITE_URL || 'https://icsdc.com').replace(/\/+$/, '');
+        var path = (window.location.pathname || '/')
+            .replace(/\/index\.html$/i, '/')
+            .replace(/\.html$/i, '');
+        if (path.length > 1) path = path.replace(/\/+$/, ''); // strip trailing slash (keep root)
+        if (!path) path = '/';
+
+        var link = document.querySelector('link[rel="canonical"]');
+        if (!link) {
+            link = document.createElement('link');
+            link.setAttribute('rel', 'canonical');
+            document.head.appendChild(link);
+        }
+        link.setAttribute('href', base + path);
+    } catch (e) { /* non-fatal */ }
+}
+
 async function init() {
+    setCanonical();
 
 
 
