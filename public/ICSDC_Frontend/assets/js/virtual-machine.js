@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getVirtualMachinePage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -43,11 +44,11 @@ import { uploadURL } from './services/strapiClient.js';
             var name = plan.title || '';
             var desc = plan.desc || plan.description || '';
             var parts = desc.split(/\s*[·•]\s*/);
-            var vcpu    = parts[0] || '';
-            var ram     = parts[1] || '';
+            var vcpu = parts[0] || '';
+            var ram = parts[1] || '';
             var storage = parts[2] || '';
-            var xfer    = parts[3] || '';
-            var price   = parts[4] || 'Contact Us';
+            var xfer = parts[3] || '';
+            var price = parts[4] || 'Contact Us';
 
             // Inject category header if needed
             Object.keys(categories).forEach(function (cat) {
@@ -102,7 +103,7 @@ import { uploadURL } from './services/strapiClient.js';
             return '<div class="vm-when-card">' +
                 '<div class="vm-when-num">' + num + '</div>' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.desc || card.description || '') + '</p>' +
+                '<p>' + inlineRichText(card.desc || card.description || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -126,7 +127,7 @@ import { uploadURL } from './services/strapiClient.js';
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) document.querySelector('.vm-top-badge').textContent = page.heroTopBadge;
@@ -166,7 +167,7 @@ import { uploadURL } from './services/strapiClient.js';
             if (page.blockStorageCta) {
                 var bsCta = document.querySelector('.vm-bs-cta');
                 if (bsCta) {
-                    if (page.blockStorageCta.text) bsCta.innerHTML = page.blockStorageCta.text + ' &rarr;';
+                    if (page.blockStorageCta.text) bsCta.innerHTML = page.blockStorageCta.text + ' ';
                     if (page.blockStorageCta.link) bsCta.href = page.blockStorageCta.link;
                 }
             }

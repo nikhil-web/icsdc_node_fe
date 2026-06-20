@@ -1,4 +1,5 @@
 import { getZimbraHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import { uploadURL } from './services/strapiClient.js';
 import {
     populateSEO,
@@ -57,7 +58,7 @@ import {
             return '<div class="zimbra-step zimbra-flow-step" style="grid-column:' + col + ';grid-row:' + (row + 1) + ';">' +
                 '<div class="zimbra-step-num">' + (step.number || (i + 1)) + '</div>' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || '') + '</p>' +
+                '<p>' + inlineRichText(step.description || '') + '</p>' +
                 arrow +
                 '</div>';
         }).join('');

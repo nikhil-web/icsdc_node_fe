@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getVeeamBackupPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -32,7 +33,7 @@ import {
         if (!tbody) return;
 
         tbody.innerHTML = rows.map(function (row) {
-            var parts = (row.desc || row.description || '').split('|');
+            var parts = inlineRichText(row.desc || row.description || '').split('|');
             var icsdcVal = (parts[0] || '').trim();
             var directVal = (parts[1] || '').trim();
             return '<tr>' +
@@ -55,7 +56,7 @@ import {
         grid.innerHTML = stats.map(function (stat) {
             return '<div class="veeam-stat-card">' +
                 '<div class="veeam-stat-number">' + (stat.title || '') + '</div>' +
-                '<p class="veeam-stat-desc">' + (stat.desc || stat.description || '') + '</p>' +
+                '<p class="veeam-stat-desc">' + inlineRichText(stat.desc || stat.description || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -75,7 +76,7 @@ import {
             return '<div class="veeam-step-card">' +
                 '<div class="veeam-step-num">' + num + '</div>' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || step.desc || '') + '</p>' +
+                '<p>' + inlineRichText(step.description || step.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }

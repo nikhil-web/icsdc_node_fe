@@ -1,4 +1,5 @@
 import { getLinuxVpsHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -42,15 +43,15 @@ import {
 
             // Build checkmark feature list from spec fields
             var featureItems = [];
-            if (plan.vcpu)      featureItems.push(plan.vcpu);
-            if (plan.ram)       featureItems.push(plan.ram + ' RAM');
-            if (plan.storage)   featureItems.push(plan.storage + ' Storage');
+            if (plan.vcpu) featureItems.push(plan.vcpu);
+            if (plan.ram) featureItems.push(plan.ram + ' RAM');
+            if (plan.storage) featureItems.push(plan.storage + ' Storage');
             if (plan.bandwidth) featureItems.push(plan.bandwidth + ' Bandwidth');
 
             var featuresHtml = featureItems.length
                 ? '<ul class="lvps-plan-features">' +
-                    featureItems.map(function (f) { return '<li>' + f + '</li>'; }).join('') +
-                  '</ul>'
+                featureItems.map(function (f) { return '<li>' + f + '</li>'; }).join('') +
+                '</ul>'
                 : '';
 
             var btnClass = isFeatured ? 'lvps-plan-btn-featured' : 'lvps-plan-btn';
@@ -60,7 +61,7 @@ import {
                 '<div class="lvps-plan-name">' + (plan.name || '') + '</div>' +
                 priceHtml +
                 featuresHtml +
-                '<a href="/contact-us.html" class="' + btnClass + '">Get Started &rarr;</a>' +
+                '<a href="/contact-us.html" class="' + btnClass + '">Get Started </a>' +
                 '</div>';
         }).join('');
     }
@@ -95,7 +96,7 @@ import {
             return '<div class="lvps-os-card">' +
                 '<div class="lvps-os-icon">' + resolveIcon(os.icon || 'linux') + '</div>' +
                 '<div class="lvps-os-name">' + (os.name || '') + '</div>' +
-                '<div class="lvps-os-desc">' + (os.description || os.desc || '') + '</div>' +
+                '<div class="lvps-os-desc">' + inlineRichText(os.description || os.desc || '') + '</div>' +
                 '</div>';
         }).join('');
     }
@@ -113,7 +114,7 @@ import {
             return '<div class="lvps-cp-card">' +
                 '<div class="lvps-os-icon">' + resolveIcon(panel.icon || 'server') + '</div>' +
                 '<div class="lvps-os-name">' + (panel.name || '') + '</div>' +
-                '<div class="lvps-os-desc">' + (panel.description || panel.desc || '') + '</div>' +
+                '<div class="lvps-os-desc">' + inlineRichText(panel.description || panel.desc || '') + '</div>' +
                 '</div>';
         }).join('');
     }
@@ -137,7 +138,7 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.lvps-top-badge', page.heroTopBadge);
@@ -153,7 +154,7 @@ import {
 
             // Who We Are
             if (page.aboutTitle) setText(document, '#lvps-about-title', page.aboutTitle);
-            if (page.aboutDesc)  setHTML(document, '#lvps-about-desc', '<p>' + page.aboutDesc + '</p>');
+            if (page.aboutDesc) setHTML(document, '#lvps-about-desc', '<p>' + page.aboutDesc + '</p>');
             if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
                 var aboutImg = document.querySelector('#lvps-about-img');
                 if (aboutImg) {

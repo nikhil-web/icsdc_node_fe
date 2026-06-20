@@ -18,71 +18,71 @@ function buildModal() {
     modal.setAttribute('aria-hidden', 'true');
     modal.innerHTML =
         '<div class="cmp-card" role="dialog" aria-modal="true" aria-labelledby="cmp-title">' +
-            '<button type="button" class="cmp-close" aria-label="Close">&times;</button>' +
-            '<div class="cmp-grid">' +
-                '<aside class="cmp-side">' +
-                    '<img class="cmp-side-logo" alt="" />' +
-                    '<div class="cmp-side-eyebrow">' +
-                        '<i class="fa-solid fa-comments" aria-hidden="true"></i> Contact ICSDC' +
-                    '</div>' +
-                    '<h3 id="cmp-title" class="cmp-side-title">Let’s talk infrastructure.</h3>' +
-                    '<p class="cmp-side-desc">Tell us what you’re building and our team will reach out with a tailored recommendation — no pressure, no spam.</p>' +
-                    '<ul class="cmp-side-points">' +
-                        '<li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Reply within 1 business hour</li>' +
-                        '<li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Free architecture consult</li>' +
-                        '<li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Migration & scaling expertise</li>' +
-                    '</ul>' +
-                '</aside>' +
-                '<div class="cmp-main">' +
-            '<form id="cmp-form" class="cu-form" novalidate>' +
-                '<div class="cu-form-row">' +
-                    '<div class="cu-field">' +
-                        '<label for="cmp-name" class="cu-label">Your Name <span class="cu-required">*</span></label>' +
-                        '<input type="text" id="cmp-name" name="name" class="cu-input" placeholder="John Smith" required>' +
-                    '</div>' +
-                    '<div class="cu-field">' +
-                        '<label for="cmp-email" class="cu-label">Email Address <span class="cu-required">*</span></label>' +
-                        '<input type="email" id="cmp-email" name="email" class="cu-input" placeholder="john@company.com" required>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="cu-form-row">' +
-                    '<div class="cu-field">' +
-                        '<label for="cmp-phone" class="cu-label">Phone Number</label>' +
-                        '<input type="tel" id="cmp-phone" name="phone" class="cu-input" placeholder="+91 98765 43210">' +
-                    '</div>' +
-                    '<div class="cu-field">' +
-                        '<label for="cmp-company" class="cu-label">Company / Organization</label>' +
-                        '<input type="text" id="cmp-company" name="company" class="cu-input" placeholder="Your Company Ltd.">' +
-                    '</div>' +
-                '</div>' +
-                '<div class="cu-field">' +
-                    '<label for="cmp-subject" class="cu-label">What Can We Help You With? <span class="cu-required">*</span></label>' +
-                    '<select id="cmp-subject" name="subject" class="cu-input cu-select" required>' +
-                        '<option value="" disabled selected>Select a topic…</option>' +
-                        '<option value="vps-cloud">VPS / Cloud Hosting Questions</option>' +
-                        '<option value="infrastructure">Infrastructure Planning</option>' +
-                        '<option value="migration">Migration &amp; Performance</option>' +
-                        '<option value="security">Security &amp; Compliance</option>' +
-                        '<option value="pricing">Pricing &amp; Plans</option>' +
-                        '<option value="partnerships">Partnerships &amp; Reseller</option>' +
-                        '<option value="support">Technical Support</option>' +
-                        '<option value="other">Other / General Inquiry</option>' +
-                    '</select>' +
-                '</div>' +
-                '<div class="cu-field">' +
-                    '<label for="cmp-message" class="cu-label">Your Message <span class="cu-required">*</span></label>' +
-                    '<textarea id="cmp-message" name="message" class="cu-input cu-textarea" rows="4" ' +
-                        'placeholder="Tell us about your requirement, current setup, or any questions you have…" required></textarea>' +
-                '</div>' +
-                '<button type="submit" class="cu-submit-btn">Send Message &rarr;</button>' +
-            '</form>' +
-            '<div id="cmp-form-success" class="cu-form-success" style="display:none;">' +
-                '<div class="cu-success-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>' +
-                '<h3>Message Sent!</h3>' +
-                '<p>Thank you for reaching out. Our team will get back to you shortly.</p>' +
-            '</div>' +
-                '</div>' +          /* /.cmp-main */
-            '</div>' +              /* /.cmp-grid */
+        '<button type="button" class="cmp-close" aria-label="Close">&times;</button>' +
+        '<div class="cmp-grid">' +
+        '<aside class="cmp-side">' +
+        '<img class="cmp-side-logo" alt="" />' +
+        '<div class="cmp-side-eyebrow">' +
+        '<i class="fa-solid fa-comments" aria-hidden="true"></i> Contact ICSDC' +
+        '</div>' +
+        '<h3 id="cmp-title" class="cmp-side-title">Let’s talk infrastructure.</h3>' +
+        '<p class="cmp-side-desc">Tell us what you’re building and our team will reach out with a tailored recommendation — no pressure, no spam.</p>' +
+        '<ul class="cmp-side-points">' +
+        '<li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Reply within 1 business hour</li>' +
+        '<li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Free architecture consult</li>' +
+        '<li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Migration & scaling expertise</li>' +
+        '</ul>' +
+        '</aside>' +
+        '<div class="cmp-main">' +
+        '<form id="cmp-form" class="cu-form" novalidate>' +
+        '<div class="cu-form-row">' +
+        '<div class="cu-field">' +
+        '<label for="cmp-name" class="cu-label">Your Name <span class="cu-required">*</span></label>' +
+        '<input type="text" id="cmp-name" name="name" class="cu-input" placeholder="John Smith" required>' +
+        '</div>' +
+        '<div class="cu-field">' +
+        '<label for="cmp-email" class="cu-label">Email Address <span class="cu-required">*</span></label>' +
+        '<input type="email" id="cmp-email" name="email" class="cu-input" placeholder="john@company.com" required>' +
+        '</div>' +
+        '</div>' +
+        '<div class="cu-form-row">' +
+        '<div class="cu-field">' +
+        '<label for="cmp-phone" class="cu-label">Phone Number</label>' +
+        '<input type="tel" id="cmp-phone" name="phone" class="cu-input" placeholder="+91 98765 43210">' +
+        '</div>' +
+        '<div class="cu-field">' +
+        '<label for="cmp-company" class="cu-label">Company / Organization</label>' +
+        '<input type="text" id="cmp-company" name="company" class="cu-input" placeholder="Your Company Ltd.">' +
+        '</div>' +
+        '</div>' +
+        '<div class="cu-field">' +
+        '<label for="cmp-subject" class="cu-label">What Can We Help You With? <span class="cu-required">*</span></label>' +
+        '<select id="cmp-subject" name="subject" class="cu-input cu-select" required>' +
+        '<option value="" disabled selected>Select a topic…</option>' +
+        '<option value="vps-cloud">VPS / Cloud Hosting Questions</option>' +
+        '<option value="infrastructure">Infrastructure Planning</option>' +
+        '<option value="migration">Migration &amp; Performance</option>' +
+        '<option value="security">Security &amp; Compliance</option>' +
+        '<option value="pricing">Pricing &amp; Plans</option>' +
+        '<option value="partnerships">Partnerships &amp; Reseller</option>' +
+        '<option value="support">Technical Support</option>' +
+        '<option value="other">Other / General Inquiry</option>' +
+        '</select>' +
+        '</div>' +
+        '<div class="cu-field">' +
+        '<label for="cmp-message" class="cu-label">Your Message <span class="cu-required">*</span></label>' +
+        '<textarea id="cmp-message" name="message" class="cu-input cu-textarea" rows="4" ' +
+        'placeholder="Tell us about your requirement, current setup, or any questions you have…" required></textarea>' +
+        '</div>' +
+        '<button type="submit" class="cu-submit-btn">Send Message </button>' +
+        '</form>' +
+        '<div id="cmp-form-success" class="cu-form-success" style="display:none;">' +
+        '<div class="cu-success-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>' +
+        '<h3>Message Sent!</h3>' +
+        '<p>Thank you for reaching out. Our team will get back to you shortly.</p>' +
+        '</div>' +
+        '</div>' +          /* /.cmp-main */
+        '</div>' +              /* /.cmp-grid */
         '</div>';                   /* /.cmp-card */
 
     document.body.appendChild(modal);
@@ -117,8 +117,8 @@ function buildModal() {
 
 // ── Validation (mirrors contact-us.js validateForm) ─────────
 function validateForm(payload) {
-    if (!payload.name)    return 'Please enter your name.';
-    if (!payload.email)   return 'Please enter your email address.';
+    if (!payload.name) return 'Please enter your name.';
+    if (!payload.email) return 'Please enter your email address.';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return 'Please enter a valid email address.';
     if (!payload.subject) return 'Please select a subject.';
     if (!payload.message) return 'Please enter your message.';
@@ -141,9 +141,9 @@ async function onSubmit(e) {
     form.querySelectorAll('.cu-form-error').forEach(function (el) { el.remove(); });
 
     const payload = {
-        name:    modal.querySelector('#cmp-name').value.trim(),
-        email:   modal.querySelector('#cmp-email').value.trim(),
-        phone:   modal.querySelector('#cmp-phone').value.trim(),
+        name: modal.querySelector('#cmp-name').value.trim(),
+        email: modal.querySelector('#cmp-email').value.trim(),
+        phone: modal.querySelector('#cmp-phone').value.trim(),
         company: modal.querySelector('#cmp-company').value.trim(),
         subject: modal.querySelector('#cmp-subject').value,
         message: modal.querySelector('#cmp-message').value.trim(),
@@ -172,7 +172,7 @@ async function onSubmit(e) {
 function openModal() {
     buildModal();
     // Reset to fresh form state every time
-    const form    = modal.querySelector('#cmp-form');
+    const form = modal.querySelector('#cmp-form');
     const success = modal.querySelector('#cmp-form-success');
     form.reset();
     form.style.display = '';

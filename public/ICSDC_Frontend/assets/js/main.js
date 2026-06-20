@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getNavigation, getFooter } from "./services/contentService.js";
-import { resolveIcon } from "./utils/cms-helpers.js";
+import { resolveIcon, inlineRichText } from "./utils/cms-helpers.js";
 import { getFooterHTML } from "./footer-template.js";
 
 
@@ -456,7 +456,7 @@ function initFooter(footer) {
     // --- Address ---
     var address = document.querySelector('[data-strapi-footer-address]');
     if (address && footer.address) {
-        address.innerHTML = footer.address; // keep <br> tags from CMS
+        address.innerHTML = inlineRichText(footer.address); // keep <br> / links from CMS, strip CKEditor <p> wrapper
     }
 
     // --- Phone ---

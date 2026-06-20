@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getVpsHostingTrialPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -54,10 +55,10 @@ import {
             var featuresArr = plan.features || [];
             var featuresHtml = featuresArr.length
                 ? '<ul class="vht-plan-features">' +
-                    featuresArr.map(function (f) {
-                        return '<li>' + (f.label || f.text || f.name || f) + '</li>';
-                    }).join('') +
-                  '</ul>'
+                featuresArr.map(function (f) {
+                    return '<li>' + (f.label || f.text || f.name || f) + '</li>';
+                }).join('') +
+                '</ul>'
                 : '';
 
             var ctaText = plan.ctaText || 'Get Started';
@@ -69,7 +70,7 @@ import {
                 priceHtml +
                 taglineHtml +
                 featuresHtml +
-                '<a href="#" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '<a href="#" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -88,7 +89,7 @@ import {
             return '<div class="cloud-power-card" data-animate="fade-up">' +
                 '<div class="cloud-power-icon">' + (step.number || step.order || '') + '</div>' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || step.desc || '') + '</p>' +
+                '<p>' + inlineRichText(step.description || step.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -105,7 +106,7 @@ import {
         var sorted = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
 
         grid.innerHTML = sorted.map(function (card) {
-            var parts = (card.desc || '').split('||');
+            var parts = inlineRichText(card.desc || '').split('||');
             var description = parts[0] ? parts[0].trim() : '';
             var ctaText = parts[1] ? parts[1].trim() : (card.title ? card.title + ' Plans' : 'Learn More');
             var ctaHref = (card.link || '#').trim();
@@ -113,7 +114,7 @@ import {
             return '<div class="vht-service-card">' +
                 '<h3 class="vht-service-title">' + (card.title || '') + '</h3>' +
                 (description ? '<p class="vht-service-desc">' + description + '</p>' : '') +
-                '<a href="' + ctaHref + '" class="vht-service-cta">' + ctaText + ' &rarr;</a>' +
+                '<a href="' + ctaHref + '" class="vht-service-cta">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -137,7 +138,7 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.vht-top-badge', page.heroTopBadge);

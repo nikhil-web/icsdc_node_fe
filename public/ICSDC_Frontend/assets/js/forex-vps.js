@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getForexVpsPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -131,7 +132,7 @@ import {
                     return '<div class="fvps-step-card">' +
                         '<div class="fvps-step-number">' + (step.number || step.order || '') + '</div>' +
                         '<h3>' + (step.title || '') + '</h3>' +
-                        '<p>' + (step.description || '') + '</p>' +
+                        '<p>' + inlineRichText(step.description || '') + '</p>' +
                         '</div>';
                 }).join('');
             }

@@ -111,6 +111,26 @@
   text-align: center;
 }
 
+/* Who-We-Are body: holds the fallback <p class="subtitle"> paragraphs and the
+   Strapi-rendered aboutDesc (CKEditor HTML). Carries subtitle text styling so
+   CMS content (rendered inline via inlineRichText) matches the fallback look. */
+.dt-about-section .dt-about-body {
+  max-width: 760px;
+  margin-inline: auto;
+  text-align: center;
+  color: var(--muted-alt);
+  font-size: clamp(15px, 1.5vw, 17px);
+  line-height: 1.65;
+}
+
+.dt-about-section .dt-about-body .subtitle {
+  margin: 0 auto 14px;
+}
+
+.dt-about-section .dt-about-body .subtitle:last-child {
+  margin-bottom: 0;
+}
+
 /* ── TIPS GRID ── */
 .dt-tips-grid {
   display: grid;
@@ -127,6 +147,11 @@
   box-shadow: var(--shadow-card);
   transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .dt-tip-card:hover {
@@ -302,5 +327,70 @@
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 20px;
     text-align: left;
+  }
+}
+
+/* ══════════════════════════════════════
+   CLIENT REVISIONS (2026-06-20)
+══════════════════════════════════════ */
+
+/* #2 — Who We Are: 2-column (text left, image right), left-aligned */
+.dt-about-section .dt-about-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.dt-about-section .dt-about-content .title {
+  max-width: none;
+  margin: 0 0 20px;
+  text-align: left;
+}
+
+.dt-about-section .dt-about-content .dt-about-body,
+.dt-about-section .dt-about-content .dt-about-body .subtitle {
+  max-width: none;
+  margin-inline: 0;
+  text-align: left;
+}
+
+.dt-about-image img {
+  width: 100%;
+  /* border-radius: var(--radius-lg); */
+  object-fit: cover;
+  display: block;
+  /* box-shadow: 0 16px 48px rgba(26, 86, 219, 0.1); */
+}
+
+/* #4 + #7 — bold highlight + related card headings */
+.dt-highlight-card h3,
+.dt-related-card h3 {
+  font-weight: 800;
+}
+
+/* #8 — What You Get: two pointers per row */
+#what-you-get .cloud-use-grid {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 880px;
+  margin-inline: auto;
+}
+
+@media (max-width: 1024px) {
+  .dt-about-section .dt-about-inner {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .dt-about-section .dt-about-content .title,
+  .dt-about-section .dt-about-content .dt-about-body,
+  .dt-about-section .dt-about-content .dt-about-body .subtitle {
+    text-align: center;
+  }
+}
+
+@media (max-width: 767px) {
+  #what-you-get .cloud-use-grid {
+    grid-template-columns: 1fr;
   }
 }

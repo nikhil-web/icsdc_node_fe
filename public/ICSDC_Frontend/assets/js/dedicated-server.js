@@ -25,7 +25,7 @@
  */
 
 import { getDedicatedServerPage } from './services/contentService.js';
-import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
+import { initFAQ, initTestimonials, populateSEO, inlineRichText } from './utils/cms-helpers.js';
 
 (function () {
     'use strict';
@@ -61,14 +61,21 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
        HELPERS
     ───────────────────────────────────────────────────────── */
 
+    var RICH_HTML_RE = /<\/?(p|a|strong|em|b|i|u|br|ul|ol|li|h[1-6]|blockquote|span)\b/i;
+
     function setText(parent, selector, text) {
         var el = parent.querySelector(selector);
-        if (el && text != null) el.textContent = text;
+        if (!el || text == null) return;
+        if (typeof text === 'string' && RICH_HTML_RE.test(text)) {
+            el.innerHTML = inlineRichText(text);
+        } else {
+            el.textContent = text;
+        }
     }
 
     function setHTML(parent, selector, html) {
         var el = parent.querySelector(selector);
-        if (el && html != null) el.innerHTML = html;
+        if (el && html != null) el.innerHTML = inlineRichText(html);
     }
 
     function getInitials(name) {
@@ -157,7 +164,7 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
                 if (hero.ctaSecondary.link) btns[0].setAttribute('onclick', "window.location.href='" + hero.ctaSecondary.link + "'");
             }
             if (hero.ctaPrimary) {
-                btns[1].innerHTML = (hero.ctaPrimary.text || '') + ' &rarr;';
+                btns[1].innerHTML = (hero.ctaPrimary.text || '') + ' ';
                 if (hero.ctaPrimary.link) btns[1].setAttribute('onclick', "window.location.href='" + hero.ctaPrimary.link + "'");
             }
         }
@@ -200,7 +207,7 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
                 resolveIcon(card.icon) +
                 '</div>' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.desc || '') + '</p>' +
+                '<p>' + inlineRichText(card.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -227,7 +234,7 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
                 ? '<span class="ds-plan-badge">' + plan.badge + '</span>'
                 : '';
             var ctaClass = plan.ctaStyle === 'primary' ? 'ds-plan-cta-primary' : 'ds-plan-cta-outline';
-            var ctaArrow = plan.ctaStyle === 'primary' ? ' &rarr;' : '';
+            var ctaArrow = plan.ctaStyle === 'primary' ? ' ' : '';
 
             var featuresHTML = '';
             if (plan.features && plan.features.length) {
@@ -275,7 +282,7 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
             return '<div class="ds-pillar-card">' +
                 '<div class="ds-pillar-icon">' + resolveIcon(p.icon) + '</div>' +
                 '<h3>' + (p.title || '') + '</h3>' +
-                '<p>' + (p.desc || p.description || '') + '</p>' +
+                '<p>' + inlineRichText(p.desc || p.description || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -296,7 +303,7 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
             var primaryBtn = btns.querySelector('.ds-cta-btn-primary');
             var secondaryBtn = btns.querySelector('.ds-cta-btn-outline');
             if (primaryBtn && cta.ctaPrimary) {
-                primaryBtn.innerHTML = (cta.ctaPrimary.text || '') + ' &rarr;';
+                primaryBtn.innerHTML = (cta.ctaPrimary.text || '') + ' ';
                 if (cta.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
             }
             if (secondaryBtn && cta.ctaSecondary) {
@@ -337,7 +344,7 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
             return '<div class="ds-security-card">' +
                 '<div class="ds-security-icon">' + resolveIcon(c.icon) + '</div>' +
                 '<h3>' + (c.title || '') + '</h3>' +
-                '<p>' + (c.desc || '') + '</p>' +
+                '<p>' + inlineRichText(c.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -450,7 +457,7 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
                         '<span class="ds-cl-icon"><svg viewBox="0 0 12 12" fill="none">' +
                         '<polyline points="2,6 5,9 10,3" stroke-linecap="round" stroke-linejoin="round" />' +
                         '</svg></span>' +
-                        '<span><strong>' + (item.label || '') + '</strong> ' + (item.description || '') + '</span>' +
+                        '<span><strong>' + (item.label || '') + '</strong> ' + inlineRichText(item.description || '') + '</span>' +
                         '</li>';
                 }).join('');
             }
@@ -460,7 +467,7 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
         var perfBtns = section.querySelectorAll('.hero-btns button');
         if (perfBtns.length >= 2) {
             if (ctaPrimary) {
-                perfBtns[0].innerHTML = (ctaPrimary.text || '') + ' &rarr;';
+                perfBtns[0].innerHTML = (ctaPrimary.text || '') + ' ';
                 if (ctaPrimary.link) perfBtns[0].setAttribute('onclick', "window.location.href='" + ctaPrimary.link + "'");
             }
             if (ctaSecondary) {
@@ -535,7 +542,7 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
             return '<div class="ds-when-card">' +
                 '<div class="ds-when-num">' + (card.number || '') + '</div>' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.description || '') + '</p>' +
+                '<p>' + inlineRichText(card.description || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -559,7 +566,7 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
             return '<div class="ds-use-card">' +
                 '<div class="ds-use-icon">' + resolveIcon(card.icon) + '</div>' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.desc || '') + '</p>' +
+                '<p>' + inlineRichText(card.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -583,7 +590,7 @@ import { initFAQ, initTestimonials, populateSEO } from './utils/cms-helpers.js';
                 '<span class="faq-q-text">' + (faq.question || '') + '</span>' +
                 '<span class="faq-chev">' + chev + '</span>' +
                 '</summary>' +
-                '<div class="faq-a-wrap"><div class="faq-a">' + (faq.answer || '') + '</div></div>' +
+                '<div class="faq-a-wrap"><div class="faq-a">' + inlineRichText(faq.answer || '') + '</div></div>' +
                 '</details>';
         }).join('');
 

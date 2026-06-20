@@ -2566,3 +2566,68 @@ html[data-theme="dark"] .nav-search-item.is-active {
     align-items: center;
     justify-content: center;
 }
+/* ══════════════════════════════════════
+   IN-CONTENT LINKS (CKEditor-authored)
+   Rich-text fields (who-we-are, less-complexity, industry, ISO paragraphs,
+   footer address) can now contain editor-inserted <a> links. These blocks sit
+   on blue/dark backgrounds, so inherit the text colour + underline to signal a
+   link on any background.
+══════════════════════════════════════ */
+[data-strapi="whoWeAreParagraph"] a,
+[data-strapi="lessComplexityParagraph"] a,
+[data-strapi="industryValidatedParagraph"] a,
+[data-strapi="isoParagraph"] a,
+.iso-standards-paragraph a,
+[data-strapi-footer-address] a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.15s ease;
+}
+[data-strapi="whoWeAreParagraph"] a:hover,
+[data-strapi="lessComplexityParagraph"] a:hover,
+[data-strapi="industryValidatedParagraph"] a:hover,
+[data-strapi="isoParagraph"] a:hover,
+.iso-standards-paragraph a:hover,
+[data-strapi-footer-address] a:hover {
+    opacity: 0.8;
+}
+
+/* ══════════════════════════════════════
+   IN-CONTENT LINKS — broad (CKEditor-authored prose)
+   desc/description/answer/quote fields can now contain editor <a> links.
+   Most live on light card/section backgrounds → brand-blue underlined links.
+   (Dark/blue-bg blocks like who-we-are/footer/ISO keep their inherit-colour
+   rule defined earlier.)
+══════════════════════════════════════ */
+.faq-a a,
+.testi-quote a,
+.cloud-power-card a,
+.cloud-use-card a,
+.why-card a,
+.ds-when-card a,
+.ds-checklist-item a,
+.location-card a,
+.solution-card a,
+.cloud-cta-inner p a,
+[class*="-desc"] a,
+[class*="-answer"] a {
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.15s ease;
+}
+.faq-a a:hover,
+.testi-quote a:hover,
+.cloud-power-card a:hover,
+.cloud-use-card a:hover,
+.why-card a:hover,
+.ds-when-card a:hover,
+.ds-checklist-item a:hover,
+.location-card a:hover,
+.solution-card a:hover,
+.cloud-cta-inner p a:hover,
+[class*="-desc"] a:hover,
+[class*="-answer"] a:hover {
+    opacity: 0.8;
+}

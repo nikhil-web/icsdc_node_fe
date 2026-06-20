@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getAboutUsPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -33,7 +34,7 @@ import {
             return '<div class="au-spec-card">' +
                 '<div class="au-spec-icon" aria-hidden="true">' + resolveIcon(iconKey) + '</div>' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.desc || card.description || '') + '</p>' +
+                '<p>' + inlineRichText(card.desc || card.description || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -52,7 +53,7 @@ import {
                 '<div class="au-what-number">' + num + '</div>' +
                 '<div class="au-what-body">' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.desc || card.description || '') + '</p>' +
+                '<p>' + inlineRichText(card.desc || card.description || '') + '</p>' +
                 '</div>' +
                 '</div>';
         }).join('');

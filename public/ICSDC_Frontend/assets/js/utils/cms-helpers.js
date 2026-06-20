@@ -31,209 +31,209 @@ export function wireCtaLink(btn, link) {
 
 export var FA_ICONS = {
     // Speed / Power
-    lightning:      'bolt',
-    zap:            'bolt',
-    speed:          'bolt',
-    nvme:           'bolt',
+    lightning: 'bolt',
+    zap: 'bolt',
+    speed: 'bolt',
+    nvme: 'bolt',
     // Devices / Display
-    monitor:        'desktop',
-    mobile:         'mobile-screen',
-    smartphone:     'mobile-screen',
-    tablet:         'tablet',
+    monitor: 'desktop',
+    mobile: 'mobile-screen',
+    smartphone: 'mobile-screen',
+    tablet: 'tablet',
     // Money
-    dollar:         'dollar-sign',
-    price:          'dollar-sign',
-    billing:        'dollar-sign',
-    currency:       'dollar-sign',
+    dollar: 'dollar-sign',
+    price: 'dollar-sign',
+    billing: 'dollar-sign',
+    currency: 'dollar-sign',
     // People
-    users:          'users',
-    team:           'users',
-    headset:        'headset',
-    support:        'headset',
+    users: 'users',
+    team: 'users',
+    headset: 'headset',
+    support: 'headset',
     // Security
-    lock:           'lock',
-    ssl:            'lock',
-    shield:         'shield',
-    security:       'shield-halved',
-    protect:        'shield-halved',
-    firewall:       'fire-flame-curved',
-    'lock-key':     'key',
-    key:            'key',
+    lock: 'lock',
+    ssl: 'lock',
+    shield: 'shield',
+    security: 'shield-halved',
+    protect: 'shield-halved',
+    firewall: 'fire-flame-curved',
+    'lock-key': 'key',
+    key: 'key',
     'shield-check': 'shield-check',
-    vapt:           'shield-check',
-    'eye-off':      'eye-slash',
+    vapt: 'shield-check',
+    'eye-off': 'eye-slash',
     // Network / Global
-    pulse:          'wave-square',
-    activity:       'wave-square',
-    globe:          'globe',
-    'globe-lines':  'globe',
-    domain:         'globe',
-    network:        'network-wired',
-    connect:        'network-wired',
-    wifi:           'wifi',
+    pulse: 'wave-square',
+    activity: 'wave-square',
+    globe: 'globe',
+    'globe-lines': 'globe',
+    domain: 'globe',
+    network: 'network-wired',
+    connect: 'network-wired',
+    wifi: 'wifi',
     // Data
-    database:       'database',
-    storage:        'hard-drive',
-    'hard-drive':   'hard-drive',
-    upload:         'cloud-arrow-up',
-    backup:         'cloud-arrow-up',
-    cloud:          'cloud',
+    database: 'database',
+    storage: 'hard-drive',
+    'hard-drive': 'hard-drive',
+    upload: 'cloud-arrow-up',
+    backup: 'cloud-arrow-up',
+    cloud: 'cloud',
     // Compute
-    cpu:            'microchip',
-    gpu:            'microchip',
-    compute:        'microchip',
-    nvidia:         'microchip',
+    cpu: 'microchip',
+    gpu: 'microchip',
+    compute: 'microchip',
+    nvidia: 'microchip',
     // Code / Dev
-    code:           'code',
-    terminal:       'terminal',
-    'git-branch':   'code-branch',
-    container:      'box',
-    filter:         'filter',
+    code: 'code',
+    terminal: 'terminal',
+    'git-branch': 'code-branch',
+    container: 'box',
+    filter: 'filter',
     // Files / Docs
-    document:       'file',
-    'file-text':    'file-lines',
-    clipboard:      'clipboard',
+    document: 'file',
+    'file-text': 'file-lines',
+    clipboard: 'clipboard',
     // Communication
-    mail:           'envelope',
-    email:          'envelope',
-    chat:           'comments',
+    mail: 'envelope',
+    email: 'envelope',
+    chat: 'comments',
     // Infrastructure
-    server:         'server',
-    dedicated:      'server',
-    hosting:        'server',
-    layout:         'table-columns',
-    panel:          'table-columns',
+    server: 'server',
+    dedicated: 'server',
+    hosting: 'server',
+    layout: 'table-columns',
+    panel: 'table-columns',
     // Analytics
-    chart:          'chart-bar',
-    'bar-chart':    'chart-bar',
+    chart: 'chart-bar',
+    'bar-chart': 'chart-bar',
     // Status
-    check:          'check',
+    check: 'check',
     'check-circle': 'circle-check',
-    uptime:         'circle-check',
-    clock:          'clock',
-    refresh:        'rotate',
-    recovery:       'rotate',
-    calendar:       'calendar',
+    uptime: 'circle-check',
+    clock: 'clock',
+    refresh: 'rotate',
+    recovery: 'rotate',
+    calendar: 'calendar',
     // Content
-    video:          'video',
-    camera:         'camera',
+    video: 'video',
+    camera: 'camera',
     // UI
-    grid:           'grip',
-    layers:         'layer-group',
+    grid: 'grip',
+    layers: 'layer-group',
     // Actions
-    arrow:          'arrow-right',
-    share:          'share-nodes',
-    search:         'magnifying-glass',
-    rocket:         'rocket',
-    launch:         'rocket',
-    house:          'house',
-    gaming:         'gamepad',
+    arrow: 'arrow-right',
+    share: 'share-nodes',
+    search: 'magnifying-glass',
+    rocket: 'rocket',
+    launch: 'rocket',
+    house: 'house',
+    gaming: 'gamepad',
     // Business
-    brain:          'brain',
-    building:       'building',
-    scale:          'scale-balanced',
-    scalability:    'up-right-and-down-left-from-center',
-    tag:            'tag',
+    brain: 'brain',
+    building: 'building',
+    scale: 'scale-balanced',
+    scalability: 'up-right-and-down-left-from-center',
+    tag: 'tag',
     // OS / Platform brands (fa-brands)
-    linux:          'linux',
-    ubuntu:         'ubuntu',
-    centos:         'centos',
-    debian:         'debian',
-    almalinux:      'linux',
-    rocky:          'linux',
-    fedora:         'fedora',
-    redhat:         'redhat',
-    freebsd:        'freebsd',
-    windows:        'windows',
-    microsoft:      'microsoft',
-    google:         'google',
-    aws:            'aws',
-    azure:          'microsoft',
+    linux: 'linux',
+    ubuntu: 'ubuntu',
+    centos: 'centos',
+    debian: 'debian',
+    almalinux: 'linux',
+    rocky: 'linux',
+    fedora: 'fedora',
+    redhat: 'redhat',
+    freebsd: 'freebsd',
+    windows: 'windows',
+    microsoft: 'microsoft',
+    google: 'google',
+    aws: 'aws',
+    azure: 'microsoft',
     // Control panels (no FA brand — map to solid icons)
-    cpanel:         'sliders',
-    solusvms:       'server',
-    webmin:         'terminal',
-    plesk:          'sliders',
-    directadmin:    'gauge',
-    'whm':          'sliders',
+    cpanel: 'sliders',
+    solusvms: 'server',
+    webmin: 'terminal',
+    plesk: 'sliders',
+    directadmin: 'gauge',
+    'whm': 'sliders',
     // Misc
-    settings:       'gear',
-    manage:         'gear',
-    tool:           'wrench',
-    tools:          'wrench',
-    link:           'link',
-    compass:        'compass',
-    cloud:          'cloud',
-    smartphone:     'mobile-screen',
-    tablet:         'tablet',
-    calendar:       'calendar',
-    inbox:          'inbox',
-    award:          'award',
-    briefcase:      'briefcase',
-    'credit-card':  'credit-card',
-    flag:           'flag',
-    heart:          'heart',
-    'map-pin':      'location-dot',
-    location:       'location-dot',
-    global:         'location-dot',
+    settings: 'gear',
+    manage: 'gear',
+    tool: 'wrench',
+    tools: 'wrench',
+    link: 'link',
+    compass: 'compass',
+    cloud: 'cloud',
+    smartphone: 'mobile-screen',
+    tablet: 'tablet',
+    calendar: 'calendar',
+    inbox: 'inbox',
+    award: 'award',
+    briefcase: 'briefcase',
+    'credit-card': 'credit-card',
+    flag: 'flag',
+    heart: 'heart',
+    'map-pin': 'location-dot',
+    location: 'location-dot',
+    global: 'location-dot',
     'message-circle': 'message',
-    phone:          'phone',
-    printer:        'print',
-    share:          'share-nodes',
+    phone: 'phone',
+    printer: 'print',
+    share: 'share-nodes',
     'shopping-cart': 'cart-shopping',
-    tag:            'tag',
-    'thumbs-up':    'thumbs-up',
-    truck:          'truck',
-    umbrella:       'umbrella',
-    eye:            'eye',
-    feather:        'feather',
-    performance:    'gauge-high',
-    support:        'headset',
-    bandwidth:      'arrows-left-right',
-    migration:      'right-left',
-    transfer:       'right-left',
-    scalability:    'up-right-and-down-left-from-center',
-    scale:          'up-right-and-down-left-from-center',
-    grow:           'arrow-trend-up',
-    'trending-up':  'arrow-trend-up',
-    package:        'box',
-    docker:         'box',
-    kubernetes:     'dharmachakra',
-    openstack:      'layer-group',
-    vmware:         'server',
-    ceph:           'database',
-    nginx:          'globe',
-    terraform:      'terminal',
-    ansible:        'terminal',
-    prometheus:     'chart-line',
-    grafana:        'chart-line',
-    cloudflare:     'shield-halved',
-    compliance:     'clipboard-check',
-    api:            'code',
-    developer:      'code',
-    linux:          'linux',
-    ubuntu:         'ubuntu',
-    centos:         'centos',
-    debian:         'debian',
-    almalinux:      'linux',
-    rocky:          'linux',
-    fedora:         'fedora',
-    redhat:         'redhat',
-    freebsd:        'freebsd',
-    windows:        'windows',
-    microsoft:      'microsoft',
-    google:         'google',
-    aws:            'aws',
-    azure:          'microsoft',
-    cpanel:         'sliders',
-    solusvms:       'server',
-    webmin:         'terminal',
-    plesk:          'sliders',
-    directadmin:    'gauge',
+    tag: 'tag',
+    'thumbs-up': 'thumbs-up',
+    truck: 'truck',
+    umbrella: 'umbrella',
+    eye: 'eye',
+    feather: 'feather',
+    performance: 'gauge-high',
+    support: 'headset',
+    bandwidth: 'arrows-left-right',
+    migration: 'right-left',
+    transfer: 'right-left',
+    scalability: 'up-right-and-down-left-from-center',
+    scale: 'up-right-and-down-left-from-center',
+    grow: 'arrow-trend-up',
+    'trending-up': 'arrow-trend-up',
+    package: 'box',
+    docker: 'box',
+    kubernetes: 'dharmachakra',
+    openstack: 'layer-group',
+    vmware: 'server',
+    ceph: 'database',
+    nginx: 'globe',
+    terraform: 'terminal',
+    ansible: 'terminal',
+    prometheus: 'chart-line',
+    grafana: 'chart-line',
+    cloudflare: 'shield-halved',
+    compliance: 'clipboard-check',
+    api: 'code',
+    developer: 'code',
+    linux: 'linux',
+    ubuntu: 'ubuntu',
+    centos: 'centos',
+    debian: 'debian',
+    almalinux: 'linux',
+    rocky: 'linux',
+    fedora: 'fedora',
+    redhat: 'redhat',
+    freebsd: 'freebsd',
+    windows: 'windows',
+    microsoft: 'microsoft',
+    google: 'google',
+    aws: 'aws',
+    azure: 'microsoft',
+    cpanel: 'sliders',
+    solusvms: 'server',
+    webmin: 'terminal',
+    plesk: 'sliders',
+    directadmin: 'gauge',
 };
 
 /* Brand icons that use fa-brands instead of fa-solid */
-var FA_BRANDS = { linux:1, ubuntu:1, centos:1, debian:1, fedora:1, redhat:1, freebsd:1, windows:1, microsoft:1, google:1, aws:1, apple:1, android:1, github:1, gitlab:1, docker:1, whatsapp:1, facebook:1, twitter:1, instagram:1, linkedin:1, youtube:1, tiktok:1, slack:1, discord:1, telegram:1, wordpress:1, shopify:1, stripe:1, paypal:1, dropbox:1, spotify:1 };
+var FA_BRANDS = { linux: 1, ubuntu: 1, centos: 1, debian: 1, fedora: 1, redhat: 1, freebsd: 1, windows: 1, microsoft: 1, google: 1, aws: 1, apple: 1, android: 1, github: 1, gitlab: 1, docker: 1, whatsapp: 1, facebook: 1, twitter: 1, instagram: 1, linkedin: 1, youtube: 1, tiktok: 1, slack: 1, discord: 1, telegram: 1, wordpress: 1, shopify: 1, stripe: 1, paypal: 1, dropbox: 1, spotify: 1 };
 
 /* Legacy SVG map kept for backward compat — empty, all resolved via FA now */
 export var ICONS = {};
@@ -243,16 +243,44 @@ export var ICONS = {};
    DOM HELPERS
    ═══════════════════════════════════════════════════════════════ */
 
+// Detects CKEditor/rich-HTML content so prose fields converted to the CKEditor
+// custom field render as real markup (links, bold…) even at call sites that used
+// setText. Plain strings (titles, labels, numbers) stay textContent.
+export var RICH_HTML_RE = /<\/?(p|a|strong|em|b|i|u|br|ul|ol|li|h[1-6]|blockquote|span)\b/i;
+
 export function setText(parent, selector, text) {
     if (!parent) return;
     var el = parent.querySelector(selector);
-    if (el && text != null) el.textContent = text;
+    if (!el || text == null) return;
+    if (typeof text === 'string' && RICH_HTML_RE.test(text)) {
+        el.innerHTML = inlineRichText(text);   // CKEditor HTML → render as markup
+    } else {
+        el.textContent = text;                 // plain string → safe textContent
+    }
 }
 
 export function setHTML(parent, selector, html) {
     if (!parent) return;
     var el = parent.querySelector(selector);
-    if (el && html != null) el.innerHTML = html;
+    if (el && html != null) el.innerHTML = inlineRichText(html); // no-op on non-<p> HTML
+}
+
+/**
+ * Normalise CKEditor "defaultHtml" output for rendering INSIDE an existing
+ * block element (e.g. <p class="hero-desc">). CKEditor wraps content in <p>…</p>;
+ * dropping that straight into a <p> container would create invalid <p>-in-<p>
+ * nesting (the browser auto-closes the outer <p>, losing its styling).
+ * This strips the outer <p> wrapper and turns paragraph breaks into <br><br>,
+ * leaving inline tags (<a>, <strong>, <em>) intact. Plain text passes through
+ * unchanged (no-op), so it is safe on legacy/non-CKEditor content too.
+ */
+export function inlineRichText(html) {
+    if (html == null) return html;
+    return String(html)
+        .replace(/<\/p>\s*<p[^>]*>/gi, '<br><br>') // paragraph breaks → line breaks
+        .replace(/^\s*<p[^>]*>/i, '')              // strip leading <p ...>
+        .replace(/<\/p>\s*$/i, '')                 // strip trailing </p>
+        .trim();
 }
 
 /**
@@ -355,7 +383,7 @@ export function populateSEO(seo) {
         var href = /^https?:\/\//.test(seo.canonicalUrl)
             ? seo.canonicalUrl
             : (window.SITE_URL || 'https://icsdc.com').replace(/\/+$/, '') +
-              (seo.canonicalUrl.charAt(0) === '/' ? '' : '/') + seo.canonicalUrl;
+            (seo.canonicalUrl.charAt(0) === '/' ? '' : '/') + seo.canonicalUrl;
         var link = document.querySelector('link[rel="canonical"]');
         if (!link) {
             link = document.createElement('link');
@@ -378,7 +406,7 @@ export function populateHero(section, data) {
 
     if (data.title) setText(section, '.hero-title', data.title);
     if (data.subtitle) setText(section, '.hero-sub', data.subtitle);
-    if (data.description) setHTML(section, '.hero-desc', data.description);
+    if (data.description) setHTML(section, '.hero-desc', inlineRichText(data.description));
 
     if (data.price != null) {
         var priceEl = section.querySelector('.hero-price');
@@ -392,14 +420,14 @@ export function populateHero(section, data) {
     if (data.priceNote) setHTML(section, '.price-note', data.priceNote);
 
     var btns = section.querySelectorAll('.hero-btns button, .hero-btns a');
-    var ctaPrimaryProvided  = Object.prototype.hasOwnProperty.call(data, 'ctaPrimary');
+    var ctaPrimaryProvided = Object.prototype.hasOwnProperty.call(data, 'ctaPrimary');
     var ctaSecondaryProvided = Object.prototype.hasOwnProperty.call(data, 'ctaSecondary');
 
     // btns[0] = btn-primary (dark), btns[1] = btn-outline (secondary)
     if (btns.length >= 1) {
         var primaryBtn = btns[0];
         if (data.ctaPrimary && data.ctaPrimary.text) {
-            primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' &rarr;';
+            primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' ';
             wireCtaLink(primaryBtn, data.ctaPrimary.link);
         } else if (ctaPrimaryProvided) {
             primaryBtn.style.display = 'none';
@@ -465,14 +493,14 @@ export function populateIconCards(gridSelector, cards, cardClass, customIcons) {
 
     grid.innerHTML = sorted.map(function (card) {
         var linkHtml = card.link
-            ? '<a href="' + card.link + '" class="' + linkCls + '">Learn more &rarr;</a>'
+            ? '<a href="' + card.link + '" class="' + linkCls + '">Learn more </a>'
             : '';
         return '<div class="' + cls + '">' +
             '<div class="' + iconCls + '" aria-hidden="true">' +
             resolveIcon(card.icon, customIcons) +
             '</div>' +
             '<h3>' + (card.title || '') + '</h3>' +
-            '<p>' + (card.desc || card.description || '') + '</p>' +
+            '<p>' + inlineRichText(card.desc || card.description || '') + '</p>' +
             linkHtml +
             '</div>';
     }).join('');
@@ -486,7 +514,7 @@ export function populateSectionHeader(sectionSelector, label, title, subtitle) {
         if (labelEl) labelEl.textContent = label;
     }
     if (title) setText(section, '.title', title);
-    if (subtitle) setHTML(section, '.subtitle', subtitle);
+    if (subtitle) setHTML(section, '.subtitle', inlineRichText(subtitle));
 }
 
 export function populateCtaBand(selector, cta) {
@@ -498,7 +526,7 @@ export function populateCtaBand(selector, cta) {
     if (!inner) return;
 
     setHTML(inner, 'h2', cta.title);
-    setHTML(inner, 'p', cta.description);
+    setHTML(inner, 'p', inlineRichText(cta.description));
 
     var btns = inner.querySelector('.cloud-cta-btns') || inner.querySelector('.ds-cta-btns');
     if (btns) {
@@ -507,7 +535,7 @@ export function populateCtaBand(selector, cta) {
 
         if (primaryBtn) {
             if (cta.ctaPrimary && cta.ctaPrimary.text) {
-                primaryBtn.innerHTML = cta.ctaPrimary.text + ' &rarr;';
+                primaryBtn.innerHTML = cta.ctaPrimary.text + ' ';
                 wireCtaLink(primaryBtn, cta.ctaPrimary.link);
             } else {
                 primaryBtn.remove();
@@ -537,7 +565,7 @@ export function populatePricingPlans(gridSelector, plans) {
             ? '<span class="ds-plan-badge">' + plan.badge + '</span>'
             : '';
         var ctaClass = plan.ctaStyle === 'primary' ? 'ds-plan-cta-primary' : 'ds-plan-cta-outline';
-        var ctaArrow = plan.ctaStyle === 'primary' ? ' &rarr;' : '';
+        var ctaArrow = plan.ctaStyle === 'primary' ? ' ' : '';
 
         var featuresHTML = '';
         if (plan.features && plan.features.length) {
@@ -621,7 +649,7 @@ export function populateWhenCards(gridSelector, cards) {
         return '<div class="ds-when-card">' +
             '<div class="ds-when-num">' + (card.number || '') + '</div>' +
             '<h3>' + (card.title || '') + '</h3>' +
-            '<p>' + (card.description || '') + '</p>' +
+            '<p>' + inlineRichText(card.description || '') + '</p>' +
             '</div>';
     }).join('');
 }
@@ -675,7 +703,7 @@ export function populateChecklist(listSelector, items) {
     ul.innerHTML = sorted.map(function (item) {
         return '<li class="ds-checklist-item">' +
             '<span class="ds-cl-icon"><i class="fa-solid fa-check" aria-hidden="true"></i></span>' +
-            '<span><strong>' + (item.label || '') + '</strong> ' + (item.description || '') + '</span>' +
+            '<span><strong>' + (item.label || '') + '</strong> ' + inlineRichText(item.description || '') + '</span>' +
             '</li>';
     }).join('');
 }
@@ -707,7 +735,7 @@ export function populateLocationCards(gridSelector, locations) {
         return '<div class="location-card">' +
             '<span class="location-flag" aria-hidden="true">' + (loc.flag || '') + '</span>' +
             '<h3 class="location-name">' + (loc.name || '') + '</h3>' +
-            '<p class="location-desc">' + (loc.description || '') + '</p>' +
+            '<p class="location-desc">' + inlineRichText(loc.description || '') + '</p>' +
             '</div>';
     }).join('');
 }
@@ -729,7 +757,7 @@ export function populateSolutionCards(gridSelector, cards, customIcons) {
             '<div class="solution-icon" aria-hidden="true">' + resolveIcon(card.icon, customIcons) + '</div>' +
             '<h3 class="solution-name">' + (card.name || '') + '</h3>' +
             (card.tagline ? '<p class="solution-tagline">' + card.tagline + '</p>' : '') +
-            '<p class="solution-desc">' + (card.description || '') + '</p>' +
+            '<p class="solution-desc">' + inlineRichText(card.description || '') + '</p>' +
             ctaHTML +
             '</div>';
     }).join('');
@@ -789,7 +817,7 @@ export function initFAQ(faqItems) {
             '<span class="faq-q-text">' + (faq.question || '') + '</span>' +
             '<span class="faq-chev">' + chevronSVG + '</span>' +
             '</summary>' +
-            '<div class="faq-a-wrap"><div class="faq-a">' + (faq.answer || '') + '</div></div>' +
+            '<div class="faq-a-wrap"><div class="faq-a">' + inlineRichText(faq.answer || '') + '</div></div>' +
             '</details>';
     }).join('');
 
@@ -829,7 +857,7 @@ export function initTestimonials(items) {
             '<div class="testi-rating" aria-label="Rating: ' + (t.rating || 5) + ' out of 5 stars">' + stars + '</div>' +
             '</div>' +
             '<div class="testi-right">' +
-            '<blockquote class="testi-quote">' + t.quote + '</blockquote>' +
+            '<blockquote class="testi-quote">' + inlineRichText(t.quote || '') + '</blockquote>' +
             '</div>' +
             '</article>';
     }
@@ -841,7 +869,7 @@ export function initTestimonials(items) {
     }).join('');
 
     var cards = Array.from(grid.querySelectorAll('.testi-card'));
-    var dots  = Array.from(dotsWrap.querySelectorAll('.testi-dot'));
+    var dots = Array.from(dotsWrap.querySelectorAll('.testi-dot'));
     var currentIdx = 0;
     var programmaticScroll = false;
     var programmaticTimer;
@@ -922,8 +950,8 @@ export function initHeroContactForm(formId, successId) {
     if (!form) return;
 
     function validatePayload(p) {
-        if (!p.name)    return 'Please enter your name.';
-        if (!p.email)   return 'Please enter your email address.';
+        if (!p.name) return 'Please enter your name.';
+        if (!p.email) return 'Please enter your email address.';
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)) return 'Please enter a valid email address.';
         if (!p.subject) return 'Please select a subject.';
         if (!p.message) return 'Please enter your message.';
@@ -945,9 +973,9 @@ export function initHeroContactForm(formId, successId) {
         form.querySelectorAll('.cu-form-error').forEach(function (el) { el.remove(); });
 
         var payload = {
-            name:    (form.querySelector('[name=name]')    || {}).value.trim(),
-            email:   (form.querySelector('[name=email]')   || {}).value.trim(),
-            phone:   (form.querySelector('[name=phone]')   || {}).value.trim(),
+            name: (form.querySelector('[name=name]') || {}).value.trim(),
+            email: (form.querySelector('[name=email]') || {}).value.trim(),
+            phone: (form.querySelector('[name=phone]') || {}).value.trim(),
             company: (form.querySelector('[name=company]') || {}).value.trim(),
             subject: (form.querySelector('[name=subject]') || {}).value,
             message: (form.querySelector('[name=message]') || {}).value.trim(),

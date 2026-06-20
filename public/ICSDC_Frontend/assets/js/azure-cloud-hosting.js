@@ -13,6 +13,7 @@ import {
     initHeroContactForm
 } from './utils/cms-helpers.js';
 import { getAzureCloudHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import { uploadURL } from './services/strapiClient.js';
 
 (function () {
@@ -31,7 +32,7 @@ import { uploadURL } from './services/strapiClient.js';
             return '<div class="' + cardClass + '">' +
                 '<div class="' + iconClass + '">' + resolveIcon(card.icon) + '</div>' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.description || card.desc || '') + '</p>' +
+                '<p>' + inlineRichText(card.description || card.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -98,7 +99,7 @@ import { uploadURL } from './services/strapiClient.js';
             return '<div class="azure-plan-card' + featuredClass + '">' + badgeHtml +
                 '<div class="azure-plan-name">' + (plan.tier || plan.name || '') + '</div>' +
                 priceHtml + taglineHtml + featuresHtml +
-                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' &rarr;</a></div>';
+                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' </a></div>';
         }).join('');
     }
 
@@ -142,7 +143,7 @@ import { uploadURL } from './services/strapiClient.js';
                 '<div class="azure-step-num" aria-hidden="true">' + (step.number || index + 1) + '</div>' +
                 '<div class="azure-step-content">' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || step.desc || '') + '</p>' +
+                '<p>' + inlineRichText(step.description || step.desc || '') + '</p>' +
                 '</div>' +
                 '</div>';
         }).join('');
@@ -254,7 +255,7 @@ import { uploadURL } from './services/strapiClient.js';
                 if (qDesc && qb.description) { qDesc.textContent = qb.description; qDesc.hidden = false; }
                 var qBtn = document.getElementById('azure-quote-cta-btn');
                 if (qBtn && qb.ctaPrimary) {
-                    if (qb.ctaPrimary.text) qBtn.innerHTML = qb.ctaPrimary.text + ' &rarr;';
+                    if (qb.ctaPrimary.text) qBtn.innerHTML = qb.ctaPrimary.text + ' ';
                     if (qb.ctaPrimary.link) qBtn.setAttribute('onclick', "window.location.href='" + qb.ctaPrimary.link + "'");
                 }
             }

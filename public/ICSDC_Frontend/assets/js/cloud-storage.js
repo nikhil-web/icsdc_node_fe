@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getCloudStoragePage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -53,10 +54,10 @@ import { uploadURL } from './services/strapiClient.js';
             var featuresArr = plan.features || [];
             var featuresHtml = featuresArr.length
                 ? '<ul class="cs-plan-features">' +
-                    featuresArr.map(function (f) {
-                        return '<li>' + (f.label || f.text || f.name || f) + '</li>';
-                    }).join('') +
-                  '</ul>'
+                featuresArr.map(function (f) {
+                    return '<li>' + (f.label || f.text || f.name || f) + '</li>';
+                }).join('') +
+                '</ul>'
                 : '';
 
             var ctaText = plan.ctaText || 'Get Started';
@@ -68,7 +69,7 @@ import { uploadURL } from './services/strapiClient.js';
                 priceHtml +
                 taglineHtml +
                 featuresHtml +
-                '<a href="#" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '<a href="#" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -107,11 +108,11 @@ import { uploadURL } from './services/strapiClient.js';
         if (!grid) return;
         grid.innerHTML = cards.map(function (c) {
             var cta = c.ctaText
-                ? '<a href="' + (c.ctaLink || '#') + '" class="cs-related-cta">' + c.ctaText + ' &rarr;</a>'
+                ? '<a href="' + (c.ctaLink || '#') + '" class="cs-related-cta">' + c.ctaText + ' </a>'
                 : '';
             return '<div class="cs-related-card">' +
                 '<h3 class="cs-related-title">' + (c.title || '') + '</h3>' +
-                '<p class="cs-related-desc">' + (c.desc || c.description || '') + '</p>' +
+                '<p class="cs-related-desc">' + inlineRichText(c.desc || c.description || '') + '</p>' +
                 cta +
                 '</div>';
         }).join('');
@@ -136,7 +137,7 @@ import { uploadURL } from './services/strapiClient.js';
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.cs-top-badge', page.heroTopBadge);

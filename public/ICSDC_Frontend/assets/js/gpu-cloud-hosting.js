@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getGpuCloudHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -51,10 +52,10 @@ import {
             var featuresArr = plan.features || [];
             var featuresHtml = featuresArr.length
                 ? '<ul class="gpu-plan-features">' +
-                    featuresArr.map(function (f) {
-                        return '<li>' + (f.label || f.text || f.name || f) + '</li>';
-                    }).join('') +
-                  '</ul>'
+                featuresArr.map(function (f) {
+                    return '<li>' + (f.label || f.text || f.name || f) + '</li>';
+                }).join('') +
+                '</ul>'
                 : '';
 
             var ctaText = plan.ctaText || 'Get Started';
@@ -66,7 +67,7 @@ import {
                 priceHtml +
                 taglineHtml +
                 featuresHtml +
-                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -93,7 +94,7 @@ import {
      */
     function populateInfra(page) {
         if (page.infraTitle) setText(document, '#gpu-infra-title', page.infraTitle);
-        if (page.infraDesc)  setText(document, '#gpu-infra-desc',  page.infraDesc);
+        if (page.infraDesc) setText(document, '#gpu-infra-desc', page.infraDesc);
 
         var list = document.getElementById('gpu-infra-list');
         if (list && page.infraPoints && page.infraPoints.length) {
@@ -119,7 +120,7 @@ import {
             return '<div class="gpu-related-card">' +
                 '<div class="gpu-related-icon"><i class="' + iconClass + '" aria-hidden="true"></i></div>' +
                 '<h3 class="gpu-related-title-card">' + (card.title || '') + '</h3>' +
-                '<p class="gpu-related-desc">' + (card.desc || '') + '</p>' +
+                '<p class="gpu-related-desc">' + inlineRichText(card.desc || '') + '</p>' +
                 '<a href="' + (card.ctaLink || '#') + '" class="gpu-related-btn">' +
                 (card.ctaText || 'Learn More') + ' ' + arrowSVG +
                 '</a>' +
@@ -149,8 +150,8 @@ import {
                 heroImage: page.heroImage
             });
 
-            if (page.heroTopBadge)      setHTML(document, '.gpu-top-badge', page.heroTopBadge);
-            if (page.heroStatusTitle)   setText(document, '.gpu-bt', page.heroStatusTitle);
+            if (page.heroTopBadge) setHTML(document, '.gpu-top-badge', page.heroTopBadge);
+            if (page.heroStatusTitle) setText(document, '.gpu-bt', page.heroStatusTitle);
             if (page.heroStatusSubtitle) setText(document, '.gpu-bs', page.heroStatusSubtitle);
 
             // Why Us — 4 pillars

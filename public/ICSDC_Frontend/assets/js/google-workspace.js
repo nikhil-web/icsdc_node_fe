@@ -1,4 +1,5 @@
 import { getGoogleWorkspacePage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import { uploadURL } from './services/strapiClient.js';
 import {
     populateSEO,
@@ -35,7 +36,7 @@ import {
             return '<div class="gws-reason-card ' + GWS_REASON_COLORS[i % GWS_REASON_COLORS.length] + '">' +
                 '<div class="gws-reason-icon">' + icon + '</div>' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || '') + '</p>' +
+                '<p>' + inlineRichText(step.description || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -98,7 +99,7 @@ import {
                             '<div class="gws-app-icon" style="color:' + ic.color + '">' +
                             '<i class="fa-solid ' + ic.icon + '" aria-hidden="true"></i></div>' +
                             '<h4>' + (a.name || '') + '</h4>' +
-                            '<p>' + (a.desc || '') + '</p>' +
+                            '<p>' + inlineRichText(a.desc || '') + '</p>' +
                             '</div>';
                     }).join('');
                     return '<div class="gws-scale-group">' +
@@ -128,7 +129,7 @@ import {
             return '<div class="' + classes.join(' ') + '">' +
                 '<div class="gws-why-icon" aria-hidden="true">' + resolveIcon(card.icon) + '</div>' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.desc || card.description || '') + '</p>' +
+                '<p>' + inlineRichText(card.desc || card.description || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -175,7 +176,7 @@ import {
                     return '<div class="gws-upgrade-card ' + GWS_UPGRADE_COLORS[i % GWS_UPGRADE_COLORS.length] + '">' +
                         '<div class="gws-upgrade-icon">' + icon + '</div>' +
                         '<h3>' + (b.title || '') + '</h3>' +
-                        '<p>' + (b.desc || '') + '</p>' +
+                        '<p>' + inlineRichText(b.desc || '') + '</p>' +
                         '</div>';
                 }).join('');
                 initUpgradeTilt(wrap);

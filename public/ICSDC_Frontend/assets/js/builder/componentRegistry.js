@@ -38,25 +38,25 @@ const hero = {
     icon: 'rocket',
     description: 'Page-opening hero with image, headline, sub-heading, description, and CTAs.',
     schema: [
-        { key: 'eyebrow',     label: 'Eyebrow Text',    type: 'text' },
-        { key: 'title',       label: 'Heading',         type: 'text', required: true },
-        { key: 'subtitle',    label: 'Sub-heading',     type: 'text' },
-        { key: 'description', label: 'Description',     type: 'textarea' },
-        { key: 'imageUrl',    label: 'Hero Image',      type: 'image' },
-        { key: 'imageAlt',    label: 'Image Alt Text',  type: 'text' },
-        { key: 'imageSide',   label: 'Image Side',      type: 'select', options: ['left', 'right'], default: 'left' },
+        { key: 'eyebrow', label: 'Eyebrow Text', type: 'text' },
+        { key: 'title', label: 'Heading', type: 'text', required: true },
+        { key: 'subtitle', label: 'Sub-heading', type: 'text' },
+        { key: 'description', label: 'Description', type: 'textarea' },
+        { key: 'imageUrl', label: 'Hero Image', type: 'image' },
+        { key: 'imageAlt', label: 'Image Alt Text', type: 'text' },
+        { key: 'imageSide', label: 'Image Side', type: 'select', options: ['left', 'right'], default: 'left' },
         {
             key: 'ctaPrimary', label: 'Primary CTA', type: 'cta',
             fields: [
                 { key: 'text', label: 'Button Text', type: 'text' },
-                { key: 'link', label: 'URL',         type: 'text' },
+                { key: 'link', label: 'URL', type: 'text' },
             ]
         },
         {
             key: 'ctaSecondary', label: 'Secondary CTA', type: 'cta',
             fields: [
                 { key: 'text', label: 'Button Text', type: 'text' },
-                { key: 'link', label: 'URL',         type: 'text' },
+                { key: 'link', label: 'URL', type: 'text' },
             ]
         },
     ],
@@ -68,31 +68,31 @@ const hero = {
         imageUrl: '/assets/images/trusted-cloud-service-provider 1.png',
         imageAlt: 'Hero illustration',
         imageSide: 'left',
-        ctaPrimary:   { text: 'Get Started', link: '/contact-us' },
-        ctaSecondary: { text: 'Learn More',  link: '#' },
+        ctaPrimary: { text: 'Get Started', link: '/contact-us' },
+        ctaSecondary: { text: 'Learn More', link: '#' },
     },
     renderer(container, p) {
         // Emit the same scaffold the hand-built hosting pages use, then hand it
         // to the shared populateHero() helper. Identical code path = identical output.
-        const sideClass   = (p.imageSide === 'right') ? ' builder-hero-img-right' : ' builder-hero-img-left';
-        const heroRight   = p.imageUrl
+        const sideClass = (p.imageSide === 'right') ? ' builder-hero-img-right' : ' builder-hero-img-left';
+        const heroRight = p.imageUrl
             ? '<div class="hero-right"><img class="hero-right-image" alt="' + esc(p.imageAlt || '') + '"></div>'
             : '';
         const contentHtml =
             '<div class="hero-content">' +
-                (p.eyebrow ? '<div class="eyebrow-badge"></div>' : '') +
-                '<h1 class="hero-title"></h1>' +
-                '<p class="hero-sub"></p>' +
-                '<p class="hero-desc"></p>' +
-                '<div class="hero-btns">' +
-                    '<button class="btn-outline"></button>' +
-                    '<button class="btn-primary"></button>' +
-                '</div>' +
+            (p.eyebrow ? '<div class="eyebrow-badge"></div>' : '') +
+            '<h1 class="hero-title"></h1>' +
+            '<p class="hero-sub"></p>' +
+            '<p class="hero-desc"></p>' +
+            '<div class="hero-btns">' +
+            '<button class="btn-outline"></button>' +
+            '<button class="btn-primary"></button>' +
+            '</div>' +
             '</div>';
         const inner = (p.imageSide === 'right') ? contentHtml + heroRight : heroRight + contentHtml;
         container.innerHTML =
             '<section class="hero-section builder-hero' + sideClass + '">' +
-                '<div class="hero">' + inner + '</div>' +
+            '<div class="hero">' + inner + '</div>' +
             '</section>';
 
         const section = container.querySelector('.hero-section');
@@ -101,13 +101,13 @@ const hero = {
             ? { image: { url: p.imageUrl } }
             : null;
         populateHero(section, {
-            eyebrow:     p.eyebrow,
-            title:       p.title,
-            subtitle:    p.subtitle,
+            eyebrow: p.eyebrow,
+            title: p.title,
+            subtitle: p.subtitle,
             description: p.description,
-            ctaPrimary:  p.ctaPrimary,
+            ctaPrimary: p.ctaPrimary,
             ctaSecondary: p.ctaSecondary,
-            heroImage:   heroImagePayload,
+            heroImage: heroImagePayload,
         });
 
         // Clean up empty optional elements so we don't leave hollow tags behind.
@@ -123,11 +123,11 @@ const hero = {
 // used across the existing hardcoded pages (cloud-hosting.html, web-hosting.html,
 // cpanel-hosting.html, shared-hosting.html, windows-dedicated-server.html, etc.).
 const CARD_STYLES = {
-    'cloud-power': { card: 'cloud-power-card',     icon: 'cloud-power-icon',     gridClass: 'cloud-power-grid' },
-    'cloud-use':   { card: 'cloud-use-card',       icon: 'cloud-use-icon',       gridClass: 'cloud-use-grid'   },
-    'why':         { card: 'why-card',             icon: 'why-icon',             gridClass: 'why-grid'         },
-    'framework':   { card: 'cloud-framework-badge', icon: 'cloud-framework-icon', gridClass: 'cloud-frameworks-grid' },
-    'support':     { card: 'cp-support-feat-card', icon: 'cp-support-feat-icon', gridClass: 'cp-support-features' },
+    'cloud-power': { card: 'cloud-power-card', icon: 'cloud-power-icon', gridClass: 'cloud-power-grid' },
+    'cloud-use': { card: 'cloud-use-card', icon: 'cloud-use-icon', gridClass: 'cloud-use-grid' },
+    'why': { card: 'why-card', icon: 'why-icon', gridClass: 'why-grid' },
+    'framework': { card: 'cloud-framework-badge', icon: 'cloud-framework-icon', gridClass: 'cloud-frameworks-grid' },
+    'support': { card: 'cp-support-feat-card', icon: 'cp-support-feat-icon', gridClass: 'cp-support-features' },
 };
 
 const iconCards = {
@@ -135,22 +135,22 @@ const iconCards = {
     icon: 'grid',
     description: 'Flexible grid of icon + title + description cards. Choose card style to match any existing page.',
     schema: [
-        { key: 'label',    label: 'Section Label (eyebrow)', type: 'text' },
-        { key: 'title',    label: 'Section Title',           type: 'text', required: true },
-        { key: 'subtitle', label: 'Section Subtitle',        type: 'textarea' },
+        { key: 'label', label: 'Section Label (eyebrow)', type: 'text' },
+        { key: 'title', label: 'Section Title', type: 'text', required: true },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
         {
             key: 'cardStyle', label: 'Card Style', type: 'select',
             options: ['cloud-power', 'cloud-use', 'why', 'framework', 'support'],
             default: 'cloud-power',
         },
         { key: 'numbered', label: 'Numbered Cards (01, 02…)', type: 'toggle', default: false },
-        { key: 'columns',  label: 'Columns',                  type: 'number', default: 3, min: 2, max: 4 },
+        { key: 'columns', label: 'Columns', type: 'number', default: 3, min: 2, max: 4 },
         {
             key: 'cards', label: 'Cards', type: 'repeater',
             itemSchema: [
-                { key: 'icon',  label: 'Icon Key (FA name)',  type: 'text' },
-                { key: 'title', label: 'Card Title',          type: 'text' },
-                { key: 'desc',  label: 'Card Description',    type: 'textarea' },
+                { key: 'icon', label: 'Icon Key (FA name)', type: 'text' },
+                { key: 'title', label: 'Card Title', type: 'text' },
+                { key: 'desc', label: 'Card Description', type: 'textarea' },
             ],
         },
     ],
@@ -162,28 +162,28 @@ const iconCards = {
         numbered: false,
         columns: 3,
         cards: [
-            { icon: 'bolt',          title: 'Fast Performance',   desc: 'Blazing fast infrastructure tuned for speed.' },
-            { icon: 'shield-halved', title: 'Secure by Default',  desc: 'Enterprise-grade security at every layer.' },
-            { icon: 'headset',       title: '24/7 Support',       desc: 'Real humans available around the clock.' },
+            { icon: 'bolt', title: 'Fast Performance', desc: 'Blazing fast infrastructure tuned for speed.' },
+            { icon: 'shield-halved', title: 'Secure by Default', desc: 'Enterprise-grade security at every layer.' },
+            { icon: 'headset', title: '24/7 Support', desc: 'Real humans available around the clock.' },
         ],
     },
     renderer(container, p) {
-        const style    = CARD_STYLES[p.cardStyle] || CARD_STYLES['cloud-power'];
-        const label    = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
-        const sub      = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
-        const cols     = Math.min(4, Math.max(2, Number(p.columns) || 3));
+        const style = CARD_STYLES[p.cardStyle] || CARD_STYLES['cloud-power'];
+        const label = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
+        const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
+        const cols = Math.min(4, Math.max(2, Number(p.columns) || 3));
         const numbered = p.numbered === true;
-        const gridId   = bldId('bld-cards');
+        const gridId = bldId('bld-cards');
 
         // Emit just the section + empty grid; populateIconCards fills the grid.
         container.innerHTML =
             '<section class="section">' +
-                '<div class="container">' +
-                    label +
-                    '<h2 class="title">' + esc(p.title) + '</h2>' +
-                    sub +
-                    '<div id="' + gridId + '" class="' + style.gridClass + '" style="grid-template-columns:repeat(' + cols + ',1fr)"></div>' +
-                '</div>' +
+            '<div class="container">' +
+            label +
+            '<h2 class="title">' + esc(p.title) + '</h2>' +
+            sub +
+            '<div id="' + gridId + '" class="' + style.gridClass + '" style="grid-template-columns:repeat(' + cols + ',1fr)"></div>' +
+            '</div>' +
             '</section>';
 
         if (numbered) {
@@ -191,9 +191,9 @@ const iconCards = {
             const grid = container.querySelector('#' + gridId);
             grid.innerHTML = (p.cards || []).map((c, i) =>
                 '<div class="' + style.card + '">' +
-                    '<div class="sh-when-card-num">' + String(i + 1).padStart(2, '0') + '</div>' +
-                    '<h3>' + esc(c.title) + '</h3>' +
-                    (c.desc ? '<p>' + esc(c.desc) + '</p>' : '') +
+                '<div class="sh-when-card-num">' + String(i + 1).padStart(2, '0') + '</div>' +
+                '<h3>' + esc(c.title) + '</h3>' +
+                (c.desc ? '<p>' + esc(c.desc) + '</p>' : '') +
                 '</div>'
             ).join('');
         } else {
@@ -209,21 +209,21 @@ const ctaBand = {
     icon: 'arrow',
     description: 'A full-width call-to-action band with headline and buttons.',
     schema: [
-        { key: 'variant',     label: 'Variant',          type: 'select', options: ['light', 'dark'], default: 'dark' },
-        { key: 'title',       label: 'Headline',         type: 'text', required: true },
-        { key: 'description', label: 'Description',      type: 'textarea' },
+        { key: 'variant', label: 'Variant', type: 'select', options: ['light', 'dark'], default: 'dark' },
+        { key: 'title', label: 'Headline', type: 'text', required: true },
+        { key: 'description', label: 'Description', type: 'textarea' },
         {
             key: 'ctaPrimary', label: 'Primary CTA', type: 'cta',
             fields: [
                 { key: 'text', label: 'Button Text', type: 'text' },
-                { key: 'link', label: 'URL',         type: 'text' },
+                { key: 'link', label: 'URL', type: 'text' },
             ],
         },
         {
             key: 'ctaSecondary', label: 'Secondary CTA', type: 'cta',
             fields: [
                 { key: 'text', label: 'Button Text', type: 'text' },
-                { key: 'link', label: 'URL',         type: 'text' },
+                { key: 'link', label: 'URL', type: 'text' },
             ],
         },
     ],
@@ -231,27 +231,27 @@ const ctaBand = {
         variant: 'dark',
         title: 'Ready to get started?',
         description: 'Deploy your infrastructure in minutes.',
-        ctaPrimary:   { text: 'Start Now',   link: '/contact-us' },
-        ctaSecondary: { text: 'Learn More',  link: '#' },
+        ctaPrimary: { text: 'Start Now', link: '/contact-us' },
+        ctaSecondary: { text: 'Learn More', link: '#' },
     },
     renderer(container, p) {
         // Emit the empty .cloud-cta-band scaffold the shared populateCtaBand() expects,
         // then delegate. Same code path the hardcoded hosting pages use.
         const isDark = p.variant === 'dark';
-        const id     = bldId('bld-cta');
-        const cls    = 'cloud-cta-band' + (isDark ? ' cloud-cta-dark' : '');
-        const btnPrimaryCls   = isDark ? 'cloud-cta-btn-primary' : 'btn-primary';
+        const id = bldId('bld-cta');
+        const cls = 'cloud-cta-band' + (isDark ? ' cloud-cta-dark' : '');
+        const btnPrimaryCls = isDark ? 'cloud-cta-btn-primary' : 'btn-primary';
         const btnSecondaryCls = isDark ? 'cloud-cta-btn-outline' : 'btn-outline';
         container.innerHTML =
             '<section id="' + id + '" class="' + cls + '">' +
-                '<div class="cloud-cta-inner">' +
-                    '<h2></h2>' +
-                    '<p></p>' +
-                    '<div class="cloud-cta-btns">' +
-                        '<button class="' + btnSecondaryCls + '"></button>' +
-                        '<button class="' + btnPrimaryCls + '"></button>' +
-                    '</div>' +
-                '</div>' +
+            '<div class="cloud-cta-inner">' +
+            '<h2></h2>' +
+            '<p></p>' +
+            '<div class="cloud-cta-btns">' +
+            '<button class="' + btnSecondaryCls + '"></button>' +
+            '<button class="' + btnPrimaryCls + '"></button>' +
+            '</div>' +
+            '</div>' +
             '</section>';
         populateCtaBand('#' + id, {
             title: p.title,
@@ -273,15 +273,15 @@ const faq = {
             key: 'items', label: 'FAQ Items', type: 'repeater',
             itemSchema: [
                 { key: 'question', label: 'Question', type: 'text' },
-                { key: 'answer',   label: 'Answer',   type: 'textarea' },
+                { key: 'answer', label: 'Answer', type: 'textarea' },
             ],
         },
     ],
     defaultProps: {
         title: 'Frequently Asked Questions',
         items: [
-            { question: 'What is included?',          answer: 'Replace this answer with your own content.' },
-            { question: 'How do I get started?',      answer: 'Replace this answer with your own content.' },
+            { question: 'What is included?', answer: 'Replace this answer with your own content.' },
+            { question: 'How do I get started?', answer: 'Replace this answer with your own content.' },
             { question: 'Is support available 24/7?', answer: 'Replace this answer with your own content.' },
         ],
     },
@@ -290,14 +290,14 @@ const faq = {
         // then hand it the items. Identical to every hand-built hosting page's FAQ.
         container.innerHTML =
             '<section class="faq-section">' +
-                '<div class="faq-container">' +
-                    '<div class="faq-col">' +
-                        '<h2 class="faq-title">' + esc(p.title) + '</h2>' +
-                        '<div class="faq-grid">' +
-                            '<div class="faq-accordions" id="faq-accordions"></div>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>' +
+            '<div class="faq-container">' +
+            '<div class="faq-col">' +
+            '<h2 class="faq-title">' + esc(p.title) + '</h2>' +
+            '<div class="faq-grid">' +
+            '<div class="faq-accordions" id="faq-accordions"></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
             '</section>';
         Promise.resolve().then(() => sharedInitFAQ(p.items || []));
     },
@@ -309,8 +309,8 @@ const pricing = {
     icon: 'tag',
     description: '3-column pricing plans with optional "popular" badge. Choose WP style (default) or Cloud style.',
     schema: [
-        { key: 'label',    label: 'Section Label',    type: 'text' },
-        { key: 'title',    label: 'Section Title',    type: 'text', required: true },
+        { key: 'label', label: 'Section Label', type: 'text' },
+        { key: 'title', label: 'Section Title', type: 'text', required: true },
         { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
         {
             key: 'style', label: 'Card Style', type: 'select',
@@ -319,15 +319,15 @@ const pricing = {
         {
             key: 'plans', label: 'Plans', type: 'repeater',
             itemSchema: [
-                { key: 'name',     label: 'Plan Name / Tier',  type: 'text' },
-                { key: 'price',    label: 'Price',      type: 'text' },
-                { key: 'period',   label: 'Period',     type: 'text', default: '/mo' },
-                { key: 'currency', label: 'Currency',   type: 'text', default: '₹' },
-                { key: 'desc',     label: 'Description / Tagline', type: 'textarea' },
+                { key: 'name', label: 'Plan Name / Tier', type: 'text' },
+                { key: 'price', label: 'Price', type: 'text' },
+                { key: 'period', label: 'Period', type: 'text', default: '/mo' },
+                { key: 'currency', label: 'Currency', type: 'text', default: '₹' },
+                { key: 'desc', label: 'Description / Tagline', type: 'textarea' },
                 { key: 'features', label: 'Features (one per line)', type: 'textarea' },
-                { key: 'popular',  label: 'Mark as Popular', type: 'toggle', default: false },
-                { key: 'ctaText',  label: 'Button Text', type: 'text', default: 'Get Started' },
-                { key: 'ctaLink',  label: 'Button URL',  type: 'text', default: '/contact-us' },
+                { key: 'popular', label: 'Mark as Popular', type: 'toggle', default: false },
+                { key: 'ctaText', label: 'Button Text', type: 'text', default: 'Get Started' },
+                { key: 'ctaLink', label: 'Button URL', type: 'text', default: '/contact-us' },
             ],
         },
     ],
@@ -337,44 +337,44 @@ const pricing = {
         subtitle: 'Transparent pricing. No surprises.',
         style: 'wp',
         plans: [
-            { name: 'Starter',  price: '99',  period: '/mo', currency: '₹', desc: 'For personal projects.',  features: '1 Site\n5GB Storage\nFree SSL\n24/7 Support', popular: false, ctaText: 'Get Started', ctaLink: '/contact-us' },
-            { name: 'Business', price: '249', period: '/mo', currency: '₹', desc: 'For growing teams.',      features: '5 Sites\n20GB Storage\nFree SSL + Domain\nDaily Backups\nPriority Support', popular: true, ctaText: 'Get Started', ctaLink: '/contact-us' },
-            { name: 'Pro',      price: '499', period: '/mo', currency: '₹', desc: 'For high-traffic sites.', features: 'Unlimited Sites\n50GB NVMe SSD\nCDN Included\nDaily Backups\nMalware Scan\nPriority Support', popular: false, ctaText: 'Get Started', ctaLink: '/contact-us' },
+            { name: 'Starter', price: '99', period: '/mo', currency: '₹', desc: 'For personal projects.', features: '1 Site\n5GB Storage\nFree SSL\n24/7 Support', popular: false, ctaText: 'Get Started', ctaLink: '/contact-us' },
+            { name: 'Business', price: '249', period: '/mo', currency: '₹', desc: 'For growing teams.', features: '5 Sites\n20GB Storage\nFree SSL + Domain\nDaily Backups\nPriority Support', popular: true, ctaText: 'Get Started', ctaLink: '/contact-us' },
+            { name: 'Pro', price: '499', period: '/mo', currency: '₹', desc: 'For high-traffic sites.', features: 'Unlimited Sites\n50GB NVMe SSD\nCDN Included\nDaily Backups\nMalware Scan\nPriority Support', popular: false, ctaText: 'Get Started', ctaLink: '/contact-us' },
         ],
     },
     renderer(container, p) {
         const label = p.label ? '<span class="cloud-section-label">' + esc(p.label) + '</span>' : '';
-        const sub   = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
+        const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
         const style = p.style === 'cloud' ? 'cloud' : 'wp';
         const gridId = bldId('bld-pricing');
 
         // Map the builder's plain plan schema onto the shape the canonical
         // populatePricingPlans / populatePricingPlansCloud helpers expect.
         const plans = (p.plans || []).map((plan) => ({
-            tier:     plan.name || plan.tier || '',
+            tier: plan.name || plan.tier || '',
             currency: plan.currency || '₹',
-            price:    plan.price || '',
-            period:   plan.period || '/mo',
-            tagline:  plan.desc || plan.tagline || '',
+            price: plan.price || '',
+            period: plan.period || '/mo',
+            tagline: plan.desc || plan.tagline || '',
             features: String(plan.features || '').split('\n').map((f) => f.trim()).filter(Boolean).map((f) => ({ label: f })),
             isFeatured: plan.popular === true,
-            badge:    plan.badgeLabel || 'Most Popular',
-            ctaText:  plan.ctaText || 'Get Started',
+            badge: plan.badgeLabel || 'Most Popular',
+            ctaText: plan.ctaText || 'Get Started',
             ctaStyle: (plan.popular === true) ? 'primary' : 'outline',
             // ctaLink carried through and applied post-render (the helpers emit <button>)
             _ctaLink: plan.ctaLink || '/contact-us',
         }));
 
-        const gridCls    = style === 'cloud' ? 'cloud-pricing-grid' : 'wp-plans-grid';
+        const gridCls = style === 'cloud' ? 'cloud-pricing-grid' : 'wp-plans-grid';
         const sectionCls = style === 'cloud' ? 'section cloud-pricing-section' : 'section';
         container.innerHTML =
             '<section class="' + sectionCls + '">' +
-                '<div class="container">' +
-                    label +
-                    '<h2 class="title">' + esc(p.title) + '</h2>' +
-                    sub +
-                    '<div id="' + gridId + '" class="' + gridCls + '"></div>' +
-                '</div>' +
+            '<div class="container">' +
+            label +
+            '<h2 class="title">' + esc(p.title) + '</h2>' +
+            sub +
+            '<div id="' + gridId + '" class="' + gridCls + '"></div>' +
+            '</div>' +
             '</section>';
 
         const grid = container.querySelector('#' + gridId);
@@ -401,7 +401,7 @@ const pricing = {
                     '<div class="wp-plan-price">' + esc(plan.currency) + esc(plan.price) + '<span>' + esc(plan.period) + '</span></div>' +
                     (plan.tagline ? '<p class="wp-plan-desc">' + esc(plan.tagline) + '</p>' : '') +
                     '<ul class="wp-plan-features">' + featsHtml + '</ul>' +
-                    '<a href="' + esc(plan._ctaLink) + '" class="wp-plan-btn">' + esc(plan.ctaText) + ' &rarr;</a>' +
+                    '<a href="' + esc(plan._ctaLink) + '" class="wp-plan-btn">' + esc(plan.ctaText) + ' </a>' +
                     '</div>';
             }).join('');
         }
@@ -414,14 +414,14 @@ const statsBand = {
     icon: 'chart',
     description: 'A row of large metric numbers with sub-labels. e.g. 99.9% Uptime · 24/7 Support · 2-Hr RPO.',
     schema: [
-        { key: 'label',    label: 'Section Label',    type: 'text' },
-        { key: 'title',    label: 'Section Title',    type: 'text' },
+        { key: 'label', label: 'Section Label', type: 'text' },
+        { key: 'title', label: 'Section Title', type: 'text' },
         { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
         {
             key: 'metrics', label: 'Metrics', type: 'repeater',
             itemSchema: [
                 { key: 'value', label: 'Big Value (e.g. 99.9%)', type: 'text' },
-                { key: 'label', label: 'Sub-label',              type: 'text' },
+                { key: 'label', label: 'Sub-label', type: 'text' },
             ],
         },
     ],
@@ -431,9 +431,9 @@ const statsBand = {
         subtitle: '',
         metrics: [
             { value: '99.9%', label: 'Uptime SLA' },
-            { value: '2-Hr',  label: 'RPO Guarantee' },
-            { value: '100%',  label: 'India-Hosted' },
-            { value: '24/7',  label: 'Expert Support' },
+            { value: '2-Hr', label: 'RPO Guarantee' },
+            { value: '100%', label: 'India-Hosted' },
+            { value: '24/7', label: 'Expert Support' },
         ],
     },
     renderer(container, p) {
@@ -442,16 +442,16 @@ const statsBand = {
         const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
         const items = (p.metrics || []).map((m) =>
             '<div class="cloud-wl-metric">' +
-                '<strong>' + esc(m.value) + '</strong>' +
-                '<span>' + esc(m.label) + '</span>' +
+            '<strong>' + esc(m.value) + '</strong>' +
+            '<span>' + esc(m.label) + '</span>' +
             '</div>'
         ).join('');
         container.innerHTML =
             '<section class="section cloud-workload-section">' +
-                '<div class="container">' +
-                    label + title + sub +
-                    '<div class="cloud-wl-metrics">' + items + '</div>' +
-                '</div>' +
+            '<div class="container">' +
+            label + title + sub +
+            '<div class="cloud-wl-metrics">' + items + '</div>' +
+            '</div>' +
             '</section>';
     },
 };
@@ -462,19 +462,19 @@ const comparisonTable = {
     icon: 'compare',
     description: 'ICSDC vs Typical Providers — feature-by-feature comparison table.',
     schema: [
-        { key: 'label',     label: 'Section Label',         type: 'text' },
-        { key: 'title',     label: 'Section Title',         type: 'text', required: true },
-        { key: 'subtitle',  label: 'Section Subtitle',      type: 'textarea' },
-        { key: 'colFeature',label: 'Feature Column Header', type: 'text', default: 'Feature' },
-        { key: 'colOurs',   label: 'Our Column Header',     type: 'text', default: 'ICSDC' },
-        { key: 'colTheirs', label: 'Their Column Header',   type: 'text', default: 'Typical Providers' },
-        { key: 'mode',      label: 'Cell Mode', type: 'select', options: ['text', 'checkmark'], default: 'text' },
+        { key: 'label', label: 'Section Label', type: 'text' },
+        { key: 'title', label: 'Section Title', type: 'text', required: true },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        { key: 'colFeature', label: 'Feature Column Header', type: 'text', default: 'Feature' },
+        { key: 'colOurs', label: 'Our Column Header', type: 'text', default: 'ICSDC' },
+        { key: 'colTheirs', label: 'Their Column Header', type: 'text', default: 'Typical Providers' },
+        { key: 'mode', label: 'Cell Mode', type: 'select', options: ['text', 'checkmark'], default: 'text' },
         {
             key: 'rows', label: 'Rows', type: 'repeater',
             itemSchema: [
-                { key: 'feature', label: 'Feature',       type: 'text' },
-                { key: 'ours',    label: 'Our Value (text or "yes"/"no")', type: 'text' },
-                { key: 'theirs',  label: 'Their Value (text or "yes"/"no")', type: 'text' },
+                { key: 'feature', label: 'Feature', type: 'text' },
+                { key: 'ours', label: 'Our Value (text or "yes"/"no")', type: 'text' },
+                { key: 'theirs', label: 'Their Value (text or "yes"/"no")', type: 'text' },
             ],
         },
     ],
@@ -487,10 +487,10 @@ const comparisonTable = {
         colTheirs: 'Typical Providers',
         mode: 'text',
         rows: [
-            { feature: 'Infrastructure Quality',  ours: 'Enterprise-grade servers tuned for stability', theirs: 'Mass-market shared servers oversold for cost' },
+            { feature: 'Infrastructure Quality', ours: 'Enterprise-grade servers tuned for stability', theirs: 'Mass-market shared servers oversold for cost' },
             { feature: 'Performance Consistency', ours: 'Predictable speed even during traffic spikes', theirs: 'Performance drops during peak usage' },
-            { feature: 'Security Approach',       ours: 'Security-first architecture with isolation',   theirs: 'Basic security with limited visibility' },
-            { feature: 'Uptime Reliability',      ours: 'High availability with proactive monitoring',  theirs: 'Reactive uptime with limited redundancy' },
+            { feature: 'Security Approach', ours: 'Security-first architecture with isolation', theirs: 'Basic security with limited visibility' },
+            { feature: 'Uptime Reliability', ours: 'High availability with proactive monitoring', theirs: 'Reactive uptime with limited redundancy' },
         ],
     },
     renderer(container, p) {
@@ -506,24 +506,24 @@ const comparisonTable = {
         }
         const rowsHtml = (p.rows || []).map((r) =>
             '<tr>' +
-                '<td>' + esc(r.feature) + '</td>' +
-                '<td class="webh-col-icsdc">' + cell(r.ours) + '</td>' +
-                '<td>' + cell(r.theirs) + '</td>' +
+            '<td>' + esc(r.feature) + '</td>' +
+            '<td class="webh-col-icsdc">' + cell(r.ours) + '</td>' +
+            '<td>' + cell(r.theirs) + '</td>' +
             '</tr>'
         ).join('');
         container.innerHTML =
             '<section class="section">' +
-                '<div class="container">' +
-                    label +
-                    '<h2 class="title">' + esc(p.title) + '</h2>' +
-                    sub +
-                    '<div class="webh-compare-table-wrap">' +
-                        '<table class="webh-compare-table">' +
-                            '<thead><tr><th>' + esc(p.colFeature) + '</th><th class="webh-col-icsdc">' + esc(p.colOurs) + '</th><th>' + esc(p.colTheirs) + '</th></tr></thead>' +
-                            '<tbody>' + rowsHtml + '</tbody>' +
-                        '</table>' +
-                    '</div>' +
-                '</div>' +
+            '<div class="container">' +
+            label +
+            '<h2 class="title">' + esc(p.title) + '</h2>' +
+            sub +
+            '<div class="webh-compare-table-wrap">' +
+            '<table class="webh-compare-table">' +
+            '<thead><tr><th>' + esc(p.colFeature) + '</th><th class="webh-col-icsdc">' + esc(p.colOurs) + '</th><th>' + esc(p.colTheirs) + '</th></tr></thead>' +
+            '<tbody>' + rowsHtml + '</tbody>' +
+            '</table>' +
+            '</div>' +
+            '</div>' +
             '</section>';
     },
 };
@@ -534,14 +534,14 @@ const processSteps = {
     icon: 'steps',
     description: 'Horizontal flow of numbered steps. e.g. "What Happens Next" — 01 → 02 → 03.',
     schema: [
-        { key: 'label',    label: 'Section Label',    type: 'text' },
-        { key: 'title',    label: 'Section Title',    type: 'text', required: true },
+        { key: 'label', label: 'Section Label', type: 'text' },
+        { key: 'title', label: 'Section Title', type: 'text', required: true },
         { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
         {
             key: 'steps', label: 'Steps', type: 'repeater',
             itemSchema: [
                 { key: 'title', label: 'Step Title', type: 'text' },
-                { key: 'desc',  label: 'Step Description (optional)', type: 'textarea' },
+                { key: 'desc', label: 'Step Description (optional)', type: 'textarea' },
             ],
         },
     ],
@@ -550,10 +550,10 @@ const processSteps = {
         title: 'What Happens Next',
         subtitle: '',
         steps: [
-            { title: 'Share Your Requirement',     desc: '' },
-            { title: 'We Review Your Use Case',    desc: '' },
+            { title: 'Share Your Requirement', desc: '' },
+            { title: 'We Review Your Use Case', desc: '' },
             { title: 'We Suggest the Right Solution', desc: '' },
-            { title: 'Setup & Beyond',             desc: '' },
+            { title: 'Setup & Beyond', desc: '' },
         ],
     },
     renderer(container, p) {
@@ -563,21 +563,21 @@ const processSteps = {
         const stepsHtml = steps.map((s, i) => {
             const stepEl =
                 '<div class="cu-step">' +
-                    '<div class="cu-step-number">' + String(i + 1).padStart(2, '0') + '</div>' +
-                    '<h3 class="cu-step-title">' + esc(s.title) + '</h3>' +
-                    (s.desc ? '<p class="cu-step-desc" style="text-align:center;color:var(--muted);margin-top:8px">' + esc(s.desc) + '</p>' : '') +
+                '<div class="cu-step-number">' + String(i + 1).padStart(2, '0') + '</div>' +
+                '<h3 class="cu-step-title">' + esc(s.title) + '</h3>' +
+                (s.desc ? '<p class="cu-step-desc" style="text-align:center;color:var(--muted);margin-top:8px">' + esc(s.desc) + '</p>' : '') +
                 '</div>';
             const connector = (i < steps.length - 1) ? '<div class="cu-step-connector" aria-hidden="true"></div>' : '';
             return stepEl + connector;
         }).join('');
         container.innerHTML =
             '<section class="section">' +
-                '<div class="container">' +
-                    label +
-                    '<h2 class="title">' + esc(p.title) + '</h2>' +
-                    sub +
-                    '<div class="cu-steps-flow">' + stepsHtml + '</div>' +
-                '</div>' +
+            '<div class="container">' +
+            label +
+            '<h2 class="title">' + esc(p.title) + '</h2>' +
+            sub +
+            '<div class="cu-steps-flow">' + stepsHtml + '</div>' +
+            '</div>' +
             '</section>';
     },
 };
@@ -588,15 +588,15 @@ const logoCloud = {
     icon: 'partners',
     description: 'Grid of partner / client logos or text badges.',
     schema: [
-        { key: 'label',    label: 'Section Label',    type: 'text' },
-        { key: 'title',    label: 'Section Title',    type: 'text', required: true },
+        { key: 'label', label: 'Section Label', type: 'text' },
+        { key: 'title', label: 'Section Title', type: 'text', required: true },
         { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
         {
             key: 'logos', label: 'Logos', type: 'repeater',
             itemSchema: [
-                { key: 'name',     label: 'Name (shown as text fallback)', type: 'text' },
-                { key: 'imageUrl', label: 'Logo Image (optional)',         type: 'image' },
-                { key: 'link',     label: 'Link URL (optional)',           type: 'text' },
+                { key: 'name', label: 'Name (shown as text fallback)', type: 'text' },
+                { key: 'imageUrl', label: 'Logo Image (optional)', type: 'image' },
+                { key: 'link', label: 'Link URL (optional)', type: 'text' },
             ],
         },
     ],
@@ -624,12 +624,12 @@ const logoCloud = {
         }).join('');
         container.innerHTML =
             '<section class="section au-partners-section">' +
-                '<div class="container">' +
-                    label +
-                    '<h2 class="title">' + esc(p.title) + '</h2>' +
-                    sub +
-                    '<div class="au-partners-grid">' + itemsHtml + '</div>' +
-                '</div>' +
+            '<div class="container">' +
+            label +
+            '<h2 class="title">' + esc(p.title) + '</h2>' +
+            sub +
+            '<div class="au-partners-grid">' + itemsHtml + '</div>' +
+            '</div>' +
             '</section>';
     },
 };
@@ -648,11 +648,11 @@ const testimonials = {
         {
             key: 'items', label: 'Testimonials', type: 'repeater',
             itemSchema: [
-                { key: 'quote',   label: 'Quote',          type: 'textarea' },
-                { key: 'name',    label: 'Name',           type: 'text' },
-                { key: 'title',   label: 'Job Title',      type: 'text' },
-                { key: 'company', label: 'Company',        type: 'text' },
-                { key: 'rating',  label: 'Rating (1-5)',   type: 'number', min: 1, max: 5, default: 5 },
+                { key: 'quote', label: 'Quote', type: 'textarea' },
+                { key: 'name', label: 'Name', type: 'text' },
+                { key: 'title', label: 'Job Title', type: 'text' },
+                { key: 'company', label: 'Company', type: 'text' },
+                { key: 'rating', label: 'Rating (1-5)', type: 'number', min: 1, max: 5, default: 5 },
             ],
         },
     ],
@@ -667,27 +667,27 @@ const testimonials = {
     renderer(container, p) {
         // Map prior draft shapes (jobTitle / role) onto `title` so the helper sees them.
         const items = (p.items || []).map((t) => ({
-            quote:   t.quote || '',
-            name:    t.name  || '',
-            title:   t.title || t.jobTitle || t.role || '',
+            quote: t.quote || '',
+            name: t.name || '',
+            title: t.title || t.jobTitle || t.role || '',
             company: t.company || '',
-            rating:  Math.max(1, Math.min(5, Number(t.rating) || 5)),
+            rating: Math.max(1, Math.min(5, Number(t.rating) || 5)),
         }));
 
         // Emit the exact scaffold initTestimonials expects (with global IDs).
         container.innerHTML =
             '<section class="testi-section" aria-labelledby="bld-testi-heading">' +
-                '<div class="testi-container">' +
-                    '<h2 id="bld-testi-heading" class="testi-title">' + esc(p.title) + '</h2>' +
-                    '<div class="testi-scroll-viewport">' +
-                        '<div class="testi-grid" id="testi-grid" role="list" aria-label="Customer testimonials"></div>' +
-                    '</div>' +
-                    '<div class="testi-pagination" id="testi-dots" role="tablist" aria-label="Testimonial navigation"></div>' +
-                    '<div class="testi-nav">' +
-                        '<button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>' +
-                        '<button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>' +
-                    '</div>' +
-                '</div>' +
+            '<div class="testi-container">' +
+            '<h2 id="bld-testi-heading" class="testi-title">' + esc(p.title) + '</h2>' +
+            '<div class="testi-scroll-viewport">' +
+            '<div class="testi-grid" id="testi-grid" role="list" aria-label="Customer testimonials"></div>' +
+            '</div>' +
+            '<div class="testi-pagination" id="testi-dots" role="tablist" aria-label="Testimonial navigation"></div>' +
+            '<div class="testi-nav">' +
+            '<button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">&#8249;</button>' +
+            '<button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">&#8250;</button>' +
+            '</div>' +
+            '</div>' +
             '</section>';
 
         // Defer one microtask so the DOM is queryable, then run the shared helper —
@@ -701,17 +701,17 @@ const imageText = {
     icon: 'image',
     description: 'Two-column layout: image on one side, headline + paragraph + optional CTA on the other.',
     schema: [
-        { key: 'eyebrow',    label: 'Eyebrow (small label)', type: 'text' },
-        { key: 'title',      label: 'Heading',               type: 'text', required: true },
-        { key: 'body',       label: 'Body Text',             type: 'textarea' },
-        { key: 'imageUrl',   label: 'Image',                 type: 'image' },
-        { key: 'imageAlt',   label: 'Image Alt Text',        type: 'text' },
-        { key: 'imageSide',  label: 'Image Side',            type: 'select', options: ['left', 'right'], default: 'left' },
+        { key: 'eyebrow', label: 'Eyebrow (small label)', type: 'text' },
+        { key: 'title', label: 'Heading', type: 'text', required: true },
+        { key: 'body', label: 'Body Text', type: 'textarea' },
+        { key: 'imageUrl', label: 'Image', type: 'image' },
+        { key: 'imageAlt', label: 'Image Alt Text', type: 'text' },
+        { key: 'imageSide', label: 'Image Side', type: 'select', options: ['left', 'right'], default: 'left' },
         {
             key: 'cta', label: 'Call-to-Action (optional)', type: 'cta',
             fields: [
                 { key: 'text', label: 'Button Text', type: 'text' },
-                { key: 'link', label: 'URL',         type: 'text' },
+                { key: 'link', label: 'URL', type: 'text' },
             ],
         },
     ],
@@ -726,29 +726,29 @@ const imageText = {
     },
     renderer(container, p) {
         const eyebrow = p.eyebrow ? '<span class="cloud-section-label">' + esc(p.eyebrow) + '</span>' : '';
-        const body    = p.body ? '<p class="who-we-are-paragraph">' + esc(p.body) + '</p>' : '';
-        const cta     = (p.cta && p.cta.text)
+        const body = p.body ? '<p class="who-we-are-paragraph">' + esc(p.body) + '</p>' : '';
+        const cta = (p.cta && p.cta.text)
             ? '<a class="btn-primary" style="margin-top:18px;align-self:flex-start" href="' + esc(p.cta.link || '#') + '">' + esc(p.cta.text) + '</a>'
             : '';
         const imageHtml =
             '<div class="who-we-are-image">' +
-                (p.imageUrl
-                    ? '<img src="' + esc(p.imageUrl) + '" alt="' + esc(p.imageAlt || '') + '">'
-                    : '<div style="aspect-ratio:4/3;background:var(--blue-light);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--blue);font-weight:600">No image</div>') +
+            (p.imageUrl
+                ? '<img src="' + esc(p.imageUrl) + '" alt="' + esc(p.imageAlt || '') + '">'
+                : '<div style="aspect-ratio:4/3;background:var(--blue-light);border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--blue);font-weight:600">No image</div>') +
             '</div>';
         const contentHtml =
             '<div class="blue-container">' +
-                eyebrow +
-                '<h2 class="title" style="text-align:left;margin-top:8px">' + esc(p.title) + '</h2>' +
-                body +
-                cta +
+            eyebrow +
+            '<h2 class="title" style="text-align:left;margin-top:8px">' + esc(p.title) + '</h2>' +
+            body +
+            cta +
             '</div>';
         const inner = p.imageSide === 'right'
             ? contentHtml + imageHtml
             : imageHtml + contentHtml;
         container.innerHTML =
             '<section class="who-we-are section">' +
-                '<div class="who-we-are-inner">' + inner + '</div>' +
+            '<div class="who-we-are-inner">' + inner + '</div>' +
             '</section>';
     },
 };
@@ -759,14 +759,14 @@ const gallery = {
     icon: 'gallery',
     description: 'Grid of images with overlay labels — like the "Life @ ICSDC" section on About Us.',
     schema: [
-        { key: 'title',    label: 'Section Title',    type: 'text', required: true },
+        { key: 'title', label: 'Section Title', type: 'text', required: true },
         { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
         {
             key: 'items', label: 'Images', type: 'repeater',
             itemSchema: [
-                { key: 'imageUrl', label: 'Image',         type: 'image' },
-                { key: 'imageAlt', label: 'Alt Text',      type: 'text' },
-                { key: 'label',    label: 'Overlay Label', type: 'text' },
+                { key: 'imageUrl', label: 'Image', type: 'image' },
+                { key: 'imageAlt', label: 'Alt Text', type: 'text' },
+                { key: 'label', label: 'Overlay Label', type: 'text' },
             ],
         },
     ],
@@ -785,19 +785,19 @@ const gallery = {
         const sub = p.subtitle ? '<p class="au-life-desc">' + esc(p.subtitle) + '</p>' : '';
         const cardsHtml = (p.items || []).map((it) =>
             '<div class="au-life-card">' +
-                '<img src="' + esc(it.imageUrl) + '" alt="' + esc(it.imageAlt || '') + '" loading="lazy">' +
-                (it.label
-                    ? '<div class="au-life-card-overlay"><span class="au-life-card-label">' + esc(it.label) + '</span></div>'
-                    : '') +
+            '<img src="' + esc(it.imageUrl) + '" alt="' + esc(it.imageAlt || '') + '" loading="lazy">' +
+            (it.label
+                ? '<div class="au-life-card-overlay"><span class="au-life-card-label">' + esc(it.label) + '</span></div>'
+                : '') +
             '</div>'
         ).join('');
         container.innerHTML =
             '<section class="section au-life-section">' +
-                '<div class="container">' +
-                    '<h2 class="title">' + esc(p.title) + '</h2>' +
-                    sub +
-                '</div>' +
-                '<div class="au-life-gallery">' + cardsHtml + '</div>' +
+            '<div class="container">' +
+            '<h2 class="title">' + esc(p.title) + '</h2>' +
+            sub +
+            '</div>' +
+            '<div class="au-life-gallery">' + cardsHtml + '</div>' +
             '</section>';
     },
 };
@@ -808,15 +808,15 @@ const contactInfo = {
     icon: 'info',
     description: 'Stack of icon + label + value cards. Email, phone, address, office hours.',
     schema: [
-        { key: 'title',    label: 'Section Title',    type: 'text', default: 'Get in Touch' },
+        { key: 'title', label: 'Section Title', type: 'text', default: 'Get in Touch' },
         { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
         {
             key: 'items', label: 'Contact Items', type: 'repeater',
             itemSchema: [
-                { key: 'icon',  label: 'Icon Key (FA name)', type: 'text' },
-                { key: 'label', label: 'Label',              type: 'text' },
-                { key: 'value', label: 'Value',              type: 'textarea' },
-                { key: 'link',  label: 'Link (optional, e.g. mailto: or tel:)', type: 'text' },
+                { key: 'icon', label: 'Icon Key (FA name)', type: 'text' },
+                { key: 'label', label: 'Label', type: 'text' },
+                { key: 'value', label: 'Value', type: 'textarea' },
+                { key: 'link', label: 'Link (optional, e.g. mailto: or tel:)', type: 'text' },
             ],
         },
     ],
@@ -824,10 +824,10 @@ const contactInfo = {
         title: 'Get in Touch',
         subtitle: "We're always ready to help. Reach out through any of the channels below.",
         items: [
-            { icon: 'envelope',  label: 'Email Address', value: 'info@icsdc.com',              link: 'mailto:info@icsdc.com' },
-            { icon: 'phone',     label: 'Phone Number',  value: '+91 98109 58857',             link: 'tel:+919810958857' },
-            { icon: 'map-pin',   label: 'Our Address',   value: 'Plot No. 21 & 21A, 6th Floor, Sector 142, Noida, UP 201304', link: '' },
-            { icon: 'clock',     label: 'Office Hours',  value: 'Monday – Friday: 9:00 AM – 6:00 PM IST | 24/7 Support for active clients', link: '' },
+            { icon: 'envelope', label: 'Email Address', value: 'info@icsdc.com', link: 'mailto:info@icsdc.com' },
+            { icon: 'phone', label: 'Phone Number', value: '+91 98109 58857', link: 'tel:+919810958857' },
+            { icon: 'map-pin', label: 'Our Address', value: 'Plot No. 21 & 21A, 6th Floor, Sector 142, Noida, UP 201304', link: '' },
+            { icon: 'clock', label: 'Office Hours', value: 'Monday – Friday: 9:00 AM – 6:00 PM IST | 24/7 Support for active clients', link: '' },
         ],
     },
     renderer(container, p) {
@@ -836,8 +836,8 @@ const contactInfo = {
             const inner =
                 '<div class="cu-info-icon"><i class="' + resolveFaIcon(it.icon, 'circle-info') + '" aria-hidden="true"></i></div>' +
                 '<div class="cu-info-text">' +
-                    '<span class="cu-info-label">' + esc(it.label) + '</span>' +
-                    '<span class="cu-info-value">' + esc(it.value) + '</span>' +
+                '<span class="cu-info-label">' + esc(it.label) + '</span>' +
+                '<span class="cu-info-value">' + esc(it.value) + '</span>' +
                 '</div>';
             return it.link
                 ? '<a href="' + esc(it.link) + '" class="cu-info-card" style="text-decoration:none">' + inner + '</a>'
@@ -845,13 +845,13 @@ const contactInfo = {
         }).join('');
         container.innerHTML =
             '<section class="section cu-contact-section">' +
-                '<div class="container">' +
-                    '<div class="cu-info-col">' +
-                        '<h3 class="cu-info-title">' + esc(p.title) + '</h3>' +
-                        subtitle +
-                        '<div class="cu-info-cards">' + cardsHtml + '</div>' +
-                    '</div>' +
-                '</div>' +
+            '<div class="container">' +
+            '<div class="cu-info-col">' +
+            '<h3 class="cu-info-title">' + esc(p.title) + '</h3>' +
+            subtitle +
+            '<div class="cu-info-cards">' + cardsHtml + '</div>' +
+            '</div>' +
+            '</div>' +
             '</section>';
     },
 };
@@ -862,7 +862,7 @@ const contactForm = {
     icon: 'envelope',
     description: 'Full contact form with name/email/phone/company/subject/message. Submits to /api/strapi/api/contact-submissions.',
     schema: [
-        { key: 'title',    label: 'Section Title',    type: 'text', default: 'Send Us a Message' },
+        { key: 'title', label: 'Section Title', type: 'text', default: 'Send Us a Message' },
         { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
         { key: 'subjectOptions', label: 'Subject Options (one per line; blank for free-text field)', type: 'textarea' },
         { key: 'successMessage', label: 'Success Message', type: 'textarea', default: 'Thank you for reaching out. Our team will get back to you shortly.' },
@@ -878,9 +878,9 @@ const contactForm = {
         const opts = String(p.subjectOptions || '').split('\n').map((s) => s.trim()).filter(Boolean);
         const subjectField = opts.length
             ? '<select id="bld-cf-subject" name="subject" class="cu-input cu-select" required>' +
-                '<option value="" disabled selected>Select a topic…</option>' +
-                opts.map((o) => '<option value="' + esc(o) + '">' + esc(o) + '</option>').join('') +
-              '</select>'
+            '<option value="" disabled selected>Select a topic…</option>' +
+            opts.map((o) => '<option value="' + esc(o) + '">' + esc(o) + '</option>').join('') +
+            '</select>'
             : '<input type="text" id="bld-cf-subject" name="subject" class="cu-input" placeholder="What is this about?" required>';
 
         // Unique form ID so multiple contact forms on one page don't collide
@@ -888,38 +888,38 @@ const contactForm = {
 
         container.innerHTML =
             '<section class="section">' +
-                '<div class="container" style="max-width:760px">' +
-                    '<div class="cu-hero-form-wrap">' +
-                        '<h3 class="cu-hero-form-title">' + esc(p.title) + '</h3>' +
-                        subtitle +
-                        '<form id="' + formId + '" class="cu-form" novalidate>' +
-                            '<div class="cu-form-row">' +
-                                '<div class="cu-field"><label class="cu-label">Your Name <span class="cu-required">*</span></label>' +
-                                    '<input type="text" name="name" class="cu-input" placeholder="John Smith" required></div>' +
-                                '<div class="cu-field"><label class="cu-label">Email Address <span class="cu-required">*</span></label>' +
-                                    '<input type="email" name="email" class="cu-input" placeholder="john@company.com" required></div>' +
-                            '</div>' +
-                            '<div class="cu-form-row">' +
-                                '<div class="cu-field"><label class="cu-label">Phone Number</label>' +
-                                    '<input type="tel" name="phone" class="cu-input" placeholder="+91 98765 43210"></div>' +
-                                '<div class="cu-field"><label class="cu-label">Company / Organization</label>' +
-                                    '<input type="text" name="company" class="cu-input" placeholder="Your Company Ltd."></div>' +
-                            '</div>' +
-                            '<div class="cu-field"><label class="cu-label">What Can We Help You With? <span class="cu-required">*</span></label>' +
-                                subjectField +
-                            '</div>' +
-                            '<div class="cu-field"><label class="cu-label">Your Message <span class="cu-required">*</span></label>' +
-                                '<textarea name="message" class="cu-input cu-textarea" rows="4" placeholder="Tell us about your requirement…" required></textarea>' +
-                            '</div>' +
-                            '<button type="submit" class="cu-submit-btn">Send Message &rarr;</button>' +
-                        '</form>' +
-                        '<div class="cu-form-success" style="display:none">' +
-                            '<div class="cu-success-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>' +
-                            '<h3>Message Sent!</h3>' +
-                            '<p>' + esc(p.successMessage) + '</p>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>' +
+            '<div class="container" style="max-width:760px">' +
+            '<div class="cu-hero-form-wrap">' +
+            '<h3 class="cu-hero-form-title">' + esc(p.title) + '</h3>' +
+            subtitle +
+            '<form id="' + formId + '" class="cu-form" novalidate>' +
+            '<div class="cu-form-row">' +
+            '<div class="cu-field"><label class="cu-label">Your Name <span class="cu-required">*</span></label>' +
+            '<input type="text" name="name" class="cu-input" placeholder="John Smith" required></div>' +
+            '<div class="cu-field"><label class="cu-label">Email Address <span class="cu-required">*</span></label>' +
+            '<input type="email" name="email" class="cu-input" placeholder="john@company.com" required></div>' +
+            '</div>' +
+            '<div class="cu-form-row">' +
+            '<div class="cu-field"><label class="cu-label">Phone Number</label>' +
+            '<input type="tel" name="phone" class="cu-input" placeholder="+91 98765 43210"></div>' +
+            '<div class="cu-field"><label class="cu-label">Company / Organization</label>' +
+            '<input type="text" name="company" class="cu-input" placeholder="Your Company Ltd."></div>' +
+            '</div>' +
+            '<div class="cu-field"><label class="cu-label">What Can We Help You With? <span class="cu-required">*</span></label>' +
+            subjectField +
+            '</div>' +
+            '<div class="cu-field"><label class="cu-label">Your Message <span class="cu-required">*</span></label>' +
+            '<textarea name="message" class="cu-input cu-textarea" rows="4" placeholder="Tell us about your requirement…" required></textarea>' +
+            '</div>' +
+            '<button type="submit" class="cu-submit-btn">Send Message </button>' +
+            '</form>' +
+            '<div class="cu-form-success" style="display:none">' +
+            '<div class="cu-success-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>' +
+            '<h3>Message Sent!</h3>' +
+            '<p>' + esc(p.successMessage) + '</p>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
             '</section>';
 
         // Wire submission to the existing /api/strapi proxy that the hand-built contact-us page uses
@@ -934,9 +934,9 @@ const contactForm = {
                 submitBtn.innerHTML = 'Sending…';
                 const fd = new FormData(form);
                 const payload = {
-                    name:    String(fd.get('name')    || '').trim(),
-                    email:   String(fd.get('email')   || '').trim(),
-                    phone:   String(fd.get('phone')   || '').trim(),
+                    name: String(fd.get('name') || '').trim(),
+                    email: String(fd.get('email') || '').trim(),
+                    phone: String(fd.get('phone') || '').trim(),
                     company: String(fd.get('company') || '').trim(),
                     subject: String(fd.get('subject') || '').trim(),
                     message: String(fd.get('message') || '').trim(),
@@ -966,9 +966,9 @@ const mapEmbed = {
     icon: 'map',
     description: 'Google Maps iframe — full-bleed location embed.',
     schema: [
-        { key: 'title',    label: 'Section Title (optional)',    type: 'text' },
+        { key: 'title', label: 'Section Title (optional)', type: 'text' },
         { key: 'embedUrl', label: 'Google Maps Embed URL', type: 'textarea', required: true },
-        { key: 'height',   label: 'Height (px)',           type: 'number', default: 420, min: 200, max: 800 },
+        { key: 'height', label: 'Height (px)', type: 'number', default: 420, min: 200, max: 800 },
     ],
     defaultProps: {
         title: '',
@@ -980,12 +980,12 @@ const mapEmbed = {
         const title = p.title ? '<h2 class="title" style="text-align:center;margin-bottom:24px">' + esc(p.title) + '</h2>' : '';
         container.innerHTML =
             '<section class="section">' +
-                '<div class="container">' +
-                    title +
-                    '<div class="cu-map-col" style="height:' + h + 'px;border-radius:12px;overflow:hidden">' +
-                        '<iframe src="' + esc(p.embedUrl) + '" width="100%" height="100%" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map"></iframe>' +
-                    '</div>' +
-                '</div>' +
+            '<div class="container">' +
+            title +
+            '<div class="cu-map-col" style="height:' + h + 'px;border-radius:12px;overflow:hidden">' +
+            '<iframe src="' + esc(p.embedUrl) + '" width="100%" height="100%" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map"></iframe>' +
+            '</div>' +
+            '</div>' +
             '</section>';
     },
 };

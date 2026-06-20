@@ -1,4 +1,5 @@
 import { getAwsCloudHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 
 import {
     populateSEO,
@@ -44,9 +45,9 @@ import {
             var featuresArr = plan.features || [];
             var featuresHtml = featuresArr.length
                 ? '<ul class="aws-plan-features">' +
-                    featuresArr.map(function (f) {
-                        return '<li>' + (f.label || f.text || f.name || f) + '</li>';
-                    }).join('') + '</ul>'
+                featuresArr.map(function (f) {
+                    return '<li>' + (f.label || f.text || f.name || f) + '</li>';
+                }).join('') + '</ul>'
                 : '';
             var ctaText = plan.ctaText || 'Get Started';
             var btnClass = isFeatured ? 'aws-plan-btn-featured' : 'aws-plan-btn';
@@ -54,7 +55,7 @@ import {
                 badgeHtml +
                 '<div class="aws-plan-name">' + (plan.tier || plan.name || '') + '</div>' +
                 priceHtml + taglineHtml + featuresHtml +
-                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -65,7 +66,7 @@ import {
         if (page.dedicatedDesc) setText(document, '#aws-dedicated-desc', page.dedicatedDesc);
         var cta = document.getElementById('aws-dedicated-cta');
         if (cta) {
-            if (page.dedicatedCtaText) cta.innerHTML = page.dedicatedCtaText + ' &rarr;';
+            if (page.dedicatedCtaText) cta.innerHTML = page.dedicatedCtaText + ' ';
             if (page.dedicatedCtaLink) cta.setAttribute('href', page.dedicatedCtaLink);
         }
         var url = imgUrl(page.dedicatedImage);
@@ -89,7 +90,7 @@ import {
             return '<div class="aws-block-card">' +
                 '<div class="aws-block-icon"><i class="' + icon + '" aria-hidden="true"></i></div>' +
                 '<h3 class="aws-block-title">' + (b.title || '') + '</h3>' +
-                '<p class="aws-block-desc">' + (b.desc || b.description || '') + '</p>' +
+                '<p class="aws-block-desc">' + inlineRichText(b.desc || b.description || '') + '</p>' +
                 ctaHtml +
                 '</div>';
         }).join('');
@@ -142,7 +143,7 @@ import {
             if (page.aboutDescription) setText(document, '#aws-about-desc', page.aboutDescription);
             var aboutCta = document.getElementById('aws-about-cta');
             if (aboutCta && page.aboutLink) {
-                if (page.aboutLink.text) aboutCta.innerHTML = page.aboutLink.text + ' &rarr;';
+                if (page.aboutLink.text) aboutCta.innerHTML = page.aboutLink.text + ' ';
                 if (page.aboutLink.link) aboutCta.setAttribute('href', page.aboutLink.link);
             }
             if (page.aboutItems && page.aboutItems.length) {

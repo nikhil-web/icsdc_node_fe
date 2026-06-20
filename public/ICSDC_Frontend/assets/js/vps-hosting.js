@@ -47,6 +47,7 @@ import {
 } from './utils/cms-helpers.js';
 
 import { getVpsHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 
 (async function () {
     'use strict';
@@ -95,7 +96,7 @@ import { getVpsHostingPage } from './services/contentService.js';
                         return '<div class="vps-pillar-card">' +
                             '<div class="vps-pillar-icon">' + resolveIcon(card.icon) + '</div>' +
                             '<h3>' + (card.title || '') + '</h3>' +
-                            '<p>' + (card.description || card.desc || '') + '</p>' +
+                            '<p>' + inlineRichText(card.description || card.desc || '') + '</p>' +
                             '</div>';
                     }).join('');
                 }
@@ -196,7 +197,7 @@ import { getVpsHostingPage } from './services/contentService.js';
                             '<div class="vps-speed-icon">' + resolveIcon(f.icon) + '</div>' +
                             '<div>' +
                             '<h3>' + (f.title || '') + '</h3>' +
-                            '<p>' + (f.description || f.desc || '') + '</p>' +
+                            '<p>' + inlineRichText(f.description || f.desc || '') + '</p>' +
                             '</div>' +
                             '</div>';
                     }).join('');
@@ -219,7 +220,7 @@ import { getVpsHostingPage } from './services/contentService.js';
                         return '<div class="vps-mgmt-card">' +
                             '<div class="vps-mgmt-icon">' + resolveIcon(card.icon) + '</div>' +
                             '<h3>' + (card.title || '') + '</h3>' +
-                            '<p>' + (card.description || card.desc || '') + '</p>' +
+                            '<p>' + inlineRichText(card.description || card.desc || '') + '</p>' +
                             '</div>';
                     }).join('');
                 }
@@ -268,7 +269,7 @@ import { getVpsHostingPage } from './services/contentService.js';
                         return '<div class="vps-diff-card">' +
                             '<div class="vps-diff-icon">' + resolveIcon(card.icon) + '</div>' +
                             '<h3>' + (card.title || '') + '</h3>' +
-                            '<p>' + (card.description || card.desc || '') + '</p>' +
+                            '<p>' + inlineRichText(card.description || card.desc || '') + '</p>' +
                             '</div>';
                     }).join('');
                 }
@@ -317,7 +318,7 @@ import { getVpsHostingPage } from './services/contentService.js';
                             '<span class="vps-location-flag">' + (loc.flag || '') + '</span>' +
                             '<div class="vps-location-info">' +
                             '<h4>' + (loc.name || '') + '</h4>' +
-                            '<p>' + (loc.description || '') + '</p>' +
+                            '<p>' + inlineRichText(loc.description || '') + '</p>' +
                             '</div>' +
                             '</div>';
                     }).join('');
@@ -341,7 +342,7 @@ import { getVpsHostingPage } from './services/contentService.js';
                             '<div class="vps-use-icon">' + resolveIcon(card.icon) + '</div>' +
                             '<div>' +
                             '<h3>' + (card.title || '') + '</h3>' +
-                            '<p>' + (card.description || card.desc || '') + '</p>' +
+                            '<p>' + inlineRichText(card.description || card.desc || '') + '</p>' +
                             '</div>' +
                             '</div>';
                     }).join('');

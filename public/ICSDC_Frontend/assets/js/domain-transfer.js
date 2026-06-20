@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getDomainTransferPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -31,7 +32,7 @@ import {
             return '<div class="dt-tip-card">' +
                 '<div class="dt-tip-num">' + (tip.number || (i + 1)) + '</div>' +
                 '<h3>' + (tip.title || '') + '</h3>' +
-                '<p>' + (tip.description || tip.desc || '') + '</p>' +
+                '<p>' + inlineRichText(tip.description || tip.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -46,7 +47,7 @@ import {
             return '<div class="dt-highlight-card" data-animate="fade-up">' +
                 '<div class="dt-highlight-icon">' + (card.icon || '') + '</div>' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.description || card.desc || '') + '</p>' +
+                '<p>' + inlineRichText(card.description || card.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -60,8 +61,8 @@ import {
         grid.innerHTML = sorted.map(function (card) {
             return '<div class="dt-related-card" data-animate="fade-up">' +
                 '<h3>' + (card.title || '') + '</h3>' +
-                '<p>' + (card.description || card.desc || '') + '</p>' +
-                '<a href="' + (card.btnUrl || '#') + '" class="dt-related-btn">' + (card.btnLabel || 'Learn More') + ' &rarr;</a>' +
+                '<p>' + inlineRichText(card.description || card.desc || '') + '</p>' +
+                '<a href="' + (card.btnUrl || '#') + '" class="dt-related-btn">' + (card.btnLabel || 'Learn More') + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -84,7 +85,7 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.dt-top-badge', page.heroTopBadge);
@@ -93,6 +94,18 @@ import {
 
             // 4 Pillars
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
+
+            // Who We Are
+            if (page.aboutTitle) setText(document, '#about .title', page.aboutTitle);
+            if (page.aboutDesc) setHTML(document, '#dt-about-desc', page.aboutDesc);
+            if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
+                var aboutImg = document.getElementById('dt-about-img');
+                if (aboutImg) {
+                    var u = page.aboutImage.image.url;
+                    aboutImg.src = /^https?:\/\//.test(u) ? u : ('http://localhost:1337' + u);
+                    aboutImg.style.display = '';
+                }
+            }
 
             // Benefits / Why Transfer
             populateSectionHeader('#why-transfer', page.benefitsLabel, page.benefitsTitle, page.benefitsSubtitle);
@@ -131,10 +144,6 @@ import {
             // FAQ
             if (page.faqTitle) setText(document, '#dt-faq-heading', page.faqTitle);
             initFAQ(page.faq);
-
-            // FAQ Contact Card
-            if (page.faqContactTitle) setHTML(document, '.faq-contact-title', page.faqContactTitle);
-            if (page.faqContactDesc) setHTML(document, '.faq-contact-desc', page.faqContactDesc);
 
             // Final CTA
             populateCtaBand('.cloud-cta-dark', page.ctaBand2);

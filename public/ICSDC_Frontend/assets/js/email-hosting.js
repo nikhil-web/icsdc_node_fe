@@ -18,6 +18,7 @@ import {
     setText
 } from './utils/cms-helpers.js';
 import { getEmailHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import { uploadURL } from './services/strapiClient.js';
 
 (async function () {
@@ -53,7 +54,7 @@ import { uploadURL } from './services/strapiClient.js';
             return '<div class="' + cardClass + '">' +
                 '<div class="' + numClass + '">' + (i + 1) + '</div>' +
                 '<div><h3>' + (b.title || '') + '</h3>' +
-                '<p>' + (b.desc || b.description || '') + '</p></div>' +
+                '<p>' + inlineRichText(b.desc || b.description || '') + '</p></div>' +
                 '</div>';
         }).join('');
     }
@@ -65,7 +66,7 @@ import { uploadURL } from './services/strapiClient.js';
         if (!grid) return;
         var icons = ['fa-award', 'fa-shield', 'fa-bolt', 'fa-users', 'fa-network-wired', 'fa-envelope'];
         grid.innerHTML = cards.map(function (c, i) {
-            var desc = (c.desc || c.description || '').trim();
+            var desc = inlineRichText(c.desc || c.description || '').trim();
             return '<div class="email-when-card">' +
                 '<div class="email-when-icon"><i class="fa-solid ' + (icons[i] || 'fa-circle-check') + '" aria-hidden="true"></i></div>' +
                 '<h3>' + (c.title || '') + '</h3>' +
@@ -108,7 +109,7 @@ import { uploadURL } from './services/strapiClient.js';
         if (page.aboutCta) {
             var aboutCta = document.getElementById('eh-about-cta');
             if (aboutCta) {
-                if (page.aboutCta.text) aboutCta.innerHTML = page.aboutCta.text + ' &rarr;';
+                if (page.aboutCta.text) aboutCta.innerHTML = page.aboutCta.text + ' ';
                 if (page.aboutCta.link) aboutCta.href = page.aboutCta.link;
             }
         }

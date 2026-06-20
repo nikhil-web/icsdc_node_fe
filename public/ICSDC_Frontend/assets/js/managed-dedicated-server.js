@@ -63,9 +63,9 @@ import {
     function renderCompareRows(tbody, rows) {
         if (!tbody || !Array.isArray(rows) || rows.length === 0) return;
         tbody.innerHTML = rows.map(function (row) {
-            var selfClass   = row.selfManaged   === '✓' ? 'mds-td-yes' : 'mds-td-no';
+            var selfClass = row.selfManaged === '✓' ? 'mds-td-yes' : 'mds-td-no';
             var managedClass = row.fullyManaged === '✓' ? 'mds-td-yes' : 'mds-td-no';
-            var selfSymbol   = row.selfManaged   === '✓' ? '&#10003;' : '&#10005;';
+            var selfSymbol = row.selfManaged === '✓' ? '&#10003;' : '&#10005;';
             var managedSymbol = row.fullyManaged === '✓' ? '&#10003;' : '&#10005;';
             return '<tr>' +
                 '<td>' + escapeHTML(row.feature || '') + '</td>' +
@@ -93,7 +93,7 @@ import {
                 ? '<span class="ds-plan-badge">' + plan.badge + '</span>'
                 : '';
             var ctaClass = plan.ctaStyle === 'primary' ? 'ds-plan-cta-primary' : 'ds-plan-cta-outline';
-            var ctaArrow = plan.ctaStyle === 'primary' ? ' &rarr;' : '';
+            var ctaArrow = plan.ctaStyle === 'primary' ? ' ' : '';
 
             var featuresHTML = '';
             if (plan.features && plan.features.length) {
@@ -136,12 +136,12 @@ import {
             // ── Hero ──
             populateHero('.hero-section', {
                 eyebrowSelector: '.mds-eyebrow',
-                title:       page.heroTitle,
-                subtitle:    page.heroSubtitle,
+                title: page.heroTitle,
+                subtitle: page.heroSubtitle,
                 description: page.heroDescription,
-                ctaPrimary:  page.heroCtaPrimary,
+                ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
             // Override eyebrow text for MDS (no dynamic eyebrow field in schema)
             var heroTitle = document.getElementById('mds-hero-title');
@@ -153,14 +153,14 @@ import {
             var heroDesc = document.getElementById('mds-hero-desc');
             if (heroDesc && page.heroDescription) heroDesc.textContent = page.heroDescription;
 
-            applyCtaButton(document.getElementById('mds-cta-primary'),   page.heroCtaPrimary);
+            applyCtaButton(document.getElementById('mds-cta-primary'), page.heroCtaPrimary);
             applyCtaButton(document.getElementById('mds-cta-secondary'), page.heroCtaSecondary);
 
             // ── Pillars (4 why-us cards) ──
             populateIconCards('#mds-pillars-grid', page.pillars, 'why-card');
 
             // ── Plans / Pricing section ──
-            setText(document, '#mds-plans-title',    page.plansTitle);
+            setText(document, '#mds-plans-title', page.plansTitle);
             setText(document, '#mds-plans-subtitle', page.plansSubtitle);
             populatePricingPlans(page.pricingPlans);
 
@@ -199,16 +199,16 @@ import {
 
             // ── Cross-sell promo banners ──
             setText(document, '#mds-baremetal-title', page.baremetalPromoTitle);
-            setText(document, '#mds-baremetal-desc',  page.baremetalPromoDesc);
+            setText(document, '#mds-baremetal-desc', page.baremetalPromoDesc);
             applyCtaAnchor(document.getElementById('mds-baremetal-cta'), page.baremetalPromoCta);
 
             setText(document, '#mds-cloud-title', page.cloudPromoTitle);
-            setText(document, '#mds-cloud-desc',  page.cloudPromoDesc);
+            setText(document, '#mds-cloud-desc', page.cloudPromoDesc);
             applyCtaAnchor(document.getElementById('mds-cloud-cta'), page.cloudPromoCta);
 
             // ── Why Choose ──
             setText(document, '#mds-why-title', page.whyChooseTitle);
-            setText(document, '#mds-why-desc',  page.whyChooseDesc);
+            setText(document, '#mds-why-desc', page.whyChooseDesc);
             renderCheckList(document.getElementById('mds-why-list'), page.whyChooseList);
 
             // ── Who Should Choose (8 cards) ──
@@ -219,7 +219,7 @@ import {
 
             // ── OS section ──
             setText(document, '#mds-os-title', page.osTitle);
-            setText(document, '#mds-os-desc',  page.osDesc);
+            setText(document, '#mds-os-desc', page.osDesc);
             if (page.osImage && page.osImage.image && page.osImage.image.url) {
                 var osImg = document.getElementById('mds-os-img');
                 if (osImg) {
@@ -243,7 +243,7 @@ import {
 
             // ── When to choose ──
             setText(document, '#mds-when-title', page.whenTitle);
-            setText(document, '#mds-when-desc',  page.whenDesc);
+            setText(document, '#mds-when-desc', page.whenDesc);
             renderCheckList(document.getElementById('mds-when-list'), page.whenList);
 
             // ── Testimonials ──

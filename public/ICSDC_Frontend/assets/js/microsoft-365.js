@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getMicrosoft365Page } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -75,9 +76,9 @@ import {
         grid.innerHTML = cards.map(function (c) {
             return '<div class="m365-related-card">' +
                 '<h3>' + (c.title || '') + '</h3>' +
-                '<p>' + (c.desc || c.description || '') + '</p>' +
+                '<p>' + inlineRichText(c.desc || c.description || '') + '</p>' +
                 '<a href="' + (c.ctaLink || c.link || '/contact-us') + '" class="m365-related-link">' +
-                (c.ctaText || c.ctaLabel || 'Learn More') + ' &rarr;</a>' +
+                (c.ctaText || c.ctaLabel || 'Learn More') + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -128,7 +129,7 @@ import {
                 priceHtml +
                 taglineHtml +
                 featuresHtml +
-                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -152,7 +153,7 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.m365-top-badge', page.heroTopBadge);

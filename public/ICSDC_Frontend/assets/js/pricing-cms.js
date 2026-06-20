@@ -22,7 +22,7 @@
  */
 
 import { getPricingPage } from './services/contentService.js';
-import { populateSEO } from './utils/cms-helpers.js';
+import { populateSEO, inlineRichText } from './utils/cms-helpers.js';
 
 (function () {
     'use strict';
@@ -41,7 +41,12 @@ import { populateSEO } from './utils/cms-helpers.js';
     }
 
     function setText(el, text) {
-        if (el && text != null) el.textContent = text;
+        if (!el || text == null) return;
+        if (typeof text === 'string' && /<\/?(p|a|strong|em|b|i|u|br|ul|ol|li|h[1-6]|blockquote|span)\b/i.test(text)) {
+            el.innerHTML = inlineRichText(text);
+        } else {
+            el.textContent = text;
+        }
     }
 
     /* ─────────────────────────────────────────────────────────

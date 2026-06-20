@@ -3,6 +3,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getContactUsPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import { postAPI } from './services/strapiClient.js';
 import {
     populateSEO,
@@ -29,7 +30,7 @@ import {
             return '<div class="cu-step">' +
                 '<div class="cu-step-number">' + String(i + 1).padStart(2, '0') + '</div>' +
                 '<h3 class="cu-step-title">' + escapeHTML(step.title) + '</h3>' +
-                '<p class="cu-step-desc">' + escapeHTML(step.description || step.desc || '') + '</p>' +
+                '<p class="cu-step-desc">' + escapeHTMLinlineRichText(step.description || step.desc || '') + '</p>' +
                 '</div>';
         }).join('<div class="cu-step-connector" aria-hidden="true"></div>');
     }

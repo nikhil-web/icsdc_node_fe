@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getPamMfaPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -39,7 +40,7 @@ import {
             return '<div class="pam-step-card">' +
                 '<div class="pam-step-num">' + num + '</div>' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || step.desc || '') + '</p>' +
+                '<p>' + inlineRichText(step.description || step.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -61,7 +62,7 @@ import {
                 '<div class="pam-numbered-badge">' + num + '</div>' +
                 '<div class="pam-numbered-body">' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || step.desc || '') + '</p>' +
+                '<p>' + inlineRichText(step.description || step.desc || '') + '</p>' +
                 '</div>' +
                 '</li>';
         }).join('');

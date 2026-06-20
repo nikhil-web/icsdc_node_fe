@@ -24,7 +24,7 @@
  */
 
 import { getHomepagePage } from "./services/contentService.js";
-import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from "./utils/cms-helpers.js";
+import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRichText } from "./utils/cms-helpers.js";
 
 (function () {
 
@@ -41,16 +41,23 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
     }
 
     // ── DOM helpers ───────────────────────────────────────────
+    const RICH_HTML_RE = /<\/?(p|a|strong|em|b|i|u|br|ul|ol|li|h[1-6]|blockquote|span)\b/i;
+
     function setText(sel, val, root = document) {
         if (!val) return;
         const el = root.querySelector(sel);
-        if (el) el.textContent = val;
+        if (!el) return;
+        if (typeof val === 'string' && RICH_HTML_RE.test(val)) {
+            el.innerHTML = inlineRichText(val);
+        } else {
+            el.textContent = val;
+        }
     }
 
     function setHTML(sel, val, root = document) {
         if (!val) return;
         const el = root.querySelector(sel);
-        if (el) el.innerHTML = val;
+        if (el) el.innerHTML = inlineRichText(val);
     }
 
     function setAttr(sel, attr, val, root = document) {
@@ -139,7 +146,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
                 </div>
                 <div class="business-needs-copy">
                     <h3>${item.title || ''}</h3>
-                    <p>${item.desc || ''}</p>
+                    <p>${inlineRichText(item.desc || '')}</p>
                 </div>
             </article>
         `).join('');
@@ -152,7 +159,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
     function populateWhoWeAre(data) {
         if (!data) return;
         setText('[data-strapi="whoWeAreHeading"]', data.heading);
-        setText('[data-strapi="whoWeAreParagraph"]', data.paragraph);
+        setHTML('[data-strapi="whoWeAreParagraph"]', inlineRichText(data.paragraph));
 
         const cards = data.featureCards;
         if (!Array.isArray(cards) || !cards.length) return;
@@ -172,7 +179,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
     function populateLessComplexity(data) {
         if (!data) return;
         setText('[data-strapi="lessComplexityHeading"]', data.heading);
-        setText('[data-strapi="lessComplexityParagraph"]', data.paragraph);
+        setHTML('[data-strapi="lessComplexityParagraph"]', inlineRichText(data.paragraph));
 
         if (data.image) {
             const img = document.querySelector('.less-cloud-complex img, .less-complexity-image img');
@@ -221,7 +228,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
             card.innerHTML = `
                 ${iconHTML}
                 <h4>${service.title}</h4>
-                <p>${service.description || service.desc || ''}</p>
+                <p>${inlineRichText(service.description || service.desc || '')}</p>
             `;
 
             const isBottom = service.position?.startsWith('bottom');
@@ -239,7 +246,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
     function populateIndustryValidated(data) {
         if (!data) return;
         setText('[data-strapi="industryValidatedHeading"]', data.heading);
-        setText('[data-strapi="industryValidatedParagraph"]', data.paragraph);
+        setHTML('[data-strapi="industryValidatedParagraph"]', inlineRichText(data.paragraph));
 
         if (data.image) {
             const img = document.querySelector('.industry-validated img, #industry-validated img');
@@ -253,7 +260,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
     function populateISOStandards(data) {
         if (!data) return;
         setText('.iso-standards-heading, [data-strapi="isoHeading"]', data.heading);
-        setText('.iso-standards-paragraph, [data-strapi="isoParagraph"]', data.paragraph);
+        setHTML('.iso-standards-paragraph, [data-strapi="isoParagraph"]', inlineRichText(data.paragraph));
 
         if (data.image) {
             const img = document.querySelector('.iso-standards img, .beyond-best-practice img');
@@ -291,7 +298,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
                 <article class="hp-partner-card">
                     ${c.tag ? `<span class="hp-partner-tag">${c.tag}</span>` : ''}
                     <h3>${c.title || ''}</h3>
-                    <p>${c.desc || ''}</p>
+                    <p>${inlineRichText(c.desc || '')}</p>
                 </article>`).join('');
         }
 
@@ -339,7 +346,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
                 <div class="hp-industry-card-head">
                     <div class="hp-industry-card-icon">${resolveIcon(d.icon)}</div>
                     <div><h3 class="hp-industry-card-title">${d.title || ''}</h3>
-                    <p class="hp-industry-card-desc">${d.desc || ''}</p></div>
+                    <p class="hp-industry-card-desc">${inlineRichText(d.desc || '')}</p></div>
                 </div>
                 <div class="hp-industry-features">${features}</div>
                 <div class="hp-industry-card-foot">
@@ -381,7 +388,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
                 <article class="hp-security-card">
                     <div class="hp-security-icon">${resolveIcon(c.icon)}</div>
                     <h3>${c.title || ''}</h3>
-                    <p>${c.desc || ''}</p>
+                    <p>${inlineRichText(c.desc || '')}</p>
                     ${c.chip ? `<span class="hp-security-chip">${c.chip}</span>` : ''}
                 </article>`).join('');
         }
@@ -391,7 +398,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
             highlights.innerHTML = page.securityHighlights.map(h => `
                 <article class="hp-security-highlight">
                     <div class="hp-security-icon">${resolveIcon(h.icon)}</div>
-                    <div><h3>${h.title || ''}</h3><p>${h.desc || ''}</p></div>
+                    <div><h3>${h.title || ''}</h3><p>${inlineRichText(h.desc || '')}</p></div>
                 </article>`).join('');
         }
 
@@ -481,7 +488,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
                     '<span class="hp-legend-dot" style="background:' + color + '"></span>' +
                     '<strong class="hp-legend-title" style="color:' + color + '">' + (loc.title || '') + '</strong>' +
                     '</div>' +
-                    '<p class="hp-legend-desc">' + (loc.description || '') + '</p>';
+                    '<p class="hp-legend-desc">' + inlineRichText(loc.description || '') + '</p>';
                 legend.appendChild(item);
             }
         });
@@ -526,7 +533,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO } from ".
                     <span class="faq-q-text">${faq.question || ''}</span>
                     <span class="faq-chev">${chev}</span>
                 </summary>
-                <div class="faq-a-wrap"><div class="faq-a">${faq.answer || ''}</div></div>
+                <div class="faq-a-wrap"><div class="faq-a">${inlineRichText(faq.answer || '')}</div></div>
             </details>`;
         }).join('');
 

@@ -1,4 +1,5 @@
 import { populateSEO, populateHero, populateIconCards, populateSectionHeader, populateCtaBand, populatePricingPlans, hidePageLoader, markActiveNavLink, initTestimonials, initFAQ, setText } from './utils/cms-helpers.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import { getWindowsCloudHostingPage } from './services/contentService.js';
 
 (async function () {
@@ -86,7 +87,7 @@ import { getWindowsCloudHostingPage } from './services/contentService.js';
                     var iconClass = card.icon ? 'fa-solid fa-' + card.icon : 'fa-solid fa-server';
                     return '<div class="wincloud-related-card">' +
                         '<div class="wincloud-related-icon"><i class="' + iconClass + '" aria-hidden="true"></i></div>' +
-                        '<p class="wincloud-related-desc">' + (card.desc || '') + '</p>' +
+                        '<p class="wincloud-related-desc">' + inlineRichText(card.desc || '') + '</p>' +
                         '<a href="' + (card.ctaLink || '#') + '" class="wincloud-related-btn">' +
                         (card.ctaText || '') + ' ' + arrowSVG + '</a>' +
                         '</div>';

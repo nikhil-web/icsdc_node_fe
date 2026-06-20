@@ -39,15 +39,15 @@ import { getWindowsVpsHostingPage } from './services/contentService.js';
                 : '';
 
             var featureItems = [];
-            if (plan.vcpu)      featureItems.push(plan.vcpu);
-            if (plan.ram)       featureItems.push(plan.ram + ' RAM');
-            if (plan.storage)   featureItems.push(plan.storage + ' Storage');
+            if (plan.vcpu) featureItems.push(plan.vcpu);
+            if (plan.ram) featureItems.push(plan.ram + ' RAM');
+            if (plan.storage) featureItems.push(plan.storage + ' Storage');
             if (plan.bandwidth) featureItems.push(plan.bandwidth + ' Bandwidth');
 
             var featuresHtml = featureItems.length
                 ? '<ul class="wvps-plan-features">' +
-                    featureItems.map(function (f) { return '<li>' + f + '</li>'; }).join('') +
-                  '</ul>'
+                featureItems.map(function (f) { return '<li>' + f + '</li>'; }).join('') +
+                '</ul>'
                 : '';
 
             var btnClass = isFeatured ? 'wvps-plan-btn-featured' : 'wvps-plan-btn';
@@ -57,7 +57,7 @@ import { getWindowsVpsHostingPage } from './services/contentService.js';
                 '<div class="wvps-plan-name">' + (plan.name || '') + '</div>' +
                 priceHtml +
                 featuresHtml +
-                '<a href="/contact-us.html" class="' + btnClass + '">Get Started &rarr;</a>' +
+                '<a href="/contact-us.html" class="' + btnClass + '">Get Started </a>' +
                 '</div>';
         }).join('');
     }
@@ -75,8 +75,8 @@ import { getWindowsVpsHostingPage } from './services/contentService.js';
 
         function renderCard(stack) {
             var itemsHtml = (stack.items || []).map(function (item) {
-                var text  = typeof item === 'string' ? item : (item.text || '');
-                var icon  = typeof item === 'string' ? 'circle-dot' : (item.icon || 'circle-dot');
+                var text = typeof item === 'string' ? item : (item.text || '');
+                var icon = typeof item === 'string' ? 'circle-dot' : (item.icon || 'circle-dot');
                 return '<div class="wvps-stack-item">' +
                     resolveIcon(icon) +
                     '<span>' + text + '</span>' +
@@ -88,7 +88,7 @@ import { getWindowsVpsHostingPage } from './services/contentService.js';
                 '<div class="wvps-stack-card-subtitle">' + (stack.subtitle || '') + '</div>' +
                 '<div class="wvps-stack-items">' + itemsHtml + '</div>' +
                 '<div class="wvps-stack-cta">' +
-                    '<a href="/contact-us.html" class="wvps-stack-cta-btn">Deploy Now &rarr;</a>' +
+                '<a href="/contact-us.html" class="wvps-stack-cta-btn">Deploy Now </a>' +
                 '</div>' +
                 '</div>';
         }
@@ -145,7 +145,7 @@ import { getWindowsVpsHostingPage } from './services/contentService.js';
 
             // Who We Are
             if (page.aboutTitle) setText(document, '#wvps-about-title', page.aboutTitle);
-            if (page.aboutDesc)  setHTML(document, '#wvps-about-desc', '<p>' + page.aboutDesc + '</p>');
+            if (page.aboutDesc) setHTML(document, '#wvps-about-desc', '<p>' + page.aboutDesc + '</p>');
 
             // Why Businesses Choose ICSDC — sub-section inside Who We Are
             var whyBlock = document.getElementById('wvps-about-why');

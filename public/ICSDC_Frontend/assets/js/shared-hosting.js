@@ -35,6 +35,7 @@ import {
 } from './utils/cms-helpers.js';
 
 import { getSharedHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import { uploadURL } from './services/strapiClient.js';
 
 (async function () {
@@ -136,7 +137,7 @@ import { uploadURL } from './services/strapiClient.js';
                             '<span class="sh-when-num">' + (card.number || '') + '</span>' +
                             '</div>' +
                             '<h3>' + (card.title || '') + '</h3>' +
-                            '<p>' + (card.description || '') + '</p>' +
+                            '<p>' + inlineRichText(card.description || '') + '</p>' +
                             '</div>';
                     }).join('');
                 }
