@@ -98,12 +98,22 @@ import {
             // Who We Are
             if (page.aboutTitle) setText(document, '#about .title', page.aboutTitle);
             if (page.aboutDesc) setHTML(document, '#dt-about-desc', page.aboutDesc);
+            // aboutImage — swap the #dt-about-img src from Strapi
             if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
                 var aboutImg = document.getElementById('dt-about-img');
                 if (aboutImg) {
-                    var u = page.aboutImage.image.url;
-                    aboutImg.src = /^https?:\/\//.test(u) ? u : ('http://localhost:1337' + u);
-                    aboutImg.style.display = '';
+                    var _m = page.aboutImage.image;
+                    var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
+                    var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)
+                        ? (_m.formats.large || _m.formats.medium || _m.formats.small).url
+                        : _m.url) || '';
+                    if (_url && !_url.startsWith('http')) _url = _base + _url;
+                    if (_url) {
+                        aboutImg.src = _url;
+                        aboutImg.alt = _m.alternativeText || '';
+                        aboutImg.style.display = '';
+                        aboutImg.removeAttribute('onerror');
+                    }
                 }
             }
 
