@@ -709,8 +709,8 @@
         transform: translateY(0);
     }
 
-    .cloud-power-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .cloud-power-grid > * {
+        flex-basis: calc(50% - 10px);
     }
 
     .cloud-why-grid {
@@ -1517,10 +1517,15 @@ summary.faq-q::marker {
 }
 
 .cloud-power-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
     text-align: left;
+}
+
+.cloud-power-grid > * {
+    flex: 0 1 calc(25% - 15px);
 }
 
 .cloud-power-card {
@@ -1607,6 +1612,7 @@ summary.faq-q::marker {
     transition: transform var(--transition-base) var(--ease-out-expo),
         box-shadow var(--transition-base) ease,
         border-color var(--transition-base) ease;
+    text-align: left;
 }
 
 .cloud-plan-card:hover {
@@ -2161,9 +2167,12 @@ summary.faq-q::marker {
         gap: 32px;
     }
 
-    .cloud-power-grid,
     .cloud-use-grid {
         grid-template-columns: 1fr;
+    }
+
+    .cloud-power-grid > * {
+        flex-basis: 100%;
     }
 
     .cloud-why-grid {
@@ -2566,6 +2575,7 @@ html[data-theme="dark"] .nav-search-item.is-active {
     align-items: center;
     justify-content: center;
 }
+
 /* ══════════════════════════════════════
    IN-CONTENT LINKS (CKEditor-authored)
    Rich-text fields (who-we-are, less-complexity, industry, ISO paragraphs,
@@ -2584,6 +2594,7 @@ html[data-theme="dark"] .nav-search-item.is-active {
     text-underline-offset: 2px;
     transition: opacity 0.15s ease;
 }
+
 [data-strapi="whoWeAreParagraph"] a:hover,
 [data-strapi="lessComplexityParagraph"] a:hover,
 [data-strapi="industryValidatedParagraph"] a:hover,
@@ -2617,6 +2628,7 @@ html[data-theme="dark"] .nav-search-item.is-active {
     text-underline-offset: 2px;
     transition: opacity 0.15s ease;
 }
+
 .faq-a a:hover,
 .testi-quote a:hover,
 .cloud-power-card a:hover,

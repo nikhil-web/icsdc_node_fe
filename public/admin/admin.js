@@ -57,6 +57,7 @@
     function isSitemapPath() { return window.location.pathname.startsWith('/admin/sitemap'); }
     function isChatPath() { return window.location.pathname.startsWith('/admin/chat'); }
     function isLeadsPath() { return window.location.pathname.startsWith('/admin/leads'); }
+    function isRobotsPath() { return window.location.pathname.startsWith('/admin/robots'); }
 
     function applyRoute() {
         const mainDash = document.getElementById('view-dashboard-main');
@@ -64,7 +65,8 @@
         const mainSitemap = document.getElementById('view-sitemap');
         const mainChat = document.getElementById('view-chat');
         const mainLeads = document.getElementById('view-leads');
-        if (!mainDash || !mainBld || !mainSitemap || !mainChat || !mainLeads) return;
+        const mainRobots = document.getElementById('view-robots');
+        if (!mainDash || !mainBld || !mainSitemap || !mainChat || !mainLeads || !mainRobots) return;
 
         // Sync nav tab "active" styling
         document.querySelectorAll('.admin-nav-tab').forEach(function (a) {
@@ -72,9 +74,10 @@
             const isActive =
                 (tab === 'builder' && isBuilderPath()) ||
                 (tab === 'sitemap' && isSitemapPath()) ||
+                (tab === 'robots' && isRobotsPath()) ||
                 (tab === 'chat' && isChatPath()) ||
                 (tab === 'leads' && isLeadsPath()) ||
-                (tab === 'dashboard' && !isBuilderPath() && !isSitemapPath() && !isChatPath() && !isLeadsPath());
+                (tab === 'dashboard' && !isBuilderPath() && !isSitemapPath() && !isRobotsPath() && !isChatPath() && !isLeadsPath());
             a.classList.toggle('active', isActive);
         });
 
@@ -84,6 +87,7 @@
         mainSitemap.hidden = true;
         mainChat.hidden = true;
         mainLeads.hidden = true;
+        mainRobots.hidden = true;
 
         if (isBuilderPath()) {
             mainBld.hidden = false;
@@ -93,6 +97,12 @@
             if (!window.__icsdc_sitemapLoaded) {
                 window.__icsdc_sitemapLoaded = true;
                 loadSitemap();
+            }
+        } else if (isRobotsPath()) {
+            mainRobots.hidden = false;
+            if (!window.__icsdc_robotsLoaded) {
+                window.__icsdc_robotsLoaded = true;
+                loadRobots();
             }
         } else if (isChatPath()) {
             mainChat.hidden = false;
@@ -799,6 +809,89 @@
         }
     }
 
+    // ── Robots.txt editor ─────────────────────────────────────
+    let robotsSaved = '';   // last-saved baseline, for dirty detection
+
+    function setRobotsStatus(msg, kind) {
+        const el = document.getElementById('robots-status');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.remove('is-success', 'is-error', 'is-dirty');
+        if (kind) el.classList.add('is-' + kind);
+    }
+
+    function setRobotsDirty(dirty) {
+        const saveBtn = document.getElementById('robots-save-btn');
+        if (saveBtn) saveBtn.disabled = !dirty;
+        if (dirty) setRobotsStatus('Unsaved changes', 'dirty');
+    }
+
+    async function loadRobots() {
+        const editor = document.getElementById('robots-editor');
+        if (!editor) return;
+        setRobotsStatus('Loading…');
+        try {
+            const res = await apiFetch('/api/admin/robots');
+            if (!res.ok) throw new Error('Load failed');
+            const data = await res.json();
+            editor.value = data.content || '';
+            robotsSaved = editor.value;
+            setRobotsDirty(false);
+            setRobotsStatus(data.exists === false
+                ? 'No robots.txt yet — showing a default. Save to create it.'
+                : 'Loaded.');
+        } catch (err) {
+            if (err.message !== 'Session expired') setRobotsStatus('Could not load robots.txt.', 'error');
+        }
+    }
+
+    function initRobotsControls() {
+        const editor = document.getElementById('robots-editor');
+        const saveBtn = document.getElementById('robots-save-btn');
+        const reloadBtn = document.getElementById('robots-reload-btn');
+        if (!editor) return;
+
+        editor.addEventListener('input', function () {
+            setRobotsDirty(editor.value !== robotsSaved);
+        });
+
+        if (reloadBtn) {
+            reloadBtn.addEventListener('click', async function () {
+                reloadBtn.disabled = true;
+                await loadRobots();
+                reloadBtn.disabled = false;
+            });
+        }
+
+        if (saveBtn) {
+            saveBtn.addEventListener('click', async function () {
+                saveBtn.disabled = true;
+                const original = saveBtn.innerHTML;
+                saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving…';
+                try {
+                    const res = await apiFetch('/api/admin/robots', {
+                        method: 'POST',
+                        body: JSON.stringify({ content: editor.value }),
+                    });
+                    if (!res.ok) {
+                        const e = await res.json().catch(function () { return {}; });
+                        throw new Error(e.error || 'Save failed');
+                    }
+                    robotsSaved = editor.value;
+                    const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    setRobotsStatus('Saved ✓ at ' + t, 'success');
+                } catch (err) {
+                    if (err.message !== 'Session expired') {
+                        setRobotsStatus(err.message || 'Could not save robots.txt.', 'error');
+                        saveBtn.disabled = false;   // allow retry
+                    }
+                } finally {
+                    saveBtn.innerHTML = original;
+                }
+            });
+        }
+    }
+
     // ── Utility ───────────────────────────────────────────────
     function esc(str) {
         return String(str || '')
@@ -816,6 +909,7 @@
         initTheme();
         initPagesControls();
         initSitemapControls();
+        initRobotsControls();
         initNavTabs();
 
         if (getJwt()) {

@@ -1059,6 +1059,9 @@ export function getBareMetalServerPage() {
 export function getVeeamBackupPage() {
     return fetchAPI(
         "/api/veeam-backup-page?" +
+        "populate[plans][populate][features]=*" +
+        "&populate[proactiveCards][populate]=*" +
+        "&populate[proactiveImage][populate][image]=true&" +
         "populate[seo]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +

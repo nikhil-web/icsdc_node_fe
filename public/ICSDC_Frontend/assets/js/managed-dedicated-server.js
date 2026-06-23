@@ -24,14 +24,14 @@ import {
     // ── Helper: set button href/onclick from a cta-link object ──
     function applyCtaButton(btnEl, cta) {
         if (!btnEl || !cta) return;
-        if (cta.text) btnEl.textContent = cta.text + ' →';
+        if (cta.text) btnEl.textContent = cta.text;
         if (cta.link) btnEl.onclick = function () { location.href = cta.link; };
     }
 
     // ── Helper: set anchor element from a cta-link object ──
     function applyCtaAnchor(anchorEl, cta) {
         if (!anchorEl || !cta) return;
-        if (cta.text) anchorEl.textContent = cta.text + ' →';
+        if (cta.text) anchorEl.textContent = cta.text;
         if (cta.link) anchorEl.href = cta.link;
     }
 

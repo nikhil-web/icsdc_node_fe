@@ -77,6 +77,7 @@
                     <a href="/admin/builder" class="admin-nav-tab" data-tab="builder" style="display:none">Page
                         Builder</a>
                     <a href="/admin/sitemap" class="admin-nav-tab" data-tab="sitemap">Sitemap</a>
+                    <a href="/admin/robots" class="admin-nav-tab" data-tab="robots">Robots.txt</a>
                     <a href="/admin/chat" class="admin-nav-tab" data-tab="chat">
                         Live Chat <span class="acp-nav-badge" id="acp-nav-badge" hidden>0</span>
                     </a>
@@ -321,6 +322,41 @@
                 <div class="sitemap-toast" id="sitemap-toast" hidden>
                     <i class="fa-solid fa-check" aria-hidden="true"></i> Sitemap URL copied!
                 </div>
+
+            </section>
+        </main>
+
+        <!-- Robots.txt view (shown when path is /admin/robots) -->
+        <main class="admin-main" id="view-robots" hidden>
+            <section class="admin-section robots-section">
+
+                <!-- Header -->
+                <div class="admin-page-header">
+                    <div>
+                        <h2 class="admin-page-title">Robots.txt Editor</h2>
+                        <p class="admin-page-sub">Controls how search engines crawl the site, served live at
+                            <code>/robots.txt</code>. Changes apply immediately on save.</p>
+                    </div>
+                    <div class="admin-header-actions">
+                        <button class="admin-refresh-btn" id="robots-reload-btn" aria-label="Reload" type="button">
+                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        </button>
+                        <a id="robots-view-btn" href="/robots.txt" target="_blank"
+                            class="admin-btn admin-btn-secondary">
+                            <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i> View live
+                        </a>
+                        <button class="admin-btn admin-btn-primary" id="robots-save-btn" type="button" disabled>
+                            <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Editor -->
+                <textarea id="robots-editor" class="robots-editor" spellcheck="false"
+                    placeholder="Loading robots.txt…" aria-label="robots.txt content"></textarea>
+
+                <!-- Status -->
+                <div class="robots-status" id="robots-status">Loading&hellip;</div>
 
             </section>
         </main>

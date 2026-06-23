@@ -13,8 +13,8 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #dcfce7;
-    color: #059669;
+    background: #dbeafe;
+    color: #1a56db;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -22,24 +22,24 @@
     padding: 6px 14px;
     border-radius: var(--radius-xl);
     margin-bottom: 20px;
-    border: 1px solid rgba(5, 150, 105, 0.22);
+    border: 1px solid rgba(26, 86, 219, 0.22);
 }
 
 /* ══════════════════════════════════════
-   HERO VISUAL — EMERALD GRADIENT
+   HERO VISUAL — BRAND BLUE GRADIENT
 ══════════════════════════════════════ */
 .veeam-hero-visual {
     width: 100%;
     max-width: 560px;
     aspect-ratio: 4 / 3;
     border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, #bbf7d0 0%, #dcfce7 50%, #f0fdf4 100%);
+    background: linear-gradient(135deg, #bfdbfe 0%, #dbeafe 50%, #eff6ff 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 24px 64px rgba(5, 150, 105, 0.14), 0 4px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 24px 64px rgba(26, 86, 219, 0.14), 0 4px 16px rgba(0, 0, 0, 0.06);
     animation: heroImageFloat 8s ease-in-out 1s infinite;
 }
 
@@ -48,8 +48,8 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 65% 30%, rgba(5, 150, 105, 0.10) 0%, transparent 55%),
-        radial-gradient(circle at 25% 70%, rgba(16, 185, 129, 0.07) 0%, transparent 50%);
+        radial-gradient(circle at 65% 30%, rgba(26, 86, 219, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, rgba(26, 86, 219, 0.07) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -69,14 +69,14 @@
     top: 20px;
     left: 20px;
     background: var(--white);
-    border: 1px solid rgba(5, 150, 105, 0.18);
+    border: 1px solid rgba(26, 86, 219, 0.18);
     border-radius: 12px;
     padding: 8px 14px;
     font-size: 11px;
     font-weight: 700;
-    color: #059669;
+    color: #1a56db;
     letter-spacing: 0.04em;
-    box-shadow: 0 4px 16px rgba(5, 150, 105, 0.14);
+    box-shadow: 0 4px 16px rgba(26, 86, 219, 0.14);
     z-index: 2;
     animation: cloud-badge-float 6s ease-in-out 0.2s infinite;
 }
@@ -86,13 +86,13 @@
     bottom: 20px;
     right: 20px;
     background: var(--white);
-    border: 1px solid rgba(5, 150, 105, 0.14);
+    border: 1px solid rgba(26, 86, 219, 0.14);
     border-radius: 12px;
     padding: 10px 16px;
     display: flex;
     align-items: center;
     gap: 10px;
-    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.13);
+    box-shadow: 0 8px 24px rgba(26, 86, 219, 0.13);
     z-index: 2;
     animation: cloud-badge-float 5s ease-in-out 0.8s infinite;
 }
@@ -101,16 +101,24 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #059669;
-    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.50);
+    background: #1a56db;
+    box-shadow: 0 0 0 0 rgba(26, 86, 219, 0.50);
     flex-shrink: 0;
     animation: veeam-pulse 2s ease-in-out infinite;
 }
 
 @keyframes veeam-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.55); }
-    70%  { box-shadow: 0 0 0 8px rgba(5, 150, 105, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+    0% {
+        box-shadow: 0 0 0 0 rgba(26, 86, 219, 0.55);
+    }
+
+    70% {
+        box-shadow: 0 0 0 8px rgba(26, 86, 219, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(26, 86, 219, 0);
+    }
 }
 
 .veeam-bt {
@@ -143,7 +151,7 @@
     overflow-x: auto;
     margin-top: 36px;
     border-radius: var(--radius-lg);
-    box-shadow: 0 4px 24px rgba(5, 150, 105, 0.08);
+    box-shadow: 0 4px 24px rgba(26, 86, 219, 0.08);
 }
 
 .veeam-compare-table {
@@ -153,10 +161,11 @@
     border-radius: var(--radius-lg);
     overflow: hidden;
     font-size: 14px;
+    text-align: left !important;
 }
 
 .veeam-compare-table thead tr {
-    background: #059669;
+    background: #1a56db;
     color: var(--white);
 }
 
@@ -166,16 +175,16 @@
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.04em;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 }
 
 .veeam-compare-table thead th.veeam-col-icsdc {
-    background: #047857;
+    background: #1442b0;
     color: var(--white);
 }
 
 .veeam-compare-table tbody tr {
-    border-bottom: 1px solid rgba(5, 150, 105, 0.10);
+    border-bottom: 1px solid rgba(26, 86, 219, 0.10);
     transition: background var(--transition-fast) ease;
 }
 
@@ -184,7 +193,7 @@
 }
 
 .veeam-compare-table tbody tr:hover {
-    background: #f0fdf4;
+    background: #eff6ff;
 }
 
 .veeam-compare-table tbody td {
@@ -194,15 +203,18 @@
     line-height: 1.5;
 }
 
+.veeam-compare-table thead th {
+    text-align: left;
+}
+
 .veeam-compare-table tbody td:first-child {
     font-weight: 600;
     color: var(--text-dark);
-    white-space: nowrap;
 }
 
 .veeam-compare-table tbody td.veeam-col-icsdc {
-    background: #f0fdf4;
-    color: #065f46;
+    background: #eff6ff;
+    color: #1442b0;
     font-weight: 500;
 }
 
@@ -212,7 +224,7 @@
     justify-content: center;
     width: 18px;
     height: 18px;
-    background: #059669;
+    background: #1a56db;
     color: var(--white);
     border-radius: 50%;
     font-size: 10px;
@@ -226,11 +238,11 @@
    STATS SECTION — RANSOMWARE REALITY
 ══════════════════════════════════════ */
 .veeam-stats-section {
-    background: #f0fdf4;
+    background: #eff6ff;
 }
 
 .veeam-section-label-light {
-    color: #059669 !important;
+    color: #1a56db !important;
 }
 
 .veeam-stats-grid {
@@ -242,23 +254,23 @@
 
 .veeam-stat-card {
     background: var(--white);
-    border: 1.5px solid rgba(5, 150, 105, 0.14);
+    border: 1.5px solid rgba(26, 86, 219, 0.14);
     border-radius: var(--radius-lg);
     padding: 32px 24px;
     text-align: center;
-    box-shadow: 0 4px 20px rgba(5, 150, 105, 0.08);
+    box-shadow: 0 4px 20px rgba(26, 86, 219, 0.08);
     transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease;
 }
 
 .veeam-stat-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(5, 150, 105, 0.14);
+    box-shadow: 0 12px 40px rgba(26, 86, 219, 0.14);
 }
 
 .veeam-stat-number {
-    font-size: 52px;
+    font-size: 26px;
     font-weight: 800;
-    color: #059669;
+    color: #1a56db;
     letter-spacing: -0.04em;
     line-height: 1;
     margin-bottom: 12px;
@@ -296,7 +308,7 @@
 .veeam-step-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-card-hover);
-    border-color: rgba(5, 150, 105, 0.30);
+    border-color: rgba(26, 86, 219, 0.30);
 }
 
 .veeam-step-num {
@@ -306,13 +318,13 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #059669;
+    background: #1a56db;
     color: var(--white);
     font-size: 16px;
     font-weight: 800;
     margin: 0 auto 16px;
     letter-spacing: -0.02em;
-    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.30);
+    box-shadow: 0 4px 12px rgba(26, 86, 219, 0.30);
 }
 
 .veeam-step-card h3 {
@@ -406,5 +418,121 @@
 
     .veeam-stat-number {
         font-size: 40px;
+    }
+}
+
+/* ══════════════════════════════════════
+   AUDIT ADDITIONS (2026-06-23)
+══════════════════════════════════════ */
+
+/* Why-Choose grid — centre the last (orphan) row [client comment #9] */
+#veeam-why-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#veeam-why-grid .cloud-power-card {
+    flex: 0 1 calc(25% - 15px);
+}
+
+@media (max-width: 1100px) {
+    #veeam-why-grid .cloud-power-card {
+        flex-basis: calc(33.333% - 14px);
+    }
+}
+
+@media (max-width: 760px) {
+    #veeam-why-grid .cloud-power-card {
+        flex-basis: calc(50% - 10px);
+    }
+}
+
+@media (max-width: 520px) {
+    #veeam-why-grid .cloud-power-card {
+        flex-basis: 100%;
+    }
+}
+
+/* Cyber-threat stats — lead line above the stat boxes [client comment #6] */
+.veeam-stats-lead {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 8px auto 28px;
+    max-width: 760px;
+    letter-spacing: -0.01em;
+}
+
+/* "From Proactive Defense" optional image */
+.veeam-proactive-img {
+    text-align: center;
+    margin-top: 32px;
+}
+
+.veeam-proactive-img img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 14px;
+}
+
+/* Related services — Managed Cloud Hosting + DRaaS cross-sell [client comment #10] */
+.veeam-related-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 36px;
+}
+
+.veeam-related-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 30px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: box-shadow .2s, transform .2s;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+.veeam-related-card:hover {
+    box-shadow: 0 12px 30px rgba(26, 86, 219, 0.10);
+    transform: translateY(-3px);
+}
+
+.veeam-related-card h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+}
+
+.veeam-related-card p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.veeam-related-btn {
+    margin-top: auto;
+    align-self: flex-start;
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.veeam-related-btn:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 760px) {
+    .veeam-related-grid {
+        grid-template-columns: 1fr;
     }
 }

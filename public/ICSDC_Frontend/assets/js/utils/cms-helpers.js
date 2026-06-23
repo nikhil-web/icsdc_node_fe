@@ -608,7 +608,7 @@ export function populatePricingPlansCloud(gridSelector, plans) {
             ? '<span class="cloud-plan-badge">' + plan.badge + '</span>'
             : '';
         var ctaClass = plan.ctaStyle === 'primary' ? 'cloud-plan-cta-primary' : 'cloud-plan-cta-outline';
-        var ctaArrow = plan.ctaStyle === 'primary' ? ' →' : '';
+        var ctaArrow = '';
 
         var featuresHTML = '';
         if (plan.features && plan.features.length) {

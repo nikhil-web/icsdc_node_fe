@@ -235,10 +235,15 @@
 }
 
 .cloud-power-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
     text-align: left;
+}
+
+.cloud-power-grid > * {
+    flex: 0 1 calc(25% - 15px);
 }
 
 .cloud-power-card {
@@ -1683,8 +1688,8 @@
         transform: translateY(0);
     }
 
-    .cloud-power-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .cloud-power-grid > * {
+        flex-basis: calc(50% - 10px);
     }
 
     .cloud-why-inner {
@@ -1750,9 +1755,12 @@
 ══════════════════════════════════════ */
 @media (max-width: 767px) {
 
-    .cloud-power-grid,
     .cloud-use-grid {
         grid-template-columns: 1fr;
+    }
+
+    .cloud-power-grid > * {
+        flex-basis: 100%;
     }
 
     .cloud-why-inner .cloud-why-grid {
