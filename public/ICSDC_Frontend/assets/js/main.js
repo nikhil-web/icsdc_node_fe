@@ -7,6 +7,25 @@ import { getNavigation, getFooter } from "./services/contentService.js";
 import { resolveIcon, inlineRichText } from "./utils/cms-helpers.js";
 import { getFooterHTML } from "./footer-template.js";
 
+// ══════════════════════════════════════════════════════════
+//  SCROLL-ANIMATION SAFETY REVEAL  (SEO / crawler fix)
+//  Scroll-triggered elements start at opacity:0 and are revealed by an
+//  IntersectionObserver on scroll. Crawlers (Googlebot's renderer) paint at a
+//  fixed viewport WITHOUT scrolling, so below-the-fold [data-animate]/[data-stagger]
+//  content never gets `.is-visible` and the rendered screenshot comes out blank.
+//  This force-reveals anything still hidden shortly after load — guaranteeing the
+//  full page is painted for crawlers (real users keep on-scroll animation for the
+//  first ~2s, which covers the above-the-fold reveal).
+(function revealAnimatedForCrawlers() {
+    function revealAll() {
+        document.querySelectorAll('[data-animate]:not(.is-visible), [data-stagger]:not(.is-visible)')
+            .forEach(function (el) { el.classList.add('is-visible'); });
+    }
+    function schedule() { setTimeout(revealAll, 2000); }
+    if (document.readyState === 'complete') schedule();
+    else window.addEventListener('load', schedule);
+})();
+
 
 // ══════════════════════════════════════════════════════════
 //  LOADER

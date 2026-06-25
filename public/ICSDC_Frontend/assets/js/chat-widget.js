@@ -100,6 +100,7 @@ function toggleChat() {
 }
 
 function openChat() {
+    ensureConnected();   // lazy-connect socket.io on first open
     isOpen = true;
     chatWindow.classList.add('is-open');
     bubble.setAttribute('aria-label', 'Close chat');
@@ -433,23 +434,29 @@ function connectSocket() {
 
 // ── Public init ───────────────────────────────────────────
 export function initChatWidget() {
-    // Load socket.io client script if not already present
-    if (typeof io === 'undefined') {
-        const script = document.createElement('script');
-        script.src = '/socket.io/socket.io.js';
-        script.onload = function () { boot(); };
-        document.head.appendChild(script);
-    } else {
-        boot();
-    }
-}
-
-function boot() {
+    // Render the chat bubble immediately, but DON'T load socket.io or open a
+    // WebSocket until the user actually opens the chat. An always-open socket
+    // keeps the page from ever reaching network-idle, which hurts crawler
+    // rendering (blank Googlebot screenshots) and wastes a connection on every
+    // visit. Lazy-connecting on first open fixes both.
     sessionId = getSid();
     if (!sessionId) {
         sessionId = generateSid();
         setSid(sessionId);
     }
     renderWidget();
-    connectSocket();
+}
+
+// Lazily load the socket.io client + open the connection. Called on first chat open.
+let socketLoading = false;
+function ensureConnected() {
+    if (socket) return;                         // already connected
+    if (typeof io !== 'undefined') { connectSocket(); return; }
+    if (socketLoading) return;                  // a load is already in flight
+    socketLoading = true;
+    const script = document.createElement('script');
+    script.src = '/socket.io/socket.io.js';
+    script.onload = function () { socketLoading = false; connectSocket(); };
+    script.onerror = function () { socketLoading = false; console.warn('[chat] failed to load socket.io'); };
+    document.head.appendChild(script);
 }
