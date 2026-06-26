@@ -898,23 +898,31 @@ nav.scrolled {
     z-index: 1;
 }
 
+/* Hero is VISIBLE BY DEFAULT (opacity:1) so crawlers / renderers that don't run CSS
+   entrance animations (e.g. Googlebot's screenshot renderer, or prefers-reduced-motion)
+   still paint the hero. The fade-in is a progressive enhancement: the keyframes carry the
+   hidden start-state, so when the animation runs it fades in, and when it doesn't the base
+   visible state remains. No persistent opacity:0 base and no forwards/both fill that could
+   freeze the element invisible. */
 .hero-content {
     position: relative;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: heroEnter 0.85s var(--ease-out-expo) 0.1s forwards;
+    opacity: 1;
+    animation: heroEnter 0.85s var(--ease-out-expo);
 }
 
 .hero-right {
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transform: translateY(16px) scale(0.98);
-    animation: heroEnterRight 0.9s var(--ease-out-expo) 0.25s forwards;
+    opacity: 1;
+    animation: heroEnterRight 0.9s var(--ease-out-expo);
 }
 
 @keyframes heroEnter {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
     to {
         opacity: 1;
         transform: translateY(0);
@@ -922,6 +930,10 @@ nav.scrolled {
 }
 
 @keyframes heroEnterRight {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+    }
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
