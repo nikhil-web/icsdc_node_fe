@@ -1206,8 +1206,8 @@ nav.scrolled {
    PAGE LOADER
 ══════════════════════════════════════ */
 #page-loader {
-    /* Loading animation removed — the page renders directly without the spinner overlay. */
-    display: none !important;
+
+    display: flex;
     position: fixed;
     inset: 0;
     background: var(--white);
