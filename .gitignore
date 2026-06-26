@@ -10,3 +10,4 @@ public/ICSDC_Frontend/sitemap.xml
 *.py
 sitemap.xml
 public/ICSDC_Frontend/sitemap.xml
+.claude/launch.json

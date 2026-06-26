@@ -876,7 +876,7 @@ nav.scrolled {
     grid-template-columns: 1fr 1fr;
     gap: 48px;
     align-items: center;
-    min-height: 100vh;
+    min-height: 100%;
 }
 
 .hero::before {
@@ -923,6 +923,7 @@ nav.scrolled {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -934,6 +935,7 @@ nav.scrolled {
         opacity: 0;
         transform: translateY(16px) scale(0.98);
     }
+
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
