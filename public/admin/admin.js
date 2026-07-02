@@ -58,6 +58,7 @@
     function isChatPath() { return window.location.pathname.startsWith('/admin/chat'); }
     function isLeadsPath() { return window.location.pathname.startsWith('/admin/leads'); }
     function isRobotsPath() { return window.location.pathname.startsWith('/admin/robots'); }
+    function isPrerenderPath() { return window.location.pathname.startsWith('/admin/prerender'); }
 
     function applyRoute() {
         const mainDash = document.getElementById('view-dashboard-main');
@@ -66,7 +67,8 @@
         const mainChat = document.getElementById('view-chat');
         const mainLeads = document.getElementById('view-leads');
         const mainRobots = document.getElementById('view-robots');
-        if (!mainDash || !mainBld || !mainSitemap || !mainChat || !mainLeads || !mainRobots) return;
+        const mainPrerender = document.getElementById('view-prerender');
+        if (!mainDash || !mainBld || !mainSitemap || !mainChat || !mainLeads || !mainRobots || !mainPrerender) return;
 
         // Sync nav tab "active" styling
         document.querySelectorAll('.admin-nav-tab').forEach(function (a) {
@@ -75,9 +77,10 @@
                 (tab === 'builder' && isBuilderPath()) ||
                 (tab === 'sitemap' && isSitemapPath()) ||
                 (tab === 'robots' && isRobotsPath()) ||
+                (tab === 'prerender' && isPrerenderPath()) ||
                 (tab === 'chat' && isChatPath()) ||
                 (tab === 'leads' && isLeadsPath()) ||
-                (tab === 'dashboard' && !isBuilderPath() && !isSitemapPath() && !isRobotsPath() && !isChatPath() && !isLeadsPath());
+                (tab === 'dashboard' && !isBuilderPath() && !isSitemapPath() && !isRobotsPath() && !isPrerenderPath() && !isChatPath() && !isLeadsPath());
             a.classList.toggle('active', isActive);
         });
 
@@ -88,6 +91,7 @@
         mainChat.hidden = true;
         mainLeads.hidden = true;
         mainRobots.hidden = true;
+        mainPrerender.hidden = true;
 
         if (isBuilderPath()) {
             mainBld.hidden = false;
@@ -104,6 +108,9 @@
                 window.__icsdc_robotsLoaded = true;
                 loadRobots();
             }
+        } else if (isPrerenderPath()) {
+            mainPrerender.hidden = false;
+            if (!prerenderState_running) loadPrerender();
         } else if (isChatPath()) {
             mainChat.hidden = false;
             if (!window.__icsdc_chatLoaded) {
@@ -892,6 +899,131 @@
         }
     }
 
+    // ── Prerender / crawler snapshots ──────────────────────────
+    let prerenderPollTimer = null;
+    let prerenderState_running = false;
+
+    function fmtBytes(n) {
+        if (n == null) return '—';
+        if (n < 1024) return n + ' B';
+        return (n / 1024).toFixed(0) + ' KB';
+    }
+
+    function fmtWhen(iso) {
+        if (!iso) return 'Never';
+        const d = new Date(iso);
+        return d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' +
+            d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function renderPrerenderTable(data) {
+        const tbody = document.getElementById('prerender-tbody');
+        if (!tbody) return;
+        if (!data.pages || !data.pages.length) {
+            tbody.innerHTML = '<tr><td colspan="4" class="admin-loading-cell">No pages found.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = data.pages.map(function (p) {
+            const built = !!p.builtAt;
+            return '<tr>' +
+                '<td><code>' + esc(p.path) + '</code></td>' +
+                '<td>' + (built
+                    ? '<span style="color:#15803d;"><i class="fa-solid fa-circle-check"></i> Built (' + fmtBytes(p.bytes) + ')</span>'
+                    : '<span style="color:#94a3b8;"><i class="fa-regular fa-circle"></i> Not built</span>') +
+                '</td>' +
+                '<td>' + fmtWhen(p.builtAt) + '</td>' +
+                '<td><button class="admin-refresh-btn" data-prerender-one="' + esc(p.path) + '" aria-label="Rebuild" type="button"><i class="fa-solid fa-rotate"></i></button></td>' +
+                '</tr>';
+        }).join('');
+
+        tbody.querySelectorAll('[data-prerender-one]').forEach(function (btn) {
+            btn.addEventListener('click', function () { buildPrerender(btn.getAttribute('data-prerender-one'), btn); });
+        });
+    }
+
+    function updatePrerenderLog(log) {
+        const wrap = document.getElementById('prerender-log-wrap');
+        const pre  = document.getElementById('prerender-log');
+        if (!wrap || !pre) return;
+        if (!log) return;
+        wrap.style.display = 'block';
+        pre.textContent = log;
+        pre.scrollTop = pre.scrollHeight;
+    }
+
+    async function loadPrerender() {
+        try {
+            const res = await apiFetch('/api/admin/prerender');
+            if (!res.ok) throw new Error('Load failed');
+            const data = await res.json();
+            renderPrerenderTable(data);
+            const statusEl = document.getElementById('prerender-status');
+            if (statusEl) {
+                statusEl.textContent = data.running
+                    ? 'Build running… (' + data.built + '/' + data.total + ' already built)'
+                    : data.built + ' / ' + data.total + ' pages have a snapshot.' +
+                      (data.finishedAt ? ' Last build finished ' + fmtWhen(data.finishedAt) + (data.exitCode ? ' (exit ' + data.exitCode + ')' : '.') : '');
+            }
+            prerenderState_running = !!data.running;
+            const buildBtn = document.getElementById('prerender-build-all-btn');
+            if (buildBtn) buildBtn.disabled = !!data.running;
+
+            if (data.log) updatePrerenderLog(data.log);
+
+            clearTimeout(prerenderPollTimer);
+            if (data.running) prerenderPollTimer = setTimeout(loadPrerender, 2500);
+        } catch (err) {
+            if (err.message !== 'Session expired') {
+                const statusEl = document.getElementById('prerender-status');
+                if (statusEl) statusEl.textContent = 'Could not load prerender status.';
+            }
+        }
+    }
+
+    async function buildPrerender(targetPath, triggerBtn) {
+        const buildBtn = document.getElementById('prerender-build-all-btn');
+        const statusEl = document.getElementById('prerender-status');
+        const logWrap  = document.getElementById('prerender-log-wrap');
+        const logPre   = document.getElementById('prerender-log');
+        prerenderState_running = true;
+        if (buildBtn) buildBtn.disabled = true;
+        if (triggerBtn) triggerBtn.disabled = true;
+        if (logWrap) logWrap.style.display = 'block';
+        if (logPre)  logPre.textContent = 'Starting build…';
+        try {
+            const res = await apiFetch('/api/admin/prerender', {
+                method: 'POST',
+                body: JSON.stringify(targetPath ? { path: targetPath } : {}),
+            });
+            if (!res.ok) {
+                const e = await res.json().catch(function () { return {}; });
+                throw new Error(e.error || 'Build failed to start');
+            }
+            if (statusEl) statusEl.textContent = 'Build started' + (targetPath ? ' for ' + targetPath : ' for all pages') + '…';
+            clearTimeout(prerenderPollTimer);
+            prerenderPollTimer = setTimeout(loadPrerender, 1500);
+        } catch (err) {
+            if (err.message !== 'Session expired') {
+                if (statusEl) statusEl.textContent = err.message || 'Could not start build.';
+                if (logPre) logPre.textContent = err.message || 'Could not start build.';
+                if (buildBtn) buildBtn.disabled = false;
+                if (triggerBtn) triggerBtn.disabled = false;
+            }
+        }
+    }
+
+    function initPrerenderControls() {
+        const refreshBtn = document.getElementById('prerender-refresh-btn');
+        const buildAllBtn = document.getElementById('prerender-build-all-btn');
+        const logClearBtn = document.getElementById('prerender-log-clear');
+        if (refreshBtn) refreshBtn.addEventListener('click', function () { loadPrerender(); });
+        if (buildAllBtn) buildAllBtn.addEventListener('click', function () { buildPrerender(null, buildAllBtn); });
+        if (logClearBtn) logClearBtn.addEventListener('click', function () {
+            const wrap = document.getElementById('prerender-log-wrap');
+            if (wrap) wrap.style.display = 'none';
+        });
+    }
+
     // ── Utility ───────────────────────────────────────────────
     function esc(str) {
         return String(str || '')
@@ -910,6 +1042,7 @@
         initPagesControls();
         initSitemapControls();
         initRobotsControls();
+        initPrerenderControls();
         initNavTabs();
 
         if (getJwt()) {

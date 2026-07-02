@@ -78,6 +78,7 @@
                         Builder</a>
                     <a href="/admin/sitemap" class="admin-nav-tab" data-tab="sitemap">Sitemap</a>
                     <a href="/admin/robots" class="admin-nav-tab" data-tab="robots">Robots.txt</a>
+                    <a href="/admin/prerender" class="admin-nav-tab" data-tab="prerender">Prerender</a>
                     <a href="/admin/chat" class="admin-nav-tab" data-tab="chat">
                         Live Chat <span class="acp-nav-badge" id="acp-nav-badge" hidden>0</span>
                     </a>
@@ -358,6 +359,49 @@
                 <!-- Status -->
                 <div class="robots-status" id="robots-status">Loading&hellip;</div>
 
+            </section>
+        </main>
+
+        <!-- Prerender view (shown when path is /admin/prerender) -->
+        <main class="admin-main" id="view-prerender" hidden>
+            <section class="admin-section">
+                <div class="admin-page-header">
+                    <div>
+                        <h2 class="admin-page-title">Crawler Prerender</h2>
+                        <p class="admin-page-sub">Static, fully-rendered snapshots served to AI / search / social
+                            crawlers (ClaudeBot, GPTBot, Googlebot, Bing, social scrapers&hellip;) so non-JS bots get
+                            real content. Humans always get the live app. Rebuild after Strapi content changes.</p>
+                    </div>
+                    <div class="admin-header-actions">
+                        <button class="admin-refresh-btn" id="prerender-refresh-btn" aria-label="Refresh" type="button">
+                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        </button>
+                        <button class="admin-btn admin-btn-primary" id="prerender-build-all-btn" type="button">
+                            <i class="fa-solid fa-bolt" aria-hidden="true"></i> Build all
+                        </button>
+                    </div>
+                </div>
+
+                <div class="robots-status" id="prerender-status">Loading&hellip;</div>
+
+                <div id="prerender-log-wrap" style="display:none;margin-bottom:16px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                        <span style="font-size:13px;font-weight:600;color:var(--c-text-muted);">Build output</span>
+                        <button class="admin-refresh-btn" id="prerender-log-clear" type="button" title="Hide log"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <pre id="prerender-log" style="background:var(--c-bg-alt,#f8fafc);border:1px solid var(--c-border);border-radius:8px;padding:12px 14px;font-size:12px;line-height:1.6;max-height:280px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;margin:0;color:var(--c-text-dark);"></pre>
+                </div>
+
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr><th>Page</th><th>Snapshot</th><th>Last built</th><th></th></tr>
+                        </thead>
+                        <tbody id="prerender-tbody">
+                            <tr><td colspan="4" class="admin-loading-cell">Loading&hellip;</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </main>
     </div>

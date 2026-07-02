@@ -6,12 +6,30 @@ const { Server: SocketServer } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+const { spawn } = require('child_process');
 
 const app = express();
 
 const publicPath = path.join(__dirname, 'public/ICSDC_Frontend');
 const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
 const STRAPI_TOKEN = process.env.STRAPI_TOKEN || '';
+
+// ── Crawler prerendering (dynamic rendering) ──────────────
+// Fully-rendered static snapshots (built by prerender.js) live in /prerendered and
+// are served to known crawlers so non-JS bots get real content. Humans get the SPA.
+const prerenderDir = path.join(publicPath, 'prerendered');
+const BOT_UA_RE = /(ClaudeBot|anthropic-ai|Claude-Web|Claude-User|Claude-SearchBot|GPTBot|ChatGPT-User|OAI-SearchBot|PerplexityBot|CCBot|Google-Extended|Googlebot|Google-InspectionTool|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|Amazonbot|meta-externalagent|facebookexternalhit|Twitterbot|LinkedInBot|Slackbot|WhatsApp|TelegramBot|Discordbot|redditbot)/i;
+
+// Map a request path → snapshot file. MUST match snapshotFile() in prerender.js.
+function snapshotFileForPath(p) {
+    if (!p || p === '/') return path.join(prerenderDir, 'home.html');
+    p = p.replace(/\/$/, '');
+    if (p.startsWith('/legal/')) return path.join(prerenderDir, 'legal', p.slice('/legal/'.length) + '.html');
+    return path.join(prerenderDir, p.replace(/^\//, '') + '.html');
+}
+
+// Tracks an in-progress admin-triggered prerender build.
+const prerenderState = { running: false, startedAt: null, finishedAt: null, exitCode: null, log: '' };
 
 // Allow large JSON bodies for builder pages (sections array can be sizeable).
 app.use(express.json({ limit: '2mb' }));
@@ -802,6 +820,78 @@ app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
 });
 
 // ══════════════════════════════════════════════════════════
+//  ADMIN: PRERENDER / CRAWLER SNAPSHOTS
+// ══════════════════════════════════════════════════════════
+// List the live pages + each one's snapshot status (built timestamp / size).
+app.get('/api/admin/prerender', requireAdminAuth, async function (req, res) {
+    try {
+        const entries = await buildSitemapEntries(req);
+        const pages = entries
+            .filter(function (e) { return e.type !== 'builder'; })   // builder pages out of scope
+            .map(function (e) {
+                let p; try { p = new URL(e.loc).pathname; } catch (_) { p = e.loc; }
+                const file = snapshotFileForPath(p);
+                let builtAt = null, bytes = null;
+                try { const st = fs.statSync(file); builtAt = st.mtime.toISOString(); bytes = st.size; } catch (_) { /* not built */ }
+                return { path: p, builtAt: builtAt, bytes: bytes };
+            });
+        res.json({
+            running:    prerenderState.running,
+            startedAt:  prerenderState.startedAt,
+            finishedAt: prerenderState.finishedAt,
+            exitCode:   prerenderState.exitCode,
+            log:        prerenderState.log.slice(-4000),
+            total:      pages.length,
+            built:      pages.filter(function (x) { return x.builtAt; }).length,
+            pages:      pages,
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to read prerender status', detail: err.message });
+    }
+});
+
+// Trigger a prerender build (all live pages, or a single { path }). Spawns prerender.js.
+app.post('/api/admin/prerender', requireAdminAuth, function (req, res) {
+    if (prerenderState.running) return res.status(409).json({ error: 'A build is already running' });
+    const target = req.body && req.body.path ? String(req.body.path) : '';
+    // Only clean site paths — no dots/traversal (target ends up in a filesystem write in prerender.js)
+    if (target && !/^\/?[a-z0-9-]+(\/[a-z0-9-]+)*$/i.test(target) && target !== '/') {
+        return res.status(400).json({ error: 'Invalid path' });
+    }
+    const args = ['prerender.js'];
+    if (target) args.push(target);
+
+    prerenderState.running = true;
+    prerenderState.startedAt = new Date().toISOString();
+    prerenderState.finishedAt = null;
+    prerenderState.exitCode = null;
+    prerenderState.log = '';
+
+    let child;
+    try {
+        child = spawn(process.execPath, args, { cwd: __dirname, env: process.env });
+    } catch (e) {
+        prerenderState.running = false;
+        return res.status(500).json({ error: 'Failed to start build', detail: e.message });
+    }
+    child.stdout.on('data', function (d) { prerenderState.log += d.toString(); });
+    child.stderr.on('data', function (d) { prerenderState.log += d.toString(); });
+    child.on('close', function (code) {
+        prerenderState.running = false;
+        prerenderState.exitCode = code;
+        prerenderState.finishedAt = new Date().toISOString();
+    });
+    child.on('error', function (e) {
+        prerenderState.running = false;
+        prerenderState.exitCode = -1;
+        prerenderState.log += '\n[spawn error] ' + e.message;
+        prerenderState.finishedAt = new Date().toISOString();
+    });
+
+    res.json({ ok: true, started: true, target: target || 'all' });
+});
+
+// ══════════════════════════════════════════════════════════
 //  ADMIN: ROBOTS.TXT EDITOR
 //  Reads/writes the flat robots.txt served by express.static.
 //  Path is hardcoded (no traversal); both routes require admin auth.
@@ -996,6 +1086,21 @@ app.use((req, res, next) => {
         return res.redirect(301, cleanUrl);
     }
     next();
+});
+
+// Serve prerendered snapshots to known crawlers (dynamic rendering). Humans fall
+// through to the normal client-rendered app below. Content is identical → not cloaking.
+app.use((req, res, next) => {
+    if (req.method !== 'GET') return next();
+    if (req.path.includes('.')) return next();                       // assets/files → let static handle
+    res.set('Vary', 'User-Agent');                                   // response differs by UA → keep caches honest
+    if (!BOT_UA_RE.test(req.headers['user-agent'] || '')) return next();
+    const file = snapshotFileForPath(req.path);
+    fs.access(file, fs.constants.F_OK, (err) => {
+        if (err) return next();                                       // no snapshot → normal SSR path
+        res.set('X-Prerendered', '1');
+        res.sendFile(file);
+    });
 });
 
 // Serve static assets. index:false so "/" falls through to the SEO-injecting

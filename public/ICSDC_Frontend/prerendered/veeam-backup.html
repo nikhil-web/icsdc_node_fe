@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark"><head>
+  <!-- Google Tag Manager -->
+  
+  <!-- End Google Tag Manager -->
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/assets/images/main_logo.png">
+  <title>Veeam Backup &amp; Recovery by ICSDC | Managed Data Protection</title>
+  <meta name="description" content="Protect critical business data with ICSDC Veeam Backup services. Managed backup and recovery for virtual, physical, and cloud workloads with 24/7 support.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-components.css">
+  <link rel="stylesheet" href="assets/css/veeam-backup.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+    <link rel="canonical" href="https://icsdc.com/veeam-backup">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ICSDC">
+    <meta property="og:title" content="Veeam Backup &amp; Recovery by ICSDC | Managed Data Protection">
+    <meta property="og:description" content="Protect critical business data with ICSDC Veeam Backup services. Managed backup and recovery for virtual, physical, and cloud workloads with 24/7 support.">
+    <meta property="og:url" content="https://icsdc.com/veeam-backup">
+    <meta property="og:image" content="https://icsdc.com/assets/images/main_logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Veeam Backup &amp; Recovery by ICSDC | Managed Data Protection">
+    <meta name="twitter:description" content="Protect critical business data with ICSDC Veeam Backup services. Managed backup and recovery for virtual, physical, and cloud workloads with 24/7 support.">
+    <meta name="twitter:image" content="https://icsdc.com/assets/images/main_logo.png">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://icsdc.com/#organization","name":"ICSDC","alternateName":"Indian Cloud Services & Data Centre","url":"https://icsdc.com","logo":"https://icsdc.com/assets/images/main_logo.png"},{"@type":"WebSite","@id":"https://icsdc.com/#website","url":"https://icsdc.com","name":"ICSDC","publisher":{"@id":"https://icsdc.com/#organization"},"inLanguage":"en"},{"@type":"WebPage","@id":"https://icsdc.com/veeam-backup#webpage","url":"https://icsdc.com/veeam-backup","name":"Veeam Backup & Recovery by ICSDC | Managed Data Protection","description":"Protect critical business data with ICSDC Veeam Backup services. Managed backup and recovery for virtual, physical, and cloud workloads with 24/7 support.","isPartOf":{"@id":"https://icsdc.com/#website"},"inLanguage":"en"}]}</script>
+</head>
+
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MXV9SGZS" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader" class="loader-done loader-hidden">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">✕</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainlogo="" data-strapi="mainLogo" src="https://admin.icsdc.com/uploads/main_logo_2_35297854fa.png" alt="Main Logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav="" class="nav-links" id="nav-links"><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('619', this)">
+                Services
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('615', this)">
+                Web Hosting
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('616', this)">
+                Domain
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('620', this)">
+                Backup &amp; Security
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('617', this)">
+                Public Cloud
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('618', this)">
+                Resources
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item"><a class="nav-link nav-link--direct" href="/pricing.html">Pricing </a></li></ul>
+      <div class="nav-search" id="nav-search"><button class="nav-search-trigger" aria-label="Search pages" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg></button><div class="nav-search-panel" role="dialog" aria-label="Page search" hidden=""><div class="nav-search-input-wrap"><svg class="nav-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg><input type="search" class="nav-search-input" placeholder="Search pages…" autocomplete="off" spellcheck="false"><kbd class="nav-search-kbd">ESC</kbd></div><div class="nav-search-results" role="listbox"></div></div></div><button id="theme-toggle" aria-label="Switch to light mode" title="Toggle dark / light mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button><button class="btn-login desktop-login-btn"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i><span>Login </span></button><button id="wa-nav-btn" type="button" class="btn-wa-nav" aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span> WhatsApp</span></button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true"><div class="mobile-search-bar" id="mobile-search-bar"><div class="mobile-search-input-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg><input type="search" class="mobile-search-input" placeholder="Search pages…" autocomplete="off" spellcheck="false"></div><div class="mobile-search-results"></div></div>
+      <ul data-strapi-nav-mobile="" class="mobile-nav-links" id="mobile-nav-links"><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('619', this); closeMobileMenu()">
+                Services
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('615', this); closeMobileMenu()">
+                Web Hosting
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('616', this); closeMobileMenu()">
+                Domain
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('620', this); closeMobileMenu()">
+                Backup &amp; Security
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('617', this); closeMobileMenu()">
+                Public Cloud
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('618', this); closeMobileMenu()">
+                Resources
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item"><a class="nav-link nav-link--direct" href="/pricing.html">Pricing </a></li></ul>
+      <div class="mobile-cta-row"><button class="btn-login mobile-login-btn"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i><span>Login </span></button><button id="wa-nav-btn-mobile" type="button" class="btn-wa-nav btn-wa-nav--mobile" aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span> WhatsApp</span></button></div>
+    <div class="mobile-theme-row"><span class="mobile-theme-label">Light Mode</span><button class="mobile-theme-toggle" aria-label="Switch to light mode" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button></div></div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">Veeam Backup &amp; Recovery for Mission-Critical Workloads</h1>
+        <p class="hero-sub">Get Complete Backup, Fast Recovery, Zero Data Worries</p>
+        <p class="hero-desc">Protect your critical business data with Veeam's powerful backup and recovery solutions. Ensure fast restores, strong security, and uninterrupted operations across on-premises and cloud environments.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="window.location.href='#veeam-plans'">Get Started With Veeam Backup </button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img class="hero-right-image" alt="" style="" src="https://admin.icsdc.com/uploads/medium_veeam_backup_authorized_partner_aa7b1fa426.png">
+        <div class="veeam-hero-visual" style="display: none;">
+          <div class="veeam-top-badge">🛡 ICSDC Managed Veeam</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#eff6ff" stroke="rgba(26, 86, 219,0.12)" stroke-width="1"></rect>
+            <!-- Shield body -->
+            <path d="M150 30 L200 52 L200 110 Q200 155 150 180 Q100 155 100 110 L100 52 Z" fill="white" stroke="rgba(26, 86, 219,0.30)" stroke-width="2"></path>
+            <!-- Shield fill gradient -->
+            <path d="M150 38 L192 57 L192 110 Q192 148 150 170 Q108 148 108 110 L108 57 Z" fill="#dbeafe" stroke="none"></path>
+            <!-- Checkmark inside shield -->
+            <polyline points="130,107 144,121 172,90" stroke="#1a56db" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></polyline>
+            <!-- Data flow arrows — left cycle -->
+            <path d="M68 90 Q52 90 52 110 Q52 130 68 130" stroke="rgba(26, 86, 219,0.35)" stroke-width="2" fill="none" stroke-dasharray="5 3"></path>
+            <polyline points="65,84 68,90 62,94" stroke="rgba(26, 86, 219,0.50)" stroke-width="2" fill="none" stroke-linejoin="round"></polyline>
+            <!-- Data flow arrows — right cycle -->
+            <path d="M232 90 Q248 90 248 110 Q248 130 232 130" stroke="rgba(26, 86, 219,0.35)" stroke-width="2" fill="none" stroke-dasharray="5 3"></path>
+            <polyline points="235,84 232,90 238,94" stroke="rgba(26, 86, 219,0.50)" stroke-width="2" fill="none" stroke-linejoin="round"></polyline>
+            <!-- Backup icon boxes at bottom -->
+            <rect x="38" y="155" width="50" height="28" rx="6" fill="white" stroke="rgba(26, 86, 219,0.22)" stroke-width="1.2"></rect>
+            <text x="63" y="165" font-size="6" fill="#1a56db" text-anchor="middle" font-weight="600">VM Backup</text>
+            <text x="63" y="175" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="700">✓
+              Active</text>
+
+            <rect x="98" y="155" width="50" height="28" rx="6" fill="white" stroke="rgba(26, 86, 219,0.22)" stroke-width="1.2"></rect>
+            <text x="123" y="165" font-size="6" fill="#1a56db" text-anchor="middle" font-weight="600">Cloud Bkp</text>
+            <text x="123" y="175" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="700">✓
+              Secure</text>
+
+            <rect x="158" y="155" width="50" height="28" rx="6" fill="white" stroke="rgba(26, 86, 219,0.22)" stroke-width="1.2"></rect>
+            <text x="183" y="165" font-size="6" fill="#1a56db" text-anchor="middle" font-weight="600">Immutable</text>
+            <text x="183" y="175" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="700">✓
+              Locked</text>
+
+            <rect x="218" y="155" width="50" height="28" rx="6" fill="white" stroke="rgba(26, 86, 219,0.22)" stroke-width="1.2"></rect>
+            <text x="243" y="165" font-size="6" fill="#1a56db" text-anchor="middle" font-weight="600">Recovery</text>
+            <text x="243" y="175" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="700">✓
+              Ready</text>
+            <!-- Corner accent dots -->
+            <circle cx="28" cy="28" r="4" fill="#bfdbfe" opacity="0.7"></circle>
+            <circle cx="272" cy="28" r="4" fill="#bfdbfe" opacity="0.7"></circle>
+            <circle cx="28" cy="192" r="3" fill="#93c5fd" opacity="0.5"></circle>
+            <circle cx="272" cy="192" r="3" fill="#93c5fd" opacity="0.5"></circle>
+          </svg>
+          <div class="veeam-status-badge">
+            <div class="veeam-dot"></div>
+            <div>
+              <div class="veeam-bt">Recovery Ready</div>
+              <div class="veeam-bs">24/7 Monitored</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — PILLARS (4 WHY-US CARDS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid is-visible" data-stagger=""><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-database" aria-hidden="true"></i></div><h3>Reliable Data Backup</h3><p>Automated and consistent backups for virtual, physical, and cloud workloads.</p></div><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div><h3>Instant &amp; Granular Recovery</h3><p>Recover full systems or individual files in minutes with minimal downtime.</p></div><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-shield" aria-hidden="true"></i></div><h3>Ransomware Protection</h3><p>Secure backups with encryption, immutability, and controlled access.</p></div><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div><h3>Cloud &amp; Hybrid Support</h3><p>Protect data across on-prem, cloud, and hybrid environments from one platform.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ PRICING ════ -->
+  <section id="veeam-plans" class="section cloud-pricing-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Pricing That Matches Your Infrastructure &amp; Risk Profile</h2>
+      <p class="subtitle is-visible" data-animate="fade-up">Get customized Veeam Backup pricing based on workload type, storage
+        requirements, and RPO/RTO goals — backed by ICSDC managed services.</p>
+      <div class="cloud-pricing-grid is-visible" data-stagger=""><div class="cloud-plan-card"><div class="cloud-plan-tier">Essential Backup</div><div class="cloud-plan-price-wrap"><span class="cloud-plan-currency">₹</span><span class="cloud-plan-price">99</span><span class="cloud-plan-period">/mo</span></div><p class="cloud-plan-tagline">For single workloads &amp; small environments</p><hr class="cloud-plan-divider"><ul class="cloud-plan-features"><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Managed Veeam backup setup</li><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Daily automated backups</li><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Immutable storage</li><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Email support</li></ul><button class="cloud-plan-cta cloud-plan-cta-outline">Get a Quote</button></div><div class="cloud-plan-card cloud-featured"><span class="cloud-plan-badge">Most Popular</span><div class="cloud-plan-tier">Business Continuity</div><div class="cloud-plan-price-wrap"><span class="cloud-plan-currency">₹</span><span class="cloud-plan-price">999</span><span class="cloud-plan-period">/mo</span></div><p class="cloud-plan-tagline">For growing teams &amp; mixed workloads</p><hr class="cloud-plan-divider"><ul class="cloud-plan-features"><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Everything in Essential</li><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>24/7 monitoring &amp; maintenance</li><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Assisted recovery &amp; restore testing</li><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Ransomware hardening</li><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Compliance reporting</li></ul><button class="cloud-plan-cta cloud-plan-cta-primary">Get a Quote</button></div><div class="cloud-plan-card"><div class="cloud-plan-tier">Enterprise Resilience</div><div class="cloud-plan-price-wrap"><span class="cloud-plan-currency">₹</span><span class="cloud-plan-price">9999</span><span class="cloud-plan-period">/mo</span></div><p class="cloud-plan-tagline">For mission-critical &amp; hybrid/multi-cloud</p><hr class="cloud-plan-divider"><ul class="cloud-plan-features"><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Everything in Business Continuity</li><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Custom RPO/RTO design</li><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Multi-site &amp; multi-cloud protection</li><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Dedicated recovery support</li><li class="cloud-plan-feature"><span class="cloud-plan-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Single point of contact</li></ul><button class="cloud-plan-cta cloud-plan-cta-outline">Get a Quote</button></div></div>
+    </div>
+  </section>
+
+  <!-- ════ SECTION 3 — WHY BUSINESSES TRUST VEEAM (9 CARDS) ════ -->
+  <section id="veeam-features" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Why Businesses Trust Veeam for Modern Data Protection</h2>
+      <p class="subtitle is-visible" data-animate="fade-up">Veeam delivers enterprise-grade data protection across every layer of your infrastructure.</p>
+
+      <div class="veeam-features-grid is-visible" data-stagger="" id="veeam-features-grid"><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-clock" aria-hidden="true"></i></div><h3>Near-Zero Downtime Recovery</h3><p>Veeam enables fast and reliable recovery of systems, applications, and data, ensuring business operations continue even during failures or cyber incidents.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-gear" aria-hidden="true"></i></div><h3>Intelligent Backup Automation</h3><p>Automated, policy-based backups remove manual dependency, reduce errors, and ensure your data is protected consistently without daily intervention.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-shield" aria-hidden="true"></i></div><h3>Ransomware-Resilient Backups</h3><p>With immutable backup storage and advanced security controls, Veeam safeguards your data from ransomware, unauthorized deletion, and malicious tampering.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-globe" aria-hidden="true"></i></div><h3>Wide Infrastructure Coverage</h3><p>Veeam protects virtual machines, physical servers, cloud workloads, and SaaS platforms through a single, unified backup solution.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-check" aria-hidden="true"></i></div><h3>Application-Consistent Protection</h3><p>Built-in application awareness ensures reliable backups for critical workloads like databases and enterprise applications without data corruption.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-database" aria-hidden="true"></i></div><h3>Optimized Storage Efficiency</h3><p>Advanced compression and deduplication technologies significantly reduce storage consumption while maintaining high backup performance.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-chart-bar" aria-hidden="true"></i></div><h3>Centralized Monitoring &amp; Reporting</h3><p>Gain complete visibility into backup health, compliance, and recovery readiness through a centralized management dashboard.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-lock" aria-hidden="true"></i></div><h3>End-to-End Data Encryption</h3><p>Enterprise-grade encryption secures data both in transit and at rest, helping meet regulatory and compliance requirements.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i></div><h3>Designed to Scale Seamlessly</h3><p>Veeam grows with your business, allowing you to protect expanding workloads and data volumes without changing your backup strategy.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — ICSDC vs DIRECT VEEAM COMPARISON TABLE ════ -->
+  <section id="veeam-compare" class="section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Why Choose ICSDC for Veeam Backup Services?</h2>
+
+      <div class="veeam-compare-table-wrap is-visible" data-animate="fade-up">
+        <table class="veeam-compare-table" aria-label="ICSDC Managed Veeam vs Direct Veeam comparison">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="veeam-col-icsdc">ICSDC Managed Veeam</th>
+              <th>Direct Veeam</th>
+            </tr>
+          </thead>
+          <tbody id="veeam-compare-tbody"><tr><td>Deployment &amp; Setup</td><td class="veeam-col-icsdc">Fully handled by ICSDC experts</td><td>User-managed setup</td></tr><tr><td>Ongoing Management</td><td class="veeam-col-icsdc">24/7 monitoring and maintenance</td><td>Self-managed</td></tr><tr><td>Backup Strategy Design</td><td class="veeam-col-icsdc">Customized to your workload and risk profile</td><td>Generic configuration</td></tr><tr><td>Ransomware Readiness</td><td class="veeam-col-icsdc">Proactive security hardening and immutability setup</td><td>Depends on user configuration</td></tr><tr><td>Recovery Support</td><td class="veeam-col-icsdc">Assisted restores with expert guidance</td><td>Self-service recovery</td></tr><tr><td>Compliance &amp; Reporting</td><td class="veeam-col-icsdc">Regular health checks and compliance reports</td><td>Limited out-of-the-box reporting</td></tr><tr><td>Cost Predictability</td><td class="veeam-col-icsdc">Bundled pricing with managed services</td><td>Licensing only</td></tr><tr><td>Single Point of Contact</td><td class="veeam-col-icsdc">One team for backup, recovery, and support</td><td>Vendor-only support</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FROM PROACTIVE DEFENSE TO CONFIDENT RECOVERY ════ -->
+  <section id="veeam-proactive" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">From Proactive Defense to Confident Recovery</h2>
+      <p class="subtitle is-visible" data-animate="fade-up">Detect potential threats early, validate trusted backup states, and
+        restore workloads securely across on-premises, cloud, or hybrid environments with full governance and
+        visibility.</p>
+      <div class="cloud-power-grid is-visible" data-stagger="" id="veeam-proactive-grid"><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-clock" aria-hidden="true"></i></div><h3>Recovery That Meets Business-Critical Timelines</h3><p>Maintain strict recovery targets with rapid restore technologies, automated verification, and coordinated recovery workflows across any infrastructure.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-shield" aria-hidden="true"></i></div><h3>Ransomware Resilience by Design</h3><p>Enforce strict access controls, multi-level approvals, and tamper-proof storage to protect backup data and minimize the risk of compromise or reinfection.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div><h3>Unified Protection for Hybrid &amp; Multi-Cloud Environments</h3><p>Protect workloads wherever they run with centralized policies, intelligent data tiering, cost-optimized storage, and seamless recovery across platforms.</p></div></div>
+      <div class="veeam-proactive-img">
+        <img id="veeam-proactive-img" src="" alt="Proactive defense to confident recovery" loading="lazy" style="display:none">
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ SECTION 5 — CYBER THREAT STATS ════ -->
+  <section id="veeam-stats" class="section veeam-stats-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Backup &amp; Recovery Built to Resist Modern Malware</h2>
+      <p class="subtitle is-visible" data-animate="fade-up">Cyber attackers increasingly target backup environments. ICSDC strengthens your backup strategy with immutable storage, verified recovery points, and strict access governance to ensure reliable recovery even during active threats.</p>
+
+      <p class="veeam-stats-lead is-visible" data-animate="fade-up" id="veeam-stats-lead">The Reality of Today’s Cyber
+        Threat Landscape</p>
+
+      <div class="veeam-stats-grid is-visible" data-stagger="" id="veeam-stats-grid"><div class="veeam-stat-card"><div class="veeam-stat-number">Malware Incidents on the Rise</div><p class="veeam-stat-desc">69% of organizations experienced at least one malware or ransomware incident in the past year.</p></div><div class="veeam-stat-card"><div class="veeam-stat-number">Backups Under Direct Attack</div><p class="veeam-stat-desc">89% of affected organizations reported attempts to compromise backup repositories during an attack.</p></div><div class="veeam-stat-card"><div class="veeam-stat-number">Immutability Still Underused</div><p class="veeam-stat-desc">Only 32% had immutable backup storage enabled before initiating recovery.</p></div><div class="veeam-stat-card"><div class="veeam-stat-number">Incident Readiness Gaps</div><p class="veeam-stat-desc">Just 30% of organizations had a predefined incident response workflow and approval process in place.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — HOW IT WORKS (5 STEPS) ════ -->
+  <section id="veeam-how" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">How ICSDC Backup &amp; Recovery Works</h2>
+
+      <div class="veeam-steps-grid is-visible" data-stagger="" id="veeam-steps-grid"><div class="veeam-step-card"><div class="veeam-step-num">1</div><h3>Assess &amp; Design</h3><p>We analyze your infrastructure, data criticality, and compliance needs to design a backup and recovery strategy aligned with your business goals.</p></div><div class="veeam-step-card"><div class="veeam-step-num">2</div><h3>Secure Backup Setup</h3><p>ICSDC configures automated backups with encryption, immutability, and access controls across on-premises, cloud, or hybrid environments.</p></div><div class="veeam-step-card"><div class="veeam-step-num">3</div><h3>Continuous Monitoring</h3><p>Backups are continuously monitored for health, performance, and anomalies to ensure recoverability at all times.</p></div><div class="veeam-step-card"><div class="veeam-step-num">4</div><h3>Verify Restore Readiness</h3><p>Recovery points are regularly validated to confirm data integrity and ensure clean, usable restores when needed.</p></div><div class="veeam-step-card"><div class="veeam-step-num">5</div><h3>Rapid Recovery Execution</h3><p>In the event of data loss or cyber incidents, our experts assist with fast, controlled recovery to meet RPO and RTO objectives.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — WHY CHOOSE ICSDC (8 CARDS) ════ -->
+  <section id="veeam-why" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Why Choose ICSDC for Veeam Backup &amp; Recovery?</h2>
+      <p class="subtitle is-visible" data-animate="fade-up"></p>
+
+      <div class="cloud-power-grid is-visible" data-stagger="" id="veeam-why-grid"><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-headset" aria-hidden="true"></i></div><h3>Managed by Backup Experts</h3><p>Our certified specialists design, deploy, and manage your Veeam environment so your backups are always optimized, secure, and recovery-ready.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-shield" aria-hidden="true"></i></div><h3>Security-First Architecture</h3><p>ICSDC implements immutability, zero-trust access, encryption, and multi-layer approvals to protect backups from ransomware and internal threats.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-check" aria-hidden="true"></i></div><h3>Business-Aligned Recovery Goals</h3><p>We configure backup policies to meet your exact RPOs and RTOs, ensuring data protection supports real business continuity needs.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-clock" aria-hidden="true"></i></div><h3>24/7 Monitoring &amp; Proactive Support</h3><p>Your backup environment is monitored around the clock, with proactive issue resolution before failures impact recovery.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div><h3>Hybrid &amp; Cloud Expertise</h3><p>Protect workloads across on-premises, cloud, and hybrid platforms with seamless management and portable recovery options.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div><h3>Assisted Recovery When It Matters Most</h3><p>During incidents, ICSDC experts guide and execute restores to minimize downtime and operational stress.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-file" aria-hidden="true"></i></div><h3>Transparent Reporting &amp; Compliance Readiness</h3><p>Receive clear reports, audit-ready logs, and recovery testing insights for compliance and internal assurance.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-gear" aria-hidden="true"></i></div><h3>One Partner, End-to-End Responsibility</h3><p>From strategy to recovery, ICSDC serves as a single point of accountability - no vendor handoffs, no confusion.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ RELATED SERVICES — Managed Cloud Hosting + DRaaS ════ -->
+  <section id="veeam-related" class="section veeam-related-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Explore Related ICSDC Services</h2>
+      <div class="veeam-related-grid is-visible" data-stagger="" id="veeam-related-grid">
+        <div class="veeam-related-card is-visible" data-animate="fade-up">
+          <h3>Managed Cloud Hosting</h3>
+          <p>Run your applications on secure, high-performance cloud infrastructure managed end-to-end by ICSDC, with
+            built-in monitoring, security, and scalability.</p>
+          <a href="/managed-cloud-hosting" class="veeam-related-btn">Explore Managed Cloud Hosting</a>
+        </div>
+        <div class="veeam-related-card is-visible" data-animate="fade-up">
+          <h3>Disaster Recovery as a Service (DRaaS)</h3>
+          <p>Ensure business continuity with rapid failover, tested recovery plans, and expert-managed disaster recovery
+            across cloud and hybrid environments.</p>
+          <a href="/contact-us" class="veeam-related-btn">View DRaaS Solutions</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ SECTION 8 — WHO SHOULD CHOOSE (9 CARDS) ════ -->
+  <section id="veeam-who" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Who should choose ICSDC Veeam Backup?</h2>
+      <p class="subtitle is-visible" data-animate="fade-up"></p>
+
+      <div class="cloud-use-grid is-visible" data-stagger="" id="veeam-who-grid"><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-shield" aria-hidden="true"></i></div><h3>Ransomware Recovery for Live Production Systems</h3><p>Quickly restore business-critical servers and applications after ransomware or malware attacks without rebuilding entire environments.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-server" aria-hidden="true"></i></div><h3>Virtual Machine Protection in Active Data Centers</h3><p>Continuously back up running virtual machines to ensure fast recovery during hardware failures or unexpected outages.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div><h3>Cloud Workload Backup &amp; Restore</h3><p>Protect workloads running on public or private cloud platforms and restore them across environments when needed.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-database" aria-hidden="true"></i></div><h3>Database &amp; Application-Level Recovery</h3><p>Restore specific databases, tables, or application components without impacting full systems.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-globe" aria-hidden="true"></i></div><h3>Business Continuity for E-Commerce Platforms</h3><p>Ensure high availability and fast recovery for online stores during peak sales periods or infrastructure disruptions.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-lock" aria-hidden="true"></i></div><h3>SaaS Data Protection</h3><p>Back up critical data from platforms like Microsoft 365 to prevent loss from accidental deletion or security incidents.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-file" aria-hidden="true"></i></div><h3>Compliance &amp; Audit Readiness</h3><p>Maintain verifiable backup records, logs, and reports to meet regulatory and audit requirements.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-code" aria-hidden="true"></i></div><h3>Development &amp; Testing Rollbacks</h3><p>Quickly revert environments to known stable states during application testing or failed deployments.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-gear" aria-hidden="true"></i></div><h3>Disaster Recovery Across Sites</h3><p>Replicate data to secondary locations and recover operations rapidly during site-level failures or natural disasters.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="veeam-testi-heading">
+    <div class="testi-container">
+      <h2 id="veeam-testi-heading" class="testi-title">Read ICSDC Veeam Backup Client Stories</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"><article class="testi-card" role="listitem" data-testi-index="0" aria-label="Testimonial from Rahul Mehta"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">RM</span></div><div class="testi-client-info"><p class="testi-name">Rahul Mehta</p><p class="testi-job">IT Manager, Manufacturing Enterprise</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">Veeam backup managed by ICSDC helped us recover critical systems within hours after a ransomware incident. Their team handled everything calmly and efficiently, which made a huge difference during a stressful time.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="1" aria-label="Testimonial from Sneha Kulkarni"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">SK</span></div><div class="testi-client-info"><p class="testi-name">Sneha Kulkarni</p><p class="testi-job">Head of Technology, Fintech Startup</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">Before ICSDC, backups were running but we were never confident about recovery. With their Veeam setup and regular verification, we now know our data is actually recoverable.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="2" aria-label="Testimonial from Amit Verma"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">AV</span></div><div class="testi-client-info"><p class="testi-name">Amit Verma</p><p class="testi-job">Infrastructure Lead, BFSI Organization</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">ICSDC designed our backup strategy around compliance needs and audit reporting. The visibility and control we get with Veeam has simplified our audits significantly.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="3" aria-label="Testimonial from Neeraj Singh"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">NS</span></div><div class="testi-client-info"><p class="testi-name">Neeraj Singh</p><p class="testi-job">Cloud Operations Manager, SaaS Company</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">We operate in a hybrid environment and ICSDC ensures seamless Veeam backups across on-prem and cloud workloads. Recovery testing gave us confidence we never had earlier.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="4" aria-label="Testimonial from Pooja Sharma"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">PS</span></div><div class="testi-client-info"><p class="testi-name">Pooja Sharma</p><p class="testi-job">Systems Administrator, E Commerce Business</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">When our primary server failed unexpectedly, ICSDC assisted with instant recovery using Veeam. Downtime was minimal and business operations continued without major impact.</blockquote></div></article></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"><button class="testi-dot testi-dot-active" role="tab" aria-selected="true" aria-label="Go to testimonial 1" data-dot="0"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 2" data-dot="1"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 3" data-dot="2"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 4" data-dot="3"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 5" data-dot="4"></button></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">‹</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">›</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 10 — FAQ ════ -->
+  <section class="faq-section" id="veeam-faq" aria-labelledby="veeam-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="veeam-faq-heading" class="faq-title">FAQs about ICSDC Veeam Backup</h2>
+        <div class="faq-grid">
+          <div class="faq-accordions" id="faq-accordions"><details class="faq-item" open=""><summary class="faq-q"><span class="faq-num">01</span><span class="faq-q-text">What workloads can ICSDC protect using Veeam Backup?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">ICSDC protects virtual machines, physical servers, cloud workloads, and SaaS data such as Microsoft 365 using Veeam-powered backup solutions.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">02</span><span class="faq-q-text">Is Veeam Backup secure against ransomware attacks?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Yes. ICSDC implements immutable storage, encryption, and strict access controls to protect backups from ransomware and unauthorized changes.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">03</span><span class="faq-q-text">Can ICSDC manage backups across hybrid or multi-cloud environments?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Absolutely. ICSDC designs and manages Veeam backups across on-premises, cloud, and hybrid infrastructures with centralized control.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">04</span><span class="faq-q-text">How fast can data be restored in case of failure?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Recovery times depend on workload size and configuration, but Veeam enables instant recovery for many workloads to minimize downtime.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">05</span><span class="faq-q-text">Does ICSDC provide ongoing monitoring and support?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Yes. ICSDC offers 24/7 monitoring, proactive issue resolution, and expert-assisted recovery when required.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">06</span><span class="faq-q-text">Can backup policies be customized for my business needs?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Yes. Backup frequency, retention, and recovery objectives are tailored to your business, compliance, and operational requirements.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">07</span><span class="faq-q-text">Will ICSDC assist during audits and compliance checks?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Yes. ICSDC provides audit-ready reports, logs, and backup health documentation to support compliance requirements.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">08</span><span class="faq-q-text">How is pricing determined for ICSDC Veeam Backup services?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Pricing is based on workloads protected, storage requirements, recovery objectives, and the level of managed services required.</div></div></details></div>
+          <aside class="faq-aside">
+            <div class="faq-illo"><svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="faqCardAveeambackup" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#1a56db" stop-opacity="0.35"></stop>
+                    <stop offset="1" stop-color="#1a56db" stop-opacity="0.05"></stop>
+                  </linearGradient>
+                  <linearGradient id="faqCardBveeambackup" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#3b82f6"></stop>
+                    <stop offset="1" stop-color="#1a56db"></stop>
+                  </linearGradient>
+                  <radialGradient id="faqGlowveeambackup" cx="0.5" cy="0.5" r="0.5">
+                    <stop offset="0" stop-color="#3b82f6" stop-opacity="0.20"></stop>
+                    <stop offset="1" stop-color="#3b82f6" stop-opacity="0"></stop>
+                  </radialGradient>
+                </defs>
+                <circle cx="160" cy="160" r="140" fill="url(#faqGlowveeambackup)"></circle>
+                <g transform="rotate(-8 160 160)">
+                  <rect x="60" y="100" width="200" height="60" rx="10" fill="url(#faqCardAveeambackup)" stroke="rgba(59,130,246,0.30)" stroke-width="1.5"></rect>
+                  <rect x="80" y="118" width="120" height="6" rx="3" fill="rgba(26,86,219,0.30)"></rect>
+                  <rect x="80" y="132" width="80" height="6" rx="3" fill="rgba(26,86,219,0.18)"></rect>
+                  <circle cx="230" cy="130" r="10" fill="rgba(59,130,246,0.25)" stroke="rgba(59,130,246,0.50)" stroke-width="1.5"></circle>
+                  <path d="M226 130 L230 134 L236 126" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                </g>
+                <g transform="rotate(3 160 160)">
+                  <rect x="55" y="140" width="210" height="64" rx="11" fill="rgba(26,86,219,0.05)" stroke="rgba(26,86,219,0.20)" stroke-width="1.5"></rect>
+                  <rect x="76" y="159" width="140" height="6" rx="3" fill="rgba(26,86,219,0.35)"></rect>
+                  <rect x="76" y="173" width="100" height="6" rx="3" fill="rgba(26,86,219,0.18)"></rect>
+                  <circle cx="236" cy="172" r="10" fill="rgba(26,86,219,0.10)" stroke="rgba(26,86,219,0.25)" stroke-width="1.5"></circle>
+                  <path d="M232 172 L236 176 L242 168" stroke="rgba(26,86,219,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                </g>
+                <g transform="translate(0, 18)">
+                  <rect x="50" y="180" width="220" height="68" rx="12" fill="rgba(59,130,246,0.10)" stroke="rgba(59,130,246,0.55)" stroke-width="1.5"></rect>
+                  <rect x="74" y="200" width="150" height="7" rx="3.5" fill="rgba(26,86,219,0.85)"></rect>
+                  <rect x="74" y="216" width="110" height="6" rx="3" fill="rgba(26,86,219,0.40)"></rect>
+                  <circle cx="244" cy="214" r="12" fill="url(#faqCardBveeambackup)"></circle>
+                  <path d="M238 217 L244 211 L250 217" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                </g>
+                <g transform="translate(36 36)">
+                  <circle cx="0" cy="0" r="28" fill="url(#faqCardBveeambackup)" stroke="rgba(59,130,246,0.40)" stroke-width="3"></circle><text x="0" y="10" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="34" font-weight="800" fill="white">?</text>
+                </g>
+                <circle cx="278" cy="60" r="5" fill="#f59e0b"></circle>
+                <circle cx="298" cy="80" r="3" fill="#f59e0b" opacity="0.6"></circle>
+                <circle cx="40" cy="270" r="4" fill="#4fd1c5" opacity="0.8"></circle>
+                <circle cx="280" cy="270" r="5" fill="#3b82f6" opacity="0.6"></circle>
+              </svg></div>
+            <div class="faq-aside-copy">
+              <h3 class="faq-aside-h">Didn't find your answer?</h3>
+              <p class="faq-aside-p">Our team is happy to help — reach out and we'll respond within minutes.</p>
+              <a href="/contact-us.html" class="faq-aside-link">Talk to our team <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg></a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark" id="veeam-cta2">
+    <div class="cloud-cta-inner">
+      <h2>Talk to Our Veeam Backup Team</h2>
+      <p>Start Protecting Your Business Data with Veeam.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="if(window.openContactPopup){window.openContactPopup();}return false;">Contact Us </button>
+        
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" id="site-footer" role="contentinfo">
+        <!-- ── Link columns ─────────────────────────────────── -->
+        <div class="footer-links-section">
+            <div class="footer-links-grid" data-strapi-link-groups="">
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Dedicated Server</h3>
+                <ul><li><a class="footer-link" href="/windows-dedicated-server.html">Windows Dedicated Server</a></li><li><a class="footer-link" href="/linux-dedicated-server.html">Linux Dedicated Server</a></li><li><a class="footer-link" href="/managed-dedicated-server.html">Managed Dedicated Server</a></li><li><a class="footer-link" href="/nvme-dedicated-servers.html">NVMe Dedicated Server</a></li><li><a class="footer-link" href="/gpu-dedicated-server.html">GPU Dedicated Server</a></li><li><a class="footer-link" href="/bare-metal-server.html">Bare Metal Server</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">VPS Hosting</h3>
+                <ul><li><a class="footer-link" href="/windows-vps-hosting.html">Windows VPS Hosting</a></li><li><a class="footer-link" href="/linux-vps-hosting.html">Linux VPS Hosting</a></li><li><a class="footer-link" href="/managed-vps-hosting.html">Managed VPS Hosting</a></li><li><a class="footer-link" href="/vps-cpanel.html">VPS cPanel Hosting</a></li><li><a class="footer-link" href="/forex-vps.html">Forex VPS</a></li><li><a class="footer-link" href="/virtual-machine.html">Virtual Machine</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Cloud Hosting</h3>
+                <ul><li><a class="footer-link" href="/cloud-hosting.html">Cloud Hosting</a></li><li><a class="footer-link" href="/managed-cloud-hosting.html">Managed Cloud Hosting</a></li><li><a class="footer-link" href="/linux-cloud-hosting.html">Linux Cloud Hosting</a></li><li><a class="footer-link" href="/windows-cloud-hosting.html">Windows Cloud Hosting</a></li><li><a class="footer-link" href="/gpu-cloud-hosting.html">GPU Cloud Hosting</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Web Hosting</h3>
+                <ul><li><a class="footer-link" href="/web-hosting.html">Web Hosting</a></li><li><a class="footer-link" href="/shared-hosting.html">Shared Hosting</a></li><li><a class="footer-link" href="/wordpress-hosting.html">WordPress Hosting</a></li><li><a class="footer-link" href="/reseller-hosting.html">Reseller Hosting</a></li><li><a class="footer-link" href="/cpanel-hosting.html">cPanel Hosting</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Public Cloud</h3>
+                <ul><li><a class="footer-link" href="/aws-cloud-hosting.html">AWS</a></li><li><a class="footer-link" href="/azure-cloud-hosting.html">Azure</a></li><li><a class="footer-link" href="/google-cloud-hosting.html">Google Cloud Platform</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Backup &amp; Security</h3>
+                <ul><li><a class="footer-link" href="/acronis-backup.html">Acronis Backup</a></li><li><a class="footer-link" href="/veeam-backup.html">Veeam Backup</a></li><li><a class="footer-link" href="/cloud-storage.html">Cloud Storage</a></li><li><a class="footer-link" href="/ssl-certificate.html">SSL Certificate</a></li><li><a class="footer-link" href="/firewall-security.html">Firewall Security</a></li><li><a class="footer-link" href="/pam-mfa.html">PAM / MFA</a></li><li><a class="footer-link" href="/vapt.html">VAPT</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Business Apps</h3>
+                <ul><li><a class="footer-link" href="/email-hosting.html">Email Hosting</a></li><li><a class="footer-link" href="/google-workspace.html">Google Workspace</a></li><li><a class="footer-link" href="/microsoft-365.html">Microsoft 365</a></li><li><a class="footer-link" href="/tally-on-cloud.html">Tally on Cloud</a></li><li><a class="footer-link" href="/zimbra-hosting.html">Zimbra Hosting</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Domain</h3>
+                <ul><li><a class="footer-link" href="/domain-registration.html">Domain Registration</a></li><li><a class="footer-link" href="/domain-transfer.html">Domain Transfer</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Company</h3>
+                <ul><li><a class="footer-link" href="/about-us.html">About Us</a></li><li><a class="footer-link" href="/contact-us.html">Contact Us</a></li><li><a class="footer-link" href="/pricing.html">Pricing</a></li></ul>
+            </div>
+        </div>
+        </div>
+
+        <!-- ── Brand bar ────────────────────────────────────── -->
+        <div class="footer-brand-bar">
+            <div class="footer-brand-inner">
+
+                <div class="footer-brand-left">
+                    <a href="/" aria-label="ICSDC Home" class="footer-logo-link">
+                        <img data-strapi-logo="" src="https://admin.icsdc.com/uploads/icsdc_logo_white_03e0f23088.png" alt="Logo" class="footer-logo">
+                    </a>
+                    <address class="footer-address">
+                        <span data-strapi-footer-address="">Plot No. 21 &amp; 21A, <br> 
+6th Floor, Sector 142, Noida, Uttar Pradesh 201304</span>
+                        <span data-strapi-footer-phone="" class="footer-phone">+91 9810958857</span>
+                        <span class="footer-email-wrap">
+                            Email: <a data-strapi-footer-email="" href="mailto:info@icsdc.com" class="footer-email-link">info@icsdc.com</a>
+                        </span>
+                    </address>
+                </div>
+
+                <div class="footer-brand-right">
+                    <div class="footer-social" data-strapi-social-list="" aria-label="Social media links"><a href="https://www.facebook.com/indiancloudservices" class="footer-social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a><a href="https://x.com/_icsdc" class="footer-social-link" aria-label="X" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a><a href="https://www.instagram.com/indiancloudservices/" class="footer-social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a><a href="https://www.linkedin.com/company/indiancloudservices/" class="footer-social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a><a href="https://www.youtube.com/@IndianCloudServices" class="footer-social-link" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Bottom bar — copyright + legal links ────────── -->
+        <div class="footer-bottom">
+            <p>© Copyright <span data-strapi-year="" id="footer-year">2026</span> <span data-strapi-company-name="">ICSDC</span>. All Rights Reserved</p>
+            <div class="footer-legal-links">
+                <a href="/legal/terms-conditions">Terms &amp; Conditions</a>
+                <a href="/legal/privacy-policy">Privacy Policy</a>
+                <a href="/legal/refund-policy">Refund Policy</a>
+                <a href="/legal/msa">MSA</a>
+                <a href="/legal/aup">AUP</a>
+                <a href="/legal/sla">SLA</a>
+            </div>
+        </div>
+    </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  
+  
+  <script type="module" src="assets/js/veeam-backup.js"></script>
+
+  
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Corporation",
+  "name": "ICSDC (Indian Cloud Services & Data Center)",
+  "url": "https://icsdc.com/",
+  "logo": "https://admin.icsdc.com/uploads/main_logo_2_35297854fa.png",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "9810958857",
+    "contactType": "sales",
+    "contactOption": "TollFree",
+    "areaServed": "IN",
+    "availableLanguage": "en"
+  },
+  "sameAs": [
+    "https://icsdc.com/",
+    "https://www.linkedin.com/company/indiancloudservices/",
+    "https://www.facebook.com/indiancloudservices",
+    "https://www.instagram.com/indiancloudservices/",
+    "https://x.com/_icsdc",
+    "https://www.youtube.com/@IndianCloudServices"
+  ]
+}
+</script><script>window.openDropdown=function(){};window.closeDropdown=function(){};window.closeMobileMenu=function(){};document.querySelectorAll('[data-animate],[data-stagger]').forEach(function(e){e.classList.add('is-visible');});</script>
+</body></html>

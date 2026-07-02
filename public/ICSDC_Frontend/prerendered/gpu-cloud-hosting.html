@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark"><head>
+  <!-- Google Tag Manager -->
+  
+  <!-- End Google Tag Manager -->
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/assets/images/main_logo.png">
+  <title>GPU Cloud Hosting for AI, ML &amp; HPC | ICSDC</title>
+  <meta name="description" content="Deploy high-performance GPU cloud servers at ICSDC. Enterprise-grade NVIDIA and AMD GPUs, NVMe storage, instant scaling, and 24/7 expert support for AI, ML, and high-compute workloads.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-components.css">
+  <link rel="stylesheet" href="assets/css/gpu-cloud-hosting.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+    <link rel="canonical" href="https://icsdc.com/gpu-cloud-hosting">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ICSDC">
+    <meta property="og:title" content="GPU Cloud Hosting for AI, ML &amp; HPC | ICSDC">
+    <meta property="og:description" content="Deploy high-performance GPU cloud servers at ICSDC. Enterprise-grade NVIDIA and AMD GPUs, NVMe storage, instant scaling, and 24/7 expert support for AI, ML, and high-compute workloads.">
+    <meta property="og:url" content="https://icsdc.com/gpu-cloud-hosting">
+    <meta property="og:image" content="https://icsdc.com/assets/images/main_logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GPU Cloud Hosting for AI, ML &amp; HPC | ICSDC">
+    <meta name="twitter:description" content="Deploy high-performance GPU cloud servers at ICSDC. Enterprise-grade NVIDIA and AMD GPUs, NVMe storage, instant scaling, and 24/7 expert support for AI, ML, and high-compute workloads.">
+    <meta name="twitter:image" content="https://icsdc.com/assets/images/main_logo.png">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://icsdc.com/#organization","name":"ICSDC","alternateName":"Indian Cloud Services & Data Centre","url":"https://icsdc.com","logo":"https://icsdc.com/assets/images/main_logo.png"},{"@type":"WebSite","@id":"https://icsdc.com/#website","url":"https://icsdc.com","name":"ICSDC","publisher":{"@id":"https://icsdc.com/#organization"},"inLanguage":"en"},{"@type":"WebPage","@id":"https://icsdc.com/gpu-cloud-hosting#webpage","url":"https://icsdc.com/gpu-cloud-hosting","name":"GPU Cloud Hosting for AI, ML & HPC | ICSDC","description":"Deploy high-performance GPU cloud servers at ICSDC. Enterprise-grade NVIDIA and AMD GPUs, NVMe storage, instant scaling, and 24/7 expert support for AI, ML, and high-compute workloads.","isPartOf":{"@id":"https://icsdc.com/#website"},"inLanguage":"en"}]}</script>
+<style>
+            .btn-primary, .btn-login, .contact-submit, .faq-contact-btn {
+                overflow: hidden;
+                position: relative;
+            }
+            .ripple-effect {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.28);
+                transform: scale(0);
+                animation: rippleAnim 0.5s linear;
+                pointer-events: none;
+            }
+            @keyframes rippleAnim {
+                to { transform: scale(4); opacity: 0; }
+            }
+        </style></head>
+
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MXV9SGZS" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader" class="loader-done loader-hidden">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">✕</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainlogo="" data-strapi="mainLogo" src="https://admin.icsdc.com/uploads/main_logo_2_35297854fa.png" alt="Main Logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav="" class="nav-links" id="nav-links"><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('619', this)">
+                Services
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('615', this)">
+                Web Hosting
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('616', this)">
+                Domain
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('620', this)">
+                Backup &amp; Security
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('617', this)">
+                Public Cloud
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('618', this)">
+                Resources
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item"><a class="nav-link nav-link--direct" href="/pricing.html">Pricing </a></li></ul>
+      <div class="nav-search" id="nav-search"><button class="nav-search-trigger" aria-label="Search pages" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg></button><div class="nav-search-panel" role="dialog" aria-label="Page search" hidden=""><div class="nav-search-input-wrap"><svg class="nav-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg><input type="search" class="nav-search-input" placeholder="Search pages…" autocomplete="off" spellcheck="false"><kbd class="nav-search-kbd">ESC</kbd></div><div class="nav-search-results" role="listbox"></div></div></div><button id="theme-toggle" aria-label="Switch to light mode" title="Toggle dark / light mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button><button class="btn-login desktop-login-btn"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i><span>Login </span></button><button id="wa-nav-btn" type="button" class="btn-wa-nav" aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span> WhatsApp</span></button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true"><div class="mobile-search-bar" id="mobile-search-bar"><div class="mobile-search-input-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg><input type="search" class="mobile-search-input" placeholder="Search pages…" autocomplete="off" spellcheck="false"></div><div class="mobile-search-results"></div></div>
+      <ul data-strapi-nav-mobile="" class="mobile-nav-links" id="mobile-nav-links"><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('619', this); closeMobileMenu()">
+                Services
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('615', this); closeMobileMenu()">
+                Web Hosting
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('616', this); closeMobileMenu()">
+                Domain
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('620', this); closeMobileMenu()">
+                Backup &amp; Security
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('617', this); closeMobileMenu()">
+                Public Cloud
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('618', this); closeMobileMenu()">
+                Resources
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item"><a class="nav-link nav-link--direct" href="/pricing.html">Pricing </a></li></ul>
+      <div class="mobile-cta-row"><button class="btn-login mobile-login-btn"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i><span>Login </span></button><button id="wa-nav-btn-mobile" type="button" class="btn-wa-nav btn-wa-nav--mobile" aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span> WhatsApp</span></button></div>
+    <div class="mobile-theme-row"><span class="mobile-theme-label">Light Mode</span><button class="mobile-theme-toggle" aria-label="Switch to light mode" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button></div></div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="gpu-eyebrow">⚡ GPU Cloud Hosting</div>
+        <h1 class="hero-title">GPU Cloud Hosting Built for AI, ML &amp; High-Compute Workloads</h1>
+        <p class="hero-sub">Get On-Demand GPU Power With Zero Hardware Costs or Complexity</p>
+        <p class="hero-desc">Get instant access to powerful GPU servers engineered for AI, ML, analytics and high-performance computing - without managing hardware or dealing with complexity.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="window.location.href='/contact-us'">Start Your GPU Cloud Now </button>
+          <button class="btn-outline" style="display: none;">View GPU Plans</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img class="hero-right-image" alt="" style="" src="https://admin.icsdc.com/uploads/large_gpu_cloud_ea62ca41b9.png">
+        <div class="gpu-hero-visual" style="display: none;">
+          <div class="gpu-top-badge">⚡ NVIDIA &amp; AMD GPUs</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#eff6ff" stroke="rgba(26,86,219,0.15)" stroke-width="1"></rect>
+            <rect x="85" y="65" width="130" height="90" rx="10" fill="white" stroke="rgba(26,86,219,0.35)" stroke-width="2"></rect>
+            <line x1="110" y1="65" x2="110" y2="155" stroke="rgba(26,86,219,0.10)" stroke-width="1"></line>
+            <line x1="135" y1="65" x2="135" y2="155" stroke="rgba(26,86,219,0.10)" stroke-width="1"></line>
+            <line x1="160" y1="65" x2="160" y2="155" stroke="rgba(26,86,219,0.10)" stroke-width="1"></line>
+            <line x1="185" y1="65" x2="185" y2="155" stroke="rgba(26,86,219,0.10)" stroke-width="1"></line>
+            <line x1="85" y1="90" x2="215" y2="90" stroke="rgba(26,86,219,0.10)" stroke-width="1"></line>
+            <line x1="85" y1="115" x2="215" y2="115" stroke="rgba(26,86,219,0.10)" stroke-width="1"></line>
+            <line x1="85" y1="140" x2="215" y2="140" stroke="rgba(26,86,219,0.10)" stroke-width="1"></line>
+            <rect x="120" y="95" width="60" height="30" rx="6" fill="#eff6ff" stroke="rgba(26,86,219,0.4)" stroke-width="1.5"></rect>
+            <text x="150" y="115" font-size="9" fill="#1a56db" text-anchor="middle" font-weight="700">GPU CORE</text>
+            <rect x="40" y="80" width="35" height="18" rx="4" fill="white" stroke="rgba(26,86,219,0.3)" stroke-width="1.5"></rect>
+            <text x="57" y="93" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="600">VRAM</text>
+            <rect x="40" y="107" width="35" height="18" rx="4" fill="white" stroke="rgba(26,86,219,0.3)" stroke-width="1.5"></rect>
+            <text x="57" y="120" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="600">HBM3</text>
+            <rect x="40" y="134" width="35" height="18" rx="4" fill="white" stroke="rgba(26,86,219,0.3)" stroke-width="1.5"></rect>
+            <text x="57" y="147" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="600">PCIe</text>
+            <rect x="225" y="80" width="35" height="18" rx="4" fill="white" stroke="rgba(26,86,219,0.3)" stroke-width="1.5"></rect>
+            <text x="242" y="93" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="600">NVMe</text>
+            <rect x="225" y="107" width="35" height="18" rx="4" fill="white" stroke="rgba(26,86,219,0.3)" stroke-width="1.5"></rect>
+            <text x="242" y="120" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="600">CUDA</text>
+            <rect x="225" y="134" width="35" height="18" rx="4" fill="white" stroke="rgba(26,86,219,0.3)" stroke-width="1.5"></rect>
+            <text x="242" y="147" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="600">Tensor</text>
+            <line x1="75" y1="89" x2="85" y2="89" stroke="rgba(26,86,219,0.35)" stroke-width="1.5" stroke-dasharray="3 2"></line>
+            <line x1="75" y1="116" x2="85" y2="116" stroke="rgba(26,86,219,0.35)" stroke-width="1.5" stroke-dasharray="3 2"></line>
+            <line x1="75" y1="143" x2="85" y2="143" stroke="rgba(26,86,219,0.35)" stroke-width="1.5" stroke-dasharray="3 2"></line>
+            <line x1="215" y1="89" x2="225" y2="89" stroke="rgba(26,86,219,0.35)" stroke-width="1.5" stroke-dasharray="3 2"></line>
+            <line x1="215" y1="116" x2="225" y2="116" stroke="rgba(26,86,219,0.35)" stroke-width="1.5" stroke-dasharray="3 2"></line>
+            <line x1="215" y1="143" x2="225" y2="143" stroke="rgba(26,86,219,0.35)" stroke-width="1.5" stroke-dasharray="3 2"></line>
+            <text x="150" y="180" font-size="8" fill="#1a56db" text-anchor="middle" font-weight="600">NVIDIA A100 · H100
+              · AMD Instinct</text>
+            <circle cx="150" cy="110" r="20" stroke="rgba(26,86,219,0.20)" stroke-width="1" fill="none">
+              <animate attributeName="r" values="16;26;16" dur="3s" repeatCount="indefinite"></animate>
+              <animate attributeName="opacity" values="0.5;0;0.5" dur="3s" repeatCount="indefinite"></animate>
+            </circle>
+            <circle cx="28" cy="28" r="4" fill="#93c5fd" opacity="0.5"></circle>
+            <circle cx="272" cy="28" r="4" fill="#93c5fd" opacity="0.5"></circle>
+            <circle cx="28" cy="192" r="3" fill="#1a56db" opacity="0.4"></circle>
+            <circle cx="272" cy="192" r="3" fill="#1a56db" opacity="0.4"></circle>
+          </svg>
+          <div class="gpu-status-badge">
+            <div class="gpu-dot"></div>
+            <div>
+              <div class="gpu-bt">Tier III &amp; IV DCs</div>
+              <div class="gpu-bs">Enterprise GPU Clusters</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — WHY US (4 PILLARS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid is-visible" data-stagger=""><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div><h3>Ultra-Fast GPU Performance</h3><p>Accelerate training, inference, rendering, and data workloads with industry-leading GPUs.</p></div><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i></div><h3>Scalable Compute on Demand</h3><p>Scale from a single GPU to multi-GPU clusters instantly as your workloads grow.</p></div><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-shield-check" aria-hidden="true"></i></div><h3>Fully Managed &amp; Secure</h3><p>Enjoy automatic updates, monitoring, and enterprise-grade security without any manual effort.</p></div><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div><h3>Cost-Efficient Usage Billing</h3><p>Pay only for the GPU power you use with transparent, predictable pricing.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — GPU PLANS ════ -->
+  <section id="gpu-plans" class="section cloud-pricing-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Flexible GPU Plans for Modern AI &amp; HPC</h2>
+      <p class="subtitle is-visible" data-animate="fade-up">Access enterprise-grade GPUs with pricing that adapts to your workload - from single-GPU testing to large multi-node clusters.</p>
+      <div class="gpu-plans-grid is-visible" data-stagger=""><div class="gpu-plan-card"><div class="gpu-plan-name">Starter GPU</div><div class="gpu-plan-price">₹2,999 <span>//mo</span></div><div class="gpu-plan-tagline">Single GPU for testing, development, and small models</div><ul class="gpu-plan-features"><li>1x NVIDIA A100</li><li>40 GB GPU Memory</li><li>8 vCPU</li><li>32 GB RAM</li><li>500 GB NVMe</li><li>5 TB Bandwidth</li></ul><a href="/contact-us" class="gpu-plan-btn">Get Started </a></div><div class="gpu-plan-card gpu-plan-featured"><div class="gpu-plan-badge">Most Popular</div><div class="gpu-plan-name">Performance GPU</div><div class="gpu-plan-price">₹7,999 <span>//mo</span></div><div class="gpu-plan-tagline">Multi-GPU setup for production AI and ML workloads</div><ul class="gpu-plan-features"><li>2x NVIDIA A100</li><li>80 GB GPU Memory</li><li>16 vCPU</li><li>64 GB RAM</li><li>1 TB NVMe</li><li>10 TB Bandwidth</li><li>Priority Support</li></ul><a href="/contact-us" class="gpu-plan-btn-featured">Get Started </a></div><div class="gpu-plan-card"><div class="gpu-plan-name">Enterprise GPU</div><div class="gpu-plan-price">₹19,999 <span>//mo</span></div><div class="gpu-plan-tagline">High-density GPU clusters for LLMs and HPC</div><ul class="gpu-plan-features"><li>4x NVIDIA H100</li><li>320 GB GPU Memory</li><li>32 vCPU</li><li>128 GB RAM</li><li>2 TB NVMe</li><li>Unlimited Bandwidth</li><li>Dedicated Account Manager</li></ul><a href="/contact-us" class="gpu-plan-btn">Contact Sales </a></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — ENTERPRISE FEATURES (What You Get) ════ -->
+  <section id="gpu-features" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">What You Get With ICSDC's Enterprise-Grade GPU Cloud</h2>
+      <p class="subtitle is-visible" data-animate="fade-up"></p>
+      <div class="gpu-features-grid is-visible" data-stagger=""><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-microchip" aria-hidden="true"></i></div><h3>Enterprise-Grade NVIDIA GPUs</h3><p>Access powerful NVIDIA GPUs like A100, H100, and RTX-class cards engineered for high-performance AI, ML, and rendering workloads.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div><h3>Blazing-Fast Performance for AI &amp; ML</h3><p>Train, fine-tune, and run complex models at exceptional speed with infrastructure optimized specifically for modern AI frameworks.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-code" aria-hidden="true"></i></div><h3>Instant Deployment With Pre-Configured Environments</h3><p>Launch GPU instances in seconds using fully optimized environments for PyTorch, TensorFlow, CUDA, JAX, and more.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i></div><h3>Flexible Scaling From Single to Multi-GPU Clusters</h3><p>Scale effortlessly from a single GPU to multi-node GPU clusters based on your workload intensity and project growth.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-database" aria-hidden="true"></i></div><h3>High-Speed NVMe Storage &amp; Low-Latency Network</h3><p>Experience ultra-fast data access and high-throughput connectivity ideal for large datasets, batch training, and real-time inference pipelines.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div><h3>Pay-As-You-Go &amp; Transparent Pricing</h3><p>Only pay for the GPU power you consume with clear, predictable billing that eliminates hidden costs and infrastructure waste.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-gear" aria-hidden="true"></i></div><h3>Fully Managed Infrastructure</h3><p>Let ICSDC handle updates, monitoring, optimization, and security while you stay focused on model development and deployment.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-shield" aria-hidden="true"></i></div><h3>Secure, Isolated &amp; Compliant Environment</h3><p>Run workloads in a fully protected, isolated environment with enterprise-level encryption, DDoS protection, and advanced firewall controls.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-brain" aria-hidden="true"></i></div><h3>Supports All Modern AI &amp; Compute Workloads</h3><p>Run everything from LLMs and computer vision to scientific computing, simulations, and large-scale data analytics.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-globe" aria-hidden="true"></i></div><h3>Global Availability With 24/7 Expert Support</h3><p>Deploy GPU workloads across global datacenters and rely on round-the-clock expert support for uninterrupted performance.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — BUILT-IN FEATURES ════ -->
+  <section id="gpu-builtin" class="section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Built-In GPU Cloud Features That Accelerate Every Workload</h2>
+      <p class="subtitle is-visible" data-animate="fade-up"></p>
+      <div class="cloud-power-grid is-visible" data-stagger=""><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-wave-square" aria-hidden="true"></i></div><h3>Cloud Monitoring</h3><p>Real-time performance insights to proactively optimize and manage your GPU workloads.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-key" aria-hidden="true"></i></div><h3>SSH Key Access</h3><p>Secure, passwordless authentication ensures safe and seamless access to your cloud environments.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-rotate" aria-hidden="true"></i></div><h3>Automated Backups</h3><p>Reliable, scheduled backups that protect your data and enable instant recovery when needed.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-database" aria-hidden="true"></i></div><h3>Object Storage</h3><p>Scalable, cost-efficient storage designed for AI datasets, logs, media files, and unstructured data.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-server" aria-hidden="true"></i></div><h3>Block Storage</h3><p>High-performance NVMe block storage ideal for databases, applications, and large training workloads.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-globe" aria-hidden="true"></i></div><h3>Load Balancers</h3><p>Intelligent traffic distribution ensures high availability and consistent app performance.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-camera" aria-hidden="true"></i></div><h3>Snapshots</h3><p>Point-in-time instance copies for instant rollbacks, migrations, or environment cloning.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-shield" aria-hidden="true"></i></div><h3>Cloud Firewalls</h3><p>Advanced network-level protection securing your GPU workloads from threats and unauthorized access.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band">
+    <div class="cloud-cta-inner">
+      <h2>Unlock the Power of ICSDC GPU Cloud Today</h2>
+      <p>Ready to accelerate your AI, ML, rendering, and high-performance compute workloads with enterprise-grade GPU servers? Businesses, startups, and developers across India and beyond choose ICSDC GPU Cloud for unmatched speed, reliability, and transparent pricing. Whether you're building AI models, running simulations, training LLMs, or processing large datasets - ICSDC gives you the power, flexibility, and trust you need.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="if(window.openContactPopup){window.openContactPopup();}return false;">Launch Your GPU Cloud Now </button>
+        
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — DEPLOY & SCALE ════ -->
+  <section id="gpu-deploy" class="section" style="background:#F7F7FF;">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Deploy &amp; Scale With Confidence</h2>
+      <p class="subtitle is-visible" data-animate="fade-up"></p>
+      <div class="gpu-deploy-grid is-visible" data-stagger=""><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-server" aria-hidden="true"></i></div><h3>Operating System Distribution</h3><p>Deploy your preferred OS instantly - Linux, Windows, or custom builds.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-store" aria-hidden="true"></i></div><h3>Marketplace Apps</h3><p>Launch pre-optimized solutions, frameworks, and tools with just one click.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-copy" aria-hidden="true"></i></div><h3>Custom Images</h3><p>Upload your own OS images to replicate environments, migrate faster, and scale effortlessly.</p></div></div>
+      <p class="gpu-os-badges-label">Popular OS &amp; Dev Stacks Supported</p>
+      <div class="gpu-os-badges" id="gpu-os-badges"><span class="gpu-os-badge"><i class="fa-brands fa-ubuntu" aria-hidden="true"></i>Ubuntu</span><span class="gpu-os-badge"><i class="fa-brands fa-debian" aria-hidden="true"></i>Debian</span><span class="gpu-os-badge"><i class="fa-brands fa-fedora" aria-hidden="true"></i>Fedora</span><span class="gpu-os-badge"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</span><span class="gpu-os-badge"><i class="fa-brands fa-centos" aria-hidden="true"></i>CentOS</span><span class="gpu-os-badge"><i class="fa-solid fa-linux" aria-hidden="true"></i>AlmaLinux</span><span class="gpu-os-badge"><i class="fa-brands fa-redhat" aria-hidden="true"></i>Red Hat</span><span class="gpu-os-badge"><i class="fa-brands fa-jenkins" aria-hidden="true"></i>Jenkins</span><span class="gpu-os-badge"><i class="fa-solid fa-server" aria-hidden="true"></i>Plesk</span></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — GPU PORTFOLIO ════ -->
+  <section id="gpu-portfolio" class="section cloud-power-section">
+    <div class="container">
+
+      <!-- 2-col intro: text left, image right -->
+      <div class="gpu-portfolio-intro is-visible" data-animate="fade-up">
+        <div class="gpu-portfolio-intro-text">
+          <h2 class="title">Next-Gen GPU Power for Modern Cloud Computing</h2>
+          <p class="subtitle">Benefit from enterprise-class GPU performance delivered through ICSDC's partnerships with top-tier Tier III &amp; Tier IV datacenters. Our GPU lineup supports everything from deep learning and LLM training to HPC simulations, rendering, and large-scale analytics—ensuring unmatched speed, stability, and scalability.</p>
+        </div>
+        <div class="gpu-portfolio-img-wrap" id="gpu-portfolio-img-wrap" style="">
+          <img id="gpu-portfolio-img" src="https://admin.icsdc.com/uploads/gpu_cloud_hosting_1_72c3436bde.png" alt="GPU Portfolio" class="gpu-portfolio-img">
+        </div>
+      </div>
+
+      <!-- H3 + cards — full width below -->
+      <h3 class="gpu-portfolio-subheading" id="gpu-portfolio-subheading">Explore Our High-Performance GPU Portfolio</h3>
+      <div class="cloud-power-grid is-visible" data-stagger=""><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-amd" aria-hidden="true"></i></div><h3>AMD Instinct™ MI355X - Built for Extreme Data Workloads</h3><p>Designed for advanced AI pipelines, this accelerator delivers remarkable memory bandwidth and capacity, enabling rapid processing of large datasets and complex models.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-microchip" aria-hidden="true"></i></div><h3>NVIDIA HGX B200 - Generative AI at Full Throttle</h3><p>Engineered for modern AI innovation, the B200 excels in high-density computing, making it ideal for training next-generation generative models and running multi-node AI clusters.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-amd" aria-hidden="true"></i></div><h3>AMD Instinct™ MI325X &amp; MI300X - Performance Meets Efficiency</h3><p>These accelerators set a new benchmark in energy-efficient, high-throughput computing - perfect for teams handling HPC workloads, scientific simulations, and deep learning tasks.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-microchip" aria-hidden="true"></i></div><h3>NVIDIA GH200 Grace Hopper™ - Accelerated Hybrid Architecture</h3><p>Combining CPU and GPU acceleration in one platform, the GH200 enables breakthrough performance in large-scale inference, LLM training, and complex computational workloads.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-microchip" aria-hidden="true"></i></div><h3>NVIDIA HGX H100 &amp; H200 - The Gold Standard for AI Training</h3><p>Industry-leading Tensor Core GPUs that excel at massive parallel compute, delivering exceptional throughput for AI training, analytics, and HPC pipelines.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-microchip" aria-hidden="true"></i></div><h3>NVIDIA A100 (HGX &amp; PCIe) - Proven Versatility for AI &amp; Research</h3><p>A powerhouse trusted across the AI community, offering balanced performance for simulation, advanced analytics, and multi-framework deep learning environments.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-microchip" aria-hidden="true"></i></div><h3>NVIDIA L40S - Optimized AI &amp; Graphics Acceleration in One</h3><p>Ideal for data centers that need both high-performance compute and next-gen visualization capabilities - perfect for rendering, AI inference, and real-time content creation.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-microchip" aria-hidden="true"></i></div><h3>NVIDIA A40 - Professional Graphics with AI-Ready Compute</h3><p>Combines precision graphics with GPU compute power, supporting engineers, researchers, and creators working on modeling, rendering, and complex design workloads.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-microchip" aria-hidden="true"></i></div><h3>NVIDIA A16 - High-Density Power for VDI &amp; Remote Workflows</h3><p>Purpose-built for virtual desktop environments, enabling responsive remote workstations for teams that rely on professional apps from anywhere.</p></div></div>
+
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — ENTERPRISE INFRASTRUCTURE ════ -->
+  <section id="gpu-infra" class="section gpu-infra-section">
+    <div class="container">
+      <h2 class="title is-visible" id="gpu-infra-title" data-animate="fade-up">Enterprise-Strength Infrastructure Backing Every GPU</h2>
+      <div class="gpu-infra-card is-visible" data-animate="fade-up">
+        <div class="gpu-infra-left">
+          <p class="gpu-infra-desc" id="gpu-infra-desc">Every GPU available on ICSDC is deployed in redundant, secure, and performance-optimized data centers. This ensures:</p>
+        </div>
+        <div class="gpu-infra-right">
+          <ul class="gpu-infra-list" id="gpu-infra-list"><li>Consistent low-latency performance</li><li>Multi-layered physical &amp; network security</li><li>High uptime backed by redundant systems</li><li>Rapid scaling for growing compute needs</li><li>Optimized environments for AI &amp; HPC workloads</li></ul>
+        </div>
+      </div>
+      <p class="gpu-infra-closing" id="gpu-infra-closing">With ICSDC, your GPU workloads run on infrastructure engineered for mission-critical operations.</p>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — RELATED SERVICES ════ -->
+  <section id="gpu-related" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title is-visible" id="gpu-related-title" data-animate="fade-up">Power Up Your Infrastructure With Related Cloud Services</h2>
+      <div class="gpu-related-grid is-visible" id="gpu-related-grid" data-stagger=""><div class="gpu-related-card"><div class="gpu-related-icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></div><h3 class="gpu-related-title-card">Managed Cloud Hosting</h3><p class="gpu-related-desc">Get fully optimized cloud environments that seamlessly integrate with GPU workloads for AI, ML, and high-compute applications.</p><a href="/managed-cloud-hosting" class="gpu-related-btn">Managed Cloud Plans <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></a></div><div class="gpu-related-card"><div class="gpu-related-icon"><i class="fa-solid fa-server" aria-hidden="true"></i></div><h3 class="gpu-related-title-card">Dedicated Servers</h3><p class="gpu-related-desc">Leverage powerful, isolated hardware to pair with GPU acceleration for demanding enterprise-grade compute needs.</p><a href="/dedicated-server" class="gpu-related-btn">Dedicated Server Plans <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"></path></svg></a></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 10 — ENTERPRISE-READY TOOLS ════ -->
+  <section id="gpu-tools" class="section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Enterprise-Ready Tools for Smarter Cloud Operations</h2>
+      <p class="subtitle is-visible" data-animate="fade-up"></p>
+      <div class="cloud-use-grid is-visible" data-stagger=""><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div><h3>Automated Protection &amp; Simplified Management</h3><p>Effortlessly safeguard your infrastructure with scheduled backups, instant snapshots, customizable networking, and robust firewall rules that adapt to your evolving workloads.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-code" aria-hidden="true"></i></div><h3>Developer-Friendly Automation Tools</h3><p>Provision, scale, and manage your GPU and compute instances using our powerful API or Terraform integrations - perfect for teams that automate cloud workflows at scale.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-globe" aria-hidden="true"></i></div><h3>Global Delivery &amp; Performance Optimization</h3><p>Ensure your applications load faster worldwide through our high-speed content acceleration network, engineered for low latency and consistent user experience across continents.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-shield" aria-hidden="true"></i></div><h3>Advanced DDoS Defense</h3><p>Stay protected with multi-layered DDoS mitigation crafted to absorb and neutralize L3/L4 network attacks, ensuring uninterrupted service for mission-critical applications.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-network-wired" aria-hidden="true"></i></div><h3>Use Your Own IP Resources</h3><p>Easily announce and operate your own IP ranges across ICSDC's global Tier III &amp; IV data center ecosystem, giving enterprises full control over routing and network identity.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 11 — WHY CHOOSE ICSDC ════ -->
+  <section id="gpu-why" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Why Choose ICSDC for GPU Cloud?</h2>
+      <p class="subtitle is-visible" data-animate="fade-up"></p>
+      <div class="cloud-use-grid is-visible" data-stagger=""><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-microchip" aria-hidden="true"></i></div><h3>Enterprise-Grade GPU Performance</h3><p>Access the latest NVIDIA and AMD accelerators hosted in Tier III &amp; IV data centers, ensuring unmatched speed, stability, and compute power for AI, ML, HPC, and rendering workloads.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div><h3>Transparent, Flexible Pricing</h3><p>Pay only for the GPU compute you use. No hidden fees, no surprise invoices - just predictable, cost-efficient cloud resources built for every budget.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-wave-square" aria-hidden="true"></i></div><h3>High Availability Through Premium Infrastructure</h3><p>Our cloud platform is backed by redundant networking, power, and cooling systems - delivering consistent uptime and reliable performance for mission-critical projects.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-brain" aria-hidden="true"></i></div><h3>Optimized for AI, ML &amp; High-Compute Workloads</h3><p>From LLM training to real-time inference pipelines, our environment is engineered to handle even the most demanding GPU workloads with maximum efficiency.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-globe" aria-hidden="true"></i></div><h3>Global Reach With Low-Latency Connectivity</h3><p>Deploy workloads across strategically located data center regions to achieve faster response times, smoother performance, and better user experience worldwide.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-shield" aria-hidden="true"></i></div><h3>Full Stack Security Built-In</h3><p>Enjoy multi-layer protection including DDoS mitigation, private networking, firewall automation, encryption, and hardened data center security.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-code" aria-hidden="true"></i></div><h3>Developer-Centric Automation Tools</h3><p>Integrate seamlessly with our API and Terraform support for automated provisioning, scaling, and management of your GPU instances.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-headset" aria-hidden="true"></i></div><h3>Expert Support From Real Cloud Engineers</h3><p>Our dedicated support team consists of specialists who understand cloud infrastructure, GPU optimization, and enterprise workloads - available 24/7 to assist.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i></div><h3>Scalable From Startup to Enterprise</h3><p>Whether you're training a small model or running massive distributed clusters, ICSDC provides flexible scaling options without compromising performance.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 12 — WHO SHOULD CHOOSE ════ -->
+  <section id="gpu-who" class="section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Who Should Choose ICSDC GPU Cloud?</h2>
+      <p class="subtitle is-visible" data-animate="fade-up"></p>
+      <div class="cloud-use-grid is-visible" data-stagger=""><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-brain" aria-hidden="true"></i></div><h3>AI &amp; Machine Learning Teams</h3><p>Perfect for model training, LLM fine-tuning, experimentation, and large-scale inference requiring high-performance GPU compute.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-chart-bar" aria-hidden="true"></i></div><h3>Data Scientists &amp; Analytics Teams</h3><p>Ideal for running complex analytics workloads, real-time data processing, and large dataset computations with accelerated performance.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-flask" aria-hidden="true"></i></div><h3>Research Institutions &amp; Universities</h3><p>A great fit for scientific simulations, computational research, genomics, physics, climate modeling, and deep learning projects.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-rocket" aria-hidden="true"></i></div><h3>Startups Building AI Products</h3><p>Empowers early-stage teams with affordable, scalable GPU resources - no hardware investment required.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-building" aria-hidden="true"></i></div><h3>Enterprises Running High-Compute Applications</h3><p>Supports AI pipelines, HPC environments, advanced analytics, and demanding production workloads across industries.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-code" aria-hidden="true"></i></div><h3>Developers &amp; Engineers Requiring On-Demand Compute</h3><p>Easily spin up GPU instances for testing, development, CI/CD pipelines, and rapid prototyping.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-palette" aria-hidden="true"></i></div><h3>Creatives, Designers &amp; Rendering Studios</h3><p>Accelerate 3D rendering, motion graphics, visual simulations, and content creation workflows with low-latency GPU infrastructure.</p></div><div class="cloud-use-card"><div class="cloud-use-icon" aria-hidden="true"><i class="fa-solid fa-desktop" aria-hidden="true"></i></div><h3>Companies Deploying Virtual Workstations</h3><p>Ideal for CAD, VDI, remote workforce setups, and graphics-heavy applications that require stable, high-performance GPU desktops.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="gpu-testi-heading">
+    <div class="testi-container">
+      <h2 id="gpu-testi-heading" class="testi-title">What our Client Says about ICSDC GPU Cloud</h2>
+
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"><article class="testi-card" role="listitem" data-testi-index="0" aria-label="Testimonial from Arjun Mehta"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">AM</span></div><div class="testi-client-info"><p class="testi-name">Arjun Mehta</p><p class="testi-job">Lead AI Engineer, Healthcare Technology Company</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">Our deep learning models used to take days to train, but ICSDC's GPU Cloud brought the turnaround down to hours. The performance has been incredibly consistent, and the support team understands AI workloads better than any provider we've worked with.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="1" aria-label="Testimonial from Riya Kapoor"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">RK</span></div><div class="testi-client-info"><p class="testi-name">Riya Kapoor</p><p class="testi-job">Founder, SaaS Automation Startup</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">As a growing startup, we needed scalable GPU power without burning our budget. ICSDC gave us enterprise-grade performance with flexible pricing, making it possible to build and iterate our AI-driven product much faster.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="2" aria-label="Testimonial from Kabir Malhotra"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">KM</span></div><div class="testi-client-info"><p class="testi-name">Kabir Malhotra</p><p class="testi-job">Senior Data Scientist, Financial Analytics Firm</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">Running large-scale predictive models is core to our business. ICSDC's infrastructure handled heavy datasets effortlessly, and the low-latency environment allowed our team to deploy models more efficiently than before.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="3" aria-label="Testimonial from Evelyn Thomas"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">ET</span></div><div class="testi-client-info"><p class="testi-name">Evelyn Thomas</p><p class="testi-job">Research Associate, University Research Lab</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">Our computational simulations require extremely stable GPU resources, and ICSDC delivered exactly that. The reliability and uptime made our research workflow smoother and more predictable.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="4" aria-label="Testimonial from Harsh Singh"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">HS</span></div><div class="testi-client-info"><p class="testi-name">Harsh Singh</p><p class="testi-job">Creative Director, Digital Design Studio</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">We work with heavy rendering projects, and ICSDC's GPU performance has cut our production time drastically. The ability to scale resources during peak demand has been a game changer for our studio.</blockquote></div></article></div>
+      </div>
+
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"><button class="testi-dot testi-dot-active" role="tab" aria-selected="true" aria-label="Go to testimonial 1" data-dot="0"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 2" data-dot="1"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 3" data-dot="2"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 4" data-dot="3"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 5" data-dot="4"></button></div>
+
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">‹</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">›</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FAQ ════ -->
+  <section class="faq-section" id="gpu-faq" aria-labelledby="gpu-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="gpu-faq-heading" class="faq-title">FAQs about ICSDC GPU Cloud</h2>
+        <div class="faq-grid">
+          <div class="faq-accordions" id="faq-accordions"><details class="faq-item" open=""><summary class="faq-q"><span class="faq-num">01</span><span class="faq-q-text">What types of GPUs does ICSDC offer?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">ICSDC provides a range of enterprise-grade NVIDIA and AMD GPUs, including options optimized for AI training, inference, rendering, HPC, and data-intensive workloads.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">02</span><span class="faq-q-text">Who should use ICSDC GPU Cloud?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Our GPU cloud is ideal for AI developers, researchers, data scientists, enterprises running high-compute tasks, creative studios, and teams needing scalable GPU resources without hardware investment.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">03</span><span class="faq-q-text">Can I scale my GPU resources whenever I need?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Yes, ICSDC allows seamless scaling from a single GPU instance to large multi-GPU clusters, ensuring your workloads can grow without disruption.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">04</span><span class="faq-q-text">Is ICSDC GPU Cloud suitable for AI and ML training?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Absolutely. Our infrastructure is optimized for deep learning frameworks, LLM training, model fine-tuning, and large-scale inference pipelines.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">05</span><span class="faq-q-text">How secure is ICSDC GPU Cloud?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Your workloads are protected with multi-layer security including DDoS mitigation, firewalls, private networking, encryption, and highly secure Tier III &amp; IV data centers.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">06</span><span class="faq-q-text">How is the pricing structured?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">ICSDC offers transparent, pay-as-you-go pricing with no hidden charges. You pay only for the GPU compute, storage, and network resources you actually use.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">07</span><span class="faq-q-text">Do you support APIs or automation tools?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Yes, you can fully control, automate, and scale instances through our API and Terraform support, making ICSDC ideal for DevOps-driven teams.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">08</span><span class="faq-q-text">Can I bring my own OS image or environment?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Yes, ICSDC allows you to upload custom images, deploy your preferred OS, and configure environments tailored to your application needs.</div></div></details></div>
+          <aside class="faq-aside">
+            <div class="faq-illo"><svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="faqCardAgpucloudhosting" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#1a56db" stop-opacity="0.35"></stop>
+                    <stop offset="1" stop-color="#1a56db" stop-opacity="0.05"></stop>
+                  </linearGradient>
+                  <linearGradient id="faqCardBgpucloudhosting" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#3b82f6"></stop>
+                    <stop offset="1" stop-color="#1a56db"></stop>
+                  </linearGradient>
+                  <radialGradient id="faqGlowgpucloudhosting" cx="0.5" cy="0.5" r="0.5">
+                    <stop offset="0" stop-color="#3b82f6" stop-opacity="0.20"></stop>
+                    <stop offset="1" stop-color="#3b82f6" stop-opacity="0"></stop>
+                  </radialGradient>
+                </defs>
+                <circle cx="160" cy="160" r="140" fill="url(#faqGlowgpucloudhosting)"></circle>
+                <g transform="rotate(-8 160 160)">
+                  <rect x="60" y="100" width="200" height="60" rx="10" fill="url(#faqCardAgpucloudhosting)" stroke="rgba(59,130,246,0.30)" stroke-width="1.5"></rect>
+                  <rect x="80" y="118" width="120" height="6" rx="3" fill="rgba(26,86,219,0.30)"></rect>
+                  <rect x="80" y="132" width="80" height="6" rx="3" fill="rgba(26,86,219,0.18)"></rect>
+                  <circle cx="230" cy="130" r="10" fill="rgba(59,130,246,0.25)" stroke="rgba(59,130,246,0.50)" stroke-width="1.5"></circle>
+                  <path d="M226 130 L230 134 L236 126" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                </g>
+                <g transform="rotate(3 160 160)">
+                  <rect x="55" y="140" width="210" height="64" rx="11" fill="rgba(26,86,219,0.05)" stroke="rgba(26,86,219,0.20)" stroke-width="1.5"></rect>
+                  <rect x="76" y="159" width="140" height="6" rx="3" fill="rgba(26,86,219,0.35)"></rect>
+                  <rect x="76" y="173" width="100" height="6" rx="3" fill="rgba(26,86,219,0.18)"></rect>
+                  <circle cx="236" cy="172" r="10" fill="rgba(26,86,219,0.10)" stroke="rgba(26,86,219,0.25)" stroke-width="1.5"></circle>
+                  <path d="M232 172 L236 176 L242 168" stroke="rgba(26,86,219,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                </g>
+                <g transform="translate(0, 18)">
+                  <rect x="50" y="180" width="220" height="68" rx="12" fill="rgba(59,130,246,0.10)" stroke="rgba(59,130,246,0.55)" stroke-width="1.5"></rect>
+                  <rect x="74" y="200" width="150" height="7" rx="3.5" fill="rgba(26,86,219,0.85)"></rect>
+                  <rect x="74" y="216" width="110" height="6" rx="3" fill="rgba(26,86,219,0.40)"></rect>
+                  <circle cx="244" cy="214" r="12" fill="url(#faqCardBgpucloudhosting)"></circle>
+                  <path d="M238 217 L244 211 L250 217" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                </g>
+                <g transform="translate(36 36)">
+                  <circle cx="0" cy="0" r="28" fill="url(#faqCardBgpucloudhosting)" stroke="rgba(59,130,246,0.40)" stroke-width="3"></circle><text x="0" y="10" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="34" font-weight="800" fill="white">?</text>
+                </g>
+                <circle cx="278" cy="60" r="5" fill="#f59e0b"></circle>
+                <circle cx="298" cy="80" r="3" fill="#f59e0b" opacity="0.6"></circle>
+                <circle cx="40" cy="270" r="4" fill="#4fd1c5" opacity="0.8"></circle>
+                <circle cx="280" cy="270" r="5" fill="#3b82f6" opacity="0.6"></circle>
+              </svg></div>
+            <div class="faq-aside-copy">
+              <h3 class="faq-aside-h">Didn't find your answer?</h3>
+              <p class="faq-aside-p">Our team is happy to help — reach out and we'll respond within minutes.</p>
+              <a href="/contact-us.html" class="faq-aside-link">Talk to our team <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg></a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Launch Your GPU Cloud Now</h2>
+      <p>Enterprise-grade GPU hosting from ₹9,999/month. NVIDIA A100, H100, and AMD Instinct on demand.</p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary" onclick="window.location.href='/contact'">Launch Your GPU Cloud Now </button>
+        
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" id="site-footer" role="contentinfo">
+        <!-- ── Link columns ─────────────────────────────────── -->
+        <div class="footer-links-section">
+            <div class="footer-links-grid" data-strapi-link-groups="">
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Dedicated Server</h3>
+                <ul><li><a class="footer-link" href="/windows-dedicated-server.html">Windows Dedicated Server</a></li><li><a class="footer-link" href="/linux-dedicated-server.html">Linux Dedicated Server</a></li><li><a class="footer-link" href="/managed-dedicated-server.html">Managed Dedicated Server</a></li><li><a class="footer-link" href="/nvme-dedicated-servers.html">NVMe Dedicated Server</a></li><li><a class="footer-link" href="/gpu-dedicated-server.html">GPU Dedicated Server</a></li><li><a class="footer-link" href="/bare-metal-server.html">Bare Metal Server</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">VPS Hosting</h3>
+                <ul><li><a class="footer-link" href="/windows-vps-hosting.html">Windows VPS Hosting</a></li><li><a class="footer-link" href="/linux-vps-hosting.html">Linux VPS Hosting</a></li><li><a class="footer-link" href="/managed-vps-hosting.html">Managed VPS Hosting</a></li><li><a class="footer-link" href="/vps-cpanel.html">VPS cPanel Hosting</a></li><li><a class="footer-link" href="/forex-vps.html">Forex VPS</a></li><li><a class="footer-link" href="/virtual-machine.html">Virtual Machine</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Cloud Hosting</h3>
+                <ul><li><a class="footer-link" href="/cloud-hosting.html">Cloud Hosting</a></li><li><a class="footer-link" href="/managed-cloud-hosting.html">Managed Cloud Hosting</a></li><li><a class="footer-link" href="/linux-cloud-hosting.html">Linux Cloud Hosting</a></li><li><a class="footer-link" href="/windows-cloud-hosting.html">Windows Cloud Hosting</a></li><li><a class="footer-link" href="/gpu-cloud-hosting.html">GPU Cloud Hosting</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Web Hosting</h3>
+                <ul><li><a class="footer-link" href="/web-hosting.html">Web Hosting</a></li><li><a class="footer-link" href="/shared-hosting.html">Shared Hosting</a></li><li><a class="footer-link" href="/wordpress-hosting.html">WordPress Hosting</a></li><li><a class="footer-link" href="/reseller-hosting.html">Reseller Hosting</a></li><li><a class="footer-link" href="/cpanel-hosting.html">cPanel Hosting</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Public Cloud</h3>
+                <ul><li><a class="footer-link" href="/aws-cloud-hosting.html">AWS</a></li><li><a class="footer-link" href="/azure-cloud-hosting.html">Azure</a></li><li><a class="footer-link" href="/google-cloud-hosting.html">Google Cloud Platform</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Backup &amp; Security</h3>
+                <ul><li><a class="footer-link" href="/acronis-backup.html">Acronis Backup</a></li><li><a class="footer-link" href="/veeam-backup.html">Veeam Backup</a></li><li><a class="footer-link" href="/cloud-storage.html">Cloud Storage</a></li><li><a class="footer-link" href="/ssl-certificate.html">SSL Certificate</a></li><li><a class="footer-link" href="/firewall-security.html">Firewall Security</a></li><li><a class="footer-link" href="/pam-mfa.html">PAM / MFA</a></li><li><a class="footer-link" href="/vapt.html">VAPT</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Business Apps</h3>
+                <ul><li><a class="footer-link" href="/email-hosting.html">Email Hosting</a></li><li><a class="footer-link" href="/google-workspace.html">Google Workspace</a></li><li><a class="footer-link" href="/microsoft-365.html">Microsoft 365</a></li><li><a class="footer-link" href="/tally-on-cloud.html">Tally on Cloud</a></li><li><a class="footer-link" href="/zimbra-hosting.html">Zimbra Hosting</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Domain</h3>
+                <ul><li><a class="footer-link" href="/domain-registration.html">Domain Registration</a></li><li><a class="footer-link" href="/domain-transfer.html">Domain Transfer</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Company</h3>
+                <ul><li><a class="footer-link" href="/about-us.html">About Us</a></li><li><a class="footer-link" href="/contact-us.html">Contact Us</a></li><li><a class="footer-link" href="/pricing.html">Pricing</a></li></ul>
+            </div>
+        </div>
+        </div>
+
+        <!-- ── Brand bar ────────────────────────────────────── -->
+        <div class="footer-brand-bar">
+            <div class="footer-brand-inner">
+
+                <div class="footer-brand-left">
+                    <a href="/" aria-label="ICSDC Home" class="footer-logo-link">
+                        <img data-strapi-logo="" src="https://admin.icsdc.com/uploads/icsdc_logo_white_03e0f23088.png" alt="Logo" class="footer-logo">
+                    </a>
+                    <address class="footer-address">
+                        <span data-strapi-footer-address="">Plot No. 21 &amp; 21A, <br> 
+6th Floor, Sector 142, Noida, Uttar Pradesh 201304</span>
+                        <span data-strapi-footer-phone="" class="footer-phone">+91 9810958857</span>
+                        <span class="footer-email-wrap">
+                            Email: <a data-strapi-footer-email="" href="mailto:info@icsdc.com" class="footer-email-link">info@icsdc.com</a>
+                        </span>
+                    </address>
+                </div>
+
+                <div class="footer-brand-right">
+                    <div class="footer-social" data-strapi-social-list="" aria-label="Social media links"><a href="https://www.facebook.com/indiancloudservices" class="footer-social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a><a href="https://x.com/_icsdc" class="footer-social-link" aria-label="X" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a><a href="https://www.instagram.com/indiancloudservices/" class="footer-social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a><a href="https://www.linkedin.com/company/indiancloudservices/" class="footer-social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a><a href="https://www.youtube.com/@IndianCloudServices" class="footer-social-link" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Bottom bar — copyright + legal links ────────── -->
+        <div class="footer-bottom">
+            <p>© Copyright <span data-strapi-year="" id="footer-year">2026</span> <span data-strapi-company-name="">ICSDC</span>. All Rights Reserved</p>
+            <div class="footer-legal-links">
+                <a href="/legal/terms-conditions">Terms &amp; Conditions</a>
+                <a href="/legal/privacy-policy">Privacy Policy</a>
+                <a href="/legal/refund-policy">Refund Policy</a>
+                <a href="/legal/msa">MSA</a>
+                <a href="/legal/aup">AUP</a>
+                <a href="/legal/sla">SLA</a>
+            </div>
+        </div>
+    </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  
+  
+  <script src="assets/js/gpu-cloud-hosting.js" type="module"></script>
+  
+  
+  
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Corporation",
+  "name": "ICSDC (Indian Cloud Services & Data Center)",
+  "url": "https://icsdc.com/",
+  "logo": "https://admin.icsdc.com/uploads/main_logo_2_35297854fa.png",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "9810958857",
+    "contactType": "sales",
+    "contactOption": "TollFree",
+    "areaServed": "IN",
+    "availableLanguage": "en"
+  },
+  "sameAs": [
+    "https://icsdc.com/",
+    "https://www.linkedin.com/company/indiancloudservices/",
+    "https://www.facebook.com/indiancloudservices",
+    "https://www.instagram.com/indiancloudservices/",
+    "https://x.com/_icsdc",
+    "https://www.youtube.com/@IndianCloudServices"
+  ]
+}
+</script><script>window.openDropdown=function(){};window.closeDropdown=function(){};window.closeMobileMenu=function(){};document.querySelectorAll('[data-animate],[data-stagger]').forEach(function(e){e.classList.add('is-visible');});</script>
+</body></html>
