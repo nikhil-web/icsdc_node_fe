@@ -25,6 +25,7 @@ import {
     populatePricingPlansCloud,
     initFAQ as sharedInitFAQ,
     initTestimonials as sharedInitTestimonials,
+    inlineRichText,
 } from '../utils/cms-helpers.js';
 
 // Each builder section gets a unique id so multiple instances of the same
@@ -990,39 +991,754 @@ const mapEmbed = {
     },
 };
 
+/* ═══════════════════════════════════════════════════════════════
+   HARVESTED SITE COMPONENTS (2026-07-03)
+   Each one reuses the exact markup/classes of an existing page
+   section so builder pages are visually identical to hand-built
+   pages. Source pattern noted per component.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ════ PILLARS — hero pillar strip (why-card grid, site-wide) ═ */
+const pillars = {
+    label: 'Hero Pillars',
+    icon: 'star',
+    description: 'The 3–4 pillar badges strip that sits under the hero on every hosting page (why-card style).',
+    schema: [
+        {
+            key: 'items', label: 'Pillars', type: 'repeater',
+            itemSchema: [
+                { key: 'icon', label: 'Icon Key (FA name)', type: 'text' },
+                { key: 'title', label: 'Title', type: 'text' },
+                { key: 'desc', label: 'Short Description', type: 'textarea' },
+            ],
+        },
+    ],
+    defaultProps: {
+        items: [
+            { icon: 'gauge-high', title: '99.9% Uptime', desc: 'Guaranteed availability backed by SLA.' },
+            { icon: 'shield-halved', title: 'Enterprise Security', desc: 'Protected at every layer, always.' },
+            { icon: 'headset', title: '24/7 Support', desc: 'Real engineers, around the clock.' },
+            { icon: 'indian-rupee-sign', title: 'Transparent Pricing', desc: 'No hidden fees. Ever.' },
+        ],
+    },
+    renderer(container, p) {
+        const gridId = bldId('bld-pillars');
+        container.innerHTML =
+            '<section class="section"><div class="container">' +
+            '<div id="' + gridId + '" class="why-grid"></div>' +
+            '</div></section>';
+        populateIconCards('#' + gridId, p.items || [], 'why-card');
+    },
+};
+
+/* ════ CHECKLIST SPLIT — "When to choose" list (cs-when) ═════ */
+const checklistSplit = {
+    label: 'Checklist Section',
+    icon: 'info',
+    description: 'Title + intro + checklist of bullet points (the "When should you choose…" pattern).',
+    schema: [
+        { key: 'title', label: 'Section Title', type: 'text', required: true },
+        { key: 'subtitle', label: 'Intro Line', type: 'text' },
+        {
+            key: 'items', label: 'Checklist Items', type: 'repeater',
+            itemSchema: [{ key: 'text', label: 'Item', type: 'textarea' }],
+        },
+    ],
+    defaultProps: {
+        title: 'When Should You Choose This?',
+        subtitle: 'Choose this solution if:',
+        items: [
+            { text: 'Your data is growing and local infrastructure is hard to manage.' },
+            { text: 'You need secure access from multiple locations or remote teams.' },
+            { text: 'You want to avoid the cost of maintaining physical systems.' },
+            { text: 'You prefer a managed solution without infrastructure overhead.' },
+        ],
+    },
+    renderer(container, p) {
+        const lis = (p.items || []).map((i) => '<li>' + esc(i.text || '') + '</li>').join('');
+        container.innerHTML =
+            '<section class="section"><div class="container">' +
+            '<h2 class="title">' + esc(p.title) + '</h2>' +
+            (p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '') +
+            '<ul class="cs-when-list">' + lis + '</ul>' +
+            '</div></section>';
+    },
+};
+
+/* ════ WHO WE ARE — image + blue container (homepage) ════════ */
+const whoWeAre = {
+    label: 'Who We Are',
+    icon: 'info',
+    description: 'Image left + blue panel with heading, paragraph and feature buttons — the site-wide "Who We Are" pattern.',
+    schema: [
+        { key: 'title', label: 'Heading', type: 'text', required: true },
+        { key: 'paragraph', label: 'Paragraph', type: 'textarea' },
+        { key: 'imageUrl', label: 'Image', type: 'image' },
+        { key: 'imageAlt', label: 'Image Alt Text', type: 'text' },
+        {
+            key: 'points', label: 'Feature Buttons', type: 'repeater',
+            itemSchema: [{ key: 'text', label: 'Text', type: 'text' }],
+        },
+        {
+            key: 'cta', label: 'CTA Button (last, highlighted)', type: 'cta',
+            fields: [
+                { key: 'text', label: 'Button Text', type: 'text' },
+                { key: 'link', label: 'URL', type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        title: 'Who We Are?',
+        paragraph: 'At ICSDC, we don’t just host your data — we power your digital infrastructure with advanced technology and expert support.',
+        imageUrl: '/assets/images/Home page images_s.webp',
+        imageAlt: 'About ICSDC',
+        points: [
+            { text: 'Ultra-fast and scalable cloud solutions built for growth' },
+            { text: 'Enterprise-grade security with least downtime' },
+            { text: 'Real people, real support — available 24/7' },
+        ],
+        cta: { text: 'Connect with a Cloud Architect Now', link: '/contact-us' },
+    },
+    renderer(container, p) {
+        const btns = (p.points || []).map((pt) =>
+            '<button class="btn-outline feature-cards">' + esc(pt.text || '') + '</button>').join('');
+        const ctaBtn = (p.cta && p.cta.text)
+            ? '<button class="btn-primary feature-cards" onclick="window.location.href=\'' + esc(p.cta.link || '#') + '\'">' + esc(p.cta.text) + '</button>'
+            : '';
+        container.innerHTML =
+            '<section class="who-we-are section">' +
+            '<div class="who-we-are-inner">' +
+            '<div class="who-we-are-image">' +
+            (p.imageUrl ? '<img src="' + esc(p.imageUrl) + '" alt="' + esc(p.imageAlt || '') + '">' : '') +
+            '</div>' +
+            '<div class="blue-container">' +
+            '<h2 class="title">' + esc(p.title) + '</h2>' +
+            '<p class="who-we-are-paragraph">' + inlineRichText(p.paragraph || '') + '</p>' +
+            '<div class="who-we-are-btns">' + btns + ctaBtn + '</div>' +
+            '</div>' +
+            '</div>' +
+            '</section>';
+    },
+};
+
+/* ════ FEATURE ROWS — alternating image/text rows ════════════ */
+const featureRows = {
+    label: 'Feature Rows',
+    icon: 'image',
+    description: 'Alternating image + text rows (image left, then right, then left…). Great for feature deep-dives.',
+    schema: [
+        { key: 'title', label: 'Section Title (optional)', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'rows', label: 'Rows', type: 'repeater',
+            itemSchema: [
+                { key: 'title', label: 'Row Heading', type: 'text' },
+                { key: 'body', label: 'Row Text', type: 'textarea' },
+                { key: 'imageUrl', label: 'Image', type: 'image' },
+                { key: 'imageAlt', label: 'Image Alt', type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        title: 'Everything You Need, End to End',
+        subtitle: '',
+        rows: [
+            { title: 'Launch in minutes', body: 'Provision production-ready infrastructure with a few clicks.', imageUrl: '/assets/images/Home page images_s.webp', imageAlt: '' },
+            { title: 'Scale without limits', body: 'Grow capacity on demand — pay only for what you use.', imageUrl: '/assets/images/Home page images_s.webp', imageAlt: '' },
+        ],
+    },
+    renderer(container, p) {
+        const head = (p.title || p.subtitle)
+            ? '<div class="container" style="text-align:center;margin-bottom:36px">' +
+              (p.title ? '<h2 class="title">' + esc(p.title) + '</h2>' : '') +
+              (p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '') +
+              '</div>'
+            : '';
+        const rows = (p.rows || []).map((r, i) => {
+            const img = '<div class="who-we-are-image">' +
+                (r.imageUrl ? '<img src="' + esc(r.imageUrl) + '" alt="' + esc(r.imageAlt || '') + '">' : '') +
+                '</div>';
+            const txt = '<div class="blue-container">' +
+                '<h2 class="title">' + esc(r.title || '') + '</h2>' +
+                '<p class="who-we-are-paragraph">' + inlineRichText(r.body || '') + '</p>' +
+                '</div>';
+            const inner = (i % 2 === 0) ? img + txt : txt + img;
+            return '<div class="who-we-are-inner" style="margin-bottom:40px">' + inner + '</div>';
+        }).join('');
+        container.innerHTML = '<section class="who-we-are section">' + head + rows + '</section>';
+    },
+};
+
+/* ════ STAT CHIPS — hp-stat row (homepage partner section) ═══ */
+const statChips = {
+    label: 'Stat Chips',
+    icon: 'chart',
+    description: 'Row of icon + big number + label chips (homepage "99.9% Uptime SLA" style).',
+    schema: [
+        {
+            key: 'stats', label: 'Stats', type: 'repeater',
+            itemSchema: [
+                { key: 'icon', label: 'Icon Key (FA name)', type: 'text' },
+                { key: 'number', label: 'Value', type: 'text' },
+                { key: 'label', label: 'Label', type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        stats: [
+            { icon: 'gauge-high', number: '99.9%', label: 'Uptime SLA' },
+            { icon: 'users', number: '500+', label: 'Clients Served' },
+            { icon: 'headset', number: '24/7', label: 'Expert Support' },
+            { icon: 'certificate', number: 'ISO', label: 'Certified' },
+        ],
+    },
+    renderer(container, p) {
+        const chips = (p.stats || []).map((s) =>
+            '<div class="hp-stat">' +
+            '<span class="hp-stat-icon"><i class="' + resolveFaIcon(s.icon) + '" aria-hidden="true"></i></span>' +
+            '<div><span class="hp-stat-num">' + esc(s.number || '') + '</span>' +
+            '<span class="hp-stat-label">' + esc(s.label || '') + '</span></div>' +
+            '</div>').join('');
+        container.innerHTML =
+            '<section class="hp-partner-section"><div class="hp-partner-inner">' +
+            '<div class="hp-partner-stats is-visible">' + chips + '</div>' +
+            '</div></section>';
+    },
+};
+
+/* ════ TAG CARDS — hp-partner-card grid (homepage) ═══════════ */
+const tagCards = {
+    label: 'Tag Cards',
+    icon: 'tag',
+    description: 'Cards with a small tag chip + heading + text (homepage "Why Partner With Us" cards).',
+    schema: [
+        { key: 'eyebrow', label: 'Eyebrow', type: 'text' },
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'cards', label: 'Cards', type: 'repeater',
+            itemSchema: [
+                { key: 'tag', label: 'Tag Chip', type: 'text' },
+                { key: 'title', label: 'Card Heading', type: 'text' },
+                { key: 'desc', label: 'Card Text', type: 'textarea' },
+            ],
+        },
+    ],
+    defaultProps: {
+        eyebrow: 'Why Partner With Us',
+        title: 'Our Partnerships Assure Best Cloud Services',
+        subtitle: '',
+        cards: [
+            { tag: 'India First', title: 'We Are the Local Experts', desc: 'Deep roots in the Indian market with local support teams.' },
+            { tag: '99.9% SLA', title: 'Your Uptime is Our Promise', desc: 'Guaranteed availability backed by redundant infrastructure.' },
+        ],
+    },
+    renderer(container, p) {
+        const cards = (p.cards || []).map((c) =>
+            '<article class="hp-partner-card">' +
+            (c.tag ? '<span class="hp-partner-tag">' + esc(c.tag) + '</span>' : '') +
+            '<h3>' + esc(c.title || '') + '</h3>' +
+            '<p>' + inlineRichText(c.desc || '') + '</p>' +
+            '</article>').join('');
+        container.innerHTML =
+            '<section class="hp-partner-section"><div class="hp-partner-inner">' +
+            '<div class="hp-partner-header">' +
+            (p.eyebrow ? '<span class="hp-eyebrow">' + esc(p.eyebrow) + '</span>' : '') +
+            (p.title ? '<h2 class="hp-section-title is-visible">' + esc(p.title) + '</h2>' : '') +
+            (p.subtitle ? '<p class="hp-section-sub is-visible">' + esc(p.subtitle) + '</p>' : '') +
+            '</div>' +
+            '<div class="hp-partner-grid is-visible">' + cards + '</div>' +
+            '</div></section>';
+    },
+};
+
+/* ════ INDUSTRY TABS — hp-industry tabbed panels (homepage) ══ */
+const industryTabs = {
+    label: 'Industry Tabs',
+    icon: 'compare',
+    description: 'Tabbed industry panels — tab strip + per-industry card with features, "used by" and a CTA.',
+    schema: [
+        { key: 'eyebrow', label: 'Eyebrow', type: 'text' },
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'industries', label: 'Industries', type: 'repeater',
+            itemSchema: [
+                { key: 'icon', label: 'Tab Icon (FA name)', type: 'text' },
+                { key: 'tabLabel', label: 'Tab Label', type: 'text' },
+                { key: 'title', label: 'Panel Title', type: 'text' },
+                { key: 'desc', label: 'Panel Description', type: 'textarea' },
+                { key: 'usedBy', label: '"Used by" line', type: 'text' },
+                {
+                    key: 'cta', label: 'Panel CTA', type: 'cta',
+                    fields: [
+                        { key: 'text', label: 'Text', type: 'text' },
+                        { key: 'link', label: 'URL', type: 'text' },
+                    ],
+                },
+            ],
+        },
+    ],
+    defaultProps: {
+        eyebrow: 'Solutions by industry',
+        title: 'Cloud built for your world',
+        subtitle: 'Every industry has unique challenges. Pick yours to see how we solve them.',
+        industries: [
+            { icon: 'heart-pulse', tabLabel: 'Healthcare', title: 'Healthcare cloud solutions', desc: 'Secure, compliant infrastructure for hospitals and health-tech.', usedBy: 'Hospitals, clinics, health-tech startups', cta: { text: 'Explore healthcare cloud', link: '/contact-us' } },
+            { icon: 'graduation-cap', tabLabel: 'Education', title: 'Education cloud solutions', desc: 'Scalable infrastructure for EdTech platforms and universities.', usedBy: 'EdTech platforms, universities', cta: { text: 'Explore education cloud', link: '/contact-us' } },
+        ],
+    },
+    renderer(container, p) {
+        const inds = Array.isArray(p.industries) ? p.industries : [];
+        const secId = bldId('bld-ind');
+        const tabs = inds.map((ind, i) =>
+            '<button class="hp-industry-tab' + (i === 0 ? ' is-active' : '') + '" role="tab" data-idx="' + i + '">' +
+            '<i class="' + resolveFaIcon(ind.icon) + '" aria-hidden="true"></i> ' + esc(ind.tabLabel || '') +
+            '</button>').join('');
+        container.innerHTML =
+            '<section class="hp-industry-section" id="' + secId + '"><div class="hp-industry-inner">' +
+            '<div class="hp-industry-header">' +
+            (p.eyebrow ? '<span class="hp-eyebrow">' + esc(p.eyebrow) + '</span>' : '') +
+            (p.title ? '<h2 class="hp-section-title is-visible">' + esc(p.title) + '</h2>' : '') +
+            (p.subtitle ? '<p class="hp-section-sub is-visible">' + esc(p.subtitle) + '</p>' : '') +
+            '</div>' +
+            '<div class="hp-industry-tabs" role="tablist">' + tabs + '</div>' +
+            '<div class="hp-industry-panel" role="tabpanel"></div>' +
+            '</div></section>';
+
+        const root = container.querySelector('#' + secId);
+        const panel = root.querySelector('.hp-industry-panel');
+        function renderPanel(i) {
+            const ind = inds[i]; if (!ind) { panel.innerHTML = ''; return; }
+            const cta = (ind.cta && ind.cta.text)
+                ? '<a href="' + esc(ind.cta.link || '#') + '" class="hp-industry-cta">' + esc(ind.cta.text) +
+                  ' <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>'
+                : '';
+            panel.innerHTML =
+                '<div class="hp-industry-card-head">' +
+                '<div class="hp-industry-card-icon"><i class="' + resolveFaIcon(ind.icon) + '" aria-hidden="true"></i></div>' +
+                '<div><h3 class="hp-industry-card-title">' + esc(ind.title || '') + '</h3>' +
+                '<p class="hp-industry-card-desc">' + inlineRichText(ind.desc || '') + '</p></div>' +
+                '</div>' +
+                '<div class="hp-industry-card-foot">' +
+                (ind.usedBy ? '<span class="hp-industry-usedby"><strong>Used by:</strong> ' + esc(ind.usedBy) + '</span>' : '') +
+                cta +
+                '</div>';
+        }
+        renderPanel(0);
+        root.querySelector('.hp-industry-tabs').addEventListener('click', (e) => {
+            const btn = e.target.closest('.hp-industry-tab'); if (!btn) return;
+            root.querySelectorAll('.hp-industry-tab').forEach((t) => t.classList.remove('is-active'));
+            btn.classList.add('is-active');
+            renderPanel(Number(btn.dataset.idx));
+        });
+    },
+};
+
+/* ════ SECURITY CARDS — hp-security-card grid (homepage) ═════ */
+const securityCards = {
+    label: 'Security Cards',
+    icon: 'grid',
+    description: 'Icon + heading + text + highlight chip cards (homepage Security & Compliance grid).',
+    schema: [
+        { key: 'eyebrow', label: 'Eyebrow', type: 'text' },
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'cards', label: 'Cards', type: 'repeater',
+            itemSchema: [
+                { key: 'icon', label: 'Icon (FA name)', type: 'text' },
+                { key: 'title', label: 'Heading', type: 'text' },
+                { key: 'desc', label: 'Text', type: 'textarea' },
+                { key: 'chip', label: 'Highlight Chip', type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        eyebrow: 'Security & compliance',
+        title: 'Your data is safe. Always.',
+        subtitle: '',
+        cards: [
+            { icon: 'lock', title: 'End-to-end encryption', desc: 'All data encrypted at rest and in transit.', chip: 'AES-256 + TLS 1.3' },
+            { icon: 'database', title: 'Automated backups', desc: 'Daily incremental and weekly full backups.', chip: '30-day retention' },
+        ],
+    },
+    renderer(container, p) {
+        const cards = (p.cards || []).map((c) =>
+            '<article class="hp-security-card">' +
+            '<div class="hp-security-icon"><i class="' + resolveFaIcon(c.icon) + '" aria-hidden="true"></i></div>' +
+            '<h3>' + esc(c.title || '') + '</h3>' +
+            '<p>' + inlineRichText(c.desc || '') + '</p>' +
+            (c.chip ? '<span class="hp-security-chip">' + esc(c.chip) + '</span>' : '') +
+            '</article>').join('');
+        container.innerHTML =
+            '<section class="hp-security-section"><div class="hp-security-inner">' +
+            '<div class="hp-security-header">' +
+            (p.eyebrow ? '<span class="hp-eyebrow">' + esc(p.eyebrow) + '</span>' : '') +
+            (p.title ? '<h2 class="hp-section-title is-visible">' + esc(p.title) + '</h2>' : '') +
+            (p.subtitle ? '<p class="hp-section-sub is-visible">' + esc(p.subtitle) + '</p>' : '') +
+            '</div>' +
+            '<div class="hp-security-grid is-visible">' + cards + '</div>' +
+            '</div></section>';
+    },
+};
+
+/* ════ BADGE ROW — hp-compliance-badge strip (homepage) ══════ */
+const badgeRow = {
+    label: 'Badge Row',
+    icon: 'star',
+    description: 'Row of small icon + label pills (compliance badges: ISO, RBI, GDPR…).',
+    schema: [
+        {
+            key: 'badges', label: 'Badges', type: 'repeater',
+            itemSchema: [
+                { key: 'icon', label: 'Icon (FA name)', type: 'text' },
+                { key: 'title', label: 'Label', type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        badges: [
+            { icon: 'shield-halved', title: 'ISO 27001 certified' },
+            { icon: 'award', title: 'ISO 9001 certified' },
+            { icon: 'circle-check', title: 'GDPR ready' },
+            { icon: 'location-dot', title: 'India data residency' },
+        ],
+    },
+    renderer(container, p) {
+        const badges = (p.badges || []).map((b) =>
+            '<span class="hp-compliance-badge"><i class="' + resolveFaIcon(b.icon) + '" aria-hidden="true"></i> ' +
+            esc(b.title || '') + '</span>').join('');
+        container.innerHTML =
+            '<section class="hp-security-section"><div class="hp-security-inner">' +
+            '<div class="hp-compliance-badges is-visible">' + badges + '</div>' +
+            '</div></section>';
+    },
+};
+
+/* ════ RELATED SERVICES — 2-card cross-sell (veeam pattern) ══ */
+const relatedServices = {
+    label: 'Related Services',
+    icon: 'grid',
+    description: 'Cross-sell cards: heading + text + button, 2-up (Related Services pattern).',
+    schema: [
+        { key: 'title', label: 'Section Title', type: 'text' },
+        {
+            key: 'cards', label: 'Cards', type: 'repeater',
+            itemSchema: [
+                { key: 'title', label: 'Card Heading', type: 'text' },
+                { key: 'desc', label: 'Card Text', type: 'textarea' },
+                { key: 'btnLabel', label: 'Button Label', type: 'text' },
+                { key: 'btnUrl', label: 'Button URL', type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        title: 'Related Services',
+        cards: [
+            { title: 'Managed Cloud Hosting', desc: 'Secure, high-performance cloud managed end-to-end by ICSDC.', btnLabel: 'Explore Managed Cloud', btnUrl: '/managed-cloud-hosting' },
+            { title: 'Backup & Recovery', desc: 'Enterprise backup with rapid recovery and expert management.', btnLabel: 'View Backup Solutions', btnUrl: '/acronis-backup' },
+        ],
+    },
+    renderer(container, p) {
+        const cards = (p.cards || []).map((c) =>
+            '<div class="veeam-related-card">' +
+            '<h3>' + esc(c.title || '') + '</h3>' +
+            '<p>' + inlineRichText(c.desc || '') + '</p>' +
+            (c.btnLabel ? '<a href="' + esc(c.btnUrl || '#') + '" class="veeam-related-btn">' + esc(c.btnLabel) + '</a>' : '') +
+            '</div>').join('');
+        container.innerHTML =
+            '<section class="section"><div class="container">' +
+            (p.title ? '<h2 class="title" style="text-align:center">' + esc(p.title) + '</h2>' : '') +
+            '<div class="veeam-related-grid">' + cards + '</div>' +
+            '</div></section>';
+    },
+};
+
+/* ════ NUMBERED TIPS — grouped bullet lists (mch-optim) ══════ */
+const numberedTips = {
+    label: 'Grouped Bullet Lists',
+    icon: 'steps',
+    description: 'Titled groups each with a bullet list (Server Optimisations pattern).',
+    schema: [
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'groups', label: 'Groups', type: 'repeater',
+            itemSchema: [
+                { key: 'title', label: 'Group Title', type: 'text' },
+                { key: 'bullets', label: 'Bullets (one per line)', type: 'textarea' },
+            ],
+        },
+    ],
+    defaultProps: {
+        title: 'What We Optimise',
+        subtitle: '',
+        groups: [
+            { title: 'Performance', bullets: 'Caching tuned per workload\nDatabase query optimisation\nCDN configuration' },
+            { title: 'Security', bullets: 'Firewall hardening\nMalware scanning\nPatch management' },
+        ],
+    },
+    renderer(container, p) {
+        const groups = (p.groups || []).map((g) => {
+            const lis = String(g.bullets || '').split('\n').map((s) => s.trim()).filter(Boolean)
+                .map((b) => '<li>' + esc(b) + '</li>').join('');
+            return '<div class="mch-optim-group">' +
+                '<h3 class="mch-optim-group-title">' + esc(g.title || '') + '</h3>' +
+                '<ul class="mch-optim-list">' + lis + '</ul>' +
+                '</div>';
+        }).join('');
+        container.innerHTML =
+            '<section class="section"><div class="container">' +
+            (p.title ? '<h2 class="title" style="text-align:center">' + esc(p.title) + '</h2>' : '') +
+            (p.subtitle ? '<p class="subtitle" style="text-align:center">' + esc(p.subtitle) + '</p>' : '') +
+            '<div class="mch-optim-groups">' + groups + '</div>' +
+            '</div></section>';
+    },
+};
+
+/* ════ PLANS TABLE — vm-plans-table (virtual machine page) ═══ */
+const plansTable = {
+    label: 'Plans Table',
+    icon: 'tag',
+    description: 'Spec-by-spec plans table with a CTA per row (Virtual Machine plans pattern).',
+    schema: [
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        { key: 'columns', label: 'Column Headers (comma-separated)', type: 'text' },
+        { key: 'ctaLabel', label: 'Row CTA Label', type: 'text', default: 'Get Started' },
+        { key: 'ctaLink', label: 'Row CTA Link', type: 'text', default: '/contact-us' },
+        {
+            key: 'rows', label: 'Plan Rows', type: 'repeater',
+            itemSchema: [
+                { key: 'cells', label: 'Cells (comma-separated, matches headers)', type: 'textarea' },
+            ],
+        },
+    ],
+    defaultProps: {
+        title: 'Choose Your Plan',
+        subtitle: '',
+        columns: 'Plan Name, vCPU, RAM, Storage, Data Transfer, Starting Price',
+        ctaLabel: 'Get Started',
+        ctaLink: '/contact-us',
+        rows: [
+            { cells: 'Starter, 2 vCPU, 4 GB, 80 GB NVMe, 2 TB, Contact Us' },
+            { cells: 'Business, 4 vCPU, 8 GB, 160 GB NVMe, 4 TB, Contact Us' },
+        ],
+    },
+    renderer(container, p) {
+        const cols = String(p.columns || '').split(',').map((s) => s.trim()).filter(Boolean);
+        const ths = cols.map((c) => '<th>' + esc(c) + '</th>').join('') + '<th>Action</th>';
+        const trs = (p.rows || []).map((r) => {
+            const cells = String(r.cells || '').split(',').map((s) => s.trim());
+            const tds = cols.map((_, i) => '<td>' + esc(cells[i] || '') + '</td>').join('');
+            const cta = '<td><a href="' + esc(p.ctaLink || '/contact-us') + '" class="btn-primary" style="padding:8px 16px;font-size:13px;white-space:nowrap">' + esc(p.ctaLabel || 'Get Started') + '</a></td>';
+            return '<tr>' + tds + cta + '</tr>';
+        }).join('');
+        container.innerHTML =
+            '<section class="section cloud-pricing-section"><div class="container">' +
+            (p.title ? '<h2 class="title">' + esc(p.title) + '</h2>' : '') +
+            (p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '') +
+            '<div class="vm-plans-table-wrap">' +
+            '<table class="vm-plans-table"><thead><tr>' + ths + '</tr></thead><tbody>' + trs + '</tbody></table>' +
+            '</div>' +
+            '</div></section>';
+    },
+};
+
+/* ════ AUDIENCE GROUPS — cs-audience cards (cloud storage) ═══ */
+const audienceGroups = {
+    label: 'Audience Groups',
+    icon: 'partners',
+    description: 'Cards per audience: heading + intro + bullet list ("For Businesses / Creators / Individuals").',
+    schema: [
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'groups', label: 'Groups', type: 'repeater',
+            itemSchema: [
+                { key: 'title', label: 'Group Heading', type: 'text' },
+                { key: 'intro', label: 'Intro Line', type: 'textarea' },
+                { key: 'points', label: 'Points (one per line)', type: 'textarea' },
+            ],
+        },
+    ],
+    defaultProps: {
+        title: 'One Platform for Every Type of User',
+        subtitle: '',
+        groups: [
+            { title: 'For Businesses', intro: 'Built for teams that need secure, reliable infrastructure.', points: 'Central, secure data environment\nControlled team access\nGranular permissions' },
+            { title: 'For Individuals', intro: 'Simple and dependable for personal use.', points: 'Easy setup\nAffordable plans\nAccess anywhere' },
+        ],
+    },
+    renderer(container, p) {
+        const cards = (p.groups || []).map((g) => {
+            const lis = String(g.points || '').split('\n').map((s) => s.trim()).filter(Boolean)
+                .map((pt) => '<li>' + esc(pt) + '</li>').join('');
+            return '<div class="cs-audience-card">' +
+                '<h3 class="cs-audience-title">' + esc(g.title || '') + '</h3>' +
+                (g.intro ? '<p class="cs-audience-intro">' + esc(g.intro) + '</p>' : '') +
+                '<ul class="cs-audience-points">' + lis + '</ul>' +
+                '</div>';
+        }).join('');
+        container.innerHTML =
+            '<section class="section cloud-power-section"><div class="container">' +
+            (p.title ? '<h2 class="title">' + esc(p.title) + '</h2>' : '') +
+            (p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '') +
+            '<div class="cs-audience-grid">' + cards + '</div>' +
+            '</div></section>';
+    },
+};
+
+/* ════ RICH TEXT — free-form content block ═══════════════════ */
+const richText = {
+    label: 'Rich Text Block',
+    icon: 'info',
+    description: 'Free-form text/HTML block for anything the other components don’t cover.',
+    schema: [
+        { key: 'title', label: 'Heading (optional)', type: 'text' },
+        { key: 'body', label: 'Content (HTML allowed)', type: 'textarea', required: true },
+        { key: 'centered', label: 'Center Text', type: 'toggle', default: false },
+    ],
+    defaultProps: {
+        title: '',
+        body: 'Write anything here. Basic HTML like <strong>bold</strong> and <a href="/contact-us">links</a> is supported.',
+        centered: false,
+    },
+    renderer(container, p) {
+        const align = p.centered ? ' style="text-align:center"' : '';
+        container.innerHTML =
+            '<section class="section"><div class="container"' + align + '>' +
+            (p.title ? '<h2 class="title">' + esc(p.title) + '</h2>' : '') +
+            '<div class="bld-richtext" style="font-size:15px;line-height:1.65;color:var(--c-text-dark)">' +
+            inlineRichText(p.body || '') +
+            '</div>' +
+            '</div></section>';
+    },
+};
+
+/* ════ SPACER / DIVIDER ══════════════════════════════════════ */
+const spacer = {
+    label: 'Spacer / Divider',
+    icon: 'steps',
+    description: 'Vertical spacing between sections, with an optional divider line.',
+    schema: [
+        { key: 'height', label: 'Height (px)', type: 'number', default: 60, min: 8, max: 240 },
+        { key: 'divider', label: 'Show Divider Line', type: 'toggle', default: false },
+    ],
+    defaultProps: { height: 60, divider: false },
+    renderer(container, p) {
+        const h = Math.max(8, Math.min(240, Number(p.height) || 60));
+        const line = p.divider
+            ? '<div style="max-width:1200px;margin:0 auto;border-top:1px solid var(--c-border,#e6e9f0)"></div>'
+            : '';
+        container.innerHTML = '<div style="height:' + Math.floor(h / 2) + 'px"></div>' + line +
+            '<div style="height:' + Math.ceil(h / 2) + 'px"></div>';
+    },
+};
+
+/* ════ VIDEO EMBED ═══════════════════════════════════════════ */
+const videoEmbed = {
+    label: 'Video Embed',
+    icon: 'image',
+    description: 'Responsive YouTube / Vimeo embed with optional heading.',
+    schema: [
+        { key: 'title', label: 'Heading (optional)', type: 'text' },
+        { key: 'embedUrl', label: 'Embed URL (youtube.com/embed/…)', type: 'text', required: true },
+    ],
+    defaultProps: {
+        title: '',
+        embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    },
+    renderer(container, p) {
+        container.innerHTML =
+            '<section class="section"><div class="container">' +
+            (p.title ? '<h2 class="title" style="text-align:center;margin-bottom:24px">' + esc(p.title) + '</h2>' : '') +
+            '<div style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;max-width:960px;margin:0 auto">' +
+            '<iframe src="' + esc(p.embedUrl) + '" style="position:absolute;inset:0;width:100%;height:100%;border:0" ' +
+            'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" title="' + esc(p.title || 'Video') + '"></iframe>' +
+            '</div>' +
+            '</div></section>';
+    },
+};
+
 /* ════ EXPORT ════════════════════════════════════════════════ */
 export const COMPONENT_REGISTRY = {
     hero,
+    pillars,
     iconCards,
     imageText,
+    whoWeAre,
+    featureRows,
+    checklistSplit,
+    richText,
     statsBand,
+    statChips,
+    tagCards,
+    securityCards,
+    badgeRow,
+    industryTabs,
+    audienceGroups,
     comparisonTable,
     processSteps,
+    numberedTips,
     ctaBand,
     pricing,
+    plansTable,
+    relatedServices,
     testimonials,
     logoCloud,
     gallery,
     contactInfo,
     contactForm,
     mapEmbed,
+    videoEmbed,
     faq,
+    spacer,
 };
 
 export const COMPONENT_ORDER = [
     'hero',
+    'pillars',
     'iconCards',
     'imageText',
+    'whoWeAre',
+    'featureRows',
+    'checklistSplit',
+    'richText',
     'statsBand',
+    'statChips',
+    'tagCards',
+    'securityCards',
+    'badgeRow',
+    'industryTabs',
+    'audienceGroups',
     'comparisonTable',
     'processSteps',
+    'numberedTips',
     'ctaBand',
     'pricing',
+    'plansTable',
+    'relatedServices',
     'testimonials',
     'logoCloud',
     'gallery',
     'contactInfo',
     'contactForm',
     'mapEmbed',
+    'videoEmbed',
     'faq',
+    'spacer',
+];
+
+/* Library groupings for the editor's left panel. Order inside each
+   category is display order; categories render in this order. */
+export const COMPONENT_CATEGORIES = [
+    { label: 'Heroes & Headers', types: ['hero', 'pillars', 'badgeRow', 'statChips'] },
+    { label: 'Content', types: ['imageText', 'whoWeAre', 'featureRows', 'checklistSplit', 'richText'] },
+    { label: 'Grids & Cards', types: ['iconCards', 'tagCards', 'securityCards', 'audienceGroups', 'relatedServices', 'gallery'] },
+    { label: 'Data & Compare', types: ['statsBand', 'comparisonTable', 'plansTable', 'processSteps', 'numberedTips', 'industryTabs'] },
+    { label: 'Social Proof', types: ['testimonials', 'logoCloud'] },
+    { label: 'Conversion', types: ['ctaBand', 'pricing', 'contactForm', 'contactInfo', 'faq'] },
+    { label: 'Media & Layout', types: ['mapEmbed', 'videoEmbed', 'spacer'] },
 ];

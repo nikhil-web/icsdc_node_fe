@@ -136,6 +136,28 @@
 }
 
 /* ── Left panel: component library ──────────────────────── */
+.bld-lib-group { margin-bottom: 0.4rem; }
+
+.bld-lib-group-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.45rem 0.35rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted, #64748b);
+}
+
+.bld-lib-group-head i { font-size: 0.6rem; transition: transform 0.15s ease; }
+.bld-lib-group:not(.is-open) .bld-lib-group-head i { transform: rotate(-90deg); }
+.bld-lib-group:not(.is-open) .bld-lib-group-body { display: none; }
+
 .bld-lib-item {
     display: flex;
     align-items: center;
@@ -185,6 +207,45 @@
     font-size: 0.75rem;
 }
 
+/* ── Post-publish toast ──────────────────────────────────── */
+.bld-publish-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 200;
+    width: 420px;
+    max-width: calc(100vw - 40px);
+    background: #0a1230;
+    color: #e2e8f0;
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 12px 40px rgba(2, 8, 30, 0.35);
+    animation: bldToastIn 0.25s ease;
+}
+
+@keyframes bldToastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+.bld-toast-row { display: flex; align-items: center; gap: 8px; }
+.bld-toast-row > i.fa-circle-check { color: #4ade80; }
+.bld-toast-row span { flex: 1; font-size: 0.85rem; }
+.bld-publish-toast a { color: #7dd3fc; }
+.bld-publish-toast code { background: rgba(255, 255, 255, 0.08); padding: 1px 5px; border-radius: 4px; }
+.bld-toast-sub { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.bld-toast-sub span { color: #94a3b8; font-size: 0.78rem; }
+.bld-toast-close { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 0.9rem; padding: 2px 4px; }
+.bld-toast-close:hover { color: #fff; }
+
+/* ── Right panel: layout controls ────────────────────────── */
+.bld-layout-panel legend i { margin-right: 4px; color: var(--blue, #1a56db); }
+
+.bld-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 0.75rem;
+}
+
+.bld-layout-field { margin-bottom: 0; }
+
 /* ── Centre: canvas ──────────────────────────────────────── */
 .bld-canvas-wrap {
     overflow-y: auto;
@@ -192,6 +253,64 @@
 }
 
 .bld-canvas { max-width: 760px; margin: 0 auto; }
+
+/* Live WYSIWYG iframe canvas */
+.bld-canvas-wrap-live {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    background:
+        linear-gradient(45deg, #f1f5f9 25%, transparent 25%, transparent 75%, #f1f5f9 75%),
+        linear-gradient(45deg, #f1f5f9 25%, #e9eef5 25%, #e9eef5 75%, #f1f5f9 75%);
+    background-size: 24px 24px;
+    background-position: 0 0, 12px 12px;
+}
+
+[data-theme="dark"] .bld-canvas-wrap-live {
+    background:
+        linear-gradient(45deg, #0f172a 25%, transparent 25%, transparent 75%, #0f172a 75%),
+        linear-gradient(45deg, #0f172a 25%, #132038 25%, #132038 75%, #0f172a 75%);
+    background-size: 24px 24px;
+    background-position: 0 0, 12px 12px;
+}
+
+.bld-canvas-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #fff;
+    transition: width 0.25s ease;
+    box-shadow: 0 0 0 1px var(--border, #e2e8f0), 0 8px 30px rgba(2, 8, 30, 0.08);
+}
+
+/* Viewport toggle in topbar */
+.bld-viewport-toggle {
+    display: inline-flex;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-right: 0.4rem;
+}
+
+.bld-viewport-toggle button {
+    border: none;
+    background: transparent;
+    padding: 0.45rem 0.65rem;
+    cursor: pointer;
+    color: var(--muted, #64748b);
+    font-size: 0.85rem;
+}
+
+.bld-viewport-toggle button + button { border-left: 1px solid var(--border, #e2e8f0); }
+
+.bld-viewport-toggle button.is-active {
+    background: var(--blue, #1a56db);
+    color: #fff;
+}
+
+[data-theme="dark"] .bld-viewport-toggle { border-color: #334155; }
+[data-theme="dark"] .bld-viewport-toggle button + button { border-left-color: #334155; }
 
 .bld-empty-canvas {
     text-align: center;

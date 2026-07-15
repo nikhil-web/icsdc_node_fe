@@ -178,6 +178,65 @@ function renderField(field, value, path) {
     }
 }
 
+/* ── Shared Layout panel ─────────────────────────────────────
+   Edits section.layout (width / align / background / padding /
+   columns) — rendered above every component's own fields.
+   See builder-layout.css for what each value does. */
+const LAYOUT_CONTROLS = [
+    { key: 'width',      label: 'Width',      options: [['contained', 'Contained'], ['narrow', 'Narrow'], ['full', 'Full width']] },
+    { key: 'align',      label: 'Text Align', options: [['left', 'Left'], ['center', 'Center']] },
+    { key: 'background', label: 'Background', options: [['none', 'None'], ['light', 'Light'], ['blue', 'Brand Blue'], ['ink', 'Dark Ink']] },
+    { key: 'padding',    label: 'Spacing',    options: [['normal', 'Normal'], ['compact', 'Compact'], ['spacious', 'Spacious']] },
+];
+
+/* Components whose main grid can be re-columned via layout.columns.
+   (iconCards is excluded — it has its own Columns field.) */
+const GRID_TYPES = ['pillars', 'tagCards', 'securityCards', 'audienceGroups', 'relatedServices', 'numberedTips', 'statChips'];
+
+function layoutPanelHtml(section) {
+    const l = section.layout || {};
+    const selects = LAYOUT_CONTROLS.map((c) => {
+        const cur = l[c.key] || c.options[0][0];
+        const opts = c.options.map(([val, lab]) =>
+            '<option value="' + val + '"' + (val === cur ? ' selected' : '') + '>' + lab + '</option>').join('');
+        return '<label class="bld-field bld-layout-field">' +
+            '<span class="bld-field-label">' + c.label + '</span>' +
+            '<select class="bld-input bld-layout-input" data-layout-key="' + c.key + '">' + opts + '</select>' +
+            '</label>';
+    }).join('');
+    const colsCur = l.columns || '';
+    const cols = GRID_TYPES.includes(section.type)
+        ? '<label class="bld-field bld-layout-field">' +
+          '<span class="bld-field-label">Grid Columns</span>' +
+          '<select class="bld-input bld-layout-input" data-layout-key="columns">' +
+          '<option value=""' + (colsCur === '' ? ' selected' : '') + '>Auto</option>' +
+          [1, 2, 3, 4].map((n) => '<option value="' + n + '"' + (String(colsCur) === String(n) ? ' selected' : '') + '>' + n + '</option>').join('') +
+          '</select></label>'
+        : '';
+    return '<fieldset class="bld-fieldset bld-layout-panel">' +
+        '<legend><i class="fa-solid fa-table-columns" aria-hidden="true"></i> Layout</legend>' +
+        '<div class="bld-layout-grid">' + selects + cols + '</div>' +
+        '</fieldset>';
+}
+
+function bindLayoutHandlers(rootEl) {
+    rootEl.querySelectorAll('.bld-layout-input').forEach((sel) => {
+        sel.addEventListener('change', () => {
+            if (!activeSection) return;
+            const key = sel.dataset.layoutKey;
+            const layout = Object.assign({}, activeSection.layout || {});
+            if (key === 'columns') {
+                if (sel.value === '') delete layout.columns;
+                else layout.columns = Number(sel.value);
+            } else {
+                layout[key] = sel.value;
+            }
+            activeSection.layout = layout;
+            if (onChangeCallback) onChangeCallback(activeSection);
+        });
+    });
+}
+
 /* ── Public API ──────────────────────────────────────────── */
 
 export function renderPropertyEditor(rootEl, section, onChange) {
@@ -204,8 +263,10 @@ export function renderPropertyEditor(rootEl, section, onChange) {
             '<h3>' + esc(entry.label) + '</h3>' +
             '<p>' + esc(entry.description || '') + '</p>' +
         '</div>' +
+        layoutPanelHtml(section) +
         '<form class="bld-prop-form" onsubmit="return false">' + fieldsHtml + '</form>';
 
+    bindLayoutHandlers(rootEl);
     bindHandlers(rootEl, entry);
 }
 
