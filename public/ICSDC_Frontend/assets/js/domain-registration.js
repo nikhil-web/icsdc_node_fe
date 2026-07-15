@@ -20,6 +20,7 @@
  *   13. FAQ
  */
 
+import { wireCtaLink } from './utils/cms-helpers.js';
 import { getDomainRegistrationPage } from './services/contentService.js';
 import {
     populateSEO,
@@ -65,7 +66,7 @@ import {
         if (searchBtn && page.heroCtaPrimary) {
             searchBtn.innerHTML = page.heroCtaPrimary.text || searchBtn.innerHTML;
             if (page.heroCtaPrimary.link && page.heroCtaPrimary.link !== '#') {
-                searchBtn.setAttribute('onclick', "window.location.href='" + page.heroCtaPrimary.link + "'");
+                wireCtaLink(searchBtn, page.heroCtaPrimary.link);
             }
         }
 

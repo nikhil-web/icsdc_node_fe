@@ -17,6 +17,7 @@
  *   10. CTA Band #2
  */
 
+import { wireCtaLink } from './utils/cms-helpers.js';
 import { getAcronisBackupPage } from './services/contentService.js';
 
 import {
@@ -81,11 +82,11 @@ import {
         var btns = section.querySelectorAll('.hero-btns button');
         if (btns.length >= 1 && page.heroCtaPrimary) {
             btns[0].innerHTML = page.heroCtaPrimary.text || '';
-            if (page.heroCtaPrimary.link) btns[0].setAttribute('onclick', "window.location.href='" + page.heroCtaPrimary.link + "'");
+            wireCtaLink(btns[0], page.heroCtaPrimary.link);
         }
         if (btns.length >= 2 && page.heroCtaSecondary) {
             btns[1].textContent = page.heroCtaSecondary.text || '';
-            if (page.heroCtaSecondary.link) btns[1].setAttribute('onclick', "window.location.href='" + page.heroCtaSecondary.link + "'");
+            wireCtaLink(btns[1], page.heroCtaSecondary.link);
         }
 
         // Hero stat cards
@@ -126,11 +127,11 @@ import {
         var pricingBtns = document.querySelectorAll('#acr-pricing .hero-btns button');
         if (pricingBtns.length >= 1 && page.pricingCtaPrimary) {
             pricingBtns[0].innerHTML = page.pricingCtaPrimary.text || '';
-            if (page.pricingCtaPrimary.link) pricingBtns[0].setAttribute('onclick', "window.location.href='" + page.pricingCtaPrimary.link + "'");
+            wireCtaLink(pricingBtns[0], page.pricingCtaPrimary.link);
         }
         if (pricingBtns.length >= 2 && page.pricingCtaSecondary) {
             pricingBtns[1].textContent = page.pricingCtaSecondary.text || '';
-            if (page.pricingCtaSecondary.link) pricingBtns[1].setAttribute('onclick', "window.location.href='" + page.pricingCtaSecondary.link + "'");
+            wireCtaLink(pricingBtns[1], page.pricingCtaSecondary.link);
         }
     }
 

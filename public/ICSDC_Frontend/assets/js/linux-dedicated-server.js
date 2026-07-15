@@ -1,3 +1,4 @@
+import { wireCtaLink } from './utils/cms-helpers.js';
 import { populateSEO, populateHero, hidePageLoader, markActiveNavLink, setText, setHTML, initTestimonials, initFAQ } from './utils/cms-helpers.js';
 import { getLinuxDedicatedServerPage } from './services/contentService.js';
 
@@ -301,11 +302,11 @@ function ldsPopulateCtaBand(cta) {
         var outlineBtn = btns.querySelector('.lds-cta-btn-outline');
         if (primaryBtn && cta.ctaPrimary) {
             primaryBtn.innerHTML = cta.ctaPrimary.text || '';
-            if (cta.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
+            wireCtaLink(primaryBtn, cta.ctaPrimary.link);
         }
         if (outlineBtn && cta.ctaSecondary) {
             outlineBtn.innerHTML = cta.ctaSecondary.text || '';
-            if (cta.ctaSecondary.link) outlineBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
+            wireCtaLink(outlineBtn, cta.ctaSecondary.link);
         }
     }
 }

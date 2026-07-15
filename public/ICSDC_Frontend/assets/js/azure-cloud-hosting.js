@@ -1,3 +1,4 @@
+import { wireCtaLink } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -199,7 +200,7 @@ import { uploadURL } from './services/strapiClient.js';
                     if (page.heroCtaSecondary && page.heroCtaSecondary.text) {
                         secondaryBtn.textContent = page.heroCtaSecondary.text;
                         if (page.heroCtaSecondary.link) {
-                            secondaryBtn.setAttribute('onclick', "window.location.href='" + page.heroCtaSecondary.link + "'");
+                            wireCtaLink(secondaryBtn, page.heroCtaSecondary.link);
                         }
                         secondaryBtn.style.display = '';
                     } else {
@@ -256,7 +257,7 @@ import { uploadURL } from './services/strapiClient.js';
                 var qBtn = document.getElementById('azure-quote-cta-btn');
                 if (qBtn && qb.ctaPrimary) {
                     if (qb.ctaPrimary.text) qBtn.innerHTML = qb.ctaPrimary.text + ' ';
-                    if (qb.ctaPrimary.link) qBtn.setAttribute('onclick', "window.location.href='" + qb.ctaPrimary.link + "'");
+                    wireCtaLink(qBtn, qb.ctaPrimary.link);
                 }
             }
 

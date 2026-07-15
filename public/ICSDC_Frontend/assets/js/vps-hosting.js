@@ -23,6 +23,7 @@
  *   16. CTA Band #2 (final CTA)
  */
 
+import { wireCtaLink } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -245,11 +246,11 @@ import { inlineRichText } from './utils/cms-helpers.js';
                 var secondaryBtn = btns.querySelector('.vps-cta-btn-outline');
                 if (primaryBtn && cta.ctaPrimary) {
                     primaryBtn.innerHTML = cta.ctaPrimary.text || '';
-                    if (cta.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
+                    wireCtaLink(primaryBtn, cta.ctaPrimary.link);
                 }
                 if (secondaryBtn && cta.ctaSecondary) {
                     secondaryBtn.textContent = cta.ctaSecondary.text || '';
-                    if (cta.ctaSecondary.link) secondaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
+                    wireCtaLink(secondaryBtn, cta.ctaSecondary.link);
                 }
             }
         })();
@@ -300,11 +301,11 @@ import { inlineRichText } from './utils/cms-helpers.js';
                 var outlineBtn = content.querySelector('.btn-outline');
                 if (primaryBtn && page.globalCtaPrimary) {
                     primaryBtn.innerHTML = page.globalCtaPrimary.text || '';
-                    if (page.globalCtaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + page.globalCtaPrimary.link + "'");
+                    wireCtaLink(primaryBtn, page.globalCtaPrimary.link);
                 }
                 if (outlineBtn && page.globalCtaSecondary) {
                     outlineBtn.textContent = page.globalCtaSecondary.text || '';
-                    if (page.globalCtaSecondary.link) outlineBtn.setAttribute('onclick', "window.location.href='" + page.globalCtaSecondary.link + "'");
+                    wireCtaLink(outlineBtn, page.globalCtaSecondary.link);
                 }
             }
 
@@ -402,11 +403,11 @@ import { inlineRichText } from './utils/cms-helpers.js';
                 var secondaryBtn = btns.querySelector('.vps-cta-btn-outline');
                 if (primaryBtn && cta.ctaPrimary) {
                     primaryBtn.innerHTML = cta.ctaPrimary.text || '';
-                    if (cta.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
+                    wireCtaLink(primaryBtn, cta.ctaPrimary.link);
                 }
                 if (secondaryBtn && cta.ctaSecondary) {
                     secondaryBtn.textContent = cta.ctaSecondary.text || '';
-                    if (cta.ctaSecondary.link) secondaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
+                    wireCtaLink(secondaryBtn, cta.ctaSecondary.link);
                 }
             }
         })();
