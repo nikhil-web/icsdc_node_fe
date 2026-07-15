@@ -389,6 +389,7 @@
 .vps-plan-price-wrap {
     display: flex;
     align-items: baseline;
+    justify-content: center;
     gap: 4px;
     margin-bottom: 4px;
 }
