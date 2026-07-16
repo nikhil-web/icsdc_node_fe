@@ -61,6 +61,8 @@ import { uploadURL } from './services/strapiClient.js';
                 : '';
 
             var ctaText = plan.ctaText || 'Get Started';
+            // Per-plan CMS link; empty → site-wide contact popup. (Was a dead href="#".)
+            var ctaHref = plan.ctaLink || 'contact-popup';
             var btnClass = isFeatured ? 'cs-plan-btn-featured' : 'cs-plan-btn';
 
             return '<div class="cs-plan-card' + featuredClass + '">' +
@@ -69,7 +71,7 @@ import { uploadURL } from './services/strapiClient.js';
                 priceHtml +
                 taglineHtml +
                 featuresHtml +
-                '<a href="#" class="' + btnClass + '">' + ctaText + ' </a>' +
+                '<a href="' + ctaHref + '" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }

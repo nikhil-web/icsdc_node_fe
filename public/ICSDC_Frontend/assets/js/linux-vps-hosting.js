@@ -61,7 +61,7 @@ import {
                 '<div class="lvps-plan-name">' + (plan.name || '') + '</div>' +
                 priceHtml +
                 featuresHtml +
-                '<a href="/contact-us.html" class="' + btnClass + '">Get Started </a>' +
+                '<a href="' + (plan.ctaLink || 'contact-popup') + '" class="' + btnClass + '">' + (plan.ctaText || 'Get Started') + ' </a>' +
                 '</div>';
         }).join('');
     }

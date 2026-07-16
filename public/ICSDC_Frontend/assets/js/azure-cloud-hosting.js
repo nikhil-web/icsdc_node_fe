@@ -96,11 +96,13 @@ import { uploadURL } from './services/strapiClient.js';
                     return '<li>' + (f.label || f.text || f.name || f) + '</li>';
                 }).join('') + '</ul>' : '';
             var ctaText = plan.ctaText || 'Get Started';
+            // Per-plan CMS link; empty → site-wide contact popup.
+            var ctaHref = plan.ctaLink || 'contact-popup';
             var btnClass = isFeatured ? 'azure-plan-btn-featured' : 'azure-plan-btn';
             return '<div class="azure-plan-card' + featuredClass + '">' + badgeHtml +
                 '<div class="azure-plan-name">' + (plan.tier || plan.name || '') + '</div>' +
                 priceHtml + taglineHtml + featuresHtml +
-                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' </a></div>';
+                '<a href="' + ctaHref + '" class="' + btnClass + '">' + ctaText + ' </a></div>';
         }).join('');
     }
 

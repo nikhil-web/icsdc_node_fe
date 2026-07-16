@@ -61,6 +61,8 @@ import {
                 : '';
 
             var ctaText = plan.ctaText || 'Get Started';
+            // Per-plan CMS link; empty → site-wide contact popup.
+            var ctaHref = plan.ctaLink || 'contact-popup';
             var ctaStyle = plan.ctaStyle || (isFeatured ? 'primary' : 'outline');
             var btnClass = ctaStyle === 'primary'
                 ? 'cp-plan-btn cp-plan-btn-primary'
@@ -72,7 +74,7 @@ import {
                 priceHtml +
                 descHtml +
                 featuresHtml +
-                '<a href="/contact-us.html" class="' + btnClass + '">' + ctaText + ' </a>' +
+                '<a href="' + ctaHref + '" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }

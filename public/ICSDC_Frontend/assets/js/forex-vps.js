@@ -47,7 +47,8 @@ import {
                 tagline:    plan.priceNote || null,
                 isFeatured: !!plan.isPopular,
                 badge:      plan.isPopular ? 'Most Popular' : null,
-                ctaText:    'Get Started',
+                ctaText:    plan.ctaText || 'Get Started',
+                ctaLink:    plan.ctaLink || '',   // shared renderer defaults empty → contact popup
                 ctaStyle:   plan.isPopular ? 'primary' : 'outline',
                 features:   features
             };
