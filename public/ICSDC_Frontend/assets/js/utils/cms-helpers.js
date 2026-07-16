@@ -588,11 +588,16 @@ export function populatePricingPlans(gridSelector, plans) {
             (plan.tagline ? '<p class="ds-plan-tagline">' + plan.tagline + '</p>' : '') +
             '<hr class="ds-plan-divider">' +
             '<ul class="ds-plan-features">' + featuresHTML + '</ul>' +
-            '<button class="ds-plan-cta ' + ctaClass + '">' +
+            '<button type="button" class="ds-plan-cta ' + ctaClass + '">' +
             (plan.ctaText || '') + ctaArrow +
             '</button>' +
             '</div>';
     }).join('');
+
+    // Wire each plan CTA: per-plan ctaLink, defaulting to the contact popup.
+    grid.querySelectorAll('.ds-plan-cta').forEach(function (btn, i) {
+        wireCtaLink(btn, (sorted[i] && sorted[i].ctaLink) || 'contact-popup');
+    });
 }
 
 export function populatePricingPlansCloud(gridSelector, plans) {
@@ -631,11 +636,16 @@ export function populatePricingPlansCloud(gridSelector, plans) {
             (plan.tagline ? '<p class="cloud-plan-tagline">' + plan.tagline + '</p>' : '') +
             '<hr class="cloud-plan-divider">' +
             '<ul class="cloud-plan-features">' + featuresHTML + '</ul>' +
-            '<button class="cloud-plan-cta ' + ctaClass + '">' +
+            '<button type="button" class="cloud-plan-cta ' + ctaClass + '">' +
             (plan.ctaText || '') + ctaArrow +
             '</button>' +
             '</div>';
     }).join('');
+
+    // Wire each plan CTA: per-plan ctaLink, defaulting to the contact popup.
+    grid.querySelectorAll('.cloud-plan-cta').forEach(function (btn, i) {
+        wireCtaLink(btn, (sorted[i] && sorted[i].ctaLink) || 'contact-popup');
+    });
 }
 
 export function populateWhenCards(gridSelector, cards) {

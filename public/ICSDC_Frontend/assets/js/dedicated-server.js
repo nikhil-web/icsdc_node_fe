@@ -257,11 +257,16 @@ import { initFAQ, initTestimonials, populateSEO, inlineRichText, wireCtaLink } f
                 (plan.tagline ? '<p class="ds-plan-tagline">' + plan.tagline + '</p>' : '') +
                 '<hr class="ds-plan-divider">' +
                 '<ul class="ds-plan-features">' + featuresHTML + '</ul>' +
-                '<button class="ds-plan-cta ' + ctaClass + '">' +
+                '<button type="button" class="ds-plan-cta ' + ctaClass + '">' +
                 plan.ctaText + ctaArrow +
                 '</button>' +
                 '</div>';
         }).join('');
+
+        // Wire each plan CTA: per-plan ctaLink, defaulting to the contact popup.
+        grid.querySelectorAll('.ds-plan-cta').forEach(function (btn, i) {
+            wireCtaLink(btn, (sorted[i] && sorted[i].ctaLink) || 'contact-popup');
+        });
     }
 
     /** 5. Pillars */

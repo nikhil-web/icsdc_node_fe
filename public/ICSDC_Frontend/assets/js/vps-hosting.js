@@ -144,9 +144,14 @@ import { inlineRichText } from './utils/cms-helpers.js';
                             (plan.tagline ? '<p class="vps-plan-tagline">' + plan.tagline + '</p>' : '') +
                             '<hr class="vps-plan-divider">' +
                             '<ul class="vps-plan-features">' + featuresHTML + '</ul>' +
-                            '<button class="vps-plan-cta ' + ctaClass + '">' + (plan.ctaText || '') + '</button>' +
+                            '<button type="button" class="vps-plan-cta ' + ctaClass + '">' + (plan.ctaText || '') + '</button>' +
                             '</div>';
                     }).join('');
+
+                    // Wire each plan CTA: per-plan ctaLink, defaulting to the contact popup.
+                    grid.querySelectorAll('.vps-plan-cta').forEach(function (btn, i) {
+                        wireCtaLink(btn, (page.pricingPlans[i] && page.pricingPlans[i].ctaLink) || 'contact-popup');
+                    });
                 }
             }
         })();

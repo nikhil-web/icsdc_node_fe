@@ -15,7 +15,8 @@ import {
     setText,
     setHTML,
     initFAQ,
-    initTestimonials
+    initTestimonials,
+    wireCtaLink
 } from './utils/cms-helpers.js';
 
 (function () {
@@ -116,11 +117,16 @@ import {
                 (plan.tagline ? '<p class="ds-plan-tagline">' + escapeHTML(plan.tagline) + '</p>' : '') +
                 '<hr class="ds-plan-divider">' +
                 '<ul class="ds-plan-features">' + featuresHTML + '</ul>' +
-                '<button class="ds-plan-cta ' + ctaClass + '" onclick="location.href=\'#contact\'">' +
+                '<button type="button" class="ds-plan-cta ' + ctaClass + '">' +
                 escapeHTML(plan.ctaText || 'Get Started') + ctaArrow +
                 '</button>' +
                 '</div>';
         }).join('');
+
+        // Wire each plan CTA: per-plan ctaLink, defaulting to the contact popup.
+        grid.querySelectorAll('.ds-plan-cta').forEach(function (btn, i) {
+            wireCtaLink(btn, (sorted[i] && sorted[i].ctaLink) || 'contact-popup');
+        });
     }
 
     async function init() {

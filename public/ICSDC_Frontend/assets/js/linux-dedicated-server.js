@@ -218,9 +218,14 @@ function ldsPopulatePricingPlans(gridSelector, plans) {
             (plan.tagline ? '<p class="lds-plan-tagline">' + plan.tagline + '</p>' : '') +
             '<hr class="lds-plan-divider">' +
             '<ul class="lds-plan-specs">' + featuresHTML + '</ul>' +
-            '<button class="lds-plan-cta ' + ctaClass + '">' + (plan.ctaText || '') + '</button>' +
+            '<button type="button" class="lds-plan-cta ' + ctaClass + '">' + (plan.ctaText || '') + '</button>' +
             '</div>';
     }).join('');
+
+    // Wire each plan CTA: per-plan ctaLink, defaulting to the contact popup.
+    grid.querySelectorAll('.lds-plan-cta').forEach(function (btn, i) {
+        wireCtaLink(btn, (sorted[i] && sorted[i].ctaLink) || 'contact-popup');
+    });
 }
 
 /**
