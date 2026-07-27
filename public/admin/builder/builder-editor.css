@@ -106,7 +106,9 @@
 /* ── Three-panel body ──────────────────────────────────── */
 .bld-editor-body {
     display: grid;
-    grid-template-columns: 240px 1fr minmax(480px, 40vw);
+    /* Canvas is the star: give it every spare pixel. The properties panel is a
+       form — it only needs enough width for two side-by-side selects. */
+    grid-template-columns: 232px 1fr minmax(300px, 344px);
     flex: 1;
     overflow: hidden;
     min-height: 0;
@@ -161,13 +163,13 @@
 .bld-lib-item {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     width: 100%;
-    padding: 0.65rem 0.7rem;
+    padding: 0.4rem 0.5rem;   /* compact: 31 components must not require endless scrolling */
     border: 1px solid var(--border, #e2e8f0);
-    border-radius: 8px;
+    border-radius: 7px;
     background: #fff;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
     cursor: pointer;
     transition: all 0.15s ease;
     text-align: left;
@@ -185,9 +187,10 @@
 [data-theme="dark"] .bld-lib-item:hover { background: #1e3a8a40; }
 
 .bld-lib-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+    width: 26px;
+    height: 26px;
+    font-size: 0.78rem;
+    border-radius: 6px;
     background: var(--blue-light, #ebf2fc);
     color: var(--blue, #1a56db);
     display: flex;
@@ -198,8 +201,9 @@
 
 .bld-lib-label {
     flex: 1;
-    font-size: 0.85rem;
+    font-size: 0.79rem;
     font-weight: 600;
+    line-height: 1.25;
 }
 
 .bld-lib-plus {
@@ -256,10 +260,11 @@
 
 /* Live WYSIWYG iframe canvas */
 .bld-canvas-wrap-live {
-    padding: 0;
-    overflow: hidden;
+    padding: 14px;
+    overflow: auto;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
     background:
         linear-gradient(45deg, #f1f5f9 25%, transparent 25%, transparent 75%, #f1f5f9 75%),
         linear-gradient(45deg, #f1f5f9 25%, #e9eef5 25%, #e9eef5 75%, #f1f5f9 75%);
@@ -275,13 +280,31 @@
     background-position: 0 0, 12px 12px;
 }
 
+/* The stage reserves the SCALED footprint so the flex parent centres correctly
+   and scrollbars measure the visible size, not the pre-transform size. */
+.bld-canvas-stage {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+/* The iframe renders at a TRUE device width (1280/768/390) and is scaled down
+   with a transform to fit the panel. Without this, a ~600px-wide panel makes the
+   site render its tablet layout — i.e. the WYSIWYG preview would be a lie. */
 .bld-canvas-frame {
-    width: 100%;
-    height: 100%;
     border: none;
     background: #fff;
-    transition: width 0.25s ease;
+    display: block;
+    transform-origin: top left;
     box-shadow: 0 0 0 1px var(--border, #e2e8f0), 0 8px 30px rgba(2, 8, 30, 0.08);
+}
+
+.bld-zoom-badge {
+    align-self: center;
+    font-size: 0.68rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--muted, #64748b);
+    white-space: nowrap;
+    padding: 0 2px;
 }
 
 /* Viewport toggle in topbar */

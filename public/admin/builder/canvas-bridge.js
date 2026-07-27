@@ -19,6 +19,8 @@ export function createCanvasBridge(iframe, handlers) {
     const ORIGIN = window.location.origin;
     let ready = false;
     let pendingSections = null;
+    let pendingHighlight = null;
+    let lastHighlight = null;
 
     function send(msg) {
         if (!iframe.contentWindow) return;
@@ -33,6 +35,9 @@ export function createCanvasBridge(iframe, handlers) {
             case 'bld:ready':
                 ready = true;
                 if (pendingSections) { send({ type: 'bld:render', sections: pendingSections }); pendingSections = null; }
+                // Selection made before the canvas was ready (e.g. the auto-select
+                // on page load) would otherwise be dropped — replay it here.
+                if (pendingHighlight) { send({ type: 'bld:highlight', id: pendingHighlight }); pendingHighlight = null; }
                 break;
             case 'bld:select':  handlers.onSelect && handlers.onSelect(d.id); break;
             case 'bld:reorder': handlers.onReorder && handlers.onReorder(d.ids || []); break;
@@ -48,8 +53,15 @@ export function createCanvasBridge(iframe, handlers) {
             const snapshot = JSON.parse(JSON.stringify(sections || []));
             if (!ready) { pendingSections = snapshot; return; }
             send({ type: 'bld:render', sections: snapshot });
+            // A re-render rebuilds the section elements, wiping the selection
+            // outline — restore it on the next tick.
+            if (lastHighlight) setTimeout(() => send({ type: 'bld:highlight', id: lastHighlight }), 60);
         },
-        highlight(id) { if (ready) send({ type: 'bld:highlight', id }); },
+        highlight(id) {
+            lastHighlight = id;
+            if (ready) send({ type: 'bld:highlight', id });
+            else pendingHighlight = id;
+        },
         destroy() { window.removeEventListener('message', onMessage); },
     };
 }

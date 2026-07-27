@@ -183,6 +183,7 @@ async function openEditor(documentId) {
                         '<button data-vw="tablet" title="Tablet (768px)"><i class="fa-solid fa-tablet-screen-button"></i></button>' +
                         '<button data-vw="mobile" title="Mobile (390px)"><i class="fa-solid fa-mobile-screen"></i></button>' +
                     '</div>' +
+                    '<span class="bld-zoom-badge" id="bld-zoom-badge" title="Canvas render width · zoom"></span>' +
                     '<button id="bld-history-btn" class="admin-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> History</button>' +
                     '<button id="bld-save-btn"    class="admin-toggle-btn btn-show"><i class="fa-solid fa-floppy-disk"></i> Save Draft</button>' +
                     '<button id="bld-preview-btn" class="admin-toggle-btn btn-show"><i class="fa-solid fa-eye"></i> Preview</button>' +
@@ -195,7 +196,9 @@ async function openEditor(documentId) {
                     '<div id="bld-library"></div>' +
                 '</aside>' +
                 '<main class="bld-canvas-wrap bld-canvas-wrap-live">' +
-                    '<iframe id="bld-canvas-frame" class="bld-canvas-frame" src="/builder/__canvas?canvas=1" title="Page canvas"></iframe>' +
+                    '<div class="bld-canvas-stage" id="bld-canvas-stage">' +
+                        '<iframe id="bld-canvas-frame" class="bld-canvas-frame" src="/builder/__canvas?canvas=1" title="Page canvas"></iframe>' +
+                    '</div>' +
                 '</main>' +
                 '<aside class="bld-panel bld-panel-right">' +
                     '<h3 class="bld-panel-title">Properties</h3>' +
@@ -253,6 +256,11 @@ async function openEditor(documentId) {
     });
 
     renderComponentLibrary(document.getElementById('bld-library'), onAddSection);
+    // Auto-select the first section so the properties panel is useful immediately
+    // instead of showing an empty "select a section" placeholder.
+    if (!state.selectedSectionId && state.page.sections.length) {
+        state.selectedSectionId = state.page.sections[0].id;
+    }
     initCanvas();
     initViewportToggle();
     renderProperties();
@@ -280,6 +288,7 @@ function initCanvas() {
     canvasBridge = createCanvasBridge(frame, {
         onSelect(id) {
             state.selectedSectionId = id;
+            if (canvasBridge) canvasBridge.highlight(id);   // keep bridge's lastHighlight in sync
             renderProperties();
         },
         onReorder(ids) {
@@ -301,6 +310,9 @@ function initCanvas() {
         },
     });
     canvasBridge.render(state.page.sections);
+    // Mirror the editor's selection into the canvas. The bridge queues this
+    // until the iframe reports ready, so it is safe to call immediately.
+    if (state.selectedSectionId) canvasBridge.highlight(state.selectedSectionId);
 }
 
 /* Debounced re-render so typing in the property panel feels live
@@ -312,17 +324,64 @@ function refreshCanvas(immediate) {
     _refreshTimer = setTimeout(() => canvasBridge.render(state.page.sections), 160);
 }
 
-function initViewportToggle() {
+/* ── Viewport + scale-to-fit ──────────────────────────────────
+   The iframe always renders at a TRUE device width so the page picks the
+   right CSS breakpoint, then we scale it down to fit the available panel.
+   Rendering a desktop site into a ~600px panel would otherwise trigger the
+   tablet layout — a WYSIWYG preview that lies about what visitors see. */
+const VIEWPORT_WIDTHS = { desktop: 1280, tablet: 768, mobile: 390 };
+let currentViewport = 'desktop';
+
+function applyViewport() {
+    const wrap = document.querySelector('.bld-canvas-wrap-live');
+    const stage = document.getElementById('bld-canvas-stage');
     const frame = document.getElementById('bld-canvas-frame');
+    if (!wrap || !stage || !frame) return;
+
+    const deviceW = VIEWPORT_WIDTHS[currentViewport] || VIEWPORT_WIDTHS.desktop;
+    const pad = 28;                                     // .bld-canvas-wrap-live padding × 2
+    const availW = Math.max(240, wrap.clientWidth - pad);
+    const availH = Math.max(320, wrap.clientHeight - pad);
+    const scale = Math.min(1, availW / deviceW);        // never scale up past 1:1
+
+    // Give the iframe enough CSS height that, once scaled, it fills the panel.
+    const deviceH = Math.round(availH / scale);
+    frame.style.width = deviceW + 'px';
+    frame.style.height = deviceH + 'px';
+    frame.style.transform = scale < 1 ? 'scale(' + scale + ')' : 'none';
+
+    // The stage occupies the post-scale footprint so centring + scrolling work.
+    stage.style.width = Math.round(deviceW * scale) + 'px';
+    stage.style.height = Math.round(deviceH * scale) + 'px';
+
+    const badge = document.getElementById('bld-zoom-badge');
+    if (badge) badge.textContent = deviceW + 'px · ' + Math.round(scale * 100) + '%';
+}
+
+function initViewportToggle() {
     document.querySelectorAll('.bld-viewport-toggle button').forEach((btn) => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.bld-viewport-toggle button').forEach((b) => b.classList.remove('is-active'));
             btn.classList.add('is-active');
-            const widths = { desktop: '100%', tablet: '768px', mobile: '390px' };
-            frame.style.width = widths[btn.dataset.vw] || '100%';
+            currentViewport = btn.dataset.vw || 'desktop';
+            applyViewport();
         });
     });
+
+    applyViewport();
+    // Keep the fit correct when the window (or panel) resizes.
+    if (window.ResizeObserver) {
+        const wrap = document.querySelector('.bld-canvas-wrap-live');
+        if (wrap) {
+            if (_canvasResizeObs) _canvasResizeObs.disconnect();
+            _canvasResizeObs = new ResizeObserver(() => applyViewport());
+            _canvasResizeObs.observe(wrap);
+        }
+    } else {
+        window.addEventListener('resize', applyViewport);
+    }
 }
+let _canvasResizeObs = null;
 
 function renderProperties() {
     const root = document.getElementById('bld-properties');
