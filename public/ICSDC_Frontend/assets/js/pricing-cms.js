@@ -21,6 +21,7 @@
  * when rendering price cells that have an annual subValue.
  */
 
+import { wireCtaLink } from './utils/cms-helpers.js';
 import { getPricingPage } from './services/contentService.js';
 import { populateSEO, inlineRichText } from './utils/cms-helpers.js';
 
@@ -400,13 +401,13 @@ import { populateSEO, inlineRichText } from './utils/cms-helpers.js';
         if (primBtn && cta.ctaPrimary) {
             primBtn.textContent = cta.ctaPrimary.text || 'Talk to an Expert';
             if (cta.ctaPrimary.link) {
-                primBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
+                wireCtaLink(primBtn, cta.ctaPrimary.link);
             }
         }
         if (secBtn && cta.ctaSecondary) {
             secBtn.textContent = cta.ctaSecondary.text || '';
             if (cta.ctaSecondary.link) {
-                secBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
+                wireCtaLink(secBtn, cta.ctaSecondary.link);
             } else {
 
 

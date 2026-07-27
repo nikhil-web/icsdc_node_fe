@@ -276,6 +276,7 @@
 .lds-plan-price-wrap {
     display: flex;
     align-items: baseline;
+    justify-content: center;
     gap: 2px;
     margin-bottom: 8px;
 }

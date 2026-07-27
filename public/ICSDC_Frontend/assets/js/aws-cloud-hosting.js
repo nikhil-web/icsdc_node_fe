@@ -50,12 +50,15 @@ import {
                 }).join('') + '</ul>'
                 : '';
             var ctaText = plan.ctaText || 'Get Started';
+            // Per-plan CMS link; empty → site-wide contact popup (contact-modal.js
+            // catches a[href="contact-popup"] via its delegated handler).
+            var ctaHref = plan.ctaLink || 'contact-popup';
             var btnClass = isFeatured ? 'aws-plan-btn-featured' : 'aws-plan-btn';
             return '<div class="aws-plan-card' + featuredClass + '">' +
                 badgeHtml +
                 '<div class="aws-plan-name">' + (plan.tier || plan.name || '') + '</div>' +
                 priceHtml + taglineHtml + featuresHtml +
-                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' </a>' +
+                '<a href="' + ctaHref + '" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }

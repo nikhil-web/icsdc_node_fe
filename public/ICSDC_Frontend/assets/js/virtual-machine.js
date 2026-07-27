@@ -65,7 +65,10 @@ import { uploadURL } from './services/strapiClient.js';
                 '<td>' + storage + '</td>' +
                 '<td>' + xfer + '</td>' +
                 '<td class="vm-plan-price">' + price + '</td>' +
-                '<td><a href="/contact-us" class="vm-plan-btn">Get Started</a></td>' +
+                // vmPlans is a ds.icon-card (no ctaText/ctaLink) — its `link` field is
+                // the per-row destination; empty → contact popup. Label stays uniform
+                // ("Get Started") as this is a table action column.
+                '<td><a href="' + (plan.link || 'contact-popup') + '" class="vm-plan-btn">Get Started</a></td>' +
                 '</tr>';
         });
 

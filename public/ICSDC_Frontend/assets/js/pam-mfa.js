@@ -3,6 +3,7 @@
 //  Fetches CMS data from Strapi and populates all sections.
 // ══════════════════════════════════════════════════════════
 
+import { wireCtaLink } from './utils/cms-helpers.js';
 import { getPamMfaPage } from './services/contentService.js';
 import { inlineRichText } from './utils/cms-helpers.js';
 import {
@@ -96,7 +97,7 @@ import {
                 var primaryBtn = document.getElementById('pam-cta-primary');
                 if (primaryBtn) {
                     primaryBtn.innerHTML = (page.heroCtaPrimary.text || '');
-                    if (page.heroCtaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + page.heroCtaPrimary.link + "'");
+                    wireCtaLink(primaryBtn, page.heroCtaPrimary.link);
                 }
             }
             if (page.heroCtaSecondary) {
@@ -105,7 +106,7 @@ import {
                     var secondaryBtn = document.getElementById('pam-cta-secondary');
                     if (secondaryBtn) {
                         secondaryBtn.textContent = page.heroCtaSecondary.text || '';
-                        if (page.heroCtaSecondary.link) secondaryBtn.setAttribute('onclick', "window.location.href='" + page.heroCtaSecondary.link + "'");
+                        wireCtaLink(secondaryBtn, page.heroCtaSecondary.link);
                     }
                 } else {
                     var secondaryBtn = document.getElementById('pam-cta-secondary');

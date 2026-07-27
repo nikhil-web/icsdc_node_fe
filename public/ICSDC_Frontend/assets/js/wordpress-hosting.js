@@ -46,7 +46,7 @@ import {
                 '<div class="wp-plan-price">' + (plan.price || '') + '<span>' + (plan.period || '/mo') + '</span></div>' +
                 '<p class="wp-plan-desc">' + (plan.tagline || plan.description || '') + '</p>' +
                 (features ? '<ul class="wp-plan-features">' + features + '</ul>' : '') +
-                '<a href="/contact-us.html" class="' + btnClass + '">' + (plan.ctaText || plan.ctaLabel || 'Get Started') + ' </a>' +
+                '<a href="' + (plan.ctaLink || 'contact-popup') + '" class="' + btnClass + '">' + (plan.ctaText || plan.ctaLabel || 'Get Started') + ' </a>' +
                 '</div>';
         }).join('');
     }

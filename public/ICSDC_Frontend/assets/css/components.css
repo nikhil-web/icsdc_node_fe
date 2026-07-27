@@ -1666,6 +1666,7 @@ summary.faq-q::marker {
 .cloud-plan-price-wrap {
     display: flex;
     align-items: baseline;
+    justify-content: center;
     gap: 4px;
     margin-bottom: 4px;
 }
@@ -2210,6 +2211,13 @@ summary.faq-q::marker {
 /* Why-card icons */
 .why-icon i.fa-solid {
     font-size: 22px;
+    color: var(--blue, var(--c-blue));
+}
+
+/* SVG-rendered icons (e.g. dedicated-server page) use currentColor for
+   fill/stroke; without this they inherit .why-icon's white color and
+   disappear on the light-blue box. Match the FontAwesome rule above. */
+.why-icon svg {
     color: var(--blue, var(--c-blue));
 }
 

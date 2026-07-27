@@ -25,7 +25,7 @@
  */
 
 import { getDedicatedServerPage } from './services/contentService.js';
-import { initFAQ, initTestimonials, populateSEO, inlineRichText } from './utils/cms-helpers.js';
+import { initFAQ, initTestimonials, populateSEO, inlineRichText, wireCtaLink } from './utils/cms-helpers.js';
 
 (function () {
     'use strict';
@@ -161,11 +161,11 @@ import { initFAQ, initTestimonials, populateSEO, inlineRichText } from './utils/
         if (btns.length >= 2) {
             if (hero.ctaSecondary) {
                 btns[0].textContent = hero.ctaSecondary.text || '';
-                if (hero.ctaSecondary.link) btns[0].setAttribute('onclick', "window.location.href='" + hero.ctaSecondary.link + "'");
+                wireCtaLink(btns[0], hero.ctaSecondary.link);
             }
             if (hero.ctaPrimary) {
                 btns[1].innerHTML = (hero.ctaPrimary.text || '') + ' ';
-                if (hero.ctaPrimary.link) btns[1].setAttribute('onclick', "window.location.href='" + hero.ctaPrimary.link + "'");
+                wireCtaLink(btns[1], hero.ctaPrimary.link);
             }
         }
 
@@ -257,11 +257,16 @@ import { initFAQ, initTestimonials, populateSEO, inlineRichText } from './utils/
                 (plan.tagline ? '<p class="ds-plan-tagline">' + plan.tagline + '</p>' : '') +
                 '<hr class="ds-plan-divider">' +
                 '<ul class="ds-plan-features">' + featuresHTML + '</ul>' +
-                '<button class="ds-plan-cta ' + ctaClass + '">' +
+                '<button type="button" class="ds-plan-cta ' + ctaClass + '">' +
                 plan.ctaText + ctaArrow +
                 '</button>' +
                 '</div>';
         }).join('');
+
+        // Wire each plan CTA: per-plan ctaLink, defaulting to the contact popup.
+        grid.querySelectorAll('.ds-plan-cta').forEach(function (btn, i) {
+            wireCtaLink(btn, (sorted[i] && sorted[i].ctaLink) || 'contact-popup');
+        });
     }
 
     /** 5. Pillars */
@@ -304,11 +309,11 @@ import { initFAQ, initTestimonials, populateSEO, inlineRichText } from './utils/
             var secondaryBtn = btns.querySelector('.ds-cta-btn-outline');
             if (primaryBtn && cta.ctaPrimary) {
                 primaryBtn.innerHTML = (cta.ctaPrimary.text || '') + ' ';
-                if (cta.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
+                wireCtaLink(primaryBtn, cta.ctaPrimary.link);
             }
             if (secondaryBtn && cta.ctaSecondary) {
                 secondaryBtn.textContent = cta.ctaSecondary.text || '';
-                if (cta.ctaSecondary.link) secondaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
+                wireCtaLink(secondaryBtn, cta.ctaSecondary.link);
             }
         }
     }
@@ -468,11 +473,11 @@ import { initFAQ, initTestimonials, populateSEO, inlineRichText } from './utils/
         if (perfBtns.length >= 2) {
             if (ctaPrimary) {
                 perfBtns[0].innerHTML = (ctaPrimary.text || '') + ' ';
-                if (ctaPrimary.link) perfBtns[0].setAttribute('onclick', "window.location.href='" + ctaPrimary.link + "'");
+                wireCtaLink(perfBtns[0], ctaPrimary.link);
             }
             if (ctaSecondary) {
                 perfBtns[1].textContent = ctaSecondary.text || '';
-                if (ctaSecondary.link) perfBtns[1].setAttribute('onclick', "window.location.href='" + ctaSecondary.link + "'");
+                wireCtaLink(perfBtns[1], ctaSecondary.link);
             }
         }
 

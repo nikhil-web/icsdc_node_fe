@@ -68,7 +68,7 @@ import {
                 priceHtml +
                 taglineHtml +
                 featuresHtml +
-                '<a href="#" class="' + btnClass + '">' + ctaText + ' </a>' +
+                '<a href="' + (plan.ctaLink || 'contact-popup') + '" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }
