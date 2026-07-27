@@ -55,8 +55,12 @@ function injectCanvasCss() {
         '.bsec:hover > .bld-cv-type-chip, .bsec.bld-cv-selected > .bld-cv-type-chip { display: block; }' +
         '.bld-cv-insert-line { height: 4px; background: #1a56db; border-radius: 2px; margin: 2px 24px; }' +
         '.bld-cv-ghost { opacity: .4; }' +
-        '.bld-cv-empty { text-align: center; padding: 120px 24px; color: #64748b; font-family: system-ui; }' +
-        '.bld-cv-empty i { font-size: 40px; color: #cbd5e1; display: block; margin-bottom: 12px; }' +
+        /* Sized generously: the canvas is transform-scaled (often ~60%), so this
+           editor-chrome message must stay legible once shrunk. */
+        '.bld-cv-empty { text-align: center; padding: 160px 24px; color: #64748b; font-family: system-ui; }' +
+        '.bld-cv-empty i { font-size: 84px; color: #cbd5e1; display: block; margin-bottom: 26px; }' +
+        '.bld-cv-empty h3 { font-size: 38px; margin: 0 0 12px; color: #334155; }' +
+        '.bld-cv-empty p { font-size: 22px; margin: 0; }' +
         /* neutralise entrance animations inside the canvas so everything is always visible */
         '#builder-page-root [data-animate], #builder-page-root [data-stagger] { opacity: 1 !important; transform: none !important; }';
     const el = document.createElement('style');

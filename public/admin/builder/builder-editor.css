@@ -298,6 +298,15 @@
     box-shadow: 0 0 0 1px var(--border, #e2e8f0), 0 8px 30px rgba(2, 8, 30, 0.08);
 }
 
+/* "View live" link in the page list — an <a>, so give it button metrics */
+.bld-list-view {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
 .bld-zoom-badge {
     align-self: center;
     font-size: 0.68rem;

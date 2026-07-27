@@ -120,6 +120,9 @@ function renderListBody() {
             '<td>' + esc(date) + '</td>' +
             '<td>' +
                 '<button class="admin-toggle-btn btn-show bld-list-edit" data-id="' + esc(id) + '"><i class="fa-solid fa-pen-to-square"></i> Edit</button> ' +
+                (published
+                    ? '<a class="admin-toggle-btn bld-list-view" href="/' + esc(p.slug) + '" target="_blank" rel="noopener" title="Open the live page"><i class="fa-solid fa-arrow-up-right-from-square"></i></a> '
+                    : '') +
                 '<button class="admin-toggle-btn btn-hide bld-list-delete" data-id="' + esc(id) + '" data-title="' + esc(p.title) + '"><i class="fa-solid fa-trash"></i></button>' +
             '</td>' +
         '</tr>';
