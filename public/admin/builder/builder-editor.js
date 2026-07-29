@@ -380,7 +380,11 @@ function refreshCanvas(immediate) {
    right CSS breakpoint, then we scale it down to fit the available panel.
    Rendering a desktop site into a ~600px panel would otherwise trigger the
    tablet layout — a WYSIWYG preview that lies about what visitors see. */
-const VIEWPORT_WIDTHS = { desktop: 1280, tablet: 768, mobile: 390 };
+/* Desktop MUST sit above the site's largest breakpoint (max-width:1365px, used
+   ~51 times) — at 1280px the canvas silently rendered the tablet layout, e.g.
+   who-we-are stacked instead of side-by-side. 1440 is a standard desktop width
+   comfortably clear of it. Tablet/mobile match real device widths. */
+const VIEWPORT_WIDTHS = { desktop: 1440, tablet: 768, mobile: 390 };
 let currentViewport = 'desktop';
 
 function applyViewport() {
