@@ -45,8 +45,17 @@ function clone(o) { return JSON.parse(JSON.stringify(o)); }
 function getRoot() { return document.getElementById('view-builder'); }
 function isBuilderRoute() { return window.location.pathname.startsWith('/admin/builder'); }
 
-/* ── Top-level entrypoint ────────────────────────────────── */
-export async function mountBuilder() {
+/* ── Top-level entrypoint ──────────────────────────────────
+   mountBuilder() is triggered from three places (module load, the
+   icsdc:show-builder event from admin.js, and popstate) and on a fresh
+   /admin/builder/<id> load the first two BOTH fire. Re-entering rebuilds the
+   editor DOM mid-flight, which can leave the canvas bridge listening to an
+   iframe that has already been replaced → a permanently blank canvas.
+   Dedupe: ignore a repeat mount of the same route while one is in flight. */
+let _mounting = false;
+let _mountedKey = null;
+
+export async function mountBuilder(force) {
     const root = getRoot();
     if (!root) return;
 
@@ -54,11 +63,21 @@ export async function mountBuilder() {
     const parts = window.location.pathname.replace(/\/+$/, '').split('/').filter(Boolean);
     // parts: ['admin','builder'] or ['admin','builder',':documentId']
     const documentId = parts[2] || null;
+    const key = documentId || '__list__';
 
-    if (documentId) {
-        await openEditor(documentId);
-    } else {
-        await openList();
+    if (_mounting) return;                                   // mount already running
+    if (!force && _mountedKey === key && root.childElementCount) return;  // already showing this route
+
+    _mounting = true;
+    _mountedKey = key;
+    try {
+        if (documentId) {
+            await openEditor(documentId);
+        } else {
+            await openList();
+        }
+    } finally {
+        _mounting = false;
     }
 }
 
