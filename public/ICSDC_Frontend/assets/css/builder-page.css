@@ -37,6 +37,13 @@
     width: 100%;
     grid-template-columns: 1fr 1fr;
     align-items: center;
+    /* Fill the section's full height. .hero::before (the decorative Element.png)
+       is sized with `contain` against THIS box, then scaled 1.5× and nudged down
+       202px — offsets tuned for the homepage where .hero spans the whole hero.
+       Letting it collapse to content height (≈364px in a ≈820px section) left the
+       artwork undersized and pushed off-centre. Content stays centred via the
+       grid's own align-items. */
+    align-self: stretch;
 }
 
 /* Default = image left, content right. Flip via order when imageSide='right'. */
@@ -58,6 +65,34 @@
     max-width: 880px;
     margin: 0 auto;
     text-align: center;
+}
+
+/* .hero-btns is a flex row, so it ignores the text-align:center above and the
+   CTAs drift left of the centred copy. Centre them explicitly. */
+.builder-hero .hero:has(.hero-content:only-child) .hero-btns {
+    justify-content: center;
+}
+
+/* ─── Decorative hero artwork (Element.png) ───────────────────────────────
+   The site rule sizes it with `contain` against .hero and then applies a fixed
+   scale3d(1.5) + translate(-50px,135px) — offsets eyeballed for the homepage's
+   one hero height. A builder hero's height follows the editor viewport (measured
+   620/820/1120px across window sizes), so those frozen values leave the artwork
+   oversized, drifting and bleeding out of frame.
+
+   Instead: span the full section width and size with `cover`, anchored bottom
+   centre. The art then scales with the hero at every height, with no magic
+   numbers. Scoped to .builder-hero so the live homepage is untouched. */
+.builder-hero .hero::before {
+    left: 50%;
+    right: auto;
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    transform: translateX(-50%);
+    background-position: center bottom;
+    background-size: cover;
+    opacity: 0.85;
 }
 
 /* ─── Tablet / mobile ─── */
