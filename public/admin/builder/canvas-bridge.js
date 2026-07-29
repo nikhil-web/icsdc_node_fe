@@ -34,6 +34,8 @@ export function createCanvasBridge(iframe, handlers) {
         switch (d.type) {
             case 'bld:ready':
                 ready = true;
+                clearTimeout(readyTimer);
+                if (handlers.onReady) handlers.onReady();
                 if (pendingSections) { send({ type: 'bld:render', sections: pendingSections }); pendingSections = null; }
                 // Selection made before the canvas was ready (e.g. the auto-select
                 // on page load) would otherwise be dropped — replay it here.
@@ -47,6 +49,13 @@ export function createCanvasBridge(iframe, handlers) {
     }
 
     window.addEventListener('message', onMessage);
+
+    // If the canvas never reports ready, renders stay queued and the user just
+    // sees a blank white canvas with no clue why (usually a stale cached copy of
+    // page-renderer.js / canvas-mode.js inside the iframe). Surface it instead.
+    const readyTimer = setTimeout(() => {
+        if (!ready && handlers.onTimeout) handlers.onTimeout();
+    }, 8000);
 
     return {
         render(sections) {
@@ -62,6 +71,7 @@ export function createCanvasBridge(iframe, handlers) {
             if (ready) send({ type: 'bld:highlight', id });
             else pendingHighlight = id;
         },
-        destroy() { window.removeEventListener('message', onMessage); },
+        isReady() { return ready; },
+        destroy() { clearTimeout(readyTimer); window.removeEventListener('message', onMessage); },
     };
 }

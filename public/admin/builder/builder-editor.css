@@ -298,6 +298,31 @@
     box-shadow: 0 0 0 1px var(--border, #e2e8f0), 0 8px 30px rgba(2, 8, 30, 0.08);
 }
 
+/* Canvas failed-to-load notice (stale cache, script error…) */
+.bld-canvas-error {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: min(460px, 88%);
+    height: fit-content;
+    background: #fff;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 12px;
+    padding: 28px 26px;
+    text-align: center;
+    box-shadow: 0 16px 44px rgba(2, 8, 30, 0.18);
+    z-index: 40;
+}
+
+[data-theme="dark"] .bld-canvas-error { background: #1e293b; border-color: #334155; color: #e2e8f0; }
+.bld-canvas-error i { font-size: 30px; color: #f59e0b; }
+.bld-canvas-error h3 { margin: 12px 0 8px; font-size: 1.05rem; color: var(--text, #1e293b); }
+[data-theme="dark"] .bld-canvas-error h3 { color: #f1f5f9; }
+.bld-canvas-error p { margin: 0 0 10px; font-size: 0.85rem; color: var(--muted, #64748b); line-height: 1.55; }
+.bld-canvas-error button { width: auto; margin-top: 6px; }
+
+.bld-canvas-wrap-live { position: relative; }
+
 /* "View live" link in the page list — an <a>, so give it button metrics */
 .bld-list-view {
     display: inline-flex;

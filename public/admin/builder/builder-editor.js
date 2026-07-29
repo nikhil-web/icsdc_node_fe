@@ -200,7 +200,9 @@ async function openEditor(documentId) {
                 '</aside>' +
                 '<main class="bld-canvas-wrap bld-canvas-wrap-live">' +
                     '<div class="bld-canvas-stage" id="bld-canvas-stage">' +
-                        '<iframe id="bld-canvas-frame" class="bld-canvas-frame" src="/builder/__canvas?canvas=1" title="Page canvas"></iframe>' +
+                        // cache-bust: the canvas shell + its modules are long-cached by the
+                        // browser, and a stale copy renders a silently-blank canvas.
+                        '<iframe id="bld-canvas-frame" class="bld-canvas-frame" src="/builder/__canvas?canvas=1&v=' + Date.now() + '" title="Page canvas"></iframe>' +
                     '</div>' +
                 '</main>' +
                 '<aside class="bld-panel bld-panel-right">' +
@@ -305,6 +307,7 @@ function initCanvas() {
             markDirty();
         },
         onInsert(type, index) { onAddSection(type, index); },
+        onTimeout() { showCanvasError(); },
         onAction(action, id) {
             if (action === 'up') moveSection(id, -1);
             else if (action === 'down') moveSection(id, +1);
@@ -316,6 +319,32 @@ function initCanvas() {
     // Mirror the editor's selection into the canvas. The bridge queues this
     // until the iframe reports ready, so it is safe to call immediately.
     if (state.selectedSectionId) canvasBridge.highlight(state.selectedSectionId);
+}
+
+/* The canvas iframe never reported ready — almost always a stale cached copy of
+   page-renderer.js / canvas-mode.js. Tell the user instead of showing a blank. */
+function showCanvasError() {
+    const wrap = document.querySelector('.bld-canvas-wrap-live');
+    if (!wrap || document.getElementById('bld-canvas-error')) return;
+    const box = document.createElement('div');
+    box.id = 'bld-canvas-error';
+    box.className = 'bld-canvas-error';
+    box.innerHTML =
+        '<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>' +
+        '<h3>Canvas didn’t load</h3>' +
+        '<p>The preview frame never finished starting up. This is almost always a cached ' +
+        'copy of the editor scripts.</p>' +
+        '<p><strong>Press Ctrl+Shift+R</strong> (Cmd+Shift+R on Mac) to hard-refresh, then reopen this page.</p>' +
+        '<button type="button" id="bld-canvas-retry" class="admin-toggle-btn btn-show">' +
+        '<i class="fa-solid fa-rotate"></i> Reload canvas</button>';
+    wrap.appendChild(box);
+    const btn = document.getElementById('bld-canvas-retry');
+    if (btn) btn.addEventListener('click', () => {
+        box.remove();
+        const f = document.getElementById('bld-canvas-frame');
+        if (f) f.src = '/builder/__canvas?canvas=1&v=' + Date.now();
+        initCanvas();
+    });
 }
 
 /* Debounced re-render so typing in the property panel feels live
