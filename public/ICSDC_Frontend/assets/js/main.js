@@ -8,6 +8,26 @@ import { resolveIcon, inlineRichText } from "./utils/cms-helpers.js";
 import { getFooterHTML } from "./footer-template.js";
 
 // ══════════════════════════════════════════════════════════
+//  DEFERRED WIDGET STYLES
+//  chat-widget / whatsapp-widget / contact-modal CSS used to be @import-ed
+//  from style.css, which made them a serial render-blocking waterfall (fetch
+//  style.css -> parse -> only then discover these three, all blocking paint;
+//  Lighthouse measured ~600ms each). Nothing they style is needed for first
+//  paint — two floating bubbles and a modal that starts hidden — and the
+//  widgets themselves are built by JS anyway, so load them here instead.
+//  main.js is a module (deferred), so this runs after parse and never blocks.
+(function loadDeferredWidgetStyles() {
+    ['chat-widget', 'whatsapp-widget', 'contact-modal'].forEach(function (name) {
+        var href = '/assets/css/' + name + '.css';
+        if (document.querySelector('link[href="' + href + '"]')) return;
+        var l = document.createElement('link');
+        l.rel = 'stylesheet';
+        l.href = href;
+        document.head.appendChild(l);
+    });
+})();
+
+// ══════════════════════════════════════════════════════════
 //  SCROLL-ANIMATION SAFETY REVEAL  (SEO / crawler fix)
 //  Scroll-triggered elements start at opacity:0 and are revealed by an
 //  IntersectionObserver on scroll. Crawlers (Googlebot's renderer) paint at a

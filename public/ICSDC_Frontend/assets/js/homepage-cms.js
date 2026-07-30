@@ -79,6 +79,11 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
         if (params.heroImage && params.heroImage.image) {
             const img = document.querySelector('.hero-right .hero-right-image');
             if (img) {
+                // LCP element. The server preloads this same URL (heroPreloadUrl
+                // in server.js, which also picks the 'large' format) — these hints
+                // keep it ahead of below-fold images in the fetch queue.
+                img.setAttribute('fetchpriority', 'high');
+                img.setAttribute('decoding', 'async');
                 img.src = mediaURL(params.heroImage.image, 'large');
                 img.style.display = '';
             }
@@ -225,9 +230,12 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
                    </div>`
                 : '';
 
+            // h3, not h4: these cards sit directly under the section's <h2>, so an
+            // h4 skips a level and fails the heading-order a11y check. The static
+            // markup in index.html and the .floating-card h3 CSS match this.
             card.innerHTML = `
                 ${iconHTML}
-                <h4>${service.title}</h4>
+                <h3>${service.title}</h3>
                 <p>${inlineRichText(service.description || service.desc || '')}</p>
             `;
 

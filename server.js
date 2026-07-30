@@ -977,7 +977,20 @@ app.post('/api/admin/robots', requireAdminAuth, async function (req, res) {
 //  ADMIN SPA (existing)
 // ══════════════════════════════════════════════════════════
 const adminPath = path.join(__dirname, 'public/admin');
-app.use('/admin', express.static(adminPath));
+// Deliberately NOT cached like the public site: a stale copy of the builder's
+// editor scripts is a real failure mode here (it silently blanks the WYSIWYG
+// canvas — see the retry notice in canvas-bridge.js), and the admin is a handful
+// of internal users, so there's no meaningful bandwidth win to trade for it.
+// Revalidate every load; ETag still yields a cheap 304 when nothing changed.
+app.use('/admin', express.static(adminPath, {
+    setHeaders(res, filePath) {
+        if (/\.(js|mjs|css|html?)$/i.test(filePath)) {
+            res.setHeader('Cache-Control', 'no-cache');
+        } else {
+            res.setHeader('Cache-Control', 'public, max-age=2592000');
+        }
+    },
+}));
 app.get('/admin', (req, res) => res.sendFile(path.join(adminPath, 'index.html')));
 app.get('/admin/*path', (req, res) => res.sendFile(path.join(adminPath, 'index.html')));
 
@@ -1007,6 +1020,33 @@ function seoEndpointForSlug(slug) {
 const seoCache = new Map();              // slug → { value, expires }
 const SEO_TTL = 10 * 60 * 1000;          // 10 min
 
+/* The hero image is the LCP element on most pages, but it's rendered
+   client-side from Strapi — so it isn't in the initial HTML and the browser
+   can't start fetching it until main.js has run AND the API has answered.
+   Lighthouse scores that as "Request is discoverable in initial document: no".
+   Since this server already has the page's Strapi payload in hand, it can emit
+   a <link rel=preload> for that exact image and cut a whole round-trip out of LCP.
+
+   Preloading a DIFFERENT derivative than the <img> ends up requesting would
+   download the image twice — worse than not preloading at all. The two client
+   renderers disagree on their fallback chain (cms-helpers' populateHero goes
+   large -> medium -> small; homepage-cms' mediaURL('large') goes large ->
+   small), so the only pick guaranteed to match both is `large` itself. When
+   there's no large derivative we simply skip the preload rather than gamble. */
+function heroPreloadUrl(data) {
+    const media = data && data.heroImage && data.heroImage.image;
+    if (!media) return null;
+    const large = media.formats && media.formats.large;
+    if (!large || !large.url) return null;
+    let url = large.url;
+    if (!/^https?:/i.test(url)) url = STRAPI_PUBLIC_URL.replace(/\/$/, '') + url;
+    // Never preload a server-internal origin: the browser resolves "localhost"
+    // to the visitor's own machine, so the preload would 404 AND still not match
+    // the URL the client script builds from window.STRAPI_URL.
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:|\/)/i.test(url)) return null;
+    return url;
+}
+
 async function fetchSeo(slug) {
     const cached = seoCache.get(slug);
     if (cached && cached.expires > Date.now()) return cached.value;
@@ -1014,7 +1054,8 @@ async function fetchSeo(slug) {
     try {
         const endpoint = seoEndpointForSlug(slug);
         const seoField = endpoint === 'home-page' ? 'SEO' : 'seo';
-        const r = await fetch(`${STRAPI_URL}/api/${endpoint}?populate[${seoField}]=*`, {
+        const r = await fetch(
+            `${STRAPI_URL}/api/${endpoint}?populate[${seoField}]=*&populate[heroImage][populate][image]=true`, {
             headers: STRAPI_TOKEN ? { Authorization: `Bearer ${STRAPI_TOKEN}` } : {},
         });
         if (r.ok) {
@@ -1028,6 +1069,8 @@ async function fetchSeo(slug) {
                     canonicalUrl: seo.canonicalUrl || null,
                 };
             }
+            const heroUrl = heroPreloadUrl(data);
+            if (heroUrl) value = Object.assign(value || {}, { heroImageUrl: heroUrl });
         }
     } catch (e) { /* Strapi down / no such page — fall back to static */ }
     seoCache.set(slug, { value, expires: Date.now() + SEO_TTL });
@@ -1119,6 +1162,10 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     const canonical = seoCanonical(cleanPath, seo);
 
     const headTags = [
+        // Preload first: it's only useful if the browser sees it early.
+        ...(seo && seo.heroImageUrl
+            ? [`<link rel="preload" as="image" fetchpriority="high" href="${seoEsc(seo.heroImageUrl)}">`]
+            : []),
         `<link rel="canonical" href="${seoEsc(canonical)}">`,
         `<meta property="og:type" content="website">`,
         `<meta property="og:site_name" content="${SEO_ORG_NAME}">`,
@@ -1145,6 +1192,11 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     html = html.replace(/<\/head>/i, `    ${headTags}\n</head>`);
 
     res.set('Content-Type', 'text/html; charset=utf-8');
+    // Explicit, because "no Cache-Control" is not the same as "don't cache":
+    // browsers fall back to heuristic freshness (a fraction of Last-Modified age)
+    // and would serve a stale shell — with stale server-injected SEO tags and CMS
+    // copy — after a content update. ETag still gives a cheap 304 when unchanged.
+    res.set('Cache-Control', 'public, max-age=0, must-revalidate');
     res.send(html);
 }
 
@@ -1172,9 +1224,32 @@ app.use((req, res, next) => {
     });
 });
 
+// ── Static asset caching ──────────────────────────────────
+// Assets here are NOT content-hashed (style.css keeps its name across deploys),
+// so an aggressive immutable max-age would strand users on stale CSS/JS after a
+// release. Tiered instead:
+//   images/fonts — 30d. Big win (Lighthouse flagged ~790 KiB of re-fetching) and
+//                  low risk: these are replaced far less often, and a swapped
+//                  image is usually uploaded under a new name anyway.
+//   css/js       — 1d, so a deploy propagates within a day; ETag/Last-Modified
+//                  still give instant 304s inside that window.
+//   html         — must-revalidate. Never cache the shell: it carries the
+//                  server-injected SEO head and CMS-driven copy.
+const STATIC_ASSET_RE = /\.(png|jpe?g|webp|gif|svg|ico|avif|woff2?|ttf|otf|eot|mp4|webm)$/i;
+
+function setStaticCacheHeaders(res, filePath) {
+    if (STATIC_ASSET_RE.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=2592000');      // 30 days
+    } else if (/\.(css|js|mjs)$/i.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=86400');        // 1 day
+    } else if (/\.html?$/i.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    }
+}
+
 // Serve static assets. index:false so "/" falls through to the SEO-injecting
 // homepage route below instead of static auto-serving index.html.
-app.use(express.static(publicPath, { index: false }));
+app.use(express.static(publicPath, { index: false, setHeaders: setStaticCacheHeaders }));
 
 // Homepage (SEO-injected)
 app.get('/', (req, res) => {

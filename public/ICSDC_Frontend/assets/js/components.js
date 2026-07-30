@@ -144,7 +144,7 @@
             <div class="testi-body">
                 <span class="testi-quote-mark" aria-hidden="true">&#10077;</span>
                 <blockquote class="testi-quote">${inlineRichText(t.quote || '')}</blockquote>
-                <div class="testi-rating" aria-label="Rating: ${t.rating} out of 5 stars">
+                <div role="img" class="testi-rating" aria-label="Rating: ${t.rating} out of 5 stars">
                     ${stars}
                 </div>
             </div>

@@ -1,9 +1,13 @@
 ﻿/* ══════════════════════════════════════
-   GLOBAL WIDGETS — loaded on every page via style.css
+   GLOBAL WIDGETS (chat-widget / whatsapp-widget / contact-modal)
+   These used to be @import-ed here. Don't put them back: an @import is a
+   SERIAL render-blocking waterfall — the browser has to fetch style.css and
+   parse it before it can even discover these three, and all four block first
+   paint. Lighthouse measured ~600ms of blocking per file for exactly this.
+   None of them are needed for first paint (a floating chat bubble, a floating
+   WhatsApp bubble, and a modal that starts hidden), so main.js now injects
+   them non-blocking after DOM parse. See loadDeferredWidgetStyles() there.
 ══════════════════════════════════════ */
-@import url('chat-widget.css');
-@import url('whatsapp-widget.css');
-@import url('contact-modal.css');
 
 /* ══════════════════════════════════════
    RESET
@@ -72,7 +76,11 @@ html {
     --orange: #f59e0b;
     --text: #1e293b;
     --text-dark: #0a1f44;
-    --muted: #64748b;
+    /* #64748b failed WCAG AA on the site's tinted surfaces (4.40 on #f4f6f9,
+       4.22 on #ebf2fc — both under 4.5). Darkened just enough to clear it on
+       every background this token lands on: #fff 5.19, #f4f6f9 4.80,
+       #ebf2fc 4.61, #f8fafc 4.96. */
+    --muted: #5e6e85;
     --muted-alt: #5f6b85;
     --muted-light: #4c4c4c;
     --border: #e2e8f0;
@@ -886,7 +894,15 @@ nav.scrolled {
     right: 0;
     width: 100%;
     height: 100%;
+    /* Two declarations on purpose: the first is the fallback any browser
+       understands, the second wins wherever image-set() is supported and
+       serves the WebP (596KB PNG -> 258KB WebP, the page's largest asset).
+       Source art is 3289px wide but this only ever renders as a `contain`
+       decorative wash, so the WebP is also downscaled to 1920. */
     background: url("../images/elements/Element.png") no-repeat center / contain;
+    background-image: image-set(
+        url("../images/elements/Element.webp") type("image/webp"),
+        url("../images/elements/Element.png") type("image/png"));
     opacity: 1;
     pointer-events: none;
     z-index: 0;
@@ -1471,7 +1487,7 @@ nav.scrolled {
     stroke: #1a56db;
 }
 
-.floating-card h4 {
+.floating-card h3 {
     font-size: 13px;
     font-weight: 700;
     color: #111827;
@@ -2078,7 +2094,7 @@ nav.scrolled {
         padding: 13px 14px 14px;
     }
 
-    .floating-card h4 {
+    .floating-card h3 {
         font-size: 12.5px;
     }
 
@@ -2202,7 +2218,7 @@ nav.scrolled {
         flex: 1 1 calc(33.33% - 8px);
     }
 
-    .floating-card h4 {
+    .floating-card h3 {
         font-size: 12.5px;
     }
 
@@ -2391,7 +2407,7 @@ nav.scrolled {
         border-radius: 12px;
     }
 
-    .floating-card h4 {
+    .floating-card h3 {
         font-size: 12px;
     }
 
