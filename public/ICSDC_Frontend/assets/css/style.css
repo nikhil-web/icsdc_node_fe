@@ -1,9 +1,13 @@
 ﻿/* ══════════════════════════════════════
-   GLOBAL WIDGETS — loaded on every page via style.css
+   GLOBAL WIDGETS (chat-widget / whatsapp-widget / contact-modal)
+   These used to be @import-ed here. Don't put them back: an @import is a
+   SERIAL render-blocking waterfall — the browser has to fetch style.css and
+   parse it before it can even discover these three, and all four block first
+   paint. Lighthouse measured ~600ms of blocking per file for exactly this.
+   None of them are needed for first paint (a floating chat bubble, a floating
+   WhatsApp bubble, and a modal that starts hidden), so main.js now injects
+   them non-blocking after DOM parse. See loadDeferredWidgetStyles() there.
 ══════════════════════════════════════ */
-@import url('chat-widget.css');
-@import url('whatsapp-widget.css');
-@import url('contact-modal.css');
 
 /* ══════════════════════════════════════
    RESET
