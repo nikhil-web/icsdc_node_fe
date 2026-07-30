@@ -164,10 +164,38 @@ function fieldRepeater(field, value, path) {
         '</div>';
 }
 
+/* Rich text: a real WYSIWYG surface. The markup here is just the mount point —
+   bindRichText() below turns it into an editor once the DOM exists. */
+function fieldRichText(field, value, path) {
+    return '<div class="bld-field bld-field-rich">' +
+        '<span class="bld-field-label">' + esc(field.label) + (field.required ? ' *' : '') + '</span>' +
+        '<div class="bld-rich" data-rich-path="' + path.join('.') + '">' +
+            '<div class="bld-rich-toolbar" role="toolbar" aria-label="Formatting">' +
+                '<button type="button" data-cmd="bold" title="Bold"><i class="fa-solid fa-bold"></i></button>' +
+                '<button type="button" data-cmd="italic" title="Italic"><i class="fa-solid fa-italic"></i></button>' +
+                '<span class="bld-rich-sep"></span>' +
+                '<button type="button" data-block="h2" title="Heading">H2</button>' +
+                '<button type="button" data-block="h3" title="Sub-heading">H3</button>' +
+                '<button type="button" data-block="p" title="Paragraph">¶</button>' +
+                '<span class="bld-rich-sep"></span>' +
+                '<button type="button" data-cmd="insertUnorderedList" title="Bulleted list"><i class="fa-solid fa-list-ul"></i></button>' +
+                '<button type="button" data-cmd="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button>' +
+                '<button type="button" data-block="blockquote" title="Quote"><i class="fa-solid fa-quote-left"></i></button>' +
+                '<span class="bld-rich-sep"></span>' +
+                '<button type="button" data-act="link" title="Add link"><i class="fa-solid fa-link"></i></button>' +
+                '<button type="button" data-act="image" title="Insert image"><i class="fa-solid fa-image"></i></button>' +
+                '<button type="button" data-cmd="removeFormat" title="Clear formatting"><i class="fa-solid fa-eraser"></i></button>' +
+            '</div>' +
+            '<div class="bld-rich-area" contenteditable="true">' + (value == null ? '' : value) + '</div>' +
+        '</div>' +
+        '</div>';
+}
+
 function renderField(field, value, path) {
     switch (field.type) {
         case 'text':     return fieldText(field, value, path);
         case 'image':    return fieldImage(field, value, path);
+        case 'richtext': return fieldRichText(field, value, path);
         case 'textarea': return fieldTextarea(field, value, path);
         case 'number':   return fieldNumber(field, value, path);
         case 'toggle':   return fieldToggle(field, value, path);
@@ -176,6 +204,120 @@ function renderField(field, value, path) {
         case 'repeater': return fieldRepeater(field, value, path);
         default:         return '<div class="bld-field-unknown">Unsupported field: ' + esc(field.type) + '</div>';
     }
+}
+
+/* ── Shared Layout panel ─────────────────────────────────────
+   Edits section.layout (width / align / background / padding /
+   columns) — rendered above every component's own fields.
+   See builder-layout.css for what each value does. */
+const LAYOUT_CONTROLS = [
+    { key: 'width',      label: 'Width',      options: [['contained', 'Contained'], ['narrow', 'Narrow'], ['full', 'Full width']] },
+    { key: 'align',      label: 'Text Align', options: [['center', 'Center'], ['left', 'Left']] },
+    { key: 'background', label: 'Background', options: [['none', 'None'], ['light', 'Light'], ['blue', 'Brand Blue'], ['ink', 'Dark Ink']] },
+    { key: 'padding',    label: 'Spacing',    options: [['normal', 'Normal'], ['compact', 'Compact'], ['spacious', 'Spacious']] },
+];
+
+/* Components whose main grid can be re-columned via layout.columns.
+   (iconCards is excluded — it has its own Columns field.) */
+const GRID_TYPES = ['pillars', 'tagCards', 'securityCards', 'audienceGroups', 'relatedServices', 'numberedTips', 'statChips'];
+
+function layoutPanelHtml(section) {
+    const l = section.layout || {};
+    const selects = LAYOUT_CONTROLS.map((c) => {
+        const cur = l[c.key] || c.options[0][0];
+        const opts = c.options.map(([val, lab]) =>
+            '<option value="' + val + '"' + (val === cur ? ' selected' : '') + '>' + lab + '</option>').join('');
+        return '<label class="bld-field bld-layout-field">' +
+            '<span class="bld-field-label">' + c.label + '</span>' +
+            '<select class="bld-input bld-layout-input" data-layout-key="' + c.key + '">' + opts + '</select>' +
+            '</label>';
+    }).join('');
+    const colsCur = l.columns || '';
+    const cols = GRID_TYPES.includes(section.type)
+        ? '<label class="bld-field bld-layout-field">' +
+          '<span class="bld-field-label">Grid Columns</span>' +
+          '<select class="bld-input bld-layout-input" data-layout-key="columns">' +
+          '<option value=""' + (colsCur === '' ? ' selected' : '') + '>Auto</option>' +
+          [1, 2, 3, 4].map((n) => '<option value="' + n + '"' + (String(colsCur) === String(n) ? ' selected' : '') + '>' + n + '</option>').join('') +
+          '</select></label>'
+        : '';
+    return '<fieldset class="bld-fieldset bld-layout-panel">' +
+        '<legend><i class="fa-solid fa-table-columns" aria-hidden="true"></i> Layout</legend>' +
+        '<div class="bld-layout-grid">' + selects + cols + '</div>' +
+        '</fieldset>';
+}
+
+function bindLayoutHandlers(rootEl) {
+    rootEl.querySelectorAll('.bld-layout-input').forEach((sel) => {
+        sel.addEventListener('change', () => {
+            if (!activeSection) return;
+            const key = sel.dataset.layoutKey;
+            const layout = Object.assign({}, activeSection.layout || {});
+            if (key === 'columns') {
+                if (sel.value === '') delete layout.columns;
+                else layout.columns = Number(sel.value);
+            } else {
+                layout[key] = sel.value;
+            }
+            activeSection.layout = layout;
+            if (onChangeCallback) onChangeCallback(activeSection);
+        });
+    });
+}
+
+/* ── Rich-text (WYSIWYG) binding ──────────────────────────────
+   contenteditable + execCommand: no external dependency, works offline, and
+   emits plain semantic HTML (<p>/<h2>/<ul>/<a>/<blockquote>) that the site's
+   own stylesheets already render — no editor-specific classes leak into the
+   published page. execCommand is deprecated but universally implemented; the
+   block/link/image actions below are done with DOM APIs rather than relying on
+   its patchier commands. */
+function bindRichText(wrap) {
+    const area = wrap.querySelector('.bld-rich-area');
+    const toolbar = wrap.querySelector('.bld-rich-toolbar');
+    if (!area || !toolbar) return;
+    const path = wrap.dataset.richPath.split('.').map((p) => /^\d+$/.test(p) ? Number(p) : p);
+
+    function commit() {
+        const html = area.innerHTML.trim();
+        emitChange(setByPath(activeSection.props || {}, path, html));
+    }
+
+    // Typing → live update (the canvas re-render is already debounced upstream)
+    area.addEventListener('input', commit);
+    area.addEventListener('blur', commit);
+
+    // Keep pasted content plain so foreign styles never enter the page
+    area.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+        document.execCommand('insertText', false, text);
+    });
+
+    function wrapBlock(tag) {
+        // formatBlock needs the angle-bracket form in some engines
+        document.execCommand('formatBlock', false, '<' + tag + '>');
+    }
+
+    toolbar.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        e.preventDefault();
+        area.focus();
+
+        if (btn.dataset.cmd) {
+            document.execCommand(btn.dataset.cmd, false, null);
+        } else if (btn.dataset.block) {
+            wrapBlock(btn.dataset.block);
+        } else if (btn.dataset.act === 'link') {
+            const url = window.prompt('Link URL (a path like /pricing, or a full URL):', 'https://');
+            if (url) document.execCommand('createLink', false, url);
+        } else if (btn.dataset.act === 'image') {
+            const url = await pickMedia({});
+            if (url) document.execCommand('insertImage', false, url);
+        }
+        commit();
+    });
 }
 
 /* ── Public API ──────────────────────────────────────────── */
@@ -204,8 +346,10 @@ export function renderPropertyEditor(rootEl, section, onChange) {
             '<h3>' + esc(entry.label) + '</h3>' +
             '<p>' + esc(entry.description || '') + '</p>' +
         '</div>' +
+        layoutPanelHtml(section) +
         '<form class="bld-prop-form" onsubmit="return false">' + fieldsHtml + '</form>';
 
+    bindLayoutHandlers(rootEl);
     bindHandlers(rootEl, entry);
 }
 
@@ -271,6 +415,9 @@ function bindHandlers(rootEl, entry) {
     }
     rootEl.querySelectorAll('.bld-repeater-up').forEach((btn) => btn.addEventListener('click', () => move(btn, -1)));
     rootEl.querySelectorAll('.bld-repeater-down').forEach((btn) => btn.addEventListener('click', () => move(btn, +1)));
+
+    // Rich text (WYSIWYG) editors
+    rootEl.querySelectorAll('.bld-rich').forEach((wrap) => bindRichText(wrap));
 
     // Image Browse → open media picker
     rootEl.querySelectorAll('.bld-img-browse').forEach((btn) => {

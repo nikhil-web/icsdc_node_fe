@@ -228,11 +228,29 @@ app.get('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req, re
 });
 
 // ── Builder: create new page ─────────────────────────────
+// Slugs that builder pages may never take: every static page file, legal,
+// admin/api/assets plumbing. Builder pages publish at top-level /<slug>
+// (2026-07-03), so collisions would shadow real pages.
+function isReservedBuilderSlug(slug) {
+    const s = String(slug || '').toLowerCase().replace(/^\/+|\/+$/g, '');
+    if (!s || !/^[a-z0-9-]+$/.test(s)) return true;                 // invalid chars → reject
+    const RESERVED = ['legal', 'admin', 'api', 'assets', 'builder', 'prerendered',
+        'sitemap', 'robots', 'socket.io', 'index', 'home', '404'];
+    if (RESERVED.includes(s)) return true;
+    try {
+        if (fs.existsSync(path.join(publicPath, s + '.html'))) return true;   // static page exists
+    } catch (_) {}
+    return false;
+}
+
 app.post('/api/admin/builder/pages', requireAdminAuth, async (req, res) => {
     try {
         const { title, slug, sections, metaTitle, metaDescription, templateId } = req.body || {};
         if (!title || !slug) {
             return res.status(400).json({ error: 'title and slug are required' });
+        }
+        if (isReservedBuilderSlug(slug)) {
+            return res.status(400).json({ error: 'This slug is reserved or already used by an existing site page. Choose another.' });
         }
         const r = await strapi('/api/builder-pages', {
             method: 'POST',
@@ -344,6 +362,8 @@ app.post('/api/admin/builder/pages/:documentId/publish', requireAdminAuth, async
             res.status(r.status).json(data);
         }
 
+        bustBuilderMetaCache();   // new/updated meta must show at top-level URL immediately
+
         // Write a "published" snapshot
         writeVersionSnapshot({
             documentId,
@@ -364,6 +384,7 @@ app.delete('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req,
         const r = await strapi(`/api/builder-pages/${req.params.documentId}`, {
             method: 'DELETE',
         });
+        bustBuilderMetaCache();   // top-level serving must reflect the delete immediately
         if (r.status === 204) return res.status(204).end();
         const data = await r.json();
         res.status(r.status).json(data);
@@ -558,8 +579,14 @@ app.get('/api/builder/preview/:slug', (req, res) => {
 });
 
 // ── Builder: public page renderer (must come BEFORE /:page catch-all) ──
+// Since 2026-07-03 builder pages live at top-level /<slug>; legacy
+// /builder/<slug> URLs 301 there. __canvas is the editor's WYSIWYG
+// canvas shell (rendered via postMessage — see canvas-mode.js).
 app.get('/builder/:slug', (req, res) => {
-    res.sendFile(path.join(publicPath, 'builder-template.html'));
+    if (req.params.slug === '__canvas') {
+        return res.sendFile(path.join(publicPath, 'builder-template.html'));
+    }
+    res.redirect(301, '/' + encodeURIComponent(req.params.slug));
 });
 
 // Also serve preview URLs through the same template
@@ -614,62 +641,62 @@ async function writeVersionSnapshot({ documentId, versionNumber, sections, title
 
 const STATIC_PAGES = [
     // Home
-    { path: '/',                            priority: 1.0, changefreq: 'weekly'  },
+    { path: '/',                            priority: 1.0, changefreq: 'daily'    },
     // Core hosting
-    { path: '/cloud-hosting',               priority: 0.9, changefreq: 'weekly'  },
-    { path: '/cpanel-hosting',              priority: 0.9, changefreq: 'weekly'  },
-    { path: '/reseller-hosting',            priority: 0.9, changefreq: 'weekly'  },
-    { path: '/wordpress-hosting',           priority: 0.9, changefreq: 'weekly'  },
-    { path: '/shared-hosting',              priority: 0.9, changefreq: 'weekly'  },
-    { path: '/web-hosting',                 priority: 0.9, changefreq: 'weekly'  },
+    { path: '/cloud-hosting',               priority: 0.9, changefreq: 'daily'    },
+    { path: '/cpanel-hosting',              priority: 0.9, changefreq: 'daily'    },
+    { path: '/reseller-hosting',            priority: 0.9, changefreq: 'daily'    },
+    { path: '/wordpress-hosting',           priority: 0.9, changefreq: 'daily'    },
+    { path: '/shared-hosting',              priority: 0.9, changefreq: 'daily'    },
+    { path: '/web-hosting',                 priority: 0.9, changefreq: 'daily'    },
     // VPS
-    { path: '/vps-hosting',                 priority: 0.9, changefreq: 'weekly'  },
-    { path: '/linux-vps-hosting',           priority: 0.8, changefreq: 'weekly'  },
-    { path: '/windows-vps-hosting',         priority: 0.8, changefreq: 'weekly'  },
-    { path: '/managed-vps-hosting',         priority: 0.8, changefreq: 'weekly'  },
-    { path: '/vps-cpanel',                  priority: 0.8, changefreq: 'weekly'  },
-    { path: '/vps-hosting-trial',           priority: 0.7, changefreq: 'weekly'  },
+    { path: '/vps-hosting',                 priority: 0.9, changefreq: 'daily'    },
+    { path: '/linux-vps-hosting',           priority: 0.8, changefreq: 'daily'    },
+    { path: '/windows-vps-hosting',         priority: 0.8, changefreq: 'daily'    },
+    { path: '/managed-vps-hosting',         priority: 0.8, changefreq: 'daily'    },
+    { path: '/vps-cpanel',                  priority: 0.8, changefreq: 'daily'    },
+    { path: '/vps-hosting-trial',           priority: 0.7, changefreq: 'daily'    },
     // Dedicated
-    { path: '/dedicated-server',            priority: 0.9, changefreq: 'weekly'  },
-    { path: '/bare-metal-server',           priority: 0.8, changefreq: 'weekly'  },
-    { path: '/linux-dedicated-server',      priority: 0.8, changefreq: 'weekly'  },
-    { path: '/windows-dedicated-server',    priority: 0.8, changefreq: 'weekly'  },
-    { path: '/managed-dedicated-server',    priority: 0.8, changefreq: 'weekly'  },
-    { path: '/gpu-dedicated-server',        priority: 0.8, changefreq: 'weekly'  },
-    { path: '/nvme-dedicated-servers',      priority: 0.7, changefreq: 'weekly'  },
+    { path: '/dedicated-server',            priority: 0.9, changefreq: 'daily'    },
+    { path: '/bare-metal-server',           priority: 0.8, changefreq: 'daily'    },
+    { path: '/linux-dedicated-server',      priority: 0.8, changefreq: 'daily'    },
+    { path: '/windows-dedicated-server',    priority: 0.8, changefreq: 'daily'    },
+    { path: '/managed-dedicated-server',    priority: 0.8, changefreq: 'daily'    },
+    { path: '/gpu-dedicated-server',        priority: 0.8, changefreq: 'daily'    },
+    { path: '/nvme-dedicated-servers',      priority: 0.7, changefreq: 'daily'    },
     // Cloud
-    { path: '/managed-cloud-hosting',       priority: 0.8, changefreq: 'weekly'  },
-    { path: '/linux-cloud-hosting',         priority: 0.8, changefreq: 'weekly'  },
-    { path: '/windows-cloud-hosting',       priority: 0.8, changefreq: 'weekly'  },
-    { path: '/gpu-cloud-hosting',           priority: 0.8, changefreq: 'weekly'  },
-    { path: '/aws-cloud-hosting',           priority: 0.8, changefreq: 'weekly'  },
-    { path: '/azure-cloud-hosting',         priority: 0.8, changefreq: 'weekly'  },
-    { path: '/google-cloud-hosting',        priority: 0.8, changefreq: 'weekly'  },
-    { path: '/virtual-machine',             priority: 0.7, changefreq: 'weekly'  },
-    { path: '/cloud-storage',               priority: 0.7, changefreq: 'weekly'  },
+    { path: '/managed-cloud-hosting',       priority: 0.8, changefreq: 'daily'    },
+    { path: '/linux-cloud-hosting',         priority: 0.8, changefreq: 'daily'    },
+    { path: '/windows-cloud-hosting',       priority: 0.8, changefreq: 'daily'    },
+    { path: '/gpu-cloud-hosting',           priority: 0.8, changefreq: 'daily'    },
+    { path: '/aws-cloud-hosting',           priority: 0.8, changefreq: 'daily'    },
+    { path: '/azure-cloud-hosting',         priority: 0.8, changefreq: 'daily'    },
+    { path: '/google-cloud-hosting',        priority: 0.8, changefreq: 'daily'    },
+    { path: '/virtual-machine',             priority: 0.7, changefreq: 'daily'    },
+    { path: '/cloud-storage',               priority: 0.7, changefreq: 'daily'    },
     // Email & Workspace
-    { path: '/email-hosting',               priority: 0.8, changefreq: 'weekly'  },
-    { path: '/google-workspace',            priority: 0.8, changefreq: 'weekly'  },
-    { path: '/microsoft-365',               priority: 0.8, changefreq: 'weekly'  },
-    { path: '/zimbra-hosting',              priority: 0.7, changefreq: 'weekly'  },
+    { path: '/email-hosting',               priority: 0.8, changefreq: 'daily'    },
+    { path: '/google-workspace',            priority: 0.8, changefreq: 'daily'    },
+    { path: '/microsoft-365',               priority: 0.8, changefreq: 'daily'    },
+    { path: '/zimbra-hosting',              priority: 0.7, changefreq: 'daily'    },
     // Domain & SSL
-    { path: '/domain-registration',         priority: 0.8, changefreq: 'weekly'  },
-    { path: '/domain-transfer',             priority: 0.7, changefreq: 'weekly'  },
-    { path: '/ssl-certificate',             priority: 0.7, changefreq: 'weekly'  },
+    { path: '/domain-registration',         priority: 0.8, changefreq: 'daily'    },
+    { path: '/domain-transfer',             priority: 0.7, changefreq: 'daily'    },
+    { path: '/ssl-certificate',             priority: 0.7, changefreq: 'daily'    },
     // Security
-    { path: '/firewall-security',           priority: 0.7, changefreq: 'weekly'  },
-    { path: '/vapt',                        priority: 0.7, changefreq: 'weekly'  },
-    { path: '/pam-mfa',                     priority: 0.7, changefreq: 'weekly'  },
+    { path: '/firewall-security',           priority: 0.7, changefreq: 'daily'    },
+    { path: '/vapt',                        priority: 0.7, changefreq: 'daily'    },
+    { path: '/pam-mfa',                     priority: 0.7, changefreq: 'daily'    },
     // Backup
-    { path: '/acronis-backup',              priority: 0.7, changefreq: 'weekly'  },
-    { path: '/veeam-backup',               priority: 0.7, changefreq: 'weekly'  },
+    { path: '/acronis-backup',              priority: 0.7, changefreq: 'daily'    },
+    { path: '/veeam-backup',               priority: 0.7, changefreq: 'daily'    },
     // Specialty
-    { path: '/forex-vps',                   priority: 0.7, changefreq: 'weekly'  },
-    { path: '/tally-on-cloud',              priority: 0.7, changefreq: 'weekly'  },
+    { path: '/forex-vps',                   priority: 0.7, changefreq: 'daily'    },
+    { path: '/tally-on-cloud',              priority: 0.7, changefreq: 'daily'    },
     // Info
-    { path: '/about-us',                    priority: 0.6, changefreq: 'monthly' },
-    { path: '/contact-us',                  priority: 0.8, changefreq: 'monthly' },
-    { path: '/pricing',                     priority: 0.7, changefreq: 'weekly'  },
+    { path: '/about-us',                    priority: 0.6, changefreq: 'daily'   },
+    { path: '/contact-us',                  priority: 0.8, changefreq: 'daily'   },
+    { path: '/pricing',                     priority: 0.7, changefreq: 'daily'    },
     // Legal
     { path: '/legal/terms-conditions',      priority: 0.3, changefreq: 'yearly'  },
     { path: '/legal/privacy-policy',        priority: 0.3, changefreq: 'yearly'  },
@@ -736,9 +763,9 @@ async function buildSitemapEntries(req) {
                 if (!d.slug) return;
                 if (!isPageLive(d.slug)) return;        // honour Page Registry hidden state
                 entries.push({
-                    loc:        baseUrl + '/builder/' + d.slug,
+                    loc:        baseUrl + '/' + d.slug,   // top-level URL (2026-07-03)
                     lastmod:    d.updatedAt ? d.updatedAt.split('T')[0] : today,
-                    changefreq: 'weekly',
+                    changefreq: 'daily',
                     priority:   0.7,
                     type:       'builder',
                 });
@@ -1032,7 +1059,37 @@ function seoJsonLd(canonical, title, description) {
 }
 
 // Read a page HTML file, inject SEO <head>, and send it.
-async function sendPageWithSeo(req, res, filePath, slug, cleanPath) {
+// ── Builder pages at top-level URLs (2026-07-03) ───────────
+// Published builder pages are served at /<slug>. This helper resolves a slug
+// to its SEO meta (or null if no published builder page exists). Cached 2 min.
+const builderMetaCache = new Map();   // slug → { ts, val }
+const BUILDER_META_TTL = 2 * 60 * 1000;
+
+// Called by the builder publish/delete admin routes so top-level /<slug>
+// serving reflects changes immediately (defined here; hoisted for earlier use).
+function bustBuilderMetaCache() { builderMetaCache.clear(); }
+
+async function fetchBuilderPageMeta(slug) {
+    const hit = builderMetaCache.get(slug);
+    if (hit && Date.now() - hit.ts < BUILDER_META_TTL) return hit.val;
+    let val = null;
+    try {
+        const r = await fetch(
+            `${STRAPI_URL}/api/builder-pages?filters[slug][$eq]=${encodeURIComponent(slug)}` +
+            `&fields[0]=title&fields[1]=metaTitle&fields[2]=metaDescription&pagination[pageSize]=1`,
+            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+        );
+        if (r.ok) {
+            const json = await r.json();
+            const d = (json.data && json.data[0]) || null;
+            if (d) val = { title: d.metaTitle || d.title || slug, description: d.metaDescription || '' };
+        }
+    } catch (_) { /* Strapi down → treat as no builder page */ }
+    builderMetaCache.set(slug, { ts: Date.now(), val });
+    return val;
+}
+
+async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride) {
     let html;
     try {
         html = await fs.promises.readFile(filePath, 'utf8');
@@ -1040,7 +1097,7 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath) {
         return res.status(404).sendFile(path.join(publicPath, '404.html'));
     }
 
-    const seo = await fetchSeo(slug);
+    const seo = seoOverride || await fetchSeo(slug);
 
     const curTitleM = html.match(/<title>([\s\S]*?)<\/title>/i);
     const curDescM = html.match(/<meta\s+name=["']description["']\s+content=["']([\s\S]*?)["']\s*\/?>/i);
@@ -1120,7 +1177,7 @@ app.get('/legal/:page', (req, res) => {
 });
 
 // Dynamic routes — gate on page registry cache (SEO-injected)
-app.get('/:page', (req, res) => {
+app.get('/:page', async (req, res) => {
     const slug = req.params.page;
 
     // If the slug is registered and marked offline → 404 immediately
@@ -1128,7 +1185,17 @@ app.get('/:page', (req, res) => {
         return res.status(404).sendFile(path.join(publicPath, '404.html'));
     }
 
-    sendPageWithSeo(req, res, path.join(publicPath, `${slug}.html`), slug, `/${slug}`);
+    const filePath = path.join(publicPath, `${slug}.html`);
+
+    // No static page file → maybe a published builder page lives at this slug
+    if (!fs.existsSync(filePath)) {
+        const bp = await fetchBuilderPageMeta(slug);
+        if (bp) {
+            return sendPageWithSeo(req, res, path.join(publicPath, 'builder-template.html'), slug, `/${slug}`, bp);
+        }
+    }
+
+    sendPageWithSeo(req, res, filePath, slug, `/${slug}`);
 });
 
 // ══════════════════════════════════════════════════════════

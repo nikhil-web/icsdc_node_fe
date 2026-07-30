@@ -33,7 +33,8 @@ function snapshotFile(p) {
 }
 
 // Paths to render: a single CLI arg, else every <loc> in the live sitemap.xml
-// (already filtered by Page Registry). Builder pages are out of scope.
+// (already filtered by Page Registry). Builder pages publish at top-level
+// /<slug> since 2026-07-03 and are prerendered like any other page.
 function getPaths() {
     const arg = process.argv[2];
     if (arg) {
@@ -44,8 +45,7 @@ function getPaths() {
     const xml = fs.readFileSync(path.join(publicPath, 'sitemap.xml'), 'utf8');
     const paths = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
         .map(m => { try { return new URL(m[1]).pathname; } catch { return null; } })
-        .filter(Boolean)
-        .filter(p => !p.startsWith('/builder/'));
+        .filter(Boolean);
     return [...new Set(paths)];
 }
 

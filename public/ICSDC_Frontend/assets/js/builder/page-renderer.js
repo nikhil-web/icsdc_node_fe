@@ -1,12 +1,14 @@
 /**
  * page-renderer.js
  * ────────────────
- * Runs on every /builder/:slug request (and /builder/preview/:slug).
- * Fetches the page's section JSON from Strapi (or the preview token endpoint),
- * then dispatches each section to its registry renderer.
+ * Renders builder pages. Three modes:
+ *   1. Live page      /<slug> or /builder/<slug>  → fetch published page from Strapi
+ *   2. Draft preview  /builder/preview/<slug>?token=… → fetch via preview-token endpoint
+ *   3. Editor canvas  /builder/__canvas?canvas=1  → no fetch; rendered live via
+ *      postMessage from the admin editor (see canvas-mode.js)
  *
- * Public pages       → /api/strapi/api/builder-pages?filters[slug][$eq]=...
- * Preview (drafts)   → /api/builder/preview/:slug?token=...
+ * Every section is wrapped in a `.bsec` div carrying its layout classes
+ * (width / align / background / padding / columns) — see builder-layout.css.
  */
 
 import { COMPONENT_REGISTRY } from './componentRegistry.js';
@@ -35,6 +37,62 @@ function showError(message) {
     hidePageLoader();
 }
 
+/* ── Layout wrapper ─────────────────────────────────────────
+   Maps a section's `layout` object to .bsec-* classes.
+   Missing/legacy sections (no layout) render exactly as before. */
+/* NOTE: the site's own CSS (`.section .container { text-align: center }`)
+   already centres everything by default — that's the page's native look, not
+   something this layout system applies. So the "no override" state has to be
+   'center' here too, or picking "Center" would be indistinguishable from doing
+   nothing while "Left" (the old default) could never actually left-align
+   anything, since no class was ever emitted for it. */
+const LAYOUT_DEFAULTS = { width: 'contained', align: 'center', background: 'none', padding: 'normal', columns: null };
+
+function applyLayout(wrap, layout) {
+    const l = Object.assign({}, LAYOUT_DEFAULTS, layout || {});
+    wrap.classList.add('bsec');
+    if (l.width && l.width !== 'contained') wrap.classList.add('bsec-w-' + l.width);
+    if (l.align === 'left') wrap.classList.add('bsec-align-left');
+    if (l.background && l.background !== 'none') wrap.classList.add('bsec-bg-' + l.background);
+    if (l.padding && l.padding !== 'normal') wrap.classList.add('bsec-p-' + l.padding);
+    const cols = Number(l.columns);
+    if (cols >= 1 && cols <= 4) wrap.style.setProperty('--bsec-cols', String(cols));
+}
+
+/**
+ * Render an array of section objects into `root`.
+ * Exported for canvas-mode.js (editor live canvas) to reuse.
+ */
+export function renderSections(root, sections) {
+    root.innerHTML = '';
+    const sorted = (Array.isArray(sections) ? sections : [])
+        .filter((s) => s && s.visible !== false && s.type)
+        .slice()
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    sorted.forEach((section) => {
+        const entry = COMPONENT_REGISTRY[section.type];
+        if (!entry) {
+            console.warn('[page-renderer] Unknown section type:', section.type);
+            return;
+        }
+        const wrap = document.createElement('div');
+        wrap.dataset.sectionId = section.id || '';
+        wrap.dataset.sectionType = section.type;
+        applyLayout(wrap, section.layout);
+        // Append BEFORE rendering: many renderers populate via document-level
+        // selectors (populateIconCards('#id'), initFAQ, …) which find nothing
+        // while the wrapper is detached → empty sections.
+        root.appendChild(wrap);
+        try {
+            entry.renderer(wrap, section.props || {});
+        } catch (err) {
+            console.error('[page-renderer] Renderer threw for', section.type, err);
+            wrap.remove();
+        }
+    });
+}
+
 async function fetchPage(slug, previewToken) {
     if (previewToken) {
         const r = await fetch('/api/builder/preview/' + encodeURIComponent(slug) + '?token=' + encodeURIComponent(previewToken));
@@ -54,18 +112,34 @@ async function fetchPage(slug, previewToken) {
 }
 
 (async function initBuilderPage() {
+    const params = new URLSearchParams(window.location.search);
+
+    // ── Editor canvas mode: no fetch, rendered via postMessage ──
+    if (params.get('canvas') === '1') {
+        hidePageLoader();
+        try {
+            const mod = await import('./canvas-mode.js');
+            mod.initCanvasMode(renderSections);
+        } catch (err) {
+            console.error('[page-renderer] canvas-mode failed to load:', err);
+        }
+        return;
+    }
+
     // URL forms:
-    //   /builder/<slug>
-    //   /builder/preview/<slug>?token=...
+    //   /<slug>                      (top-level builder page)
+    //   /builder/<slug>              (legacy)
+    //   /builder/preview/<slug>?token=…
     const parts = window.location.pathname.split('/').filter(Boolean);
     let slug;
-    const params = new URLSearchParams(window.location.search);
     const previewToken = params.get('token');
 
     if (parts[0] === 'builder' && parts[1] === 'preview' && parts[2]) {
         slug = parts[2];
     } else if (parts[0] === 'builder' && parts[1]) {
         slug = parts[1];
+    } else if (parts.length === 1 && parts[0]) {
+        slug = parts[0];                              // top-level /<slug>
     } else {
         return showError('Invalid page URL.');
     }
@@ -88,31 +162,10 @@ async function fetchPage(slug, previewToken) {
     document.title = metaTitle + ' | ICSDC';
     setMeta('description', metaDescription);
 
-    const sections = Array.isArray(page.sections) ? page.sections : [];
     const root = document.getElementById('builder-page-root');
     if (!root) return showError('Renderer not mounted.');
 
-    const sorted = sections
-        .filter((s) => s && s.visible !== false && s.type)
-        .slice()
-        .sort((a, b) => (a.order || 0) - (b.order || 0));
-
-    sorted.forEach((section) => {
-        const entry = COMPONENT_REGISTRY[section.type];
-        if (!entry) {
-            console.warn('[page-renderer] Unknown section type:', section.type);
-            return;
-        }
-        const wrap = document.createElement('div');
-        wrap.dataset.sectionId = section.id || '';
-        wrap.dataset.sectionType = section.type;
-        try {
-            entry.renderer(wrap, section.props || {});
-            root.appendChild(wrap);
-        } catch (err) {
-            console.error('[page-renderer] Renderer threw for', section.type, err);
-        }
-    });
+    renderSections(root, page.sections);
 
     if (page._isPreview) {
         const banner = document.createElement('div');

@@ -106,11 +106,40 @@
 /* ── Three-panel body ──────────────────────────────────── */
 .bld-editor-body {
     display: grid;
-    grid-template-columns: 240px 1fr minmax(480px, 40vw);
+    /* Canvas is the star: give it every spare pixel. The right column width is
+       user-adjustable (see .bld-resize-handle) and persisted per-browser. */
+    grid-template-columns: 232px 1fr 6px var(--bld-right-w, 344px);
     flex: 1;
     overflow: hidden;
     min-height: 0;
 }
+
+/* ── Drag handle between canvas and properties panel ─────── */
+.bld-resize-handle {
+    position: relative;
+    cursor: col-resize;
+    background: transparent;
+    z-index: 5;
+}
+
+.bld-resize-handle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 2px;
+    width: 2px;
+    background: var(--border, #e2e8f0);
+    transition: background 0.1s ease;
+}
+
+.bld-resize-handle:hover::after,
+.bld-resize-handle.is-dragging::after {
+    background: var(--blue, #1a56db);
+}
+
+body.bld-resizing { cursor: col-resize !important; user-select: none; }
+body.bld-resizing iframe { pointer-events: none; }
 
 .bld-panel {
     background: #fff;
@@ -136,16 +165,38 @@
 }
 
 /* ── Left panel: component library ──────────────────────── */
+.bld-lib-group { margin-bottom: 0.4rem; }
+
+.bld-lib-group-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.45rem 0.35rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted, #64748b);
+}
+
+.bld-lib-group-head i { font-size: 0.6rem; transition: transform 0.15s ease; }
+.bld-lib-group:not(.is-open) .bld-lib-group-head i { transform: rotate(-90deg); }
+.bld-lib-group:not(.is-open) .bld-lib-group-body { display: none; }
+
 .bld-lib-item {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     width: 100%;
-    padding: 0.65rem 0.7rem;
+    padding: 0.4rem 0.5rem;   /* compact: 31 components must not require endless scrolling */
     border: 1px solid var(--border, #e2e8f0);
-    border-radius: 8px;
+    border-radius: 7px;
     background: #fff;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
     cursor: pointer;
     transition: all 0.15s ease;
     text-align: left;
@@ -163,9 +214,10 @@
 [data-theme="dark"] .bld-lib-item:hover { background: #1e3a8a40; }
 
 .bld-lib-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+    width: 26px;
+    height: 26px;
+    font-size: 0.78rem;
+    border-radius: 6px;
     background: var(--blue-light, #ebf2fc);
     color: var(--blue, #1a56db);
     display: flex;
@@ -176,14 +228,54 @@
 
 .bld-lib-label {
     flex: 1;
-    font-size: 0.85rem;
+    font-size: 0.79rem;
     font-weight: 600;
+    line-height: 1.25;
 }
 
 .bld-lib-plus {
     color: var(--muted, #64748b);
     font-size: 0.75rem;
 }
+
+/* ── Post-publish toast ──────────────────────────────────── */
+.bld-publish-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 200;
+    width: 420px;
+    max-width: calc(100vw - 40px);
+    background: #0a1230;
+    color: #e2e8f0;
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 12px 40px rgba(2, 8, 30, 0.35);
+    animation: bldToastIn 0.25s ease;
+}
+
+@keyframes bldToastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+.bld-toast-row { display: flex; align-items: center; gap: 8px; }
+.bld-toast-row > i.fa-circle-check { color: #4ade80; }
+.bld-toast-row span { flex: 1; font-size: 0.85rem; }
+.bld-publish-toast a { color: #7dd3fc; }
+.bld-publish-toast code { background: rgba(255, 255, 255, 0.08); padding: 1px 5px; border-radius: 4px; }
+.bld-toast-sub { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.bld-toast-sub span { color: #94a3b8; font-size: 0.78rem; }
+.bld-toast-close { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 0.9rem; padding: 2px 4px; }
+.bld-toast-close:hover { color: #fff; }
+
+/* ── Right panel: layout controls ────────────────────────── */
+.bld-layout-panel legend i { margin-right: 4px; color: var(--blue, #1a56db); }
+
+.bld-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 0.75rem;
+}
+
+.bld-layout-field { margin-bottom: 0; }
 
 /* ── Centre: canvas ──────────────────────────────────────── */
 .bld-canvas-wrap {
@@ -192,6 +284,117 @@
 }
 
 .bld-canvas { max-width: 760px; margin: 0 auto; }
+
+/* Live WYSIWYG iframe canvas */
+.bld-canvas-wrap-live {
+    padding: 14px;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background:
+        linear-gradient(45deg, #f1f5f9 25%, transparent 25%, transparent 75%, #f1f5f9 75%),
+        linear-gradient(45deg, #f1f5f9 25%, #e9eef5 25%, #e9eef5 75%, #f1f5f9 75%);
+    background-size: 24px 24px;
+    background-position: 0 0, 12px 12px;
+}
+
+[data-theme="dark"] .bld-canvas-wrap-live {
+    background:
+        linear-gradient(45deg, #0f172a 25%, transparent 25%, transparent 75%, #0f172a 75%),
+        linear-gradient(45deg, #0f172a 25%, #132038 25%, #132038 75%, #0f172a 75%);
+    background-size: 24px 24px;
+    background-position: 0 0, 12px 12px;
+}
+
+/* The stage reserves the SCALED footprint so the flex parent centres correctly
+   and scrollbars measure the visible size, not the pre-transform size. */
+.bld-canvas-stage {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+/* The iframe renders at a TRUE device width (1280/768/390) and is scaled down
+   with a transform to fit the panel. Without this, a ~600px-wide panel makes the
+   site render its tablet layout — i.e. the WYSIWYG preview would be a lie. */
+.bld-canvas-frame {
+    border: none;
+    background: #fff;
+    display: block;
+    transform-origin: top left;
+    box-shadow: 0 0 0 1px var(--border, #e2e8f0), 0 8px 30px rgba(2, 8, 30, 0.08);
+}
+
+/* Canvas failed-to-load notice (stale cache, script error…) */
+.bld-canvas-error {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: min(460px, 88%);
+    height: fit-content;
+    background: #fff;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 12px;
+    padding: 28px 26px;
+    text-align: center;
+    box-shadow: 0 16px 44px rgba(2, 8, 30, 0.18);
+    z-index: 40;
+}
+
+[data-theme="dark"] .bld-canvas-error { background: #1e293b; border-color: #334155; color: #e2e8f0; }
+.bld-canvas-error i { font-size: 30px; color: #f59e0b; }
+.bld-canvas-error h3 { margin: 12px 0 8px; font-size: 1.05rem; color: var(--text, #1e293b); }
+[data-theme="dark"] .bld-canvas-error h3 { color: #f1f5f9; }
+.bld-canvas-error p { margin: 0 0 10px; font-size: 0.85rem; color: var(--muted, #64748b); line-height: 1.55; }
+.bld-canvas-error button { width: auto; margin-top: 6px; }
+
+.bld-canvas-wrap-live { position: relative; }
+
+/* "View live" link in the page list — an <a>, so give it button metrics */
+.bld-list-view {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+.bld-zoom-badge {
+    align-self: center;
+    font-size: 0.68rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--muted, #64748b);
+    white-space: nowrap;
+    padding: 0 2px;
+}
+
+/* Viewport toggle in topbar */
+.bld-viewport-toggle {
+    display: inline-flex;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-right: 0.4rem;
+}
+
+.bld-viewport-toggle button {
+    border: none;
+    background: transparent;
+    padding: 0.45rem 0.65rem;
+    cursor: pointer;
+    color: var(--muted, #64748b);
+    font-size: 0.85rem;
+}
+
+.bld-viewport-toggle button + button { border-left: 1px solid var(--border, #e2e8f0); }
+
+.bld-viewport-toggle button.is-active {
+    background: var(--blue, #1a56db);
+    color: #fff;
+}
+
+[data-theme="dark"] .bld-viewport-toggle { border-color: #334155; }
+[data-theme="dark"] .bld-viewport-toggle button + button { border-left-color: #334155; }
 
 .bld-empty-canvas {
     text-align: center;
@@ -552,11 +755,12 @@
 
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 1100px) {
-    .bld-editor-body { grid-template-columns: 200px 1fr 300px; }
+    .bld-editor-body { grid-template-columns: 200px 1fr 6px var(--bld-right-w, 300px); }
 }
 
 @media (max-width: 900px) {
     .bld-editor-body { grid-template-columns: 1fr; }
+    .bld-resize-handle { display: none; }
     .bld-panel-left, .bld-panel-right {
         position: fixed;
         top: 0; bottom: 0;
@@ -791,4 +995,207 @@
 .bld-media-status {
     font-size: 0.82rem;
     color: var(--muted, #94a3b8);
+}
+
+/* ══════════════════════════════════════════════════════════
+   NEW-PAGE MODAL + TEMPLATE PICKER
+   ══════════════════════════════════════════════════════════ */
+.bld-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 8, 30, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+    padding: 20px;
+}
+
+.bld-modal {
+    background: #fff;
+    border-radius: 14px;
+    width: min(620px, 100%);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 64px rgba(2, 8, 30, 0.32);
+}
+
+[data-theme="dark"] .bld-modal { background: #1e293b; color: #e2e8f0; }
+
+.bld-modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+[data-theme="dark"] .bld-modal-head,
+[data-theme="dark"] .bld-modal-foot { border-color: #334155; }
+
+.bld-modal-head h3 { margin: 0; font-size: 1.05rem; font-weight: 700; }
+
+.bld-modal-x {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--muted, #64748b);
+    font-size: 1rem;
+    padding: 4px 6px;
+}
+
+.bld-modal-x:hover { color: var(--text, #1e293b); }
+[data-theme="dark"] .bld-modal-x:hover { color: #f1f5f9; }
+
+.bld-modal-body { padding: 20px 22px; overflow-y: auto; }
+
+.bld-modal-foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 22px;
+    border-top: 1px solid var(--border, #e2e8f0);
+}
+
+.bld-modal-foot .admin-toggle-btn,
+.bld-modal-foot .admin-login-btn { width: auto; margin: 0; padding: 0.6rem 1.2rem; }
+
+.bld-np-preview { font-size: 0.8rem; color: var(--muted, #64748b); margin: -4px 0 16px; }
+.bld-np-preview code {
+    background: var(--bg-light, #f1f5f9);
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: var(--blue, #1a56db);
+    font-weight: 600;
+}
+[data-theme="dark"] .bld-np-preview code { background: #0f172a; }
+
+.bld-np-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b42318;
+    font-size: 0.82rem;
+    padding: 9px 12px;
+    border-radius: 8px;
+    margin: 0 0 14px;
+}
+
+/* Template cards */
+.bld-tpl-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.bld-tpl {
+    position: relative;
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    grid-template-rows: auto auto;
+    gap: 2px 10px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border, #e2e8f0);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+[data-theme="dark"] .bld-tpl { border-color: #334155; }
+.bld-tpl:hover { border-color: var(--blue, #1a56db); }
+.bld-tpl input { position: absolute; opacity: 0; pointer-events: none; }
+.bld-tpl i { grid-row: 1 / span 2; align-self: center; font-size: 1.05rem; color: var(--blue, #1a56db); }
+.bld-tpl-label { font-size: 0.87rem; font-weight: 700; }
+.bld-tpl-desc { font-size: 0.75rem; color: var(--muted, #64748b); line-height: 1.4; }
+
+.bld-tpl.is-selected {
+    border-color: var(--blue, #1a56db);
+    background: var(--blue-light, #eff6ff);
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.12);
+}
+
+[data-theme="dark"] .bld-tpl.is-selected { background: #1e3a8a30; }
+
+/* ══════════════════════════════════════════════════════════
+   RICH TEXT (WYSIWYG) FIELD
+   ══════════════════════════════════════════════════════════ */
+.bld-rich {
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+}
+
+[data-theme="dark"] .bld-rich { background: #0f172a; border-color: #334155; }
+
+.bld-rich-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 6px;
+    background: var(--bg-light, #f8fafc);
+    border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+[data-theme="dark"] .bld-rich-toolbar { background: #1e293b; border-color: #334155; }
+
+.bld-rich-toolbar button {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 6px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text, #1e293b);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[data-theme="dark"] .bld-rich-toolbar button { color: #e2e8f0; }
+
+.bld-rich-toolbar button:hover {
+    background: #fff;
+    border-color: var(--border, #e2e8f0);
+    color: var(--blue, #1a56db);
+}
+
+[data-theme="dark"] .bld-rich-toolbar button:hover { background: #0f172a; border-color: #475569; }
+
+.bld-rich-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--border, #e2e8f0);
+    margin: 0 4px;
+}
+
+.bld-rich-area {
+    min-height: 220px;
+    max-height: 460px;
+    overflow-y: auto;
+    padding: 14px 16px;
+    font-size: 0.86rem;
+    line-height: 1.65;
+    color: var(--text, #1e293b);
+    outline: none;
+}
+
+[data-theme="dark"] .bld-rich-area { color: #e2e8f0; }
+.bld-rich-area:focus { box-shadow: inset 0 0 0 2px rgba(26, 86, 219, 0.18); }
+.bld-rich-area h2 { font-size: 1.15rem; font-weight: 800; margin: 18px 0 8px; }
+.bld-rich-area h3 { font-size: 1rem; font-weight: 700; margin: 16px 0 6px; }
+.bld-rich-area p { margin: 0 0 12px; }
+.bld-rich-area ul, .bld-rich-area ol { margin: 0 0 12px; padding-left: 22px; }
+.bld-rich-area a { color: var(--blue, #1a56db); text-decoration: underline; }
+.bld-rich-area img { max-width: 100%; height: auto; border-radius: 8px; margin: 8px 0; }
+.bld-rich-area blockquote {
+    margin: 14px 0;
+    padding-left: 14px;
+    border-left: 3px solid var(--blue, #1a56db);
+    color: var(--muted, #64748b);
 }

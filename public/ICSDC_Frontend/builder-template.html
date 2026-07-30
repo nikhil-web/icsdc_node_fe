@@ -15,10 +15,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="icon" type="image/png" href="/assets/images/main_logo.png">
   <title>Loading… | ICSDC</title>
   <meta name="description" content="">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    crossorigin="anonymous">
+  <!-- Loaded non-blocking (preload + swap): these are external CDN requests, and a
+       plain <link rel="stylesheet"> here would hold up every deferred/module script
+       below (including page-renderer.js, which posts the canvas "ready" signal) until
+       both fonts.googleapis.com and cdnjs.cloudflare.com finish responding — on a slow
+       or first-ever connection to those CDNs this alone was enough to blow the canvas's
+       8s ready watchdog, showing a blank canvas + "reload" error that then loads fine
+       once the browser has those two responses cached. -->
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" as="style" crossorigin="anonymous"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous">
+  </noscript>
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <link rel="stylesheet" href="/assets/css/cloud-components.css">
@@ -31,6 +44,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="stylesheet" href="/assets/css/cpanel-hosting.css">
   <link rel="stylesheet" href="/assets/css/shared-hosting.css">
   <link rel="stylesheet" href="/assets/css/builder-page.css">
+  <!-- Harvested-component CSS (hp-*, cs-*, veeam-related, vm-plans-table, mch-optim) -->
+  <link rel="stylesheet" href="/assets/css/homepage-extras.css">
+  <link rel="stylesheet" href="/assets/css/cloud-storage.css">
+  <link rel="stylesheet" href="/assets/css/veeam-backup.css">
+  <link rel="stylesheet" href="/assets/css/virtual-machine.css">
+  <link rel="stylesheet" href="/assets/css/managed-cloud-hosting.css">
+  <link rel="stylesheet" href="/assets/css/builder-layout.css">
   <link rel="stylesheet" href="/assets/css/dark-mode.css">
 </head>
 
