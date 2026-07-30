@@ -1662,9 +1662,98 @@ const videoEmbed = {
     },
 };
 
+/* ════ BLOG HEADER — cover, title, author byline ═════════════ */
+const blogHeader = {
+    label: 'Blog Header',
+    icon: 'info',
+    description: 'Article header: cover image, category, title, excerpt and author byline.',
+    schema: [
+        { key: 'coverImage', label: 'Cover Image', type: 'image' },
+        { key: 'coverAlt', label: 'Cover Alt Text', type: 'text' },
+        { key: 'category', label: 'Category / Kicker', type: 'text' },
+        { key: 'title', label: 'Post Title', type: 'text', required: true },
+        { key: 'excerpt', label: 'Excerpt / Standfirst', type: 'textarea' },
+        { key: 'authorName', label: 'Author Name', type: 'text' },
+        { key: 'authorRole', label: 'Author Role', type: 'text' },
+        { key: 'authorAvatar', label: 'Author Photo', type: 'image' },
+        { key: 'publishDate', label: 'Publish Date', type: 'text' },
+        { key: 'readTime', label: 'Read Time', type: 'text' },
+    ],
+    defaultProps: {
+        coverImage: '/assets/images/Home page images_s.webp',
+        coverAlt: 'Article cover image',
+        category: 'Cloud Hosting',
+        title: 'How to Choose the Right Cloud Hosting for Your Business',
+        excerpt: 'A practical guide to comparing performance, security and cost so you can pick a plan that actually fits how you work.',
+        authorName: 'ICSDC Team',
+        authorRole: 'Cloud Specialists',
+        authorAvatar: '',
+        publishDate: '',
+        readTime: '5 min read',
+    },
+    renderer(container, p) {
+        const initials = String(p.authorName || 'I').trim().split(/\s+/)
+            .map((w) => w[0]).join('').toUpperCase().slice(0, 2);
+        const avatar = p.authorAvatar
+            ? '<img class="blogh-avatar" src="' + esc(p.authorAvatar) + '" alt="' + esc(p.authorName || '') + '">'
+            : '<span class="blogh-avatar blogh-avatar-initials">' + esc(initials) + '</span>';
+        const meta = [p.publishDate, p.readTime].filter(Boolean)
+            .map((m) => '<span>' + esc(m) + '</span>').join('<span class="blogh-dot">·</span>');
+
+        container.innerHTML =
+            '<section class="section blogh-section">' +
+            '<div class="container blogh-inner">' +
+            (p.category ? '<span class="blogh-kicker">' + esc(p.category) + '</span>' : '') +
+            '<h1 class="blogh-title">' + esc(p.title || '') + '</h1>' +
+            (p.excerpt ? '<p class="blogh-excerpt">' + esc(p.excerpt) + '</p>' : '') +
+            '<div class="blogh-byline">' +
+            avatar +
+            '<div class="blogh-byline-text">' +
+            (p.authorName ? '<span class="blogh-author">' + esc(p.authorName) + '</span>' : '') +
+            (p.authorRole ? '<span class="blogh-role">' + esc(p.authorRole) + '</span>' : '') +
+            '</div>' +
+            (meta ? '<div class="blogh-meta">' + meta + '</div>' : '') +
+            '</div>' +
+            (p.coverImage
+                ? '<figure class="blogh-cover"><img src="' + esc(p.coverImage) + '" alt="' + esc(p.coverAlt || '') + '"></figure>'
+                : '') +
+            '</div>' +
+            '</section>';
+    },
+};
+
+/* ════ BLOG BODY — full article, WYSIWYG-edited ══════════════ */
+const blogBody = {
+    label: 'Article Body',
+    icon: 'info',
+    description: 'The article itself, written in a full rich-text editor (headings, lists, links, quotes, images).',
+    schema: [
+        { key: 'body', label: 'Article Content', type: 'richtext' },
+    ],
+    defaultProps: {
+        body: '<p>Start writing your article here. Use the toolbar above to add headings, lists, links, quotes and images.</p>' +
+              '<h2>A section heading</h2>' +
+              '<p>Break the article into sections so it stays easy to scan. Keep paragraphs short and lead with the point.</p>' +
+              '<ul><li>Bullet lists work well for specifics</li><li>So do short, concrete examples</li></ul>' +
+              '<blockquote>Pull out a quote when you want a line to land.</blockquote>',
+    },
+    renderer(container, p) {
+        // NOTE: deliberately NOT inlineRichText() — that collapses <p> blocks into
+        // <br><br>, which is right for one-line CMS fields but destroys an article.
+        container.innerHTML =
+            '<section class="section blogb-section">' +
+            '<div class="container blogb-inner">' +
+            '<article class="blogb-body">' + (p.body || '') + '</article>' +
+            '</div>' +
+            '</section>';
+    },
+};
+
 /* ════ EXPORT ════════════════════════════════════════════════ */
 export const COMPONENT_REGISTRY = {
     hero,
+    blogHeader,
+    blogBody,
     pillars,
     iconCards,
     imageText,
@@ -1699,6 +1788,8 @@ export const COMPONENT_REGISTRY = {
 
 export const COMPONENT_ORDER = [
     'hero',
+    'blogHeader',
+    'blogBody',
     'pillars',
     'iconCards',
     'imageText',
@@ -1740,5 +1831,6 @@ export const COMPONENT_CATEGORIES = [
     { label: 'Data & Compare', types: ['statsBand', 'comparisonTable', 'plansTable', 'processSteps', 'numberedTips', 'industryTabs'] },
     { label: 'Social Proof', types: ['testimonials', 'logoCloud'] },
     { label: 'Conversion', types: ['ctaBand', 'pricing', 'contactForm', 'contactInfo', 'faq'] },
+    { label: 'Blog', types: ['blogHeader', 'blogBody'] },
     { label: 'Media & Layout', types: ['mapEmbed', 'videoEmbed', 'spacer'] },
 ];

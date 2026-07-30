@@ -4,7 +4,7 @@
    Every builder section is wrapped in `.bsec` with modifier
    classes set from the section's `layout` object:
      width:      bsec-w-contained | bsec-w-narrow | bsec-w-full
-     align:      bsec-align-left | bsec-align-center
+     align:      bsec-align-left (center is the unstyled default)
      background: bsec-bg-none | bsec-bg-light | bsec-bg-blue | bsec-bg-ink
      padding:    bsec-p-compact | bsec-p-normal | bsec-p-spacious
      columns:    inline CSS var --bsec-cols (grid components only)
@@ -36,10 +36,26 @@
     padding-right: 32px;
 }
 
-/* ── Text alignment ────────────────────────────────────── */
-.bsec-align-center .container,
-.bsec-align-center .blue-container { text-align: center; }
-.bsec-align-center .cs-when-list { display: inline-block; text-align: left; }
+/* ── Text alignment ────────────────────────────────────────
+   The site's base CSS (`.section .container { text-align: center }`) already
+   centres everything — that IS the default, so "Center" needs no class of its
+   own. "Left" is the only real override and has to out-specificity that base
+   rule, which is why every selector here is repeated at both class positions
+   (`.bsec-align-left .container` and `.bsec-align-left.container`-style
+   nesting isn't needed since .bsec always wraps .container, but the base rule
+   `.section .container` and this rule are equal specificity — this stylesheet
+   simply needs to load after style.css, which builder-template.html already
+   guarantees). ── */
+.bsec-align-left .container,
+.bsec-align-left .blue-container { text-align: left; }
+
+.bsec-align-left .subtitle,
+.bsec-align-left .au-life-desc { margin-left: 0; margin-right: auto; }
+
+.bsec-align-left .cloud-section-label,
+.bsec-align-left .builder-eyebrow { margin-left: 0; }
+
+.bsec-align-left .cs-when-list { display: block; text-align: left; }
 
 /* ── Background ────────────────────────────────────────── */
 .bsec-bg-light { background: #f6f8fc; }

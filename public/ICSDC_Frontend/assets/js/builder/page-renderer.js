@@ -40,13 +40,19 @@ function showError(message) {
 /* ── Layout wrapper ─────────────────────────────────────────
    Maps a section's `layout` object to .bsec-* classes.
    Missing/legacy sections (no layout) render exactly as before. */
-const LAYOUT_DEFAULTS = { width: 'contained', align: 'left', background: 'none', padding: 'normal', columns: null };
+/* NOTE: the site's own CSS (`.section .container { text-align: center }`)
+   already centres everything by default — that's the page's native look, not
+   something this layout system applies. So the "no override" state has to be
+   'center' here too, or picking "Center" would be indistinguishable from doing
+   nothing while "Left" (the old default) could never actually left-align
+   anything, since no class was ever emitted for it. */
+const LAYOUT_DEFAULTS = { width: 'contained', align: 'center', background: 'none', padding: 'normal', columns: null };
 
 function applyLayout(wrap, layout) {
     const l = Object.assign({}, LAYOUT_DEFAULTS, layout || {});
     wrap.classList.add('bsec');
     if (l.width && l.width !== 'contained') wrap.classList.add('bsec-w-' + l.width);
-    if (l.align === 'center') wrap.classList.add('bsec-align-center');
+    if (l.align === 'left') wrap.classList.add('bsec-align-left');
     if (l.background && l.background !== 'none') wrap.classList.add('bsec-bg-' + l.background);
     if (l.padding && l.padding !== 'normal') wrap.classList.add('bsec-p-' + l.padding);
     const cols = Number(l.columns);

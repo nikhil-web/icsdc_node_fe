@@ -24,6 +24,7 @@ import { renderComponentLibrary } from './component-library.js';
 import { renderPropertyEditor } from './property-editor.js';
 import { openVersionHistory } from './version-history.js';
 import { createCanvasBridge } from './canvas-bridge.js';
+import { BUILDER_TEMPLATES, getTemplate } from '/assets/js/builder/templates.js';
 
 const state = {
     mode: 'list',
@@ -153,25 +154,133 @@ function renderListBody() {
         btn.addEventListener('click', () => onDeleteClick(btn.dataset.id, btn.dataset.title)));
 }
 
-async function onNewPageClick() {
-    const title = window.prompt('Page title?');
-    if (!title || !title.trim()) return;
-    const slugHint = title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    const slug = window.prompt('URL slug (page will be live at icsdc.com/<slug>):', slugHint);
-    if (!slug || !slug.trim()) return;
+function slugify(s) {
+    return String(s || '').toLowerCase().trim()
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
 
-    try {
-        const res = await BuilderAPI.createPage({
-            title: title.trim(),
-            slug: slug.trim().toLowerCase(),
-            sections: [],
-        });
-        const newId = res?.data?.documentId || res?.data?.id;
-        if (newId) navigateTo('/admin/builder/' + newId);
-        else openList();
-    } catch (err) {
-        alert('Failed to create page: ' + err.message);
+/* Build the section list for a template. Sections get their ids/order here;
+   props fall back to each component's own defaults when the template omits them. */
+function sectionsFromTemplate(templateId) {
+    const tpl = getTemplate(templateId);
+    return (tpl.sections || []).map((s, i) => {
+        const entry = COMPONENT_REGISTRY[s.type];
+        return {
+            id: generateSectionId(),
+            type: s.type,
+            order: i,
+            visible: true,
+            props: clone(s.props || (entry && entry.defaultProps) || {}),
+            layout: clone(s.layout || {}),
+        };
+    });
+}
+
+/* New-page dialog — replaces two stacked window.prompt()s with a real form:
+   live slug preview, template picker, inline validation. */
+function onNewPageClick() {
+    const existing = document.getElementById('bld-newpage');
+    if (existing) existing.remove();
+
+    const cards = BUILDER_TEMPLATES.map((t, i) =>
+        '<label class="bld-tpl' + (i === 0 ? ' is-selected' : '') + '">' +
+        '<input type="radio" name="bld-tpl" value="' + t.id + '"' + (i === 0 ? ' checked' : '') + '>' +
+        '<i class="fa-solid ' + t.icon + '" aria-hidden="true"></i>' +
+        '<span class="bld-tpl-label">' + esc(t.label) + '</span>' +
+        '<span class="bld-tpl-desc">' + esc(t.description) + '</span>' +
+        '</label>').join('');
+
+    const wrap = document.createElement('div');
+    wrap.id = 'bld-newpage';
+    wrap.className = 'bld-modal-backdrop';
+    wrap.innerHTML =
+        '<div class="bld-modal" role="dialog" aria-modal="true" aria-labelledby="bld-np-title">' +
+        '<div class="bld-modal-head">' +
+            '<h3 id="bld-np-title">New page</h3>' +
+            '<button type="button" class="bld-modal-x" id="bld-np-cancel" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>' +
+        '</div>' +
+        '<div class="bld-modal-body">' +
+            '<label class="bld-field">' +
+                '<span class="bld-field-label">Page title *</span>' +
+                '<input type="text" class="bld-input" id="bld-np-title-input" placeholder="e.g. Summer Cloud Offer" autocomplete="off">' +
+            '</label>' +
+            '<label class="bld-field">' +
+                '<span class="bld-field-label">URL slug</span>' +
+                '<input type="text" class="bld-input" id="bld-np-slug" placeholder="summer-cloud-offer" autocomplete="off">' +
+            '</label>' +
+            '<p class="bld-np-preview">Will be live at <code id="bld-np-url">icsdc.com/…</code></p>' +
+            '<p class="bld-np-error" id="bld-np-error" hidden></p>' +
+            '<div class="bld-field-label bld-field-label-block">Start from</div>' +
+            '<div class="bld-tpl-grid">' + cards + '</div>' +
+        '</div>' +
+        '<div class="bld-modal-foot">' +
+            '<button type="button" class="admin-toggle-btn" id="bld-np-cancel2">Cancel</button>' +
+            '<button type="button" class="admin-login-btn" id="bld-np-create"><i class="fa-solid fa-plus"></i> Create page</button>' +
+        '</div>' +
+        '</div>';
+    document.body.appendChild(wrap);
+
+    const titleEl = document.getElementById('bld-np-title-input');
+    const slugEl = document.getElementById('bld-np-slug');
+    const urlEl = document.getElementById('bld-np-url');
+    const errEl = document.getElementById('bld-np-error');
+    const createBtn = document.getElementById('bld-np-create');
+    let slugTouched = false;
+
+    function syncUrl() {
+        const s = slugify(slugEl.value || titleEl.value);
+        urlEl.textContent = 'icsdc.com/' + (s || '…');
     }
+    titleEl.addEventListener('input', () => {
+        if (!slugTouched) slugEl.value = slugify(titleEl.value);
+        syncUrl();
+    });
+    slugEl.addEventListener('input', () => { slugTouched = true; syncUrl(); });
+
+    function close() { wrap.remove(); document.removeEventListener('keydown', onKey); }
+    function onKey(e) {
+        if (e.key === 'Escape') close();
+        if (e.key === 'Enter' && document.activeElement !== createBtn) { e.preventDefault(); submit(); }
+    }
+    document.addEventListener('keydown', onKey);
+    wrap.addEventListener('mousedown', (e) => { if (e.target === wrap) close(); });
+    document.getElementById('bld-np-cancel').addEventListener('click', close);
+    document.getElementById('bld-np-cancel2').addEventListener('click', close);
+
+    wrap.querySelectorAll('.bld-tpl input').forEach((r) => {
+        r.addEventListener('change', () => {
+            wrap.querySelectorAll('.bld-tpl').forEach((c) => c.classList.remove('is-selected'));
+            r.closest('.bld-tpl').classList.add('is-selected');
+        });
+    });
+
+    async function submit() {
+        const title = titleEl.value.trim();
+        const slug = slugify(slugEl.value || title);
+        const tplId = (wrap.querySelector('.bld-tpl input:checked') || {}).value || 'blank';
+        errEl.hidden = true;
+        if (!title) { errEl.textContent = 'Give the page a title.'; errEl.hidden = false; titleEl.focus(); return; }
+        if (!slug)  { errEl.textContent = 'That title has no usable URL slug — enter one manually.'; errEl.hidden = false; slugEl.focus(); return; }
+
+        createBtn.disabled = true;
+        createBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating…';
+        try {
+            const res = await BuilderAPI.createPage({ title, slug, sections: sectionsFromTemplate(tplId) });
+            const newId = res?.data?.documentId || res?.data?.id;
+            close();
+            if (newId) navigateTo('/admin/builder/' + newId);
+            else openList();
+        } catch (err) {
+            // The server rejects slugs that collide with an existing page — show it here.
+            errEl.textContent = err.message || 'Could not create the page.';
+            errEl.hidden = false;
+            createBtn.disabled = false;
+            createBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Create page';
+        }
+    }
+    createBtn.addEventListener('click', submit);
+    syncUrl();
+    titleEl.focus();
 }
 
 async function onDeleteClick(documentId, title) {
@@ -224,6 +333,7 @@ async function openEditor(documentId) {
                         '<iframe id="bld-canvas-frame" class="bld-canvas-frame" src="/builder/__canvas?canvas=1&v=' + Date.now() + '" title="Page canvas"></iframe>' +
                     '</div>' +
                 '</main>' +
+                '<div class="bld-resize-handle" id="bld-resize-handle" title="Drag to resize"></div>' +
                 '<aside class="bld-panel bld-panel-right">' +
                     '<h3 class="bld-panel-title">Properties</h3>' +
                     '<div id="bld-properties"></div>' +
@@ -287,6 +397,7 @@ async function openEditor(documentId) {
     }
     initCanvas();
     initViewportToggle();
+    initPanelResize();
     renderProperties();
     setStatus(state.page.publishedAt ? 'Published · v' + state.page.currentVersion : 'Draft · v' + state.page.currentVersion);
 }
@@ -437,6 +548,61 @@ function initViewportToggle() {
     }
 }
 let _canvasResizeObs = null;
+
+/* ── Resizable properties panel ────────────────────────────
+   The right column width is a CSS var on .bld-editor-body so it can be
+   dragged; persisted per-browser so it survives reloads. */
+const RIGHT_PANEL_KEY = 'icsdc_bld_right_panel_w';
+const RIGHT_PANEL_MIN = 280;
+const RIGHT_PANEL_MAX = 640;
+
+function initPanelResize() {
+    const body = document.querySelector('.bld-editor-body');
+    const handle = document.getElementById('bld-resize-handle');
+    if (!body || !handle) return;
+
+    const saved = Number(localStorage.getItem(RIGHT_PANEL_KEY));
+    if (saved >= RIGHT_PANEL_MIN && saved <= RIGHT_PANEL_MAX) {
+        body.style.setProperty('--bld-right-w', saved + 'px');
+    }
+
+    let startX = 0;
+    let startWidth = 0;
+
+    function onMove(e) {
+        const x = e.touches ? e.touches[0].clientX : e.clientX;
+        const next = Math.min(RIGHT_PANEL_MAX, Math.max(RIGHT_PANEL_MIN, startWidth + (startX - x)));
+        body.style.setProperty('--bld-right-w', next + 'px');
+        applyViewport();
+    }
+
+    function onUp() {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onUp);
+        document.body.classList.remove('bld-resizing');
+        handle.classList.remove('is-dragging');
+        const width = parseFloat(getComputedStyle(body).getPropertyValue('--bld-right-w')) ||
+            document.querySelector('.bld-panel-right').getBoundingClientRect().width;
+        localStorage.setItem(RIGHT_PANEL_KEY, String(Math.round(width)));
+    }
+
+    function onDown(e) {
+        e.preventDefault();
+        startX = e.touches ? e.touches[0].clientX : e.clientX;
+        startWidth = document.querySelector('.bld-panel-right').getBoundingClientRect().width;
+        document.body.classList.add('bld-resizing');
+        handle.classList.add('is-dragging');
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+        document.addEventListener('touchmove', onMove);
+        document.addEventListener('touchend', onUp);
+    }
+
+    handle.addEventListener('mousedown', onDown);
+    handle.addEventListener('touchstart', onDown, { passive: false });
+}
 
 function renderProperties() {
     const root = document.getElementById('bld-properties');
