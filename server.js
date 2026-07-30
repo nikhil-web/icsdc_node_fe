@@ -977,7 +977,20 @@ app.post('/api/admin/robots', requireAdminAuth, async function (req, res) {
 //  ADMIN SPA (existing)
 // ══════════════════════════════════════════════════════════
 const adminPath = path.join(__dirname, 'public/admin');
-app.use('/admin', express.static(adminPath));
+// Deliberately NOT cached like the public site: a stale copy of the builder's
+// editor scripts is a real failure mode here (it silently blanks the WYSIWYG
+// canvas — see the retry notice in canvas-bridge.js), and the admin is a handful
+// of internal users, so there's no meaningful bandwidth win to trade for it.
+// Revalidate every load; ETag still yields a cheap 304 when nothing changed.
+app.use('/admin', express.static(adminPath, {
+    setHeaders(res, filePath) {
+        if (/\.(js|mjs|css|html?)$/i.test(filePath)) {
+            res.setHeader('Cache-Control', 'no-cache');
+        } else {
+            res.setHeader('Cache-Control', 'public, max-age=2592000');
+        }
+    },
+}));
 app.get('/admin', (req, res) => res.sendFile(path.join(adminPath, 'index.html')));
 app.get('/admin/*path', (req, res) => res.sendFile(path.join(adminPath, 'index.html')));
 
@@ -1145,6 +1158,11 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     html = html.replace(/<\/head>/i, `    ${headTags}\n</head>`);
 
     res.set('Content-Type', 'text/html; charset=utf-8');
+    // Explicit, because "no Cache-Control" is not the same as "don't cache":
+    // browsers fall back to heuristic freshness (a fraction of Last-Modified age)
+    // and would serve a stale shell — with stale server-injected SEO tags and CMS
+    // copy — after a content update. ETag still gives a cheap 304 when unchanged.
+    res.set('Cache-Control', 'public, max-age=0, must-revalidate');
     res.send(html);
 }
 
@@ -1172,9 +1190,32 @@ app.use((req, res, next) => {
     });
 });
 
+// ── Static asset caching ──────────────────────────────────
+// Assets here are NOT content-hashed (style.css keeps its name across deploys),
+// so an aggressive immutable max-age would strand users on stale CSS/JS after a
+// release. Tiered instead:
+//   images/fonts — 30d. Big win (Lighthouse flagged ~790 KiB of re-fetching) and
+//                  low risk: these are replaced far less often, and a swapped
+//                  image is usually uploaded under a new name anyway.
+//   css/js       — 1d, so a deploy propagates within a day; ETag/Last-Modified
+//                  still give instant 304s inside that window.
+//   html         — must-revalidate. Never cache the shell: it carries the
+//                  server-injected SEO head and CMS-driven copy.
+const STATIC_ASSET_RE = /\.(png|jpe?g|webp|gif|svg|ico|avif|woff2?|ttf|otf|eot|mp4|webm)$/i;
+
+function setStaticCacheHeaders(res, filePath) {
+    if (STATIC_ASSET_RE.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=2592000');      // 30 days
+    } else if (/\.(css|js|mjs)$/i.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=86400');        // 1 day
+    } else if (/\.html?$/i.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    }
+}
+
 // Serve static assets. index:false so "/" falls through to the SEO-injecting
 // homepage route below instead of static auto-serving index.html.
-app.use(express.static(publicPath, { index: false }));
+app.use(express.static(publicPath, { index: false, setHeaders: setStaticCacheHeaders }));
 
 // Homepage (SEO-injected)
 app.get('/', (req, res) => {
