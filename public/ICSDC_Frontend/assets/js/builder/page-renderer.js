@@ -59,6 +59,34 @@ function applyLayout(wrap, layout) {
     if (cols >= 1 && cols <= 4) wrap.style.setProperty('--bsec-cols', String(cols));
 }
 
+/* ── Heal internal-only media URLs baked into saved props ────
+   Media picked through the admin's media library used to be absolutified
+   server-side using the SERVER's own (often localhost-internal) Strapi URL,
+   which then got saved permanently into a section's props. That URL is
+   broken for every browser except one that happens to run Strapi on its own
+   port 1337 too. The server no longer does this (see STRAPI_PUBLIC_URL in
+   server.js), but pages saved before that fix still carry the bad absolute
+   URL — rewrite it at render time to this environment's real Strapi origin
+   rather than requiring every affected image to be re-picked by hand. */
+const INTERNAL_MEDIA_RE = /^https?:\/\/(?:localhost|127\.0\.0\.1|160\.25\.110\.10)(?::\d+)?(\/uploads\/.*)$/i;
+
+function healMediaUrl(v) {
+    if (typeof v !== 'string') return v;
+    const m = INTERNAL_MEDIA_RE.exec(v);
+    if (m && typeof window !== 'undefined' && window.STRAPI_URL) return window.STRAPI_URL + m[1];
+    return v;
+}
+
+function healMediaUrls(value) {
+    if (Array.isArray(value)) return value.map(healMediaUrls);
+    if (value && typeof value === 'object') {
+        const out = {};
+        for (const k in value) out[k] = healMediaUrls(value[k]);
+        return out;
+    }
+    return healMediaUrl(value);
+}
+
 /**
  * Render an array of section objects into `root`.
  * Exported for canvas-mode.js (editor live canvas) to reuse.
@@ -84,6 +112,7 @@ export function renderSections(root, sections) {
         // selectors (populateIconCards('#id'), initFAQ, …) which find nothing
         // while the wrapper is detached → empty sections.
         root.appendChild(wrap);
+        section = Object.assign({}, section, { props: healMediaUrls(section.props || {}) });
         try {
             entry.renderer(wrap, section.props || {});
         } catch (err) {
