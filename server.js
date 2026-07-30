@@ -13,6 +13,15 @@ const app = express();
 const publicPath = path.join(__dirname, 'public/ICSDC_Frontend');
 const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
 const STRAPI_TOKEN = process.env.STRAPI_TOKEN || '';
+// STRAPI_URL is how THIS SERVER reaches Strapi (often http://localhost:1337 when
+// Node and Strapi run as sibling services on the same box — fast + no public
+// exposure needed for that hop). It must never be handed to a BROWSER: a remote
+// admin's browser resolves "localhost" to their OWN machine, not the server, so
+// any URL built from STRAPI_URL and sent in an API response 404s/refuses for
+// everyone except someone who happens to run Strapi locally on their own port
+// 1337 too. STRAPI_PUBLIC_URL is the address a browser can actually reach —
+// falls back to STRAPI_URL for pure-local dev where they're the same host.
+const STRAPI_PUBLIC_URL = process.env.STRAPI_PUBLIC_URL || STRAPI_URL;
 
 // ── Crawler prerendering (dynamic rendering) ──────────────
 // Fully-rendered static snapshots (built by prerender.js) live in /prerendered and
@@ -466,15 +475,18 @@ function cleanupExpiredTokens() {
 }
 
 // ── Admin: media library (Strapi upload proxy) ───────────────────────
+// Builds URLs that go straight into a browser <img src> and can also be saved
+// permanently into builder-page props (shared across every environment reading
+// that content) — must use STRAPI_PUBLIC_URL, never the server-internal STRAPI_URL.
 function absolutifyMediaUrls(file) {
     if (!file || typeof file !== 'object') return file;
     // Strapi 5 sometimes wraps responses as { id, attributes: {...} }
     const target = file.attributes && typeof file.attributes === 'object' ? file.attributes : file;
-    if (target.url && !/^https?:/i.test(target.url)) target.url = STRAPI_URL.replace(/\/$/, '') + target.url;
+    if (target.url && !/^https?:/i.test(target.url)) target.url = STRAPI_PUBLIC_URL.replace(/\/$/, '') + target.url;
     if (target.formats && typeof target.formats === 'object') {
         Object.keys(target.formats).forEach((k) => {
             const f = target.formats[k];
-            if (f && f.url && !/^https?:/i.test(f.url)) f.url = STRAPI_URL.replace(/\/$/, '') + f.url;
+            if (f && f.url && !/^https?:/i.test(f.url)) f.url = STRAPI_PUBLIC_URL.replace(/\/$/, '') + f.url;
         });
     }
     return file;
