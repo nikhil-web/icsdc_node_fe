@@ -55,7 +55,7 @@ export function createCanvasBridge(iframe, handlers) {
     // page-renderer.js / canvas-mode.js inside the iframe). Surface it instead.
     const readyTimer = setTimeout(() => {
         if (!ready && handlers.onTimeout) handlers.onTimeout();
-    }, 8000);
+    }, 12000);
 
     return {
         render(sections) {
