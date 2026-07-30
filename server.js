@@ -1020,6 +1020,33 @@ function seoEndpointForSlug(slug) {
 const seoCache = new Map();              // slug → { value, expires }
 const SEO_TTL = 10 * 60 * 1000;          // 10 min
 
+/* The hero image is the LCP element on most pages, but it's rendered
+   client-side from Strapi — so it isn't in the initial HTML and the browser
+   can't start fetching it until main.js has run AND the API has answered.
+   Lighthouse scores that as "Request is discoverable in initial document: no".
+   Since this server already has the page's Strapi payload in hand, it can emit
+   a <link rel=preload> for that exact image and cut a whole round-trip out of LCP.
+
+   Preloading a DIFFERENT derivative than the <img> ends up requesting would
+   download the image twice — worse than not preloading at all. The two client
+   renderers disagree on their fallback chain (cms-helpers' populateHero goes
+   large -> medium -> small; homepage-cms' mediaURL('large') goes large ->
+   small), so the only pick guaranteed to match both is `large` itself. When
+   there's no large derivative we simply skip the preload rather than gamble. */
+function heroPreloadUrl(data) {
+    const media = data && data.heroImage && data.heroImage.image;
+    if (!media) return null;
+    const large = media.formats && media.formats.large;
+    if (!large || !large.url) return null;
+    let url = large.url;
+    if (!/^https?:/i.test(url)) url = STRAPI_PUBLIC_URL.replace(/\/$/, '') + url;
+    // Never preload a server-internal origin: the browser resolves "localhost"
+    // to the visitor's own machine, so the preload would 404 AND still not match
+    // the URL the client script builds from window.STRAPI_URL.
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:|\/)/i.test(url)) return null;
+    return url;
+}
+
 async function fetchSeo(slug) {
     const cached = seoCache.get(slug);
     if (cached && cached.expires > Date.now()) return cached.value;
@@ -1027,7 +1054,8 @@ async function fetchSeo(slug) {
     try {
         const endpoint = seoEndpointForSlug(slug);
         const seoField = endpoint === 'home-page' ? 'SEO' : 'seo';
-        const r = await fetch(`${STRAPI_URL}/api/${endpoint}?populate[${seoField}]=*`, {
+        const r = await fetch(
+            `${STRAPI_URL}/api/${endpoint}?populate[${seoField}]=*&populate[heroImage][populate][image]=true`, {
             headers: STRAPI_TOKEN ? { Authorization: `Bearer ${STRAPI_TOKEN}` } : {},
         });
         if (r.ok) {
@@ -1041,6 +1069,8 @@ async function fetchSeo(slug) {
                     canonicalUrl: seo.canonicalUrl || null,
                 };
             }
+            const heroUrl = heroPreloadUrl(data);
+            if (heroUrl) value = Object.assign(value || {}, { heroImageUrl: heroUrl });
         }
     } catch (e) { /* Strapi down / no such page — fall back to static */ }
     seoCache.set(slug, { value, expires: Date.now() + SEO_TTL });
@@ -1132,6 +1162,10 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     const canonical = seoCanonical(cleanPath, seo);
 
     const headTags = [
+        // Preload first: it's only useful if the browser sees it early.
+        ...(seo && seo.heroImageUrl
+            ? [`<link rel="preload" as="image" fetchpriority="high" href="${seoEsc(seo.heroImageUrl)}">`]
+            : []),
         `<link rel="canonical" href="${seoEsc(canonical)}">`,
         `<meta property="og:type" content="website">`,
         `<meta property="og:site_name" content="${SEO_ORG_NAME}">`,

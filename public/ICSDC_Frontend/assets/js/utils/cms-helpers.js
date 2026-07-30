@@ -454,6 +454,12 @@ export function populateHero(section, data) {
                 : _m.url) || '';
             if (_url && !_url.startsWith('http')) _url = _base + _url;
             if (_url) {
+                // This is the LCP element on most pages. The server preloads the
+                // same URL (heroPreloadUrl in server.js — keep the format pick
+                // above in sync with it); these hints stop the browser from
+                // queueing it behind lazier below-fold images once it lands.
+                heroImg.setAttribute('fetchpriority', 'high');
+                heroImg.setAttribute('decoding', 'async');
                 heroImg.src = _url;
                 heroImg.style.display = '';
                 Array.from(heroRight.children).forEach(function (child) {
