@@ -4,8 +4,27 @@
 // ══════════════════════════════════════════════════════════
 
 import { getNavigation, getFooter } from "./services/contentService.js";
-import { resolveIcon } from "./utils/cms-helpers.js";
+import { resolveIcon, inlineRichText } from "./utils/cms-helpers.js";
 import { getFooterHTML } from "./footer-template.js";
+
+// ══════════════════════════════════════════════════════════
+//  SCROLL-ANIMATION SAFETY REVEAL  (SEO / crawler fix)
+//  Scroll-triggered elements start at opacity:0 and are revealed by an
+//  IntersectionObserver on scroll. Crawlers (Googlebot's renderer) paint at a
+//  fixed viewport WITHOUT scrolling, so below-the-fold [data-animate]/[data-stagger]
+//  content never gets `.is-visible` and the rendered screenshot comes out blank.
+//  This force-reveals anything still hidden shortly after load — guaranteeing the
+//  full page is painted for crawlers (real users keep on-scroll animation for the
+//  first ~2s, which covers the above-the-fold reveal).
+(function revealAnimatedForCrawlers() {
+    function revealAll() {
+        document.querySelectorAll('[data-animate]:not(.is-visible), [data-stagger]:not(.is-visible)')
+            .forEach(function (el) { el.classList.add('is-visible'); });
+    }
+    function schedule() { setTimeout(revealAll, 2000); }
+    if (document.readyState === 'complete') schedule();
+    else window.addEventListener('load', schedule);
+})();
 
 
 // ══════════════════════════════════════════════════════════
@@ -456,7 +475,7 @@ function initFooter(footer) {
     // --- Address ---
     var address = document.querySelector('[data-strapi-footer-address]');
     if (address && footer.address) {
-        address.innerHTML = footer.address; // keep <br> tags from CMS
+        address.innerHTML = inlineRichText(footer.address); // keep <br> / links from CMS, strip CKEditor <p> wrapper
     }
 
     // --- Phone ---
@@ -523,7 +542,35 @@ function initFooter(footer) {
 
 }
 
+/**
+ * Inject a self-referencing <link rel="canonical"> on every page.
+ * Builds the canonical from window.SITE_URL (config.js) + the clean pathname:
+ *   - strips a trailing ".html" / "index.html" (site uses clean URLs)
+ *   - drops query strings, hashes, and trailing slashes (except root)
+ * This consolidates duplicate URLs (.html, ?utm=…, www, http) onto the one
+ * canonical https://icsdc.com/<path> — matching what's in sitemap.xml.
+ */
+function setCanonical() {
+    try {
+        var base = (window.SITE_URL || 'https://icsdc.com').replace(/\/+$/, '');
+        var path = (window.location.pathname || '/')
+            .replace(/\/index\.html$/i, '/')
+            .replace(/\.html$/i, '');
+        if (path.length > 1) path = path.replace(/\/+$/, ''); // strip trailing slash (keep root)
+        if (!path) path = '/';
+
+        var link = document.querySelector('link[rel="canonical"]');
+        if (!link) {
+            link = document.createElement('link');
+            link.setAttribute('rel', 'canonical');
+            document.head.appendChild(link);
+        }
+        link.setAttribute('href', base + path);
+    } catch (e) { /* non-fatal */ }
+}
+
 async function init() {
+    setCanonical();
 
 
 

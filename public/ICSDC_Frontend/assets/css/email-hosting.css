@@ -256,6 +256,11 @@
     stroke-width: 2;
 }
 
+.email-when-icon i {
+    color: #0284c7;
+    font-size: 20px;
+}
+
 .email-when-card h3 {
     font-size: 14px;
     font-weight: 700;
@@ -269,6 +274,458 @@
     line-height: 1.6;
 }
 
+/* Solution-card brand logo colours (FA icons) */
+.email-solution-card.google .email-solution-logo i {
+    color: #ea4335;
+}
+
+.email-solution-card.microsoft .email-solution-logo i {
+    color: #0078d4;
+}
+
+.email-solution-card.zimbra .email-solution-logo i {
+    color: #0ea5e9;
+}
+
+/* ══════════════════════════════════════
+   WHO WE ARE — checklist + CTA (inside .blue-container)
+══════════════════════════════════════ */
+.eh-about-points {
+    list-style: none;
+    padding: 0;
+    margin: 18px 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.eh-about-points li {
+    position: relative;
+    padding-left: 28px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-dark);
+}
+
+.eh-about-points li::before {
+    content: '\2713';
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #e0f2fe;
+    color: #0284c7;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.eh-about-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    padding: 13px 28px;
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    color: #fff;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform var(--transition-fast) ease, box-shadow var(--transition-base) ease;
+}
+
+.eh-about-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.32);
+}
+
+/* ══════════════════════════════════════
+   REUSABLE MEDIA FRAME — soft showcase panel
+   so section images never look "floating"
+══════════════════════════════════════ */
+.eh-media-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.eh-media-frame img {
+    width: 70%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+/* ══════════════════════════════════════
+   EXPERIENCE THE POWER — 2-col text + image
+══════════════════════════════════════ */
+.eh-experience-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.eh-experience-text .title,
+.eh-experience-text .subtitle {
+    text-align: left;
+    margin: 0 0 20px 0;
+}
+
+.eh-experience-points {
+    list-style: none;
+    padding: 0;
+    margin: 28px 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 24px;
+}
+
+.eh-experience-points li {
+    position: relative;
+    padding-left: 28px;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--text-dark);
+    font-weight: 500;
+    text-align: left;
+}
+
+.eh-experience-points li::before {
+    content: '\2713';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #e0f2fe;
+    color: #0284c7;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ══════════════════════════════════════
+   DIGITAL HANDSHAKE — image left + stacked blocks right
+══════════════════════════════════════ */
+.eh-handshake-layout {
+    display: grid;
+    grid-template-columns: 0.82fr 1.18fr;
+    gap: 48px;
+    align-items: start;
+    margin-top: 40px;
+}
+
+.eh-handshake-media {
+    position: sticky;
+    top: 100px;
+}
+
+.eh-handshake-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.eh-handshake-card {
+    display: flex;
+    gap: 18px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px 26px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.eh-handshake-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.eh-handshake-num {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.eh-handshake-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    line-height: 1.35;
+}
+
+.eh-handshake-card p {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+/* ══════════════════════════════════════
+   WHEN TO CHOOSE — cards left + image right
+══════════════════════════════════════ */
+.email-when-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0px;
+    align-items: center;
+}
+
+.email-when-layout .email-when-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 0;
+}
+
+.email-when-layout .email-when-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+    padding: 20px 22px;
+}
+
+.email-when-layout .email-when-icon {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.email-when-layout .email-when-card h3 {
+    margin-bottom: 0;
+    font-size: 16px;
+}
+
+/* ══════════════════════════════════════
+   REAL-TIME APPLICATIONS — 3 numbered blocks + closing
+══════════════════════════════════════ */
+.eh-realtime-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.eh-realtime-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-bottom: 4px solid #0ea5e9;
+    border-radius: var(--radius-lg);
+    padding: 28px 26px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease, box-shadow var(--transition-base) ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.eh-realtime-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.eh-realtime-num {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #e0f2fe;
+    color: #0284c7;
+    font-size: 16px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+}
+
+.eh-realtime-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.eh-realtime-card p {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.eh-realtime-closing {
+    margin: 36px auto 0;
+    max-width: 720px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: #0284c7;
+    font-style: italic;
+}
+
+/* ── Dark mode for new sections ── */
+html[data-theme="dark"] .eh-about-points li,
+html[data-theme="dark"] .eh-experience-points li {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .eh-handshake-card,
+html[data-theme="dark"] .eh-realtime-card {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .eh-handshake-card h3,
+html[data-theme="dark"] .eh-realtime-card h3 {
+    color: #e2e8f0;
+}
+
+
+.cloud-power-section {
+    background: var(--bg-light);
+}
+
+.email-solutions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    text-align: left;
+}
+
+.solution-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 26px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base) ease,
+        box-shadow var(--transition-base) ease,
+        border-color var(--transition-base) ease;
+    align-items: self-start;
+    justify-content: space-between;
+}
+
+.solution-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(26, 86, 219, 0.18);
+}
+
+.cloud-power-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #e8f0fe 0%, #c7d9fb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform var(--transition-base) var(--ease-out-back);
+}
+
+.solution-card:hover .cloud-power-icon {
+    transform: scale(1.12) rotate(-4deg);
+}
+
+.cloud-power-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--blue);
+    stroke-width: 1.8;
+    fill: none;
+}
+
+.solution-card h3 {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.solution-card p {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--muted-alt);
+    margin: 0;
+    text-align: left;
+}
+
+.solution-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    text-decoration: none;
+    transition: gap 0.2s ease, opacity 0.2s ease;
+}
+
+.solution-link:hover {
+    gap: 7px;
+    opacity: 0.85;
+}
+
+
+.solution-cta {
+    padding: 11px 22px;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+    transition: background var(--transition-base) ease,
+        transform var(--transition-fast) ease,
+        box-shadow var(--transition-base) ease;
+    min-height: 44px;
+    box-shadow: 0 2px 10px rgba(26, 86, 219, 0.30);
+    text-decoration: none;
+}
+
+.solution-cta:hover {
+    background: var(--blue-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.40);
+}
+
+.solution-cta:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(26, 86, 219, 0.20);
+}
+
+
 /* ── Responsive ── */
 @media (max-width: 1365px) {
     .email-solutions-grid {
@@ -278,10 +735,55 @@
     .email-when-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .eh-experience-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .eh-experience-inner .eh-media-frame {
+        order: -1;
+    }
+
+    .eh-handshake-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .eh-handshake-media {
+        position: static;
+        order: -1;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    .email-when-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .email-when-layout .eh-media-frame {
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    .eh-realtime-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 767px) {
+
+    .eh-handshake-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
     .email-when-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .eh-experience-points {
         grid-template-columns: 1fr;
     }
 }

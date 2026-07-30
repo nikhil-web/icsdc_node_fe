@@ -146,7 +146,8 @@ html[data-theme="dark"] .hamburger span {
     justify-content: center;
     width: 40px;
     height: 40px;
-    border-radius: 10px;                       /* match .nav-search-trigger */
+    border-radius: 10px;
+    /* match .nav-search-trigger */
     background: transparent;
     border: 1px solid var(--c-border, #e5e7eb);
     color: var(--c-text-mid, #4b5563);
@@ -175,6 +176,7 @@ html[data-theme="dark"] #theme-toggle {
     color: #cbd5e1;
     background: transparent;
 }
+
 html[data-theme="dark"] #theme-toggle:hover {
     background: rgba(59, 130, 246, 0.1);
     color: #60a5fa;
@@ -570,15 +572,41 @@ html[data-theme="dark"] .faq-item[open] {
     border-color: rgba(59, 130, 246, 0.4);
 }
 
-html[data-theme="dark"] .faq-q { color: #cbd5e1; }
+html[data-theme="dark"] .faq-q {
+    color: #cbd5e1;
+}
+
 html[data-theme="dark"] .faq-item[open] .faq-q,
-html[data-theme="dark"] .faq-q:hover { color: #60a5fa; }
-html[data-theme="dark"] .faq-a { color: #94a3b8; }
-html[data-theme="dark"] .faq-chev { background: rgba(255,255,255,0.04); border-color: #334155; }
-html[data-theme="dark"] .faq-item[open] .faq-chev { background: #3b82f6; border-color: #3b82f6; color: white; }
-html[data-theme="dark"] .faq-aside-h { color: #e6eaf2; }
-html[data-theme="dark"] .faq-aside-p { color: rgba(230, 234, 242, 0.55); }
-html[data-theme="dark"] .faq-aside-link { color: #60a5fa; }
+html[data-theme="dark"] .faq-q:hover {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .faq-a {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .faq-chev {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .faq-item[open] .faq-chev {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+html[data-theme="dark"] .faq-aside-h {
+    color: #e6eaf2;
+}
+
+html[data-theme="dark"] .faq-aside-p {
+    color: rgba(230, 234, 242, 0.55);
+}
+
+html[data-theme="dark"] .faq-aside-link {
+    color: #60a5fa;
+}
 
 /* ══════════════════════════════════════════════════════
    13. CLOUD SOLUTIONS SECTION — FLOATING CARDS
@@ -1121,4 +1149,146 @@ html[data-theme="dark"] .cloud-cta-btn-outline {
 
 html[data-theme="dark"] .cloud-why-grid .ds-when-card {
     background: #00000026;
+}
+
+html[data-theme="dark"] .gws-plan-card {
+    border-color: #334155;
+}
+
+/* gws-why-blue/peach/green/purple are shared color variants used by
+   .gws-why-card, .gws-reason-card and .gws-upgrade-card */
+html[data-theme="dark"] .gws-why-blue {
+    background: rgba(26, 86, 219, 0.12);
+}
+
+html[data-theme="dark"] .gws-why-blue .gws-why-icon,
+html[data-theme="dark"] .gws-why-blue .gws-reason-icon,
+html[data-theme="dark"] .gws-why-blue .gws-upgrade-icon {
+    background: rgba(26, 86, 219, 0.25);
+    color: #7da3ff;
+}
+
+html[data-theme="dark"] .gws-why-peach {
+    background: rgba(245, 158, 11, 0.12);
+}
+
+html[data-theme="dark"] .gws-why-peach .gws-why-icon,
+html[data-theme="dark"] .gws-why-peach .gws-reason-icon,
+html[data-theme="dark"] .gws-why-peach .gws-upgrade-icon {
+    background: rgba(245, 158, 11, 0.22);
+    color: #fbbf24;
+}
+
+html[data-theme="dark"] .gws-why-green {
+    background: rgba(22, 163, 74, 0.12);
+}
+
+html[data-theme="dark"] .gws-why-green .gws-why-icon,
+html[data-theme="dark"] .gws-why-green .gws-reason-icon,
+html[data-theme="dark"] .gws-why-green .gws-upgrade-icon {
+    background: rgba(22, 163, 74, 0.22);
+    color: #4ade80;
+}
+
+html[data-theme="dark"] .gws-why-purple {
+    background: rgba(124, 92, 252, 0.14);
+}
+
+html[data-theme="dark"] .gws-why-purple .gws-why-icon,
+html[data-theme="dark"] .gws-why-purple .gws-reason-icon,
+html[data-theme="dark"] .gws-why-purple .gws-upgrade-icon {
+    background: rgba(124, 92, 252, 0.25);
+    color: #b3a1ff;
+}
+
+html[data-theme="dark"] .gws-reason-card:hover,
+html[data-theme="dark"] .gws-why-card:hover,
+html[data-theme="dark"] .gws-upgrade-card:hover {
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+}
+
+/* ══════════════════════════════════════
+   HOMEPAGE NEW SECTIONS — Partner / Industry / Security
+══════════════════════════════════════ */
+html[data-theme="dark"] .hp-partner-section,
+html[data-theme="dark"] .hp-security-section {
+    background: #0f172a !important;
+}
+
+html[data-theme="dark"] .hp-industry-section {
+    background: #111827 !important;
+}
+
+html[data-theme="dark"] .hp-section-title {
+    color: var(--text) !important;
+}
+
+html[data-theme="dark"] .hp-eyebrow {
+    background: rgba(99, 153, 255, 0.12) !important;
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .hp-stat,
+html[data-theme="dark"] .hp-partner-card,
+html[data-theme="dark"] .hp-industry-tab,
+html[data-theme="dark"] .hp-industry-feature,
+html[data-theme="dark"] .hp-industry-cta,
+html[data-theme="dark"] .hp-compliance-badge,
+html[data-theme="dark"] .hp-security-card,
+html[data-theme="dark"] .hp-btn-ghost {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .hp-stat-num,
+html[data-theme="dark"] .hp-partner-card h3,
+html[data-theme="dark"] .hp-industry-tab,
+html[data-theme="dark"] .hp-industry-card-title,
+html[data-theme="dark"] .hp-industry-feature-title,
+html[data-theme="dark"] .hp-industry-usedby strong,
+html[data-theme="dark"] .hp-industry-cta,
+html[data-theme="dark"] .hp-compliance-badge,
+html[data-theme="dark"] .hp-security-card h3,
+html[data-theme="dark"] .hp-security-highlight h3,
+html[data-theme="dark"] .hp-btn-ghost {
+    color: var(--text) !important;
+}
+
+html[data-theme="dark"] .hp-industry-panel {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .hp-industry-card-foot {
+    border-top-color: #334155 !important;
+}
+
+html[data-theme="dark"] .hp-partner-tag,
+html[data-theme="dark"] .hp-security-chip {
+    background: rgba(99, 153, 255, 0.14) !important;
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .hp-security-icon {
+    background: rgba(99, 153, 255, 0.14) !important;
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .hp-security-highlight {
+    background: #16223a !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .hp-security-highlight .hp-security-icon {
+    background: #1e293b !important;
+}
+
+html[data-theme="dark"] .hp-industry-tab.is-active {
+    background: var(--blue, #1a56db) !important;
+    border-color: var(--blue, #1a56db) !important;
+    color: #fff !important;
+}
+
+html[data-theme="dark"] .hp-industry-tab.is-active i {
+    color: #fff !important;
 }

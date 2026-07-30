@@ -1,3 +1,4 @@
+import { wireCtaLink } from './utils/cms-helpers.js';
 import { populateSEO, populateHero, hidePageLoader, markActiveNavLink, setText, setHTML, initTestimonials, initFAQ } from './utils/cms-helpers.js';
 import { getLinuxDedicatedServerPage } from './services/contentService.js';
 
@@ -217,9 +218,14 @@ function ldsPopulatePricingPlans(gridSelector, plans) {
             (plan.tagline ? '<p class="lds-plan-tagline">' + plan.tagline + '</p>' : '') +
             '<hr class="lds-plan-divider">' +
             '<ul class="lds-plan-specs">' + featuresHTML + '</ul>' +
-            '<button class="lds-plan-cta ' + ctaClass + '">' + (plan.ctaText || '') + '</button>' +
+            '<button type="button" class="lds-plan-cta ' + ctaClass + '">' + (plan.ctaText || '') + '</button>' +
             '</div>';
     }).join('');
+
+    // Wire each plan CTA: per-plan ctaLink, defaulting to the contact popup.
+    grid.querySelectorAll('.lds-plan-cta').forEach(function (btn, i) {
+        wireCtaLink(btn, (sorted[i] && sorted[i].ctaLink) || 'contact-popup');
+    });
 }
 
 /**
@@ -301,11 +307,11 @@ function ldsPopulateCtaBand(cta) {
         var outlineBtn = btns.querySelector('.lds-cta-btn-outline');
         if (primaryBtn && cta.ctaPrimary) {
             primaryBtn.innerHTML = cta.ctaPrimary.text || '';
-            if (cta.ctaPrimary.link) primaryBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
+            wireCtaLink(primaryBtn, cta.ctaPrimary.link);
         }
         if (outlineBtn && cta.ctaSecondary) {
             outlineBtn.innerHTML = cta.ctaSecondary.text || '';
-            if (cta.ctaSecondary.link) outlineBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
+            wireCtaLink(outlineBtn, cta.ctaSecondary.link);
         }
     }
 }

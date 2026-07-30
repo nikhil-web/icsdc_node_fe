@@ -21,8 +21,9 @@
  * when rendering price cells that have an annual subValue.
  */
 
+import { wireCtaLink } from './utils/cms-helpers.js';
 import { getPricingPage } from './services/contentService.js';
-import { populateSEO } from './utils/cms-helpers.js';
+import { populateSEO, inlineRichText } from './utils/cms-helpers.js';
 
 (function () {
     'use strict';
@@ -41,7 +42,12 @@ import { populateSEO } from './utils/cms-helpers.js';
     }
 
     function setText(el, text) {
-        if (el && text != null) el.textContent = text;
+        if (!el || text == null) return;
+        if (typeof text === 'string' && /<\/?(p|a|strong|em|b|i|u|br|ul|ol|li|h[1-6]|blockquote|span)\b/i.test(text)) {
+            el.innerHTML = inlineRichText(text);
+        } else {
+            el.textContent = text;
+        }
     }
 
     /* ─────────────────────────────────────────────────────────
@@ -395,13 +401,13 @@ import { populateSEO } from './utils/cms-helpers.js';
         if (primBtn && cta.ctaPrimary) {
             primBtn.textContent = cta.ctaPrimary.text || 'Talk to an Expert';
             if (cta.ctaPrimary.link) {
-                primBtn.setAttribute('onclick', "window.location.href='" + cta.ctaPrimary.link + "'");
+                wireCtaLink(primBtn, cta.ctaPrimary.link);
             }
         }
         if (secBtn && cta.ctaSecondary) {
             secBtn.textContent = cta.ctaSecondary.text || '';
             if (cta.ctaSecondary.link) {
-                secBtn.setAttribute('onclick', "window.location.href='" + cta.ctaSecondary.link + "'");
+                wireCtaLink(secBtn, cta.ctaSecondary.link);
             } else {
 
 

@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getForexVpsPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -46,7 +47,8 @@ import {
                 tagline:    plan.priceNote || null,
                 isFeatured: !!plan.isPopular,
                 badge:      plan.isPopular ? 'Most Popular' : null,
-                ctaText:    'Get Started',
+                ctaText:    plan.ctaText || 'Get Started',
+                ctaLink:    plan.ctaLink || '',   // shared renderer defaults empty → contact popup
                 ctaStyle:   plan.isPopular ? 'primary' : 'outline',
                 features:   features
             };
@@ -131,7 +133,7 @@ import {
                     return '<div class="fvps-step-card">' +
                         '<div class="fvps-step-number">' + (step.number || step.order || '') + '</div>' +
                         '<h3>' + (step.title || '') + '</h3>' +
-                        '<p>' + (step.description || '') + '</p>' +
+                        '<p>' + inlineRichText(step.description || '') + '</p>' +
                         '</div>';
                 }).join('');
             }

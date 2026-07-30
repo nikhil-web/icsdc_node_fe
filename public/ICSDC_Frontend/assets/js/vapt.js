@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getVaptPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -38,7 +39,7 @@ import {
             return '<div class="vapt-step-card">' +
                 '<div class="vapt-step-num">' + num + '</div>' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || step.desc || '') + '</p>' +
+                '<p>' + inlineRichText(step.description || step.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }

@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getBareMetalServerPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -69,7 +70,7 @@ import {
 
         tbody.innerHTML = managedFeatures.map(function (feature) {
             var name = feature.title || '';
-            var availability = (feature.desc || '').toLowerCase().trim();
+            var availability = inlineRichText(feature.desc || '').toLowerCase().trim();
             var isBoth = availability === 'both';
             var rowClass = isBoth ? ' class="bms-both-row"' : '';
 

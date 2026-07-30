@@ -13,7 +13,9 @@
  *   ✅ Cloud Solutions Engineered  (floating cards)
  *   ✅ Industry-Leading Excellence Validated  (heading, paragraph)
  *   ✅ Beyond Best Practice / ISO Standards   (heading, paragraph)
- *   ✅ Best Cloud Services / Our Partnerships  (heading, paragraph, featureCards)
+ *   ✅ Why Partner With Us   (eyebrow, title, sub, stats, tag cards, CTAs)
+ *   ✅ Solutions by Industry (eyebrow, title, sub, industry tabs + panels)
+ *   ✅ Security & Compliance (eyebrow, title, sub, badges, cards, highlights, CTAs)
  *   ✅ Testimonials  (carousel)
  *   ✅ FAQ  (accordion)
  *   ✅ Get In Touch  (title, subtitle, email, phone, hours, submit label)
@@ -22,7 +24,7 @@
  */
 
 import { getHomepagePage } from "./services/contentService.js";
-import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-helpers.js";
+import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRichText } from "./utils/cms-helpers.js";
 
 (function () {
 
@@ -39,16 +41,23 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
     }
 
     // ── DOM helpers ───────────────────────────────────────────
+    const RICH_HTML_RE = /<\/?(p|a|strong|em|b|i|u|br|ul|ol|li|h[1-6]|blockquote|span)\b/i;
+
     function setText(sel, val, root = document) {
         if (!val) return;
         const el = root.querySelector(sel);
-        if (el) el.textContent = val;
+        if (!el) return;
+        if (typeof val === 'string' && RICH_HTML_RE.test(val)) {
+            el.innerHTML = inlineRichText(val);
+        } else {
+            el.textContent = val;
+        }
     }
 
     function setHTML(sel, val, root = document) {
         if (!val) return;
         const el = root.querySelector(sel);
-        if (el) el.innerHTML = val;
+        if (el) el.innerHTML = inlineRichText(val);
     }
 
     function setAttr(sel, attr, val, root = document) {
@@ -57,15 +66,8 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
         if (el) el.setAttribute(attr, val);
     }
 
-    // ═══════════════════════════════════════════════════════════
-    //  SEO
-    // ═══════════════════════════════════════════════════════════
-    function populateSEO(seo) {
-        if (!seo) return;
-        if (seo.metaTitle) document.title = seo.metaTitle;
-        const desc = document.querySelector('meta[name="description"]');
-        if (desc && seo.metaDescription) desc.setAttribute('content', seo.metaDescription);
-    }
+    // SEO (title + meta description + optional canonical override) is handled by
+    // the shared populateSEO imported from cms-helpers.js.
 
     function populateHeroSection(params) {
         setText('[data-strapi="mainHeading"]', params.mainHeading);
@@ -144,7 +146,7 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
                 </div>
                 <div class="business-needs-copy">
                     <h3>${item.title || ''}</h3>
-                    <p>${item.desc || ''}</p>
+                    <p>${inlineRichText(item.desc || '')}</p>
                 </div>
             </article>
         `).join('');
@@ -157,7 +159,7 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
     function populateWhoWeAre(data) {
         if (!data) return;
         setText('[data-strapi="whoWeAreHeading"]', data.heading);
-        setText('[data-strapi="whoWeAreParagraph"]', data.paragraph);
+        setHTML('[data-strapi="whoWeAreParagraph"]', inlineRichText(data.paragraph));
 
         const cards = data.featureCards;
         if (!Array.isArray(cards) || !cards.length) return;
@@ -177,7 +179,7 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
     function populateLessComplexity(data) {
         if (!data) return;
         setText('[data-strapi="lessComplexityHeading"]', data.heading);
-        setText('[data-strapi="lessComplexityParagraph"]', data.paragraph);
+        setHTML('[data-strapi="lessComplexityParagraph"]', inlineRichText(data.paragraph));
 
         if (data.image) {
             const img = document.querySelector('.less-cloud-complex img, .less-complexity-image img');
@@ -226,7 +228,7 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
             card.innerHTML = `
                 ${iconHTML}
                 <h4>${service.title}</h4>
-                <p>${service.description || service.desc || ''}</p>
+                <p>${inlineRichText(service.description || service.desc || '')}</p>
             `;
 
             const isBottom = service.position?.startsWith('bottom');
@@ -244,7 +246,7 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
     function populateIndustryValidated(data) {
         if (!data) return;
         setText('[data-strapi="industryValidatedHeading"]', data.heading);
-        setText('[data-strapi="industryValidatedParagraph"]', data.paragraph);
+        setHTML('[data-strapi="industryValidatedParagraph"]', inlineRichText(data.paragraph));
 
         if (data.image) {
             const img = document.querySelector('.industry-validated img, #industry-validated img');
@@ -258,7 +260,7 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
     function populateISOStandards(data) {
         if (!data) return;
         setText('.iso-standards-heading, [data-strapi="isoHeading"]', data.heading);
-        setText('.iso-standards-paragraph, [data-strapi="isoParagraph"]', data.paragraph);
+        setHTML('.iso-standards-paragraph, [data-strapi="isoParagraph"]', inlineRichText(data.paragraph));
 
         if (data.image) {
             const img = document.querySelector('.iso-standards img, .beyond-best-practice img');
@@ -267,23 +269,145 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  BEST CLOUD SERVICES / OUR PARTNERSHIPS
+    //  WHY PARTNER WITH US  (partnerStats, partnerCards, CTAs)
     // ═══════════════════════════════════════════════════════════
-    function populateBestCloudServices(data) {
-        if (!data) return;
-        setText('.best-cloud-services-title', data.heading);
-        setText('.best-cloud-services-subtitle', data.paragraph);
+    function ctaAnchor(cta, cls) {
+        if (!cta || !cta.text) return '';
+        const link = cta.link || '#';
+        return `<a href="${link}" class="${cls}">${cta.text} ` +
+            `<i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>`;
+    }
 
-        const cards = data.featureCards;
-        if (!Array.isArray(cards) || !cards.length) return;
+    function populatePartnerSection(page) {
+        setText('[data-strapi="partnerEyebrow"]', page.partnerEyebrow);
+        setText('[data-strapi="partnerTitle"]', page.partnerTitle);
+        setText('[data-strapi="partnerSubtitle"]', page.partnerSubtitle);
 
-        const container = document.querySelector('[data-strapi-grid="ourPartnershipsCards"]');
-        if (!container) return;
+        const stats = document.querySelector('[data-strapi-grid="partnerStats"]');
+        if (stats && Array.isArray(page.partnerStats)) {
+            stats.innerHTML = page.partnerStats.map(s => `
+                <div class="hp-stat">
+                    <span class="hp-stat-icon">${resolveIcon(s.icon)}</span>
+                    <div><span class="hp-stat-num">${s.number || ''}</span><span class="hp-stat-label">${s.label || ''}</span></div>
+                </div>`).join('');
+        }
 
-        container.innerHTML = cards.map(card => {
-            const cls = card.variant === 'primary' ? 'btn-primary feature-cards' : 'btn-outline feature-cards';
-            return `<button class="${cls}">${card.label}</button>`;
-        }).join('');
+        const grid = document.querySelector('[data-strapi-grid="partnerCards"]');
+        if (grid && Array.isArray(page.partnerCards)) {
+            grid.innerHTML = page.partnerCards.map(c => `
+                <article class="hp-partner-card">
+                    ${c.tag ? `<span class="hp-partner-tag">${c.tag}</span>` : ''}
+                    <h3>${c.title || ''}</h3>
+                    <p>${inlineRichText(c.desc || '')}</p>
+                </article>`).join('');
+        }
+
+        const ctas = document.querySelector('[data-strapi-grid="partnerCtas"]');
+        if (ctas) {
+            ctas.innerHTML =
+                ctaAnchor(page.partnerCtaPrimary, 'hp-btn-primary') +
+                ctaAnchor(page.partnerCtaSecondary, 'hp-btn-ghost');
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  SOLUTIONS BY INDUSTRY  (tabs + dynamic panel)
+    // ═══════════════════════════════════════════════════════════
+    function populateIndustrySection(page) {
+        setText('[data-strapi="industryEyebrow"]', page.industryEyebrow);
+        setText('[data-strapi="industryTitle"]', page.industryTitle);
+        setText('[data-strapi="industrySubtitle"]', page.industrySubtitle);
+
+        const industries = Array.isArray(page.industries) ? page.industries : [];
+        const tabsWrap = document.querySelector('[data-strapi-grid="industryTabs"]');
+        const panel = document.getElementById('hp-industry-panel');
+        if (!tabsWrap || !panel || !industries.length) return;
+
+        tabsWrap.innerHTML = industries.map((ind, i) => `
+            <button class="hp-industry-tab${i === 0 ? ' is-active' : ''}" role="tab"
+                aria-selected="${i === 0 ? 'true' : 'false'}" data-industry-idx="${i}">
+                ${resolveIcon(ind.icon)} ${ind.tabLabel || ''}
+            </button>`).join('');
+
+        function renderPanel(idx) {
+            const d = industries[idx];
+            if (!d) return;
+            const features = (Array.isArray(d.features) ? d.features : []).map(f => `
+                <div class="hp-industry-feature">
+                    <span class="hp-industry-feature-icon">${resolveIcon(f.icon)}</span>
+                    <div><span class="hp-industry-feature-title">${f.title || ''}</span>
+                    <span class="hp-industry-feature-sub">${f.sub || ''}</span></div>
+                </div>`).join('');
+
+            const ctaText = d.cta && d.cta.text ? d.cta.text : '';
+            const ctaLink = d.cta && d.cta.link ? d.cta.link : '#';
+
+            panel.innerHTML = `
+                <div class="hp-industry-card-head">
+                    <div class="hp-industry-card-icon">${resolveIcon(d.icon)}</div>
+                    <div><h3 class="hp-industry-card-title">${d.title || ''}</h3>
+                    <p class="hp-industry-card-desc">${inlineRichText(d.desc || '')}</p></div>
+                </div>
+                <div class="hp-industry-features">${features}</div>
+                <div class="hp-industry-card-foot">
+                    <span class="hp-industry-usedby"><strong>Used by:</strong> ${d.usedBy || ''}</span>
+                    ${ctaText ? `<a href="${ctaLink}" class="hp-industry-cta">${ctaText} <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>` : ''}
+                </div>`;
+        }
+
+        const tabs = tabsWrap.querySelectorAll('.hp-industry-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                tabs.forEach(t => { t.classList.remove('is-active'); t.setAttribute('aria-selected', 'false'); });
+                tab.classList.add('is-active');
+                tab.setAttribute('aria-selected', 'true');
+                renderPanel(parseInt(tab.getAttribute('data-industry-idx'), 10));
+            });
+        });
+
+        renderPanel(0);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  SECURITY & COMPLIANCE  (badges, cards, highlights, CTAs)
+    // ═══════════════════════════════════════════════════════════
+    function populateSecuritySection(page) {
+        setText('[data-strapi="securityEyebrow"]', page.securityEyebrow);
+        setText('[data-strapi="securityTitle"]', page.securityTitle);
+        setText('[data-strapi="securitySubtitle"]', page.securitySubtitle);
+
+        const badges = document.querySelector('[data-strapi-grid="complianceBadges"]');
+        if (badges && Array.isArray(page.complianceBadges)) {
+            badges.innerHTML = page.complianceBadges.map(b => `
+                <span class="hp-compliance-badge">${resolveIcon(b.icon)} ${b.title || ''}</span>`).join('');
+        }
+
+        const cards = document.querySelector('[data-strapi-grid="securityCards"]');
+        if (cards && Array.isArray(page.securityCards)) {
+            cards.innerHTML = page.securityCards.map(c => `
+                <article class="hp-security-card">
+                    <div class="hp-security-icon">${resolveIcon(c.icon)}</div>
+                    <h3>${c.title || ''}</h3>
+                    <p>${inlineRichText(c.desc || '')}</p>
+                    ${c.chip ? `<span class="hp-security-chip">${c.chip}</span>` : ''}
+                </article>`).join('');
+        }
+
+        const highlights = document.querySelector('[data-strapi-grid="securityHighlights"]');
+        if (highlights && Array.isArray(page.securityHighlights)) {
+            highlights.innerHTML = page.securityHighlights.map(h => `
+                <article class="hp-security-highlight">
+                    <div class="hp-security-icon">${resolveIcon(h.icon)}</div>
+                    <div><h3>${h.title || ''}</h3><p>${inlineRichText(h.desc || '')}</p></div>
+                </article>`).join('');
+        }
+
+        const ctas = document.querySelector('[data-strapi-grid="securityCtas"]');
+        if (ctas) {
+            ctas.innerHTML =
+                ctaAnchor(page.securityCtaPrimary, 'hp-btn-primary') +
+                ctaAnchor(page.securityCtaSecondary, 'hp-btn-ghost');
+        }
     }
 
     // Testimonials handled by shared initTestimonials from cms-helpers.js
@@ -364,7 +488,7 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
                     '<span class="hp-legend-dot" style="background:' + color + '"></span>' +
                     '<strong class="hp-legend-title" style="color:' + color + '">' + (loc.title || '') + '</strong>' +
                     '</div>' +
-                    '<p class="hp-legend-desc">' + (loc.description || '') + '</p>';
+                    '<p class="hp-legend-desc">' + inlineRichText(loc.description || '') + '</p>';
                 legend.appendChild(item);
             }
         });
@@ -409,7 +533,7 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
                     <span class="faq-q-text">${faq.question || ''}</span>
                     <span class="faq-chev">${chev}</span>
                 </summary>
-                <div class="faq-a-wrap"><div class="faq-a">${faq.answer || ''}</div></div>
+                <div class="faq-a-wrap"><div class="faq-a">${inlineRichText(faq.answer || '')}</div></div>
             </details>`;
         }).join('');
 
@@ -467,7 +591,9 @@ import { populateIconCards, resolveIcon, initTestimonials } from "./utils/cms-he
             populateCloudSolutions(page.CloudSolutionsEngineered);
             populateIndustryValidated(page.IndustryLeadingExcellenceValidated);
             populateISOStandards(page.BeyondBestPracticeOurISOStandards);
-            populateBestCloudServices(page.BestCloudServices);
+            populatePartnerSection(page);
+            populateIndustrySection(page);
+            populateSecuritySection(page);
             renderMapSection(page.globalPresenceTitle, page.globalPresenceSubtitle, page.globalLocations);
             initTestimonials(page.testimonials);
             populateLogoGrid('hp-tech-grid', page.techPartnersTitle, page.techPartners, '#hp-tech-title');

@@ -235,6 +235,66 @@
     border-color: var(--blue);
 }
 
+/* ── Plans table: dark mode ── */
+html[data-theme="dark"] .vm-plans-table-wrap {
+    border-color: #334155;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.40);
+}
+
+html[data-theme="dark"] .vm-plans-table {
+    background: #0f172a;
+}
+
+html[data-theme="dark"] .vm-plans-table thead tr {
+    background: #1e293b;
+}
+
+html[data-theme="dark"] .vm-plans-table th {
+    color: #60a5fa;
+    border-bottom-color: rgba(96, 165, 250, 0.25);
+}
+
+html[data-theme="dark"] .vm-plans-table td {
+    color: #e2e8f0;
+    border-bottom-color: rgba(148, 163, 184, 0.12);
+}
+
+html[data-theme="dark"] .vm-category-row td {
+    background: #1e40af;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .vm-plans-table tbody tr:not(.vm-category-row):nth-child(even) {
+    background: #16203a;
+}
+
+html[data-theme="dark"] .vm-plans-table tbody tr:not(.vm-category-row):nth-child(odd) {
+    background: #0f172a;
+}
+
+html[data-theme="dark"] .vm-plans-table tbody tr:not(.vm-category-row):hover {
+    background: #1e293b;
+}
+
+html[data-theme="dark"] .vm-plan-name {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .vm-plan-price {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .vm-plan-btn {
+    color: #60a5fa;
+    border-color: rgba(96, 165, 250, 0.40);
+}
+
+html[data-theme="dark"] .vm-plan-btn:hover {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+
 /* ══════════════════════════════════════
    FEATURES GRID (12 cards, 4-col)
 ══════════════════════════════════════ */

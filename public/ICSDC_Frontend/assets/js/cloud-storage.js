@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getCloudStoragePage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -17,6 +18,7 @@ import {
     initFAQ,
     initTestimonials
 } from './utils/cms-helpers.js';
+import { uploadURL } from './services/strapiClient.js';
 
 (function () {
     'use strict';
@@ -52,13 +54,15 @@ import {
             var featuresArr = plan.features || [];
             var featuresHtml = featuresArr.length
                 ? '<ul class="cs-plan-features">' +
-                    featuresArr.map(function (f) {
-                        return '<li>' + (f.label || f.text || f.name || f) + '</li>';
-                    }).join('') +
-                  '</ul>'
+                featuresArr.map(function (f) {
+                    return '<li>' + (f.label || f.text || f.name || f) + '</li>';
+                }).join('') +
+                '</ul>'
                 : '';
 
             var ctaText = plan.ctaText || 'Get Started';
+            // Per-plan CMS link; empty → site-wide contact popup. (Was a dead href="#".)
+            var ctaHref = plan.ctaLink || 'contact-popup';
             var btnClass = isFeatured ? 'cs-plan-btn-featured' : 'cs-plan-btn';
 
             return '<div class="cs-plan-card' + featuredClass + '">' +
@@ -67,7 +71,51 @@ import {
                 priceHtml +
                 taglineHtml +
                 featuresHtml +
-                '<a href="#" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '<a href="' + ctaHref + '" class="' + btnClass + '">' + ctaText + ' </a>' +
+                '</div>';
+        }).join('');
+    }
+
+    /** Render the "When to Choose" checklist from a JSON string array. */
+    function populateWhenList(points) {
+        if (!points || !points.length) return;
+        var list = document.getElementById('cs-when-list');
+        if (!list) return;
+        list.innerHTML = points.map(function (pt) {
+            return '<li>' + (typeof pt === 'string' ? pt : (pt.text || pt.label || '')) + '</li>';
+        }).join('');
+    }
+
+    /** Render the audience groups (For Businesses / Creators / Individuals). */
+    function populateAudience(groups) {
+        if (!groups || !groups.length) return;
+        var grid = document.getElementById('cs-audience-grid');
+        if (!grid) return;
+        grid.innerHTML = groups.map(function (g) {
+            var pts = (g.points || []).map(function (p) {
+                return '<li>' + (typeof p === 'string' ? p : (p.text || '')) + '</li>';
+            }).join('');
+            return '<div class="cs-audience-card">' +
+                '<h3 class="cs-audience-title">' + (g.title || '') + '</h3>' +
+                (g.intro ? '<p class="cs-audience-intro">' + g.intro + '</p>' : '') +
+                '<ul class="cs-audience-points">' + pts + '</ul>' +
+                '</div>';
+        }).join('');
+    }
+
+    /** Render the related-services cards from JSON. */
+    function populateRelated(cards) {
+        if (!cards || !cards.length) return;
+        var grid = document.getElementById('cs-related-grid');
+        if (!grid) return;
+        grid.innerHTML = cards.map(function (c) {
+            var cta = c.ctaText
+                ? '<a href="' + (c.ctaLink || '#') + '" class="cs-related-cta">' + c.ctaText + ' </a>'
+                : '';
+            return '<div class="cs-related-card">' +
+                '<h3 class="cs-related-title">' + (c.title || '') + '</h3>' +
+                '<p class="cs-related-desc">' + inlineRichText(c.desc || c.description || '') + '</p>' +
+                cta +
                 '</div>';
         }).join('');
     }
@@ -91,7 +139,7 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.cs-top-badge', page.heroTopBadge);
@@ -105,9 +153,34 @@ import {
             populateSectionHeader('#cs-plans', page.plansLabel, page.plansTitle, page.plansSubtitle);
             populatePlans(page.plans);
 
+            // Who We Are
+            var aboutTitleEl = document.getElementById('cs-about-title');
+            if (aboutTitleEl && page.aboutTitle) aboutTitleEl.textContent = page.aboutTitle;
+            var aboutDescEl = document.getElementById('cs-about-desc');
+            if (aboutDescEl && page.aboutDesc) aboutDescEl.textContent = page.aboutDesc;
+            if (page.aboutImage && page.aboutImage.image) {
+                var aboutImg = document.getElementById('cs-about-img');
+                if (aboutImg) {
+                    var aboutImgUrl = uploadURL(page.aboutImage.image);
+                    if (aboutImgUrl) aboutImg.src = aboutImgUrl;
+                }
+            }
+
             // Features (8 cards)
             populateSectionHeader('#cs-features', page.featuresLabel, page.featuresTitle, page.featuresSubtitle);
             populateIconCards('#cs-features .cs-features-grid', page.features, 'cloud-power-card');
+
+            // When to Choose
+            populateSectionHeader('#cs-when', page.whenLabel, page.whenTitle, page.whenSubtitle);
+            populateWhenList(page.whenPoints);
+
+            // One Platform for Every User
+            populateSectionHeader('#cs-audience', page.audienceLabel, page.audienceTitle, page.audienceSubtitle);
+            populateAudience(page.audienceGroups);
+
+            // Related Services
+            populateSectionHeader('#cs-related', page.relatedLabel, page.relatedTitle, null);
+            populateRelated(page.relatedCards);
 
             // CTA Band 1
             populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
@@ -123,9 +196,6 @@ import {
             // FAQ
             if (page.faqTitle) setText(document, '#cs-faq-heading', page.faqTitle);
             initFAQ(page.faq);
-
-            // CTA Band 2 (dark)
-            populateCtaBand('.cloud-cta-dark', page.ctaBand2);
 
         } catch (err) {
             console.error('[cloud-storage] CMS load failed:', err);

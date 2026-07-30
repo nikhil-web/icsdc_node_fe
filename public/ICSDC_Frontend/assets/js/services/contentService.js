@@ -91,12 +91,20 @@ export function getZimbraHostingPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
+        "&populate[plans][populate][features]=*" +
+        "&populate[aboutImage][populate][image]=true" +
         "&populate[featureBadges]=*" +
         "&populate[whyCards]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[migrationSteps]=*" +
+        "&populate[collabCards]=*" +
+        "&populate[collabImage][populate][image]=true" +
         "&populate[comparisonRows]=*" +
+        "&populate[comparisonCtaPrimary]=*" +
+        "&populate[comparisonCtaSecondary]=*" +
+        "&populate[whyZimbraCards]=*" +
+        "&populate[whyZimbraImage][populate][image]=true" +
         "&populate[ctaBand2][populate][ctaPrimary]=*" +
         "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
@@ -259,17 +267,22 @@ export function getEmailHostingPage() {
         "?populate[seo]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
+        "&populate[heroImage][populate][image]=true" +
         "&populate[pillars]=*" +
+        "&populate[plans][populate]=features" +
+        "&populate[aboutCta]=*" +
+        "&populate[aboutImage][populate][image]=true" +
         "&populate[features]=*" +
+        "&populate[experienceImage][populate][image]=true" +
         "&populate[solutions]=*" +
+        "&populate[handshakeImage][populate][image]=true" +
         "&populate[useCases]=*" +
-
+        "&populate[whenImage][populate][image]=true" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[ctaBand2][populate][ctaPrimary]=*" +
         "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
-        "&populate[heroImage][populate][image]=true" +
         "&populate[testimonials][populate]=*"
     );
 }
@@ -295,11 +308,13 @@ export function getDomainRegistrationPage() {
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[whyCards]=*" +
         "&populate[tips]=*" +
-        "&populate[ctaBand2][populate][ctaPrimary]=*" +
-        "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
         "&populate[heroImage][populate][image]=true" +
-        "&populate[testimonials][populate]=*"
+        "&populate[testimonials][populate]=*" +
+        "&populate[whyChooseCards]=*" +
+        "&populate[whyImage][populate][image]=true" +
+        "&populate[privacyImage][populate][image]=true" +
+        "&populate[aboutImage][populate][image]=true"
     );
 }
 
@@ -571,7 +586,18 @@ export function getHomepagePage() {
         "&populate[heroImage][populate][image]=true" +
         "&populate[trustedPartners][populate][logo]=true" +
         "&populate[whyBusinessNeedsCloud][populate][image]=true" +
-        "&populate[whyBusinessNeedsCloud][populate][items]=*"
+        "&populate[whyBusinessNeedsCloud][populate][items]=*" +
+        "&populate[partnerStats]=*" +
+        "&populate[partnerCards]=*" +
+        "&populate[partnerCtaPrimary]=*" +
+        "&populate[partnerCtaSecondary]=*" +
+        "&populate[industries][populate][features]=*" +
+        "&populate[industries][populate][cta]=*" +
+        "&populate[complianceBadges]=*" +
+        "&populate[securityCards]=*" +
+        "&populate[securityHighlights]=*" +
+        "&populate[securityCtaPrimary]=*" +
+        "&populate[securityCtaSecondary]=*"
     );
 }
 
@@ -598,6 +624,7 @@ export function getDomainTransferPage() {
         "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
         "&populate[heroImage][populate][image]=true" +
+        "&populate[aboutImage][populate][image]=true" +
         "&populate[testimonials][populate]=*"
     );
 }
@@ -612,12 +639,14 @@ export function getGoogleWorkspacePage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
-        "&populate[plans][populate]=features" +
+        "&populate[plans][populate][features]=*" +
         "&populate[features]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[whyCards]=*" +
         "&populate[steps]=*" +
+        "&populate[scaleImage][populate][image]=true" +
+        "&populate[upgradeImage][populate][image]=true" +
         "&populate[ctaBand2][populate][ctaPrimary]=*" +
         "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
@@ -945,7 +974,9 @@ export function getMicrosoft365Page() {
         "&populate[heroImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
         "&populate[ctaBand2][populate][ctaPrimary]=*" +
-        "&populate[ctaBand2][populate][ctaSecondary]=*"
+        "&populate[ctaBand2][populate][ctaSecondary]=*" +
+        "&populate[toolsCards][populate]=*" +
+        "&populate[whenImage][populate][image]=true"
     );
 }
 
@@ -984,6 +1015,7 @@ export function getCloudStoragePage() {
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
         "&populate[plans][populate][features]=*" +
+        "&populate[aboutImage][populate][image]=true" +
         "&populate[features][populate]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
@@ -1027,6 +1059,9 @@ export function getBareMetalServerPage() {
 export function getVeeamBackupPage() {
     return fetchAPI(
         "/api/veeam-backup-page?" +
+        "populate[plans][populate][features]=*" +
+        "&populate[proactiveCards][populate]=*" +
+        "&populate[proactiveImage][populate][image]=true&" +
         "populate[seo]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +

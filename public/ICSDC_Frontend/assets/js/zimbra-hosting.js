@@ -1,10 +1,13 @@
 import { getZimbraHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
+import { uploadURL } from './services/strapiClient.js';
 import {
     populateSEO,
     populateHero,
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
+    populatePricingPlansCloud,
     hidePageLoader,
     markActiveNavLink,
     setText,
@@ -32,13 +35,30 @@ import {
         var grid = document.querySelector('#migration .zimbra-steps');
         if (!grid) return;
 
+        var COLS = 3;
+
         var sorted = steps.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+        var n = sorted.length;
+
+        grid.classList.add('zimbra-flow');
         grid.innerHTML = sorted.map(function (step, i) {
-            var arrow = i < sorted.length - 1 ? '<div class="zimbra-step-arrow">&#8250;</div>' : '';
-            return '<div class="zimbra-step">' +
-                '<div class="zimbra-step-num">' + (step.number || '') + '</div>' +
+            var row = Math.floor(i / COLS);
+            var posInRow = i % COLS;
+            var ltr = (row % 2 === 0);
+            var col = ltr ? (posInRow + 1) : (COLS - posInRow);
+
+            var dir = '';
+            if (i < n - 1) {
+                dir = (posInRow < COLS - 1) ? (ltr ? 'right' : 'left') : 'down';
+            }
+            var arrow = dir
+                ? '<span class="zimbra-flow-arrow zimbra-flow-arrow--' + dir + '"></span>'
+                : '';
+
+            return '<div class="zimbra-step zimbra-flow-step" style="grid-column:' + col + ';grid-row:' + (row + 1) + ';">' +
+                '<div class="zimbra-step-num">' + (step.number || (i + 1)) + '</div>' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || '') + '</p>' +
+                '<p>' + inlineRichText(step.description || '') + '</p>' +
                 arrow +
                 '</div>';
         }).join('');
@@ -67,9 +87,7 @@ import {
             var m365Class = row.m365Status === 'check' ? ' class="zimbra-check"'
                 : row.m365Status === 'cross' ? ' class="zimbra-cross"' : '';
 
-            var zimbraContent = row.zimbraStatus === 'neutral'
-                ? '<strong>' + (row.zimbraValue || '') + '</strong>'
-                : (row.zimbraValue || '');
+            var zimbraContent = (row.zimbraValue || '');
 
             return '<tr>' +
                 '<td>' + (row.feature || '') + '</td>' +
@@ -79,50 +97,31 @@ import {
         }).join('');
     }
 
-    function initZimbraFAQ(faqItems) {
-        var container = document.getElementById('zimbra-faq-accordions');
-        if (!container || !faqItems || !faqItems.length) return;
-
-        var sorted = faqItems.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-        var chev = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
-
-        container.innerHTML = sorted.map(function (faq, i) {
-            var num = String(i + 1).padStart(2, '0');
-            return '<details class="faq-item"' + (i === 0 ? ' open' : '') + '>' +
-                '<summary class="faq-q">' +
-                '<span class="faq-num">' + num + '</span>' +
-                '<span class="faq-q-text">' + (faq.question || '') + '</span>' +
-                '<span class="faq-chev">' + chev + '</span>' +
-                '</summary>' +
-                '<div class="faq-a-wrap"><div class="faq-a">' + (faq.answer || '') + '</div></div>' +
-                '</details>';
+    function populateAboutPoints(points) {
+        if (!points || !points.length) return;
+        var list = document.getElementById('zim-about-points');
+        if (!list) return;
+        list.innerHTML = points.map(function (p) {
+            return '<li>' + (typeof p === 'string' ? p : (p.text || p.label || '')) + '</li>';
         }).join('');
-
-        var items = container.querySelectorAll('.faq-item');
-        items.forEach(function (item) {
-            item.addEventListener('toggle', function () {
-                if (item.open) {
-                    items.forEach(function (o) { if (o !== item) o.open = false; });
-                }
-            });
-        });
     }
 
-    function populateFaqContact(page) {
-        var card = document.querySelector('.faq-contact-card');
-        if (!card) return;
+    function setSectionImage(imgId, imageComp) {
+        if (!imageComp || !imageComp.image) return;
+        var el = document.getElementById(imgId);
+        if (!el) return;
+        var url = uploadURL(imageComp.image);
+        if (url) el.src = url;
+    }
 
-        if (page.faqContactTitle) setHTML(card, '.faq-contact-title', page.faqContactTitle);
-        if (page.faqContactDescription) setHTML(card, '.faq-contact-desc', page.faqContactDescription);
-
-        if (page.faqContactBtnLabel) {
-            var btn = card.querySelector('.faq-contact-btn');
-            if (btn) {
-                var svg = btn.querySelector('svg');
-                btn.textContent = page.faqContactBtnLabel + ' ';
-                if (svg) btn.appendChild(svg);
-                if (page.faqContactBtnUrl) btn.setAttribute('href', page.faqContactBtnUrl);
-            }
+    function populateCompareButtons(primary, secondary) {
+        if (primary && primary.text) {
+            var p = document.querySelector('#zim-compare-btns .zim-compare-btn-primary');
+            if (p) { p.textContent = primary.text; if (primary.link) p.setAttribute('href', primary.link); }
+        }
+        if (secondary && secondary.text) {
+            var s = document.querySelector('#zim-compare-btns .zim-compare-btn-outline');
+            if (s) { s.textContent = secondary.text; if (secondary.link) s.setAttribute('href', secondary.link); }
         }
     }
 
@@ -143,7 +142,7 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.zimbra-top-badge', page.heroTopBadge);
@@ -152,30 +151,44 @@ import {
 
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
-            populateSectionHeader('#features', page.featuresLabel, page.featuresTitle, page.featuresSubtitle);
+            // Plans
+            populateSectionHeader('#zim-plans', null, page.plansTitle, page.plansSubtitle);
+            populatePricingPlansCloud('#zim-plans-grid', page.plans);
+
+            // Who We Are
+            if (page.aboutTitle) setText(document, '#zim-about-title', page.aboutTitle);
+            if (page.aboutDesc) setHTML(document, '#zim-about-desc', page.aboutDesc);
+            populateAboutPoints(page.aboutPoints);
+            setSectionImage('zim-about-img', page.aboutImage);
+
+            populateSectionHeader('#features', null, page.featuresTitle, null);
             populateFeatureBadges(page.featureBadges);
 
-            populateSectionHeader('#why-us', page.whyLabel, page.whyTitle, page.whySubtitle);
+            populateSectionHeader('#why-us', null, page.whyTitle, page.whySubtitle);
             populateIconCards('#why-us .cloud-power-grid', page.whyCards, 'cloud-power-card');
 
             populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
 
-            populateSectionHeader('#migration', page.migrationLabel, page.migrationTitle, page.migrationSubtitle);
+            // Primary Collaborative Features
+            populateSectionHeader('#zim-collab', null, page.collabTitle, page.collabSubtitle);
+            populateIconCards('#zim-collab-grid', page.collabCards, 'cloud-power-card');
+
+            populateSectionHeader('#migration', null, page.migrationTitle, page.migrationSubtitle);
             populateMigrationSteps(page.migrationSteps);
 
-            populateSectionHeader('#comparison', page.comparisonLabel, page.comparisonTitle, page.comparisonSubtitle);
+            populateSectionHeader('#comparison', null, page.comparisonTitle, page.comparisonSubtitle);
             populateComparison(page.comparisonColumns, page.comparisonRows);
+            populateCompareButtons(page.comparisonCtaPrimary, page.comparisonCtaSecondary);
 
-            if (page.testimonialTitle) setText(document, '#winvps-testi-heading', page.testimonialTitle);
+            // Why Choose Zimbra for Your Email Hosting
+            populateSectionHeader('#zim-whychoose', null, page.whyZimbraTitle, page.whyZimbraSubtitle);
+            populateIconCards('#zim-whychoose-grid', page.whyZimbraCards, 'cloud-power-card');
+
+            if (page.testimonialTitle) setText(document, '#testi-heading', page.testimonialTitle);
             initTestimonials(page.testimonials);
 
-            if (page.faqTitle) setText(document, '#winvps-faq-heading', page.faqTitle);
+            if (page.faqTitle) setText(document, '#zim-faq-heading', page.faqTitle);
             initFAQ(page.faq);
-
-
-            populateFaqContact(page);
-
-            populateCtaBand('.cloud-cta-dark', page.ctaBand2);
         } catch (err) {
             console.error('[zimbra-hosting] Failed to load CMS data:', err);
         }

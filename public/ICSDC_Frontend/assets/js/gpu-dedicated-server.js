@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getGpuDedicatedServerPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -52,10 +53,10 @@ import {
             var featuresArr = plan.features || [];
             var featuresHtml = featuresArr.length
                 ? '<ul class="gds-plan-features">' +
-                    featuresArr.map(function (f) {
-                        return '<li>' + (f.label || f.text || f.name || f) + '</li>';
-                    }).join('') +
-                  '</ul>'
+                featuresArr.map(function (f) {
+                    return '<li>' + (f.label || f.text || f.name || f) + '</li>';
+                }).join('') +
+                '</ul>'
                 : '';
 
             var ctaText = plan.ctaText || 'Get Started';
@@ -67,7 +68,7 @@ import {
                 priceHtml +
                 taglineHtml +
                 featuresHtml +
-                '<a href="#" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '<a href="' + (plan.ctaLink || 'contact-popup') + '" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -91,7 +92,7 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.gds-top-badge', page.heroTopBadge);
@@ -165,7 +166,7 @@ import {
                         return '<div class="gds-related-card">' +
                             (s.label ? '<span class="gds-related-card-label">' + s.label + '</span>' : '') +
                             '<h3>' + (s.title || '') + '</h3>' +
-                            '<p>' + (s.desc || '') + '</p>' +
+                            '<p>' + inlineRichText(s.desc || '') + '</p>' +
                             '<a href="' + (s.ctaLink || '#') + '" class="gds-related-btn">' + (s.ctaText || 'Learn More') + '</a>' +
                             '</div>';
                     }).join('');

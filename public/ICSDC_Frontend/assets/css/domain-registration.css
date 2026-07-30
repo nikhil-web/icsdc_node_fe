@@ -217,69 +217,328 @@
 
 .dom-tld-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
 
 .dom-tld-card {
-    /* background: #fff; */
-    border: 2px solid var(--border);
+    background: #fff;
+    border: 1.5px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 28px 20px;
-    text-align: center;
+    padding: 24px 20px 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    align-items: flex-start;
     box-shadow: var(--shadow-card);
     transition: transform var(--transition-base) ease,
         box-shadow var(--transition-base) ease,
         border-color var(--transition-base) ease;
     position: relative;
+    overflow: hidden;
 }
 
 .dom-tld-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
     box-shadow: var(--shadow-card-hover);
-    border-color: rgba(26, 86, 219, 0.25);
+    border-color: rgba(26, 86, 219, 0.3);
 }
 
 .dom-tld-featured {
     border-color: var(--blue);
+    box-shadow: 0 0 0 2px rgba(26, 86, 219, 0.1), var(--shadow-card);
 }
 
-.dom-tld-ext {
+/* Extension logo chip */
+.dom-tld-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 10px;
     font-size: 22px;
     font-weight: 800;
-    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    background: var(--bg-light);
+    color: var(--blue);
 }
 
-.dom-tld-price {
-    font-size: 14px;
-    font-weight: 600;
+/* Per-extension accent colours */
+.dom-tld-card[data-ext=".com"] .dom-tld-logo {
+    background: #eff6ff;
+    color: #1a56db;
+}
+
+.dom-tld-card[data-ext=".in"] .dom-tld-logo {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+.dom-tld-card[data-ext=".net"] .dom-tld-logo {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.dom-tld-card[data-ext=".org"] .dom-tld-logo {
+    background: #faf5ff;
+    color: #7c3aed;
+}
+
+.dom-tld-card[data-ext=".tech"] .dom-tld-logo {
+    background: #ecfeff;
+    color: #0891b2;
+}
+
+.dom-tld-card[data-ext=".store"] .dom-tld-logo {
+    background: #fdf2f8;
+    color: #db2777;
+}
+
+.dom-tld-card[data-ext=".online"] .dom-tld-logo {
+    background: #f8fafc;
+    color: #475569;
+}
+
+.dom-tld-card[data-ext=".co"] .dom-tld-logo {
+    background: #f0fdfa;
+    color: #0d9488;
+}
+
+.dom-tld-card[data-ext=".xyz"] .dom-tld-logo {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.dom-tld-desc {
+    font-size: 13px;
     color: var(--muted);
+    line-height: 1.55;
+    margin-bottom: 16px;
+    flex: 1;
+}
+
+.dom-tld-price-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+    min-height: 22px;
+}
+
+.dom-tld-orig-price {
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.dom-tld-save-badge {
+    background: #fce7f3;
+    color: #be185d;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 2px 9px;
+    border-radius: 50px;
+    text-transform: uppercase;
+}
+
+.dom-tld-curr-price {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-dark);
+    line-height: 1.1;
+    margin-bottom: 18px;
+}
+
+.dom-tld-per {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.dom-tld-register-btn {
+    width: 100%;
+    padding: 11px 0;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    transition: background var(--transition-fast) ease, transform var(--transition-fast) ease;
+    font-family: inherit;
+}
+
+.dom-tld-register-btn:hover {
+    background: var(--blue-dark);
+    transform: translateY(-1px);
+    color: #fff;
 }
 
 .dom-tld-badge {
     position: absolute;
-    top: -10px;
-    right: -10px;
+    top: -1px;
+    right: 16px;
     background: var(--blue);
     color: #fff;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 50px;
+    padding: 4px 12px;
+    border-radius: 0 0 8px 8px;
+}
+
+/* ── Why Choose ICSDC (alternating bg) ── */
+.dom-why-choose-section {
+    background: var(--bg-light);
+}
+
+/* ── Why a Domain Name Matters (2-col checklist + image) ── */
+.dom-why-section {
+    background: var(--bg-light);
+}
+
+.dom-why-inner {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+    align-items: center;
+}
+
+/* Image on the LEFT, text on the RIGHT */
+.dom-why-image {
+    order: -1;
+}
+
+.dom-why-content .title {
+    margin-bottom: 48px;
+    text-align: left;
+}
+
+.dom-why-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    flex-direction: column;
+    gap: 25px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.dom-why-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--c-text-dark);
+    line-height: 1.65;
+}
+
+.dom-why-list li i {
+    color: var(--blue);
+    margin-top: 3px;
+    flex-shrink: 0;
+    font-size: 16px;
+}
+
+.dom-why-image img {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 16px 48px rgba(26, 86, 219, 0.1);
+}
+
+/* ── Own Your Domain / Privacy (2-col text + image) ── */
+.dom-privacy-inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 60px;
+    align-items: center;
+    text-align: left;
+}
+
+/* Image on the LEFT, text on the RIGHT */
+.dom-privacy-image {
+}
+
+#dom-privacy-desc p {
+    font-size: 15px;
+    color: var(--c-text-dark);
+    line-height: 1.65;
+    margin-bottom: 16px;
+}
+
+#dom-privacy-desc p:last-child {
+    margin-bottom: 0;
+}
+
+.dom-privacy-tagline {
+    margin-top: 24px !important;
+    padding: 16px 20px;
+    background: rgba(26, 86, 219, 0.06);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.dom-privacy-image img {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 16px 48px rgba(26, 86, 219, 0.1);
+}
+
+/* ── Who We Are — checklist bullets ── */
+.dom-about-points {
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.dom-about-points li {
+    position: relative;
+    padding-left: 30px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.dom-about-points li::before {
+    content: '\2713';
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
 }
 
 /* ── Responsive ── */
-@media (max-width: 1365px) {
-    .dom-tld-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
+@media (max-width: 1024px) {
 
+    .dom-why-inner,
+    .dom-privacy-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 1024px) {
     .dom-tld-grid {
         grid-template-columns: repeat(2, 1fr);
     }

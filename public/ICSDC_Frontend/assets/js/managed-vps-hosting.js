@@ -53,7 +53,7 @@ import {
                 (group.subtitle ? '<div class="vpc-sw-card-sub">' + group.subtitle + '</div>' : '') +
                 '<div class="vpc-sw-items">' + items + '</div>' +
                 '<div class="vpc-sw-cta">' +
-                    '<a href="/contact-us.html" class="vpc-sw-cta-btn">Get Managed Setup &rarr;</a>' +
+                '<a href="/contact-us.html" class="vpc-sw-cta-btn">Get Managed Setup </a>' +
                 '</div>' +
                 '</div>';
         }

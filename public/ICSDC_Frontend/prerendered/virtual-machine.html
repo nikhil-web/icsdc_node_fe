@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark"><head>
+  <!-- Google Tag Manager -->
+  
+  <!-- End Google Tag Manager -->
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/assets/images/main_logo.png">
+  <title>ICSDC Virtual Machines | Flexible, Isolated Cloud Compute</title>
+  <meta name="description" content="Run isolated virtual machines with dedicated vCPU, RAM, and NVMe SSD storage. Custom OS, instant provisioning, scalable resources, and 24/7 expert support from ICSDC.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/cloud-components.css">
+  <link rel="stylesheet" href="assets/css/virtual-machine.css">
+  <link rel="stylesheet" href="assets/css/dark-mode.css">
+    <link rel="canonical" href="https://icsdc.com/virtual-machine">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ICSDC">
+    <meta property="og:title" content="ICSDC Virtual Machines | Flexible, Isolated Cloud Compute">
+    <meta property="og:description" content="Run isolated virtual machines with dedicated vCPU, RAM, and NVMe SSD storage. Custom OS, instant provisioning, scalable resources, and 24/7 expert support from ICSDC.">
+    <meta property="og:url" content="https://icsdc.com/virtual-machine">
+    <meta property="og:image" content="https://icsdc.com/assets/images/main_logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ICSDC Virtual Machines | Flexible, Isolated Cloud Compute">
+    <meta name="twitter:description" content="Run isolated virtual machines with dedicated vCPU, RAM, and NVMe SSD storage. Custom OS, instant provisioning, scalable resources, and 24/7 expert support from ICSDC.">
+    <meta name="twitter:image" content="https://icsdc.com/assets/images/main_logo.png">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://icsdc.com/#organization","name":"ICSDC","alternateName":"Indian Cloud Services & Data Centre","url":"https://icsdc.com","logo":"https://icsdc.com/assets/images/main_logo.png"},{"@type":"WebSite","@id":"https://icsdc.com/#website","url":"https://icsdc.com","name":"ICSDC","publisher":{"@id":"https://icsdc.com/#organization"},"inLanguage":"en"},{"@type":"WebPage","@id":"https://icsdc.com/virtual-machine#webpage","url":"https://icsdc.com/virtual-machine","name":"ICSDC Virtual Machines | Flexible, Isolated Cloud Compute","description":"Run isolated virtual machines with dedicated vCPU, RAM, and NVMe SSD storage. Custom OS, instant provisioning, scalable resources, and 24/7 expert support from ICSDC.","isPartOf":{"@id":"https://icsdc.com/#website"},"inLanguage":"en"}]}</script>
+</head>
+
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MXV9SGZS" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader" class="loader-done loader-hidden">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- DROPDOWN -->
+  <div id="dropdown-wrap">
+    <div id="dropdown">
+      <div data-strapi-dd="sidebar" class="hidden" id="dd-sidebar"></div>
+      <div data-strapi-dd="flatLeft" class="hidden" id="dd-flat-left">
+        <div data-strapi-dd="flatIcon" class="dd-flat-icon"></div>
+        <div>
+          <h3 data-strapi-dd="flatTitle"></h3>
+          <p data-strapi-dd="flatDesc"></p>
+        </div>
+      </div>
+      <div id="dd-content">
+        <div id="dd-top-bar">
+          <div data-strapi-dd="panelTitle" class="hidden" id="dd-panel-title"></div>
+          <button class="dd-close" onclick="closeDropdown()">✕</button>
+        </div>
+        <div data-strapi-dd="grid" id="dd-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <img data-strapi-mainlogo="" data-strapi="mainLogo" src="https://admin.icsdc.com/uploads/main_logo_2_35297854fa.png" alt="Main Logo" class="logo-icon">
+      </a>
+      <ul data-strapi-nav="" class="nav-links" id="nav-links"><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('619', this)">
+                Services
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('615', this)">
+                Web Hosting
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('616', this)">
+                Domain
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('620', this)">
+                Backup &amp; Security
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('617', this)">
+                Public Cloud
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('618', this)">
+                Resources
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item"><a class="nav-link nav-link--direct" href="/pricing.html">Pricing </a></li></ul>
+      <div class="nav-search" id="nav-search"><button class="nav-search-trigger" aria-label="Search pages" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg></button><div class="nav-search-panel" role="dialog" aria-label="Page search" hidden=""><div class="nav-search-input-wrap"><svg class="nav-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg><input type="search" class="nav-search-input" placeholder="Search pages…" autocomplete="off" spellcheck="false"><kbd class="nav-search-kbd">ESC</kbd></div><div class="nav-search-results" role="listbox"></div></div></div><button id="theme-toggle" aria-label="Switch to light mode" title="Toggle dark / light mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button><button class="btn-login desktop-login-btn"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i><span>Login </span></button><button id="wa-nav-btn" type="button" class="btn-wa-nav" aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span> WhatsApp</span></button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true"><div class="mobile-search-bar" id="mobile-search-bar"><div class="mobile-search-input-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg><input type="search" class="mobile-search-input" placeholder="Search pages…" autocomplete="off" spellcheck="false"></div><div class="mobile-search-results"></div></div>
+      <ul data-strapi-nav-mobile="" class="mobile-nav-links" id="mobile-nav-links"><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('619', this); closeMobileMenu()">
+                Services
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('615', this); closeMobileMenu()">
+                Web Hosting
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('616', this); closeMobileMenu()">
+                Domain
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('620', this); closeMobileMenu()">
+                Backup &amp; Security
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('617', this); closeMobileMenu()">
+                Public Cloud
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item">
+            <button class="nav-link" onclick="openDropdown('618', this); closeMobileMenu()">
+                Resources
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button></li><li class="nav-item"><a class="nav-link nav-link--direct" href="/pricing.html">Pricing </a></li></ul>
+      <div class="mobile-cta-row"><button class="btn-login mobile-login-btn"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i><span>Login </span></button><button id="wa-nav-btn-mobile" type="button" class="btn-wa-nav btn-wa-nav--mobile" aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span> WhatsApp</span></button></div>
+    <div class="mobile-theme-row"><span class="mobile-theme-label">Light Mode</span><button class="mobile-theme-toggle" aria-label="Switch to light mode" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button></div></div>
+  </nav>
+
+
+  <!-- ════ SECTION 1 — HERO ════ -->
+  <section class="hero-section">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="vm-eyebrow">◈ Virtual Machines</div>
+        <h1 class="hero-title">Virtual Machines Designed for Continuous Work, Not Just Compute</h1>
+        <p class="hero-sub">Complete Control Over Resources, Configuration, and Runtime</p>
+        <p class="hero-desc">Run isolated virtual environments with predictable resources, flexible configurations, and the freedom to deploy exactly what your applications require. Whether you're testing, scaling, or running production workloads, these virtual machines are built to fit into your workflow without friction.</p>
+        <div class="hero-btns">
+          <a href="#vm-plans" class="btn-primary" onclick="window.location.href='/contact-us'">Launch Your Virtual Machine </a>
+          <a href="#vm-plans" class="btn-outline" style="display: none;">View VM Plans</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img class="hero-right-image" alt="" style="" src="https://admin.icsdc.com/uploads/large_virtual_machine_hosting_provider_d7e73067fb.png">
+        <div class="vm-hero-visual" style="display: none;">
+          <div class="vm-top-badge">◈ ICSDC Virtual Machines</div>
+          <svg viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background panel -->
+            <rect x="10" y="10" width="280" height="200" rx="16" fill="#f0f6ff" stroke="rgba(26,86,219,0.12)" stroke-width="1"></rect>
+
+            <!-- Physical server box at bottom -->
+            <rect x="40" y="160" width="220" height="36" rx="8" fill="white" stroke="rgba(26,86,219,0.30)" stroke-width="1.5"></rect>
+            <rect x="52" y="168" width="40" height="12" rx="3" fill="#dbeafe" stroke="rgba(26,86,219,0.20)" stroke-width="1"></rect>
+            <rect x="100" y="168" width="40" height="12" rx="3" fill="#dbeafe" stroke="rgba(26,86,219,0.20)" stroke-width="1"></rect>
+            <rect x="148" y="168" width="40" height="12" rx="3" fill="#dbeafe" stroke="rgba(26,86,219,0.20)" stroke-width="1"></rect>
+            <circle cx="230" cy="174" r="4" fill="#1a56db" opacity="0.5"></circle>
+            <circle cx="244" cy="174" r="4" fill="#22c55e" opacity="0.8"></circle>
+            <text x="150" y="155" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="600" opacity="0.7">PHYSICAL HOST SERVER</text>
+
+            <!-- Partition lines going up from server -->
+            <line x1="110" y1="140" x2="110" y2="160" stroke="rgba(26,86,219,0.25)" stroke-width="1" stroke-dasharray="3 2"></line>
+            <line x1="190" y1="140" x2="190" y2="160" stroke="rgba(26,86,219,0.25)" stroke-width="1" stroke-dasharray="3 2"></line>
+
+            <!-- VM Box 1 -->
+            <rect x="30" y="68" width="74" height="68" rx="10" fill="white" stroke="rgba(26,86,219,0.28)" stroke-width="1.5"></rect>
+            <rect x="38" y="76" width="58" height="10" rx="3" fill="#dbeafe"></rect>
+            <text x="67" y="84" font-size="6" fill="#1a56db" text-anchor="middle" font-weight="700">VM&nbsp;1</text>
+            <text x="67" y="96" font-size="5.5" fill="#1e40af" text-anchor="middle">2 vCPU · 4 GB</text>
+            <text x="67" y="106" font-size="5.5" fill="#1e40af" text-anchor="middle">60 GB NVMe</text>
+            <rect x="38" y="112" width="58" height="16" rx="4" fill="#1a56db" opacity="0.12"></rect>
+            <text x="67" y="123" font-size="5.5" fill="#1a56db" text-anchor="middle" font-weight="600">Running</text>
+
+            <!-- VM Box 2 (center, slightly taller) -->
+            <rect x="113" y="55" width="74" height="80" rx="10" fill="white" stroke="#1a56db" stroke-width="2"></rect>
+            <rect x="121" y="63" width="58" height="10" rx="3" fill="#1a56db"></rect>
+            <text x="150" y="71" font-size="6" fill="white" text-anchor="middle" font-weight="700">VM&nbsp;2</text>
+            <text x="150" y="84" font-size="5.5" fill="#1e40af" text-anchor="middle">4 vCPU · 8 GB</text>
+            <text x="150" y="94" font-size="5.5" fill="#1e40af" text-anchor="middle">160 GB NVMe</text>
+            <rect x="121" y="100" width="58" height="16" rx="4" fill="#1a56db" opacity="0.15"></rect>
+            <text x="150" y="111" font-size="5.5" fill="#1a56db" text-anchor="middle" font-weight="600">Running</text>
+            <!-- Highlight glow -->
+            <rect x="113" y="55" width="74" height="80" rx="10" fill="none" stroke="rgba(26,86,219,0.15)" stroke-width="6"></rect>
+
+            <!-- VM Box 3 -->
+            <rect x="196" y="68" width="74" height="68" rx="10" fill="white" stroke="rgba(26,86,219,0.28)" stroke-width="1.5"></rect>
+            <rect x="204" y="76" width="58" height="10" rx="3" fill="#dbeafe"></rect>
+            <text x="233" y="84" font-size="6" fill="#1a56db" text-anchor="middle" font-weight="700">VM&nbsp;3</text>
+            <text x="233" y="96" font-size="5.5" fill="#1e40af" text-anchor="middle">8 vCPU · 16 GB</text>
+            <text x="233" y="106" font-size="5.5" fill="#1e40af" text-anchor="middle">320 GB NVMe</text>
+            <rect x="204" y="112" width="58" height="16" rx="4" fill="#1a56db" opacity="0.12"></rect>
+            <text x="233" y="123" font-size="5.5" fill="#1a56db" text-anchor="middle" font-weight="600">Running</text>
+
+            <!-- Connector lines from VMs to physical server -->
+            <line x1="67" y1="136" x2="100" y2="160" stroke="rgba(26,86,219,0.22)" stroke-width="1.2" stroke-dasharray="4 2"></line>
+            <line x1="150" y1="135" x2="150" y2="160" stroke="rgba(26,86,219,0.30)" stroke-width="1.5" stroke-dasharray="4 2"></line>
+            <line x1="233" y1="136" x2="200" y2="160" stroke="rgba(26,86,219,0.22)" stroke-width="1.2" stroke-dasharray="4 2"></line>
+
+            <!-- Corner decoration dots -->
+            <circle cx="28" cy="28" r="4" fill="#bfdbfe" opacity="0.7"></circle>
+            <circle cx="272" cy="28" r="4" fill="#bfdbfe" opacity="0.7"></circle>
+            <circle cx="28" cy="192" r="3" fill="#93c5fd" opacity="0.5"></circle>
+            <circle cx="272" cy="192" r="3" fill="#93c5fd" opacity="0.5"></circle>
+
+            <!-- Isolation label -->
+            <text x="150" y="38" font-size="7" fill="#1a56db" text-anchor="middle" font-weight="700" opacity="0.6">ISOLATED VIRTUAL ENVIRONMENTS</text>
+            <line x1="60" y1="43" x2="97" y2="43" stroke="rgba(26,86,219,0.2)" stroke-width="0.8"></line>
+            <line x1="203" y1="43" x2="240" y2="43" stroke="rgba(26,86,219,0.2)" stroke-width="0.8"></line>
+          </svg>
+          <div class="vm-status-badge">
+            <div class="vm-dot"></div>
+            <div>
+              <div class="vm-bt">99.9% Uptime</div>
+              <div class="vm-bs">Instant Provisioning</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 2 — PILLARS (4 WHY-US CARDS) ════ -->
+  <section class="why-us section">
+    <div class="container">
+      <div class="why-grid is-visible" data-stagger=""><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-server" aria-hidden="true"></i></div><h3>Isolated Compute Environments</h3><p>Run workloads independently for stable and secure operations.</p></div><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i></div><h3>Flexible Resource Allocation</h3><p>Scale CPU, memory, and storage as your needs change.</p></div><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-gear" aria-hidden="true"></i></div><h3>Custom OS &amp; Software Stack</h3><p>Choose your operating system and deploy your tools freely.</p></div><div class="why-card"><div class="why-icon" aria-hidden="true"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div><h3>Fast Deployment &amp; Recovery</h3><p>Launch, clone, or restore virtual machines in minutes.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 3 — VM PLANS TABLE ════ -->
+  <section id="vm-plans" class="section cloud-pricing-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Choose Your Virtual Machine Plan</h2>
+      <p class="subtitle is-visible" data-animate="fade-up">Our virtual machine plans are designed to give you the right balance of CPU power, memory, storage, and bandwidth for your workload. Pick a configuration that matches your needs and budget - with flexible billing options including pay-as-you-go or prepaid plans</p>
+
+      <div class="vm-plans-table-wrap is-visible" data-animate="fade-up">
+        <table class="vm-plans-table">
+          <thead>
+            <tr>
+              <th>Plan Name</th>
+              <th>vCPU</th>
+              <th>RAM</th>
+              <th>Storage (NVMe SSD)</th>
+              <th>Data Transfer</th>
+              <th>Starting Price</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody><tr class="vm-category-row"><td colspan="7">Standard</td></tr><tr><td class="vm-plan-name">Standard 1</td><td>1 Core</td><td>2 GB RAM</td><td>25 GB NVMe SSD</td><td>1 TB Transfer</td><td class="vm-plan-price">Contact Us</td><td><a href="/contact-us" class="vm-plan-btn">Get Started</a></td></tr><tr><td class="vm-plan-name">Standard 2</td><td>2 Cores</td><td>4 GB RAM</td><td>60 GB NVMe SSD</td><td>2 TB Transfer</td><td class="vm-plan-price">Contact Us</td><td><a href="/contact-us" class="vm-plan-btn">Get Started</a></td></tr><tr><td class="vm-plan-name">Standard 3</td><td>4 Cores</td><td>8 GB RAM</td><td>160 GB NVMe SSD</td><td>4 TB Transfer</td><td class="vm-plan-price">Contact Us</td><td><a href="/contact-us" class="vm-plan-btn">Get Started</a></td></tr><tr><td class="vm-plan-name">Standard 4</td><td>8 Cores</td><td>16 GB RAM</td><td>320 GB NVMe SSD</td><td>6 TB Transfer</td><td class="vm-plan-price">Contact Us</td><td><a href="/contact-us" class="vm-plan-btn">Get Started</a></td></tr><tr class="vm-category-row"><td colspan="7">CPU Optimized</td></tr><tr><td class="vm-plan-name">CPU Optimized 1</td><td>2 Cores</td><td>2 GB RAM</td><td>25 GB NVMe SSD</td><td>4 TB Transfer</td><td class="vm-plan-price">Contact Us</td><td><a href="/contact-us" class="vm-plan-btn">Get Started</a></td></tr><tr><td class="vm-plan-name">CPU Optimized 2</td><td>4 Cores</td><td>4 GB RAM</td><td>60 GB NVMe SSD</td><td>5 TB Transfer</td><td class="vm-plan-price">Contact Us</td><td><a href="/contact-us" class="vm-plan-btn">Get Started</a></td></tr><tr><td class="vm-plan-name">CPU Optimized 3</td><td>8 Cores</td><td>8 GB RAM</td><td>100 GB NVMe SSD</td><td>6 TB Transfer</td><td class="vm-plan-price">Contact Us</td><td><a href="/contact-us" class="vm-plan-btn">Get Started</a></td></tr><tr class="vm-category-row"><td colspan="7">Memory Optimized</td></tr><tr><td class="vm-plan-name">Memory Optimized 1</td><td>2 Cores</td><td>8 GB RAM</td><td>50 GB NVMe SSD</td><td>4 TB Transfer</td><td class="vm-plan-price">Contact Us</td><td><a href="/contact-us" class="vm-plan-btn">Get Started</a></td></tr><tr><td class="vm-plan-name">Memory Optimized 2</td><td>4 Cores</td><td>16 GB RAM</td><td>100 GB NVMe SSD</td><td>6 TB Transfer</td><td class="vm-plan-price">Contact Us</td><td><a href="/contact-us" class="vm-plan-btn">Get Started</a></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 4 — FEATURES (12 CARDS) ════ -->
+  <section id="vm-features" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">What Powers Every ICSDC Virtual Machine</h2>
+      <p class="subtitle is-visible" data-animate="fade-up"></p>
+
+      <div class="vm-features-grid is-visible" data-stagger=""><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-server" aria-hidden="true"></i></div><h3>Dedicated Virtual Resources</h3><p>Each virtual machine is allocated its own CPU, RAM, and storage, ensuring predictable performance and avoiding resource contention.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-gear" aria-hidden="true"></i></div><h3>Full OS-Level Control</h3><p>You get complete administrative access to install, configure, and manage the operating system and software stack as required.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div><h3>Instant VM Provisioning</h3><p>Virtual machines are deployed quickly, allowing teams to start working without delays or complex setup processes.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i></div><h3>Scalable Compute Capacity</h3><p>Easily scale resources up or down as workload requirements change, without needing to rebuild or migrate environments.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-camera" aria-hidden="true"></i></div><h3>Snapshot &amp; Image Management</h3><p>Create snapshots to capture system states, enabling quick recovery, cloning, or environment replication.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-shield" aria-hidden="true"></i></div><h3>Secure Network Isolation</h3><p>Run your workloads in isolated virtual networks, improving security and reducing exposure to external threats.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-check" aria-hidden="true"></i></div><h3>High-Availability Infrastructure</h3><p>Built on reliable and redundant infrastructure to minimize downtime and maintain business continuity.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-code" aria-hidden="true"></i></div><h3>Custom Application Environments</h3><p>Support multiple environments such as development, testing, staging, and production with consistent configurations.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-chart-bar" aria-hidden="true"></i></div><h3>Centralized VM Management</h3><p>Manage all virtual machines from a unified control panel, simplifying monitoring and administration.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-database" aria-hidden="true"></i></div><h3>Backup &amp; Recovery Support</h3><p>Safeguard your data with structured backup options and fast recovery to handle accidental loss or failures.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-globe" aria-hidden="true"></i></div><h3>Multi-Use Workload Support</h3><p>Suitable for a wide range of use cases including websites, databases, internal tools, and enterprise applications.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-headset" aria-hidden="true"></i></div><h3>24/7 Expert Assistance</h3><p>Get round-the-clock access to ICSDC's technical team for troubleshooting, optimization, and ongoing support.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ CTA BAND 1 ════ -->
+  <section class="cloud-cta-band">
+    <div class="cloud-cta-inner">
+      <h2>Get Started - Select Your Configuration</h2>
+      <p></p>
+      <div class="cloud-cta-btns">
+        <a href="#vm-plans" class="cloud-cta-btn-primary">Launch Your Virtual Machine </a>
+        <a href="tel:+919810958857" class="cloud-cta-btn-outline">Call +91 98109 58857</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 5 — WHY CHOOSE ICSDC (4 CARDS) ════ -->
+  <section id="vm-why" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Why Choose ICSDC?</h2>
+      <p class="subtitle is-visible" data-animate="fade-up">ICSDC delivers dependable VPS infrastructure designed for real-world workloads. From performance and uptime to expert support and transparent pricing, everything is built to give you confidence and control from day one.</p>
+
+      <div class="vm-why-grid is-visible" data-stagger=""><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-headset" aria-hidden="true"></i></div><h3>24/7 Expert Support</h3><p>Our experienced technical team is available around the clock to help with setup, configuration, migrations, and issue resolution through live chat and support tickets.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-check" aria-hidden="true"></i></div><h3>99.9% Uptime Commitment</h3><p>Powered by enterprise-grade SSD infrastructure, our VPS platform is engineered to keep your applications online and accessible at all times.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i></div><h3>Best Value Without Compromise</h3><p>Get enterprise-level performance, security, and reliability at competitive pricing designed to scale with your business.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-globe" aria-hidden="true"></i></div><h3>Strategically Located Data Centers</h3><p>Our collaborative data centers at Germany, USA, UK, Russia, India are optimized for speed, stability, and low latency, with continuous expansion to support global demand.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 6 — BLOCK STORAGE ADD-ON ════ -->
+  <section id="vm-block-storage" class="vm-block-storage section">
+    <div class="container">
+      <div class="vm-bs-inner">
+        <div class="vm-bs-visual is-visible" data-animate="fade-right">
+          <img id="vm-bs-img" src="https://admin.icsdc.com/uploads/medium_Virtual_machine_hosting_in_india_1_478d14226b.png" alt="ICSDC block storage for virtual machines" loading="lazy">
+        </div>
+        <div class="vm-bs-text is-visible" data-animate="fade-left">
+          <h2 class="vm-bs-title">Expand Your Virtual Machine Capabilities</h2>
+          <p class="vm-bs-subtitle">Add dependable block storage to your virtual machines and keep your data available, movable, and scalable as your workloads evolve.</p>
+          <h3 class="vm-bs-subheading">Block Storage Designed to Grow With Your VMs</h3>
+          <p class="vm-bs-desc">Enhance your virtual machine capacity with high-performance cloud block storage built for flexibility. Allocate only the storage you need, attach or detach volumes effortlessly across prepaid or pay-as-you-go VMs, and resize anytime as application demands increase - all without disrupting operations.</p>
+          <a href="#vm-plans" class="vm-bs-cta">Scale Storage Instantly </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 7 — USE CASES (8 CARDS) ════ -->
+  <section id="vm-usecases" class="section cloud-power-section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Real-World Applications of ICSDC Virtual Machines</h2>
+      <p class="subtitle is-visible" data-animate="fade-up">ICSDC Virtual Machines are built to support everyday production workloads across industries. From startups to large enterprises, teams rely on VMs to run stable, customizable, and scalable environments.</p>
+
+      <div class="cloud-use-grid is-visible" data-stagger=""><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-code" aria-hidden="true"></i></div><h3>Software Developers &amp; Engineering Teams</h3><p>Use virtual machines for development, testing, staging, and CI/CD pipelines. Maintain consistent environments across teams without impacting production systems.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-rocket" aria-hidden="true"></i></div><h3>Startups &amp; SaaS Businesses</h3><p>Deploy applications quickly, scale resources as users grow, and control infrastructure costs while maintaining performance and uptime.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-globe" aria-hidden="true"></i></div><h3>E-Commerce &amp; Online Platforms</h3><p>Host websites, payment systems, and databases on isolated VMs to ensure stability during high traffic and sales events.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-server" aria-hidden="true"></i></div><h3>Enterprises &amp; IT Departments</h3><p>Run internal tools, legacy applications, ERP systems, and business-critical workloads in secure, controlled virtual environments.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-chart-bar" aria-hidden="true"></i></div><h3>Data &amp; Analytics Teams</h3><p>Process datasets, run analytics workloads, and manage databases with dedicated compute and storage resources.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-gear" aria-hidden="true"></i></div><h3>Agencies &amp; Managed Service Providers</h3><p>Host multiple client projects, manage separate environments, and deliver reliable services with full administrative control.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-check" aria-hidden="true"></i></div><h3>Education &amp; Training Institutes</h3><p>Create virtual labs, sandbox environments, and training systems without investing in physical hardware.</p></div><div class="cloud-power-card"><div class="cloud-power-icon" aria-hidden="true"><i class="fa-solid fa-lock" aria-hidden="true"></i></div><h3>Remote Teams &amp; Businesses</h3><p>Support collaboration tools, internal apps, and secure access systems with centralized virtual infrastructure.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 8 — WHEN TO CHOOSE (7 CARDS) ════ -->
+  <section id="vm-when" class="section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">When to Choose ICSDC Virtual Machines</h2>
+      <p class="subtitle is-visible" data-animate="fade-up">Choose ICSDC Virtual Machines when you need flexible compute without the limitations of shared hosting or the complexity of physical servers.</p>
+
+      <div class="vm-when-grid is-visible" data-stagger=""><div class="vm-when-card"><div class="vm-when-num">01</div><h3>You Need Custom Control</h3><p>When your application requires a specific operating system, software stack, or configuration that shared environments can't support.</p></div><div class="vm-when-card"><div class="vm-when-num">02</div><h3>Your Workloads Are Growing or Changing</h3><p>When traffic, usage, or processing demands fluctuate and you need the ability to scale resources without rebuilding infrastructure.</p></div><div class="vm-when-card"><div class="vm-when-num">03</div><h3>Stability and Isolation Matter</h3><p>When your applications must run independently without being affected by other workloads or users.</p></div><div class="vm-when-card"><div class="vm-when-num">04</div><h3>You Want Faster Deployment</h3><p>When you need to launch environments quickly for development, testing, or production without hardware delays.</p></div><div class="vm-when-card"><div class="vm-when-num">05</div><h3>You're Migrating From Shared or On-Premise Systems</h3><p>When moving applications from shared hosting or physical servers to a more flexible, cloud-based setup.</p></div><div class="vm-when-card"><div class="vm-when-num">06</div><h3>Cost Predictability Is Important</h3><p>When you want enterprise-grade infrastructure with controlled, transparent pricing.</p></div><div class="vm-when-card"><div class="vm-when-num">07</div><h3>You Require Secure, Dedicated Environments</h3><p>When handling business data, customer applications, or internal systems that demand isolated and secure infrastructure.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9 — VM vs SHARED HOSTING COMPARISON TABLE ════ -->
+  <section id="vm-compare" class="section">
+    <div class="container">
+      <h2 class="title is-visible" data-animate="fade-up">Virtual Machines vs Shared Hosting</h2>
+      <p class="subtitle is-visible" data-animate="fade-up">Not every workload needs the same level of control. This comparison helps you decide when ICSDC Virtual Machines are the better choice over shared hosting.</p>
+
+      <div class="vm-compare-table-wrap is-visible" data-animate="fade-up">
+        <table class="vm-compare-table">
+          <thead>
+            <tr>
+              <th>Criteria</th>
+              <th>Shared Hosting</th>
+              <th class="vm-col-icsdc">ICSDC Virtual Machines</th>
+            </tr>
+          </thead>
+          <tbody id="vm-compare-tbody"><tr><td class="vm-criteria">Resource Allocation</td><td>Shared among multiple users</td><td class="vm-col-good">Dedicated virtual resources</td></tr><tr><td class="vm-criteria">Performance Stability</td><td>Can fluctuate under load</td><td class="vm-col-good">Consistent and predictable</td></tr><tr><td class="vm-criteria">Control &amp; Customization</td><td>Very limited</td><td class="vm-col-good">Full OS-level control</td></tr><tr><td class="vm-criteria">Deployment Flexibility</td><td>Restricted environments</td><td class="vm-col-good">Custom configurations</td></tr><tr><td class="vm-criteria">Scalability</td><td>Minimal</td><td class="vm-col-good">Easy to scale anytime</td></tr><tr><td class="vm-criteria">Security &amp; Isolation</td><td>Low</td><td class="vm-col-good">High</td></tr><tr><td class="vm-criteria">Use Case Fit</td><td>Basic websites, blogs</td><td class="vm-col-good">Applications, databases, business systems</td></tr><tr><td class="vm-criteria">Cost Structure</td><td>Lowest upfront cost</td><td class="vm-col-good">Balanced cost with higher value</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 9B — WHY CHOOSE VMs OVER SHARED HOSTING ════ -->
+  <section id="vm-whyover" class="section who-we-are">
+    <div class="who-we-are-inner">
+      <div class="who-we-are-image is-visible" data-animate="fade-right">
+        <img id="vm-whyover-img" src="https://admin.icsdc.com/uploads/medium_Virtual_machine_hosting_in_india_1_478d14226b.png" alt="Why choose ICSDC virtual machines over shared hosting" loading="lazy">
+      </div>
+      <div class="blue-container is-visible" data-animate="fade-left">
+        <h2 class="title" id="vm-whyover-title">Why Choose Virtual Machines Over Shared Hosting</h2>
+        <p class="who-we-are-paragraph" id="vm-whyover-desc">ICSDC Virtual Machines are ideal when your applications outgrow shared environments and need dedicated resources, better stability, and full control - without unnecessary complexity.</p>
+        <p class="who-we-are-paragraph vm-whyover-points-label" id="vm-whyover-points-label">Upgrade to Virtual Machines When You Need:</p>
+        <ul class="vm-whyover-points" id="vm-whyover-points"><li>Reliable performance for growing workloads</li><li>Custom software and OS-level access</li><li>Secure, isolated environments</li></ul>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 10 — TESTIMONIALS ════ -->
+  <section class="testi-section" aria-labelledby="vm-testi-heading">
+    <div class="testi-container">
+      <h2 id="vm-testi-heading" class="testi-title">Read ICSDC Virtual Machines Client Stories</h2>
+      <div class="testi-scroll-viewport">
+        <div class="testi-grid" role="list" id="testi-grid"><article class="testi-card" role="listitem" data-testi-index="0" aria-label="Testimonial from Rohit Mehra"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">RM</span></div><div class="testi-client-info"><p class="testi-name">Rohit Mehra</p><p class="testi-job">Lead Software Engineer, SaaS Product Company</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">We moved from shared hosting to ICSDC Virtual Machines when our application traffic became unpredictable. The stability and control instantly solved our downtime issues, and scaling resources has been seamless.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="1" aria-label="Testimonial from Ananya Kapoor"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">AK</span></div><div class="testi-client-info"><p class="testi-name">Ananya Kapoor</p><p class="testi-job">Product Manager, Technology Startup</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">Our development team needed isolated environments for testing and staging. ICSDC VMs gave us full OS control without the overhead of managing physical servers.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="2" aria-label="Testimonial from Sahil Verma"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">SV</span></div><div class="testi-client-info"><p class="testi-name">Sahil Verma</p><p class="testi-job">Technical Director, Digital Services Agency</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">We run multiple client projects, and separation was critical for us. With ICSDC Virtual Machines, each project runs independently with consistent performance.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="3" aria-label="Testimonial from Neha Jain"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">NJ</span></div><div class="testi-client-info"><p class="testi-name">Neha Jain</p><p class="testi-job">Operations Head, Online Retail Business</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">As our e-commerce platform grew, shared hosting was no longer reliable. ICSDC Virtual Machines helped us handle peak traffic without performance drops.</blockquote></div></article><article class="testi-card" role="listitem" data-testi-index="4" aria-label="Testimonial from Amit Kulkarni"><div class="testi-left"><div class="testi-avatar" aria-hidden="true"><span class="testi-avatar-initials">AK</span></div><div class="testi-client-info"><p class="testi-name">Amit Kulkarni</p><p class="testi-job">IT Manager, Enterprise Solutions Firm</p><p class="testi-company"></p></div><div class="testi-rating" aria-label="Rating: 5 out of 5 stars"><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i><i class="fa-solid fa-star testi-star" aria-hidden="true"></i></div></div><div class="testi-right"><blockquote class="testi-quote">Our internal tools and databases required a secure and flexible setup. ICSDC Virtual Machines offered the right balance of control, pricing, and support.</blockquote></div></article></div>
+      </div>
+      <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"><button class="testi-dot testi-dot-active" role="tab" aria-selected="true" aria-label="Go to testimonial 1" data-dot="0"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 2" data-dot="1"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 3" data-dot="2"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 4" data-dot="3"></button><button class="testi-dot" role="tab" aria-selected="false" aria-label="Go to testimonial 5" data-dot="4"></button></div>
+      <div class="testi-nav">
+        <button class="testi-nav-btn" id="testi-prev" aria-label="Previous testimonial">‹</button>
+        <button class="testi-nav-btn" id="testi-next" aria-label="Next testimonial">›</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ SECTION 11 — FAQ ════ -->
+  <section class="faq-section" id="vm-faq" aria-labelledby="vm-faq-heading">
+    <div class="faq-container">
+      <div class="faq-col">
+        <h2 id="vm-faq-heading" class="faq-title">FAQs about ICSDC Virtual Machines</h2>
+        <div class="faq-grid">
+          <div class="faq-accordions" id="faq-accordions"><details class="faq-item" open=""><summary class="faq-q"><span class="faq-num">01</span><span class="faq-q-text">What is a Virtual Machine and how is it different from shared hosting?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">A virtual machine provides dedicated virtual resources and full OS-level control, while shared hosting runs multiple users on the same environment with limited customization and shared performance.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">02</span><span class="faq-q-text">Can I choose my operating system on ICSDC Virtual Machines?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Yes, you can select your preferred operating system and configure it based on your application requirements.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">03</span><span class="faq-q-text">How quickly can I deploy a virtual machine?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Virtual machines are provisioned within minutes, allowing you to start working without long setup delays.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">04</span><span class="faq-q-text">Is it possible to scale resources later?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Yes, CPU, memory, storage, and block storage can be scaled as your workload grows.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">05</span><span class="faq-q-text">Are backups and snapshots supported?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Yes, ICSDC supports snapshots and backup options to help you restore or replicate environments easily.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">06</span><span class="faq-q-text">How secure are ICSDC Virtual Machines?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Each VM runs in an isolated environment with network-level security and controlled access to ensure data protection.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">07</span><span class="faq-q-text">Can I migrate from shared hosting to a virtual machine?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">Yes, ICSDC provides guidance and support to help migrate websites and applications smoothly.</div></div></details><details class="faq-item"><summary class="faq-q"><span class="faq-num">08</span><span class="faq-q-text">What types of applications can run on these virtual machines?</span><span class="faq-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></summary><div class="faq-a-wrap"><div class="faq-a">ICSDC Virtual Machines support web applications, databases, SaaS platforms, internal tools, and custom workloads.</div></div></details></div>
+          <aside class="faq-aside">
+            <div class="faq-illo"><svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="faqCardAvirtualmachine" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#1a56db" stop-opacity="0.35"></stop>
+                    <stop offset="1" stop-color="#1a56db" stop-opacity="0.05"></stop>
+                  </linearGradient>
+                  <linearGradient id="faqCardBvirtualmachine" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#3b82f6"></stop>
+                    <stop offset="1" stop-color="#1a56db"></stop>
+                  </linearGradient>
+                  <radialGradient id="faqGlowvirtualmachine" cx="0.5" cy="0.5" r="0.5">
+                    <stop offset="0" stop-color="#3b82f6" stop-opacity="0.20"></stop>
+                    <stop offset="1" stop-color="#3b82f6" stop-opacity="0"></stop>
+                  </radialGradient>
+                </defs>
+                <circle cx="160" cy="160" r="140" fill="url(#faqGlowvirtualmachine)"></circle>
+                <g transform="rotate(-8 160 160)">
+                  <rect x="60" y="100" width="200" height="60" rx="10" fill="url(#faqCardAvirtualmachine)" stroke="rgba(59,130,246,0.30)" stroke-width="1.5"></rect>
+                  <rect x="80" y="118" width="120" height="6" rx="3" fill="rgba(26,86,219,0.30)"></rect>
+                  <rect x="80" y="132" width="80" height="6" rx="3" fill="rgba(26,86,219,0.18)"></rect>
+                  <circle cx="230" cy="130" r="10" fill="rgba(59,130,246,0.25)" stroke="rgba(59,130,246,0.50)" stroke-width="1.5"></circle>
+                  <path d="M226 130 L230 134 L236 126" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                </g>
+                <g transform="rotate(3 160 160)">
+                  <rect x="55" y="140" width="210" height="64" rx="11" fill="rgba(26,86,219,0.05)" stroke="rgba(26,86,219,0.20)" stroke-width="1.5"></rect>
+                  <rect x="76" y="159" width="140" height="6" rx="3" fill="rgba(26,86,219,0.35)"></rect>
+                  <rect x="76" y="173" width="100" height="6" rx="3" fill="rgba(26,86,219,0.18)"></rect>
+                  <circle cx="236" cy="172" r="10" fill="rgba(26,86,219,0.10)" stroke="rgba(26,86,219,0.25)" stroke-width="1.5"></circle>
+                  <path d="M232 172 L236 176 L242 168" stroke="rgba(26,86,219,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                </g>
+                <g transform="translate(0, 18)">
+                  <rect x="50" y="180" width="220" height="68" rx="12" fill="rgba(59,130,246,0.10)" stroke="rgba(59,130,246,0.55)" stroke-width="1.5"></rect>
+                  <rect x="74" y="200" width="150" height="7" rx="3.5" fill="rgba(26,86,219,0.85)"></rect>
+                  <rect x="74" y="216" width="110" height="6" rx="3" fill="rgba(26,86,219,0.40)"></rect>
+                  <circle cx="244" cy="214" r="12" fill="url(#faqCardBvirtualmachine)"></circle>
+                  <path d="M238 217 L244 211 L250 217" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                </g>
+                <g transform="translate(36 36)">
+                  <circle cx="0" cy="0" r="28" fill="url(#faqCardBvirtualmachine)" stroke="rgba(59,130,246,0.40)" stroke-width="3"></circle><text x="0" y="10" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="34" font-weight="800" fill="white">?</text>
+                </g>
+                <circle cx="278" cy="60" r="5" fill="#f59e0b"></circle>
+                <circle cx="298" cy="80" r="3" fill="#f59e0b" opacity="0.6"></circle>
+                <circle cx="40" cy="270" r="4" fill="#4fd1c5" opacity="0.8"></circle>
+                <circle cx="280" cy="270" r="5" fill="#3b82f6" opacity="0.6"></circle>
+              </svg></div>
+            <div class="faq-aside-copy">
+              <h3 class="faq-aside-h">Didn't find your answer?</h3>
+              <p class="faq-aside-p">Our team is happy to help — reach out and we'll respond within minutes.</p>
+              <a href="/contact-us.html" class="faq-aside-link">Talk to our team <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg></a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════ FINAL CTA DARK ════ -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Launch Your First Virtual Machine Today</h2>
+      <p>Flexible, isolated VMs with dedicated resources, custom OS, and 24/7 expert support. Deploy in minutes.</p>
+      <div class="cloud-cta-btns">
+        <a href="#vm-plans" class="cloud-cta-btn-primary">Launch Your Virtual Machine </a>
+        <a href="/contact-us.html" class="cloud-cta-btn-outline">Talk to an Expert</a>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" id="site-footer" role="contentinfo">
+        <!-- ── Link columns ─────────────────────────────────── -->
+        <div class="footer-links-section">
+            <div class="footer-links-grid" data-strapi-link-groups="">
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Dedicated Server</h3>
+                <ul><li><a class="footer-link" href="/windows-dedicated-server.html">Windows Dedicated Server</a></li><li><a class="footer-link" href="/linux-dedicated-server.html">Linux Dedicated Server</a></li><li><a class="footer-link" href="/managed-dedicated-server.html">Managed Dedicated Server</a></li><li><a class="footer-link" href="/nvme-dedicated-servers.html">NVMe Dedicated Server</a></li><li><a class="footer-link" href="/gpu-dedicated-server.html">GPU Dedicated Server</a></li><li><a class="footer-link" href="/bare-metal-server.html">Bare Metal Server</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">VPS Hosting</h3>
+                <ul><li><a class="footer-link" href="/windows-vps-hosting.html">Windows VPS Hosting</a></li><li><a class="footer-link" href="/linux-vps-hosting.html">Linux VPS Hosting</a></li><li><a class="footer-link" href="/managed-vps-hosting.html">Managed VPS Hosting</a></li><li><a class="footer-link" href="/vps-cpanel.html">VPS cPanel Hosting</a></li><li><a class="footer-link" href="/forex-vps.html">Forex VPS</a></li><li><a class="footer-link" href="/virtual-machine.html">Virtual Machine</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Cloud Hosting</h3>
+                <ul><li><a class="footer-link" href="/cloud-hosting.html">Cloud Hosting</a></li><li><a class="footer-link" href="/managed-cloud-hosting.html">Managed Cloud Hosting</a></li><li><a class="footer-link" href="/linux-cloud-hosting.html">Linux Cloud Hosting</a></li><li><a class="footer-link" href="/windows-cloud-hosting.html">Windows Cloud Hosting</a></li><li><a class="footer-link" href="/gpu-cloud-hosting.html">GPU Cloud Hosting</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Web Hosting</h3>
+                <ul><li><a class="footer-link" href="/web-hosting.html">Web Hosting</a></li><li><a class="footer-link" href="/shared-hosting.html">Shared Hosting</a></li><li><a class="footer-link" href="/wordpress-hosting.html">WordPress Hosting</a></li><li><a class="footer-link" href="/reseller-hosting.html">Reseller Hosting</a></li><li><a class="footer-link" href="/cpanel-hosting.html">cPanel Hosting</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Public Cloud</h3>
+                <ul><li><a class="footer-link" href="/aws-cloud-hosting.html">AWS</a></li><li><a class="footer-link" href="/azure-cloud-hosting.html">Azure</a></li><li><a class="footer-link" href="/google-cloud-hosting.html">Google Cloud Platform</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Backup &amp; Security</h3>
+                <ul><li><a class="footer-link" href="/acronis-backup.html">Acronis Backup</a></li><li><a class="footer-link" href="/veeam-backup.html">Veeam Backup</a></li><li><a class="footer-link" href="/cloud-storage.html">Cloud Storage</a></li><li><a class="footer-link" href="/ssl-certificate.html">SSL Certificate</a></li><li><a class="footer-link" href="/firewall-security.html">Firewall Security</a></li><li><a class="footer-link" href="/pam-mfa.html">PAM / MFA</a></li><li><a class="footer-link" href="/vapt.html">VAPT</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Business Apps</h3>
+                <ul><li><a class="footer-link" href="/email-hosting.html">Email Hosting</a></li><li><a class="footer-link" href="/google-workspace.html">Google Workspace</a></li><li><a class="footer-link" href="/microsoft-365.html">Microsoft 365</a></li><li><a class="footer-link" href="/tally-on-cloud.html">Tally on Cloud</a></li><li><a class="footer-link" href="/zimbra-hosting.html">Zimbra Hosting</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Domain</h3>
+                <ul><li><a class="footer-link" href="/domain-registration.html">Domain Registration</a></li><li><a class="footer-link" href="/domain-transfer.html">Domain Transfer</a></li></ul>
+            </div>
+        
+            <div class="footer-link-group">
+                <h3 class="footer-link-title">Company</h3>
+                <ul><li><a class="footer-link" href="/about-us.html">About Us</a></li><li><a class="footer-link" href="/contact-us.html">Contact Us</a></li><li><a class="footer-link" href="/pricing.html">Pricing</a></li></ul>
+            </div>
+        </div>
+        </div>
+
+        <!-- ── Brand bar ────────────────────────────────────── -->
+        <div class="footer-brand-bar">
+            <div class="footer-brand-inner">
+
+                <div class="footer-brand-left">
+                    <a href="/" aria-label="ICSDC Home" class="footer-logo-link">
+                        <img data-strapi-logo="" src="https://admin.icsdc.com/uploads/icsdc_logo_white_03e0f23088.png" alt="Logo" class="footer-logo">
+                    </a>
+                    <address class="footer-address">
+                        <span data-strapi-footer-address="">Plot No. 21 &amp; 21A, <br> 
+6th Floor, Sector 142, Noida, Uttar Pradesh 201304</span>
+                        <span data-strapi-footer-phone="" class="footer-phone">+91 9810958857</span>
+                        <span class="footer-email-wrap">
+                            Email: <a data-strapi-footer-email="" href="mailto:info@icsdc.com" class="footer-email-link">info@icsdc.com</a>
+                        </span>
+                    </address>
+                </div>
+
+                <div class="footer-brand-right">
+                    <div class="footer-social" data-strapi-social-list="" aria-label="Social media links"><a href="https://www.facebook.com/indiancloudservices" class="footer-social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a><a href="https://x.com/_icsdc" class="footer-social-link" aria-label="X" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a><a href="https://www.instagram.com/indiancloudservices/" class="footer-social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a><a href="https://www.linkedin.com/company/indiancloudservices/" class="footer-social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a><a href="https://www.youtube.com/@IndianCloudServices" class="footer-social-link" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Bottom bar — copyright + legal links ────────── -->
+        <div class="footer-bottom">
+            <p>© Copyright <span data-strapi-year="" id="footer-year">2026</span> <span data-strapi-company-name="">ICSDC</span>. All Rights Reserved</p>
+            <div class="footer-legal-links">
+                <a href="/legal/terms-conditions">Terms &amp; Conditions</a>
+                <a href="/legal/privacy-policy">Privacy Policy</a>
+                <a href="/legal/refund-policy">Refund Policy</a>
+                <a href="/legal/msa">MSA</a>
+                <a href="/legal/aup">AUP</a>
+                <a href="/legal/sla">SLA</a>
+            </div>
+        </div>
+    </footer>
+
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- Strapi config -->
+  
+  
+  <script type="module" src="assets/js/virtual-machine.js"></script>
+
+  
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Corporation",
+  "name": "ICSDC (Indian Cloud Services & Data Center)",
+  "url": "https://icsdc.com/",
+  "logo": "https://admin.icsdc.com/uploads/main_logo_2_35297854fa.png",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "9810958857",
+    "contactType": "sales",
+    "contactOption": "TollFree",
+    "areaServed": "IN",
+    "availableLanguage": "en"
+  },
+  "sameAs": [
+    "https://icsdc.com/",
+    "https://www.linkedin.com/company/indiancloudservices/",
+    "https://www.facebook.com/indiancloudservices",
+    "https://www.instagram.com/indiancloudservices/",
+    "https://x.com/_icsdc",
+    "https://www.youtube.com/@IndianCloudServices"
+  ]
+}
+</script><script>window.openDropdown=function(){};window.closeDropdown=function(){};window.closeMobileMenu=function(){};document.querySelectorAll('[data-animate],[data-stagger]').forEach(function(e){e.classList.add('is-visible');});</script>
+</body></html>

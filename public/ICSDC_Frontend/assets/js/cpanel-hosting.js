@@ -54,13 +54,15 @@ import {
             var featuresArr = plan.features || [];
             var featuresHtml = featuresArr.length
                 ? '<ul class="cp-plan-features">' +
-                    featuresArr.map(function (f) {
-                        return '<li>' + (f.label || f.text || f.name || f) + '</li>';
-                    }).join('') +
-                  '</ul>'
+                featuresArr.map(function (f) {
+                    return '<li>' + (f.label || f.text || f.name || f) + '</li>';
+                }).join('') +
+                '</ul>'
                 : '';
 
             var ctaText = plan.ctaText || 'Get Started';
+            // Per-plan CMS link; empty → site-wide contact popup.
+            var ctaHref = plan.ctaLink || 'contact-popup';
             var ctaStyle = plan.ctaStyle || (isFeatured ? 'primary' : 'outline');
             var btnClass = ctaStyle === 'primary'
                 ? 'cp-plan-btn cp-plan-btn-primary'
@@ -72,7 +74,7 @@ import {
                 priceHtml +
                 descHtml +
                 featuresHtml +
-                '<a href="/contact-us.html" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '<a href="' + ctaHref + '" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -114,7 +116,7 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.cp-top-badge', page.heroTopBadge);

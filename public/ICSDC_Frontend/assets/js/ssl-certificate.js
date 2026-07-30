@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getSslCertificatePage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -35,9 +36,9 @@ import {
             return '<div class="ssl-type-card">' +
                 '<div class="ssl-type-badge' + badgeExtra + '">' + (item.subtitle || '') + '</div>' +
                 '<h3 class="ssl-type-title">' + (item.title || '') + '</h3>' +
-                '<p class="ssl-type-desc">' + (item.desc || item.description || '') + '</p>' +
+                '<p class="ssl-type-desc">' + inlineRichText(item.desc || item.description || '') + '</p>' +
                 '<a href="' + (item.ctaLink || '#contact') + '" class="ssl-type-cta">' +
-                (item.ctaText || 'Contact Us') + ' &rarr;' +
+                (item.ctaText || 'Contact Us') + ' ' +
                 '</a>' +
                 '</div>';
         }).join('');
@@ -61,7 +62,7 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             // Pillars (4 why-us cards)

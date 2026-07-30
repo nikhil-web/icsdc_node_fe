@@ -1,4 +1,5 @@
 import { getLinuxCloudHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -102,7 +103,7 @@ import {
                         var iconClass = card.icon ? 'fa-solid fa-' + card.icon : 'fa-solid fa-cloud';
                         return '<div class="lch-related-card">' +
                             '<div class="lch-related-icon"><i class="' + iconClass + '" aria-hidden="true"></i></div>' +
-                            '<p class="lch-related-desc">' + (card.desc || '') + '</p>' +
+                            '<p class="lch-related-desc">' + inlineRichText(card.desc || '') + '</p>' +
                             '<a href="' + (card.ctaLink || '#') + '" class="lch-related-btn">' +
                             (card.ctaText || '') + ' ' + arrowSVG +
                             '</a>' +

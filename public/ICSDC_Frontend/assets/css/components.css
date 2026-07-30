@@ -141,7 +141,7 @@
 }
 
 .business-needs-image {
-    width: 100%;
+    width: 90%;
     height: auto;
     object-fit: contain;
 }
@@ -168,16 +168,16 @@
 
 .business-needs-item {
     display: grid;
-    grid-template-columns: 88px 1fr;
-    gap: 28px;
+    grid-template-columns: 75px 1fr;
+    gap: 16px;
     align-items: center;
-    padding: 26px 0;
-    border-bottom: 1.5px solid rgba(26, 86, 219, 0.82);
+    padding: 15px 0;
+    border-bottom: 1px solid rgb(160 189 255 / 82%);
 }
 
 .business-needs-icon {
-    width: 88px;
-    height: 88px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
     background: #d7e3f4;
     display: flex;
@@ -193,7 +193,7 @@
 
 .business-needs-copy h3 {
     margin: 0 0 6px;
-    font-size: clamp(22px, 1.5vw, 26px);
+    font-size: clamp(22px, 1vw, 24px);
     line-height: .8em;
     letter-spacing: -0.02em;
     font-weight: 700;
@@ -202,7 +202,7 @@
 
 .business-needs-copy p {
     margin: 0;
-    font-size: clamp(18px, 1vw, 20px);
+    font-size: clamp(18px, 0.8vw, 18px);
     line-height: 1.35;
     letter-spacing: -0.01em;
     color: #616161;
@@ -220,7 +220,7 @@
     gap: 48px;
     max-width: var(--c-container);
     margin: 0 auto;
-    padding: 64px var(--c-px);
+    padding: 35px var(--c-px);
 }
 
 .iso-text {
@@ -250,13 +250,14 @@
 .iso-badges-wrap {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
 .iso-badges-img {
     max-width: 100%;
     height: auto;
     display: block;
+    transform: translateY(-50px);
 }
 
 .iso-image-wrapper {
@@ -626,7 +627,7 @@
     }
 
     .footer-brand-inner {
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
     }
 
@@ -699,8 +700,7 @@
     }
 
     .cloud-pricing-grid {
-        grid-template-columns: 1fr;
-        max-width: 480px;
+        grid-template-columns: 1fr !important;
         margin-left: auto;
         margin-right: auto;
     }
@@ -709,8 +709,8 @@
         transform: translateY(0);
     }
 
-    .cloud-power-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .cloud-power-grid > * {
+        flex-basis: calc(50% - 10px);
     }
 
     .cloud-why-grid {
@@ -728,8 +728,8 @@
 
 /* Aside column */
 .faq-aside {
-    position: sticky;
-    top: 110px;
+    /* position: sticky;
+    top: 110px; */
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -1517,10 +1517,15 @@ summary.faq-q::marker {
 }
 
 .cloud-power-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
     text-align: left;
+}
+
+.cloud-power-grid > * {
+    flex: 0 1 calc(25% - 15px);
 }
 
 .cloud-power-card {
@@ -1607,6 +1612,7 @@ summary.faq-q::marker {
     transition: transform var(--transition-base) var(--ease-out-expo),
         box-shadow var(--transition-base) ease,
         border-color var(--transition-base) ease;
+    text-align: left;
 }
 
 .cloud-plan-card:hover {
@@ -1660,6 +1666,7 @@ summary.faq-q::marker {
 .cloud-plan-price-wrap {
     display: flex;
     align-items: baseline;
+    justify-content: center;
     gap: 4px;
     margin-bottom: 4px;
 }
@@ -2161,9 +2168,12 @@ summary.faq-q::marker {
         gap: 32px;
     }
 
-    .cloud-power-grid,
     .cloud-use-grid {
         grid-template-columns: 1fr;
+    }
+
+    .cloud-power-grid > * {
+        flex-basis: 100%;
     }
 
     .cloud-why-grid {
@@ -2201,6 +2211,13 @@ summary.faq-q::marker {
 /* Why-card icons */
 .why-icon i.fa-solid {
     font-size: 22px;
+    color: var(--blue, var(--c-blue));
+}
+
+/* SVG-rendered icons (e.g. dedicated-server page) use currentColor for
+   fill/stroke; without this they inherit .why-icon's white color and
+   disappear on the light-blue box. Match the FontAwesome rule above. */
+.why-icon svg {
     color: var(--blue, var(--c-blue));
 }
 
@@ -2284,7 +2301,8 @@ summary.faq-q::marker {
 }
 
 .nav-search-trigger {
-    display: none; /* hidden by default; shown on desktop via min-width: 1366px below */
+    display: none;
+    /* hidden by default; shown on desktop via min-width: 1366px below */
     align-items: center;
     justify-content: center;
     width: 40px;
@@ -2564,4 +2582,72 @@ html[data-theme="dark"] .nav-search-item.is-active {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* ══════════════════════════════════════
+   IN-CONTENT LINKS (CKEditor-authored)
+   Rich-text fields (who-we-are, less-complexity, industry, ISO paragraphs,
+   footer address) can now contain editor-inserted <a> links. These blocks sit
+   on blue/dark backgrounds, so inherit the text colour + underline to signal a
+   link on any background.
+══════════════════════════════════════ */
+[data-strapi="whoWeAreParagraph"] a,
+[data-strapi="lessComplexityParagraph"] a,
+[data-strapi="industryValidatedParagraph"] a,
+[data-strapi="isoParagraph"] a,
+.iso-standards-paragraph a,
+[data-strapi-footer-address] a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.15s ease;
+}
+
+[data-strapi="whoWeAreParagraph"] a:hover,
+[data-strapi="lessComplexityParagraph"] a:hover,
+[data-strapi="industryValidatedParagraph"] a:hover,
+[data-strapi="isoParagraph"] a:hover,
+.iso-standards-paragraph a:hover,
+[data-strapi-footer-address] a:hover {
+    opacity: 0.8;
+}
+
+/* ══════════════════════════════════════
+   IN-CONTENT LINKS — broad (CKEditor-authored prose)
+   desc/description/answer/quote fields can now contain editor <a> links.
+   Most live on light card/section backgrounds → brand-blue underlined links.
+   (Dark/blue-bg blocks like who-we-are/footer/ISO keep their inherit-colour
+   rule defined earlier.)
+══════════════════════════════════════ */
+.faq-a a,
+.testi-quote a,
+.cloud-power-card a,
+.cloud-use-card a,
+.why-card a,
+.ds-when-card a,
+.ds-checklist-item a,
+.location-card a,
+.solution-card a,
+.cloud-cta-inner p a,
+[class*="-desc"] a,
+[class*="-answer"] a {
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.15s ease;
+}
+
+.faq-a a:hover,
+.testi-quote a:hover,
+.cloud-power-card a:hover,
+.cloud-use-card a:hover,
+.why-card a:hover,
+.ds-when-card a:hover,
+.ds-checklist-item a:hover,
+.location-card a:hover,
+.solution-card a:hover,
+.cloud-cta-inner p a:hover,
+[class*="-desc"] a:hover,
+[class*="-answer"] a:hover {
+    opacity: 0.8;
 }

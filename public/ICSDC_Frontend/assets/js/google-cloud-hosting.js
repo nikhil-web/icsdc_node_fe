@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getGoogleCloudHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -37,7 +38,7 @@ import { uploadURL } from './services/strapiClient.js';
             return '<div class="cloud-power-card" data-animate="fade-up">' +
                 '<div class="cloud-power-icon">' + (step.icon || (i + 1)) + '</div>' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || step.desc || '') + '</p>' +
+                '<p>' + inlineRichText(step.description || step.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }

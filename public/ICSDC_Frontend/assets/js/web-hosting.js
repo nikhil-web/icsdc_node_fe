@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getWebHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -31,7 +32,7 @@ import {
         if (!tbody) return;
 
         tbody.innerHTML = rows.map(function (row) {
-            var parts = (row.desc || row.description || '').split('|');
+            var parts = inlineRichText(row.desc || row.description || '').split('|');
             var icsdcVal = (parts[0] || '').trim();
             var typicalVal = (parts[1] || '').trim();
             return '<tr>' +
@@ -53,7 +54,7 @@ import {
         if (!tbody) return;
 
         tbody.innerHTML = rows.map(function (row) {
-            var parts = (row.desc || row.description || '').split('|');
+            var parts = inlineRichText(row.desc || row.description || '').split('|');
             var icsdcVal = (parts[0] || '').trim();
             var otherVal = (parts[1] || '').trim();
             // Render checkmark/cross based on content

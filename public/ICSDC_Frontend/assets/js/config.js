@@ -16,3 +16,12 @@ if (host === "dev.icsdc.com") {
 } else {
     window.STRAPI_URL = "http://160.25.110.10:1337"; // fallback
 }
+
+// Canonical site origin — used to build <link rel="canonical"> on every page.
+// Always points production/staging at the one canonical domain so duplicate
+// hosts (www, http, staging) consolidate onto https://icsdc.com.
+if (host === "localhost" || host === "127.0.0.1") {
+    window.SITE_URL = window.location.origin; // dev: self-referential (not indexed)
+} else {
+    window.SITE_URL = "https://icsdc.com";
+}

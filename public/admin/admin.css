@@ -1786,3 +1786,42 @@ code {
         grid-template-columns: 1fr;
     }
 }
+/* ══════════════════════════════════════
+   ROBOTS.TXT EDITOR
+══════════════════════════════════════ */
+.robots-section .robots-editor {
+    width: 100%;
+    min-height: 380px;
+    margin-top: 20px;
+    padding: 16px 18px;
+    border: 1px solid var(--admin-border, #e2e8f0);
+    border-radius: 10px;
+    background: var(--admin-card, #fff);
+    color: var(--admin-text, #0f1c2e);
+    font-family: "SFMono-Regular", "Consolas", "Liberation Mono", Menlo, monospace;
+    font-size: 13.5px;
+    line-height: 1.7;
+    tab-size: 2;
+    resize: vertical;
+    transition: border-color .15s, box-shadow .15s;
+}
+.robots-section .robots-editor:focus {
+    outline: none;
+    border-color: var(--admin-accent, #1a56db);
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.15);
+}
+.robots-status {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--admin-muted, #64748b);
+    min-height: 18px;
+}
+.robots-status.is-success { color: #15803d; }
+.robots-status.is-error   { color: #dc2626; }
+.robots-status.is-dirty   { color: #b45309; }
+
+html[data-theme="dark"] .robots-section .robots-editor {
+    background: #0f1729;
+    border-color: #233047;
+    color: #e2e8f0;
+}

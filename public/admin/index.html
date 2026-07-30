@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/assets/images/main_logo.png" />
     <title>ICSDC Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <script>
@@ -15,6 +17,7 @@
     <link rel="stylesheet" href="/admin/admin.css" />
     <link rel="stylesheet" href="/admin/builder/builder-editor.css" />
 </head>
+
 <body>
 
     <!-- ── Login ── -->
@@ -31,13 +34,15 @@
                 <form id="login-form" class="admin-login-form" novalidate>
                     <div class="admin-field">
                         <label for="login-email">Email</label>
-                        <input id="login-email" type="email" placeholder="admin@icsdc.com" autocomplete="username" required />
+                        <input id="login-email" type="email" placeholder="admin@icsdc.com" autocomplete="username"
+                            required />
                     </div>
 
                     <div class="admin-field">
                         <label for="login-password">Password</label>
                         <div class="admin-password-wrap">
-                            <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" required />
+                            <input id="login-password" type="password" placeholder="••••••••"
+                                autocomplete="current-password" required />
                             <button type="button" id="eye-toggle" class="admin-eye-btn" aria-label="Show password">
                                 <i class="fa-solid fa-eye" aria-hidden="true"></i>
                             </button>
@@ -49,7 +54,7 @@
                         <span id="login-error-text"></span>
                     </div>
 
-                    <button type="submit" id="login-btn" class="admin-login-btn">Sign In &rarr;</button>
+                    <button type="submit" id="login-btn" class="admin-login-btn">Sign In </button>
                 </form>
 
                 <p class="admin-login-note">Access restricted to authorised ICSDC administrators only.</p>
@@ -66,11 +71,15 @@
                     <img src="/assets/images/main_logo.png" alt="ICSDC" class="logo-icon" />
                 </a>
                 <div class="admin-nav-left-tabs">
-                    <a href="/admin"          class="admin-nav-tab" data-tab="dashboard">Dashboard</a>
-                    <a href="/admin/leads"    class="admin-nav-tab" data-tab="leads">Leads</a>
-                    <a href="/admin/builder"  class="admin-nav-tab" data-tab="builder">Page Builder</a>
-                    <a href="/admin/sitemap"  class="admin-nav-tab" data-tab="sitemap">Sitemap</a>
-                    <a href="/admin/chat"    class="admin-nav-tab" data-tab="chat">
+                    <a href="/admin" class="admin-nav-tab" data-tab="dashboard">Dashboard</a>
+                    <a href="/admin/leads" class="admin-nav-tab" data-tab="leads">Leads</a>
+                    <!-- Page Builder temporarily hidden — remove style="display:none" to restore -->
+                    <a href="/admin/builder" class="admin-nav-tab" data-tab="builder" style="display:none">Page
+                        Builder</a>
+                    <a href="/admin/sitemap" class="admin-nav-tab" data-tab="sitemap">Sitemap</a>
+                    <a href="/admin/robots" class="admin-nav-tab" data-tab="robots">Robots.txt</a>
+                    <a href="/admin/prerender" class="admin-nav-tab" data-tab="prerender">Prerender</a>
+                    <a href="/admin/chat" class="admin-nav-tab" data-tab="chat">
                         Live Chat <span class="acp-nav-badge" id="acp-nav-badge" hidden>0</span>
                     </a>
                 </div>
@@ -101,9 +110,12 @@
                     <div class="admin-header-actions">
                         <input id="search-pages" class="admin-search" type="search" placeholder="Search pages…" />
                         <div class="admin-filter-btns">
-                            <button class="admin-filter-btn active" data-filter="all">All (<span id="count-all">0</span>)</button>
-                            <button class="admin-filter-btn" data-filter="live">Live (<span id="count-live">0</span>)</button>
-                            <button class="admin-filter-btn" data-filter="hidden">Hidden (<span id="count-hidden">0</span>)</button>
+                            <button class="admin-filter-btn active" data-filter="all">All (<span
+                                    id="count-all">0</span>)</button>
+                            <button class="admin-filter-btn" data-filter="live">Live (<span
+                                    id="count-live">0</span>)</button>
+                            <button class="admin-filter-btn" data-filter="hidden">Hidden (<span
+                                    id="count-hidden">0</span>)</button>
                         </div>
                         <button class="admin-refresh-btn" id="refresh-pages" aria-label="Refresh">
                             <i class="fa-solid fa-rotate" aria-hidden="true"></i>
@@ -121,7 +133,10 @@
                             </tr>
                         </thead>
                         <tbody id="pages-body">
-                            <tr><td colspan="4" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>
+                            <tr>
+                                <td colspan="4" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i>
+                                    Loading…</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -150,7 +165,8 @@
                 <div class="admin-page-header">
                     <div>
                         <h2 class="admin-page-title">Leads</h2>
-                        <p class="admin-page-sub">All inbound enquiries from the contact form, WhatsApp widget, and chatbot — in one place.</p>
+                        <p class="admin-page-sub">All inbound enquiries from the contact form, WhatsApp widget, and
+                            chatbot — in one place.</p>
                     </div>
                     <div class="admin-header-actions">
                         <input id="search-leads" class="admin-search" type="search" placeholder="Search leads…" />
@@ -183,10 +199,13 @@
 
                 <!-- Source filter chips -->
                 <div class="admin-filter-btns" id="lead-filter-chips" style="margin-bottom:1rem;">
-                    <button class="admin-filter-btn active" data-source="all">All (<span id="lead-count-all">0</span>)</button>
-                    <button class="admin-filter-btn" data-source="contact">Contact (<span id="lead-count-contact">0</span>)</button>
+                    <button class="admin-filter-btn active" data-source="all">All (<span
+                            id="lead-count-all">0</span>)</button>
+                    <button class="admin-filter-btn" data-source="contact">Contact (<span
+                            id="lead-count-contact">0</span>)</button>
 
-                    <button class="admin-filter-btn" data-source="chat">Chat (<span id="lead-count-chat">0</span>)</button>
+                    <button class="admin-filter-btn" data-source="chat">Chat (<span
+                            id="lead-count-chat">0</span>)</button>
                 </div>
 
                 <!-- Unified leads table -->
@@ -204,7 +223,10 @@
                             </tr>
                         </thead>
                         <tbody id="leads-body">
-                            <tr><td colspan="7" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading leads…</td></tr>
+                            <tr>
+                                <td colspan="7" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i>
+                                    Loading leads…</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -225,7 +247,8 @@
                 <div class="admin-page-header">
                     <div>
                         <h2 class="admin-page-title">Sitemap Manager</h2>
-                        <p class="admin-page-sub">All public URLs submitted to search engines via <code>/sitemap.xml</code>.</p>
+                        <p class="admin-page-sub">All public URLs submitted to search engines via
+                            <code>/sitemap.xml</code>.</p>
                     </div>
                     <div class="admin-header-actions">
                         <button class="admin-refresh-btn" id="sitemap-refresh-btn" aria-label="Refresh">
@@ -234,7 +257,8 @@
                         <button class="admin-btn admin-btn-secondary" id="sitemap-copy-btn">
                             <i class="fa-solid fa-link" aria-hidden="true"></i> Copy URL
                         </button>
-                        <a id="sitemap-download-btn" href="/sitemap.xml" target="_blank" class="admin-btn admin-btn-primary">
+                        <a id="sitemap-download-btn" href="/sitemap.xml" target="_blank"
+                            class="admin-btn admin-btn-primary">
                             <i class="fa-solid fa-download" aria-hidden="true"></i> Download XML
                         </a>
                     </div>
@@ -268,7 +292,8 @@
                         <button class="admin-filter-btn" data-sitemap-filter="static">Static</button>
                         <button class="admin-filter-btn" data-sitemap-filter="builder">Builder</button>
                     </div>
-                    <button class="admin-btn admin-btn-primary" id="sitemap-regenerate-btn" type="button" style="margin-left:auto;">
+                    <button class="admin-btn admin-btn-primary" id="sitemap-regenerate-btn" type="button"
+                        style="margin-left:auto;">
                         <i class="fa-solid fa-rotate" aria-hidden="true"></i> Regenerate
                     </button>
                 </div>
@@ -286,7 +311,10 @@
                             </tr>
                         </thead>
                         <tbody id="sitemap-body">
-                            <tr><td colspan="5" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>
+                            <tr>
+                                <td colspan="5" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i>
+                                    Loading…</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -296,6 +324,84 @@
                     <i class="fa-solid fa-check" aria-hidden="true"></i> Sitemap URL copied!
                 </div>
 
+            </section>
+        </main>
+
+        <!-- Robots.txt view (shown when path is /admin/robots) -->
+        <main class="admin-main" id="view-robots" hidden>
+            <section class="admin-section robots-section">
+
+                <!-- Header -->
+                <div class="admin-page-header">
+                    <div>
+                        <h2 class="admin-page-title">Robots.txt Editor</h2>
+                        <p class="admin-page-sub">Controls how search engines crawl the site, served live at
+                            <code>/robots.txt</code>. Changes apply immediately on save.</p>
+                    </div>
+                    <div class="admin-header-actions">
+                        <button class="admin-refresh-btn" id="robots-reload-btn" aria-label="Reload" type="button">
+                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        </button>
+                        <a id="robots-view-btn" href="/robots.txt" target="_blank"
+                            class="admin-btn admin-btn-secondary">
+                            <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i> View live
+                        </a>
+                        <button class="admin-btn admin-btn-primary" id="robots-save-btn" type="button" disabled>
+                            <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Editor -->
+                <textarea id="robots-editor" class="robots-editor" spellcheck="false"
+                    placeholder="Loading robots.txt…" aria-label="robots.txt content"></textarea>
+
+                <!-- Status -->
+                <div class="robots-status" id="robots-status">Loading&hellip;</div>
+
+            </section>
+        </main>
+
+        <!-- Prerender view (shown when path is /admin/prerender) -->
+        <main class="admin-main" id="view-prerender" hidden>
+            <section class="admin-section">
+                <div class="admin-page-header">
+                    <div>
+                        <h2 class="admin-page-title">Crawler Prerender</h2>
+                        <p class="admin-page-sub">Static, fully-rendered snapshots served to AI / search / social
+                            crawlers (ClaudeBot, GPTBot, Googlebot, Bing, social scrapers&hellip;) so non-JS bots get
+                            real content. Humans always get the live app. Rebuild after Strapi content changes.</p>
+                    </div>
+                    <div class="admin-header-actions">
+                        <button class="admin-refresh-btn" id="prerender-refresh-btn" aria-label="Refresh" type="button">
+                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        </button>
+                        <button class="admin-btn admin-btn-primary" id="prerender-build-all-btn" type="button">
+                            <i class="fa-solid fa-bolt" aria-hidden="true"></i> Build all
+                        </button>
+                    </div>
+                </div>
+
+                <div class="robots-status" id="prerender-status">Loading&hellip;</div>
+
+                <div id="prerender-log-wrap" style="display:none;margin-bottom:16px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                        <span style="font-size:13px;font-weight:600;color:var(--c-text-muted);">Build output</span>
+                        <button class="admin-refresh-btn" id="prerender-log-clear" type="button" title="Hide log"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <pre id="prerender-log" style="background:var(--c-bg-alt,#f8fafc);border:1px solid var(--c-border);border-radius:8px;padding:12px 14px;font-size:12px;line-height:1.6;max-height:280px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;margin:0;color:var(--c-text-dark);"></pre>
+                </div>
+
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr><th>Page</th><th>Snapshot</th><th>Last built</th><th></th></tr>
+                        </thead>
+                        <tbody id="prerender-tbody">
+                            <tr><td colspan="4" class="admin-loading-cell">Loading&hellip;</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </main>
     </div>
@@ -308,4 +414,5 @@
     <script type="module" src="/admin/builder/builder-editor.js"></script>
     <script src="/admin/chat/chat-panel.js"></script>
 </body>
+
 </html>

@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getTallyOnCloudPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -30,7 +31,7 @@ import { uploadURL } from './services/strapiClient.js';
         var tbody = document.getElementById('toc-compare-tbody');
         if (!tbody) return;
         tbody.innerHTML = rows.map(function (row) {
-            var parts = (row.desc || row.description || '').split('|');
+            var parts = inlineRichText(row.desc || row.description || '').split('|');
             var cloudVal = (parts[0] || '').trim();
             var desktopVal = (parts[1] || '').trim();
             return '<tr>' +

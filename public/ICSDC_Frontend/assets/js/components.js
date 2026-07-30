@@ -16,6 +16,16 @@
         ...(API_TOKEN ? { Authorization: `Bearer ${API_TOKEN}` } : {}),
     };
 
+    /** Normalise CKEditor HTML for inline rendering (strip outer <p>, keep links). */
+    function inlineRichText(html) {
+        if (html == null) return html;
+        return String(html)
+            .replace(/<\/p>\s*<p[^>]*>/gi, '<br><br>')
+            .replace(/^\s*<p[^>]*>/i, '')
+            .replace(/<\/p>\s*$/i, '')
+            .trim();
+    }
+
     /** Lightweight fetch wrapper — consistent with strapiClient.js */
     async function strapiFetch(path) {
         const res = await fetch(`${BASE_URL}${path}`, { headers });
@@ -133,7 +143,7 @@
         >
             <div class="testi-body">
                 <span class="testi-quote-mark" aria-hidden="true">&#10077;</span>
-                <blockquote class="testi-quote">${t.quote}</blockquote>
+                <blockquote class="testi-quote">${inlineRichText(t.quote || '')}</blockquote>
                 <div class="testi-rating" aria-label="Rating: ${t.rating} out of 5 stars">
                     ${stars}
                 </div>
@@ -250,7 +260,7 @@
                     <span class="faq-q-text">${faq.question || ''}</span>
                     <span class="faq-chev">${chev}</span>
                 </summary>
-                <div class="faq-a-wrap"><div class="faq-a">${faq.answer || ''}</div></div>
+                <div class="faq-a-wrap"><div class="faq-a">${inlineRichText(faq.answer || '')}</div></div>
             </details>`;
         }).join('');
 

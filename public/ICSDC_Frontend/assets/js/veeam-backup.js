@@ -4,12 +4,14 @@
 // ══════════════════════════════════════════════════════════
 
 import { getVeeamBackupPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
+    populatePricingPlansCloud,
     hidePageLoader,
     markActiveNavLink,
     setText,
@@ -32,12 +34,12 @@ import {
         if (!tbody) return;
 
         tbody.innerHTML = rows.map(function (row) {
-            var parts = (row.desc || row.description || '').split('|');
+            var parts = inlineRichText(row.desc || row.description || '').split('|');
             var icsdcVal = (parts[0] || '').trim();
             var directVal = (parts[1] || '').trim();
             return '<tr>' +
                 '<td>' + (row.title || '') + '</td>' +
-                '<td class="veeam-col-icsdc"><span class="veeam-check">&#10003;</span>' + icsdcVal + '</td>' +
+                '<td class="veeam-col-icsdc">' + icsdcVal + '</td>' +
                 '<td>' + directVal + '</td>' +
                 '</tr>';
         }).join('');
@@ -55,7 +57,7 @@ import {
         grid.innerHTML = stats.map(function (stat) {
             return '<div class="veeam-stat-card">' +
                 '<div class="veeam-stat-number">' + (stat.title || '') + '</div>' +
-                '<p class="veeam-stat-desc">' + (stat.desc || stat.description || '') + '</p>' +
+                '<p class="veeam-stat-desc">' + inlineRichText(stat.desc || stat.description || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -75,7 +77,25 @@ import {
             return '<div class="veeam-step-card">' +
                 '<div class="veeam-step-num">' + num + '</div>' +
                 '<h3>' + (step.title || '') + '</h3>' +
-                '<p>' + (step.description || step.desc || '') + '</p>' +
+                '<p>' + inlineRichText(step.description || step.desc || '') + '</p>' +
+                '</div>';
+        }).join('');
+    }
+
+    /**
+     * Render the related-services cross-sell cards (Managed Cloud Hosting + DRaaS).
+     * relatedCards is a json array: [{ title, description, btnLabel, btnUrl }].
+     */
+    function populateRelated(cards) {
+        if (!cards || !cards.length) return;
+        var grid = document.getElementById('veeam-related-grid');
+        if (!grid) return;
+        grid.innerHTML = cards.map(function (c) {
+            return '<div class="veeam-related-card" data-animate="fade-up">' +
+                '<h3>' + (c.title || '') + '</h3>' +
+                '<p>' + inlineRichText(c.description || c.desc || '') + '</p>' +
+                '<a href="' + (c.btnUrl || '#') + '" class="btn-primary">' +
+                (c.btnLabel || 'Learn More') + '</a>' +
                 '</div>';
         }).join('');
     }
@@ -98,8 +118,7 @@ import {
                 subtitle: page.heroSubtitle,
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
-                ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.veeam-top-badge', page.heroTopBadge);
@@ -108,6 +127,13 @@ import {
 
             // Pillars (4 cards)
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
+
+            // Pricing
+            populateSectionHeader('#veeam-plans', page.plansLabel, page.plansTitle, page.plansSubtitle);
+            populatePricingPlansCloud('#veeam-plans .cloud-pricing-grid', page.plans);
+            document.querySelectorAll('#veeam-plans .cloud-plan-cta').forEach(function (b) {
+                b.addEventListener('click', function () { location.href = '/contact-us'; });
+            });
 
             // Why Businesses Trust Veeam (9 cards)
             populateSectionHeader('#veeam-features', page.featuresLabel, page.featuresTitle, page.featuresSubtitle);
@@ -124,6 +150,18 @@ import {
             }
             populateCompareTable(page.compareRows);
 
+            // From Proactive Defense to Confident Recovery
+            populateSectionHeader('#veeam-proactive', null, page.proactiveTitle, page.proactiveSubtitle);
+            populateIconCards('#veeam-proactive-grid', page.proactiveCards, 'cloud-power-card');
+            if (page.proactiveImage && page.proactiveImage.image && page.proactiveImage.image.url) {
+                var pImg = document.getElementById('veeam-proactive-img');
+                if (pImg) {
+                    var pu = page.proactiveImage.image.url;
+                    pImg.src = /^https?:\/\//.test(pu) ? pu : ('http://localhost:1337' + pu);
+                    pImg.style.display = '';
+                }
+            }
+
             // Cyber Threat Stats
             populateSectionHeader('#veeam-stats', page.statsLabel, page.statsTitle, page.statsSubtitle);
             populateStats(page.stats);
@@ -132,12 +170,13 @@ import {
             populateSectionHeader('#veeam-how', page.stepsLabel, page.stepsTitle, null);
             populateSteps(page.steps);
 
-            // CTA Band 1
-            populateCtaBand('#veeam-cta1', page.ctaBand1);
-
             // Why Choose ICSDC (8 cards)
             populateSectionHeader('#veeam-why', page.whyLabel, page.whyTitle, page.whySubtitle);
             populateIconCards('#veeam-why-grid', page.whyCards, 'cloud-power-card');
+
+            // Related Services (Managed Cloud Hosting + DRaaS)
+            if (page.relatedTitle) setText(document, '#veeam-related .title', page.relatedTitle);
+            populateRelated(page.relatedCards);
 
             // Who Should Choose (9 cards)
             populateSectionHeader('#veeam-who', page.whoLabel, page.whoTitle, page.whoSubtitle);
@@ -149,14 +188,6 @@ import {
 
             // FAQ
             if (page.faqTitle) setText(document, '#veeam-faq-heading', page.faqTitle);
-            if (page.faqContactTitle) {
-                var faqContactTitle = document.querySelector('.faq-contact-title');
-                if (faqContactTitle) faqContactTitle.textContent = page.faqContactTitle;
-            }
-            if (page.faqContactDesc) {
-                var faqContactDesc = document.querySelector('.faq-contact-desc');
-                if (faqContactDesc) faqContactDesc.innerHTML = page.faqContactDesc.replace(/\n/g, '<br>');
-            }
             initFAQ(page.faq);
 
             // CTA Band 2 (dark)

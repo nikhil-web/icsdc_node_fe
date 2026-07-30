@@ -1,4 +1,5 @@
 import { getWordpressHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -45,7 +46,7 @@ import {
                 '<div class="wp-plan-price">' + (plan.price || '') + '<span>' + (plan.period || '/mo') + '</span></div>' +
                 '<p class="wp-plan-desc">' + (plan.tagline || plan.description || '') + '</p>' +
                 (features ? '<ul class="wp-plan-features">' + features + '</ul>' : '') +
-                '<a href="/contact-us.html" class="' + btnClass + '">' + (plan.ctaText || plan.ctaLabel || 'Get Started') + ' &rarr;</a>' +
+                '<a href="' + (plan.ctaLink || 'contact-popup') + '" class="' + btnClass + '">' + (plan.ctaText || plan.ctaLabel || 'Get Started') + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -60,7 +61,7 @@ import {
         });
 
         grid.innerHTML = sorted.map(function (card) {
-            var parts = (card.desc || '').split('||');
+            var parts = inlineRichText(card.desc || '').split('||');
             var tagline = parts[0] ? parts[0].trim() : '';
             var description = parts[1] ? parts[1].trim() : '';
             var ctaText = 'Explore ' + (card.title || 'More');
@@ -70,7 +71,7 @@ import {
                 '<h3 class="wp-related-card-title">' + (card.title || '') + '</h3>' +
                 (tagline ? '<p class="wp-related-tagline">' + tagline + '</p>' : '') +
                 (description ? '<p class="wp-related-desc">' + description + '</p>' : '') +
-                '<a href="' + ctaHref + '" class="wp-related-cta">' + ctaText + ' &rarr;</a>' +
+                '<a href="' + ctaHref + '" class="wp-related-cta">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }

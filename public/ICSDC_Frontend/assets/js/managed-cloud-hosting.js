@@ -4,6 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getManagedCloudHostingPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -51,10 +52,10 @@ import {
             var featuresArr = plan.features || [];
             var featuresHtml = featuresArr.length
                 ? '<ul class="mch-plan-features">' +
-                    featuresArr.map(function (f) {
-                        return '<li>' + (f.label || f.text || f.name || f) + '</li>';
-                    }).join('') +
-                  '</ul>'
+                featuresArr.map(function (f) {
+                    return '<li>' + (f.label || f.text || f.name || f) + '</li>';
+                }).join('') +
+                '</ul>'
                 : '';
 
             var ctaText = plan.ctaText || 'Get Started';
@@ -66,7 +67,7 @@ import {
                 priceHtml +
                 taglineHtml +
                 featuresHtml +
-                '<a href="/contact-us" class="' + btnClass + '">' + ctaText + ' &rarr;</a>' +
+                '<a href="' + (plan.ctaLink || 'contact-popup') + '" class="' + btnClass + '">' + ctaText + ' </a>' +
                 '</div>';
         }).join('');
     }
@@ -116,7 +117,7 @@ import {
 
         var cta1 = document.getElementById('mch-migration-cta1');
         if (cta1 && b.ctaPrimary) {
-            if (b.ctaPrimary.text) cta1.innerHTML = b.ctaPrimary.text + ' &rarr;';
+            if (b.ctaPrimary.text) cta1.innerHTML = b.ctaPrimary.text + ' ';
             if (b.ctaPrimary.link) cta1.setAttribute('href', b.ctaPrimary.link);
         }
         var cta2 = document.getElementById('mch-migration-cta2');
@@ -162,7 +163,7 @@ import {
             return '<div class="mch-service-card">' +
                 '<div class="mch-service-icon"><i class="' + iconClass + '" aria-hidden="true"></i></div>' +
                 '<h3 class="mch-service-title">' + (card.title || '') + '</h3>' +
-                '<p class="mch-service-desc">' + (card.desc || '') + '</p>' +
+                '<p class="mch-service-desc">' + inlineRichText(card.desc || '') + '</p>' +
                 '<a href="' + link + '" class="mch-service-btn">' + cta + ' ' + arrowSVG + '</a>' +
                 '</div>';
         }).join('');
@@ -177,7 +178,7 @@ import {
         if (!wrap || !steps || !steps.length) return;
         var sorted = steps.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
         wrap.innerHTML = sorted.map(function (step) {
-            var bullets = (step.description || '')
+            var bullets = inlineRichText(step.description || '')
                 .split('.')
                 .map(function (s) { return s.trim(); })
                 .filter(Boolean);

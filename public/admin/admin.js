@@ -1,11 +1,11 @@
 (function () {
     'use strict';
 
-    const JWT_KEY  = 'icsdc_admin_jwt';
+    const JWT_KEY = 'icsdc_admin_jwt';
     const USER_KEY = 'icsdc_admin_user';
 
     // ── Auth helpers ──────────────────────────────────────────
-    function getJwt()  { return sessionStorage.getItem(JWT_KEY); }
+    function getJwt() { return sessionStorage.getItem(JWT_KEY); }
     function getUser() { return JSON.parse(sessionStorage.getItem(USER_KEY) || 'null'); }
 
     function saveSession(jwt, user) {
@@ -53,37 +53,45 @@
         applyRoute();
     }
 
-    function isBuilderPath()  { return window.location.pathname.startsWith('/admin/builder'); }
-    function isSitemapPath()  { return window.location.pathname.startsWith('/admin/sitemap'); }
-    function isChatPath()     { return window.location.pathname.startsWith('/admin/chat'); }
-    function isLeadsPath()    { return window.location.pathname.startsWith('/admin/leads'); }
+    function isBuilderPath() { return window.location.pathname.startsWith('/admin/builder'); }
+    function isSitemapPath() { return window.location.pathname.startsWith('/admin/sitemap'); }
+    function isChatPath() { return window.location.pathname.startsWith('/admin/chat'); }
+    function isLeadsPath() { return window.location.pathname.startsWith('/admin/leads'); }
+    function isRobotsPath() { return window.location.pathname.startsWith('/admin/robots'); }
+    function isPrerenderPath() { return window.location.pathname.startsWith('/admin/prerender'); }
 
     function applyRoute() {
-        const mainDash    = document.getElementById('view-dashboard-main');
-        const mainBld     = document.getElementById('view-builder');
+        const mainDash = document.getElementById('view-dashboard-main');
+        const mainBld = document.getElementById('view-builder');
         const mainSitemap = document.getElementById('view-sitemap');
-        const mainChat    = document.getElementById('view-chat');
-        const mainLeads   = document.getElementById('view-leads');
-        if (!mainDash || !mainBld || !mainSitemap || !mainChat || !mainLeads) return;
+        const mainChat = document.getElementById('view-chat');
+        const mainLeads = document.getElementById('view-leads');
+        const mainRobots = document.getElementById('view-robots');
+        const mainPrerender = document.getElementById('view-prerender');
+        if (!mainDash || !mainBld || !mainSitemap || !mainChat || !mainLeads || !mainRobots || !mainPrerender) return;
 
         // Sync nav tab "active" styling
         document.querySelectorAll('.admin-nav-tab').forEach(function (a) {
             const tab = a.dataset.tab;
             const isActive =
-                (tab === 'builder'   && isBuilderPath()) ||
-                (tab === 'sitemap'   && isSitemapPath()) ||
-                (tab === 'chat'      && isChatPath())    ||
-                (tab === 'leads'     && isLeadsPath())   ||
-                (tab === 'dashboard' && !isBuilderPath() && !isSitemapPath() && !isChatPath() && !isLeadsPath());
+                (tab === 'builder' && isBuilderPath()) ||
+                (tab === 'sitemap' && isSitemapPath()) ||
+                (tab === 'robots' && isRobotsPath()) ||
+                (tab === 'prerender' && isPrerenderPath()) ||
+                (tab === 'chat' && isChatPath()) ||
+                (tab === 'leads' && isLeadsPath()) ||
+                (tab === 'dashboard' && !isBuilderPath() && !isSitemapPath() && !isRobotsPath() && !isPrerenderPath() && !isChatPath() && !isLeadsPath());
             a.classList.toggle('active', isActive);
         });
 
         // Hide all, show active
-        mainDash.hidden    = true;
-        mainBld.hidden     = true;
+        mainDash.hidden = true;
+        mainBld.hidden = true;
         mainSitemap.hidden = true;
-        mainChat.hidden    = true;
-        mainLeads.hidden   = true;
+        mainChat.hidden = true;
+        mainLeads.hidden = true;
+        mainRobots.hidden = true;
+        mainPrerender.hidden = true;
 
         if (isBuilderPath()) {
             mainBld.hidden = false;
@@ -94,6 +102,15 @@
                 window.__icsdc_sitemapLoaded = true;
                 loadSitemap();
             }
+        } else if (isRobotsPath()) {
+            mainRobots.hidden = false;
+            if (!window.__icsdc_robotsLoaded) {
+                window.__icsdc_robotsLoaded = true;
+                loadRobots();
+            }
+        } else if (isPrerenderPath()) {
+            mainPrerender.hidden = false;
+            if (!prerenderState_running) loadPrerender();
         } else if (isChatPath()) {
             mainChat.hidden = false;
             if (!window.__icsdc_chatLoaded) {
@@ -134,10 +151,10 @@
 
     // ── Login ─────────────────────────────────────────────────
     function initLogin() {
-        const form   = document.getElementById('login-form');
-        const errEl  = document.getElementById('login-error');
+        const form = document.getElementById('login-form');
+        const errEl = document.getElementById('login-error');
         const errTxt = document.getElementById('login-error-text');
-        const btn    = document.getElementById('login-btn');
+        const btn = document.getElementById('login-btn');
 
         function showError(msg) {
             errTxt.textContent = msg;
@@ -149,7 +166,7 @@
             errEl.hidden = true;
 
             const identifier = document.getElementById('login-email').value.trim();
-            const password   = document.getElementById('login-password').value;
+            const password = document.getElementById('login-password').value;
 
             if (!identifier || !password) {
                 showError('Please enter your email and password.');
@@ -160,10 +177,10 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in…';
 
             try {
-                const res  = await fetch('/api/admin/login', {
-                    method:  'POST',
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body:    JSON.stringify({ identifier, password }),
+                    body: JSON.stringify({ identifier, password }),
                 });
                 const data = await res.json();
 
@@ -178,14 +195,14 @@
                 showError('Could not reach the server. Please try again.');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = 'Sign In &rarr;';
+                btn.innerHTML = 'Sign In ';
             }
         });
     }
 
     // ── Password eye toggle ───────────────────────────────────
     function initEyeToggle() {
-        const btn   = document.getElementById('eye-toggle');
+        const btn = document.getElementById('eye-toggle');
         const input = document.getElementById('login-password');
         if (!btn || !input) return;
 
@@ -238,12 +255,12 @@
 
     // ── Health ────────────────────────────────────────────────
     async function loadHealth() {
-        const chip   = document.getElementById('chip-strapi');
+        const chip = document.getElementById('chip-strapi');
         const status = document.getElementById('strapi-status');
         try {
-            const res  = await apiFetch('/api/admin/health');
+            const res = await apiFetch('/api/admin/health');
             const data = await res.json();
-            const up   = data.strapi === 'ok';
+            const up = data.strapi === 'ok';
             status.textContent = up ? 'OK' : 'Down';
             chip.className = `admin-chip ${up ? 'admin-chip-ok' : 'admin-chip-down'}`;
         } catch (err) {
@@ -261,8 +278,8 @@
         const tbody = document.getElementById('submissions-body');
         tbody.innerHTML = '<tr><td colspan="6" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>';
         try {
-            const res   = await apiFetch('/api/admin/submissions');
-            const data  = await res.json();
+            const res = await apiFetch('/api/admin/submissions');
+            const data = await res.json();
             allSubmissions = data?.data || [];
             renderSubmissions(allSubmissions);
         } catch (err) {
@@ -279,7 +296,7 @@
             return;
         }
         tbody.innerHTML = items.map(function (item, idx) {
-            const d    = item.attributes || item;
+            const d = item.attributes || item;
             const date = d.createdAt
                 ? new Date(d.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
                 : '—';
@@ -308,7 +325,7 @@
 
         tbody.querySelectorAll('.sub-expand-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                const panel    = document.getElementById(btn.closest('tr').dataset.detail);
+                const panel = document.getElementById(btn.closest('tr').dataset.detail);
                 const expanded = btn.getAttribute('aria-expanded') === 'true';
                 btn.setAttribute('aria-expanded', !expanded);
                 btn.classList.toggle('open', !expanded);
@@ -341,14 +358,14 @@
     }
 
     // ── Pages ─────────────────────────────────────────────────
-    let allPages      = [];
-    let activeFilter  = 'all';
+    let allPages = [];
+    let activeFilter = 'all';
 
     async function loadPages() {
         const tbody = document.getElementById('pages-body');
         tbody.innerHTML = '<tr><td colspan="4" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>';
         try {
-            const res  = await apiFetch('/api/admin/pages');
+            const res = await apiFetch('/api/admin/pages');
             const data = await res.json();
             // Drop the homepage row — it must never be toggleable, so it
             // shouldn't appear in the registry table.
@@ -366,23 +383,23 @@
     }
 
     function updatePageCounts() {
-        const live   = allPages.filter(function (p) { return (p.attributes || p).isLive !== false; }).length;
+        const live = allPages.filter(function (p) { return (p.attributes || p).isLive !== false; }).length;
         const hidden = allPages.length - live;
-        document.getElementById('count-all').textContent    = allPages.length;
-        document.getElementById('count-live').textContent   = live;
+        document.getElementById('count-all').textContent = allPages.length;
+        document.getElementById('count-live').textContent = live;
         document.getElementById('count-hidden').textContent = hidden;
     }
 
     function renderPages() {
-        const query  = (document.getElementById('search-pages').value || '').toLowerCase();
-        const tbody  = document.getElementById('pages-body');
+        const query = (document.getElementById('search-pages').value || '').toLowerCase();
+        const tbody = document.getElementById('pages-body');
 
         const filtered = allPages.filter(function (item) {
-            const d    = item.attributes || item;
+            const d = item.attributes || item;
             const live = d.isLive !== false;
 
-            if (activeFilter === 'live'   && !live) return false;
-            if (activeFilter === 'hidden' &&  live) return false;
+            if (activeFilter === 'live' && !live) return false;
+            if (activeFilter === 'hidden' && live) return false;
 
             if (query) {
                 return [d.displayName, d.slug].some(function (v) {
@@ -398,8 +415,8 @@
         }
 
         tbody.innerHTML = filtered.map(function (item) {
-            const d    = item.attributes || item;
-            const id   = item.documentId || item.id;
+            const d = item.attributes || item;
+            const id = item.documentId || item.id;
             const live = d.isLive !== false;
             const badge = live
                 ? '<span class="admin-status-badge live"><span class="admin-status-dot"></span>Live</span>'
@@ -423,7 +440,7 @@
     }
 
     async function handleTogglePage(btn) {
-        const id      = btn.dataset.id;
+        const id = btn.dataset.id;
         const wasLive = btn.dataset.live === 'true';
         const newLive = !wasLive;
 
@@ -433,7 +450,7 @@
         try {
             const res = await apiFetch(`/api/admin/pages/${id}`, {
                 method: 'PATCH',
-                body:   JSON.stringify({ isLive: newLive }),
+                body: JSON.stringify({ isLive: newLive }),
             });
             if (!res.ok) throw new Error('Toggle failed');
 
@@ -441,7 +458,7 @@
             const entry = allPages.find(function (p) { return (p.documentId || String(p.id)) === String(id); });
             if (entry) {
                 if (entry.attributes) entry.attributes.isLive = newLive;
-                else                  entry.isLive            = newLive;
+                else entry.isLive = newLive;
             }
 
             updatePageCounts();
@@ -484,15 +501,15 @@
     }
 
     // ── Leads ─────────────────────────────────────────────────
-    let allLeads          = [];
+    let allLeads = [];
     let leadsActiveSource = 'all';
-    let leadsSearchQ      = '';
+    let leadsSearchQ = '';
 
     async function loadLeads() {
         const tbody = document.getElementById('leads-body');
         tbody.innerHTML = '<tr><td colspan="7" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading leads…</td></tr>';
         try {
-            const res  = await apiFetch('/api/admin/leads');
+            const res = await apiFetch('/api/admin/leads');
             const data = await res.json();
             allLeads = data?.data || [];
             updateLeadStats(data.counts || {}, data.weekCounts || {});
@@ -509,16 +526,16 @@
             const el = document.getElementById(id);
             if (el) el.textContent = val || 0;
         };
-        set('stat-contact-total',  counts.contact);
+        set('stat-contact-total', counts.contact);
         set('stat-whatsapp-total', counts.whatsapp);
-        set('stat-chat-total',     counts.chat);
-        set('stat-contact-week',   weekCounts.contact);
-        set('stat-whatsapp-week',  weekCounts.whatsapp);
-        set('stat-chat-week',      weekCounts.chat);
-        set('lead-count-all',      counts.total);
-        set('lead-count-contact',  counts.contact);
+        set('stat-chat-total', counts.chat);
+        set('stat-contact-week', weekCounts.contact);
+        set('stat-whatsapp-week', weekCounts.whatsapp);
+        set('stat-chat-week', weekCounts.chat);
+        set('lead-count-all', counts.total);
+        set('lead-count-contact', counts.contact);
         set('lead-count-whatsapp', counts.whatsapp);
-        set('lead-count-chat',     counts.chat);
+        set('lead-count-chat', counts.chat);
     }
 
     function filteredLeads() {
@@ -533,13 +550,13 @@
 
     function leadBadge(source) {
         const map = {
-            contact:  { cls: 'contact',  icon: 'fa-solid fa-envelope',   label: 'Contact'  },
-            whatsapp: { cls: 'whatsapp', icon: 'fa-brands fa-whatsapp',  label: 'WhatsApp' },
-            chat:     { cls: 'chat',     icon: 'fa-solid fa-comments',   label: 'Chat'     },
+            contact: { cls: 'contact', icon: 'fa-solid fa-envelope', label: 'Contact' },
+            whatsapp: { cls: 'whatsapp', icon: 'fa-brands fa-whatsapp', label: 'WhatsApp' },
+            chat: { cls: 'chat', icon: 'fa-solid fa-comments', label: 'Chat' },
         };
         const m = map[source] || { cls: 'chat', icon: 'fa-solid fa-circle', label: source };
         return '<span class="lead-badge lead-badge--' + m.cls + '">' +
-               '<i class="' + m.icon + '" aria-hidden="true"></i> ' + m.label + '</span>';
+            '<i class="' + m.icon + '" aria-hidden="true"></i> ' + m.label + '</span>';
     }
 
     function leadActions(l) {
@@ -578,8 +595,8 @@
         const rows = [];
         if (l.subject) rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Subject</span><span>' + esc(l.subject) + '</span></div>');
         if (l.company) rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Company</span><span>' + esc(l.company) + '</span></div>');
-        if (l.email)   rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Email</span><a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a></div>');
-        if (l.phone)   rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Phone</span><span>' + esc(l.phone) + '</span></div>');
+        if (l.email) rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Email</span><a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a></div>');
+        if (l.phone) rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Phone</span><span>' + esc(l.phone) + '</span></div>');
         if (l.source === 'whatsapp' && l.raw && l.raw.sourceUrl)
             rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Page</span><a href="' + esc(l.raw.sourceUrl) + '" target="_blank" rel="noopener">' + esc(l.raw.sourceUrl) + '</a></div>');
         if (l.source === 'chat' && l.raw && Array.isArray(l.raw.messages) && l.raw.messages.length) {
@@ -614,15 +631,15 @@
                 '<td>' + date + '</td>' +
                 '<td class="lead-actions">' + leadActions(l) + '</td>' +
                 '<td><button class="sub-expand-btn" aria-expanded="false" aria-controls="' + detailId + '"><i class="fa-solid fa-chevron-down"></i></button></td>' +
-            '</tr>' +
-            '<tr id="' + detailId + '" class="sub-detail-panel" hidden>' +
+                '</tr>' +
+                '<tr id="' + detailId + '" class="sub-detail-panel" hidden>' +
                 '<td colspan="7"><div class="sub-detail-body">' + leadDetailBody(l) + '</div></td>' +
-            '</tr>';
+                '</tr>';
         }).join('');
 
         tbody.querySelectorAll('.sub-expand-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                const panel    = document.getElementById(btn.closest('tr').dataset.detail);
+                const panel = document.getElementById(btn.closest('tr').dataset.detail);
                 const expanded = btn.getAttribute('aria-expanded') === 'true';
                 btn.setAttribute('aria-expanded', !expanded);
                 btn.classList.toggle('open', !expanded);
@@ -660,23 +677,23 @@
     }
 
     // ── Sitemap ───────────────────────────────────────────────
-    let allSitemapEntries   = [];
+    let allSitemapEntries = [];
     let sitemapActiveFilter = 'all';
-    let sitemapUrl          = '/sitemap.xml';
+    let sitemapUrl = '/sitemap.xml';
 
     async function loadSitemap() {
         const tbody = document.getElementById('sitemap-body');
         tbody.innerHTML = '<tr><td colspan="5" class="admin-loading-cell"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>';
         try {
-            const res  = await apiFetch('/api/admin/sitemap');
+            const res = await apiFetch('/api/admin/sitemap');
             const data = await res.json();
             allSitemapEntries = data.entries || [];
-            sitemapUrl        = data.sitemapUrl || '/sitemap.xml';
+            sitemapUrl = data.sitemapUrl || '/sitemap.xml';
 
             // Stats
-            document.getElementById('stat-total').textContent    = data.counts.total;
-            document.getElementById('stat-static').textContent   = data.counts.static;
-            document.getElementById('stat-builder').textContent  = data.counts.builder;
+            document.getElementById('stat-total').textContent = data.counts.total;
+            document.getElementById('stat-static').textContent = data.counts.static;
+            document.getElementById('stat-builder').textContent = data.counts.builder;
             document.getElementById('stat-generated').textContent =
                 data.generatedAt
                     ? new Date(data.generatedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
@@ -691,11 +708,11 @@
     }
 
     function renderSitemap() {
-        const query  = (document.getElementById('sitemap-search').value || '').toLowerCase();
-        const tbody  = document.getElementById('sitemap-body');
+        const query = (document.getElementById('sitemap-search').value || '').toLowerCase();
+        const tbody = document.getElementById('sitemap-body');
 
         const filtered = allSitemapEntries.filter(function (e) {
-            if (sitemapActiveFilter === 'static'  && e.type !== 'static')  return false;
+            if (sitemapActiveFilter === 'static' && e.type !== 'static') return false;
             if (sitemapActiveFilter === 'builder' && e.type !== 'builder') return false;
             if (query) return e.loc.toLowerCase().includes(query);
             return true;
@@ -776,7 +793,7 @@
 
         // Copy sitemap URL
         const copyBtn = document.getElementById('sitemap-copy-btn');
-        const toast   = document.getElementById('sitemap-toast');
+        const toast = document.getElementById('sitemap-toast');
         if (copyBtn && toast) {
             copyBtn.addEventListener('click', async function () {
                 const url = sitemapUrl || window.location.origin + '/sitemap.xml';
@@ -787,7 +804,7 @@
                     const ta = document.createElement('textarea');
                     ta.value = url;
                     ta.style.position = 'fixed';
-                    ta.style.opacity  = '0';
+                    ta.style.opacity = '0';
                     document.body.appendChild(ta);
                     ta.select();
                     document.execCommand('copy');
@@ -799,13 +816,221 @@
         }
     }
 
+    // ── Robots.txt editor ─────────────────────────────────────
+    let robotsSaved = '';   // last-saved baseline, for dirty detection
+
+    function setRobotsStatus(msg, kind) {
+        const el = document.getElementById('robots-status');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.remove('is-success', 'is-error', 'is-dirty');
+        if (kind) el.classList.add('is-' + kind);
+    }
+
+    function setRobotsDirty(dirty) {
+        const saveBtn = document.getElementById('robots-save-btn');
+        if (saveBtn) saveBtn.disabled = !dirty;
+        if (dirty) setRobotsStatus('Unsaved changes', 'dirty');
+    }
+
+    async function loadRobots() {
+        const editor = document.getElementById('robots-editor');
+        if (!editor) return;
+        setRobotsStatus('Loading…');
+        try {
+            const res = await apiFetch('/api/admin/robots');
+            if (!res.ok) throw new Error('Load failed');
+            const data = await res.json();
+            editor.value = data.content || '';
+            robotsSaved = editor.value;
+            setRobotsDirty(false);
+            setRobotsStatus(data.exists === false
+                ? 'No robots.txt yet — showing a default. Save to create it.'
+                : 'Loaded.');
+        } catch (err) {
+            if (err.message !== 'Session expired') setRobotsStatus('Could not load robots.txt.', 'error');
+        }
+    }
+
+    function initRobotsControls() {
+        const editor = document.getElementById('robots-editor');
+        const saveBtn = document.getElementById('robots-save-btn');
+        const reloadBtn = document.getElementById('robots-reload-btn');
+        if (!editor) return;
+
+        editor.addEventListener('input', function () {
+            setRobotsDirty(editor.value !== robotsSaved);
+        });
+
+        if (reloadBtn) {
+            reloadBtn.addEventListener('click', async function () {
+                reloadBtn.disabled = true;
+                await loadRobots();
+                reloadBtn.disabled = false;
+            });
+        }
+
+        if (saveBtn) {
+            saveBtn.addEventListener('click', async function () {
+                saveBtn.disabled = true;
+                const original = saveBtn.innerHTML;
+                saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving…';
+                try {
+                    const res = await apiFetch('/api/admin/robots', {
+                        method: 'POST',
+                        body: JSON.stringify({ content: editor.value }),
+                    });
+                    if (!res.ok) {
+                        const e = await res.json().catch(function () { return {}; });
+                        throw new Error(e.error || 'Save failed');
+                    }
+                    robotsSaved = editor.value;
+                    const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    setRobotsStatus('Saved ✓ at ' + t, 'success');
+                } catch (err) {
+                    if (err.message !== 'Session expired') {
+                        setRobotsStatus(err.message || 'Could not save robots.txt.', 'error');
+                        saveBtn.disabled = false;   // allow retry
+                    }
+                } finally {
+                    saveBtn.innerHTML = original;
+                }
+            });
+        }
+    }
+
+    // ── Prerender / crawler snapshots ──────────────────────────
+    let prerenderPollTimer = null;
+    let prerenderState_running = false;
+
+    function fmtBytes(n) {
+        if (n == null) return '—';
+        if (n < 1024) return n + ' B';
+        return (n / 1024).toFixed(0) + ' KB';
+    }
+
+    function fmtWhen(iso) {
+        if (!iso) return 'Never';
+        const d = new Date(iso);
+        return d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' +
+            d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function renderPrerenderTable(data) {
+        const tbody = document.getElementById('prerender-tbody');
+        if (!tbody) return;
+        if (!data.pages || !data.pages.length) {
+            tbody.innerHTML = '<tr><td colspan="4" class="admin-loading-cell">No pages found.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = data.pages.map(function (p) {
+            const built = !!p.builtAt;
+            return '<tr>' +
+                '<td><code>' + esc(p.path) + '</code></td>' +
+                '<td>' + (built
+                    ? '<span style="color:#15803d;"><i class="fa-solid fa-circle-check"></i> Built (' + fmtBytes(p.bytes) + ')</span>'
+                    : '<span style="color:#94a3b8;"><i class="fa-regular fa-circle"></i> Not built</span>') +
+                '</td>' +
+                '<td>' + fmtWhen(p.builtAt) + '</td>' +
+                '<td><button class="admin-refresh-btn" data-prerender-one="' + esc(p.path) + '" aria-label="Rebuild" type="button"><i class="fa-solid fa-rotate"></i></button></td>' +
+                '</tr>';
+        }).join('');
+
+        tbody.querySelectorAll('[data-prerender-one]').forEach(function (btn) {
+            btn.addEventListener('click', function () { buildPrerender(btn.getAttribute('data-prerender-one'), btn); });
+        });
+    }
+
+    function updatePrerenderLog(log) {
+        const wrap = document.getElementById('prerender-log-wrap');
+        const pre  = document.getElementById('prerender-log');
+        if (!wrap || !pre) return;
+        if (!log) return;
+        wrap.style.display = 'block';
+        pre.textContent = log;
+        pre.scrollTop = pre.scrollHeight;
+    }
+
+    async function loadPrerender() {
+        try {
+            const res = await apiFetch('/api/admin/prerender');
+            if (!res.ok) throw new Error('Load failed');
+            const data = await res.json();
+            renderPrerenderTable(data);
+            const statusEl = document.getElementById('prerender-status');
+            if (statusEl) {
+                statusEl.textContent = data.running
+                    ? 'Build running… (' + data.built + '/' + data.total + ' already built)'
+                    : data.built + ' / ' + data.total + ' pages have a snapshot.' +
+                      (data.finishedAt ? ' Last build finished ' + fmtWhen(data.finishedAt) + (data.exitCode ? ' (exit ' + data.exitCode + ')' : '.') : '');
+            }
+            prerenderState_running = !!data.running;
+            const buildBtn = document.getElementById('prerender-build-all-btn');
+            if (buildBtn) buildBtn.disabled = !!data.running;
+
+            if (data.log) updatePrerenderLog(data.log);
+
+            clearTimeout(prerenderPollTimer);
+            if (data.running) prerenderPollTimer = setTimeout(loadPrerender, 2500);
+        } catch (err) {
+            if (err.message !== 'Session expired') {
+                const statusEl = document.getElementById('prerender-status');
+                if (statusEl) statusEl.textContent = 'Could not load prerender status.';
+            }
+        }
+    }
+
+    async function buildPrerender(targetPath, triggerBtn) {
+        const buildBtn = document.getElementById('prerender-build-all-btn');
+        const statusEl = document.getElementById('prerender-status');
+        const logWrap  = document.getElementById('prerender-log-wrap');
+        const logPre   = document.getElementById('prerender-log');
+        prerenderState_running = true;
+        if (buildBtn) buildBtn.disabled = true;
+        if (triggerBtn) triggerBtn.disabled = true;
+        if (logWrap) logWrap.style.display = 'block';
+        if (logPre)  logPre.textContent = 'Starting build…';
+        try {
+            const res = await apiFetch('/api/admin/prerender', {
+                method: 'POST',
+                body: JSON.stringify(targetPath ? { path: targetPath } : {}),
+            });
+            if (!res.ok) {
+                const e = await res.json().catch(function () { return {}; });
+                throw new Error(e.error || 'Build failed to start');
+            }
+            if (statusEl) statusEl.textContent = 'Build started' + (targetPath ? ' for ' + targetPath : ' for all pages') + '…';
+            clearTimeout(prerenderPollTimer);
+            prerenderPollTimer = setTimeout(loadPrerender, 1500);
+        } catch (err) {
+            if (err.message !== 'Session expired') {
+                if (statusEl) statusEl.textContent = err.message || 'Could not start build.';
+                if (logPre) logPre.textContent = err.message || 'Could not start build.';
+                if (buildBtn) buildBtn.disabled = false;
+                if (triggerBtn) triggerBtn.disabled = false;
+            }
+        }
+    }
+
+    function initPrerenderControls() {
+        const refreshBtn = document.getElementById('prerender-refresh-btn');
+        const buildAllBtn = document.getElementById('prerender-build-all-btn');
+        const logClearBtn = document.getElementById('prerender-log-clear');
+        if (refreshBtn) refreshBtn.addEventListener('click', function () { loadPrerender(); });
+        if (buildAllBtn) buildAllBtn.addEventListener('click', function () { buildPrerender(null, buildAllBtn); });
+        if (logClearBtn) logClearBtn.addEventListener('click', function () {
+            const wrap = document.getElementById('prerender-log-wrap');
+            if (wrap) wrap.style.display = 'none';
+        });
+    }
+
     // ── Utility ───────────────────────────────────────────────
     function esc(str) {
         return String(str || '')
-            .replace(/&/g,  '&amp;')
-            .replace(/</g,  '&lt;')
-            .replace(/>/g,  '&gt;')
-            .replace(/"/g,  '&quot;');
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
     }
 
     // ── Boot ──────────────────────────────────────────────────
@@ -816,6 +1041,8 @@
         initTheme();
         initPagesControls();
         initSitemapControls();
+        initRobotsControls();
+        initPrerenderControls();
         initNavTabs();
 
         if (getJwt()) {

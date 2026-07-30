@@ -6,12 +6,30 @@ const { Server: SocketServer } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+const { spawn } = require('child_process');
 
 const app = express();
 
 const publicPath = path.join(__dirname, 'public/ICSDC_Frontend');
 const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
 const STRAPI_TOKEN = process.env.STRAPI_TOKEN || '';
+
+// ── Crawler prerendering (dynamic rendering) ──────────────
+// Fully-rendered static snapshots (built by prerender.js) live in /prerendered and
+// are served to known crawlers so non-JS bots get real content. Humans get the SPA.
+const prerenderDir = path.join(publicPath, 'prerendered');
+const BOT_UA_RE = /(ClaudeBot|anthropic-ai|Claude-Web|Claude-User|Claude-SearchBot|GPTBot|ChatGPT-User|OAI-SearchBot|PerplexityBot|CCBot|Google-Extended|Googlebot|Google-InspectionTool|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|Amazonbot|meta-externalagent|facebookexternalhit|Twitterbot|LinkedInBot|Slackbot|WhatsApp|TelegramBot|Discordbot|redditbot)/i;
+
+// Map a request path → snapshot file. MUST match snapshotFile() in prerender.js.
+function snapshotFileForPath(p) {
+    if (!p || p === '/') return path.join(prerenderDir, 'home.html');
+    p = p.replace(/\/$/, '');
+    if (p.startsWith('/legal/')) return path.join(prerenderDir, 'legal', p.slice('/legal/'.length) + '.html');
+    return path.join(prerenderDir, p.replace(/^\//, '') + '.html');
+}
+
+// Tracks an in-progress admin-triggered prerender build.
+const prerenderState = { running: false, startedAt: null, finishedAt: null, exitCode: null, log: '' };
 
 // Allow large JSON bodies for builder pages (sections array can be sizeable).
 app.use(express.json({ limit: '2mb' }));
@@ -679,8 +697,11 @@ function isPageLive(slug) {
 }
 
 async function buildSitemapEntries(req) {
-    const baseUrl = process.env.SITE_URL ||
-        (req ? `${req.protocol}://${req.get('host')}` : 'https://icsdc.in');
+    // Always emit absolute https URLs for the canonical domain. req.protocol is
+    // unreliable — it is http when Node runs behind a TLS-terminating proxy or on
+    // localhost, which previously made regenerated sitemaps use http://. SITE_URL
+    // (https://icsdc.com) wins when set; otherwise fall back to the canonical https URL.
+    const baseUrl = process.env.SITE_URL || 'https://icsdc.com';
     const today = new Date().toISOString().split('T')[0];
 
     const entries = STATIC_PAGES
@@ -782,7 +803,7 @@ app.post('/api/admin/sitemap/regenerate', requireAdminAuth, async function (req,
 app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
     try {
         const entries     = await buildSitemapEntries(req);
-        const sitemapUrl  = (process.env.SITE_URL || `${req.protocol}://${req.get('host')}`) + '/sitemap.xml';
+        const sitemapUrl  = (process.env.SITE_URL || 'https://icsdc.com') + '/sitemap.xml';
         res.json({
             entries,
             sitemapUrl,
@@ -799,12 +820,264 @@ app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
 });
 
 // ══════════════════════════════════════════════════════════
+//  ADMIN: PRERENDER / CRAWLER SNAPSHOTS
+// ══════════════════════════════════════════════════════════
+// List the live pages + each one's snapshot status (built timestamp / size).
+app.get('/api/admin/prerender', requireAdminAuth, async function (req, res) {
+    try {
+        const entries = await buildSitemapEntries(req);
+        const pages = entries
+            .filter(function (e) { return e.type !== 'builder'; })   // builder pages out of scope
+            .map(function (e) {
+                let p; try { p = new URL(e.loc).pathname; } catch (_) { p = e.loc; }
+                const file = snapshotFileForPath(p);
+                let builtAt = null, bytes = null;
+                try { const st = fs.statSync(file); builtAt = st.mtime.toISOString(); bytes = st.size; } catch (_) { /* not built */ }
+                return { path: p, builtAt: builtAt, bytes: bytes };
+            });
+        res.json({
+            running:    prerenderState.running,
+            startedAt:  prerenderState.startedAt,
+            finishedAt: prerenderState.finishedAt,
+            exitCode:   prerenderState.exitCode,
+            log:        prerenderState.log.slice(-4000),
+            total:      pages.length,
+            built:      pages.filter(function (x) { return x.builtAt; }).length,
+            pages:      pages,
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to read prerender status', detail: err.message });
+    }
+});
+
+// Trigger a prerender build (all live pages, or a single { path }). Spawns prerender.js.
+app.post('/api/admin/prerender', requireAdminAuth, function (req, res) {
+    if (prerenderState.running) return res.status(409).json({ error: 'A build is already running' });
+    const target = req.body && req.body.path ? String(req.body.path) : '';
+    // Only clean site paths — no dots/traversal (target ends up in a filesystem write in prerender.js)
+    if (target && !/^\/?[a-z0-9-]+(\/[a-z0-9-]+)*$/i.test(target) && target !== '/') {
+        return res.status(400).json({ error: 'Invalid path' });
+    }
+    const args = ['prerender.js'];
+    if (target) args.push(target);
+
+    prerenderState.running = true;
+    prerenderState.startedAt = new Date().toISOString();
+    prerenderState.finishedAt = null;
+    prerenderState.exitCode = null;
+    prerenderState.log = '';
+
+    let child;
+    try {
+        child = spawn(process.execPath, args, { cwd: __dirname, env: process.env });
+    } catch (e) {
+        prerenderState.running = false;
+        return res.status(500).json({ error: 'Failed to start build', detail: e.message });
+    }
+    child.stdout.on('data', function (d) { prerenderState.log += d.toString(); });
+    child.stderr.on('data', function (d) { prerenderState.log += d.toString(); });
+    child.on('close', function (code) {
+        prerenderState.running = false;
+        prerenderState.exitCode = code;
+        prerenderState.finishedAt = new Date().toISOString();
+    });
+    child.on('error', function (e) {
+        prerenderState.running = false;
+        prerenderState.exitCode = -1;
+        prerenderState.log += '\n[spawn error] ' + e.message;
+        prerenderState.finishedAt = new Date().toISOString();
+    });
+
+    res.json({ ok: true, started: true, target: target || 'all' });
+});
+
+// ══════════════════════════════════════════════════════════
+//  ADMIN: ROBOTS.TXT EDITOR
+//  Reads/writes the flat robots.txt served by express.static.
+//  Path is hardcoded (no traversal); both routes require admin auth.
+// ══════════════════════════════════════════════════════════
+const ROBOTS_PATH = path.join(publicPath, 'robots.txt');
+const ROBOTS_DEFAULT = 'User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ' +
+    (process.env.SITE_URL || 'https://icsdc.com').replace(/\/+$/, '') + '/sitemap.xml\n';
+const ROBOTS_MAX_BYTES = 64 * 1024; // 64KB guard
+
+app.get('/api/admin/robots', requireAdminAuth, async function (req, res) {
+    try {
+        let content, exists = true;
+        try {
+            content = await fs.promises.readFile(ROBOTS_PATH, 'utf8');
+        } catch (e) {
+            if (e.code === 'ENOENT') { content = ROBOTS_DEFAULT; exists = false; }
+            else throw e;
+        }
+        res.json({ content, exists, path: '/robots.txt' });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to read robots.txt', detail: err.message });
+    }
+});
+
+app.post('/api/admin/robots', requireAdminAuth, async function (req, res) {
+    try {
+        var content = req.body && req.body.content;
+        if (typeof content !== 'string') {
+            return res.status(400).json({ error: 'Body must include a string "content" field' });
+        }
+        if (Buffer.byteLength(content, 'utf8') > ROBOTS_MAX_BYTES) {
+            return res.status(413).json({ error: 'robots.txt is too large (max 64KB)' });
+        }
+        // Normalise to a single trailing newline.
+        var normalized = content.replace(/\r\n/g, '\n').replace(/\n*$/, '') + '\n';
+        await fs.promises.writeFile(ROBOTS_PATH, normalized, 'utf8');
+        res.json({ ok: true, savedAt: new Date().toISOString(), bytes: Buffer.byteLength(normalized, 'utf8') });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to save robots.txt', detail: err.message });
+    }
+});
+
+// ══════════════════════════════════════════════════════════
 //  ADMIN SPA (existing)
 // ══════════════════════════════════════════════════════════
 const adminPath = path.join(__dirname, 'public/admin');
 app.use('/admin', express.static(adminPath));
 app.get('/admin', (req, res) => res.sendFile(path.join(adminPath, 'index.html')));
 app.get('/admin/*path', (req, res) => res.sendFile(path.join(adminPath, 'index.html')));
+
+// ══════════════════════════════════════════════════════════
+//  SERVER-SIDE SEO INJECTION
+//  The page <body> is rendered client-side from Strapi, but search
+//  engines / social scrapers / SEO tools that don't run JS need the
+//  SEO <head> in the RAW HTML (View Source). This reads each page's
+//  HTML, pulls its SEO from Strapi (cached), and injects a real
+//  <title>, meta description, canonical, OpenGraph/Twitter tags, and
+//  JSON-LD (Organization + WebSite + WebPage) before sending.
+// ══════════════════════════════════════════════════════════
+const SEO_SITE_URL = (process.env.SITE_URL || 'https://icsdc.com').replace(/\/+$/, '');
+const SEO_OG_IMAGE = SEO_SITE_URL + '/assets/images/main_logo.png';
+const SEO_ORG_NAME = 'ICSDC';
+const SEO_ORG_ALT = 'Indian Cloud Services & Data Centre';
+
+// clean slug → Strapi single-type. Default convention: `${slug}-page`.
+const SEO_ENDPOINT_OVERRIDES = {
+    home: 'home-page',
+    'nvme-dedicated-servers': 'nvme-dedicated-server-page',
+};
+function seoEndpointForSlug(slug) {
+    return SEO_ENDPOINT_OVERRIDES[slug] || `${slug}-page`;
+}
+
+const seoCache = new Map();              // slug → { value, expires }
+const SEO_TTL = 10 * 60 * 1000;          // 10 min
+
+async function fetchSeo(slug) {
+    const cached = seoCache.get(slug);
+    if (cached && cached.expires > Date.now()) return cached.value;
+    let value = null;
+    try {
+        const endpoint = seoEndpointForSlug(slug);
+        const seoField = endpoint === 'home-page' ? 'SEO' : 'seo';
+        const r = await fetch(`${STRAPI_URL}/api/${endpoint}?populate[${seoField}]=*`, {
+            headers: STRAPI_TOKEN ? { Authorization: `Bearer ${STRAPI_TOKEN}` } : {},
+        });
+        if (r.ok) {
+            const json = await r.json();
+            const data = json && json.data;
+            const seo = data && (data.seo || data.SEO);
+            if (seo) {
+                value = {
+                    title: seo.metaTitle || null,
+                    description: seo.metaDescription || null,
+                    canonicalUrl: seo.canonicalUrl || null,
+                };
+            }
+        }
+    } catch (e) { /* Strapi down / no such page — fall back to static */ }
+    seoCache.set(slug, { value, expires: Date.now() + SEO_TTL });
+    return value;
+}
+
+function seoEsc(s) {
+    return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function seoCanonical(cleanPath, seo) {
+    if (seo && seo.canonicalUrl) {
+        return /^https?:\/\//.test(seo.canonicalUrl)
+            ? seo.canonicalUrl
+            : SEO_SITE_URL + (seo.canonicalUrl.charAt(0) === '/' ? '' : '/') + seo.canonicalUrl;
+    }
+    return SEO_SITE_URL + (cleanPath === '/' ? '/' : cleanPath);
+}
+
+function seoJsonLd(canonical, title, description) {
+    const graph = [
+        {
+            '@type': 'Organization', '@id': SEO_SITE_URL + '/#organization',
+            name: SEO_ORG_NAME, alternateName: SEO_ORG_ALT,
+            url: SEO_SITE_URL, logo: SEO_OG_IMAGE,
+        },
+        {
+            '@type': 'WebSite', '@id': SEO_SITE_URL + '/#website',
+            url: SEO_SITE_URL, name: SEO_ORG_NAME,
+            publisher: { '@id': SEO_SITE_URL + '/#organization' }, inLanguage: 'en',
+        },
+        {
+            '@type': 'WebPage', '@id': canonical + '#webpage',
+            url: canonical, name: title || SEO_ORG_NAME, description: description || '',
+            isPartOf: { '@id': SEO_SITE_URL + '/#website' }, inLanguage: 'en',
+        },
+    ];
+    return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+}
+
+// Read a page HTML file, inject SEO <head>, and send it.
+async function sendPageWithSeo(req, res, filePath, slug, cleanPath) {
+    let html;
+    try {
+        html = await fs.promises.readFile(filePath, 'utf8');
+    } catch (e) {
+        return res.status(404).sendFile(path.join(publicPath, '404.html'));
+    }
+
+    const seo = await fetchSeo(slug);
+
+    const curTitleM = html.match(/<title>([\s\S]*?)<\/title>/i);
+    const curDescM = html.match(/<meta\s+name=["']description["']\s+content=["']([\s\S]*?)["']\s*\/?>/i);
+
+    const title = (seo && seo.title) || (curTitleM && curTitleM[1].trim()) || SEO_ORG_NAME;
+    const description = (seo && seo.description) || (curDescM && curDescM[1].trim()) || '';
+    const canonical = seoCanonical(cleanPath, seo);
+
+    const headTags = [
+        `<link rel="canonical" href="${seoEsc(canonical)}">`,
+        `<meta property="og:type" content="website">`,
+        `<meta property="og:site_name" content="${SEO_ORG_NAME}">`,
+        `<meta property="og:title" content="${seoEsc(title)}">`,
+        `<meta property="og:description" content="${seoEsc(description)}">`,
+        `<meta property="og:url" content="${seoEsc(canonical)}">`,
+        `<meta property="og:image" content="${seoEsc(SEO_OG_IMAGE)}">`,
+        `<meta name="twitter:card" content="summary_large_image">`,
+        `<meta name="twitter:title" content="${seoEsc(title)}">`,
+        `<meta name="twitter:description" content="${seoEsc(description)}">`,
+        `<meta name="twitter:image" content="${seoEsc(SEO_OG_IMAGE)}">`,
+        `<script type="application/ld+json">${seoJsonLd(canonical, title, description)}</script>`,
+    ].join('\n    ');
+
+    // Replace <title>
+    if (curTitleM) html = html.replace(curTitleM[0], `<title>${seoEsc(title)}</title>`);
+    // Replace or insert meta description
+    if (curDescM) {
+        html = html.replace(curDescM[0], `<meta name="description" content="${seoEsc(description)}">`);
+    } else if (description) {
+        html = html.replace(/<\/head>/i, `    <meta name="description" content="${seoEsc(description)}">\n</head>`);
+    }
+    // Inject canonical + OG/Twitter + JSON-LD before </head>
+    html = html.replace(/<\/head>/i, `    ${headTags}\n</head>`);
+
+    res.set('Content-Type', 'text/html; charset=utf-8');
+    res.send(html);
+}
 
 // Redirect .html URLs to clean URLs
 app.use((req, res, next) => {
@@ -815,25 +1088,38 @@ app.use((req, res, next) => {
     next();
 });
 
-// Serve static assets
-app.use(express.static(publicPath));
-
-// Homepage
-app.get('/', (req, res) => {
-    res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-// Legal pages — serve from legal/ subdirectory
-app.get('/legal/:page', (req, res) => {
-    const slug = req.params.page;
-    const filePath = path.join(publicPath, 'legal', `${slug}.html`);
-    fs.access(filePath, fs.constants.F_OK, (err) => {
-        if (err) return res.status(404).sendFile(path.join(publicPath, '404.html'));
-        res.sendFile(filePath);
+// Serve prerendered snapshots to known crawlers (dynamic rendering). Humans fall
+// through to the normal client-rendered app below. Content is identical → not cloaking.
+app.use((req, res, next) => {
+    if (req.method !== 'GET') return next();
+    if (req.path.includes('.')) return next();                       // assets/files → let static handle
+    res.set('Vary', 'User-Agent');                                   // response differs by UA → keep caches honest
+    if (!BOT_UA_RE.test(req.headers['user-agent'] || '')) return next();
+    const file = snapshotFileForPath(req.path);
+    fs.access(file, fs.constants.F_OK, (err) => {
+        if (err) return next();                                       // no snapshot → normal SSR path
+        res.set('X-Prerendered', '1');
+        res.sendFile(file);
     });
 });
 
-// Dynamic routes — gate on page registry cache
+// Serve static assets. index:false so "/" falls through to the SEO-injecting
+// homepage route below instead of static auto-serving index.html.
+app.use(express.static(publicPath, { index: false }));
+
+// Homepage (SEO-injected)
+app.get('/', (req, res) => {
+    sendPageWithSeo(req, res, path.join(publicPath, 'index.html'), 'home', '/');
+});
+
+// Legal pages — serve from legal/ subdirectory (SEO-injected; no Strapi → static
+// title + computed canonical + Organization/WebSite/WebPage JSON-LD)
+app.get('/legal/:page', (req, res) => {
+    const slug = req.params.page;
+    sendPageWithSeo(req, res, path.join(publicPath, 'legal', `${slug}.html`), `legal-${slug}`, `/legal/${slug}`);
+});
+
+// Dynamic routes — gate on page registry cache (SEO-injected)
 app.get('/:page', (req, res) => {
     const slug = req.params.page;
 
@@ -842,13 +1128,7 @@ app.get('/:page', (req, res) => {
         return res.status(404).sendFile(path.join(publicPath, '404.html'));
     }
 
-    const filePath = path.join(publicPath, `${slug}.html`);
-    fs.access(filePath, fs.constants.F_OK, (err) => {
-        if (err) {
-            return res.status(404).sendFile(path.join(publicPath, '404.html'));
-        }
-        res.sendFile(filePath);
-    });
+    sendPageWithSeo(req, res, path.join(publicPath, `${slug}.html`), slug, `/${slug}`);
 });
 
 // ══════════════════════════════════════════════════════════

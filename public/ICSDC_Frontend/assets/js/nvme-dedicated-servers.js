@@ -1,4 +1,5 @@
 import { getNvmeDedicatedServerPage } from './services/contentService.js';
+import { inlineRichText } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -37,7 +38,7 @@ import {
                 ? '<span class="nds-plan-badge">' + plan.badge + '</span>'
                 : '';
             var btnClass = plan.ctaStyle === 'primary' ? 'nds-plan-btn-primary' : 'nds-plan-btn-outline';
-            var btnArrow = plan.ctaStyle === 'primary' ? ' &rarr;' : '';
+            var btnArrow = plan.ctaStyle === 'primary' ? ' ' : '';
 
             var featuresHTML = '';
             if (plan.features && plan.features.length) {
@@ -80,7 +81,7 @@ import {
             return '<div class="nds-when-card">' +
                 '<div class="nds-when-num">' + (item.number || '') + '</div>' +
                 '<h3>' + (item.title || '') + '</h3>' +
-                '<p>' + (item.description || item.desc || '') + '</p>' +
+                '<p>' + inlineRichText(item.description || item.desc || '') + '</p>' +
                 '</div>';
         }).join('');
     }
@@ -104,7 +105,7 @@ import {
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
                 ctaSecondary: page.heroCtaSecondary,
-            heroImage: page.heroImage
+                heroImage: page.heroImage
             });
 
             if (page.heroTopBadge) setHTML(document, '.nds-top-badge', page.heroTopBadge);
