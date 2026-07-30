@@ -230,9 +230,12 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
                    </div>`
                 : '';
 
+            // h3, not h4: these cards sit directly under the section's <h2>, so an
+            // h4 skips a level and fails the heading-order a11y check. The static
+            // markup in index.html and the .floating-card h3 CSS match this.
             card.innerHTML = `
                 ${iconHTML}
-                <h4>${service.title}</h4>
+                <h3>${service.title}</h3>
                 <p>${inlineRichText(service.description || service.desc || '')}</p>
             `;
 

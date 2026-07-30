@@ -76,7 +76,11 @@ html {
     --orange: #f59e0b;
     --text: #1e293b;
     --text-dark: #0a1f44;
-    --muted: #64748b;
+    /* #64748b failed WCAG AA on the site's tinted surfaces (4.40 on #f4f6f9,
+       4.22 on #ebf2fc — both under 4.5). Darkened just enough to clear it on
+       every background this token lands on: #fff 5.19, #f4f6f9 4.80,
+       #ebf2fc 4.61, #f8fafc 4.96. */
+    --muted: #5e6e85;
     --muted-alt: #5f6b85;
     --muted-light: #4c4c4c;
     --border: #e2e8f0;
@@ -1483,7 +1487,7 @@ nav.scrolled {
     stroke: #1a56db;
 }
 
-.floating-card h4 {
+.floating-card h3 {
     font-size: 13px;
     font-weight: 700;
     color: #111827;
@@ -2090,7 +2094,7 @@ nav.scrolled {
         padding: 13px 14px 14px;
     }
 
-    .floating-card h4 {
+    .floating-card h3 {
         font-size: 12.5px;
     }
 
@@ -2214,7 +2218,7 @@ nav.scrolled {
         flex: 1 1 calc(33.33% - 8px);
     }
 
-    .floating-card h4 {
+    .floating-card h3 {
         font-size: 12.5px;
     }
 
@@ -2403,7 +2407,7 @@ nav.scrolled {
         border-radius: 12px;
     }
 
-    .floating-card h4 {
+    .floating-card h3 {
         font-size: 12px;
     }
 

@@ -8,6 +8,15 @@
 :root {
     --wa-green: #25D366;
     --wa-green-dark: #128C7E;
+    /* White text on brand green is only 1.98 — a bad WCAG failure. This is the
+       same hue (142°) darkened until white clears AA (4.88), so it still reads
+       as "WhatsApp green". Use it anywhere green sits behind TEXT; the floating
+       bubble keeps the bright brand colour since it carries only an icon. */
+    --wa-green-text-safe: #17823E;
+    /* Hover/active partner for the above. --wa-green-dark (#128C7E) is only
+       4.14 with white, so hovering used to REDUCE contrast below AA; this goes
+       darker instead, as a hover should. */
+    --wa-green-text-safe-dark: #147136;
     --wa-radius: 16px;
 }
 
@@ -17,7 +26,7 @@
     align-items: center;
     gap: 6px;
     padding: 9px 16px;
-    background: var(--wa-green);
+    background: var(--wa-green-text-safe);
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -33,7 +42,7 @@
 }
 .btn-wa-nav i { font-size: 17px; }
 .btn-wa-nav:hover {
-    background: var(--wa-green-dark);
+    background: var(--wa-green-text-safe-dark);
     transform: translateY(-1px);
     box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
 }
@@ -41,7 +50,7 @@
 
 /* Highlighted state — shown while the popover is open */
 .btn-wa-nav.is-open {
-    background: var(--wa-green-dark);
+    background: var(--wa-green-text-safe-dark);
     box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.35), 0 4px 14px rgba(37, 211, 102, 0.4);
     transform: translateY(0);
     outline: 2px solid rgba(255, 255, 255, 0.6);

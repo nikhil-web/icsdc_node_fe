@@ -9,8 +9,11 @@
     --c-footer-bar: #060a20;
     --c-text-dark: #0a1f44;
     --c-text-mid: #4a5568;
-    --c-text-muted: #64748b;
-    --c-text-light: #94a3b8;
+    /* Both darkened for WCAG AA — see the --muted note in style.css.
+       #94a3b8 was the worst offender on the page at 2.56 on white
+       (.testi-job); #67768b gives 4.62. */
+    --c-text-muted: #5e6e85;
+    --c-text-light: #67768b;
     --c-border: #e2e8f0;
     --c-border-blue: rgba(26, 86, 219, 0.15);
     --c-bg-grey: #f4f6f9;
@@ -498,11 +501,14 @@
 .testi-pagination {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    /* 14px + the 10px dot = a 24px pitch, so the enlarged hit areas below sit
+       edge to edge without overlapping each other. */
+    gap: 14px;
     margin-bottom: 20px;
 }
 
 .testi-dot {
+    position: relative;
     width: 10px;
     height: 10px;
     border-radius: 50%;
@@ -513,6 +519,21 @@
         width 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
         border-radius 0.25s ease,
         transform 0.2s ease;
+}
+
+/* The dot is deliberately a 10px visual, but a 10px tap target fails WCAG
+   2.5.8 (needs 24px). Rather than inflate the dot — the active state animates
+   its width into a pill, so its box IS the design — overlay an invisible 24px
+   target on top. width:100% + min-width keeps the target covering the pill too. */
+.testi-dot::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    min-width: 24px;
+    height: 24px;
 }
 
 .testi-dot:hover {
@@ -1382,7 +1403,9 @@ summary.faq-q::marker {
 .footer-bottom p {
     font-size: 12px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.40);
+    /* 0.40 composited to #6a6c79 on --c-footer-bar (#060a20) = 3.76, under AA.
+       0.50 gives 5.34. */
+    color: rgba(255, 255, 255, 0.50);
     line-height: 1.5;
     margin: 0;
 }
@@ -1399,7 +1422,8 @@ summary.faq-q::marker {
 .footer-legal-links a {
     font-size: 12px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.40);
+    /* Same AA fix as .footer-bottom p above (0.40 -> 3.76 on the footer bar). */
+    color: rgba(255, 255, 255, 0.50);
     text-decoration: none;
     padding: 0 10px;
     border-right: 1px solid rgba(255, 255, 255, 0.15);
@@ -1508,7 +1532,10 @@ summary.faq-q::marker {
     text-transform: uppercase;
     color: var(--blue);
     margin-bottom: 8px;
-    opacity: 0.75;
+    /* 0.75 diluted --blue to #517ee3 = 3.56 on #f4f6f9, and this is 11px text
+       so it needs 4.5. 0.9 gives 4.75. (Same fix as the duplicate definition
+       of this class in cloud-components.css.) */
+    opacity: 0.9;
 }
 
 /* ── Power Grid (12-feature) ── */

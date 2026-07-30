@@ -870,7 +870,7 @@ export function initTestimonials(items) {
             '<p class="testi-job">' + (t.title || '') + '</p>' +
             '<p class="testi-company">' + (t.company || '') + '</p>' +
             '</div>' +
-            '<div class="testi-rating" aria-label="Rating: ' + (t.rating || 5) + ' out of 5 stars">' + stars + '</div>' +
+            '<div role="img" class="testi-rating" aria-label="Rating: ' + (t.rating || 5) + ' out of 5 stars">' + stars + '</div>' +
             '</div>' +
             '<div class="testi-right">' +
             '<blockquote class="testi-quote">' + inlineRichText(t.quote || '') + '</blockquote>' +
