@@ -165,7 +165,7 @@ body:has(.builder-preview-banner) nav {
    lost that tie and the 760px measure was never applied. */
 .container.blogh-inner,
 .container.blogb-inner {
-    max-width: 760px;          /* comfortable reading measure */
+    max-width: 900px;          /* comfortable reading measure */
 }
 
 .blogh-kicker {
