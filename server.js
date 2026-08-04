@@ -1317,6 +1317,29 @@ function setStaticCacheHeaders(res, filePath) {
     }
 }
 
+// ── Minified assets (scripts/build.js) ────────────────────
+// build/ICSDC_Frontend mirrors public/ICSDC_Frontend but contains ONLY minified
+// .css/.js. Mounting it first means those win; everything else (images, HTML,
+// the prerendered snapshots) finds no match here and falls through to the
+// source mount below, so the build never has to copy binary assets.
+//
+// Skipped in development: a build/ left over from an earlier run would other-
+// wise shadow live edits to CSS/JS and silently serve stale code. npm run dev
+// sets NODE_ENV=development for exactly this reason. If build/ is absent the
+// mount is simply never registered and the site serves unminified sources —
+// so a missing or failed build degrades to "slower", never to "broken".
+const BUILD_DIR = path.join(__dirname, 'build/ICSDC_Frontend');
+const useMinified = process.env.NODE_ENV !== 'development' && fs.existsSync(BUILD_DIR);
+if (useMinified) {
+    app.use(express.static(BUILD_DIR, { index: false, setHeaders: setStaticCacheHeaders }));
+    console.log('[static] serving minified CSS/JS from build/ICSDC_Frontend');
+} else {
+    console.log(
+        '[static] serving unminified sources' +
+        (process.env.NODE_ENV === 'development' ? ' (development)' : ' — run `npm run build` to minify')
+    );
+}
+
 // Serve static assets. index:false so "/" falls through to the SEO-injecting
 // homepage route below instead of static auto-serving index.html.
 app.use(express.static(publicPath, { index: false, setHeaders: setStaticCacheHeaders }));

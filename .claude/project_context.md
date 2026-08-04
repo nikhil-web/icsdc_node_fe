@@ -10,7 +10,9 @@ Full cross-repo overview lives in `../../CLAUDE.md` (parent `icsdc/` folder, not
 
 An Express 5 server (`server.js`) that fronts a ~50-page static HTML marketing site. Content is authored in a separate Strapi 5 CMS (`../../icsdc backend/ICSDC_Backend`) and hydrated into the HTML client-side.
 
-No build step, no framework. Vanilla ES modules + plain CSS.
+No framework. Vanilla ES modules + plain CSS, served directly — the only build
+step is `npm run build`, which minifies CSS/JS in place-of-tree into `build/`
+without bundling (see "Minification" below).
 
 ---
 
@@ -68,6 +70,26 @@ The HTML already contains the full section markup with empty/placeholder text. J
 - **Snapshots go stale.** Any content or markup change needs `node prerender.js` (or the `/admin/prerender` button) or crawlers keep seeing the old page.
 
 ---
+
+## Minification
+
+`npm run build` -> `scripts/build.js`. Uses esbuild's **transform** API one file
+at a time: no module resolution, no bundling, no format conversion. That is
+deliberate — HTML references `assets/js/<page>.js` directly and modules import
+by relative path, so anything that rewrote specifiers would mean editing ~50
+HTML files.
+
+- Output mirrors the source tree into `build/ICSDC_Frontend`, so `./utils/x.js`
+  and `url("../images/y.webp")` resolve unchanged.
+- `server.js` mounts `build/` before `public/`; images, HTML and the
+  `prerendered/` snapshots find no match and fall through to source.
+- Sources are never modified. `build/` is gitignored and disposable.
+- Dev never serves it (`NODE_ENV=development`), so a stale build cannot shadow
+  a live edit — a footgun worth keeping in mind if you ever change that gate.
+- `public/admin` is excluded on purpose (see `server.js:979`).
+
+Measured: 1837 KB -> 1002 KB (-45.5%) across 123 files; mobile Lighthouse
+performance 70 -> 79, TTI -2.4s.
 
 ## Local setup
 
