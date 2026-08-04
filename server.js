@@ -1163,8 +1163,14 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
 
     const headTags = [
         // Preload first: it's only useful if the browser sees it early.
+        // `media` matters: style.css hides .hero-right below 1366px, so on phones
+        // and tablets this image is never painted. An unconditional preload still
+        // downloads it at high priority there (measured: a 771 KB PNG fetched and
+        // decoded while display:none), stealing bandwidth from the real mobile LCP.
+        // Gating on the same breakpoint keeps the desktop LCP win without the
+        // mobile cost. Keep this query in sync with the .hero-right rule in style.css.
         ...(seo && seo.heroImageUrl
-            ? [`<link rel="preload" as="image" fetchpriority="high" href="${seoEsc(seo.heroImageUrl)}">`]
+            ? [`<link rel="preload" as="image" fetchpriority="high" media="(min-width: 1366px)" href="${seoEsc(seo.heroImageUrl)}">`]
             : []),
         `<link rel="canonical" href="${seoEsc(canonical)}">`,
         `<meta property="og:type" content="website">`,

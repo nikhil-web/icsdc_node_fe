@@ -14,10 +14,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/assets/images/main_logo_icon.png">
     <title>ICSDC - Scalable Fortified Cloud</title>
+    <!-- Warm up the two third-party origins before the requests are discovered.
+         Both serve render-blocking CSS; the TLS+DNS handshake alone was ~300ms. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <!-- Font Awesome is icons only — nothing above the fold depends on it, and it
+         was costing ~1.5s of blocked render. Load it non-blocking: the print media
+         type keeps it out of the critical path, then onload promotes it to all. -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        crossorigin="anonymous">
+        crossorigin="anonymous" media="print" onload="this.media='all';this.onload=null">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+            crossorigin="anonymous">
+    </noscript>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/homepage-extras.css">
@@ -82,7 +95,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <main id="main-content">
 
     <!-- HERO -->
-    <section class="hero-section">
+    <section class="hero-section hero-section--home">
         <div class="hero">
             <div class="hero-content">
                 <h1 data-strapi="mainHeading" class="hero-title"></h1>

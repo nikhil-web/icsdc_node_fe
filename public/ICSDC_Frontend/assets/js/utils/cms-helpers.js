@@ -446,7 +446,13 @@ export function populateHero(section, data) {
     if (data.heroImage && data.heroImage.image) {
         var heroRight = section.querySelector('.hero-right');
         var heroImg = heroRight && heroRight.querySelector('.hero-right-image');
-        if (heroImg) {
+        // Below 1366px style.css sets .hero-right { display: none }, but assigning
+        // .src still downloads and decodes the image. On the homepage that is a
+        // 771 KB PNG fetched purely to be invisible. Skip the assignment when the
+        // container isn't rendered; the server-side preload is gated on the same
+        // breakpoint. Pages that swap in a hero form set --has-form and stay visible.
+        var heroVisible = heroRight && getComputedStyle(heroRight).display !== 'none';
+        if (heroImg && heroVisible) {
             var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
             var _m = data.heroImage.image;
             var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)

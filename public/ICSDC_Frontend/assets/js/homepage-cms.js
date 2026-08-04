@@ -77,8 +77,14 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
         setText('[data-strapi="priceNote"]', params.priceNote);
 
         if (params.heroImage && params.heroImage.image) {
-            const img = document.querySelector('.hero-right .hero-right-image');
-            if (img) {
+            const heroRight = document.querySelector('.hero-right');
+            const img = heroRight && heroRight.querySelector('.hero-right-image');
+            // style.css hides .hero-right below 1366px. Assigning .src there still
+            // downloads and decodes the image — a 771 KB PNG fetched to be invisible
+            // on every phone and tablet. Skip it when the container isn't rendered;
+            // the server-side preload (heroPreloadUrl) is gated on the same breakpoint.
+            const heroVisible = heroRight && getComputedStyle(heroRight).display !== 'none';
+            if (img && heroVisible) {
                 // LCP element. The server preloads this same URL (heroPreloadUrl
                 // in server.js, which also picks the 'large' format) — these hints
                 // keep it ahead of below-fold images in the fetch queue.

@@ -1005,6 +1005,19 @@ nav.scrolled {
     align-items: baseline;
     gap: 4px;
     letter-spacing: -0.03em;
+    /* CLS guard: the price text is injected by populateHero() after the Strapi
+       fetch. Without a reserved line box this collapses to the height of the
+       "/mo" unit alone, then jumps once hydrated — measured at +94px on a
+       375px viewport, which was ~all of the page's 0.519 CLS. 1.65em == one
+       line at the computed line-height. */
+    min-height: 1.65em;
+}
+
+/* The homepage price string ("Cloud Hosting Starts at ₹…") wraps to two lines
+   at every viewport width, so it needs a two-line reservation. Scoped to the
+   homepage — service-page prices are short and would get dead whitespace. */
+.hero-section--home .hero-price {
+    min-height: 3.3em;
 }
 
 .price-unit {
