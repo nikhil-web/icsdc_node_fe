@@ -909,6 +909,31 @@ nav.scrolled {
     transform: scale3d(1.5, 1.5, 1.5) translateX(-50px) translateY(135px);
 }
 
+/* Drop the decorative backdrop on phones.
+   This artwork is the LCP resource: the LCP element is div.hero, and what paints
+   it is this ::before layer, not the (server-rendered) hero text. Because it
+   arrives via a CSS background it is invisible to the preload scanner —
+   `lcp-discovery-insight` fails "Request is discoverable in initial document"
+   and "fetchpriority=high should be applied" — and it cannot even be requested
+   until style.css has parsed.
+
+   Measured by ablation on 3-run medians: removing it takes LCP 8.0s -> 6.2s
+   (-1.8s) with FCP and Speed Index unchanged. Preloading it instead was tried
+   and made things WORSE (SI +2.0s, score 70 -> 63): the critical path here is
+   bandwidth-bound on ~129KB of render-blocking CSS, so fetching 258KB earlier
+   at high priority just starves the stylesheets. Only removing bytes helps.
+
+   At 1920x750 it is ~3x oversized for a 412px viewport, and at scale3d(1.5)
+   with translateX/Y most of it is off-canvas on a phone. The correct long-term
+   fix is a downscaled mobile derivative, which needs a webp encoder this
+   machine does not have (no cwebp / Pillow, and sips cannot write webp).
+   Desktop and tablet are untouched. */
+@media (max-width: 767px) {
+    .hero::before {
+        display: none;
+    }
+}
+
 .hero>* {
     position: relative;
     z-index: 1;
@@ -934,14 +959,21 @@ nav.scrolled {
     animation: heroEnterRight 0.9s var(--ease-out-expo);
 }
 
+/* Deliberately animates transform ONLY — no opacity.
+   .hero-content wraps .hero-desc, which is the LCP element on mobile (84,645px²
+   in a 412px viewport, ~2.2x the next largest). Chrome does not record an LCP
+   candidate for content painted at opacity 0, so fading the wrapper in pushed LCP
+   out behind this animation on top of the already-late render-blocking CSS —
+   measured 9.4s. Sliding without fading keeps the entrance motion while the text
+   is paintable from the first frame. The paired heroEnterRight below still fades
+   because .hero-right is display:none under 1366px and is not an LCP candidate
+   there; on desktop the hero image is preloaded, so it is not gated on this. */
 @keyframes heroEnter {
     from {
-        opacity: 0;
         transform: translateY(20px);
     }
 
     to {
-        opacity: 1;
         transform: translateY(0);
     }
 }

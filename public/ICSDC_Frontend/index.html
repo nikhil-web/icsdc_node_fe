@@ -31,17 +31,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
+
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <!-- Font Awesome is icons only — nothing above the fold depends on it, so it
-         must not block first paint (it was costing ~1.5s).
-         Use rel=preload as=style, NOT the media="print" trick: media="print"
-         demotes the request to VeryLow priority, and Lighthouse's Lantern
-         simulator then models it as arriving very late, which inflated simulated
-         LCP from 5.2s to 9.1s even though observed LCP improved. preload as=style
-         is fetched at High priority and is still non-render-blocking. -->
+         must not block first paint (it was costing ~1.5s of the render-blocking
+         budget). media="print" + onload keeps it off the critical path.
+         The obvious alternative, rel=preload as=style, was A/B'd on 3-run medians
+         and measured WORSE on every metric (FCP 3.4s vs 3.1s, LCP 8.0s vs 7.7s,
+         SI 3.4s vs 3.1s): as=style fetches at High priority, so FA's ~268KB of
+         webfonts then compete with the render-blocking CSS. Keep media="print". -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         crossorigin="anonymous" media="print" onload="this.media='all';this.onload=null">
+    <!-- media="print" needs JS to promote it, so JS-off clients get the plain sheet. -->
     <noscript>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
             crossorigin="anonymous">
