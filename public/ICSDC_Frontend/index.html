@@ -49,23 +49,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/homepage-extras.css">
-    <!-- dark-mode.css is 42KB and `unused-css-rules` reports 41KB of it unused on a
-         light-theme load, yet it was render-blocking for everyone. Gating it on the
-         media query makes it non-render-blocking for light-theme visitors while
-         dark-OS visitors still block on it (they need it before first paint).
-         The script below reconciles the manual override: theme-init resolves
-         `localStorage('icsdc-theme') || system`, so a saved choice must win over
-         the OS preference. Both run synchronously in <head>, before first paint. -->
-    <link rel="stylesheet" href="assets/css/dark-mode.css" media="(prefers-color-scheme: dark)"
-        id="icsdc-dark-css">
-    <script>
-        (function () {
-            var saved = localStorage.getItem('icsdc-theme');
-            if (saved !== 'dark' && saved !== 'light') return;   // no override — media query decides
-            var l = document.getElementById('icsdc-dark-css');
-            if (l) l.media = saved === 'dark' ? 'all' : 'not all';
-        })();
-    </script>
+    <!-- NOTE: do NOT gate this file behind (prefers-color-scheme: dark).
+         Despite its name, dark-mode.css is not purely dark overrides — it also
+         carries the BASE styling for #theme-toggle, .mobile-theme-toggle and
+         friends (~8 unprefixed rule blocks, e.g. the toggle's 40x40 box at
+         dark-mode.css:153). Loading it conditionally leaves those controls
+         unstyled in light mode, which regressed the `target-size` audit onto
+         #theme-toggle. `unused-css-rules` flags 41KB of this file as unused on a
+         light load, but the fix for that is to split the base rules out into
+         components.css first — not to skip the download. -->
+    <link rel="stylesheet" href="assets/css/dark-mode.css">
 </head>
 
 <body>
