@@ -1071,6 +1071,19 @@ async function fetchSeo(slug) {
             }
             const heroUrl = heroPreloadUrl(data);
             if (heroUrl) value = Object.assign(value || {}, { heroImageUrl: heroUrl });
+
+            // Hero copy for server-side injection. These are plain scalar columns
+            // on home-page, so they already arrive with the SEO request above — no
+            // extra populate and no extra round-trip. Service pages keep their copy
+            // inside a `hero` component that this query doesn't populate, so they
+            // simply get no heroText and fall through to client rendering unchanged.
+            if (data) {
+                const heroText = {};
+                for (const k of HERO_TEXT_FIELDS) {
+                    if (typeof data[k] === 'string' && data[k].trim()) heroText[k] = data[k];
+                }
+                if (Object.keys(heroText).length) value = Object.assign(value || {}, { heroText });
+            }
         }
     } catch (e) { /* Strapi down / no such page — fall back to static */ }
     seoCache.set(slug, { value, expires: Date.now() + SEO_TTL });
@@ -1081,6 +1094,53 @@ function seoEsc(s) {
     return String(s == null ? '' : s)
         .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
         .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ── Server-side hero copy ─────────────────────────────────
+   The homepage hero ships with empty [data-strapi] elements that only fill in
+   after main.js runs AND the Strapi fetch resolves. Two consequences Lighthouse
+   measures directly:
+     - LCP: the largest text block does not exist in the initial HTML, so the
+       paint waits on the whole JS + network chain (measured 9.1s simulated).
+     - CLS: ~396px of copy appears at once and shoves the page down (0.437,
+       reported against .hero-price-container, the element that gets pushed).
+   This server already holds the page's Strapi payload for the SEO <head>, so it
+   can write that same copy into the body for free.
+
+   The three helpers below mirror homepage-cms.js `setText` EXACTLY — same
+   RICH_HTML_RE, same inlineRichText transform — so when the client later writes
+   the identical string it is a no-op and cannot introduce a second shift. */
+const HERO_TEXT_FIELDS = ['mainHeading', 'subHeading', 'description', 'price', 'priceNote'];
+
+// Mirrors RICH_HTML_RE in assets/js/utils/cms-helpers.js
+const SEO_RICH_HTML_RE = /<\/?(p|a|strong|em|b|i|u|br|ul|ol|li|h[1-6]|blockquote|span)\b/i;
+
+// Mirrors inlineRichText() in assets/js/utils/cms-helpers.js
+function seoInlineRichText(html) {
+    if (html == null) return html;
+    return String(html)
+        .replace(/<\/p>\s*<p[^>]*>/gi, '<br><br>')
+        .replace(/^\s*<p[^>]*>/i, '')
+        .replace(/<\/p>\s*$/i, '')
+        .trim();
+}
+
+/* Fill empty <tag data-strapi="key"></tag> elements in place. Only ever writes
+   into a tag that is genuinely empty, so hand-authored fallback copy on other
+   pages is never clobbered. */
+function injectHeroText(html, heroText) {
+    if (!heroText) return html;
+    for (const key of HERO_TEXT_FIELDS) {
+        const raw = heroText[key];
+        if (!raw) continue;
+        const body = SEO_RICH_HTML_RE.test(raw) ? seoInlineRichText(raw) : seoEsc(raw);
+        // (open tag with this data-strapi key)(immediately-closing same tag)
+        const re = new RegExp(
+            '(<([a-zA-Z][\\w-]*)\\b[^>]*\\bdata-strapi="' + key + '"[^>]*>)\\s*(</\\2>)'
+        );
+        html = html.replace(re, (m, open, _tag, close) => open + body + close);
+    }
+    return html;
 }
 
 function seoCanonical(cleanPath, seo) {
@@ -1196,6 +1256,10 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     }
     // Inject canonical + OG/Twitter + JSON-LD before </head>
     html = html.replace(/<\/head>/i, `    ${headTags}\n</head>`);
+
+    // Write the hero copy into the body so the LCP text exists in the initial
+    // HTML and the page does not reflow when the client hydrates.
+    if (seo && seo.heroText) html = injectHeroText(html, seo.heroText);
 
     res.set('Content-Type', 'text/html; charset=utf-8');
     // Explicit, because "no Cache-Control" is not the same as "don't cache":

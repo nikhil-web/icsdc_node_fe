@@ -21,7 +21,8 @@ export function getFooterHTML() {
 
                 <div class="footer-brand-left">
                     <a href="/" aria-label="ICSDC Home" class="footer-logo-link">
-                        <img data-strapi-logo src="" alt="ICSDC" class="footer-logo">
+                        <img data-strapi-logo src="" alt="ICSDC" class="footer-logo"
+                            width="800" height="667" loading="lazy" decoding="async">
                     </a>
                     <address class="footer-address">
                         <span data-strapi-footer-address></span>

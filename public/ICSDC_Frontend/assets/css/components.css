@@ -1426,13 +1426,30 @@ summary.faq-q::marker {
     color: rgba(255, 255, 255, 0.50);
     text-decoration: none;
     padding: 0 10px;
-    border-right: 1px solid rgba(255, 255, 255, 0.15);
     line-height: 1;
     transition: color 0.18s;
+    /* WCAG 2.5.8 / Lighthouse `target-size`: at font-size 12px with line-height 1
+       and no vertical padding these anchors were only ~12px tall, under the 24px
+       minimum. inline-flex + min-height grows the hit area without moving the
+       text, which stays vertically centred. */
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    position: relative;
 }
 
-.footer-legal-links a:last-child {
-    border-right: none;
+/* The separator was previously this anchor's border-right, which would now
+   stretch to the full 24px target and read as a much heavier rule. Drawing it as
+   a centred 12px pseudo-element keeps the divider looking exactly as before. */
+.footer-legal-links a:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .footer-legal-links a:hover {
