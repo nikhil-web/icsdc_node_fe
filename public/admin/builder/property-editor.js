@@ -10,7 +10,7 @@
  * the section preview.
  */
 
-import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js';
+import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js?v=6';
 import { pickMedia } from './media-picker.js';
 
 let activeSection = null;

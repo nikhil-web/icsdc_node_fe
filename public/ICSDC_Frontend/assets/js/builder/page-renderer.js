@@ -11,7 +11,11 @@
  * (width / align / background / padding / columns) — see builder-layout.css.
  */
 
-import { COMPONENT_REGISTRY } from './componentRegistry.js';
+// ?v= matters here, not just on the <script> tag in builder-template.html:
+// bumping the version on THIS file doesn't invalidate its imports (same URL →
+// served from cache), so an edit to componentRegistry.js alone would sit behind
+// its 24h Cache-Control for returning visitors. Bump this when that file changes.
+import { COMPONENT_REGISTRY } from './componentRegistry.js?v=6';
 import { hidePageLoader } from '../utils/cms-helpers.js';
 
 function setMeta(name, value) {
@@ -157,6 +161,7 @@ async function fetchPage(slug, previewToken) {
 
     // URL forms:
     //   /<slug>                      (top-level builder page)
+    //   /blogs/<slug>                (blog post — see server.js isBlogSlug())
     //   /builder/<slug>              (legacy)
     //   /builder/preview/<slug>?token=…
     const parts = window.location.pathname.split('/').filter(Boolean);
@@ -167,6 +172,8 @@ async function fetchPage(slug, previewToken) {
         slug = parts[2];
     } else if (parts[0] === 'builder' && parts[1]) {
         slug = parts[1];
+    } else if (parts[0] === 'blogs' && parts[1]) {
+        slug = parts[1];                              // /blogs/<slug>
     } else if (parts.length === 1 && parts[0]) {
         slug = parts[0];                              // top-level /<slug>
     } else {

@@ -1700,12 +1700,10 @@ const blogHeader = {
         const meta = [p.publishDate, p.readTime].filter(Boolean)
             .map((m) => '<span>' + esc(m) + '</span>').join('<span class="blogh-dot">·</span>');
 
-        container.innerHTML =
-            '<section class="section blogh-section">' +
-            '<div class="container blogh-inner">' +
-            (p.category ? '<span class="blogh-kicker">' + esc(p.category) + '</span>' : '') +
-            '<h1 class="blogh-title">' + esc(p.title || '') + '</h1>' +
-            (p.excerpt ? '<p class="blogh-excerpt">' + esc(p.excerpt) + '</p>' : '') +
+        // Byline sits AFTER the cover image: kicker → title → excerpt → cover →
+        // author/date. Keeping the headline and its standfirst together, then
+        // letting the image land, reads better than splitting them with a byline.
+        const byline =
             '<div class="blogh-byline">' +
             avatar +
             '<div class="blogh-byline-text">' +
@@ -1713,10 +1711,18 @@ const blogHeader = {
             (p.authorRole ? '<span class="blogh-role">' + esc(p.authorRole) + '</span>' : '') +
             '</div>' +
             (meta ? '<div class="blogh-meta">' + meta + '</div>' : '') +
-            '</div>' +
+            '</div>';
+
+        container.innerHTML =
+            '<section class="section blogh-section">' +
+            '<div class="container blogh-inner">' +
+            (p.category ? '<span class="blogh-kicker">' + esc(p.category) + '</span>' : '') +
+            '<h1 class="blogh-title">' + esc(p.title || '') + '</h1>' +
+            (p.excerpt ? '<p class="blogh-excerpt">' + esc(p.excerpt) + '</p>' : '') +
             (p.coverImage
                 ? '<figure class="blogh-cover"><img src="' + esc(p.coverImage) + '" alt="' + esc(p.coverAlt || '') + '"></figure>'
                 : '') +
+            byline +
             '</div>' +
             '</section>';
     },
@@ -1726,9 +1732,20 @@ const blogHeader = {
 const blogBody = {
     label: 'Article Body',
     icon: 'info',
-    description: 'The article itself, written in a full rich-text editor (headings, lists, links, quotes, images).',
+    description: 'The article itself, written in a full rich-text editor (headings, lists, links, quotes, images). Optional contents rail and promo card fill the side margins.',
     schema: [
         { key: 'body', label: 'Article Content', type: 'richtext' },
+        { key: 'showToc', label: 'Show "On this page" contents rail', type: 'toggle', default: true },
+        { key: 'showSidebar', label: 'Show side promo card', type: 'toggle', default: true },
+        { key: 'sidebarTitle', label: 'Promo Title', type: 'text' },
+        { key: 'sidebarText', label: 'Promo Text', type: 'textarea' },
+        {
+            key: 'sidebarCta', label: 'Promo Button', type: 'cta',
+            fields: [
+                { key: 'text', label: 'Button Text', type: 'text' },
+                { key: 'link', label: 'URL', type: 'text' },
+            ]
+        },
     ],
     defaultProps: {
         body: '<p>Start writing your article here. Use the toolbar above to add headings, lists, links, quotes and images.</p>' +
@@ -1736,18 +1753,138 @@ const blogBody = {
               '<p>Break the article into sections so it stays easy to scan. Keep paragraphs short and lead with the point.</p>' +
               '<ul><li>Bullet lists work well for specifics</li><li>So do short, concrete examples</li></ul>' +
               '<blockquote>Pull out a quote when you want a line to land.</blockquote>',
+        showToc: true,
+        showSidebar: true,
+        sidebarTitle: 'Need hosting that keeps up?',
+        sidebarText: 'Talk to our team about a plan sized to your traffic, budget and growth.',
+        sidebarCta: { text: 'View Plans', link: '/pricing' },
     },
     renderer(container, p) {
+        // Toggles default ON — `undefined` means "prop never set" (older posts
+        // created before these fields existed), which should still get the rails.
+        const showToc = p.showToc !== false;
+        const showSidebar = p.showSidebar !== false;
+
+        // Mirrors the /legal/* TOC markup (aside > details > summary + ul), which
+        // already solves the mobile-collapse case. NOTE: a bare <nav> here is a
+        // trap — style.css styles the element itself (`nav { position: fixed;
+        // top: 0; z-index: 1000 }`) for the site navbar, so a <nav> in the rail
+        // gets ripped out and pinned over the header. Plain <ul> only.
+        const tocHtml = showToc
+            ? '<aside class="blogb-toc" data-blogb-toc hidden aria-label="On this page">' +
+              '<details class="blogb-toc-collapsed" open>' +
+              '<summary>On this page</summary>' +
+              '<p class="blogb-toc-title">Contents</p>' +
+              '<ul class="blogb-toc-list"></ul>' +
+              '</details>' +
+              '</aside>'
+            : '<div></div>';
+
+        // defaultProps only seed NEWLY created sections — posts saved before these
+        // fields existed have them undefined, which rendered an empty bordered box.
+        // Fall back to the same copy defaultProps uses so old posts look right too.
+        const sideTitle = p.sidebarTitle || 'Need hosting that keeps up?';
+        const sideText = p.sidebarText || 'Talk to our team about a plan sized to your traffic, budget and growth.';
+        const ctaText = (p.sidebarCta && p.sidebarCta.text) || 'View Plans';
+        const ctaLink = (p.sidebarCta && p.sidebarCta.link) || '/pricing';
+        const sidebarHtml = showSidebar
+            ? '<aside class="blogb-side">' +
+              '<div class="blogb-promo">' +
+              '<h3>' + esc(sideTitle) + '</h3>' +
+              '<p>' + esc(sideText) + '</p>' +
+              '<a class="btn-primary blogb-promo-btn" href="' + esc(ctaLink) + '">' + esc(ctaText) + '</a>' +
+              '</div>' +
+              '</aside>'
+            : '<div></div>';
+
         // NOTE: deliberately NOT inlineRichText() — that collapses <p> blocks into
         // <br><br>, which is right for one-line CMS fields but destroys an article.
         container.innerHTML =
             '<section class="section blogb-section">' +
             '<div class="container blogb-inner">' +
+            tocHtml +
             '<article class="blogb-body">' + (p.body || '') + '</article>' +
+            sidebarHtml +
             '</div>' +
             '</section>';
+
+        if (showToc) buildBlogToc(container);
     },
 };
+
+/* Builds the "On this page" rail from the article's own h2/h3 headings.
+   Done here rather than in the editor because the body is free-form rich text —
+   headings have no ids until we assign them. Runs for both the live page and the
+   builder canvas, so what an editor previews is what ships. */
+function buildBlogToc(container) {
+    const body = container.querySelector('.blogb-body');
+    const aside = container.querySelector('[data-blogb-toc]');
+    const list = aside && aside.querySelector('.blogb-toc-list');
+    if (!body || !list) return;
+
+    const headings = Array.from(body.querySelectorAll('h2, h3'));
+    // One or two headings isn't a table of contents — leave the rail hidden and
+    // let the article use the space instead.
+    if (headings.length < 2) return;
+
+    const used = Object.create(null);
+    const links = headings.map((h) => {
+        const text = (h.textContent || '').trim();
+        if (!text) return '';
+        let id = h.id || text.toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .trim().replace(/\s+/g, '-')
+            .slice(0, 60);
+        if (!id) id = 'section';
+        // Duplicate headings are common ("Overview" twice) — suffix so anchors stay unique.
+        if (used[id]) { used[id] += 1; id = id + '-' + used[id]; } else { used[id] = 1; }
+        h.id = id;
+        return '<li class="blogb-toc-' + h.tagName.toLowerCase() + '">' +
+               '<a class="blogb-toc-link" href="#' + id + '">' + esc(text) + '</a></li>';
+    }).join('');
+
+    list.innerHTML = links;
+    aside.hidden = false;
+
+    // Deliberately NO preventDefault/scrollTo here: style.css already sets
+    // `html { scroll-behavior: smooth }` globally and the headings carry
+    // `scroll-margin-top` (builder-page.css), so the plain anchor jump is both
+    // smooth AND clears the fixed navbar. Doing it in JS as well only adds a
+    // path that can silently fail (and breaks middle-click / open-in-new-tab).
+    list.querySelectorAll('.blogb-toc-link').forEach((a) => {
+        a.addEventListener('click', () => {
+            // Collapse the accordion again on mobile, where it sits above the article.
+            const details = a.closest('details.blogb-toc-collapsed');
+            if (details && window.innerWidth < 1025) details.open = false;
+        });
+    });
+
+    // Highlight the section you're currently reading.
+    if (typeof IntersectionObserver !== 'function') return;
+    const linkFor = {};
+    list.querySelectorAll('.blogb-toc-link').forEach((a) => {
+        linkFor[a.getAttribute('href').slice(1)] = a;
+    });
+    let currentId = null;
+    const observer = new IntersectionObserver((entries) => {
+        // Pick the TOP-MOST intersecting heading, not simply the last entry in
+        // the batch — an h2 and its first h3 are often in the band together, and
+        // "last wins" made the sub-heading beat its own parent. Same approach as
+        // legal.js's TOC.
+        let topMost = null;
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            if (!topMost || entry.boundingClientRect.top < topMost.boundingClientRect.top) topMost = entry;
+        });
+        if (!topMost || topMost.target.id === currentId) return;
+        currentId = topMost.target.id;
+        const a = linkFor[currentId];
+        if (!a) return;
+        list.querySelectorAll('.blogb-toc-active').forEach((el) => el.classList.remove('blogb-toc-active'));
+        a.classList.add('blogb-toc-active');
+    }, { rootMargin: '-96px 0px -70% 0px' });
+    headings.forEach((h) => { if (h.id) observer.observe(h); });
+}
 
 /* ════ EXPORT ════════════════════════════════════════════════ */
 export const COMPONENT_REGISTRY = {

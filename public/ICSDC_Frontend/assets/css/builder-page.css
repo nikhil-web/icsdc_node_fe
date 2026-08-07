@@ -28,7 +28,8 @@
    - Image side configurable via .builder-hero-img-left / -img-right
    ══════════════════════════════════════════════════════════ */
 .builder-hero {
-    min-height: calc(100vh - 80px); /* full screen minus nav */
+    min-height: calc(100vh - 80px);
+    /* full screen minus nav */
     display: flex;
     align-items: center;
 }
@@ -47,10 +48,21 @@
 }
 
 /* Default = image left, content right. Flip via order when imageSide='right'. */
-.builder-hero-img-right .hero-right { order: 2; }
-.builder-hero-img-right .hero-content { order: 1; }
-.builder-hero-img-left  .hero-right { order: 1; }
-.builder-hero-img-left  .hero-content { order: 2; }
+.builder-hero-img-right .hero-right {
+    order: 2;
+}
+
+.builder-hero-img-right .hero-content {
+    order: 1;
+}
+
+.builder-hero-img-left .hero-right {
+    order: 1;
+}
+
+.builder-hero-img-left .hero-content {
+    order: 2;
+}
 
 .builder-hero .hero-right-image {
     width: 100%;
@@ -100,26 +112,68 @@
     .builder-hero {
         min-height: auto;
     }
+
     .builder-hero .hero {
         grid-template-columns: 1fr;
     }
-    .builder-hero-img-left  .hero-right,
+
+    .builder-hero-img-left .hero-right,
     .builder-hero-img-right .hero-right {
         order: 0;
     }
-    .builder-hero-img-left  .hero-content,
+
+    .builder-hero-img-left .hero-content,
     .builder-hero-img-right .hero-content {
         order: 1;
     }
-    .builder-hero .hero-right-image { margin: 0 auto; }
+
+    .builder-hero .hero-right-image {
+        margin: 0 auto;
+    }
 }
 
 /* Section spacing inside the builder root — ensure CTAs and section blocks aren't
    crammed against each other when sections are stacked back-to-back. */
-#builder-page-root > div + div { margin-top: 0; }
+#builder-page-root>div+div {
+    margin-top: 0;
+}
+
 #builder-page-root .section,
 #builder-page-root .faq-section,
-#builder-page-root .cloud-cta-band { padding-top: 60px; padding-bottom: 60px; }
+#builder-page-root .cloud-cta-band {
+    padding-top: 60px;
+    padding-bottom: 0px;
+}
+
+/* blogHeader is always the first (and effectively "hero") section of a blog
+   post, but the generic 60px above isn't enough to clear the fixed nav
+   (--nav-height: 72px) — the eyebrow/title rendered underneath it. The site's
+   real .hero already solves this the same way (style.css: padding: calc(
+   var(--nav-height) + 24px) ...); blogh-section just needed the same treatment,
+   since it goes through the generic .section rule instead. */
+#builder-page-root .blogh-section {
+    padding-top: calc(var(--nav-height, 72px) + 32px);
+}
+
+/* Builder sections never had a mobile padding reduction (unlike style.css's own
+   .section, which drops 70px->60px under 767px) — barely visible when sections
+   are full of content, but blogHeader/blogBody are two separate .section
+   elements, so their 60px-bottom + 60px-top stack into a flat 120px gap right
+   after the cover image. Same raw gap on every screen size, so it reads as far
+   more disproportionate on a narrow phone than on desktop. */
+@media (max-width: 767px) {
+
+    #builder-page-root .section,
+    #builder-page-root .faq-section,
+    #builder-page-root .cloud-cta-band {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    #builder-page-root .blogh-section {
+        padding-top: calc(var(--nav-height, 72px) + 20px);
+    }
+}
 
 /* Anchor styling for plan card CTAs (avoid default underlines) */
 #builder-page-root .wp-plan-btn {
@@ -149,7 +203,9 @@
     gap: 10px;
 }
 
-.builder-preview-banner i { font-size: 14px; }
+.builder-preview-banner i {
+    font-size: 14px;
+}
 
 body:has(.builder-preview-banner) nav {
     top: 36px;
@@ -163,9 +219,216 @@ body:has(.builder-preview-banner) nav {
    the element also carries `.container`, and style.css's `.section .container`
    rule (two classes too) has equal specificity; a single-class selector here
    lost that tie and the 760px measure was never applied. */
+
+/* Header and body share ONE width so the header's left edge lands on the
+   contents rail and its right edge on the promo card. Declared together
+   deliberately — if these ever drift apart the header stops lining up with the
+   page beneath it, which is exactly how it looked wrong before. (Tracking the
+   navbar's wider --c-container instead was tried and read as too wide.) */
 .container.blogh-inner,
 .container.blogb-inner {
-    max-width: 900px;          /* comfortable reading measure */
+    max-width: 1560px;
+}
+
+/* Three-column article layout: contents rail | article | promo card.
+   The article used to sit alone in a 900px column, leaving the page very empty
+   either side on desktop. */
+.container.blogb-inner {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr) 250px;
+    gap: 0 48px;
+    align-items: start;
+}
+
+/* Every header element spans the full header width. The byline in particular
+   reads well wide now that it sits under the cover — author left, date right,
+   bounded by the image edges rather than floating mid-column. */
+.blogh-excerpt,
+.blogh-byline {
+    max-width: 100%;
+}
+
+/* ── Contents rail ── */
+.blogb-toc {
+    position: sticky;
+    /* clears the fixed navbar */
+    top: calc(var(--nav-height, 72px) + 24px);
+    max-height: calc(100vh - var(--nav-height, 72px) - 48px);
+    overflow-y: auto;
+    font-size: 13.5px;
+}
+
+/* The <summary> is the mobile-only accordion handle; on desktop the rail is
+   always open, so hide it and let .blogb-toc-title do the labelling. */
+.blogb-toc-collapsed>summary {
+    display: none;
+}
+
+.blogb-toc-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted, #5a6478);
+    margin: 0 0 12px;
+}
+
+.blogb-toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 2px solid var(--c-border, #e6e9f0);
+}
+
+.blogb-toc-list li {
+    margin: 0;
+}
+
+.blogb-toc-link {
+    display: block;
+    padding: 7px 0 7px 14px;
+    margin-left: -2px;
+    border-left: 2px solid transparent;
+    color: var(--muted, #5a6478);
+    text-decoration: none;
+    line-height: 1.45;
+    transition: color 0.16s, border-color 0.16s;
+}
+
+.blogb-toc-link:hover {
+    color: var(--c-text-dark, #0f1c2e);
+}
+
+/* Nested h3 entries sit in slightly from their parent h2. */
+.blogb-toc-h3>.blogb-toc-link {
+    padding-left: 26px;
+    font-size: 13px;
+}
+
+.blogb-toc-active {
+    color: var(--blue, #1a56db);
+    border-left-color: var(--blue, #1a56db);
+    font-weight: 600;
+}
+
+/* Anchors must clear the fixed navbar when jumped to directly (a pasted
+   #hash URL bypasses the JS smooth-scroll offset entirely). */
+.blogb-body h2,
+.blogb-body h3 {
+    scroll-margin-top: calc(var(--nav-height, 72px) + 24px);
+}
+
+/* ── Side promo card ── */
+.blogb-side {
+    position: sticky;
+    top: calc(var(--nav-height, 72px) + 24px);
+}
+
+.blogb-promo {
+    background: var(--c-bg-grey, #f4f6f9);
+    border: 1px solid var(--c-border, #e6e9f0);
+    border-radius: 14px;
+    padding: 22px 20px;
+}
+
+.blogb-promo h3 {
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.3;
+    color: var(--c-text-dark, #0f1c2e);
+    margin: 0 0 8px;
+}
+
+.blogb-promo p {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--muted, #5a6478);
+    margin: 0 0 16px;
+}
+
+.blogb-promo-btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* ── Responsive: shed the rails before the article gets cramped ── */
+@media (max-width: 1280px) {
+
+    /* Promo goes first — the contents rail is the more useful of the two.
+       The header must narrow WITH the body here: losing the promo column
+       shrinks the body to 1100px, and a header still at 1560px would hang off
+       both sides again. */
+    .container.blogh-inner,
+    .container.blogb-inner {
+        max-width: 1100px;
+    }
+
+    .container.blogb-inner {
+        grid-template-columns: 220px minmax(0, 1fr);
+    }
+
+    .blogb-side {
+        display: none;
+    }
+}
+
+@media (max-width: 1024px) {
+
+    /* Below the rails breakpoint the article is full-width anyway, so pull the
+       header back to the same measure — a header wider than its own body reads
+       as broken once there's no sidebar to justify the difference. */
+    .container.blogh-inner,
+    .container.blogb-inner {
+        display: block;
+        max-width: 900px;
+    }
+
+    .blogb-toc {
+        position: static;
+        max-height: none;
+        margin-bottom: 28px;
+        border: 1px solid var(--c-border, #e6e9f0);
+        border-radius: 12px;
+        padding: 4px 16px;
+    }
+
+    /* Inline above the article now, so make it collapsible rather than a long
+       list the reader has to scroll past to reach the first paragraph. */
+    .blogb-toc-collapsed>summary {
+        display: block;
+        list-style: none;
+        cursor: pointer;
+        padding: 12px 0;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--c-text-dark, #0f1c2e);
+    }
+
+    .blogb-toc-collapsed>summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .blogb-toc-collapsed>summary::after {
+        content: '\002B';
+        float: right;
+        font-weight: 400;
+        color: var(--muted, #5a6478);
+    }
+
+    .blogb-toc-collapsed[open]>summary::after {
+        content: '\2212';
+    }
+
+    /* The uppercase "Contents" label is redundant next to the summary handle. */
+    .blogb-toc-title {
+        display: none;
+    }
+
+    .blogb-toc-list {
+        padding-bottom: 8px;
+    }
 }
 
 .blogh-kicker {
@@ -194,10 +457,13 @@ body:has(.builder-preview-banner) nav {
     margin: 0 0 26px;
 }
 
+/* Sits below the cover image now, so it needs the gap ABOVE it. The bottom
+   border still works as the divider between the header block and the article. */
 .blogh-byline {
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-top: 24px;
     padding-bottom: 24px;
     border-bottom: 1px solid var(--c-border, #e6e9f0);
     flex-wrap: wrap;
@@ -221,9 +487,22 @@ body:has(.builder-preview-banner) nav {
     font-weight: 700;
 }
 
-.blogh-byline-text { display: flex; flex-direction: column; line-height: 1.35; }
-.blogh-author { font-size: 15px; font-weight: 700; color: var(--c-text-dark, #0f1c2e); }
-.blogh-role { font-size: 13px; color: var(--muted, #5a6478); }
+.blogh-byline-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.35;
+}
+
+.blogh-author {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--c-text-dark, #0f1c2e);
+}
+
+.blogh-role {
+    font-size: 13px;
+    color: var(--muted, #5a6478);
+}
 
 .blogh-meta {
     margin-left: auto;
@@ -234,7 +513,9 @@ body:has(.builder-preview-banner) nav {
     color: var(--muted, #5a6478);
 }
 
-.blogh-dot { opacity: 0.5; }
+.blogh-dot {
+    opacity: 0.5;
+}
 
 .blogh-cover {
     margin: 28px 0 0;
@@ -242,18 +523,65 @@ body:has(.builder-preview-banner) nav {
     overflow: hidden;
 }
 
-.blogh-cover img { width: 100%; height: auto; display: block; }
+.blogh-cover img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
 
 /* ── Article body ── */
-.blogb-body { font-size: 17px; line-height: 1.75; color: var(--c-text-dark, #0f1c2e); }
-.blogb-body > *:first-child { margin-top: 0; }
-.blogb-body p { margin: 0 0 20px; }
-.blogb-body h2 { font-size: 27px; font-weight: 800; line-height: 1.25; letter-spacing: -0.02em; margin: 40px 0 14px; }
-.blogb-body h3 { font-size: 21px; font-weight: 700; line-height: 1.3; margin: 32px 0 12px; }
-.blogb-body ul, .blogb-body ol { margin: 0 0 20px; padding-left: 24px; }
-.blogb-body li { margin-bottom: 8px; }
-.blogb-body a { color: var(--blue, #1a56db); text-decoration: underline; }
-.blogb-body img { max-width: 100%; height: auto; border-radius: 12px; margin: 12px 0 24px; display: block; }
+.blogb-body {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--c-text-dark, #0f1c2e);
+}
+
+.blogb-body>*:first-child {
+    margin-top: 0;
+}
+
+.blogb-body p {
+    margin: 0 0 20px;
+}
+
+.blogb-body h2 {
+    font-size: 27px;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin: 40px 0 14px;
+}
+
+.blogb-body h3 {
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 32px 0 12px;
+}
+
+.blogb-body ul,
+.blogb-body ol {
+    margin: 0 0 20px;
+    padding-left: 24px;
+}
+
+.blogb-body li {
+    margin-bottom: 8px;
+}
+
+.blogb-body a {
+    color: var(--blue, #1a56db);
+    text-decoration: underline;
+}
+
+.blogb-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 12px 0 24px;
+    display: block;
+}
+
 .blogb-body blockquote {
     margin: 28px 0;
     padding: 6px 0 6px 22px;
@@ -262,6 +590,7 @@ body:has(.builder-preview-banner) nav {
     line-height: 1.6;
     color: var(--c-text-dark, #0f1c2e);
 }
+
 .blogb-body code {
     background: #f1f5f9;
     padding: 2px 6px;
@@ -271,6 +600,38 @@ body:has(.builder-preview-banner) nav {
 
 [data-theme="dark"] .blogh-title,
 [data-theme="dark"] .blogh-author,
-[data-theme="dark"] .blogb-body { color: #e8eefc; }
-[data-theme="dark"] .blogb-body code { background: #1e293b; }
-[data-theme="dark"] .blogh-byline { border-bottom-color: #24334d; }
+[data-theme="dark"] .blogb-body {
+    color: #e8eefc;
+}
+
+[data-theme="dark"] .blogb-body code {
+    background: #1e293b;
+}
+
+[data-theme="dark"] .blogh-byline {
+    border-bottom-color: #24334d;
+}
+
+/* Contents rail + promo card in dark mode. These use hardcoded hexes rather
+   than tokens to match the rules above — builder-page.css predates the token
+   sweep and mixing the two here would read inconsistently. */
+[data-theme="dark"] .blogb-toc-list {
+    border-left-color: #24334d;
+}
+
+[data-theme="dark"] .blogb-toc-link:hover {
+    color: #e8eefc;
+}
+
+[data-theme="dark"] .blogb-toc {
+    border-bottom-color: #24334d;
+}
+
+[data-theme="dark"] .blogb-promo {
+    background: #16233d;
+    border-color: #24334d;
+}
+
+[data-theme="dark"] .blogb-promo h3 {
+    color: #e8eefc;
+}

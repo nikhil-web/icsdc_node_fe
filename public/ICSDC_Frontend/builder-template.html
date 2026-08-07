@@ -43,7 +43,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="stylesheet" href="/assets/css/about-us.css">
   <link rel="stylesheet" href="/assets/css/cpanel-hosting.css">
   <link rel="stylesheet" href="/assets/css/shared-hosting.css">
-  <link rel="stylesheet" href="/assets/css/builder-page.css">
+  <!-- Versioned: same 24h Cache-Control reasoning as page-renderer.js above. -->
+  <link rel="stylesheet" href="/assets/css/builder-page.css?v=9">
   <!-- Harvested-component CSS (hp-*, cs-*, veeam-related, vm-plans-table, mch-optim) -->
   <link rel="stylesheet" href="/assets/css/homepage-extras.css">
   <link rel="stylesheet" href="/assets/css/cloud-storage.css">
@@ -138,7 +139,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- Strapi config -->
   <script src="/assets/js/config.js"></script>
   <script src="/assets/js/main.js" type="module"></script>
-  <script src="/assets/js/builder/page-renderer.js" type="module"></script>
+  <!-- Versioned: page-renderer.js gets a 24h Cache-Control (server.js
+       setStaticCacheHeaders) and changes here need to reach every builder page
+       (including blog posts) as soon as they're deployed. Bump ?v= on edit. -->
+  <script src="/assets/js/builder/page-renderer.js?v=8" type="module"></script>
   <script src="/assets/js/components.js"></script>
   <script src="/assets/js/polish.js" defer></script>
   <script src="/assets/js/nav-search.js" defer></script>

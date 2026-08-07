@@ -709,6 +709,7 @@ const STATIC_PAGES = [
     { path: '/about-us',                    priority: 0.6, changefreq: 'daily'   },
     { path: '/contact-us',                  priority: 0.8, changefreq: 'daily'   },
     { path: '/pricing',                     priority: 0.7, changefreq: 'daily'    },
+    { path: '/blogs',                       priority: 0.6, changefreq: 'daily'    },
     // Legal
     { path: '/legal/terms-conditions',      priority: 0.3, changefreq: 'yearly'  },
     { path: '/legal/privacy-policy',        priority: 0.3, changefreq: 'yearly'  },
@@ -770,16 +771,21 @@ async function buildSitemapEntries(req) {
         );
         if (r.ok) {
             const { data } = await r.json();
+            // Blog posts serve at /blogs/<slug>, other builder pages at /<slug> —
+            // the sitemap must list the URL that actually 200s, not the one that
+            // 301s, so resolve the split from the same source the routes use.
+            const blogSlugs = new Set((await fetchBlogPosts()).map((p) => p.slug));
             (data || []).forEach(function (item) {
                 const d = item.attributes || item;
                 if (!d.slug) return;
                 if (!isPageLive(d.slug)) return;        // honour Page Registry hidden state
+                const isBlog = blogSlugs.has(d.slug);
                 entries.push({
-                    loc:        baseUrl + '/' + d.slug,   // top-level URL (2026-07-03)
+                    loc:        baseUrl + (isBlog ? '/blogs/' : '/') + d.slug,
                     lastmod:    d.updatedAt ? d.updatedAt.split('T')[0] : today,
                     changefreq: 'daily',
                     priority:   0.7,
-                    type:       'builder',
+                    type:       isBlog ? 'blog' : 'builder',
                 });
             });
         }
@@ -1204,6 +1210,80 @@ async function fetchBuilderPageMeta(slug) {
     return val;
 }
 
+// ── Blog listing (public, no auth) ──────────────────────────
+// There's no dedicated Strapi "blog post" content type — a blog post is just
+// a builder-page created from the "blog-post" template (a blogHeader section
+// + a blogBody section, see templates.js/componentRegistry.js). So this scans
+// every published builder-page's `sections` JSON for a blogHeader entry and
+// pulls out only the listing fields (title/excerpt/cover/author/date) — never
+// the article body, to keep this endpoint's payload small regardless of how
+// long individual articles get. Cached like fetchBuilderPageMeta above.
+let blogPostsCache = null;   // { ts, val }
+const BLOG_POSTS_TTL = 2 * 60 * 1000;
+
+async function fetchBlogPosts() {
+    if (blogPostsCache && Date.now() - blogPostsCache.ts < BLOG_POSTS_TTL) return blogPostsCache.val;
+    let posts = [];
+    try {
+        const r = await fetch(
+            `${STRAPI_URL}/api/builder-pages?publicationState=live` +
+            `&fields[0]=slug&fields[1]=title&fields[2]=sections&fields[3]=publishedAt&fields[4]=updatedAt` +
+            `&pagination[pageSize]=200`,
+            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+        );
+        if (r.ok) {
+            const json = await r.json();
+            posts = (json.data || [])
+                .map((row) => {
+                    const d = row.attributes || row;
+                    const header = (d.sections || []).find((s) => s.type === 'blogHeader');
+                    if (!header || !d.slug) return null;
+                    const p = header.props || {};
+                    return {
+                        slug: d.slug,
+                        title: p.title || d.title || d.slug,
+                        excerpt: p.excerpt || '',
+                        category: p.category || '',
+                        // Media-picker selections are already absolutified by the admin
+                        // proxy; template defaults are same-origin relative paths — both
+                        // work as-is in an <img src>, so no URL rewriting needed here.
+                        coverImage: p.coverImage || '',
+                        coverAlt: p.coverAlt || p.title || '',
+                        authorName: p.authorName || '',
+                        authorRole: p.authorRole || '',
+                        authorAvatar: p.authorAvatar || '',
+                        // publishDate is free-text (editor-typed, not a real date field) —
+                        // shown as-is on cards, but never used for sorting.
+                        publishDate: p.publishDate || '',
+                        readTime: p.readTime || '',
+                        sortDate: d.publishedAt || d.updatedAt || null,
+                    };
+                })
+                .filter(Boolean)
+                .sort((a, b) => new Date(b.sortDate || 0) - new Date(a.sortDate || 0));
+        }
+    } catch (_) { /* Strapi down — fall through to whatever's cached/empty */ }
+    blogPostsCache = { ts: Date.now(), val: posts };
+    return posts;
+}
+
+// Blog posts live at /blogs/<slug>; every other builder page stays at /<slug>.
+// Since "is a blog post" just means "has a blogHeader section", the already-cached
+// listing is the single source of truth for that split — routing, the legacy
+// top-level redirect and the sitemap all consult this so they can't disagree.
+async function isBlogSlug(slug) {
+    const posts = await fetchBlogPosts();
+    return posts.some((p) => p.slug === slug);
+}
+
+app.get('/api/blog-posts', async (req, res) => {
+    try {
+        res.json({ posts: await fetchBlogPosts() });
+    } catch (err) {
+        res.status(502).json({ posts: [], error: 'Failed to load blog posts' });
+    }
+});
+
 async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride) {
     let html;
     try {
@@ -1356,6 +1436,25 @@ app.get('/legal/:page', (req, res) => {
     sendPageWithSeo(req, res, path.join(publicPath, 'legal', `${slug}.html`), `legal-${slug}`, `/legal/${slug}`);
 });
 
+// /blog is a common thing to type by hand — send it to the real index.
+app.get('/blog', (req, res) => res.redirect(301, '/blogs'));
+
+// Blog posts — /blogs/<slug>. They're builder pages under the hood, so this
+// serves the same builder-template shell as /<slug> does, just at a nested URL.
+// Anything that isn't actually a blog post 404s here rather than falling through,
+// so a regular builder page has exactly one canonical URL (its top-level one).
+app.get('/blogs/:slug', async (req, res) => {
+    const slug = req.params.slug;
+    if (!(await isBlogSlug(slug))) {
+        return res.status(404).sendFile(path.join(publicPath, '404.html'));
+    }
+    if (pageCache.has(slug) && !pageCache.get(slug)) {
+        return res.status(404).sendFile(path.join(publicPath, '404.html'));
+    }
+    const bp = await fetchBuilderPageMeta(slug);
+    sendPageWithSeo(req, res, path.join(publicPath, 'builder-template.html'), slug, `/blogs/${slug}`, bp);
+});
+
 // Dynamic routes — gate on page registry cache (SEO-injected)
 app.get('/:page', async (req, res) => {
     const slug = req.params.page;
@@ -1369,6 +1468,10 @@ app.get('/:page', async (req, res) => {
 
     // No static page file → maybe a published builder page lives at this slug
     if (!fs.existsSync(filePath)) {
+        // Blog posts moved under /blogs/ — 301 the legacy top-level URL so any
+        // existing link or index entry follows to the one canonical location.
+        if (await isBlogSlug(slug)) return res.redirect(301, `/blogs/${slug}`);
+
         const bp = await fetchBuilderPageMeta(slug);
         if (bp) {
             return sendPageWithSeo(req, res, path.join(publicPath, 'builder-template.html'), slug, `/${slug}`, bp);

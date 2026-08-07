@@ -1408,3 +1408,19 @@ export function getPricingPage() {
         "&populate[ctaBand][populate][ctaSecondary]=*"
     );
 }
+
+/**
+ * Fetches the /blogs index page's editable chrome: masthead copy, category
+ * cards, the "I need help with" sidebar links, and the CTA band. The post
+ * list itself is NOT here — that comes from GET /api/blog-posts (server.js),
+ * which aggregates published builder-pages, not this single-type.
+ */
+export function getBlogIndexPage() {
+    return fetchAPI(
+        "/api/blog-index-page" +
+        "?populate[categories]=*" +
+        "&populate[helpLinks]=*" +
+        "&populate[ctaBand][populate][ctaPrimary]=*" +
+        "&populate[ctaBand][populate][ctaSecondary]=*"
+    );
+}

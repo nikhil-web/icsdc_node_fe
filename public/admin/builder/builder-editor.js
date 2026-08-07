@@ -17,7 +17,7 @@
  *   }
  */
 
-import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js';
+import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js?v=6';
 import { generateSectionId } from '/assets/js/builder/builder-utils.js';
 import { BuilderAPI } from './builder-api.js';
 import { renderComponentLibrary } from './component-library.js';
@@ -33,6 +33,14 @@ const state = {
     selectedSectionId: null,
     dirty: false,
 };
+
+// Blog posts (built from the blog-post template) serve at /blogs/<slug>, not
+// top-level /<slug> — same "has a blogHeader section" check server.js's
+// isBlogSlug() uses, so the URL shown here can't drift from what's really live.
+function livePathFor(page) {
+    const isBlogPost = (page.sections || []).some((s) => s.type === 'blogHeader');
+    return (isBlogPost ? '/blogs/' : '/') + page.slug;
+}
 
 function esc(s) {
     return String(s == null ? '' : s)
@@ -133,15 +141,17 @@ function renderListBody() {
             ? '<span class="admin-status-badge live"><span class="admin-status-dot"></span>Published</span>'
             : '<span class="admin-status-badge hidden"><span class="admin-status-dot"></span>Draft</span>';
         const date = p.updatedAt ? new Date(p.updatedAt).toLocaleString() : '—';
+        // Blog posts live at /blogs/<slug> — a bare /<slug> 404s for them.
+        const livePath = livePathFor(p);
         return '<tr>' +
             '<td>' + esc(p.title) + '</td>' +
-            '<td><code>/' + esc(p.slug) + '</code></td>' +
+            '<td><code>' + esc(livePath) + '</code></td>' +
             '<td>' + status + '</td>' +
             '<td>' + esc(date) + '</td>' +
             '<td>' +
                 '<button class="admin-toggle-btn btn-show bld-list-edit" data-id="' + esc(id) + '"><i class="fa-solid fa-pen-to-square"></i> Edit</button> ' +
                 (published
-                    ? '<a class="admin-toggle-btn bld-list-view" href="/' + esc(p.slug) + '" target="_blank" rel="noopener" title="Open the live page"><i class="fa-solid fa-arrow-up-right-from-square"></i></a> '
+                    ? '<a class="admin-toggle-btn bld-list-view" href="' + esc(livePath) + '" target="_blank" rel="noopener" title="Open the live page"><i class="fa-solid fa-arrow-up-right-from-square"></i></a> '
                     : '') +
                 '<button class="admin-toggle-btn btn-hide bld-list-delete" data-id="' + esc(id) + '" data-title="' + esc(p.title) + '"><i class="fa-solid fa-trash"></i></button>' +
             '</td>' +
@@ -229,7 +239,9 @@ function onNewPageClick() {
 
     function syncUrl() {
         const s = slugify(slugEl.value || titleEl.value);
-        urlEl.textContent = 'icsdc.com/' + (s || '…');
+        const tplId = (wrap.querySelector('.bld-tpl input:checked') || {}).value || 'blank';
+        const prefix = tplId === 'blog-post' ? '/blogs/' : '/';
+        urlEl.textContent = 'icsdc.com' + prefix + (s || '…');
     }
     titleEl.addEventListener('input', () => {
         if (!slugTouched) slugEl.value = slugify(titleEl.value);
@@ -251,6 +263,7 @@ function onNewPageClick() {
         r.addEventListener('change', () => {
             wrap.querySelectorAll('.bld-tpl').forEach((c) => c.classList.remove('is-selected'));
             r.closest('.bld-tpl').classList.add('is-selected');
+            syncUrl();
         });
     });
 
@@ -370,7 +383,7 @@ async function openEditor(documentId) {
     }
 
     document.getElementById('bld-page-title').value = state.page.title;
-    document.getElementById('bld-slug-display').textContent = '/' + state.page.slug;
+    document.getElementById('bld-slug-display').textContent = livePathFor(state.page);
 
     document.getElementById('bld-back-btn').addEventListener('click', () => {
         if (state.dirty && !confirm('You have unsaved changes. Leave anyway?')) return;
@@ -753,7 +766,12 @@ async function onPublish() {
 /* Post-publish confirmation: live URL + one-click crawler-snapshot rebuild
    (crawlers get the prerendered snapshot; it must be regenerated after publish). */
 function showPublishSuccess() {
-    const path = '/' + state.page.slug;
+    // Blog posts (a page built from the blog-post template) serve at
+    // /blogs/<slug>, not top-level /<slug> — same "has a blogHeader section"
+    // check server.js's isBlogSlug() uses, so this can't drift out of sync
+    // with what the server actually serves at.
+    const isBlogPost = (state.page.sections || []).some((s) => s.type === 'blogHeader');
+    const path = (isBlogPost ? '/blogs/' : '/') + state.page.slug;
     const existing = document.getElementById('bld-publish-toast');
     if (existing) existing.remove();
     const toast = document.createElement('div');
