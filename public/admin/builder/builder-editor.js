@@ -17,7 +17,7 @@
  *   }
  */
 
-import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js?v=6';
+import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js';
 import { generateSectionId } from '/assets/js/builder/builder-utils.js';
 import { BuilderAPI } from './builder-api.js';
 import { renderComponentLibrary } from './component-library.js';
@@ -341,9 +341,15 @@ async function openEditor(documentId) {
                 '</aside>' +
                 '<main class="bld-canvas-wrap bld-canvas-wrap-live">' +
                     '<div class="bld-canvas-stage" id="bld-canvas-stage">' +
-                        // cache-bust: the canvas shell + its modules are long-cached by the
-                        // browser, and a stale copy renders a silently-blank canvas.
-                        '<iframe id="bld-canvas-frame" class="bld-canvas-frame" src="/builder/__canvas?canvas=1&v=' + Date.now() + '" title="Page canvas"></iframe>' +
+                        /* URL is deliberately STABLE — it used to carry &v=Date.now(),
+                           which made every mount a unique URL and therefore a full cold
+                           boot (nothing in the iframe could ever be reused). That existed
+                           to dodge a stale cached module rendering a blank canvas, but
+                           that's now handled properly: builder-template.html revalidates
+                           on every load (Cache-Control: must-revalidate) and its scripts
+                           carry explicit ?v= versions. Keeping it stable lets the browser
+                           reuse the shell, CSS and modules between mounts. */
+                        '<iframe id="bld-canvas-frame" class="bld-canvas-frame" src="/builder/__canvas?canvas=1" title="Page canvas"></iframe>' +
                     '</div>' +
                 '</main>' +
                 '<div class="bld-resize-handle" id="bld-resize-handle" title="Drag to resize"></div>' +

@@ -15,7 +15,7 @@
 // bumping the version on THIS file doesn't invalidate its imports (same URL →
 // served from cache), so an edit to componentRegistry.js alone would sit behind
 // its 24h Cache-Control for returning visitors. Bump this when that file changes.
-import { COMPONENT_REGISTRY } from './componentRegistry.js?v=6';
+import { COMPONENT_REGISTRY } from './componentRegistry.js';
 import { hidePageLoader } from '../utils/cms-helpers.js';
 
 function setMeta(name, value) {

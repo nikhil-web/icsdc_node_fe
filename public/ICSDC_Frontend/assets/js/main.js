@@ -16,7 +16,16 @@ import { getFooterHTML } from "./footer-template.js";
 //  paint — two floating bubbles and a modal that starts hidden — and the
 //  widgets themselves are built by JS anyway, so load them here instead.
 //  main.js is a module (deferred), so this runs after parse and never blocks.
+/* Builder canvas mode (/builder/__canvas?canvas=1, inside the admin's editor
+   iframe). It exists ONLY to render builder sections, so every piece of site
+   chrome below is pure cost there: the nav + footer Strapi round-trips, the
+   logo image, the chat/WhatsApp/contact widgets and their stylesheets. They
+   also can't be interacted with in the editor. Skipping them cuts the canvas
+   boot down to the renderer itself. */
+const IS_CANVAS = new URLSearchParams(window.location.search).get('canvas') === '1';
+
 (function loadDeferredWidgetStyles() {
+    if (IS_CANVAS) return;
     ['chat-widget', 'whatsapp-widget', 'contact-modal'].forEach(function (name) {
         var href = '/assets/css/' + name + '.css';
         if (document.querySelector('link[href="' + href + '"]')) return;
@@ -592,6 +601,18 @@ function setCanonical() {
 async function init() {
     setCanonical();
 
+    /* Canvas mode: skip the nav/footer Strapi fetches and the widgets entirely.
+       Measured on the editor canvas, those two API calls plus the logo image
+       were the three slowest requests on the page (~935ms combined) and none of
+       it is editable or clickable inside the iframe. The nav/footer markup is
+       already in builder-template.html, so the chrome still occupies its normal
+       space — section spacing previews identically, it just isn't populated. */
+    if (IS_CANVAS) {
+        hideLoader();
+        initThemeToggle();
+        return;
+    }
+
 
 
 
@@ -632,8 +653,12 @@ async function init() {
 
 init();
 
-// Load chat widget after main init (dynamic import keeps main.js lean)
-import('./chat-widget.js').then(function (m) { m.initChatWidget(); }).catch(function () {});
+// Load chat widget after main init (dynamic import keeps main.js lean).
+// Never in the editor canvas — a live-chat bubble inside the page builder is
+// noise, and it opens a socket.io connection per canvas mount.
+if (!IS_CANVAS) {
+    import('./chat-widget.js').then(function (m) { m.initChatWidget(); }).catch(function () {});
+}
 
 // ══════════════════════════════════════════════════════
 //  THEME TOGGLE

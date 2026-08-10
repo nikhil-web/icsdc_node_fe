@@ -7,7 +7,7 @@
  * draggable so it can be dropped straight onto the WYSIWYG canvas.
  */
 
-import { COMPONENT_REGISTRY, COMPONENT_ORDER, COMPONENT_CATEGORIES } from '/assets/js/builder/componentRegistry.js?v=6';
+import { COMPONENT_REGISTRY, COMPONENT_ORDER, COMPONENT_CATEGORIES } from '/assets/js/builder/componentRegistry.js';
 
 const ICON_MAP = {
     rocket:   'fa-rocket',

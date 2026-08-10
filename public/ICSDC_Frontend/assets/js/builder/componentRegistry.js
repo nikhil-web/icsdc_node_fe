@@ -1778,7 +1778,7 @@ const blogBody = {
               '<ul class="blogb-toc-list"></ul>' +
               '</details>' +
               '</aside>'
-            : '<div></div>';
+            : '';
 
         // defaultProps only seed NEWLY created sections — posts saved before these
         // fields existed have them undefined, which rendered an empty bordered box.
@@ -1795,7 +1795,7 @@ const blogBody = {
               '<a class="btn-primary blogb-promo-btn" href="' + esc(ctaLink) + '">' + esc(ctaText) + '</a>' +
               '</div>' +
               '</aside>'
-            : '<div></div>';
+            : '';
 
         // NOTE: deliberately NOT inlineRichText() — that collapses <p> blocks into
         // <br><br>, which is right for one-line CMS fields but destroys an article.
