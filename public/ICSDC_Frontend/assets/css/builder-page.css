@@ -133,7 +133,18 @@
 }
 
 /* Section spacing inside the builder root — ensure CTAs and section blocks aren't
-   crammed against each other when sections are stacked back-to-back. */
+   crammed against each other when sections are stacked back-to-back.
+
+   --bld-section-gap is the ONE place to tune builder rhythm. Padding is
+   symmetric on purpose: the bottom used to be 0, so every section ended flush
+   against the next one (a table's last row touching the following heading) and
+   the spacing you saw depended entirely on which component came next. Equal
+   top/bottom means any two components sit the same distance apart regardless
+   of order. The Layout panel's Compact/Spacious options still override it. */
+#builder-page-root {
+    --bld-section-gap: 60px;
+}
+
 #builder-page-root>div+div {
     margin-top: 0;
 }
@@ -141,8 +152,8 @@
 #builder-page-root .section,
 #builder-page-root .faq-section,
 #builder-page-root .cloud-cta-band {
-    padding-top: 60px;
-    padding-bottom: 0px;
+    padding-top: var(--bld-section-gap);
+    padding-bottom: var(--bld-section-gap);
 }
 
 /* blogHeader is always the first (and effectively "hero") section of a blog
@@ -162,12 +173,10 @@
    after the cover image. Same raw gap on every screen size, so it reads as far
    more disproportionate on a narrow phone than on desktop. */
 @media (max-width: 767px) {
-
-    #builder-page-root .section,
-    #builder-page-root .faq-section,
-    #builder-page-root .cloud-cta-band {
-        padding-top: 40px;
-        padding-bottom: 40px;
+    /* Retune the one token rather than re-declaring padding — the rules above
+       pick this up automatically. */
+    #builder-page-root {
+        --bld-section-gap: 40px;
     }
 
     #builder-page-root .blogh-section {
@@ -239,6 +248,15 @@ body:has(.builder-preview-banner) nav {
     gap: 0 48px;
     align-items: start;
 }
+
+/* Pin each child to its own column instead of relying on source order. The
+   contents rail hides itself when the article has fewer than 2 headings, and a
+   display:none grid item leaves the flow entirely — so with auto-placement the
+   article slid into column 1 (250px wide) and the promo took the wide middle.
+   Explicit columns keep the article centred no matter which rails are present. */
+.container.blogb-inner > .blogb-toc  { grid-column: 1; }
+.container.blogb-inner > .blogb-body { grid-column: 2; }
+.container.blogb-inner > .blogb-side { grid-column: 3; }
 
 /* Every header element spans the full header width. The byline in particular
    reads well wide now that it sits under the cover — author left, date right,

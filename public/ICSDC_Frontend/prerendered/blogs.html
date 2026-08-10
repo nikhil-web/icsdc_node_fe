@@ -1,175 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark"><head>
-    <!-- Google Tag Manager -->
-    
-    <!-- End Google Tag Manager -->
+  <!-- Google Tag Manager -->
+  
+  <!-- End Google Tag Manager -->
   
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="/assets/images/main_logo.png">
-  <title>404 – Page Not Found | ICSDC</title>
-  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="/assets/images/main_logo_icon.png">
+  <title>ICSDC Blog - Cloud Hosting Guides and Insights</title>
+  <meta name="description" content="Guides, product updates and infrastructure insights from the ICSDC team - cloud hosting, backup and recovery, security and more.">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/components.css">
+  <!-- Versioned while this page is under active development: blogs.css/js get a
+       24h Cache-Control (server.js setStaticCacheHeaders), so an unversioned URL
+       here would leave visitors stuck on a stale copy after every edit today.
+       Bump ?v= when either file changes; the .html itself is always revalidated
+       so this new URL is picked up on next load with no user action needed. -->
+  <link rel="stylesheet" href="assets/css/blogs.css?v=4">
   <link rel="stylesheet" href="assets/css/dark-mode.css">
-  <style>
-    .nf-wrap {
-      min-height: 80vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 24px;
-      gap: 0;
-    }
-
-    .nf-code {
-      font-size: clamp(96px, 18vw, 180px);
-      font-weight: 800;
-      line-height: 1;
-      color: var(--blue);
-      letter-spacing: -4px;
-      opacity: 0.12;
-      user-select: none;
-      position: absolute;
-    }
-
-    .nf-icon-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 96px;
-      height: 96px;
-      border-radius: 24px;
-      background: var(--blue-light);
-      margin-bottom: 28px;
-    }
-
-    .nf-icon-wrap i {
-      font-size: 42px;
-      color: var(--blue);
-    }
-
-    .nf-wrap h1 {
-      font-size: clamp(28px, 5vw, 42px);
-      font-weight: 800;
-      color: var(--c-heading, #0f172a);
-      margin: 0 0 14px;
-    }
-
-    .nf-wrap p {
-      font-size: 17px;
-      color: var(--c-text-muted, #64748b);
-      max-width: 460px;
-      line-height: 1.65;
-      margin: 0 0 36px;
-    }
-
-    .nf-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-    }
-
-    .nf-btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 13px 28px;
-      background: var(--blue);
-      color: #fff;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 600;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.18s;
-    }
-
-    .nf-btn-primary:hover {
-      background: var(--blue-dark);
-    }
-
-    .nf-btn-outline {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 13px 28px;
-      background: transparent;
-      color: var(--blue);
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 600;
-      border: 2px solid var(--blue);
-      border-radius: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.18s, color 0.18s;
-    }
-
-    .nf-btn-outline:hover {
-      background: var(--blue-hover-bg, #eff6ff);
-    }
-
-    .nf-divider {
-      width: 56px;
-      height: 4px;
-      border-radius: 99px;
-      background: var(--blue);
-      margin: 0 auto 28px;
-      opacity: 0.35;
-    }
-
-    .nf-quick-links {
-      margin-top: 52px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      max-width: 640px;
-    }
-
-    .nf-quick-links span {
-      font-size: 13px;
-      color: var(--c-text-muted, #64748b);
-      width: 100%;
-      margin-bottom: 4px;
-      font-weight: 500;
-    }
-
-    .nf-quick-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 16px;
-      background: var(--c-surface, #f8fafc);
-      border: 1px solid var(--c-border, #e2e8f0);
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--c-heading, #0f172a);
-      text-decoration: none;
-      transition: border-color 0.15s, color 0.15s;
-    }
-
-    .nf-quick-link:hover {
-      border-color: var(--blue);
-      color: var(--blue);
-    }
-
-    .nf-quick-link i {
-      font-size: 12px;
-      opacity: 0.7;
-    }
-  </style>
-<link rel="canonical" href="https://icsdc.com/blogs"><style>
+    <link rel="canonical" href="https://icsdc.com/blogs">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ICSDC">
+    <meta property="og:title" content="ICSDC Blog - Cloud Hosting Guides and Insights">
+    <meta property="og:description" content="Guides, product updates and infrastructure insights from the ICSDC team - cloud hosting, backup and recovery, security and more.">
+    <meta property="og:url" content="https://icsdc.com/blogs">
+    <meta property="og:image" content="https://icsdc.com/assets/images/main_logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ICSDC Blog - Cloud Hosting Guides and Insights">
+    <meta name="twitter:description" content="Guides, product updates and infrastructure insights from the ICSDC team - cloud hosting, backup and recovery, security and more.">
+    <meta name="twitter:image" content="https://icsdc.com/assets/images/main_logo.png">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://icsdc.com/#organization","name":"ICSDC","alternateName":"Indian Cloud Services & Data Centre","url":"https://icsdc.com","logo":"https://icsdc.com/assets/images/main_logo.png"},{"@type":"WebSite","@id":"https://icsdc.com/#website","url":"https://icsdc.com","name":"ICSDC","publisher":{"@id":"https://icsdc.com/#organization"},"inLanguage":"en"},{"@type":"WebPage","@id":"https://icsdc.com/blogs#webpage","url":"https://icsdc.com/blogs","name":"ICSDC Blog - Cloud Hosting Guides and Insights","description":"Guides, product updates and infrastructure insights from the ICSDC team - cloud hosting, backup and recovery, security and more.","isPartOf":{"@id":"https://icsdc.com/#website"},"inLanguage":"en"}]}</script>
+<link rel="stylesheet" href="/assets/css/chat-widget.css"><link rel="stylesheet" href="/assets/css/whatsapp-widget.css"><link rel="stylesheet" href="/assets/css/contact-modal.css"><style>
             .btn-primary, .btn-login, .contact-submit, .faq-contact-btn {
                 overflow: hidden;
                 position: relative;
@@ -188,10 +51,11 @@
         </style></head>
 
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MXV9SGZS"
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MXV9SGZS"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
+  <!-- End Google Tag Manager (noscript) -->
+
   <!-- PAGE LOADER -->
   <div id="page-loader" class="loader-done loader-hidden">
     <div class="loader-content">
@@ -312,42 +176,98 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="mobile-theme-row"><span class="mobile-theme-label">Light Mode</span><button class="mobile-theme-toggle" aria-label="Switch to light mode" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button></div></div>
   </nav>
 
-  <!-- 404 CONTENT -->
-  <section class="nf-wrap">
-    <div class="nf-icon-wrap">
-      <i class="fa-solid fa-triangle-exclamation"></i>
-    </div>
-    <h1>Page Not Found</h1>
-    <div class="nf-divider"></div>
-    <p>The page you're looking for doesn't exist or may have been moved. Let's get you back on track.</p>
-    <div class="nf-actions">
-      <a href="/" class="nf-btn-primary">
-        <i class="fa-solid fa-house"></i> Back to Home
-      </a>
-      <a href="contact-us.html" class="nf-btn-outline">
-        <i class="fa-solid fa-headset"></i> Contact Support
-      </a>
+  <main id="main-content">
+
+    <!-- ════ CATEGORY BAR ════ -->
+    <!-- A bare <nav> here would match style.css's element-selector `nav { position:
+         fixed; top:0; z-index:1000; ... }` — meant only for the real site navbar —
+         and paint a second fixed bar directly over it. role="navigation" gives the
+         same a11y landmark without tripping that selector. -->
+    <div class="blog-catbar" role="navigation" aria-label="Browse by category">
+      <div class="blog-catbar-inner">
+        <div class="blog-chips" id="blog-chips"><button type="button" class="blog-chip blog-chip-active" data-cat="">All</button><button type="button" class="blog-chip" data-cat="Cloud Hosting">Cloud Hosting</button></div>
+        <div class="blog-search">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input type="search" id="blog-search-input" placeholder="Search articles…" aria-label="Search articles">
+        </div>
+      </div>
     </div>
 
-    <div class="nf-quick-links">
-      <span>Popular pages</span>
-      <a href="cloud-hosting.html" class="nf-quick-link"><i class="fa-solid fa-cloud"></i> Cloud Hosting</a>
-      <a href="dedicated-server.html" class="nf-quick-link"><i class="fa-solid fa-server"></i> Dedicated Servers</a>
-      <a href="vps-hosting.html" class="nf-quick-link"><i class="fa-solid fa-layer-group"></i> VPS Hosting</a>
-      <a href="gpu-dedicated-server.html" class="nf-quick-link"><i class="fa-solid fa-microchip"></i> GPU Servers</a>
-      <a href="pricing.html" class="nf-quick-link"><i class="fa-solid fa-tag"></i> Pricing</a>
-      <a href="ssl-certificate.html" class="nf-quick-link"><i class="fa-solid fa-lock"></i> SSL Certificates</a>
-    </div>
-  </section>
+    <div class="container blog-page">
 
-  <!-- FOOTER -->
+      <!-- ════ FEATURED POST ════ -->
+      <section class="blog-featured-wrap" id="blog-featured-wrap" aria-label="Featured article">
+        <a class="blog-featured" id="blog-featured-card" href="/blogs/why-enterprise-backup-strategies-fail-during-real-disasters">
+          <div class="blog-featured-body">
+            <span class="blog-eyebrow">Top Featured</span>
+            <h1 class="blog-featured-title" id="blog-featured-title">How to Choose the Right Cloud Hosting for Your Business</h1>
+            <p class="blog-featured-excerpt" id="blog-featured-excerpt">A practical guide to comparing performance, security and cost so you can pick a plan that actually fits how you work.</p>
+            <div class="blog-meta" id="blog-featured-meta">ICSDC Team<span class="blog-dot">·</span>30July 2026<span class="blog-dot">·</span>5 min read</div>
+          </div>
+          <div class="blog-featured-media"><img id="blog-featured-img" src="https://admin.icsdc.com/uploads/OMB_Jay_Parikh_Build_Hero_2_1_a056fb4941.png" alt="Article cover image"></div>
+        </a>
+      </section>
+
+      <!-- ════ RECENT GRID ════ -->
+      <section class="blog-recent-wrap" id="blog-recent-wrap" aria-label="Recent articles">
+        <div class="blog-recent-grid" id="blog-recent-grid"><a class="blog-card" href="/blogs/the-messy-politics-behind-google-s-big-ai-shakeup"><div class="blog-card-media"><img src="https://admin.icsdc.com/uploads/69fb7cbfe1443b8dc48e26d4_1c27516e07.webp" alt="Article cover image" loading="lazy"></div><span class="blog-card-cat">Cloud Hosting</span><h3 class="blog-card-title">The messy politics behind Google’s big AI shakeup</h3><div class="blog-meta">Nikhil Pandey<span class="blog-dot">·</span>5 min read</div></a></div>
+      </section>
+
+      <!-- ════ ARCHIVE LIST + SIDEBAR HELP ════ -->
+      <section class="blog-archive-wrap" aria-label="All articles">
+        <div class="blog-archive-panel">
+          <h2 class="blog-archive-heading">Cloud Hosting Guides, Tips &amp; Hosting News</h2>
+          <ul class="blog-archive-list" id="blog-archive-list"><li class="blog-row"><a href="/blogs/why-enterprise-backup-strategies-fail-during-real-disasters">How to Choose the Right Cloud Hosting for Your Business</a></li><li class="blog-row"><a href="/blogs/the-messy-politics-behind-google-s-big-ai-shakeup">The messy politics behind Google’s big AI shakeup</a></li></ul>
+
+          <p class="blog-noresults" id="blog-noresults" hidden="">No articles match your search.</p>
+
+          <!-- Same reasoning as the category bar above: a bare <nav> here would match
+               style.css's `nav { position:fixed; top:0; z-index:1000; ... }` and fly
+               up to the top of the viewport instead of sitting under the article list. -->
+          <div class="blog-pagination" id="blog-pagination" role="navigation" aria-label="Article pages"></div>
+        </div>
+
+        <aside class="blog-help">
+          <h3>I need help with</h3>
+          <div class="blog-help-grid" id="blog-help-grid"><a class="blog-help-item" href="/cloud-hosting"><i class="fa-solid fa-cloud" aria-hidden="true"></i><span>Cloud Hosting</span></a><a class="blog-help-item" href="/vps-hosting"><i class="fa-solid fa-server" aria-hidden="true"></i><span>VPS Hosting</span></a><a class="blog-help-item" href="/dedicated-server"><i class="fa-solid fa-database" aria-hidden="true"></i><span>Dedicated Servers</span></a><a class="blog-help-item" href="/web-hosting"><i class="fa-solid fa-globe" aria-hidden="true"></i><span>Web Hosting</span></a><a class="blog-help-item" href="/reseller-hosting"><i class="fa-solid fa-users" aria-hidden="true"></i><span>Reseller Hosting</span></a><a class="blog-help-item" href="/cloud-storage"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Backup &amp; Security</span></a></div>
+        </aside>
+      </section>
+
+      <!-- ════ CATEGORIES ════ -->
+      <section class="blog-categories-wrap" aria-label="Browse categories">
+        <h2 class="blog-section-heading">Categories</h2>
+        <div class="blog-categories-grid" id="blog-categories-grid"><a class="blog-cat-card" href="/cloud-hosting"><i class="fa-solid fa-cloud" aria-hidden="true"></i><h3>Cloud Hosting</h3><p>Guides on scaling, migrating and managing cloud infrastructure.</p></a><a class="blog-cat-card" href="/vps-hosting"><i class="fa-solid fa-server" aria-hidden="true"></i><h3>VPS Hosting</h3><p>Tips for getting the most out of a virtual private server.</p></a><a class="blog-cat-card" href="/dedicated-server"><i class="fa-solid fa-database" aria-hidden="true"></i><h3>Dedicated Servers</h3><p>Performance, security and setup for dedicated hardware.</p></a><a class="blog-cat-card" href="/cloud-storage"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><h3>Backup &amp; Security</h3><p>Protecting your data with backup, recovery and compliance.</p></a><a class="blog-cat-card" href="/web-hosting"><i class="fa-solid fa-globe" aria-hidden="true"></i><h3>Web Hosting</h3><p>Getting your website online — fast, secure and reliable.</p></a><a class="blog-cat-card" href="/domain-registration"><i class="fa-solid fa-envelope" aria-hidden="true"></i><h3>Domain &amp; Email</h3><p>Domains, DNS and business email, explained simply.</p></a></div>
+      </section>
+
+      <!-- Empty state — no published posts at all -->
+      <div class="blog-empty" id="blog-empty" hidden="">
+        <i class="fa-regular fa-newspaper" aria-hidden="true"></i>
+        <h3>No articles yet</h3>
+        <p>We're working on our first posts — check back soon.</p>
+      </div>
+
+    </div>
+
+    <!-- ════ PROMO CTA BAND ════ -->
+    <section class="blog-cta-band">
+      <div class="container blog-cta-inner">
+        <div>
+          <h2 id="blog-cta-title">Get More From Your Hosting</h2>
+          <p id="blog-cta-desc">Talk to our team about a plan that fits your traffic, your budget and your growth.</p>
+          <a class="btn-outline blog-cta-btn" id="blog-cta-btn" href="/pricing">View Plans</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
   <footer class="site-footer" id="site-footer" role="contentinfo">
         <!-- ── Link columns ─────────────────────────────────── -->
         <div class="footer-links-section">
             <div class="footer-links-grid" data-strapi-link-groups="">
             <div class="footer-link-group">
                 <h3 class="footer-link-title">Dedicated Server</h3>
-                <ul><li><a class="footer-link" href="/dedicated-server">Dedicated Server</a></li><li><a class="footer-link" href="/windows-dedicated-server">Windows Dedicated Server</a></li><li><a class="footer-link" href="/linux-dedicated-server">Linux Dedicated Server</a></li><li><a class="footer-link" href="/managed-dedicated-server">Managed Dedicated Server</a></li><li><a class="footer-link" href="/nvme-dedicated-servers">NVMe Dedicated Server</a></li><li><a class="footer-link" href="/gpu-dedicated-server">GPU Dedicated Server</a></li><li><a class="footer-link" href="/bare-metal-server">Bare Metal Server</a></li></ul>
+                <ul><li><a class="footer-link" href="/windows-dedicated-server">Windows Dedicated Server</a></li><li><a class="footer-link" href="/linux-dedicated-server">Linux Dedicated Server</a></li><li><a class="footer-link" href="/managed-dedicated-server">Managed Dedicated Server</a></li><li><a class="footer-link" href="/nvme-dedicated-servers">NVMe Dedicated Server</a></li><li><a class="footer-link" href="/gpu-dedicated-server">GPU Dedicated Server</a></li><li><a class="footer-link" href="/bare-metal-server">Bare Metal Server</a></li></ul>
             </div>
         
             <div class="footer-link-group">
@@ -408,7 +328,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div class="footer-brand-left">
                     <a href="/" aria-label="ICSDC Home" class="footer-logo-link">
-                        <img data-strapi-logo="" src="https://admin.icsdc.com/uploads/icsdc_logo_white_03e0f23088.png" alt="Logo" class="footer-logo">
+                        <img data-strapi-logo="" src="https://admin.icsdc.com/uploads/icsdc_logo_white_03e0f23088.png" alt="Logo" class="footer-logo" width="800" height="667" loading="lazy" decoding="async">
                     </a>
                     <address class="footer-address">
                         <span data-strapi-footer-address="">Plot No. 21 &amp; 21A, <br> 
@@ -441,11 +361,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </footer>
 
+  <!-- SCROLL ANIMATION ENGINE -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('[data-animate], [data-stagger]').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
   
   
+  <script src="assets/js/blogs.js?v=3" type="module"></script>
   
   
+
   
+
 
 
 <script type="application/ld+json">

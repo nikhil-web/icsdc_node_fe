@@ -665,10 +665,6 @@ html[data-theme="dark"] .testi-card {
     border-color: #334155 !important;
 }
 
-html[data-theme="dark"] .testi-footer {
-    border-top-color: #334155;
-}
-
 html[data-theme="dark"] .testi-name {
     color: #e2e8f0 !important;
 }
@@ -680,11 +676,6 @@ html[data-theme="dark"] .testi-quote {
 html[data-theme="dark"] .testi-job {
     /* was #64748b — only 3.07 on the #1e293b card surface. #8b98ac = 5.00. */
     color: #8b98ac !important;
-}
-
-html[data-theme="dark"] .testi-quote-mark {
-    color: #60a5fa;
-    opacity: 0.25;
 }
 
 html[data-theme="dark"] .testi-nav-btn {

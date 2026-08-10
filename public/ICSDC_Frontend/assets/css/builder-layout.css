@@ -89,12 +89,20 @@
     color: var(--c-text-dark, #0f1c2e);
 }
 
-/* ── Vertical padding ──────────────────────────────────── */
-.bsec-p-compact .section,
-.bsec-p-compact > section { padding-top: 28px; padding-bottom: 28px; }
+/* ── Vertical padding ────────────────────────────────────
+   These retune --bld-section-gap (declared on #builder-page-root in
+   builder-page.css) rather than setting padding directly. Setting padding here
+   silently did NOTHING: builder-page.css targets `#builder-page-root .section`,
+   whose ID selector outranks any `.bsec-p-* .section` rule, so Compact and
+   Spacious both lost the cascade and every section stayed at the default.
+   A custom property inherits into the subtree, so specificity never applies. */
+.bsec-p-compact { --bld-section-gap: 28px; }
+.bsec-p-spacious { --bld-section-gap: 110px; }
 
-.bsec-p-spacious .section,
-.bsec-p-spacious > section { padding-top: 110px; padding-bottom: 110px; }
+/* Components that render a bare <section> without the .section class don't go
+   through the token rule, so they still need the direct declaration. */
+.bsec-p-compact > section:not(.section) { padding-top: 28px; padding-bottom: 28px; }
+.bsec-p-spacious > section:not(.section) { padding-top: 110px; padding-bottom: 110px; }
 
 /* ── Grid column override (components with a single grid) ─ */
 .bsec[style*="--bsec-cols"] .why-grid,

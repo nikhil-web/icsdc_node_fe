@@ -11,6 +11,42 @@ const { spawn } = require('child_process');
 const app = express();
 
 const publicPath = path.join(__dirname, 'public/ICSDC_Frontend');
+
+// ── Built output (scripts/build.js) ───────────────────────
+// build/ICSDC_Frontend mirrors public/ICSDC_Frontend containing minified CSS/JS
+// plus HTML whose asset references carry ?v=<content-hash>. Declared here (not
+// beside the static mounts further down) because sitePage() below is used by
+// routes that are registered earlier in the file.
+//
+// Skipped in development so a stale build/ can never shadow live source edits —
+// that failure mode is silent and costs real debugging time. npm run dev sets
+// NODE_ENV=development for exactly this reason.
+const BUILD_DIR = path.join(__dirname, 'build/ICSDC_Frontend');
+const useMinified = process.env.NODE_ENV !== 'development' && fs.existsSync(BUILD_DIR);
+
+/**
+ * Resolve a site file, preferring the build.
+ *
+ * The page routes read HTML off disk themselves (sendPageWithSeo injects the
+ * SEO head, sendFile for 404s) rather than going through express.static — so
+ * without this they would serve the SOURCE HTML and none of the content-hashed
+ * asset URLs the build produced. Memoised: the build is immutable while the
+ * process runs, since scripts/build.js publishes by atomic rename and prestart
+ * rebuilds before boot.
+ */
+const _siteFileCache = new Map();
+function sitePage(...segments) {
+    const rel = path.join(...segments);
+    if (_siteFileCache.has(rel)) return _siteFileCache.get(rel);
+    let resolved = path.join(publicPath, rel);
+    if (useMinified) {
+        const built = path.join(BUILD_DIR, rel);
+        if (fs.existsSync(built)) resolved = built;
+    }
+    _siteFileCache.set(rel, resolved);
+    return resolved;
+}
+
 const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
 const STRAPI_TOKEN = process.env.STRAPI_TOKEN || '';
 // STRAPI_URL is how THIS SERVER reaches Strapi (often http://localhost:1337 when
@@ -596,14 +632,14 @@ app.get('/api/builder/preview/:slug', (req, res) => {
 // canvas shell (rendered via postMessage — see canvas-mode.js).
 app.get('/builder/:slug', (req, res) => {
     if (req.params.slug === '__canvas') {
-        return res.sendFile(path.join(publicPath, 'builder-template.html'));
+        return res.sendFile(sitePage('builder-template.html'));
     }
     res.redirect(301, '/' + encodeURIComponent(req.params.slug));
 });
 
 // Also serve preview URLs through the same template
 app.get('/builder/preview/:slug', (req, res) => {
-    res.sendFile(path.join(publicPath, 'builder-template.html'));
+    res.sendFile(sitePage('builder-template.html'));
 });
 
 // ── Version snapshot writer (uses Strapi's knex via global) ──
@@ -1102,6 +1138,16 @@ function seoEsc(s) {
         .replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// Inverse of seoEsc — turns markup scraped out of a page file back into plain
+// text so it can be re-escaped exactly once. &amp; is decoded LAST so that an
+// input like "&amp;lt;" yields "&lt;" rather than collapsing all the way to "<".
+function seoUnesc(s) {
+    return String(s == null ? '' : s)
+        .replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&apos;/g, "'")
+        .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&');
+}
+
 /* ── Server-side hero copy ─────────────────────────────────
    The homepage hero ships with empty [data-strapi] elements that only fill in
    after main.js runs AND the Strapi fetch resolves. Two consequences Lighthouse
@@ -1224,6 +1270,7 @@ const BLOG_POSTS_TTL = 2 * 60 * 1000;
 async function fetchBlogPosts() {
     if (blogPostsCache && Date.now() - blogPostsCache.ts < BLOG_POSTS_TTL) return blogPostsCache.val;
     let posts = [];
+    let ok = false;
     try {
         const r = await fetch(
             `${STRAPI_URL}/api/builder-pages?publicationState=live` +
@@ -1261,10 +1308,22 @@ async function fetchBlogPosts() {
                 })
                 .filter(Boolean)
                 .sort((a, b) => new Date(b.sortDate || 0) - new Date(a.sortDate || 0));
+            ok = true;
         }
-    } catch (_) { /* Strapi down — fall through to whatever's cached/empty */ }
-    blogPostsCache = { ts: Date.now(), val: posts };
-    return posts;
+    } catch (_) { /* Strapi unreachable — handled below */ }
+
+    if (ok) {
+        blogPostsCache = { ts: Date.now(), val: posts };
+        return posts;
+    }
+
+    /* Only successes are cached. Caching a failure the same way meant one
+       transient Strapi blip pinned an empty list for 2 minutes — and because
+       isBlogSlug() drives routing, /blogs/<slug> then returned a hard 404 for
+       real published articles (search engines can drop a URL over that).
+       Serve the last good list instead and retry on the next request. */
+    if (blogPostsCache) return blogPostsCache.val;
+    return [];
 }
 
 // Blog posts live at /blogs/<slug>; every other builder page stays at /<slug>.
@@ -1289,7 +1348,7 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     try {
         html = await fs.promises.readFile(filePath, 'utf8');
     } catch (e) {
-        return res.status(404).sendFile(path.join(publicPath, '404.html'));
+        return res.status(404).sendFile(sitePage('404.html'));
     }
 
     const seo = seoOverride || await fetchSeo(slug);
@@ -1297,8 +1356,14 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     const curTitleM = html.match(/<title>([\s\S]*?)<\/title>/i);
     const curDescM = html.match(/<meta\s+name=["']description["']\s+content=["']([\s\S]*?)["']\s*\/?>/i);
 
-    const title = (seo && seo.title) || (curTitleM && curTitleM[1].trim()) || SEO_ORG_NAME;
-    const description = (seo && seo.description) || (curDescM && curDescM[1].trim()) || '';
+    /* `title`/`description` must be PLAIN text here, because every use site below
+       runs them through seoEsc(). Strapi values already are, but these fallbacks
+       are scraped out of the page file's own markup and so are HTML-escaped
+       already — without unescaping, a source title containing "&amp;" gets
+       re-escaped to "&amp;amp;" and renders as a literal "&amp;". Only bites
+       pages with no Strapi SEO entry (e.g. the legal pages, /blogs). */
+    const title = (seo && seo.title) || (curTitleM && seoUnesc(curTitleM[1].trim())) || SEO_ORG_NAME;
+    const description = (seo && seo.description) || (curDescM && seoUnesc(curDescM[1].trim())) || '';
     const canonical = seoCanonical(cleanPath, seo);
 
     const headTags = [
@@ -1391,25 +1456,40 @@ function setStaticCacheHeaders(res, filePath) {
     if (STATIC_ASSET_RE.test(filePath)) {
         res.setHeader('Cache-Control', 'public, max-age=2592000');      // 30 days
     } else if (/\.(css|js|mjs)$/i.test(filePath)) {
-        res.setHeader('Cache-Control', 'public, max-age=86400');        // 1 day
+        // Keyed on the ?v=<content-hash> that scripts/build.js writes into the
+        // built HTML and into module import specifiers.
+        //
+        //  with ?v=  → the URL identifies THAT exact content, so it can never go
+        //              stale: an edit changes the hash, which changes the URL.
+        //              Cache hard; this is what satisfies Lighthouse's
+        //              "efficient cache policy" audit.
+        //  without   → an unhashed URL (dev, or a page served straight from
+        //              public/). Caching it blind is how an edit ends up
+        //              invisible for a day, so revalidate instead: ETag makes
+        //              that a bodyless 304 when nothing changed.
+        //
+        // Versions are generated at build time ON PURPOSE. Hand-written ?v=N in
+        // the source meant a diff on every file referencing the asset (~56 for
+        // components.css) and had to be remembered on every edit. Do not go back
+        // to that — if a version is missing, fix the build.
+        const versioned = res.req && res.req.query && res.req.query.v;
+        res.setHeader(
+            'Cache-Control',
+            versioned ? 'public, max-age=31536000, immutable' : 'public, max-age=0, must-revalidate'
+        );
     } else if (/\.html?$/i.test(filePath)) {
         res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     }
 }
 
 // ── Minified assets (scripts/build.js) ────────────────────
-// build/ICSDC_Frontend mirrors public/ICSDC_Frontend but contains ONLY minified
-// .css/.js. Mounting it first means those win; everything else (images, HTML,
-// the prerendered snapshots) finds no match here and falls through to the
-// source mount below, so the build never has to copy binary assets.
-//
-// Skipped in development: a build/ left over from an earlier run would other-
-// wise shadow live edits to CSS/JS and silently serve stale code. npm run dev
-// sets NODE_ENV=development for exactly this reason. If build/ is absent the
-// mount is simply never registered and the site serves unminified sources —
-// so a missing or failed build degrades to "slower", never to "broken".
-const BUILD_DIR = path.join(__dirname, 'build/ICSDC_Frontend');
-const useMinified = process.env.NODE_ENV !== 'development' && fs.existsSync(BUILD_DIR);
+// BUILD_DIR / useMinified are declared near the top of this file, beside
+// sitePage(), because the page routes need them earlier. Mounting the build
+// first means its minified CSS/JS win; everything else (images, the prerendered
+// snapshots) finds no match here and falls through to the source mount below,
+// so the build never has to copy binary assets. If build/ is absent the mount
+// is simply never registered and the site serves unminified sources — a missing
+// or failed build degrades to "slower", never to "broken".
 if (useMinified) {
     app.use(express.static(BUILD_DIR, { index: false, setHeaders: setStaticCacheHeaders }));
     console.log('[static] serving minified CSS/JS from build/ICSDC_Frontend');
@@ -1426,14 +1506,14 @@ app.use(express.static(publicPath, { index: false, setHeaders: setStaticCacheHea
 
 // Homepage (SEO-injected)
 app.get('/', (req, res) => {
-    sendPageWithSeo(req, res, path.join(publicPath, 'index.html'), 'home', '/');
+    sendPageWithSeo(req, res, sitePage('index.html'), 'home', '/');
 });
 
 // Legal pages — serve from legal/ subdirectory (SEO-injected; no Strapi → static
 // title + computed canonical + Organization/WebSite/WebPage JSON-LD)
 app.get('/legal/:page', (req, res) => {
     const slug = req.params.page;
-    sendPageWithSeo(req, res, path.join(publicPath, 'legal', `${slug}.html`), `legal-${slug}`, `/legal/${slug}`);
+    sendPageWithSeo(req, res, sitePage('legal', `${slug}.html`), `legal-${slug}`, `/legal/${slug}`);
 });
 
 // /blog is a common thing to type by hand — send it to the real index.
@@ -1446,13 +1526,13 @@ app.get('/blog', (req, res) => res.redirect(301, '/blogs'));
 app.get('/blogs/:slug', async (req, res) => {
     const slug = req.params.slug;
     if (!(await isBlogSlug(slug))) {
-        return res.status(404).sendFile(path.join(publicPath, '404.html'));
+        return res.status(404).sendFile(sitePage('404.html'));
     }
     if (pageCache.has(slug) && !pageCache.get(slug)) {
-        return res.status(404).sendFile(path.join(publicPath, '404.html'));
+        return res.status(404).sendFile(sitePage('404.html'));
     }
     const bp = await fetchBuilderPageMeta(slug);
-    sendPageWithSeo(req, res, path.join(publicPath, 'builder-template.html'), slug, `/blogs/${slug}`, bp);
+    sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/blogs/${slug}`, bp);
 });
 
 // Dynamic routes — gate on page registry cache (SEO-injected)
@@ -1461,10 +1541,10 @@ app.get('/:page', async (req, res) => {
 
     // If the slug is registered and marked offline → 404 immediately
     if (pageCache.has(slug) && !pageCache.get(slug)) {
-        return res.status(404).sendFile(path.join(publicPath, '404.html'));
+        return res.status(404).sendFile(sitePage('404.html'));
     }
 
-    const filePath = path.join(publicPath, `${slug}.html`);
+    const filePath = sitePage(`${slug}.html`);
 
     // No static page file → maybe a published builder page lives at this slug
     if (!fs.existsSync(filePath)) {
@@ -1474,7 +1554,7 @@ app.get('/:page', async (req, res) => {
 
         const bp = await fetchBuilderPageMeta(slug);
         if (bp) {
-            return sendPageWithSeo(req, res, path.join(publicPath, 'builder-template.html'), slug, `/${slug}`, bp);
+            return sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/${slug}`, bp);
         }
     }
 

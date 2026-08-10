@@ -360,21 +360,6 @@
     box-shadow: 0 12px 48px rgba(26, 86, 219, 0.18);
 }
 
-/* ── Card body: quote mark + text + stars ── */
-.testi-body {
-    flex: 1;
-}
-
-.testi-quote-mark {
-    display: block;
-    font-size: 56px;
-    line-height: 0.8;
-    color: var(--c-blue);
-    opacity: 0.15;
-    margin-bottom: 10px;
-    font-family: Georgia, 'Times New Roman', serif;
-}
-
 .testi-quote {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 15px;
@@ -450,6 +435,16 @@
     box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.18);
 }
 
+/* Photo variant of the avatar. .testi-avatar is a fixed 46px circle with
+   overflow:hidden, so object-fit is what stops a non-square upload from
+   stretching — without it a wide photo renders squashed, not cropped. */
+.testi-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .testi-avatar-initials {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 16px;
@@ -486,15 +481,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-/* ── Card footer: kept for legacy markup ── */
-.testi-footer {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding-top: 18px;
-    border-top: 1px solid var(--c-border-blue);
 }
 
 /* ── Controls ── */
@@ -899,13 +885,19 @@ summary.faq-q::marker {
     justify-content: center;
     flex-shrink: 0;
     color: var(--c-text-mid);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Explicit properties, not `all` — `all` also transitions layout-affecting
+       properties (width/height/border-width), which forces needless layout work
+       on every frame alongside the panel expanding right below it. */
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .faq-chev svg {
     width: 14px;
     height: 14px;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    /* transform-only: runs on the compositor, never triggers layout */
+    transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .faq-item[open] .faq-chev {
@@ -918,22 +910,45 @@ summary.faq-q::marker {
     transform: rotate(180deg);
 }
 
-/* Answer panel */
+/* Answer panel.
+   Animates grid-template-rows 0fr->1fr rather than max-height 0->600px.
+   max-height was the source of the jitter: the panel is only ~120px tall, so
+   the easing curve spent most of its 0.4s travelling between 120px and 600px
+   with nothing visible happening — the reveal snapped open in the first few
+   frames, and closing sat still before lurching. 0fr->1fr resolves to the
+   content's REAL height, so the curve maps 1:1 onto what you actually see and
+   it eases evenly in both directions. */
 .faq-a-wrap {
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .faq-item[open] .faq-a-wrap {
-    max-height: 600px;
+    grid-template-rows: 1fr;
+}
+
+/* Grid items default to min-height:auto, which refuses to shrink below content
+   height and would break the 0fr collapse entirely. */
+.faq-a-wrap > * {
+    min-height: 0;
+    overflow: hidden;
 }
 
 .faq-a {
-    padding: 0 24px 24px 76px;
+    /* Bottom padding is applied only when open. min-height:0 lets the grid item
+       shrink its CONTENT to zero, but padding is immune to it — leaving 24px of
+       the answer panel still showing under every closed question. Collapsing it
+       alongside the row is what gets a true 0 height. */
+    padding: 0 24px 0 76px;
     font-size: 15px;
     color: var(--c-text-muted);
     line-height: 1.7;
+    transition: padding-bottom 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-item[open] .faq-a {
+    padding-bottom: 24px;
 }
 
 @media (max-width: 560px) {
@@ -942,8 +957,13 @@ summary.faq-q::marker {
         font-size: 14.5px;
     }
 
+    /* Bottom padding stays open-only here too — see the desktop .faq-a note. */
     .faq-a {
-        padding: 0 18px 18px 18px;
+        padding: 0 18px 0 18px;
+    }
+
+    .faq-item[open] .faq-a {
+        padding-bottom: 18px;
     }
 
     .faq-num {

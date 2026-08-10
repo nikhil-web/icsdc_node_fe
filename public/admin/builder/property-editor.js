@@ -10,7 +10,7 @@
  * the section preview.
  */
 
-import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js?v=6';
+import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js';
 import { pickMedia } from './media-picker.js';
 
 let activeSection = null;
@@ -265,6 +265,127 @@ function bindLayoutHandlers(rootEl) {
     });
 }
 
+/* ── Paste sanitiser (Google Docs / Word) ─────────────────────
+   Goal: keep the STRUCTURE an author wrote (headings, bold, italic, lists,
+   links, quotes, tables) and throw away everything presentational, so pasted
+   articles inherit the site's own typography instead of Docs' or Word's.
+
+   Everything not on this list is UNWRAPPED rather than deleted — a stray
+   <span>/<div>/<font> disappears but the text inside it survives. Deleting
+   outright would silently eat pasted content. */
+const PASTE_ALLOWED_TAGS = {
+    P: 1, BR: 1, H1: 1, H2: 1, H3: 1, H4: 1, H5: 1, H6: 1,
+    STRONG: 1, B: 1, EM: 1, I: 1, U: 1, S: 1, STRIKE: 1, DEL: 1,
+    UL: 1, OL: 1, LI: 1, A: 1, BLOCKQUOTE: 1, CODE: 1, PRE: 1,
+    IMG: 1, HR: 1, TABLE: 1, THEAD: 1, TBODY: 1, TR: 1, TH: 1, TD: 1, SUP: 1, SUB: 1,
+};
+
+// Only these attributes survive; everything else (style/class/id/dir/lang, and
+// crucially every on* handler) is dropped.
+const PASTE_ALLOWED_ATTRS = { A: ['href', 'title'], IMG: ['src', 'alt'] };
+
+/* Docs and Word express bold/italic as inline STYLE on a <span>, not as
+   <strong>/<em>. Unwrapping the span would therefore lose the emphasis, so
+   read it off the style first and re-express it semantically. */
+function semanticTagsFromStyle(el) {
+    const s = el.style;
+    if (!s) return [];
+    const tags = [];
+    const fw = String(s.fontWeight || '').toLowerCase();
+    if (fw === 'bold' || fw === 'bolder' || (parseInt(fw, 10) >= 600)) tags.push('strong');
+    if (String(s.fontStyle || '').toLowerCase() === 'italic') tags.push('em');
+    const td = String(s.textDecoration || s.textDecorationLine || '').toLowerCase();
+    if (td.indexOf('underline') !== -1) tags.push('u');
+    if (td.indexOf('line-through') !== -1) tags.push('s');
+    return tags;
+}
+
+function unwrapInto(el, wrapTags) {
+    const parent = el.parentNode;
+    if (!parent) return;
+    let host = el;
+    // Rebuild the emphasis the style was carrying, innermost last
+    wrapTags.forEach((t) => {
+        const w = document.createElement(t);
+        parent.insertBefore(w, host);
+        w.appendChild(host);
+        host = w;
+    });
+    // Move children out relative to el's CURRENT parent — after the wrapping
+    // above, el is nested inside the new wrapper and is no longer a child of
+    // `parent`, so anchoring on `parent` here throws NotFoundError.
+    while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+    el.remove();
+}
+
+function sanitizePastedHtml(html) {
+    const tpl = document.createElement('template');
+    tpl.innerHTML = html;
+    const root = tpl.content;
+
+    // Drop these outright — content inside them is never body copy.
+    root.querySelectorAll('script,style,meta,link,title,head,noscript,iframe,object,embed').forEach((n) => n.remove());
+
+    // Strip comments (Word emits huge conditional-comment blocks).
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_COMMENT, null);
+    const comments = [];
+    while (walker.nextNode()) comments.push(walker.currentNode);
+    comments.forEach((c) => c.remove());
+
+    // Deepest-first so unwrapping a parent can't skip children still to visit.
+    const els = Array.from(root.querySelectorAll('*')).reverse();
+    els.forEach((el) => {
+        const tag = el.tagName;
+
+        if (!PASTE_ALLOWED_TAGS[tag]) {
+            unwrapInto(el, semanticTagsFromStyle(el));
+            return;
+        }
+
+        /* Google Docs wraps the WHOLE selection in
+           <b style="font-weight:normal" id="docs-internal-guid-…">.
+           Left alone that makes an entire pasted article bold. */
+        if ((tag === 'B' || tag === 'STRONG')) {
+            const fw = String(el.style && el.style.fontWeight || '').toLowerCase();
+            if (fw === 'normal' || (parseInt(fw, 10) && parseInt(fw, 10) < 600)) {
+                unwrapInto(el, []);
+                return;
+            }
+        }
+
+        // Keep the tag, bin every attribute except the few that carry meaning.
+        const keep = PASTE_ALLOWED_ATTRS[tag] || [];
+        Array.from(el.attributes).forEach((attr) => {
+            if (keep.indexOf(attr.name.toLowerCase()) === -1) el.removeAttribute(attr.name);
+        });
+
+        // Neutralise javascript:/data: URLs — this HTML ends up on public pages.
+        if (tag === 'A' && el.getAttribute('href')) {
+            const href = el.getAttribute('href').trim();
+            if (/^(javascript|data|vbscript):/i.test(href)) el.removeAttribute('href');
+        }
+        if (tag === 'IMG' && el.getAttribute('src')) {
+            const src = el.getAttribute('src').trim();
+            // Docs pastes images as base64 data: URLs — they'd bloat the saved
+            // JSON enormously, so drop them and let the author use the image button.
+            if (!/^https?:\/\//i.test(src)) el.remove();
+        }
+    });
+
+    // Collapse empties left behind by stripped wrappers (but keep void tags).
+    Array.from(root.querySelectorAll('p,span,div,strong,b,em,i,u,s')).forEach((el) => {
+        if (!el.textContent.trim() && !el.querySelector('img,br,hr')) el.remove();
+    });
+
+    /* Docs marks heading text as font-weight:700, which the style conversion
+       above turns into <h2><strong>…</strong></h2>. Headings are already bold,
+       so drop the redundant emphasis rather than saving it into the article. */
+    root.querySelectorAll('h1 strong, h1 b, h2 strong, h2 b, h3 strong, h3 b, h4 strong, h4 b, h5 strong, h5 b, h6 strong, h6 b')
+        .forEach((el) => unwrapInto(el, []));
+
+    return tpl.innerHTML.replace(/\s+/g, ' ').trim();
+}
+
 /* ── Rich-text (WYSIWYG) binding ──────────────────────────────
    contenteditable + execCommand: no external dependency, works offline, and
    emits plain semantic HTML (<p>/<h2>/<ul>/<a>/<blockquote>) that the site's
@@ -287,11 +408,22 @@ function bindRichText(wrap) {
     area.addEventListener('input', commit);
     area.addEventListener('blur', commit);
 
-    // Keep pasted content plain so foreign styles never enter the page
+    // Paste from Google Docs / Word keeps its STRUCTURE (headings, bold, lists,
+    // links, tables) but is stripped of all presentation. Pasting the raw HTML
+    // would drag in inline font/colour styles, Word's mso-* junk and an XSS
+    // surface — see sanitizePastedHtml.
     area.addEventListener('paste', (e) => {
+        const cb = e.clipboardData || window.clipboardData;
+        if (!cb) return;
+        const html = cb.getData('text/html');
         e.preventDefault();
-        const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-        document.execCommand('insertText', false, text);
+        if (html) {
+            const clean = sanitizePastedHtml(html);
+            // insertHTML keeps the caret/undo stack behaving like a normal paste
+            document.execCommand('insertHTML', false, clean);
+        } else {
+            document.execCommand('insertText', false, cb.getData('text/plain'));
+        }
     });
 
     function wrapBlock(tag) {

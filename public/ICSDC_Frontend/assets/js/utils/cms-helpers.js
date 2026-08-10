@@ -7,7 +7,7 @@
  */
 
 import { CUSTOM_ICONS } from './custom-icons.js';
-import { postAPI } from '../services/strapiClient.js';
+import { postAPI, uploadURL } from '../services/strapiClient.js';
 
 /**
  * Wire a CTA button's click. If `link` is the magic value 'contact-popup'
@@ -862,15 +862,22 @@ export function initTestimonials(items) {
     if (!grid || !dotsWrap || !items || !items.length) return;
 
     function buildTestiCard(t, index) {
-        var initials = getInitials(t.name);
         var stars = '';
         for (var s = 0; s < (t.rating || 5); s++) { stars += starSVG(); }
 
+        /* ds.testimonial-card has an `Avatar` media field (capital A) that this
+           renderer ignored until 2026-08-10 — editors could upload a photo and
+           it silently never appeared. Initials stay the fallback, so entries
+           with no upload look exactly as before. `avatar` is accepted too
+           because the field name is easy to get wrong in the CMS. */
+        var avatarSrc = uploadURL(t.Avatar || t.avatar, 'thumbnail');
+        var avatarHTML = avatarSrc
+            ? '<img src="' + avatarSrc + '" alt="" class="testi-avatar-img" loading="lazy" decoding="async">'
+            : '<span class="testi-avatar-initials">' + getInitials(t.name) + '</span>';
+
         return '<article class="testi-card" role="listitem" data-testi-index="' + index + '" aria-label="Testimonial from ' + t.name + '">' +
             '<div class="testi-left">' +
-            '<div class="testi-avatar" aria-hidden="true">' +
-            '<span class="testi-avatar-initials">' + initials + '</span>' +
-            '</div>' +
+            '<div class="testi-avatar" aria-hidden="true">' + avatarHTML + '</div>' +
             '<div class="testi-client-info">' +
             '<p class="testi-name">' + t.name + '</p>' +
             '<p class="testi-job">' + (t.title || '') + '</p>' +
