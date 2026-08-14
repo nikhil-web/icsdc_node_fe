@@ -9,18 +9,57 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-MXV9SGZS');</script>
     <!-- End Google Tag Manager -->
-    <script src="assets/js/theme-init.js"></script>
+    <!-- Inlined from assets/js/theme-init.js. It must stay synchronous in <head>
+         to set data-theme before first paint (anti-FOUC), which made it a
+         render-blocking request costing ~467ms for 669 bytes. Inlining removes
+         the round-trip entirely while keeping identical behaviour. Keep this in
+         sync with assets/js/theme-init.js, which other pages still load. -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('icsdc-theme');
+            var system = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', saved || system);
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/assets/images/main_logo.png">
+    <link rel="icon" type="image/png" href="/assets/images/main_logo_icon.png">
     <title>ICSDC - Scalable Fortified Cloud</title>
+    <!-- Warm up the two third-party origins before the requests are discovered.
+         Both serve render-blocking CSS; the TLS+DNS handshake alone was ~300ms. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <!-- Font Awesome is icons only — nothing above the fold depends on it, so it
+         must not block first paint (it was costing ~1.5s of the render-blocking
+         budget). media="print" + onload keeps it off the critical path.
+         The obvious alternative, rel=preload as=style, was A/B'd on 3-run medians
+         and measured WORSE on every metric (FCP 3.4s vs 3.1s, LCP 8.0s vs 7.7s,
+         SI 3.4s vs 3.1s): as=style fetches at High priority, so FA's ~268KB of
+         webfonts then compete with the render-blocking CSS. Keep media="print". -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        crossorigin="anonymous">
+        crossorigin="anonymous" media="print" onload="this.media='all';this.onload=null">
+    <!-- media="print" needs JS to promote it, so JS-off clients get the plain sheet. -->
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+            crossorigin="anonymous">
+    </noscript>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/homepage-extras.css">
+    <!-- NOTE: do NOT gate this file behind (prefers-color-scheme: dark).
+         Despite its name, dark-mode.css is not purely dark overrides — it also
+         carries the BASE styling for #theme-toggle, .mobile-theme-toggle and
+         friends (~8 unprefixed rule blocks, e.g. the toggle's 40x40 box at
+         dark-mode.css:153). Loading it conditionally leaves those controls
+         unstyled in light mode, which regressed the `target-size` audit onto
+         #theme-toggle. `unused-css-rules` flags 41KB of this file as unused on a
+         light load, but the fix for that is to split the base rules out into
+         components.css first — not to skip the download. -->
     <link rel="stylesheet" href="assets/css/dark-mode.css">
 </head>
 
@@ -65,7 +104,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <nav>
         <div class="nav-inner">
             <a href="#" class="logo">
-                <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon">
+                <img data-strapi-mainLogo data-strapi="mainLogo" src="" alt="ICSDC logo" class="logo-icon"
+                    width="750" height="625">
             </a>
             <ul data-strapi-nav class="nav-links" id="nav-links"></ul>
             <button class="btn-login desktop-login-btn">NO STRAPI DATA</button>
@@ -79,8 +119,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </nav>
 
+    <main id="main-content">
+
     <!-- HERO -->
-    <section class="hero-section">
+    <section class="hero-section hero-section--home">
         <div class="hero">
             <div class="hero-content">
                 <h1 data-strapi="mainHeading" class="hero-title"></h1>
@@ -150,7 +192,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="less-cloud-complex-image" data-animate="scale-up">
                 <div class="gradient"></div>
-                <img src="assets/images/image 1.webp" alt="ICSDC global infrastructure map">
+                <img src="assets/images/image 1.webp" alt="ICSDC global infrastructure map"
+                    width="1160" height="671" loading="lazy" decoding="async">
             </div>
         </div>
     </section>
@@ -190,21 +233,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="floating-card fc-left fc-top" style="--fc-delay:0s">
                     <div class="fc-icon"><i class="fa-solid fa-up-right-and-down-left-from-center"
                             aria-hidden="true"></i></div>
-                    <h4>Dedicated Server</h4>
+                    <h3>Dedicated Server</h3>
                     <p>Get the exclusive power and control only dedicated hardware can offer — from Windows, Linux, NVMe
                         to Managed GPU and Bare Metal.</p>
                 </div>
 
                 <div class="floating-card fc-left fc-mid" style="--fc-delay:0.8s">
                     <div class="fc-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
-                    <h4>NVMe Storage</h4>
+                    <h3>NVMe Storage</h3>
                     <p>Blazing-fast NVMe SSD arrays with enterprise-grade redundancy, ensuring ultra-low latency for
                         your most critical workloads.</p>
                 </div>
 
                 <div class="floating-card fc-left fc-bot" style="--fc-delay:1.6s">
                     <div class="fc-icon"><i class="fa-solid fa-file-lines" aria-hidden="true"></i></div>
-                    <h4>Bare Metal</h4>
+                    <h3>Bare Metal</h3>
                     <p>Single-tenant physical servers with no hypervisor overhead — full hardware access for maximum
                         performance and compliance.</p>
                 </div>
@@ -224,21 +267,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <!-- RIGHT COLUMN CARDS -->
                 <div class="floating-card fc-right fc-top" style="--fc-delay:0.4s">
                     <div class="fc-icon"><i class="fa-solid fa-house" aria-hidden="true"></i></div>
-                    <h4>Managed Cloud</h4>
+                    <h3>Managed Cloud</h3>
                     <p>Fully managed cloud infrastructure with 24×7 expert support — we handle operations so your team
                         can focus on innovation.</p>
                 </div>
 
                 <div class="floating-card fc-right fc-mid" style="--fc-delay:1.2s">
                     <div class="fc-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
-                    <h4>GPU Servers</h4>
+                    <h3>GPU Servers</h3>
                     <p>High-density GPU clusters purpose-built for AI/ML training, rendering, and HPC — scalable from
                         single node to full racks.</p>
                 </div>
 
                 <div class="floating-card fc-right fc-bot" style="--fc-delay:2.0s">
                     <div class="fc-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
-                    <h4>Global CDN</h4>
+                    <h3>Global CDN</h3>
                     <p>Lightning-fast content delivery across 30+ PoPs worldwide — reduce latency and serve users at the
                         edge, wherever they are.</p>
                 </div>
@@ -246,14 +289,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <!-- BOTTOM ROW CARDS -->
                 <div class="floating-card fc-btm fc-btm-l" style="--fc-delay:2.4s">
                     <div class="fc-icon"><i class="fa-solid fa-shield" aria-hidden="true"></i></div>
-                    <h4>DDoS Protection</h4>
+                    <h3>DDoS Protection</h3>
                     <p>Enterprise-grade mitigation absorbing multi-Tbps attacks at the network edge, keeping your
                         services online and responsive.</p>
                 </div>
 
                 <div class="floating-card fc-btm fc-btm-r" style="--fc-delay:3.0s">
                     <div class="fc-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
-                    <h4>24×7 Support</h4>
+                    <h3>24×7 Support</h3>
                     <p>Round-the-clock certified cloud architects ready to resolve issues, optimise configurations, and
                         guide your architecture decisions.</p>
                 </div>
@@ -273,7 +316,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <p class="who-we-are-paragraph" data-strapi="industryValidatedParagraph"></p>
             </div>
             <div class="less-cloud-complex-image" data-animate="scale-up">
-                <img src="assets/images/industry.webp" alt="ICSDC global infrastructure map">
+                <img src="assets/images/industry.webp" alt="ICSDC global infrastructure map"
+                    width="1200" height="532" loading="lazy" decoding="async">
             </div>
         </div>
     </section>
@@ -304,7 +348,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="business-needs-visual" data-animate="fade-right">
                 <div class="business-needs-image-wrap">
                     <img src="assets/images/trusted-cloud-service-provider.webp" alt="Cloud services illustration"
-                        class="business-needs-image" data-strapi="whyCloudImage">
+                        class="business-needs-image" data-strapi="whyCloudImage"
+                        width="1000" height="1000" loading="lazy" decoding="async">
                 </div>
             </div>
             <div class="business-needs-content" data-animate="fade-left">
@@ -451,12 +496,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="testi-container">
             <h2 id="testi-heading" class="testi-title">See our Clients Stories</h2>
 
-            <!-- Cards rendered by components.js -->
             <div class="testi-scroll-viewport">
-                <div class="testi-grid" role="list" id="testi-grid"></div>
+                <div class="testi-grid" role="list" tabindex="0" aria-label="Customer testimonials, scrollable" id="testi-grid"></div>
             </div>
 
-            <!-- Pagination dots rendered by components.js -->
             <div class="testi-pagination" role="tablist" aria-label="Testimonial navigation" id="testi-dots"></div>
 
             <div class="testi-nav">
@@ -605,7 +648,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <!-- FAQ accordion column -->
             <div class="faq-col">
                 <h2 id="faq-heading" class="faq-title">Frequently Asked Questions</h2>
-                <!-- Accordion items rendered by components.js -->
                 <div class="faq-grid">
           <div class="faq-accordions" id="faq-accordions"></div>
           <aside class="faq-aside">
@@ -680,6 +722,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
     <!-- contact section end -->
 
+
+    </main>
 
     <footer class="site-footer" id="site-footer" role="contentinfo"></footer>
 
@@ -808,7 +852,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script src="assets/js/main.js" type="module"></script>
     <script src="assets/js/polish.js" defer></script>
     <script src="assets/js/homepage-cms.js" type="module"></script>
-    <script src="assets/js/components.js" defer></script>
 
     <script>
         // Footer: inject current year

@@ -7,7 +7,7 @@
  */
 
 import { CUSTOM_ICONS } from './custom-icons.js';
-import { postAPI } from '../services/strapiClient.js';
+import { postAPI, uploadURL } from '../services/strapiClient.js';
 
 /**
  * Wire a CTA button's click. If `link` is the magic value 'contact-popup'
@@ -446,7 +446,13 @@ export function populateHero(section, data) {
     if (data.heroImage && data.heroImage.image) {
         var heroRight = section.querySelector('.hero-right');
         var heroImg = heroRight && heroRight.querySelector('.hero-right-image');
-        if (heroImg) {
+        // Below 1366px style.css sets .hero-right { display: none }, but assigning
+        // .src still downloads and decodes the image. On the homepage that is a
+        // 771 KB PNG fetched purely to be invisible. Skip the assignment when the
+        // container isn't rendered; the server-side preload is gated on the same
+        // breakpoint. Pages that swap in a hero form set --has-form and stay visible.
+        var heroVisible = heroRight && getComputedStyle(heroRight).display !== 'none';
+        if (heroImg && heroVisible) {
             var _base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
             var _m = data.heroImage.image;
             var _url = (_m.formats && (_m.formats.large || _m.formats.medium || _m.formats.small)
@@ -454,6 +460,12 @@ export function populateHero(section, data) {
                 : _m.url) || '';
             if (_url && !_url.startsWith('http')) _url = _base + _url;
             if (_url) {
+                // This is the LCP element on most pages. The server preloads the
+                // same URL (heroPreloadUrl in server.js — keep the format pick
+                // above in sync with it); these hints stop the browser from
+                // queueing it behind lazier below-fold images once it lands.
+                heroImg.setAttribute('fetchpriority', 'high');
+                heroImg.setAttribute('decoding', 'async');
                 heroImg.src = _url;
                 heroImg.style.display = '';
                 Array.from(heroRight.children).forEach(function (child) {
@@ -850,21 +862,28 @@ export function initTestimonials(items) {
     if (!grid || !dotsWrap || !items || !items.length) return;
 
     function buildTestiCard(t, index) {
-        var initials = getInitials(t.name);
         var stars = '';
         for (var s = 0; s < (t.rating || 5); s++) { stars += starSVG(); }
 
+        /* ds.testimonial-card has an `Avatar` media field (capital A) that this
+           renderer ignored until 2026-08-10 — editors could upload a photo and
+           it silently never appeared. Initials stay the fallback, so entries
+           with no upload look exactly as before. `avatar` is accepted too
+           because the field name is easy to get wrong in the CMS. */
+        var avatarSrc = uploadURL(t.Avatar || t.avatar, 'thumbnail');
+        var avatarHTML = avatarSrc
+            ? '<img src="' + avatarSrc + '" alt="" class="testi-avatar-img" loading="lazy" decoding="async">'
+            : '<span class="testi-avatar-initials">' + getInitials(t.name) + '</span>';
+
         return '<article class="testi-card" role="listitem" data-testi-index="' + index + '" aria-label="Testimonial from ' + t.name + '">' +
             '<div class="testi-left">' +
-            '<div class="testi-avatar" aria-hidden="true">' +
-            '<span class="testi-avatar-initials">' + initials + '</span>' +
-            '</div>' +
+            '<div class="testi-avatar" aria-hidden="true">' + avatarHTML + '</div>' +
             '<div class="testi-client-info">' +
             '<p class="testi-name">' + t.name + '</p>' +
             '<p class="testi-job">' + (t.title || '') + '</p>' +
             '<p class="testi-company">' + (t.company || '') + '</p>' +
             '</div>' +
-            '<div class="testi-rating" aria-label="Rating: ' + (t.rating || 5) + ' out of 5 stars">' + stars + '</div>' +
+            '<div role="img" class="testi-rating" aria-label="Rating: ' + (t.rating || 5) + ' out of 5 stars">' + stars + '</div>' +
             '</div>' +
             '<div class="testi-right">' +
             '<blockquote class="testi-quote">' + inlineRichText(t.quote || '') + '</blockquote>' +

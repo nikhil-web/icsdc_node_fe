@@ -11,3 +11,7 @@ public/ICSDC_Frontend/sitemap.xml
 sitemap.xml
 public/ICSDC_Frontend/sitemap.xml
 .claude/launch.json
+
+# Minified output from scripts/build.js — generated, never committed.
+# Absent build/ just means the server serves unminified sources.
+build/

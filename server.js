@@ -11,8 +11,53 @@ const { spawn } = require('child_process');
 const app = express();
 
 const publicPath = path.join(__dirname, 'public/ICSDC_Frontend');
+
+// ── Built output (scripts/build.js) ───────────────────────
+// build/ICSDC_Frontend mirrors public/ICSDC_Frontend containing minified CSS/JS
+// plus HTML whose asset references carry ?v=<content-hash>. Declared here (not
+// beside the static mounts further down) because sitePage() below is used by
+// routes that are registered earlier in the file.
+//
+// Skipped in development so a stale build/ can never shadow live source edits —
+// that failure mode is silent and costs real debugging time. npm run dev sets
+// NODE_ENV=development for exactly this reason.
+const BUILD_DIR = path.join(__dirname, 'build/ICSDC_Frontend');
+const useMinified = process.env.NODE_ENV !== 'development' && fs.existsSync(BUILD_DIR);
+
+/**
+ * Resolve a site file, preferring the build.
+ *
+ * The page routes read HTML off disk themselves (sendPageWithSeo injects the
+ * SEO head, sendFile for 404s) rather than going through express.static — so
+ * without this they would serve the SOURCE HTML and none of the content-hashed
+ * asset URLs the build produced. Memoised: the build is immutable while the
+ * process runs, since scripts/build.js publishes by atomic rename and prestart
+ * rebuilds before boot.
+ */
+const _siteFileCache = new Map();
+function sitePage(...segments) {
+    const rel = path.join(...segments);
+    if (_siteFileCache.has(rel)) return _siteFileCache.get(rel);
+    let resolved = path.join(publicPath, rel);
+    if (useMinified) {
+        const built = path.join(BUILD_DIR, rel);
+        if (fs.existsSync(built)) resolved = built;
+    }
+    _siteFileCache.set(rel, resolved);
+    return resolved;
+}
+
 const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
 const STRAPI_TOKEN = process.env.STRAPI_TOKEN || '';
+// STRAPI_URL is how THIS SERVER reaches Strapi (often http://localhost:1337 when
+// Node and Strapi run as sibling services on the same box — fast + no public
+// exposure needed for that hop). It must never be handed to a BROWSER: a remote
+// admin's browser resolves "localhost" to their OWN machine, not the server, so
+// any URL built from STRAPI_URL and sent in an API response 404s/refuses for
+// everyone except someone who happens to run Strapi locally on their own port
+// 1337 too. STRAPI_PUBLIC_URL is the address a browser can actually reach —
+// falls back to STRAPI_URL for pure-local dev where they're the same host.
+const STRAPI_PUBLIC_URL = process.env.STRAPI_PUBLIC_URL || STRAPI_URL;
 
 // ── Crawler prerendering (dynamic rendering) ──────────────
 // Fully-rendered static snapshots (built by prerender.js) live in /prerendered and
@@ -228,11 +273,29 @@ app.get('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req, re
 });
 
 // ── Builder: create new page ─────────────────────────────
+// Slugs that builder pages may never take: every static page file, legal,
+// admin/api/assets plumbing. Builder pages publish at top-level /<slug>
+// (2026-07-03), so collisions would shadow real pages.
+function isReservedBuilderSlug(slug) {
+    const s = String(slug || '').toLowerCase().replace(/^\/+|\/+$/g, '');
+    if (!s || !/^[a-z0-9-]+$/.test(s)) return true;                 // invalid chars → reject
+    const RESERVED = ['legal', 'admin', 'api', 'assets', 'builder', 'prerendered',
+        'sitemap', 'robots', 'socket.io', 'index', 'home', '404'];
+    if (RESERVED.includes(s)) return true;
+    try {
+        if (fs.existsSync(path.join(publicPath, s + '.html'))) return true;   // static page exists
+    } catch (_) {}
+    return false;
+}
+
 app.post('/api/admin/builder/pages', requireAdminAuth, async (req, res) => {
     try {
         const { title, slug, sections, metaTitle, metaDescription, templateId } = req.body || {};
         if (!title || !slug) {
             return res.status(400).json({ error: 'title and slug are required' });
+        }
+        if (isReservedBuilderSlug(slug)) {
+            return res.status(400).json({ error: 'This slug is reserved or already used by an existing site page. Choose another.' });
         }
         const r = await strapi('/api/builder-pages', {
             method: 'POST',
@@ -344,6 +407,8 @@ app.post('/api/admin/builder/pages/:documentId/publish', requireAdminAuth, async
             res.status(r.status).json(data);
         }
 
+        bustBuilderMetaCache();   // new/updated meta must show at top-level URL immediately
+
         // Write a "published" snapshot
         writeVersionSnapshot({
             documentId,
@@ -364,6 +429,7 @@ app.delete('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req,
         const r = await strapi(`/api/builder-pages/${req.params.documentId}`, {
             method: 'DELETE',
         });
+        bustBuilderMetaCache();   // top-level serving must reflect the delete immediately
         if (r.status === 204) return res.status(204).end();
         const data = await r.json();
         res.status(r.status).json(data);
@@ -445,15 +511,18 @@ function cleanupExpiredTokens() {
 }
 
 // ── Admin: media library (Strapi upload proxy) ───────────────────────
+// Builds URLs that go straight into a browser <img src> and can also be saved
+// permanently into builder-page props (shared across every environment reading
+// that content) — must use STRAPI_PUBLIC_URL, never the server-internal STRAPI_URL.
 function absolutifyMediaUrls(file) {
     if (!file || typeof file !== 'object') return file;
     // Strapi 5 sometimes wraps responses as { id, attributes: {...} }
     const target = file.attributes && typeof file.attributes === 'object' ? file.attributes : file;
-    if (target.url && !/^https?:/i.test(target.url)) target.url = STRAPI_URL.replace(/\/$/, '') + target.url;
+    if (target.url && !/^https?:/i.test(target.url)) target.url = STRAPI_PUBLIC_URL.replace(/\/$/, '') + target.url;
     if (target.formats && typeof target.formats === 'object') {
         Object.keys(target.formats).forEach((k) => {
             const f = target.formats[k];
-            if (f && f.url && !/^https?:/i.test(f.url)) f.url = STRAPI_URL.replace(/\/$/, '') + f.url;
+            if (f && f.url && !/^https?:/i.test(f.url)) f.url = STRAPI_PUBLIC_URL.replace(/\/$/, '') + f.url;
         });
     }
     return file;
@@ -558,13 +627,19 @@ app.get('/api/builder/preview/:slug', (req, res) => {
 });
 
 // ── Builder: public page renderer (must come BEFORE /:page catch-all) ──
+// Since 2026-07-03 builder pages live at top-level /<slug>; legacy
+// /builder/<slug> URLs 301 there. __canvas is the editor's WYSIWYG
+// canvas shell (rendered via postMessage — see canvas-mode.js).
 app.get('/builder/:slug', (req, res) => {
-    res.sendFile(path.join(publicPath, 'builder-template.html'));
+    if (req.params.slug === '__canvas') {
+        return res.sendFile(sitePage('builder-template.html'));
+    }
+    res.redirect(301, '/' + encodeURIComponent(req.params.slug));
 });
 
 // Also serve preview URLs through the same template
 app.get('/builder/preview/:slug', (req, res) => {
-    res.sendFile(path.join(publicPath, 'builder-template.html'));
+    res.sendFile(sitePage('builder-template.html'));
 });
 
 // ── Version snapshot writer (uses Strapi's knex via global) ──
@@ -614,62 +689,63 @@ async function writeVersionSnapshot({ documentId, versionNumber, sections, title
 
 const STATIC_PAGES = [
     // Home
-    { path: '/',                            priority: 1.0, changefreq: 'weekly'  },
+    { path: '/',                            priority: 1.0, changefreq: 'daily'    },
     // Core hosting
-    { path: '/cloud-hosting',               priority: 0.9, changefreq: 'weekly'  },
-    { path: '/cpanel-hosting',              priority: 0.9, changefreq: 'weekly'  },
-    { path: '/reseller-hosting',            priority: 0.9, changefreq: 'weekly'  },
-    { path: '/wordpress-hosting',           priority: 0.9, changefreq: 'weekly'  },
-    { path: '/shared-hosting',              priority: 0.9, changefreq: 'weekly'  },
-    { path: '/web-hosting',                 priority: 0.9, changefreq: 'weekly'  },
+    { path: '/cloud-hosting',               priority: 0.9, changefreq: 'daily'    },
+    { path: '/cpanel-hosting',              priority: 0.9, changefreq: 'daily'    },
+    { path: '/reseller-hosting',            priority: 0.9, changefreq: 'daily'    },
+    { path: '/wordpress-hosting',           priority: 0.9, changefreq: 'daily'    },
+    { path: '/shared-hosting',              priority: 0.9, changefreq: 'daily'    },
+    { path: '/web-hosting',                 priority: 0.9, changefreq: 'daily'    },
     // VPS
-    { path: '/vps-hosting',                 priority: 0.9, changefreq: 'weekly'  },
-    { path: '/linux-vps-hosting',           priority: 0.8, changefreq: 'weekly'  },
-    { path: '/windows-vps-hosting',         priority: 0.8, changefreq: 'weekly'  },
-    { path: '/managed-vps-hosting',         priority: 0.8, changefreq: 'weekly'  },
-    { path: '/vps-cpanel',                  priority: 0.8, changefreq: 'weekly'  },
-    { path: '/vps-hosting-trial',           priority: 0.7, changefreq: 'weekly'  },
+    { path: '/vps-hosting',                 priority: 0.9, changefreq: 'daily'    },
+    { path: '/linux-vps-hosting',           priority: 0.8, changefreq: 'daily'    },
+    { path: '/windows-vps-hosting',         priority: 0.8, changefreq: 'daily'    },
+    { path: '/managed-vps-hosting',         priority: 0.8, changefreq: 'daily'    },
+    { path: '/vps-cpanel',                  priority: 0.8, changefreq: 'daily'    },
+    { path: '/vps-hosting-trial',           priority: 0.7, changefreq: 'daily'    },
     // Dedicated
-    { path: '/dedicated-server',            priority: 0.9, changefreq: 'weekly'  },
-    { path: '/bare-metal-server',           priority: 0.8, changefreq: 'weekly'  },
-    { path: '/linux-dedicated-server',      priority: 0.8, changefreq: 'weekly'  },
-    { path: '/windows-dedicated-server',    priority: 0.8, changefreq: 'weekly'  },
-    { path: '/managed-dedicated-server',    priority: 0.8, changefreq: 'weekly'  },
-    { path: '/gpu-dedicated-server',        priority: 0.8, changefreq: 'weekly'  },
-    { path: '/nvme-dedicated-servers',      priority: 0.7, changefreq: 'weekly'  },
+    { path: '/dedicated-server',            priority: 0.9, changefreq: 'daily'    },
+    { path: '/bare-metal-server',           priority: 0.8, changefreq: 'daily'    },
+    { path: '/linux-dedicated-server',      priority: 0.8, changefreq: 'daily'    },
+    { path: '/windows-dedicated-server',    priority: 0.8, changefreq: 'daily'    },
+    { path: '/managed-dedicated-server',    priority: 0.8, changefreq: 'daily'    },
+    { path: '/gpu-dedicated-server',        priority: 0.8, changefreq: 'daily'    },
+    { path: '/nvme-dedicated-servers',      priority: 0.7, changefreq: 'daily'    },
     // Cloud
-    { path: '/managed-cloud-hosting',       priority: 0.8, changefreq: 'weekly'  },
-    { path: '/linux-cloud-hosting',         priority: 0.8, changefreq: 'weekly'  },
-    { path: '/windows-cloud-hosting',       priority: 0.8, changefreq: 'weekly'  },
-    { path: '/gpu-cloud-hosting',           priority: 0.8, changefreq: 'weekly'  },
-    { path: '/aws-cloud-hosting',           priority: 0.8, changefreq: 'weekly'  },
-    { path: '/azure-cloud-hosting',         priority: 0.8, changefreq: 'weekly'  },
-    { path: '/google-cloud-hosting',        priority: 0.8, changefreq: 'weekly'  },
-    { path: '/virtual-machine',             priority: 0.7, changefreq: 'weekly'  },
-    { path: '/cloud-storage',               priority: 0.7, changefreq: 'weekly'  },
+    { path: '/managed-cloud-hosting',       priority: 0.8, changefreq: 'daily'    },
+    { path: '/linux-cloud-hosting',         priority: 0.8, changefreq: 'daily'    },
+    { path: '/windows-cloud-hosting',       priority: 0.8, changefreq: 'daily'    },
+    { path: '/gpu-cloud-hosting',           priority: 0.8, changefreq: 'daily'    },
+    { path: '/aws-cloud-hosting',           priority: 0.8, changefreq: 'daily'    },
+    { path: '/azure-cloud-hosting',         priority: 0.8, changefreq: 'daily'    },
+    { path: '/google-cloud-hosting',        priority: 0.8, changefreq: 'daily'    },
+    { path: '/virtual-machine',             priority: 0.7, changefreq: 'daily'    },
+    { path: '/cloud-storage',               priority: 0.7, changefreq: 'daily'    },
     // Email & Workspace
-    { path: '/email-hosting',               priority: 0.8, changefreq: 'weekly'  },
-    { path: '/google-workspace',            priority: 0.8, changefreq: 'weekly'  },
-    { path: '/microsoft-365',               priority: 0.8, changefreq: 'weekly'  },
-    { path: '/zimbra-hosting',              priority: 0.7, changefreq: 'weekly'  },
+    { path: '/email-hosting',               priority: 0.8, changefreq: 'daily'    },
+    { path: '/google-workspace',            priority: 0.8, changefreq: 'daily'    },
+    { path: '/microsoft-365',               priority: 0.8, changefreq: 'daily'    },
+    { path: '/zimbra-hosting',              priority: 0.7, changefreq: 'daily'    },
     // Domain & SSL
-    { path: '/domain-registration',         priority: 0.8, changefreq: 'weekly'  },
-    { path: '/domain-transfer',             priority: 0.7, changefreq: 'weekly'  },
-    { path: '/ssl-certificate',             priority: 0.7, changefreq: 'weekly'  },
+    { path: '/domain-registration',         priority: 0.8, changefreq: 'daily'    },
+    { path: '/domain-transfer',             priority: 0.7, changefreq: 'daily'    },
+    { path: '/ssl-certificate',             priority: 0.7, changefreq: 'daily'    },
     // Security
-    { path: '/firewall-security',           priority: 0.7, changefreq: 'weekly'  },
-    { path: '/vapt',                        priority: 0.7, changefreq: 'weekly'  },
-    { path: '/pam-mfa',                     priority: 0.7, changefreq: 'weekly'  },
+    { path: '/firewall-security',           priority: 0.7, changefreq: 'daily'    },
+    { path: '/vapt',                        priority: 0.7, changefreq: 'daily'    },
+    { path: '/pam-mfa',                     priority: 0.7, changefreq: 'daily'    },
     // Backup
-    { path: '/acronis-backup',              priority: 0.7, changefreq: 'weekly'  },
-    { path: '/veeam-backup',               priority: 0.7, changefreq: 'weekly'  },
+    { path: '/acronis-backup',              priority: 0.7, changefreq: 'daily'    },
+    { path: '/veeam-backup',               priority: 0.7, changefreq: 'daily'    },
     // Specialty
-    { path: '/forex-vps',                   priority: 0.7, changefreq: 'weekly'  },
-    { path: '/tally-on-cloud',              priority: 0.7, changefreq: 'weekly'  },
+    { path: '/forex-vps',                   priority: 0.7, changefreq: 'daily'    },
+    { path: '/tally-on-cloud',              priority: 0.7, changefreq: 'daily'    },
     // Info
-    { path: '/about-us',                    priority: 0.6, changefreq: 'monthly' },
-    { path: '/contact-us',                  priority: 0.8, changefreq: 'monthly' },
-    { path: '/pricing',                     priority: 0.7, changefreq: 'weekly'  },
+    { path: '/about-us',                    priority: 0.6, changefreq: 'daily'   },
+    { path: '/contact-us',                  priority: 0.8, changefreq: 'daily'   },
+    { path: '/pricing',                     priority: 0.7, changefreq: 'daily'    },
+    { path: '/blogs',                       priority: 0.6, changefreq: 'daily'    },
     // Legal
     { path: '/legal/terms-conditions',      priority: 0.3, changefreq: 'yearly'  },
     { path: '/legal/privacy-policy',        priority: 0.3, changefreq: 'yearly'  },
@@ -731,16 +807,21 @@ async function buildSitemapEntries(req) {
         );
         if (r.ok) {
             const { data } = await r.json();
+            // Blog posts serve at /blogs/<slug>, other builder pages at /<slug> —
+            // the sitemap must list the URL that actually 200s, not the one that
+            // 301s, so resolve the split from the same source the routes use.
+            const blogSlugs = new Set((await fetchBlogPosts()).map((p) => p.slug));
             (data || []).forEach(function (item) {
                 const d = item.attributes || item;
                 if (!d.slug) return;
                 if (!isPageLive(d.slug)) return;        // honour Page Registry hidden state
+                const isBlog = blogSlugs.has(d.slug);
                 entries.push({
-                    loc:        baseUrl + '/builder/' + d.slug,
+                    loc:        baseUrl + (isBlog ? '/blogs/' : '/') + d.slug,
                     lastmod:    d.updatedAt ? d.updatedAt.split('T')[0] : today,
-                    changefreq: 'weekly',
+                    changefreq: 'daily',
                     priority:   0.7,
-                    type:       'builder',
+                    type:       isBlog ? 'blog' : 'builder',
                 });
             });
         }
@@ -938,7 +1019,20 @@ app.post('/api/admin/robots', requireAdminAuth, async function (req, res) {
 //  ADMIN SPA (existing)
 // ══════════════════════════════════════════════════════════
 const adminPath = path.join(__dirname, 'public/admin');
-app.use('/admin', express.static(adminPath));
+// Deliberately NOT cached like the public site: a stale copy of the builder's
+// editor scripts is a real failure mode here (it silently blanks the WYSIWYG
+// canvas — see the retry notice in canvas-bridge.js), and the admin is a handful
+// of internal users, so there's no meaningful bandwidth win to trade for it.
+// Revalidate every load; ETag still yields a cheap 304 when nothing changed.
+app.use('/admin', express.static(adminPath, {
+    setHeaders(res, filePath) {
+        if (/\.(js|mjs|css|html?)$/i.test(filePath)) {
+            res.setHeader('Cache-Control', 'no-cache');
+        } else {
+            res.setHeader('Cache-Control', 'public, max-age=2592000');
+        }
+    },
+}));
 app.get('/admin', (req, res) => res.sendFile(path.join(adminPath, 'index.html')));
 app.get('/admin/*path', (req, res) => res.sendFile(path.join(adminPath, 'index.html')));
 
@@ -968,6 +1062,33 @@ function seoEndpointForSlug(slug) {
 const seoCache = new Map();              // slug → { value, expires }
 const SEO_TTL = 10 * 60 * 1000;          // 10 min
 
+/* The hero image is the LCP element on most pages, but it's rendered
+   client-side from Strapi — so it isn't in the initial HTML and the browser
+   can't start fetching it until main.js has run AND the API has answered.
+   Lighthouse scores that as "Request is discoverable in initial document: no".
+   Since this server already has the page's Strapi payload in hand, it can emit
+   a <link rel=preload> for that exact image and cut a whole round-trip out of LCP.
+
+   Preloading a DIFFERENT derivative than the <img> ends up requesting would
+   download the image twice — worse than not preloading at all. The two client
+   renderers disagree on their fallback chain (cms-helpers' populateHero goes
+   large -> medium -> small; homepage-cms' mediaURL('large') goes large ->
+   small), so the only pick guaranteed to match both is `large` itself. When
+   there's no large derivative we simply skip the preload rather than gamble. */
+function heroPreloadUrl(data) {
+    const media = data && data.heroImage && data.heroImage.image;
+    if (!media) return null;
+    const large = media.formats && media.formats.large;
+    if (!large || !large.url) return null;
+    let url = large.url;
+    if (!/^https?:/i.test(url)) url = STRAPI_PUBLIC_URL.replace(/\/$/, '') + url;
+    // Never preload a server-internal origin: the browser resolves "localhost"
+    // to the visitor's own machine, so the preload would 404 AND still not match
+    // the URL the client script builds from window.STRAPI_URL.
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:|\/)/i.test(url)) return null;
+    return url;
+}
+
 async function fetchSeo(slug) {
     const cached = seoCache.get(slug);
     if (cached && cached.expires > Date.now()) return cached.value;
@@ -975,7 +1096,8 @@ async function fetchSeo(slug) {
     try {
         const endpoint = seoEndpointForSlug(slug);
         const seoField = endpoint === 'home-page' ? 'SEO' : 'seo';
-        const r = await fetch(`${STRAPI_URL}/api/${endpoint}?populate[${seoField}]=*`, {
+        const r = await fetch(
+            `${STRAPI_URL}/api/${endpoint}?populate[${seoField}]=*&populate[heroImage][populate][image]=true`, {
             headers: STRAPI_TOKEN ? { Authorization: `Bearer ${STRAPI_TOKEN}` } : {},
         });
         if (r.ok) {
@@ -989,6 +1111,21 @@ async function fetchSeo(slug) {
                     canonicalUrl: seo.canonicalUrl || null,
                 };
             }
+            const heroUrl = heroPreloadUrl(data);
+            if (heroUrl) value = Object.assign(value || {}, { heroImageUrl: heroUrl });
+
+            // Hero copy for server-side injection. These are plain scalar columns
+            // on home-page, so they already arrive with the SEO request above — no
+            // extra populate and no extra round-trip. Service pages keep their copy
+            // inside a `hero` component that this query doesn't populate, so they
+            // simply get no heroText and fall through to client rendering unchanged.
+            if (data) {
+                const heroText = {};
+                for (const k of HERO_TEXT_FIELDS) {
+                    if (typeof data[k] === 'string' && data[k].trim()) heroText[k] = data[k];
+                }
+                if (Object.keys(heroText).length) value = Object.assign(value || {}, { heroText });
+            }
         }
     } catch (e) { /* Strapi down / no such page — fall back to static */ }
     seoCache.set(slug, { value, expires: Date.now() + SEO_TTL });
@@ -999,6 +1136,63 @@ function seoEsc(s) {
     return String(s == null ? '' : s)
         .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
         .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Inverse of seoEsc — turns markup scraped out of a page file back into plain
+// text so it can be re-escaped exactly once. &amp; is decoded LAST so that an
+// input like "&amp;lt;" yields "&lt;" rather than collapsing all the way to "<".
+function seoUnesc(s) {
+    return String(s == null ? '' : s)
+        .replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&apos;/g, "'")
+        .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&');
+}
+
+/* ── Server-side hero copy ─────────────────────────────────
+   The homepage hero ships with empty [data-strapi] elements that only fill in
+   after main.js runs AND the Strapi fetch resolves. Two consequences Lighthouse
+   measures directly:
+     - LCP: the largest text block does not exist in the initial HTML, so the
+       paint waits on the whole JS + network chain (measured 9.1s simulated).
+     - CLS: ~396px of copy appears at once and shoves the page down (0.437,
+       reported against .hero-price-container, the element that gets pushed).
+   This server already holds the page's Strapi payload for the SEO <head>, so it
+   can write that same copy into the body for free.
+
+   The three helpers below mirror homepage-cms.js `setText` EXACTLY — same
+   RICH_HTML_RE, same inlineRichText transform — so when the client later writes
+   the identical string it is a no-op and cannot introduce a second shift. */
+const HERO_TEXT_FIELDS = ['mainHeading', 'subHeading', 'description', 'price', 'priceNote'];
+
+// Mirrors RICH_HTML_RE in assets/js/utils/cms-helpers.js
+const SEO_RICH_HTML_RE = /<\/?(p|a|strong|em|b|i|u|br|ul|ol|li|h[1-6]|blockquote|span)\b/i;
+
+// Mirrors inlineRichText() in assets/js/utils/cms-helpers.js
+function seoInlineRichText(html) {
+    if (html == null) return html;
+    return String(html)
+        .replace(/<\/p>\s*<p[^>]*>/gi, '<br><br>')
+        .replace(/^\s*<p[^>]*>/i, '')
+        .replace(/<\/p>\s*$/i, '')
+        .trim();
+}
+
+/* Fill empty <tag data-strapi="key"></tag> elements in place. Only ever writes
+   into a tag that is genuinely empty, so hand-authored fallback copy on other
+   pages is never clobbered. */
+function injectHeroText(html, heroText) {
+    if (!heroText) return html;
+    for (const key of HERO_TEXT_FIELDS) {
+        const raw = heroText[key];
+        if (!raw) continue;
+        const body = SEO_RICH_HTML_RE.test(raw) ? seoInlineRichText(raw) : seoEsc(raw);
+        // (open tag with this data-strapi key)(immediately-closing same tag)
+        const re = new RegExp(
+            '(<([a-zA-Z][\\w-]*)\\b[^>]*\\bdata-strapi="' + key + '"[^>]*>)\\s*(</\\2>)'
+        );
+        html = html.replace(re, (m, open, _tag, close) => open + body + close);
+    }
+    return html;
 }
 
 function seoCanonical(cleanPath, seo) {
@@ -1032,24 +1226,157 @@ function seoJsonLd(canonical, title, description) {
 }
 
 // Read a page HTML file, inject SEO <head>, and send it.
-async function sendPageWithSeo(req, res, filePath, slug, cleanPath) {
+// ── Builder pages at top-level URLs (2026-07-03) ───────────
+// Published builder pages are served at /<slug>. This helper resolves a slug
+// to its SEO meta (or null if no published builder page exists). Cached 2 min.
+const builderMetaCache = new Map();   // slug → { ts, val }
+const BUILDER_META_TTL = 2 * 60 * 1000;
+
+// Called by the builder publish/delete admin routes so top-level /<slug>
+// serving reflects changes immediately (defined here; hoisted for earlier use).
+function bustBuilderMetaCache() { builderMetaCache.clear(); }
+
+async function fetchBuilderPageMeta(slug) {
+    const hit = builderMetaCache.get(slug);
+    if (hit && Date.now() - hit.ts < BUILDER_META_TTL) return hit.val;
+    let val = null;
+    try {
+        const r = await fetch(
+            `${STRAPI_URL}/api/builder-pages?filters[slug][$eq]=${encodeURIComponent(slug)}` +
+            `&fields[0]=title&fields[1]=metaTitle&fields[2]=metaDescription&pagination[pageSize]=1`,
+            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+        );
+        if (r.ok) {
+            const json = await r.json();
+            const d = (json.data && json.data[0]) || null;
+            if (d) val = { title: d.metaTitle || d.title || slug, description: d.metaDescription || '' };
+        }
+    } catch (_) { /* Strapi down → treat as no builder page */ }
+    builderMetaCache.set(slug, { ts: Date.now(), val });
+    return val;
+}
+
+// ── Blog listing (public, no auth) ──────────────────────────
+// There's no dedicated Strapi "blog post" content type — a blog post is just
+// a builder-page created from the "blog-post" template (a blogHeader section
+// + a blogBody section, see templates.js/componentRegistry.js). So this scans
+// every published builder-page's `sections` JSON for a blogHeader entry and
+// pulls out only the listing fields (title/excerpt/cover/author/date) — never
+// the article body, to keep this endpoint's payload small regardless of how
+// long individual articles get. Cached like fetchBuilderPageMeta above.
+let blogPostsCache = null;   // { ts, val }
+const BLOG_POSTS_TTL = 2 * 60 * 1000;
+
+async function fetchBlogPosts() {
+    if (blogPostsCache && Date.now() - blogPostsCache.ts < BLOG_POSTS_TTL) return blogPostsCache.val;
+    let posts = [];
+    let ok = false;
+    try {
+        const r = await fetch(
+            `${STRAPI_URL}/api/builder-pages?publicationState=live` +
+            `&fields[0]=slug&fields[1]=title&fields[2]=sections&fields[3]=publishedAt&fields[4]=updatedAt` +
+            `&pagination[pageSize]=200`,
+            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+        );
+        if (r.ok) {
+            const json = await r.json();
+            posts = (json.data || [])
+                .map((row) => {
+                    const d = row.attributes || row;
+                    const header = (d.sections || []).find((s) => s.type === 'blogHeader');
+                    if (!header || !d.slug) return null;
+                    const p = header.props || {};
+                    return {
+                        slug: d.slug,
+                        title: p.title || d.title || d.slug,
+                        excerpt: p.excerpt || '',
+                        category: p.category || '',
+                        // Media-picker selections are already absolutified by the admin
+                        // proxy; template defaults are same-origin relative paths — both
+                        // work as-is in an <img src>, so no URL rewriting needed here.
+                        coverImage: p.coverImage || '',
+                        coverAlt: p.coverAlt || p.title || '',
+                        authorName: p.authorName || '',
+                        authorRole: p.authorRole || '',
+                        authorAvatar: p.authorAvatar || '',
+                        // publishDate is free-text (editor-typed, not a real date field) —
+                        // shown as-is on cards, but never used for sorting.
+                        publishDate: p.publishDate || '',
+                        readTime: p.readTime || '',
+                        sortDate: d.publishedAt || d.updatedAt || null,
+                    };
+                })
+                .filter(Boolean)
+                .sort((a, b) => new Date(b.sortDate || 0) - new Date(a.sortDate || 0));
+            ok = true;
+        }
+    } catch (_) { /* Strapi unreachable — handled below */ }
+
+    if (ok) {
+        blogPostsCache = { ts: Date.now(), val: posts };
+        return posts;
+    }
+
+    /* Only successes are cached. Caching a failure the same way meant one
+       transient Strapi blip pinned an empty list for 2 minutes — and because
+       isBlogSlug() drives routing, /blogs/<slug> then returned a hard 404 for
+       real published articles (search engines can drop a URL over that).
+       Serve the last good list instead and retry on the next request. */
+    if (blogPostsCache) return blogPostsCache.val;
+    return [];
+}
+
+// Blog posts live at /blogs/<slug>; every other builder page stays at /<slug>.
+// Since "is a blog post" just means "has a blogHeader section", the already-cached
+// listing is the single source of truth for that split — routing, the legacy
+// top-level redirect and the sitemap all consult this so they can't disagree.
+async function isBlogSlug(slug) {
+    const posts = await fetchBlogPosts();
+    return posts.some((p) => p.slug === slug);
+}
+
+app.get('/api/blog-posts', async (req, res) => {
+    try {
+        res.json({ posts: await fetchBlogPosts() });
+    } catch (err) {
+        res.status(502).json({ posts: [], error: 'Failed to load blog posts' });
+    }
+});
+
+async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride) {
     let html;
     try {
         html = await fs.promises.readFile(filePath, 'utf8');
     } catch (e) {
-        return res.status(404).sendFile(path.join(publicPath, '404.html'));
+        return res.status(404).sendFile(sitePage('404.html'));
     }
 
-    const seo = await fetchSeo(slug);
+    const seo = seoOverride || await fetchSeo(slug);
 
     const curTitleM = html.match(/<title>([\s\S]*?)<\/title>/i);
     const curDescM = html.match(/<meta\s+name=["']description["']\s+content=["']([\s\S]*?)["']\s*\/?>/i);
 
-    const title = (seo && seo.title) || (curTitleM && curTitleM[1].trim()) || SEO_ORG_NAME;
-    const description = (seo && seo.description) || (curDescM && curDescM[1].trim()) || '';
+    /* `title`/`description` must be PLAIN text here, because every use site below
+       runs them through seoEsc(). Strapi values already are, but these fallbacks
+       are scraped out of the page file's own markup and so are HTML-escaped
+       already — without unescaping, a source title containing "&amp;" gets
+       re-escaped to "&amp;amp;" and renders as a literal "&amp;". Only bites
+       pages with no Strapi SEO entry (e.g. the legal pages, /blogs). */
+    const title = (seo && seo.title) || (curTitleM && seoUnesc(curTitleM[1].trim())) || SEO_ORG_NAME;
+    const description = (seo && seo.description) || (curDescM && seoUnesc(curDescM[1].trim())) || '';
     const canonical = seoCanonical(cleanPath, seo);
 
     const headTags = [
+        // Preload first: it's only useful if the browser sees it early.
+        // `media` matters: style.css hides .hero-right below 1366px, so on phones
+        // and tablets this image is never painted. An unconditional preload still
+        // downloads it at high priority there (measured: a 771 KB PNG fetched and
+        // decoded while display:none), stealing bandwidth from the real mobile LCP.
+        // Gating on the same breakpoint keeps the desktop LCP win without the
+        // mobile cost. Keep this query in sync with the .hero-right rule in style.css.
+        ...(seo && seo.heroImageUrl
+            ? [`<link rel="preload" as="image" fetchpriority="high" media="(min-width: 1366px)" href="${seoEsc(seo.heroImageUrl)}">`]
+            : []),
         `<link rel="canonical" href="${seoEsc(canonical)}">`,
         `<meta property="og:type" content="website">`,
         `<meta property="og:site_name" content="${SEO_ORG_NAME}">`,
@@ -1075,7 +1402,16 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath) {
     // Inject canonical + OG/Twitter + JSON-LD before </head>
     html = html.replace(/<\/head>/i, `    ${headTags}\n</head>`);
 
+    // Write the hero copy into the body so the LCP text exists in the initial
+    // HTML and the page does not reflow when the client hydrates.
+    if (seo && seo.heroText) html = injectHeroText(html, seo.heroText);
+
     res.set('Content-Type', 'text/html; charset=utf-8');
+    // Explicit, because "no Cache-Control" is not the same as "don't cache":
+    // browsers fall back to heuristic freshness (a fraction of Last-Modified age)
+    // and would serve a stale shell — with stale server-injected SEO tags and CMS
+    // copy — after a content update. ETag still gives a cheap 304 when unchanged.
+    res.set('Cache-Control', 'public, max-age=0, must-revalidate');
     res.send(html);
 }
 
@@ -1103,32 +1439,126 @@ app.use((req, res, next) => {
     });
 });
 
+// ── Static asset caching ──────────────────────────────────
+// Assets here are NOT content-hashed (style.css keeps its name across deploys),
+// so an aggressive immutable max-age would strand users on stale CSS/JS after a
+// release. Tiered instead:
+//   images/fonts — 30d. Big win (Lighthouse flagged ~790 KiB of re-fetching) and
+//                  low risk: these are replaced far less often, and a swapped
+//                  image is usually uploaded under a new name anyway.
+//   css/js       — 1d, so a deploy propagates within a day; ETag/Last-Modified
+//                  still give instant 304s inside that window.
+//   html         — must-revalidate. Never cache the shell: it carries the
+//                  server-injected SEO head and CMS-driven copy.
+const STATIC_ASSET_RE = /\.(png|jpe?g|webp|gif|svg|ico|avif|woff2?|ttf|otf|eot|mp4|webm)$/i;
+
+function setStaticCacheHeaders(res, filePath) {
+    if (STATIC_ASSET_RE.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=2592000');      // 30 days
+    } else if (/\.(css|js|mjs)$/i.test(filePath)) {
+        // Keyed on the ?v=<content-hash> that scripts/build.js writes into the
+        // built HTML and into module import specifiers.
+        //
+        //  with ?v=  → the URL identifies THAT exact content, so it can never go
+        //              stale: an edit changes the hash, which changes the URL.
+        //              Cache hard; this is what satisfies Lighthouse's
+        //              "efficient cache policy" audit.
+        //  without   → an unhashed URL (dev, or a page served straight from
+        //              public/). Caching it blind is how an edit ends up
+        //              invisible for a day, so revalidate instead: ETag makes
+        //              that a bodyless 304 when nothing changed.
+        //
+        // Versions are generated at build time ON PURPOSE. Hand-written ?v=N in
+        // the source meant a diff on every file referencing the asset (~56 for
+        // components.css) and had to be remembered on every edit. Do not go back
+        // to that — if a version is missing, fix the build.
+        const versioned = res.req && res.req.query && res.req.query.v;
+        res.setHeader(
+            'Cache-Control',
+            versioned ? 'public, max-age=31536000, immutable' : 'public, max-age=0, must-revalidate'
+        );
+    } else if (/\.html?$/i.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    }
+}
+
+// ── Minified assets (scripts/build.js) ────────────────────
+// BUILD_DIR / useMinified are declared near the top of this file, beside
+// sitePage(), because the page routes need them earlier. Mounting the build
+// first means its minified CSS/JS win; everything else (images, the prerendered
+// snapshots) finds no match here and falls through to the source mount below,
+// so the build never has to copy binary assets. If build/ is absent the mount
+// is simply never registered and the site serves unminified sources — a missing
+// or failed build degrades to "slower", never to "broken".
+if (useMinified) {
+    app.use(express.static(BUILD_DIR, { index: false, setHeaders: setStaticCacheHeaders }));
+    console.log('[static] serving minified CSS/JS from build/ICSDC_Frontend');
+} else {
+    console.log(
+        '[static] serving unminified sources' +
+        (process.env.NODE_ENV === 'development' ? ' (development)' : ' — run `npm run build` to minify')
+    );
+}
+
 // Serve static assets. index:false so "/" falls through to the SEO-injecting
 // homepage route below instead of static auto-serving index.html.
-app.use(express.static(publicPath, { index: false }));
+app.use(express.static(publicPath, { index: false, setHeaders: setStaticCacheHeaders }));
 
 // Homepage (SEO-injected)
 app.get('/', (req, res) => {
-    sendPageWithSeo(req, res, path.join(publicPath, 'index.html'), 'home', '/');
+    sendPageWithSeo(req, res, sitePage('index.html'), 'home', '/');
 });
 
 // Legal pages — serve from legal/ subdirectory (SEO-injected; no Strapi → static
 // title + computed canonical + Organization/WebSite/WebPage JSON-LD)
 app.get('/legal/:page', (req, res) => {
     const slug = req.params.page;
-    sendPageWithSeo(req, res, path.join(publicPath, 'legal', `${slug}.html`), `legal-${slug}`, `/legal/${slug}`);
+    sendPageWithSeo(req, res, sitePage('legal', `${slug}.html`), `legal-${slug}`, `/legal/${slug}`);
+});
+
+// /blog is a common thing to type by hand — send it to the real index.
+app.get('/blog', (req, res) => res.redirect(301, '/blogs'));
+
+// Blog posts — /blogs/<slug>. They're builder pages under the hood, so this
+// serves the same builder-template shell as /<slug> does, just at a nested URL.
+// Anything that isn't actually a blog post 404s here rather than falling through,
+// so a regular builder page has exactly one canonical URL (its top-level one).
+app.get('/blogs/:slug', async (req, res) => {
+    const slug = req.params.slug;
+    if (!(await isBlogSlug(slug))) {
+        return res.status(404).sendFile(sitePage('404.html'));
+    }
+    if (pageCache.has(slug) && !pageCache.get(slug)) {
+        return res.status(404).sendFile(sitePage('404.html'));
+    }
+    const bp = await fetchBuilderPageMeta(slug);
+    sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/blogs/${slug}`, bp);
 });
 
 // Dynamic routes — gate on page registry cache (SEO-injected)
-app.get('/:page', (req, res) => {
+app.get('/:page', async (req, res) => {
     const slug = req.params.page;
 
     // If the slug is registered and marked offline → 404 immediately
     if (pageCache.has(slug) && !pageCache.get(slug)) {
-        return res.status(404).sendFile(path.join(publicPath, '404.html'));
+        return res.status(404).sendFile(sitePage('404.html'));
     }
 
-    sendPageWithSeo(req, res, path.join(publicPath, `${slug}.html`), slug, `/${slug}`);
+    const filePath = sitePage(`${slug}.html`);
+
+    // No static page file → maybe a published builder page lives at this slug
+    if (!fs.existsSync(filePath)) {
+        // Blog posts moved under /blogs/ — 301 the legacy top-level URL so any
+        // existing link or index entry follows to the one canonical location.
+        if (await isBlogSlug(slug)) return res.redirect(301, `/blogs/${slug}`);
+
+        const bp = await fetchBuilderPageMeta(slug);
+        if (bp) {
+            return sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/${slug}`, bp);
+        }
+    }
+
+    sendPageWithSeo(req, res, filePath, slug, `/${slug}`);
 });
 
 // ══════════════════════════════════════════════════════════

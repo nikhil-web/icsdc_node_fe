@@ -9,8 +9,11 @@
     --c-footer-bar: #060a20;
     --c-text-dark: #0a1f44;
     --c-text-mid: #4a5568;
-    --c-text-muted: #64748b;
-    --c-text-light: #94a3b8;
+    /* Both darkened for WCAG AA — see the --muted note in style.css.
+       #94a3b8 was the worst offender on the page at 2.56 on white
+       (.testi-job); #67768b gives 4.62. */
+    --c-text-muted: #5e6e85;
+    --c-text-light: #67768b;
     --c-border: #e2e8f0;
     --c-border-blue: rgba(26, 86, 219, 0.15);
     --c-bg-grey: #f4f6f9;
@@ -357,21 +360,6 @@
     box-shadow: 0 12px 48px rgba(26, 86, 219, 0.18);
 }
 
-/* ── Card body: quote mark + text + stars ── */
-.testi-body {
-    flex: 1;
-}
-
-.testi-quote-mark {
-    display: block;
-    font-size: 56px;
-    line-height: 0.8;
-    color: var(--c-blue);
-    opacity: 0.15;
-    margin-bottom: 10px;
-    font-family: Georgia, 'Times New Roman', serif;
-}
-
 .testi-quote {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 15px;
@@ -447,6 +435,16 @@
     box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.18);
 }
 
+/* Photo variant of the avatar. .testi-avatar is a fixed 46px circle with
+   overflow:hidden, so object-fit is what stops a non-square upload from
+   stretching — without it a wide photo renders squashed, not cropped. */
+.testi-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .testi-avatar-initials {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 16px;
@@ -485,24 +483,18 @@
     text-overflow: ellipsis;
 }
 
-/* ── Card footer: kept for legacy markup ── */
-.testi-footer {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding-top: 18px;
-    border-top: 1px solid var(--c-border-blue);
-}
-
 /* ── Controls ── */
 .testi-pagination {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    /* 14px + the 10px dot = a 24px pitch, so the enlarged hit areas below sit
+       edge to edge without overlapping each other. */
+    gap: 14px;
     margin-bottom: 20px;
 }
 
 .testi-dot {
+    position: relative;
     width: 10px;
     height: 10px;
     border-radius: 50%;
@@ -513,6 +505,21 @@
         width 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
         border-radius 0.25s ease,
         transform 0.2s ease;
+}
+
+/* The dot is deliberately a 10px visual, but a 10px tap target fails WCAG
+   2.5.8 (needs 24px). Rather than inflate the dot — the active state animates
+   its width into a pill, so its box IS the design — overlay an invisible 24px
+   target on top. width:100% + min-width keeps the target covering the pill too. */
+.testi-dot::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    min-width: 24px;
+    height: 24px;
 }
 
 .testi-dot:hover {
@@ -878,13 +885,19 @@ summary.faq-q::marker {
     justify-content: center;
     flex-shrink: 0;
     color: var(--c-text-mid);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Explicit properties, not `all` — `all` also transitions layout-affecting
+       properties (width/height/border-width), which forces needless layout work
+       on every frame alongside the panel expanding right below it. */
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .faq-chev svg {
     width: 14px;
     height: 14px;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    /* transform-only: runs on the compositor, never triggers layout */
+    transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .faq-item[open] .faq-chev {
@@ -897,22 +910,45 @@ summary.faq-q::marker {
     transform: rotate(180deg);
 }
 
-/* Answer panel */
+/* Answer panel.
+   Animates grid-template-rows 0fr->1fr rather than max-height 0->600px.
+   max-height was the source of the jitter: the panel is only ~120px tall, so
+   the easing curve spent most of its 0.4s travelling between 120px and 600px
+   with nothing visible happening — the reveal snapped open in the first few
+   frames, and closing sat still before lurching. 0fr->1fr resolves to the
+   content's REAL height, so the curve maps 1:1 onto what you actually see and
+   it eases evenly in both directions. */
 .faq-a-wrap {
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .faq-item[open] .faq-a-wrap {
-    max-height: 600px;
+    grid-template-rows: 1fr;
+}
+
+/* Grid items default to min-height:auto, which refuses to shrink below content
+   height and would break the 0fr collapse entirely. */
+.faq-a-wrap > * {
+    min-height: 0;
+    overflow: hidden;
 }
 
 .faq-a {
-    padding: 0 24px 24px 76px;
+    /* Bottom padding is applied only when open. min-height:0 lets the grid item
+       shrink its CONTENT to zero, but padding is immune to it — leaving 24px of
+       the answer panel still showing under every closed question. Collapsing it
+       alongside the row is what gets a true 0 height. */
+    padding: 0 24px 0 76px;
     font-size: 15px;
     color: var(--c-text-muted);
     line-height: 1.7;
+    transition: padding-bottom 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-item[open] .faq-a {
+    padding-bottom: 24px;
 }
 
 @media (max-width: 560px) {
@@ -921,8 +957,13 @@ summary.faq-q::marker {
         font-size: 14.5px;
     }
 
+    /* Bottom padding stays open-only here too — see the desktop .faq-a note. */
     .faq-a {
-        padding: 0 18px 18px 18px;
+        padding: 0 18px 0 18px;
+    }
+
+    .faq-item[open] .faq-a {
+        padding-bottom: 18px;
     }
 
     .faq-num {
@@ -1382,7 +1423,9 @@ summary.faq-q::marker {
 .footer-bottom p {
     font-size: 12px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.40);
+    /* 0.40 composited to #6a6c79 on --c-footer-bar (#060a20) = 3.76, under AA.
+       0.50 gives 5.34. */
+    color: rgba(255, 255, 255, 0.50);
     line-height: 1.5;
     margin: 0;
 }
@@ -1399,16 +1442,34 @@ summary.faq-q::marker {
 .footer-legal-links a {
     font-size: 12px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.40);
+    /* Same AA fix as .footer-bottom p above (0.40 -> 3.76 on the footer bar). */
+    color: rgba(255, 255, 255, 0.50);
     text-decoration: none;
     padding: 0 10px;
-    border-right: 1px solid rgba(255, 255, 255, 0.15);
     line-height: 1;
     transition: color 0.18s;
+    /* WCAG 2.5.8 / Lighthouse `target-size`: at font-size 12px with line-height 1
+       and no vertical padding these anchors were only ~12px tall, under the 24px
+       minimum. inline-flex + min-height grows the hit area without moving the
+       text, which stays vertically centred. */
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    position: relative;
 }
 
-.footer-legal-links a:last-child {
-    border-right: none;
+/* The separator was previously this anchor's border-right, which would now
+   stretch to the full 24px target and read as a much heavier rule. Drawing it as
+   a centred 12px pseudo-element keeps the divider looking exactly as before. */
+.footer-legal-links a:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .footer-legal-links a:hover {
@@ -1508,7 +1569,10 @@ summary.faq-q::marker {
     text-transform: uppercase;
     color: var(--blue);
     margin-bottom: 8px;
-    opacity: 0.75;
+    /* 0.75 diluted --blue to #517ee3 = 3.56 on #f4f6f9, and this is 11px text
+       so it needs 4.5. 0.9 gives 4.75. (Same fix as the duplicate definition
+       of this class in cloud-components.css.) */
+    opacity: 0.9;
 }
 
 /* ── Power Grid (12-feature) ── */

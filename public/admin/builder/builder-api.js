@@ -63,6 +63,15 @@ export const BuilderAPI = {
         });
         return jsonOrThrow(r);
     },
+    // Kick off a crawler-snapshot rebuild for one path (reuses the prerender admin endpoint).
+    rebuildSnapshot: async (path) => {
+        const r = await fetch('/api/admin/prerender', {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ path }),
+        });
+        return { ok: r.ok, status: r.status };
+    },
     deletePage: async (documentId) => {
         const r = await fetch('/api/admin/builder/pages/' + documentId, {
             method: 'DELETE',

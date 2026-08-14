@@ -301,16 +301,28 @@ import { inlineRichText } from './utils/cms-helpers.js';
                     });
                 }
 
-                // CTA buttons
+                // CTA buttons — the HTML ships with hardcoded fallback text, so a
+                // CTA deleted in the CMS (field present but empty/null) must hide
+                // the button rather than leave the fallback showing forever.
                 var primaryBtn = content.querySelector('.btn-primary');
                 var outlineBtn = content.querySelector('.btn-outline');
-                if (primaryBtn && page.globalCtaPrimary) {
-                    primaryBtn.innerHTML = page.globalCtaPrimary.text || '';
-                    wireCtaLink(primaryBtn, page.globalCtaPrimary.link);
+                var primaryProvided = Object.prototype.hasOwnProperty.call(page, 'globalCtaPrimary');
+                var secondaryProvided = Object.prototype.hasOwnProperty.call(page, 'globalCtaSecondary');
+                if (primaryBtn) {
+                    if (page.globalCtaPrimary && page.globalCtaPrimary.text) {
+                        primaryBtn.innerHTML = page.globalCtaPrimary.text || '';
+                        wireCtaLink(primaryBtn, page.globalCtaPrimary.link);
+                    } else if (primaryProvided) {
+                        primaryBtn.style.display = 'none';
+                    }
                 }
-                if (outlineBtn && page.globalCtaSecondary) {
-                    outlineBtn.textContent = page.globalCtaSecondary.text || '';
-                    wireCtaLink(outlineBtn, page.globalCtaSecondary.link);
+                if (outlineBtn) {
+                    if (page.globalCtaSecondary && page.globalCtaSecondary.text) {
+                        outlineBtn.textContent = page.globalCtaSecondary.text || '';
+                        wireCtaLink(outlineBtn, page.globalCtaSecondary.link);
+                    } else if (secondaryProvided) {
+                        outlineBtn.style.display = 'none';
+                    }
                 }
             }
 

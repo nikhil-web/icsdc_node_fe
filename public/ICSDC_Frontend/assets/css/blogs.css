@@ -1,0 +1,558 @@
+/* ══════════════════════════════════════
+   BLOG INDEX  (/blogs)
+   Surfaces are built from the shared tokens (--white/--text-dark/--muted/
+   --border/--blue/--bg-light), which dark-mode.css already re-points at its
+   :root — so this file needs no dark-mode block of its own.
+══════════════════════════════════════ */
+
+/* ── Container geometry ────────────────────────────────
+   style.css only defines `.section .container`, never a bare `.container` —
+   so `.blog-page` supplies its own max-width/centering/padding rather than
+   relying on that rule (which also forces text-align:center; this page is
+   left-aligned throughout). 1400px is narrower than the site's 1800px
+   --c-container because long headlines/body text get hard to scan at full
+   width. */
+.blog-page {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--c-px);
+}
+
+/* ── Category bar ──────────────────────────────────── */
+.blog-catbar {
+    background: var(--blue);
+    padding: 84px 0 18px;
+    /* pushes content clear of the fixed nav */
+}
+
+.blog-catbar-inner {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--c-px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.blog-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.blog-chip {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.78);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.18s, color 0.18s;
+}
+
+.blog-chip:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+}
+
+.blog-chip-active {
+    background: #fff;
+    color: var(--blue);
+}
+
+.blog-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    min-width: 220px;
+}
+
+.blog-search i {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 13px;
+}
+
+.blog-search input {
+    background: none;
+    border: 0;
+    outline: none;
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    width: 100%;
+}
+
+.blog-search input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Featured post ─────────────────────────────────── */
+.blog-featured-wrap {
+    padding: 48px 0 8px;
+}
+
+.blog-featured {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: clamp(28px, 4vw, 56px);
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.blog-eyebrow {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+
+.blog-featured-title {
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--text-dark);
+    margin: 0 0 14px;
+    transition: color 0.18s;
+}
+
+.blog-featured:hover .blog-featured-title {
+    color: var(--blue);
+}
+
+.blog-featured-excerpt {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0 0 16px;
+    max-width: 56ch;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blog-featured-media {
+    aspect-ratio: 16 / 11;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-light);
+}
+
+.blog-featured-media img {
+    width: 100%;
+    height: 100%;
+    /* contain, not cover — covers were cropping cover images (which come in all
+       sorts of aspect ratios from Strapi) to fill the fixed-ratio box. contain
+       always shows the whole image, letterboxed against --bg-light if the
+       ratio doesn't match. */
+    object-fit: contain;
+    display: block;
+}
+
+.blog-media-empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 24px;
+    opacity: 0.4;
+}
+
+/* ── Recent grid ─────────────────────────────────────── */
+.blog-recent-wrap {
+    padding: 40px 0 8px;
+}
+
+.blog-recent-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    align-content: start;
+}
+
+.blog-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+
+.blog-card-media {
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--bg-light);
+    margin-bottom: 12px;
+}
+
+.blog-card-media img {
+    width: 100%;
+    height: 100%;
+    /* contain, not cover — see the note on .blog-featured-media img above. */
+    object-fit: contain;
+    display: block;
+}
+
+.blog-card-cat {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 6px;
+}
+
+.blog-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    color: var(--text-dark);
+    margin: 0 0 8px;
+    transition: color 0.18s;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blog-card:hover .blog-card-title {
+    color: var(--blue);
+}
+
+.blog-meta {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: auto;
+}
+
+.blog-dot {
+    margin: 0 6px;
+    opacity: 0.5;
+}
+
+/* ── Archive panel + help sidebar ──────────────────── */
+.blog-archive-wrap {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    padding: 48px 0;
+    align-items: start;
+}
+
+.blog-archive-panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+}
+
+.blog-archive-heading {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin: 0 0 20px;
+}
+
+.blog-archive-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px 24px;
+}
+
+.blog-row a {
+    display: block;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-dark);
+    text-decoration: none;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.18s;
+}
+
+.blog-row a:hover {
+    color: var(--blue);
+}
+
+.blog-noresults {
+    color: var(--muted);
+    font-size: 14px;
+    padding: 12px 0;
+}
+
+.blog-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 28px;
+}
+
+.blog-page-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.blog-page-btn:hover:not([disabled]) {
+    border-color: var(--blue);
+    color: var(--blue);
+}
+
+.blog-page-btn[disabled] {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.blog-page-active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+}
+
+/* Sidebar "I need help with" — same reasoning as the category cards below:
+   hardcoded links into real ICSDC pages, no taxonomy to drive it from. */
+.blog-help {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+}
+
+.blog-help h3 {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin: 0 0 16px;
+}
+
+.blog-help-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.blog-help-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-dark);
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    padding: 16px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background 0.18s, color 0.18s;
+}
+
+.blog-help-item i {
+    font-size: 18px;
+    color: var(--blue);
+}
+
+.blog-help-item:hover {
+    background: var(--blue);
+    color: #fff;
+}
+
+.blog-help-item:hover i {
+    color: #fff;
+}
+
+/* ── Categories ─────────────────────────────────────── */
+.blog-categories-wrap {
+    padding: 8px 0 56px;
+}
+
+.blog-section-heading {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin: 0 0 24px;
+}
+
+.blog-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.blog-cat-card {
+    display: block;
+    text-decoration: none;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: border-color 0.18s, transform 0.18s;
+}
+
+.blog-cat-card:hover {
+    border-color: var(--blue);
+    transform: translateY(-2px);
+}
+
+.blog-cat-card i {
+    font-size: 22px;
+    color: var(--blue);
+    margin-bottom: 14px;
+    display: block;
+}
+
+.blog-cat-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 8px;
+}
+
+.blog-cat-card p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* ── Empty state ────────────────────────────────────── */
+.blog-empty {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--muted);
+}
+
+.blog-empty i {
+    font-size: 40px;
+    color: var(--blue);
+    opacity: 0.45;
+    margin-bottom: 16px;
+}
+
+.blog-empty h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 8px;
+}
+
+.blog-empty p {
+    margin: 0;
+}
+
+/* ── CTA band ───────────────────────────────────────── */
+.blog-cta-band {
+    background: var(--blue);
+    padding: 56px 0;
+}
+
+.blog-cta-inner {
+    text-align: center;
+    color: #fff;
+}
+
+.blog-cta-inner h2 {
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 800;
+    margin: 0 0 12px;
+}
+
+.blog-cta-inner p {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0 0 24px;
+}
+
+.blog-cta-btn {
+    background: #fff;
+    color: var(--blue);
+    border-color: #fff;
+}
+
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .blog-archive-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .blog-categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .blog-archive-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 860px) {
+    .blog-featured {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .blog-featured-media {
+        order: -1;
+        aspect-ratio: 16 / 9;
+    }
+
+    .blog-recent-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .blog-catbar {
+        padding-top: 76px;
+    }
+
+    .blog-catbar-inner {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .blog-archive-list {
+        grid-template-columns: 1fr;
+    }
+
+    .blog-help-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .blog-categories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .blog-archive-panel {
+        padding: 20px;
+    }
+}

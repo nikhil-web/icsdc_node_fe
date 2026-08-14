@@ -54,7 +54,10 @@
     text-transform: uppercase;
     color: var(--blue);
     margin-bottom: 8px;
-    opacity: 0.75;
+    /* Was opacity:0.75, which diluted --blue to #517ee3 — only 3.56 against
+       #f4f6f9, and this is 11px text so it needs the full 4.5. At 0.9 it's
+       4.75; the dimming is barely perceptible at this size and weight. */
+    opacity: 0.9;
 }
 
 /* ══════════════════════════════════════

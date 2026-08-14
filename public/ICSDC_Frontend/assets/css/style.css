@@ -1,9 +1,13 @@
 ﻿/* ══════════════════════════════════════
-   GLOBAL WIDGETS — loaded on every page via style.css
+   GLOBAL WIDGETS (chat-widget / whatsapp-widget / contact-modal)
+   These used to be @import-ed here. Don't put them back: an @import is a
+   SERIAL render-blocking waterfall — the browser has to fetch style.css and
+   parse it before it can even discover these three, and all four block first
+   paint. Lighthouse measured ~600ms of blocking per file for exactly this.
+   None of them are needed for first paint (a floating chat bubble, a floating
+   WhatsApp bubble, and a modal that starts hidden), so main.js now injects
+   them non-blocking after DOM parse. See loadDeferredWidgetStyles() there.
 ══════════════════════════════════════ */
-@import url('chat-widget.css');
-@import url('whatsapp-widget.css');
-@import url('contact-modal.css');
 
 /* ══════════════════════════════════════
    RESET
@@ -72,7 +76,11 @@ html {
     --orange: #f59e0b;
     --text: #1e293b;
     --text-dark: #0a1f44;
-    --muted: #64748b;
+    /* #64748b failed WCAG AA on the site's tinted surfaces (4.40 on #f4f6f9,
+       4.22 on #ebf2fc — both under 4.5). Darkened just enough to clear it on
+       every background this token lands on: #fff 5.19, #f4f6f9 4.80,
+       #ebf2fc 4.61, #f8fafc 4.96. */
+    --muted: #5e6e85;
     --muted-alt: #5f6b85;
     --muted-light: #4c4c4c;
     --border: #e2e8f0;
@@ -886,11 +894,44 @@ nav.scrolled {
     right: 0;
     width: 100%;
     height: 100%;
+    /* Two declarations on purpose: the first is the fallback any browser
+       understands, the second wins wherever image-set() is supported and
+       serves the WebP (596KB PNG -> 258KB WebP, the page's largest asset).
+       Source art is 3289px wide but this only ever renders as a `contain`
+       decorative wash, so the WebP is also downscaled to 1920. */
     background: url("../images/elements/Element.png") no-repeat center / contain;
+    background-image: image-set(
+        url("../images/elements/Element.webp") type("image/webp"),
+        url("../images/elements/Element.png") type("image/png"));
     opacity: 1;
     pointer-events: none;
     z-index: 0;
     transform: scale3d(1.5, 1.5, 1.5) translateX(-50px) translateY(135px);
+}
+
+/* Drop the decorative backdrop on phones.
+   This artwork is the LCP resource: the LCP element is div.hero, and what paints
+   it is this ::before layer, not the (server-rendered) hero text. Because it
+   arrives via a CSS background it is invisible to the preload scanner —
+   `lcp-discovery-insight` fails "Request is discoverable in initial document"
+   and "fetchpriority=high should be applied" — and it cannot even be requested
+   until style.css has parsed.
+
+   Measured by ablation on 3-run medians: removing it takes LCP 8.0s -> 6.2s
+   (-1.8s) with FCP and Speed Index unchanged. Preloading it instead was tried
+   and made things WORSE (SI +2.0s, score 70 -> 63): the critical path here is
+   bandwidth-bound on ~129KB of render-blocking CSS, so fetching 258KB earlier
+   at high priority just starves the stylesheets. Only removing bytes helps.
+
+   At 1920x750 it is ~3x oversized for a 412px viewport, and at scale3d(1.5)
+   with translateX/Y most of it is off-canvas on a phone. The correct long-term
+   fix is a downscaled mobile derivative, which needs a webp encoder this
+   machine does not have (no cwebp / Pillow, and sips cannot write webp).
+   Desktop and tablet are untouched. */
+@media (max-width: 767px) {
+    .hero::before {
+        display: none;
+    }
 }
 
 .hero>* {
@@ -918,14 +959,21 @@ nav.scrolled {
     animation: heroEnterRight 0.9s var(--ease-out-expo);
 }
 
+/* Deliberately animates transform ONLY — no opacity.
+   .hero-content wraps .hero-desc, which is the LCP element on mobile (84,645px²
+   in a 412px viewport, ~2.2x the next largest). Chrome does not record an LCP
+   candidate for content painted at opacity 0, so fading the wrapper in pushed LCP
+   out behind this animation on top of the already-late render-blocking CSS —
+   measured 9.4s. Sliding without fading keeps the entrance motion while the text
+   is paintable from the first frame. The paired heroEnterRight below still fades
+   because .hero-right is display:none under 1366px and is not an LCP candidate
+   there; on desktop the hero image is preloaded, so it is not gated on this. */
 @keyframes heroEnter {
     from {
-        opacity: 0;
         transform: translateY(20px);
     }
 
     to {
-        opacity: 1;
         transform: translateY(0);
     }
 }
@@ -989,6 +1037,19 @@ nav.scrolled {
     align-items: baseline;
     gap: 4px;
     letter-spacing: -0.03em;
+    /* CLS guard: the price text is injected by populateHero() after the Strapi
+       fetch. Without a reserved line box this collapses to the height of the
+       "/mo" unit alone, then jumps once hydrated — measured at +94px on a
+       375px viewport, which was ~all of the page's 0.519 CLS. 1.65em == one
+       line at the computed line-height. */
+    min-height: 1.65em;
+}
+
+/* The homepage price string ("Cloud Hosting Starts at ₹…") wraps to two lines
+   at every viewport width, so it needs a two-line reservation. Scoped to the
+   homepage — service-page prices are short and would get dead whitespace. */
+.hero-section--home .hero-price {
+    min-height: 3.3em;
 }
 
 .price-unit {
@@ -1471,7 +1532,7 @@ nav.scrolled {
     stroke: #1a56db;
 }
 
-.floating-card h4 {
+.floating-card h3 {
     font-size: 13px;
     font-weight: 700;
     color: #111827;
@@ -2078,7 +2139,7 @@ nav.scrolled {
         padding: 13px 14px 14px;
     }
 
-    .floating-card h4 {
+    .floating-card h3 {
         font-size: 12.5px;
     }
 
@@ -2202,7 +2263,7 @@ nav.scrolled {
         flex: 1 1 calc(33.33% - 8px);
     }
 
-    .floating-card h4 {
+    .floating-card h3 {
         font-size: 12.5px;
     }
 
@@ -2391,7 +2452,7 @@ nav.scrolled {
         border-radius: 12px;
     }
 
-    .floating-card h4 {
+    .floating-card h3 {
         font-size: 12px;
     }
 

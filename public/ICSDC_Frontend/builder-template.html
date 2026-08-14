@@ -2,23 +2,41 @@
 <html lang="en">
 
 <head>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <!-- Google Tag Manager — skipped in the editor canvas (?canvas=1). Without
+         the guard every canvas mount fired a page_view from inside the admin
+         iframe: it polluted analytics with editor traffic AND cost two network
+         round-trips on each boot. -->
+    <script>if (new URLSearchParams(location.search).get('canvas') !== '1') {
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-MXV9SGZS');</script>
+})(window,document,'script','dataLayer','GTM-MXV9SGZS');
+}</script>
     <!-- End Google Tag Manager -->
   <script src="/assets/js/theme-init.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="/assets/images/main_logo.png">
+  <link rel="icon" type="image/png" href="/assets/images/main_logo_icon.png">
   <title>Loading… | ICSDC</title>
   <meta name="description" content="">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    crossorigin="anonymous">
+  <!-- Loaded non-blocking (preload + swap): these are external CDN requests, and a
+       plain <link rel="stylesheet"> here would hold up every deferred/module script
+       below (including page-renderer.js, which posts the canvas "ready" signal) until
+       both fonts.googleapis.com and cdnjs.cloudflare.com finish responding — on a slow
+       or first-ever connection to those CDNs this alone was enough to blow the canvas's
+       8s ready watchdog, showing a blank canvas + "reload" error that then loads fine
+       once the browser has those two responses cached. -->
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" as="style" crossorigin="anonymous"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous">
+  </noscript>
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <link rel="stylesheet" href="/assets/css/cloud-components.css">
@@ -31,6 +49,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="stylesheet" href="/assets/css/cpanel-hosting.css">
   <link rel="stylesheet" href="/assets/css/shared-hosting.css">
   <link rel="stylesheet" href="/assets/css/builder-page.css">
+  <!-- Harvested-component CSS (hp-*, cs-*, veeam-related, vm-plans-table, mch-optim) -->
+  <link rel="stylesheet" href="/assets/css/homepage-extras.css">
+  <link rel="stylesheet" href="/assets/css/cloud-storage.css">
+  <link rel="stylesheet" href="/assets/css/veeam-backup.css">
+  <link rel="stylesheet" href="/assets/css/virtual-machine.css">
+  <link rel="stylesheet" href="/assets/css/managed-cloud-hosting.css">
+  <link rel="stylesheet" href="/assets/css/builder-layout.css">
   <link rel="stylesheet" href="/assets/css/dark-mode.css">
 </head>
 
@@ -119,7 +144,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script src="/assets/js/config.js"></script>
   <script src="/assets/js/main.js" type="module"></script>
   <script src="/assets/js/builder/page-renderer.js" type="module"></script>
-  <script src="/assets/js/components.js"></script>
   <script src="/assets/js/polish.js" defer></script>
   <script src="/assets/js/nav-search.js" defer></script>
 </body>

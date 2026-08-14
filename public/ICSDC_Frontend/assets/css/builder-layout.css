@@ -1,0 +1,137 @@
+/* ══════════════════════════════════════════════════════════
+   builder-layout.css
+   Per-section layout controls for builder pages.
+   Every builder section is wrapped in `.bsec` with modifier
+   classes set from the section's `layout` object:
+     width:      bsec-w-contained | bsec-w-narrow | bsec-w-full
+     align:      bsec-align-left (center is the unstyled default)
+     background: bsec-bg-none | bsec-bg-light | bsec-bg-blue | bsec-bg-ink
+     padding:    bsec-p-compact | bsec-p-normal | bsec-p-spacious
+     columns:    inline CSS var --bsec-cols (grid components only)
+   All colours come from the site design tokens.
+   ══════════════════════════════════════════════════════════ */
+
+.bsec { position: relative; }
+
+/* ── Width ─────────────────────────────────────────────── */
+/* Inner containers used across the design system */
+.bsec-w-narrow .container,
+.bsec-w-narrow .hp-partner-inner,
+.bsec-w-narrow .hp-industry-inner,
+.bsec-w-narrow .hp-security-inner,
+.bsec-w-narrow .who-we-are-inner,
+.bsec-w-narrow .cloud-cta-inner {
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bsec-w-full .container,
+.bsec-w-full .hp-partner-inner,
+.bsec-w-full .hp-industry-inner,
+.bsec-w-full .hp-security-inner,
+.bsec-w-full .who-we-are-inner {
+    max-width: none;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+/* ── Text alignment ────────────────────────────────────────
+   The site's base CSS (`.section .container { text-align: center }`) already
+   centres everything — that IS the default, so "Center" needs no class of its
+   own. "Left" is the only real override and has to out-specificity that base
+   rule, which is why every selector here is repeated at both class positions
+   (`.bsec-align-left .container` and `.bsec-align-left.container`-style
+   nesting isn't needed since .bsec always wraps .container, but the base rule
+   `.section .container` and this rule are equal specificity — this stylesheet
+   simply needs to load after style.css, which builder-template.html already
+   guarantees). ── */
+.bsec-align-left .container,
+.bsec-align-left .blue-container { text-align: left; }
+
+.bsec-align-left .subtitle,
+.bsec-align-left .au-life-desc { margin-left: 0; margin-right: auto; }
+
+.bsec-align-left .cloud-section-label,
+.bsec-align-left .builder-eyebrow { margin-left: 0; }
+
+.bsec-align-left .cs-when-list { display: block; text-align: left; }
+
+/* ── Background ────────────────────────────────────────── */
+.bsec-bg-light { background: #f6f8fc; }
+.bsec-bg-light > section { background: transparent; }
+
+.bsec-bg-blue { background: var(--blue, #1a56db); }
+.bsec-bg-blue > section { background: transparent; }
+.bsec-bg-blue .title,
+.bsec-bg-blue .subtitle,
+.bsec-bg-blue h2, .bsec-bg-blue h3, .bsec-bg-blue p, .bsec-bg-blue li { color: #fff; }
+
+.bsec-bg-ink { background: var(--ink, #0a1230); }
+.bsec-bg-ink > section { background: transparent; }
+.bsec-bg-ink .title,
+.bsec-bg-ink .subtitle,
+.bsec-bg-ink h2, .bsec-bg-ink h3, .bsec-bg-ink p, .bsec-bg-ink li { color: #fff; }
+
+/* Cards keep their own surfaces on tinted backgrounds */
+.bsec-bg-blue .hp-partner-card h3, .bsec-bg-blue .hp-partner-card p,
+.bsec-bg-ink .hp-partner-card h3, .bsec-bg-ink .hp-partner-card p,
+.bsec-bg-blue .hp-security-card h3, .bsec-bg-blue .hp-security-card p,
+.bsec-bg-ink .hp-security-card h3, .bsec-bg-ink .hp-security-card p,
+.bsec-bg-blue .cs-audience-card h3, .bsec-bg-blue .cs-audience-card p, .bsec-bg-blue .cs-audience-card li,
+.bsec-bg-ink .cs-audience-card h3, .bsec-bg-ink .cs-audience-card p, .bsec-bg-ink .cs-audience-card li,
+.bsec-bg-blue .cs-when-list li, .bsec-bg-ink .cs-when-list li,
+.bsec-bg-blue .veeam-related-card h3, .bsec-bg-blue .veeam-related-card p,
+.bsec-bg-ink .veeam-related-card h3, .bsec-bg-ink .veeam-related-card p,
+.bsec-bg-blue .mch-optim-group h3, .bsec-bg-blue .mch-optim-group li,
+.bsec-bg-ink .mch-optim-group h3, .bsec-bg-ink .mch-optim-group li,
+.bsec-bg-blue .vm-plans-table td, .bsec-bg-ink .vm-plans-table td {
+    color: var(--c-text-dark, #0f1c2e);
+}
+
+/* ── Vertical padding ────────────────────────────────────
+   These retune --bld-section-gap (declared on #builder-page-root in
+   builder-page.css) rather than setting padding directly. Setting padding here
+   silently did NOTHING: builder-page.css targets `#builder-page-root .section`,
+   whose ID selector outranks any `.bsec-p-* .section` rule, so Compact and
+   Spacious both lost the cascade and every section stayed at the default.
+   A custom property inherits into the subtree, so specificity never applies. */
+.bsec-p-compact { --bld-section-gap: 28px; }
+.bsec-p-spacious { --bld-section-gap: 110px; }
+
+/* Components that render a bare <section> without the .section class don't go
+   through the token rule, so they still need the direct declaration. */
+.bsec-p-compact > section:not(.section) { padding-top: 28px; padding-bottom: 28px; }
+.bsec-p-spacious > section:not(.section) { padding-top: 110px; padding-bottom: 110px; }
+
+/* ── Grid column override (components with a single grid) ─ */
+.bsec[style*="--bsec-cols"] .why-grid,
+.bsec[style*="--bsec-cols"] .cloud-power-grid,
+.bsec[style*="--bsec-cols"] .cloud-use-grid,
+.bsec[style*="--bsec-cols"] .hp-partner-grid,
+.bsec[style*="--bsec-cols"] .hp-security-grid,
+.bsec[style*="--bsec-cols"] .cs-audience-grid,
+.bsec[style*="--bsec-cols"] .veeam-related-grid,
+.bsec[style*="--bsec-cols"] .mch-optim-groups,
+.bsec[style*="--bsec-cols"] .hp-partner-stats {
+    display: grid;
+    grid-template-columns: repeat(var(--bsec-cols), 1fr) !important;
+}
+
+@media (max-width: 900px) {
+    .bsec[style*="--bsec-cols"] .why-grid,
+    .bsec[style*="--bsec-cols"] .cloud-power-grid,
+    .bsec[style*="--bsec-cols"] .cloud-use-grid,
+    .bsec[style*="--bsec-cols"] .hp-partner-grid,
+    .bsec[style*="--bsec-cols"] .hp-security-grid,
+    .bsec[style*="--bsec-cols"] .cs-audience-grid,
+    .bsec[style*="--bsec-cols"] .veeam-related-grid,
+    .bsec[style*="--bsec-cols"] .mch-optim-groups,
+    .bsec[style*="--bsec-cols"] .hp-partner-stats {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ── Dark mode ─────────────────────────────────────────── */
+[data-theme="dark"] .bsec-bg-light { background: #0d1a2e; }
+[data-theme="dark"] .bsec-bg-ink { background: #060b1c; }

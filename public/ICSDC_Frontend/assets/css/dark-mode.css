@@ -53,6 +53,14 @@ html[data-theme="dark"] {
     --border: #334155;
     --blue-hover-bg: #172554;
     --blue-light: #1e3a5f;
+    /* Brand #1a56db is unreadable AS TEXT on near-black (2.36–2.88, under AA),
+       but it must stay as-is for BUTTON BACKGROUNDS — white-on-#1a56db is fine,
+       and lightening the token itself breaks those (white on a lighter blue
+       drops to 2.97). So --blue is deliberately NOT overridden here; this is the
+       text-only variant, same hue (220°) lightened until it clears 4.5 on every
+       dark surface in use: #0f172a 6.00, #1e293b 4.92, #13203a 5.45.
+       Apply it wherever blue is the FOREGROUND colour in dark mode. */
+    --blue-text: #6894ee;
 
     /* Shadows — more opaque for dark bg */
     --shadow: 0 8px 40px rgba(0, 0, 0, 0.40);
@@ -69,7 +77,9 @@ html[data-theme="dark"] {
     --c-text-dark: #f1f5f9;
     --c-text-mid: #94a3b8;
     --c-text-muted: #94a3b8;
-    --c-text-light: #64748b;
+    /* #64748b was only 3.07 on the dark card surface (#1e293b) — .testi-job
+       and friends. #8b98ac gives 5.00 there / 6.11 on #0f172a. */
+    --c-text-light: #8b98ac;
     --c-bg-grey: #1e293b;
     --c-white: #1e293b;
     /* overridden for card backgrounds; ISO text forced white via explicit rules */
@@ -627,7 +637,7 @@ html[data-theme="dark"] .floating-card:hover {
     border-color: rgba(59, 130, 246, 0.4) !important;
 }
 
-html[data-theme="dark"] .floating-card h4 {
+html[data-theme="dark"] .floating-card h3 {
     color: #e2e8f0 !important;
 }
 
@@ -655,10 +665,6 @@ html[data-theme="dark"] .testi-card {
     border-color: #334155 !important;
 }
 
-html[data-theme="dark"] .testi-footer {
-    border-top-color: #334155;
-}
-
 html[data-theme="dark"] .testi-name {
     color: #e2e8f0 !important;
 }
@@ -668,12 +674,8 @@ html[data-theme="dark"] .testi-quote {
 }
 
 html[data-theme="dark"] .testi-job {
-    color: #64748b !important;
-}
-
-html[data-theme="dark"] .testi-quote-mark {
-    color: #60a5fa;
-    opacity: 0.25;
+    /* was #64748b — only 3.07 on the #1e293b card surface. #8b98ac = 5.00. */
+    color: #8b98ac !important;
 }
 
 html[data-theme="dark"] .testi-nav-btn {
@@ -1291,4 +1293,31 @@ html[data-theme="dark"] .hp-industry-tab.is-active {
 
 html[data-theme="dark"] .hp-industry-tab.is-active i {
     color: #fff !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   WCAG AA — blue TEXT on dark surfaces
+   The brand blue stays untouched as a button/background colour (see the
+   --blue-text note in the token block above); these are the places where it
+   is the foreground, where it measured 2.36–2.88 against the dark surfaces
+   and needed the lighter variant instead.
+   ══════════════════════════════════════════════════════════ */
+html[data-theme="dark"] .section .title,
+html[data-theme="dark"] .faq-num,
+html[data-theme="dark"] .cloud-section-label,
+html[data-theme="dark"] .why-card p a,
+html[data-theme="dark"] .hp-section-title,
+html[data-theme="dark"] #hp-contact-title,
+/* These carry their own title classes rather than the shared .title */
+html[data-theme="dark"] .business-needs-title,
+html[data-theme="dark"] .testi-title,
+html[data-theme="dark"] .faq-title {
+    color: var(--blue-text);
+}
+
+/* Needs its own rule: `.faq-item[open] .faq-num` (0,3,0) out-specifies
+   `html[data-theme="dark"] .faq-num` (0,2,1), so the open accordion item kept
+   the unreadable brand blue. */
+html[data-theme="dark"] .faq-item[open] .faq-num {
+    color: var(--blue-text);
 }

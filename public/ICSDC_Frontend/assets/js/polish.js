@@ -65,7 +65,7 @@
     })();
 
 
-    /* ── 4. CONTACT FORM — handled by components.js ── */
+    /* ── 4. CONTACT FORM — handled by contact-us.js / contact-modal.js ── */
 
 
     /* ── 5. WHY-CARD GRADIENT SHIFT ON HOVER ───────────────────── */
