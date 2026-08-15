@@ -1662,11 +1662,11 @@ const videoEmbed = {
     },
 };
 
-/* ════ BLOG HEADER — cover, title, author byline ═════════════ */
+/* ════ BLOG HEADER — split hero: text left, cover right ══════ */
 const blogHeader = {
     label: 'Blog Header',
     icon: 'info',
-    description: 'Article header: cover image, category, title, excerpt and author byline.',
+    description: 'Article header: text (category, title, excerpt, byline) on the left, cover image on the right.',
     schema: [
         { key: 'coverImage', label: 'Cover Image', type: 'image' },
         { key: 'coverAlt', label: 'Cover Alt Text', type: 'text' },
@@ -1700,29 +1700,42 @@ const blogHeader = {
         const meta = [p.publishDate, p.readTime].filter(Boolean)
             .map((m) => '<span>' + esc(m) + '</span>').join('<span class="blogh-dot">·</span>');
 
-        // Byline sits AFTER the cover image: kicker → title → excerpt → cover →
-        // author/date. Keeping the headline and its standfirst together, then
-        // letting the image land, reads better than splitting them with a byline.
-        const byline =
-            '<div class="blogh-byline">' +
-            avatar +
-            '<div class="blogh-byline-text">' +
-            (p.authorName ? '<span class="blogh-author">' + esc(p.authorName) + '</span>' : '') +
-            (p.authorRole ? '<span class="blogh-role">' + esc(p.authorRole) + '</span>' : '') +
-            '</div>' +
-            (meta ? '<div class="blogh-meta">' + meta + '</div>' : '') +
-            '</div>';
+        // Date/read-time leads the byline, the author sits in a chip after it —
+        // the whole block lives under the excerpt in the LEFT column now, so
+        // there is no full-width row to push the meta out to the right edge of.
+        const byline = (meta || p.authorName || p.authorRole)
+            ? '<div class="blogh-byline">' +
+              (meta ? '<div class="blogh-meta">' + meta + '</div>' : '') +
+              '<div class="blogh-author-chip">' +
+              avatar +
+              '<div class="blogh-byline-text">' +
+              (p.authorName ? '<span class="blogh-author">' + esc(p.authorName) + '</span>' : '') +
+              (p.authorRole ? '<span class="blogh-role">' + esc(p.authorRole) + '</span>' : '') +
+              '</div>' +
+              '</div>' +
+              '</div>'
+            : '';
 
+        // Split hero: all the text in one column, the cover in the other. The
+        // cover used to run the full 1560px header width below the title, which
+        // made it tower over the article — bounded by half the row (and a height
+        // ceiling in CSS) it no longer swallows the first screen.
+        // The text wrapper is required: it is the grid child, not each element.
         container.innerHTML =
             '<section class="section blogh-section">' +
-            '<div class="container blogh-inner">' +
+            // No cover uploaded → nothing to fill the right column with, so drop
+            // the split and let the text run in one centred measure instead of
+            // sitting squeezed in half the page beside a gap.
+            '<div class="container blogh-inner' + (p.coverImage ? '' : ' blogh-inner-solo') + '">' +
+            '<div class="blogh-text">' +
             (p.category ? '<span class="blogh-kicker">' + esc(p.category) + '</span>' : '') +
             '<h1 class="blogh-title">' + esc(p.title || '') + '</h1>' +
             (p.excerpt ? '<p class="blogh-excerpt">' + esc(p.excerpt) + '</p>' : '') +
-            (p.coverImage
-                ? '<figure class="blogh-cover"><img src="' + esc(p.coverImage) + '" alt="' + esc(p.coverAlt || '') + '"></figure>'
-                : '') +
             byline +
+            '</div>' +
+            (p.coverImage
+                ? '<figure class="blogh-cover"><img src="' + esc(p.coverImage) + '" alt="' + esc(p.coverAlt || '') + '" fetchpriority="high" decoding="async"></figure>'
+                : '') +
             '</div>' +
             '</section>';
     },

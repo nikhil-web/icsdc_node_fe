@@ -258,9 +258,46 @@ body:has(.builder-preview-banner) nav {
 .container.blogb-inner > .blogb-body { grid-column: 2; }
 .container.blogb-inner > .blogb-side { grid-column: 3; }
 
-/* Every header element spans the full header width. The byline in particular
-   reads well wide now that it sits under the cover — author left, date right,
-   bounded by the image edges rather than floating mid-column. */
+/* Split header: text column | cover column. The text column gets slightly more
+   room than the image — a 50/50 split left long titles breaking into four or
+   five lines while the cover had width it did not need. `align-items: center`
+   keeps a short header vertically centred against the image instead of
+   stranding the byline at the top of a tall cover. */
+.container.blogh-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 32px 60px;
+}
+
+/* The grid child is this wrapper, not each element — without it the kicker,
+   title, excerpt and byline would each become their own grid cell.
+   text-align is set here rather than inherited: `.section .container` centres
+   everything by default (builder-layout.css only overrides it when the section
+   is set to "Left"), and centred copy beside a cover image reads as a mistake
+   whatever the section's alignment control says. */
+.blogh-text {
+    min-width: 0;
+    text-align: left;
+}
+
+/* Explicit columns. The second group is the pre-split markup still baked into
+   older crawler snapshots (prerendered/blogs/*.html), where the kicker, title,
+   excerpt, cover and byline are all direct children of .blogh-inner — without
+   these they auto-place into alternating columns and the header scrambles.
+   Pinning them keeps the text left and the cover right in that case too. */
+.container.blogh-inner > .blogh-text,
+.container.blogh-inner > .blogh-kicker,
+.container.blogh-inner > .blogh-title,
+.container.blogh-inner > .blogh-excerpt,
+.container.blogh-inner > .blogh-byline {
+    grid-column: 1;
+}
+
+.container.blogh-inner > .blogh-cover {
+    grid-column: 2;
+}
+
 .blogh-excerpt,
 .blogh-byline {
     max-width: 100%;
@@ -449,47 +486,62 @@ body:has(.builder-preview-banner) nav {
     }
 }
 
+/* Pill rather than the old bare uppercase line — against a half-width text
+   column the plain kicker read as a stray label above the title. */
 .blogh-kicker {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: var(--blue, #1a56db);
+    color: #fff;
     font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-    color: var(--blue, #1a56db);
-    margin-bottom: 14px;
+    margin-bottom: 18px;
 }
 
+/* Smaller ceiling than the old full-width header: 46px in a column half the
+   page wide turned normal titles into four-line blocks. */
 .blogh-title {
-    font-size: clamp(30px, 4.2vw, 46px);
+    font-size: clamp(28px, 3vw, 42px);
     font-weight: 800;
-    line-height: 1.15;
+    line-height: 1.18;
     letter-spacing: -0.025em;
     color: var(--c-text-dark, #0f1c2e);
     margin: 0 0 16px;
 }
 
 .blogh-excerpt {
-    font-size: 18px;
+    font-size: 17px;
     line-height: 1.6;
     color: var(--muted, #5a6478);
-    margin: 0 0 26px;
+    margin: 0 0 4px;
 }
 
-/* Sits below the cover image now, so it needs the gap ABOVE it. The bottom
-   border still works as the divider between the header block and the article. */
+/* No bottom border any more — it would only underline the text column, which
+   reads as a broken half-width rule next to the cover. */
 .blogh-byline {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 12px 18px;
     margin-top: 24px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--c-border, #e6e9f0);
     flex-wrap: wrap;
 }
 
+.blogh-author-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 16px 5px 5px;
+    border: 1px solid var(--c-border, #e6e9f0);
+    border-radius: 999px;
+}
+
 .blogh-avatar {
-    width: 44px;
-    height: 44px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
@@ -501,33 +553,32 @@ body:has(.builder-preview-banner) nav {
     justify-content: center;
     background: var(--blue, #1a56db);
     color: #fff;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
 }
 
 .blogh-byline-text {
     display: flex;
     flex-direction: column;
-    line-height: 1.35;
+    line-height: 1.3;
 }
 
 .blogh-author {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--c-text-dark, #0f1c2e);
 }
 
 .blogh-role {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--muted, #5a6478);
 }
 
 .blogh-meta {
-    margin-left: auto;
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 13px;
+    font-size: 13.5px;
     color: var(--muted, #5a6478);
 }
 
@@ -535,16 +586,67 @@ body:has(.builder-preview-banner) nav {
     opacity: 0.5;
 }
 
+/* Grid child — sits in the right column, no top margin (that was for the old
+   stacked layout where the cover followed the excerpt). */
 .blogh-cover {
-    margin: 28px 0 0;
-    border-radius: 14px;
+    margin: 0;
+    border-radius: 18px;
     overflow: hidden;
+    background: var(--c-bg-grey, #f4f6f9);
 }
 
+/* Sizing is what actually fixes "the image is very big": the cover is bounded
+   by its column (~half the header) instead of the full 1560px measure.
+   No fixed aspect-ratio on purpose — covers here are usually wide infographics
+   with text baked in, and cropping them to a set ratio cuts that text off. The
+   natural ratio is kept and only unusually TALL uploads hit the 420px ceiling
+   (object-fit then crops rather than squashing them). */
 .blogh-cover img {
     width: 100%;
     height: auto;
+    max-height: 420px;
+    object-fit: cover;
     display: block;
+}
+
+/* Stacked header (the .blogh-inner `display: block` above kicks in at the same
+   1024px breakpoint the rails use — two columns inside a 900px measure would
+   leave the title in a ~430px slot). These live AFTER the base cover rules on
+   purpose: same specificity, so the later block has to be the responsive one. */
+@media (max-width: 1024px) {
+    .blogh-cover {
+        margin-top: 28px;
+    }
+
+    /* Full width of the 900px measure now, so the ceiling has to grow with it —
+       a 16:9 cover is ~506px tall here and clipping it at the desktop 420 would
+       crop a picture that has plenty of room to breathe. */
+    .blogh-cover img {
+        max-height: 520px;
+    }
+}
+
+@media (max-width: 600px) {
+    .blogh-cover {
+        margin-top: 22px;
+        border-radius: 14px;
+    }
+
+    .blogh-cover img {
+        max-height: 300px;
+    }
+
+    .blogh-byline {
+        gap: 10px 14px;
+    }
+}
+
+/* Cover-less header (set by the renderer): one column, article measure. Last in
+   the file on purpose — it has to beat the responsive max-widths above, which
+   share its specificity. */
+.container.blogh-inner-solo {
+    display: block;
+    max-width: 900px;
 }
 
 /* ── Article body ── */
@@ -626,8 +728,12 @@ body:has(.builder-preview-banner) nav {
     background: #1e293b;
 }
 
-[data-theme="dark"] .blogh-byline {
-    border-bottom-color: #24334d;
+[data-theme="dark"] .blogh-author-chip {
+    border-color: #24334d;
+}
+
+[data-theme="dark"] .blogh-cover {
+    background: #16233d;
 }
 
 /* Contents rail + promo card in dark mode. These use hardcoded hexes rather
