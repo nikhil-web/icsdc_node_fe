@@ -34,3 +34,93 @@
     border-color: var(--blue);
     background: var(--white);
 }
+
+/* ══ Why Choose ICSDC ══
+   These 10 cards are title-only (no description), so the shared
+   .cloud-use-card layout — sized for icon + heading + paragraph —
+   left each card ~60% empty, and a 3-column grid stranded the 10th
+   card alone on a fourth row. Denser 5-across tile instead, scoped
+   to #acr-why so every other page using .cloud-use-card is untouched. */
+
+/* populateIconCards always emits a <p>, even with no description. */
+#acr-why .cloud-use-card p:empty {
+    display: none;
+}
+
+/* Flex-wrap rather than a fixed column count: the tiles keep a sensible
+   ~200-240px width at every viewport, and a short trailing row (10 items
+   never divides evenly into 3 or 4) centres itself instead of leaving a
+   stranded card hanging off the left edge. */
+#acr-why .cloud-use-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+}
+
+#acr-why .cloud-use-card {
+    flex: 0 1 200px;
+    max-width: 240px;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 28px 14px 24px;
+    gap: 16px;
+}
+
+#acr-why .cloud-use-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: var(--blue-light);
+    border: 1px solid var(--border);
+}
+
+/* Icons resolve to Font Awesome <i>, not <svg> — the shared
+   .cloud-use-icon svg rule never matches these. */
+#acr-why .cloud-use-icon i {
+    font-size: 20px;
+    line-height: 1;
+    color: var(--blue);
+}
+
+#acr-why .cloud-use-card:hover .cloud-use-icon {
+    transform: scale(1.08) rotate(-4deg);
+    border-color: var(--blue);
+}
+
+#acr-why .cloud-use-card h3 {
+    font-size: 14.5px;
+    line-height: 1.45;
+    text-wrap: balance;
+}
+
+/* Phones: full-width rows read better than narrow centred tiles. */
+@media (max-width: 767px) {
+    #acr-why .cloud-use-card {
+        flex: 1 1 100%;
+        max-width: none;
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+        padding: 18px;
+        gap: 14px;
+    }
+
+    #acr-why .cloud-use-icon {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+.acr-why-image {
+    margin-top: 48px;
+    text-align: center;
+}
+
+.acr-why-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border);
+}

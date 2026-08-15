@@ -336,6 +336,7 @@ export function getAcronisBackupPage() {
         "&populate[pillars]=*" +
         "&populate[pricingCtaPrimary]=*" +
         "&populate[pricingCtaSecondary]=*" +
+        "&populate[plans][populate][features]=*" +
         "&populate[features]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
@@ -344,6 +345,7 @@ export function getAcronisBackupPage() {
         "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
         "&populate[heroImage][populate][image]=true" +
+        "&populate[whyImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
         "&populate[aboutPoints]=*" +
         "&populate[aboutFeatures]=*"

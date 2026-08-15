@@ -443,6 +443,13 @@ html[data-theme="dark"] .cloud-power-icon {
     background: var(--blue-light);
 }
 
+/* Acronis "Why Choose ICSDC" tiles — --blue (#1a56db) on the dark
+   --blue-light badge (#1e3a5f) is only ~1.9:1. Lift to the same blue
+   used elsewhere in dark mode for ~4.5:1. */
+html[data-theme="dark"] #acr-why .cloud-use-icon i {
+    color: #60a5fa;
+}
+
 /* ds-plan-card / lds-plan-card */
 html[data-theme="dark"] .ds-plan-card,
 html[data-theme="dark"] .lds-plan-card {

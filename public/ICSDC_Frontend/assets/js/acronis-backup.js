@@ -8,7 +8,7 @@
  *   1.  SEO meta tags
  *   2.  Hero (eyebrow + shield visual + stat cards + status badge)
  *   3.  4 Pillars (icon cards)
- *   4.  Pricing (section header + placeholder message + CTA)
+ *   4.  Pricing (section header + plan cards)
  *   5.  Features (section header + 12 icon cards)
  *   6.  CTA Band #1
  *   7.  Why Choose ICSDC (section header + 6 icon cards)
@@ -28,6 +28,7 @@ import {
     populateCtaBand,
     populateTldCards,
     populateStats,
+    populatePricingPlansCloud,
     hidePageLoader,
     markActiveNavLink,
     setText,
@@ -110,29 +111,10 @@ import {
         populateIconCards('.why-us .why-grid', pillars, 'why-card');
     }
 
-    /** 4. Pricing Section (header + placeholder message + CTA) */
+    /** 4. Pricing Section (header + plan cards) */
     function populatePricing(page) {
         populateSectionHeader('#acr-pricing', page.pricingLabel, page.pricingTitle, page.pricingSubtitle);
-
-        // Pricing placeholder message
-        if (page.pricingMessage) {
-            var placeholder = document.querySelector('#acr-pricing .acr-pricing-placeholder');
-            if (placeholder) {
-                var msgP = placeholder.querySelector('p');
-                if (msgP) msgP.textContent = page.pricingMessage;
-            }
-        }
-
-        // Pricing CTA buttons
-        var pricingBtns = document.querySelectorAll('#acr-pricing .hero-btns button');
-        if (pricingBtns.length >= 1 && page.pricingCtaPrimary) {
-            pricingBtns[0].innerHTML = page.pricingCtaPrimary.text || '';
-            wireCtaLink(pricingBtns[0], page.pricingCtaPrimary.link);
-        }
-        if (pricingBtns.length >= 2 && page.pricingCtaSecondary) {
-            pricingBtns[1].textContent = page.pricingCtaSecondary.text || '';
-            wireCtaLink(pricingBtns[1], page.pricingCtaSecondary.link);
-        }
+        populatePricingPlansCloud('#acr-pricing .cloud-pricing-grid', page.plans);
     }
 
     /** 5. Features (12 icon cards in #acr-features .cloud-power-grid) */
@@ -149,6 +131,29 @@ import {
         if (cards && cards.length) {
             populateIconCards('#acr-why .cloud-use-grid', cards, 'cloud-use-card');
         }
+    }
+
+    /** 7b. Why section image (optional — set in Strapi via whyImage) */
+    function populateWhyImage(whyImage) {
+        var wrap = document.getElementById('acr-why-image');
+        if (!wrap) return;
+        var media = whyImage && whyImage.image;
+        if (!media) return;
+
+        var img = wrap.querySelector('img');
+        if (!img) return;
+
+        var base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
+        var picked = (media.formats && (media.formats.large || media.formats.medium || media.formats.small)) || media;
+        var url = picked.url || '';
+        if (url && !url.startsWith('http')) url = base + url;
+        if (!url) return;
+
+        img.src = url;
+        img.alt = media.alternativeText || '';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        wrap.style.display = '';
     }
 
     /** 4b. Who We Are (about section) */
@@ -206,6 +211,7 @@ import {
 
             // 7. Why Choose ICSDC
             populateWhyCards(page.whyLabel, page.whyTitle, page.whySubtitle, page.whyCards);
+            populateWhyImage(page.whyImage);
 
             // 8. Testimonials
             if (page.testimonialTitle) {
@@ -223,9 +229,6 @@ import {
                 setText(document, '#acr-faq-heading', page.faqTitle);
             }
             initFAQ(page.faq);
-
-            // 10. CTA Band #2
-            populateCtaBand('.cloud-cta-dark', page.ctaBand2);
 
         } catch (err) {
             console.error('[acronis-backup] Failed to load CMS data:', err);
