@@ -173,23 +173,18 @@
         </div>
     </section>
 
-    <!-- ════════ PRICING PLACEHOLDER ════════ -->
+    <!-- ════════ PRICING ════════ -->
     <section id="wds-pricing" class="section cloud-pricing-section">
         <div class="container">
 
             <h2 class="title" data-animate="fade-up">Find a Windows Dedicated Server Plan That Fits Your Workload</h2>
             <p class="subtitle" data-animate="fade-up">Select the ideal server setup with scalable resources and
                 transparent pricing.</p>
-            <div class="wds-pricing-placeholder" data-animate="fade-up">
-                <div class="wds-pricing-icon"><i class="fa-solid fa-server" aria-hidden="true"></i></div>
-                <h3>Custom Pricing Available</h3>
-                <p>Windows Dedicated Server plans are tailored to your workload &mdash; CPU cores, RAM, storage, and
-                    Windows edition. Contact our team for a personalized quote.</p>
-                <div class="hero-btns" style="justify-content:center; margin-top:24px;">
-                    <button class="btn-primary">Get a Custom Quote </button>
-                    <button class="btn-outline">Call +91 98109 58857</button>
-                </div>
-            </div>
+            <!-- Cards are rendered from Strapi `plans` by populatePricingPlansCloud().
+                 Deliberately no static fallback cards: hardcoded prices here would go
+                 stale the moment someone edits a plan in the CMS, and would then be
+                 shown to visitors during any Strapi outage. -->
+            <div class="cloud-pricing-grid" data-stagger></div>
         </div>
     </section>
 
@@ -387,9 +382,12 @@
                     </tbody>
                 </table>
             </div>
-            <div style="text-align:center; margin-top:32px;">
-                <button class="btn-primary">View Plans </button>
-                <button class="btn-outline" style="margin-left:12px;">Talk to an Expert</button>
+            <!-- Text + link come from Strapi (comparisonCtaPrimary/Secondary);
+                 the labels below are the fallback if those fields are empty. -->
+            <div id="wds-compare-btns" style="text-align:center; margin-top:32px;">
+                <button class="btn-primary wds-compare-btn-primary">View Plans </button>
+                <button class="btn-outline wds-compare-btn-outline" style="margin-left:12px;">Talk to an
+                    Expert</button>
             </div>
         </div>
     </section>

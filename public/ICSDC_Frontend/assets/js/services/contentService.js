@@ -332,10 +332,7 @@ export function getAcronisBackupPage() {
         "?populate[seo]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
-        "&populate[heroStats]=*" +
         "&populate[pillars]=*" +
-        "&populate[pricingCtaPrimary]=*" +
-        "&populate[pricingCtaSecondary]=*" +
         "&populate[plans][populate][features]=*" +
         "&populate[features]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
@@ -471,11 +468,14 @@ export function getWindowsDedicatedServerPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
+        "&populate[plans][populate][features]=*" +
         "&populate[pricingCtaPrimary]=*" +
         "&populate[pricingCtaSecondary]=*" +
         "&populate[aboutItems]=*" +
         "&populate[features]=*" +
         "&populate[comparisonRows]=*" +
+        "&populate[comparisonCtaPrimary]=*" +
+        "&populate[comparisonCtaSecondary]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[whyCards]=*" +

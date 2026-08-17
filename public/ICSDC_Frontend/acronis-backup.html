@@ -116,14 +116,6 @@
             </svg>
             <div class="acr-shield-badge">AES-256 Encrypted</div>
           </div>
-          <div class="acr-stat-card acr-stat-1">
-            <div class="acr-stat-val">99.9%</div>
-            <div class="acr-stat-label">Uptime</div>
-          </div>
-          <div class="acr-stat-card acr-stat-2">
-            <div class="acr-stat-val">&lt;15 min</div>
-            <div class="acr-stat-label">RTO</div>
-          </div>
           <div class="acr-status-badge">
             <div class="acr-status-dot"></div>
             <div>
@@ -171,7 +163,6 @@
   <!-- ════════ PRICING PLANS ════════ -->
   <section id="acr-pricing" class="section cloud-pricing-section">
     <div class="container">
-      <span class="cloud-section-label" data-animate="fade-up">Pricing</span>
       <h2 class="title" data-animate="fade-up">Choose Your Acronis Backup Storage Plan</h2>
       <p class="subtitle" data-animate="fade-up">Choose the right storage plan based on how much data you want to
         protect. Every option includes reliable backups and easy restore anytime.</p>
@@ -280,8 +271,7 @@
   <section class="cloud-cta-band">
     <div class="cloud-cta-inner">
       <h2>Let&rsquo;s Safeguard Your Data Together with ICSDC</h2>
-      <p>Your data is the backbone of your business. Protect it with enterprise-grade Acronis Backup managed by
-        ICSDC&rsquo;s certified team.</p>
+      <p></p>
       <div class="cloud-cta-btns">
         <button class="cloud-cta-btn-primary">Start Protecting Your Data </button>
         <button class="cloud-cta-btn-outline">Talk to Our Backup Experts</button>
@@ -434,6 +424,26 @@
             </div>
           </aside>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ CTA BAND #2 ════════
+       The source document specifies a second call to action after the FAQ.
+       Heading only: the document supplies no body copy and no button labels, so
+       none are hardcoded here — the previous version of this section carried
+       invented copy, and static fallbacks render verbatim whenever Strapi is
+       unreachable, which is how that copy reached the live page in the first
+       place. The two buttons are kept as empty hooks because populateCtaBand()
+       finds them by exactly these classes; it .remove()s any button whose CMS
+       CTA has no text, so they stay invisible until someone fills them in. -->
+  <section class="cloud-cta-band cloud-cta-dark">
+    <div class="cloud-cta-inner">
+      <h2>Talk to Our Backup Experts from ICSDC</h2>
+      <p></p>
+      <div class="cloud-cta-btns">
+        <button class="cloud-cta-btn-primary"></button>
+        <button class="cloud-cta-btn-outline"></button>
       </div>
     </div>
   </section>

@@ -1,5 +1,24 @@
-import { populateSEO, populateHero, populateIconCards, populateSectionHeader, populateCtaBand, populateComparisonTable, hidePageLoader, markActiveNavLink, setText, setHTML, initTestimonials, initFAQ } from './utils/cms-helpers.js';
+import { populateSEO, populateHero, populateIconCards, populateSectionHeader, populateCtaBand, populateComparisonTable, populatePricingPlansCloud, wireCtaLink, hidePageLoader, markActiveNavLink, setText, setHTML, initTestimonials, initFAQ } from './utils/cms-helpers.js';
 import { getWindowsDedicatedServerPage } from './services/contentService.js';
+
+// Comparison-table CTAs. These are <button>s, so the destination must go through
+// wireCtaLink() — it opens the contact modal for 'contact-popup' and navigates
+// otherwise. Never hand-wire an onclick here (see CLAUDE.md).
+// Each button is only touched when Strapi actually supplies text, so a blank CMS
+// field leaves the HTML fallback label in place rather than emptying the button.
+function populateCompareButtons(primary, secondary) {
+    var pairs = [
+        [primary, '#wds-compare-btns .wds-compare-btn-primary'],
+        [secondary, '#wds-compare-btns .wds-compare-btn-outline']
+    ];
+    pairs.forEach(function (pair) {
+        var cta = pair[0];
+        var btn = document.querySelector(pair[1]);
+        if (!btn || !cta || !cta.text) return;
+        btn.textContent = cta.text;
+        wireCtaLink(btn, cta.link);
+    });
+}
 
 (async function () {
     'use strict';
@@ -22,11 +41,13 @@ import { getWindowsDedicatedServerPage } from './services/contentService.js';
 
         populateIconCards('.why-grid', page.pillars, 'why-card');
 
-        // Pricing
+        // Pricing — header + plan cards. populatePricingPlansCloud() wires each
+        // CTA to plan.ctaLink, falling back to the site-wide contact popup.
         populateSectionHeader('#wds-pricing', page.pricingLabel, page.pricingTitle, null);
         if (page.pricingDescription) {
             setHTML(document.getElementById('wds-pricing'), '.subtitle, p', page.pricingDescription);
         }
+        populatePricingPlansCloud('#wds-pricing .cloud-pricing-grid', page.plans);
 
         // About with checklist items
         populateSectionHeader('#wds-about', page.aboutLabel, page.aboutTitle, null);
@@ -48,6 +69,7 @@ import { getWindowsDedicatedServerPage } from './services/contentService.js';
 
         populateSectionHeader('#wds-comparison', page.comparisonLabel, page.comparisonTitle, page.comparisonSubtitle);
         populateComparisonTable('.wds-compare-table', page.comparisonColumns, page.comparisonRows);
+        populateCompareButtons(page.comparisonCtaPrimary, page.comparisonCtaSecondary);
 
         populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
 
