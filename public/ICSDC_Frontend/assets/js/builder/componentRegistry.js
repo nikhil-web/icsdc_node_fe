@@ -26,6 +26,7 @@ import {
     initFAQ as sharedInitFAQ,
     initTestimonials as sharedInitTestimonials,
     inlineRichText,
+    resolveIcon,
 } from '../utils/cms-helpers.js';
 
 // Each builder section gets a unique id so multiple instances of the same
@@ -1678,6 +1679,7 @@ const blogHeader = {
         { key: 'authorAvatar', label: 'Author Photo', type: 'image' },
         { key: 'publishDate', label: 'Publish Date', type: 'text' },
         { key: 'readTime', label: 'Read Time', type: 'text' },
+        { key: 'showSocial', label: 'Show social links (from site footer)', type: 'toggle', default: true },
     ],
     defaultProps: {
         coverImage: '/assets/images/Home page images_s.webp',
@@ -1690,8 +1692,12 @@ const blogHeader = {
         authorAvatar: '',
         publishDate: '',
         readTime: '5 min read',
+        showSocial: true,
     },
     renderer(container, p) {
+        // `!== false` so posts saved before this field existed still get the row
+        // — defaultProps only seed NEWLY created sections.
+        const showSocial = p.showSocial !== false;
         const initials = String(p.authorName || 'I').trim().split(/\s+/)
             .map((w) => w[0]).join('').toUpperCase().slice(0, 2);
         const avatar = p.authorAvatar
@@ -1700,9 +1706,6 @@ const blogHeader = {
         const meta = [p.publishDate, p.readTime].filter(Boolean)
             .map((m) => '<span>' + esc(m) + '</span>').join('<span class="blogh-dot">·</span>');
 
-        // Byline sits AFTER the cover image: kicker → title → excerpt → cover →
-        // author/date. Keeping the headline and its standfirst together, then
-        // letting the image land, reads better than splitting them with a byline.
         const byline =
             '<div class="blogh-byline">' +
             avatar +
@@ -1713,20 +1716,89 @@ const blogHeader = {
             (meta ? '<div class="blogh-meta">' + meta + '</div>' : '') +
             '</div>';
 
+        /* Two columns: all the text on the left, cover image on the right.
+           The cover used to be a full-bleed band under the headline, which at the
+           header's 1560px measure rendered enormous — it dominated the screen and
+           pushed the article itself below the fold. Side by side, the image is
+           roughly half the width and the headline keeps the top of the page.
+
+           `.blogh-text` wraps every text element so it is ONE grid item; without
+           it each of kicker/title/excerpt/byline would take its own cell and the
+           layout would fall apart. Text comes first in source order so that the
+           ≤1024px `display:block` rule (which the header already shares with the
+           body) stacks headline-then-image with no extra work — and so the h1 is
+           still the first thing in the document. */
         container.innerHTML =
             '<section class="section blogh-section">' +
             '<div class="container blogh-inner">' +
+            '<div class="blogh-text">' +
             (p.category ? '<span class="blogh-kicker">' + esc(p.category) + '</span>' : '') +
             '<h1 class="blogh-title">' + esc(p.title || '') + '</h1>' +
             (p.excerpt ? '<p class="blogh-excerpt">' + esc(p.excerpt) + '</p>' : '') +
+            byline +
+            (showSocial
+                ? '<div class="blogh-social" data-blogh-social aria-label="Follow ICSDC"></div>'
+                : '') +
+            '</div>' +
             (p.coverImage
                 ? '<figure class="blogh-cover"><img src="' + esc(p.coverImage) + '" alt="' + esc(p.coverAlt || '') + '"></figure>'
                 : '') +
-            byline +
             '</div>' +
             '</section>';
+
+        if (showSocial) fillBlogSocial(container);
     },
 };
+
+/* Social icons under the byline, reusing the FOOTER's links so there is one
+   source of truth: same Strapi `footer.commonFooter.socialLinks`, same
+   resolveIcon() call, same order. Edit them once in the CMS and both update.
+
+   Styling is NOT reused: .footer-social-link is built for the dark footer
+   (translucent-white fill, white glyphs) and would be invisible on the header's
+   light background, so .blogh-social-link restates the same 36px circle in
+   theme tokens instead.
+
+   Fire-and-forget, like fillBlogHelp(): the row simply stays empty if Strapi is
+   unreachable rather than throwing and taking the rest of the header with it. */
+/* Memoised GET, keyed by URL, for CMS lookups made from inside renderers.
+   Renderers are NOT called once per page: the builder canvas re-runs every
+   renderer on each `bld:render` postMessage, which the editor sends debounced
+   on every property edit — so an un-cached fetch here fires again on each
+   keystroke batch while an author is typing. Caching the PROMISE (not the
+   result) also collapses concurrent callers into one request.
+   Page-lifetime only — a reload picks up CMS changes. */
+const _cmsGetCache = Object.create(null);
+function cmsGet(url) {
+    if (!_cmsGetCache[url]) {
+        _cmsGetCache[url] = fetch(url)
+            .then((r) => (r.ok ? r.json() : null))
+            .catch(() => null);
+    }
+    return _cmsGetCache[url];
+}
+
+function fillBlogSocial(container) {
+    const box = container.querySelector('[data-blogh-social]');
+    if (!box) return;
+    cmsGet('/api/strapi/api/footer?populate[commonFooter][populate][socialLinks]=*')
+        .then((json) => {
+            const cf = json && json.data && json.data.commonFooter;
+            const links = (cf && cf.socialLinks) || [];
+            const html = links
+                .filter((s) => s.url)
+                .map((s) =>
+                    '<a class="blogh-social-link" href="' + esc(s.url) + '"' +
+                    ' aria-label="' + esc(s.name || 'Social link') + '"' +
+                    ' target="_blank" rel="noopener noreferrer">' +
+                    resolveIcon(s.icon) + '</a>')
+                .join('');
+            // Leave the row absent rather than an empty bordered strip.
+            if (html) box.innerHTML = html;
+            else box.remove();
+        })
+        .catch(() => { if (box) box.remove(); });
+}
 
 /* ════ BLOG BODY — full article, WYSIWYG-edited ══════════════ */
 const blogBody = {
@@ -1737,6 +1809,7 @@ const blogBody = {
         { key: 'body', label: 'Article Content', type: 'richtext' },
         { key: 'showToc', label: 'Show "On this page" contents rail', type: 'toggle', default: true },
         { key: 'showSidebar', label: 'Show side promo card', type: 'toggle', default: true },
+        { key: 'showHelp', label: 'Show "I need help with" card', type: 'toggle', default: true },
         { key: 'sidebarTitle', label: 'Promo Title', type: 'text' },
         { key: 'sidebarText', label: 'Promo Text', type: 'textarea' },
         {
@@ -1755,6 +1828,7 @@ const blogBody = {
               '<blockquote>Pull out a quote when you want a line to land.</blockquote>',
         showToc: true,
         showSidebar: true,
+        showHelp: true,
         sidebarTitle: 'Need hosting that keeps up?',
         sidebarText: 'Talk to our team about a plan sized to your traffic, budget and growth.',
         sidebarCta: { text: 'View Plans', link: '/pricing' },
@@ -1787,13 +1861,31 @@ const blogBody = {
         const sideText = p.sidebarText || 'Talk to our team about a plan sized to your traffic, budget and growth.';
         const ctaText = (p.sidebarCta && p.sidebarCta.text) || 'View Plans';
         const ctaLink = (p.sidebarCta && p.sidebarCta.link) || '/pricing';
-        const sidebarHtml = showSidebar
-            ? '<aside class="blogb-side">' +
-              '<div class="blogb-promo">' +
-              '<h3>' + esc(sideTitle) + '</h3>' +
-              '<p>' + esc(sideText) + '</p>' +
-              '<a class="btn-primary blogb-promo-btn" href="' + esc(ctaLink) + '">' + esc(ctaText) + '</a>' +
+        const showHelp = p.showHelp !== false;
+
+        // Reuses the /blogs index's .blog-help markup and classes verbatim (its
+        // CSS is loaded by builder-template.html) so the two cannot drift apart.
+        // Rendered with the same defaults blogs.js falls back to, then filled from
+        // Strapi below — one edit in the CMS updates the index AND every article.
+        const helpHtml = showHelp
+            ? '<div class="blog-help blogb-help">' +
+              '<h3>I need help with</h3>' +
+              '<div class="blog-help-grid" data-blogb-help-grid>' +
+              BLOG_HELP_DEFAULTS.map(helpItemHtml).join('') +
               '</div>' +
+              '</div>'
+            : '';
+
+        const sidebarHtml = (showSidebar || showHelp)
+            ? '<aside class="blogb-side">' +
+              (showSidebar
+                  ? '<div class="blogb-promo">' +
+                    '<h3>' + esc(sideTitle) + '</h3>' +
+                    '<p>' + esc(sideText) + '</p>' +
+                    '<a class="btn-primary blogb-promo-btn" href="' + esc(ctaLink) + '">' + esc(ctaText) + '</a>' +
+                    '</div>'
+                  : '') +
+              helpHtml +
               '</aside>'
             : '';
 
@@ -1809,8 +1901,45 @@ const blogBody = {
             '</section>';
 
         if (showToc) buildBlogToc(container);
+        if (showHelp) fillBlogHelp(container);
     },
 };
+
+/* The "I need help with" links, shared with the /blogs index.
+   Kept in sync by SOURCE, not by copy: these are only the pre-fetch defaults
+   (identical to blogs.js's FALLBACK_HELP_LINKS), and fillBlogHelp() replaces
+   them with blog-index-page.helpLinks from Strapi when that is reachable. */
+const BLOG_HELP_DEFAULTS = [
+    { icon: 'fa-cloud', title: 'Cloud Hosting', link: '/cloud-hosting' },
+    { icon: 'fa-server', title: 'VPS Hosting', link: '/vps-hosting' },
+    { icon: 'fa-database', title: 'Dedicated Servers', link: '/dedicated-server' },
+    { icon: 'fa-globe', title: 'Web Hosting', link: '/web-hosting' },
+    { icon: 'fa-users', title: 'Reseller Hosting', link: '/reseller-hosting' },
+    { icon: 'fa-shield-halved', title: 'Backup & Security', link: '/cloud-storage' },
+];
+
+function helpItemHtml(h) {
+    return '<a class="blog-help-item" href="' + esc(h.link || '#') + '">' +
+        '<i class="fa-solid ' + esc(h.icon || 'fa-circle') + '" aria-hidden="true"></i>' +
+        '<span>' + esc(h.title) + '</span></a>';
+}
+
+/* Swap the baked-in defaults for the CMS list. Deliberately fire-and-forget:
+   the card is already rendered and readable, so a slow or dead Strapi costs
+   nothing but keeps the defaults — never a blank box, never a thrown error
+   that would take the rest of the renderer down with it. */
+function fillBlogHelp(container) {
+    const grid = container.querySelector('[data-blogb-help-grid]');
+    if (!grid) return;
+    cmsGet('/api/strapi/api/blog-index-page?populate[helpLinks]=*')
+        .then((json) => {
+            const links = json && json.data && json.data.helpLinks;
+            if (!links || !links.length) return;
+            const sorted = links.slice().sort((a, b) => (a.order || 0) - (b.order || 0));
+            grid.innerHTML = sorted.map(helpItemHtml).join('');
+        })
+        .catch(() => { /* keep defaults */ });
+}
 
 /* Builds the "On this page" rail from the article's own h2/h3 headings.
    Done here rather than in the editor because the body is free-form rich text —
@@ -1828,9 +1957,14 @@ function buildBlogToc(container) {
     if (headings.length < 2) return;
 
     const used = Object.create(null);
-    const links = headings.map((h) => {
+
+    // Assign ids first, then group: each h2 owns the h3s that follow it, so the
+    // rail can show only the current section's sub-headings instead of every
+    // h3 in the article at once.
+    const items = [];
+    headings.forEach((h) => {
         const text = (h.textContent || '').trim();
-        if (!text) return '';
+        if (!text) return;
         let id = h.id || text.toLowerCase()
             .replace(/[^\w\s-]/g, '')
             .trim().replace(/\s+/g, '-')
@@ -1839,11 +1973,43 @@ function buildBlogToc(container) {
         // Duplicate headings are common ("Overview" twice) — suffix so anchors stay unique.
         if (used[id]) { used[id] += 1; id = id + '-' + used[id]; } else { used[id] = 1; }
         h.id = id;
-        return '<li class="blogb-toc-' + h.tagName.toLowerCase() + '">' +
-               '<a class="blogb-toc-link" href="#' + id + '">' + esc(text) + '</a></li>';
-    }).join('');
+        items.push({ id: id, text: text, level: h.tagName.toLowerCase() });
+    });
 
-    list.innerHTML = links;
+    const linkHtml = (it) =>
+        '<a class="blogb-toc-link" href="#' + it.id + '">' + esc(it.text) + '</a>';
+
+    // Two separate flags on purpose: an h2 <li> is always opened, but its
+    // collapsible <ul> only exists if that h2 actually has sub-headings. Using
+    // one flag left an h2-with-no-children unclosed and produced nested <li>s.
+    let html = '';
+    let liOpen = false;    // an h2 <li> awaiting its </li>
+    let subOpen = false;   // that h2's <div><ul> awaiting its close
+
+    const closeGroup = () => {
+        if (subOpen) { html += '</ul></div>'; subOpen = false; }
+        if (liOpen) { html += '</li>'; liOpen = false; }
+    };
+
+    items.forEach((it) => {
+        if (it.level === 'h2') {
+            closeGroup();
+            html += '<li class="blogb-toc-h2 blogb-toc-group">' + linkHtml(it);
+            liOpen = true;
+        } else if (liOpen) {
+            // Wrapper opened lazily on the first child, so an h2 without
+            // sub-headings never renders an empty collapsible container.
+            if (!subOpen) { html += '<div class="blogb-toc-sub-wrap"><ul class="blogb-toc-sub">'; subOpen = true; }
+            html += '<li class="blogb-toc-h3">' + linkHtml(it) + '</li>';
+        } else {
+            // h3 before any h2 — no parent to nest under, so keep it top-level
+            // rather than dropping it from the rail entirely.
+            html += '<li class="blogb-toc-h3">' + linkHtml(it) + '</li>';
+        }
+    });
+    closeGroup();
+
+    list.innerHTML = html;
     aside.hidden = false;
 
     // Deliberately NO preventDefault/scrollTo here: style.css already sets
@@ -1853,11 +2019,20 @@ function buildBlogToc(container) {
     // path that can silently fail (and breaks middle-click / open-in-new-tab).
     list.querySelectorAll('.blogb-toc-link').forEach((a) => {
         a.addEventListener('click', () => {
+            // Expand straight away rather than waiting for the scroll observer
+            // to catch up — otherwise clicking an h2 looks like nothing happened.
+            setOpenGroup(a.closest('.blogb-toc-group'));
             // Collapse the accordion again on mobile, where it sits above the article.
             const details = a.closest('details.blogb-toc-collapsed');
             if (details && window.innerWidth < 1025) details.open = false;
         });
     });
+
+    // Open the first group up front. Deliberately BEFORE the IntersectionObserver
+    // guard below: without it the rail renders fully collapsed until the reader
+    // scrolls far enough to trip the observer — and on a browser with no
+    // IntersectionObserver it would stay collapsed forever.
+    setOpenGroup(list.querySelector('.blogb-toc-group'));
 
     // Highlight the section you're currently reading.
     if (typeof IntersectionObserver !== 'function') return;
@@ -1882,8 +2057,21 @@ function buildBlogToc(container) {
         if (!a) return;
         list.querySelectorAll('.blogb-toc-active').forEach((el) => el.classList.remove('blogb-toc-active'));
         a.classList.add('blogb-toc-active');
+        setOpenGroup(a.closest('.blogb-toc-group'));
     }, { rootMargin: '-96px 0px -70% 0px' });
     headings.forEach((h) => { if (h.id) observer.observe(h); });
+
+    /* Only ONE group is expanded at a time: the section being read. Sub-headings
+       for every other h2 stay collapsed, so the rail shows where you are rather
+       than every h3 in the article at once. `.closest()` resolves an active h3
+       to its parent h2's group, so clicking/scrolling into a sub-heading keeps
+       its own group open instead of collapsing the list under the reader. */
+    function setOpenGroup(group) {
+        list.querySelectorAll('.blogb-toc-group.is-open').forEach((g) => {
+            if (g !== group) g.classList.remove('is-open');
+        });
+        if (group) group.classList.add('is-open');
+    }
 }
 
 /* ════ EXPORT ════════════════════════════════════════════════ */

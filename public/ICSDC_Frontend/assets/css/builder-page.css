@@ -258,9 +258,25 @@ body:has(.builder-preview-banner) nav {
 .container.blogb-inner > .blogb-body { grid-column: 2; }
 .container.blogb-inner > .blogb-side { grid-column: 3; }
 
-/* Every header element spans the full header width. The byline in particular
-   reads well wide now that it sits under the cover — author left, date right,
-   bounded by the image edges rather than floating mid-column. */
+/* Header: text left, cover image right. The cover was previously a full-bleed
+   band under the headline — at this 1560px measure that rendered enormous and
+   pushed the article below the fold. Halving its width fixes that without
+   shrinking the type.
+   `align-items: center` so a short headline sits against the middle of the
+   image rather than floating at its top edge. */
+.container.blogh-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0 48px;
+    align-items: center;
+}
+
+/* No cover image set → the text is the only grid item, so let it span both
+   columns instead of sitting in a half-width cell beside empty space. */
+.container.blogh-inner > .blogh-text:only-child {
+    grid-column: 1 / -1;
+}
+
 .blogh-excerpt,
 .blogh-byline {
     max-width: 100%;
@@ -323,6 +339,40 @@ body:has(.builder-preview-banner) nav {
     font-size: 13px;
 }
 
+/* Sub-headings are collapsed unless their parent h2 is the section being read,
+   so the rail shows where you are instead of every h3 in the article at once.
+
+   Animates grid-template-rows 0fr→1fr rather than max-height — the same pattern
+   the FAQ accordion uses (components.css) — because it resolves to the content's
+   real height, so the curve maps 1:1 onto what you actually see. Two things this
+   needs and silently breaks without: `min-height: 0` on the grid child (grid
+   items default to min-height:auto and refuse to collapse), and NO vertical
+   padding on the collapsing <ul> (padding is immune to the 0fr shrink and would
+   leave a sliver of the sub-list showing when closed). */
+.blogb-toc-sub-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.24s ease;
+}
+
+.blogb-toc-group.is-open>.blogb-toc-sub-wrap {
+    grid-template-rows: 1fr;
+}
+
+.blogb-toc-sub {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .blogb-toc-sub-wrap {
+        transition: none;
+    }
+}
+
 .blogb-toc-active {
     color: var(--blue, #1a56db);
     border-left-color: var(--blue, #1a56db);
@@ -347,6 +397,18 @@ body:has(.builder-preview-banner) nav {
     border: 1px solid var(--c-border, #e6e9f0);
     border-radius: 14px;
     padding: 22px 20px;
+}
+
+/* The help card can share the rail with the promo card above it. Margin rather
+   than a gap on .blogb-side, because either card can be switched off
+   independently and a gap would still reserve space for the missing one. */
+.blogb-help {
+    margin-top: 20px;
+}
+
+/* First (or only) card in the rail — nothing above it to space away from. */
+.blogb-side > .blogb-help:first-child {
+    margin-top: 0;
 }
 
 .blogb-promo h3 {
@@ -396,12 +458,15 @@ body:has(.builder-preview-banner) nav {
 
     /* Below the rails breakpoint the article is full-width anyway, so pull the
        header back to the same measure — a header wider than its own body reads
-       as broken once there's no sidebar to justify the difference. */
+       as broken once there's no sidebar to justify the difference.
+       display:block also un-does the header's two-column grid, stacking it as
+       headline-then-image (source order) with no separate rule needed. */
     .container.blogh-inner,
     .container.blogb-inner {
         display: block;
         max-width: 900px;
     }
+
 
     .blogb-toc {
         position: static;
@@ -475,15 +540,15 @@ body:has(.builder-preview-banner) nav {
     margin: 0 0 26px;
 }
 
-/* Sits below the cover image now, so it needs the gap ABOVE it. The bottom
-   border still works as the divider between the header block and the article. */
+/* Last thing in the left-hand text column. No bottom border: it would now run
+   under only that column and stop dead at the gap, reading as a broken rule
+   rather than a divider. The blogBody section's own top padding separates the
+   header from the article. */
 .blogh-byline {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-top: 24px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--c-border, #e6e9f0);
     flex-wrap: wrap;
 }
 
@@ -535,16 +600,73 @@ body:has(.builder-preview-banner) nav {
     opacity: 0.5;
 }
 
+/* Social row under the byline. Same links and icons as the site footer (see
+   fillBlogSocial in componentRegistry.js) and the same 36px circle, but the
+   footer's own .footer-social-link styling can't be reused: it is built for the
+   dark footer bar (translucent-white fill, white glyphs) and would be invisible
+   here. Restated in theme tokens so it works in light AND dark mode.
+   margin-top matches .blogh-byline's so the row sits on the same rhythm. */
+.blogh-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.blogh-social-link {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    text-decoration: none;
+    font-size: 14px;
+    color: var(--muted, #5a6478);
+    background: var(--c-bg-grey, #f4f6f9);
+    border: 1px solid var(--c-border, #e6e9f0);
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.blogh-social-link:hover {
+    background: var(--blue, #1a56db);
+    border-color: var(--blue, #1a56db);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* resolveIcon() can return an inline <svg> rather than an <i>; size it to match
+   the Font Awesome glyphs so the two never render at different sizes. */
+.blogh-social-link svg {
+    width: 15px;
+    height: 15px;
+}
+
+/* Sits in its own grid column, so no top margin — that was spacing for the old
+   stacked layout and is re-applied at ≤1024px where it stacks again. */
 .blogh-cover {
-    margin: 28px 0 0;
+    margin: 0;
     border-radius: 14px;
     overflow: hidden;
 }
 
+/* height:auto deliberately — the image keeps its natural aspect ratio and is
+   never cropped, matching how cover images are handled on the blog index. */
 .blogh-cover img {
     width: 100%;
     height: auto;
     display: block;
+}
+
+/* Below 1024px .blogh-inner reverts to display:block and the cover stacks under
+   the text again, so it needs its gap back. This MUST come after the base
+   `.blogh-cover { margin: 0 }` above — same specificity, so source order decides,
+   and declaring it up with the other 1024px rules silently lost the tie. */
+@media (max-width: 1024px) {
+    .blogh-cover {
+        margin-top: 28px;
+    }
 }
 
 /* ── Article body ── */

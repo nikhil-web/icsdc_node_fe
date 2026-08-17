@@ -1412,15 +1412,20 @@ export function getPricingPage() {
 }
 
 /**
- * Fetches the /blogs index page's editable chrome: masthead copy, category
- * cards, the "I need help with" sidebar links, and the CTA band. The post
- * list itself is NOT here — that comes from GET /api/blog-posts (server.js),
- * which aggregates published builder-pages, not this single-type.
+ * Fetches the /blogs index page's editable chrome: SEO meta, the section
+ * headings, category cards, the "I need help with" sidebar links, and the CTA
+ * band. The post list itself is NOT here — that comes from GET /api/blog-posts
+ * (server.js), which aggregates published builder-pages, not this single-type.
+ *
+ * The heading fields (featuredLabel/archiveTitle/categoriesTitle/helpTitle/
+ * searchPlaceholder/emptyTitle/emptyText) are plain scalars, so Strapi returns
+ * them automatically — only components need an explicit populate.
  */
 export function getBlogIndexPage() {
     return fetchAPI(
         "/api/blog-index-page" +
-        "?populate[categories]=*" +
+        "?populate[seo]=*" +
+        "&populate[categories]=*" +
         "&populate[helpLinks]=*" +
         "&populate[ctaBand][populate][ctaPrimary]=*" +
         "&populate[ctaBand][populate][ctaSecondary]=*"
