@@ -1726,6 +1726,7 @@
     padding: 0.85rem 1.25rem;
     border-bottom: 1px solid #e5eaf2;
     color: var(--c-text, #1e293b);
+    text-align: initial;
 }
 
 .wds-col-managed {
