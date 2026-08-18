@@ -4,6 +4,7 @@ import {
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
+    populatePricingPlansCloud,
     hidePageLoader,
     markActiveNavLink,
     initTestimonials,
@@ -17,50 +18,6 @@ import { getWindowsVpsHostingPage } from './services/contentService.js';
 (function () {
     'use strict';
 
-    /**
-     * Render the Windows VPS plans grid.
-     * Uses ds.vps-plan component fields: name, price, priceNote, vcpu, ram, storage, bandwidth, isPopular.
-     */
-    function populatePlans(plans) {
-        if (!plans || !plans.length) return;
-        var grid = document.querySelector('#wvps-plans .wvps-plans-grid');
-        if (!grid) return;
-
-        var sorted = plans.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-        grid.innerHTML = sorted.map(function (plan) {
-            var isFeatured = plan.isPopular || false;
-            var featuredClass = isFeatured ? ' wvps-plan-featured' : '';
-            var badgeHtml = isFeatured
-                ? '<div class="wvps-plan-badge">Most Popular</div>'
-                : '';
-
-            var priceHtml = plan.price
-                ? '<div class="wvps-plan-price">&#8377;' + plan.price + ' <span>' + (plan.priceNote || '/mo') + '</span></div>'
-                : '';
-
-            var featureItems = [];
-            if (plan.vcpu) featureItems.push(plan.vcpu);
-            if (plan.ram) featureItems.push(plan.ram + ' RAM');
-            if (plan.storage) featureItems.push(plan.storage + ' Storage');
-            if (plan.bandwidth) featureItems.push(plan.bandwidth + ' Bandwidth');
-
-            var featuresHtml = featureItems.length
-                ? '<ul class="wvps-plan-features">' +
-                featureItems.map(function (f) { return '<li>' + f + '</li>'; }).join('') +
-                '</ul>'
-                : '';
-
-            var btnClass = isFeatured ? 'wvps-plan-btn-featured' : 'wvps-plan-btn';
-
-            return '<div class="wvps-plan-card' + featuredClass + '">' +
-                badgeHtml +
-                '<div class="wvps-plan-name">' + (plan.name || '') + '</div>' +
-                priceHtml +
-                featuresHtml +
-                '<a href="' + (plan.ctaLink || 'contact-popup') + '" class="' + btnClass + '">' + (plan.ctaText || 'Get Started') + ' </a>' +
-                '</div>';
-        }).join('');
-    }
 
     /**
      * Render the tabbed technology stack.
@@ -140,8 +97,8 @@ import { getWindowsVpsHostingPage } from './services/contentService.js';
             populateIconCards('.why-grid', page.pillars, 'why-card');
 
             // Plans
-            populateSectionHeader('#wvps-plans', page.plansLabel, page.plansTitle, page.plansSubtitle);
-            populatePlans(page.plans);
+            populateSectionHeader('#wvps-plans', null, page.plansTitle, page.plansSubtitle);
+            populatePricingPlansCloud('#wvps-plans .cloud-pricing-grid', page.plans);
 
             // Who We Are
             if (page.aboutTitle) setText(document, '#wvps-about-title', page.aboutTitle);

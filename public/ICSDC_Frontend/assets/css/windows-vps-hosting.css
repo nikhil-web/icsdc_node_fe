@@ -296,10 +296,7 @@
       .win-security-grid {
         grid-template-columns: 1fr;
       }
-    
-      .wvps-plans-grid {
-        grid-template-columns: 1fr;
-      }
+
     
 }
 
@@ -318,14 +315,9 @@
       .win-security-grid {
         grid-template-columns: repeat(2, 1fr);
       }
-    
-      .wvps-plans-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    
-}
 
     
+}
 
     .win-stack-card {
       background: #fff;
@@ -381,163 +373,18 @@
     /* ══════════════════════════════════════
        VPS PLANS GRID — 3 COLUMNS
     ══════════════════════════════════════ */
-    .wvps-plans-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-top: 40px;
-    }
 
-    .wvps-plan-card {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 32px 24px;
-      box-shadow: var(--shadow-card);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      transition: transform var(--transition-base) ease,
-          box-shadow var(--transition-base) ease,
-          border-color var(--transition-base) ease;
-    }
+    
 
-    .wvps-plan-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-card-hover);
-      border-color: rgba(0, 120, 212, 0.28);
-    }
+    
 
-    .wvps-plan-card.wvps-plan-featured {
-      border-color: #0078d4;
-      border-width: 2px;
-    }
+    
 
-    .wvps-plan-badge {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #0078d4;
-      color: var(--white);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 4px 16px;
-      border-radius: var(--radius-xl);
-      white-space: nowrap;
-      box-shadow: 0 4px 12px rgba(0, 120, 212, 0.30);
-    }
+    
 
-    .wvps-plan-name {
-      font-size: 16px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #0078d4;
-      margin-bottom: 8px;
-    }
+    
 
-    .wvps-plan-price {
-      font-size: 32px;
-      font-weight: 800;
-      color: #0078d4;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 20px;
-    }
-
-    .wvps-plan-price span {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--muted);
-      letter-spacing: 0;
-    }
-
-    .wvps-plan-features {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 24px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .wvps-plan-features li {
-      font-size: 13px;
-      color: var(--text-dark);
-      padding-left: 22px;
-      position: relative;
-      line-height: 1.5;
-    }
-
-    .wvps-plan-features li::before {
-      content: '✓';
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: #0078d4;
-      font-weight: 700;
-      font-size: 13px;
-    }
-
-    .wvps-plan-btn {
-      width: 100%;
-      padding: 12px 20px;
-      background: transparent;
-      color: #0078d4;
-      border: 2px solid #0078d4;
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      letter-spacing: -0.01em;
-      margin-top: auto;
-      transition: background var(--transition-base) ease,
-          transform var(--transition-fast) ease,
-          box-shadow var(--transition-base) ease;
-      min-height: 44px;
-      text-align: center;
-      display: block;
-      text-decoration: none;
-    }
-
-    .wvps-plan-btn:hover {
-      background: #e3f2fd;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(0, 120, 212, 0.14);
-    }
-
-    .wvps-plan-btn-featured {
-      width: 100%;
-      padding: 12px 20px;
-      background: #0078d4;
-      color: var(--white);
-      border: 2px solid #0078d4;
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      letter-spacing: -0.01em;
-      margin-top: auto;
-      transition: background var(--transition-base) ease,
-          transform var(--transition-fast) ease,
-          box-shadow var(--transition-base) ease;
-      min-height: 44px;
-      text-align: center;
-      display: block;
-      text-decoration: none;
-    }
-
-    .wvps-plan-btn-featured:hover {
-      background: #005a9e;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(0, 120, 212, 0.30);
-    }
+    
 
     
 

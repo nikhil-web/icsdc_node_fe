@@ -506,7 +506,7 @@ export function getWindowsVpsHostingPage() {
         "&populate[heroCtaSecondary]=*" +
         "&populate[heroImage][populate][image]=true" +
         "&populate[pillars]=*" +
-        "&populate[plans]=*" +
+        "&populate[plans][populate][features]=*" +
         "&populate[aboutImage][populate][image]=true" +
         "&populate[features]=*" +
         "&populate[securityCards]=*" +
