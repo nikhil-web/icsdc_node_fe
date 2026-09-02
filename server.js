@@ -902,10 +902,14 @@ app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
             entries,
             sitemapUrl,
             generatedAt: new Date().toISOString(),
+            /* All three types, so static + builder + blog === total. Blog posts
+               were counted in neither bucket, which made the admin stat cards
+               silently under-report (54 of 57 on the current data). */
             counts: {
                 total:   entries.length,
                 static:  entries.filter(function (e) { return e.type === 'static';  }).length,
                 builder: entries.filter(function (e) { return e.type === 'builder'; }).length,
+                blog:    entries.filter(function (e) { return e.type === 'blog';    }).length,
             },
         });
     } catch (err) {

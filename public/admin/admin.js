@@ -694,6 +694,7 @@
             document.getElementById('stat-total').textContent = data.counts.total;
             document.getElementById('stat-static').textContent = data.counts.static;
             document.getElementById('stat-builder').textContent = data.counts.builder;
+            document.getElementById('stat-blog').textContent = data.counts.blog;
             document.getElementById('stat-generated').textContent =
                 data.generatedAt
                     ? new Date(data.generatedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
@@ -711,9 +712,11 @@
         const query = (document.getElementById('sitemap-search').value || '').toLowerCase();
         const tbody = document.getElementById('sitemap-body');
 
+        // Filter on the entry's own type. The old pair of checks knew only
+        // 'static' and 'builder', so blog posts (type 'blog') were excluded by
+        // BOTH buttons and were visible only under "All".
         const filtered = allSitemapEntries.filter(function (e) {
-            if (sitemapActiveFilter === 'static' && e.type !== 'static') return false;
-            if (sitemapActiveFilter === 'builder' && e.type !== 'builder') return false;
+            if (sitemapActiveFilter !== 'all' && e.type !== sitemapActiveFilter) return false;
             if (query) return e.loc.toLowerCase().includes(query);
             return true;
         });
@@ -724,9 +727,12 @@
         }
 
         tbody.innerHTML = filtered.map(function (e) {
-            const typeBadge = e.type === 'builder'
-                ? '<span class="sitemap-type-badge sitemap-type-builder">Builder</span>'
-                : '<span class="sitemap-type-badge sitemap-type-static">Static</span>';
+            // Three types, not two. Blog posts previously fell into the else
+            // branch and were mislabelled "Static".
+            const badgeLabel = { builder: 'Builder', blog: 'Blog' }[e.type] || 'Static';
+            const badgeClass = { builder: 'sitemap-type-builder', blog: 'sitemap-type-blog' }[e.type]
+                || 'sitemap-type-static';
+            const typeBadge = '<span class="sitemap-type-badge ' + badgeClass + '">' + badgeLabel + '</span>';
             const path = e.loc.replace(/^https?:\/\/[^/]+/, '');
             return `<tr>
                 <td class="sitemap-url-cell">
