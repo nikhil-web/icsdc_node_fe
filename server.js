@@ -73,6 +73,19 @@ function snapshotFileForPath(p) {
     return path.join(prerenderDir, p.replace(/^\//, '') + '.html');
 }
 
+/* Paths that are currently live, mirroring sitemap.xml. Kept in memory by
+   writeSitemapFile(), which already runs on boot, publish, delete and Page
+   Registry toggle.
+
+   The crawler middleware needs this because it runs BEFORE the page routes, and
+   used to serve any snapshot whose file existed. Nothing ever deletes a snapshot
+   file, so deleting a blog post left crawlers being served the full article with
+   a 200 while humans got a 404 — and a search engine only drops a URL when IT
+   sees the 404, so the dead page stayed indexed indefinitely. Same for a hidden
+   page, a renamed slug, or a delete made straight from Strapi's own admin, which
+   never touches this app at all. */
+const livePaths = new Set();
+
 // Tracks an in-progress admin-triggered prerender build.
 const prerenderState = { running: false, startedAt: null, finishedAt: null, exitCode: null, log: '' };
 
@@ -850,6 +863,16 @@ function regenerateSitemapSoon(reason) {
 async function writeSitemapFile(req) {
     try {
         const entries = await buildSitemapEntries(req);
+
+        /* Same list, kept in memory for the crawler middleware (see livePaths).
+           Rebuilt here because this already runs on boot, on publish, on delete
+           and on a Page Registry toggle — every moment the live set can change. */
+        livePaths.clear();
+        entries.forEach(function (e) {
+            try { livePaths.add(new URL(e.loc).pathname.replace(/\/$/, '') || '/'); }
+            catch (_) { /* malformed loc — just leave it out of the live set */ }
+        });
+
         const rows = entries.map(function (e) {
             return `  <url>\n    <loc>${e.loc}</loc>\n    <lastmod>${e.lastmod}</lastmod>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority.toFixed(1)}</priority>\n  </url>`;
         }).join('\n');
@@ -1640,6 +1663,16 @@ app.use((req, res, next) => {
     if (req.path.includes('.')) return next();                       // assets/files → let static handle
     res.set('Vary', 'User-Agent');                                   // response differs by UA → keep caches honest
     if (!BOT_UA_RE.test(req.headers['user-agent'] || '')) return next();
+
+    /* Never serve a snapshot for a URL that is no longer live, however long the
+       file lingers on disk. Falling through here means the crawler gets the same
+       404 a human gets, which is the only thing that makes a search engine drop
+       the URL. livePaths is empty until the first sitemap write finishes on boot
+       — treat that as "not known yet" and keep the old behaviour rather than
+       withholding every snapshot during startup. */
+    const cleanPath = req.path.replace(/\/$/, '') || '/';
+    if (livePaths.size && !livePaths.has(cleanPath)) return next();
+
     const file = snapshotFileForPath(req.path);
     fs.access(file, fs.constants.F_OK, (err) => {
         if (err) return next();                                       // no snapshot → normal SSR path

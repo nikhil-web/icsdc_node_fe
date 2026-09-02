@@ -49,6 +49,27 @@ function getPaths() {
     return [...new Set(paths)];
 }
 
+// Every .html under dir. Written out by hand rather than using
+// readdirSync(dir, { recursive: true }) so this does not require Node 20.1+.
+function walkHtml(dir) {
+    const out = [];
+    let entries;
+    try { entries = fs.readdirSync(dir, { withFileTypes: true }); }
+    catch { return out; }                                  // directory not built yet
+    for (const e of entries) {
+        const full = path.join(dir, e.name);
+        if (e.isDirectory()) out.push(...walkHtml(full));
+        else if (e.name.endsWith('.html')) out.push(full);
+    }
+    return out;
+}
+
+// Inverse of snapshotFile(): prerendered/blogs/x.html → /blogs/x, home.html → /
+function pathForSnapshot(file) {
+    const rel = path.relative(outDir, file).replace(/\\/g, '/').replace(/\.html$/, '');
+    return rel === 'home' ? '/' : '/' + rel;
+}
+
 // Runs IN the page: reveal scroll-animation content, strip dynamic scripts, drop chat widget.
 function cleanInPage() {
     document.querySelectorAll('[data-animate],[data-stagger]').forEach(e => e.classList.add('is-visible'));
@@ -136,6 +157,39 @@ function cleanInPage() {
     }
 
     await browser.close();
+
+    /* Prune snapshots whose URL has left the sitemap — a deleted post, a page
+       hidden in the Page Registry, a renamed slug. Nothing else on the system
+       ever deletes one of these files, so without this they sit on disk being
+       served to crawlers indefinitely.
+
+       AFTER the build, deliberately, never a wipe beforehand. Clearing the
+       directory up front would leave EVERY page snapshot-less for the length of
+       the run — minutes during which any crawler gets the empty client-rendered
+       shell — and would turn a partial failure into data loss. Here, a page that
+       failed this run keeps its previous snapshot, because the test is "still in
+       the sitemap", not "rebuilt successfully just now".
+
+       Skipped for single-path runs, which know nothing about the full live set,
+       and when nothing built at all, which usually means the app was unreachable
+       and the sitemap should not be trusted as a delete list. */
+    if (!process.argv[2] && ok > 0) {
+        const live = new Set(paths.map(p => p.replace(/\/$/, '') || '/'));
+        let pruned = 0;
+        for (const file of walkHtml(outDir)) {
+            const url = pathForSnapshot(file);
+            if (live.has(url)) continue;
+            try {
+                fs.unlinkSync(file);
+                console.log(`  - pruned ${path.relative(publicPath, file).replace(/\\/g, '/')}  (${url} left the sitemap)`);
+                pruned++;
+            } catch (e) {
+                console.warn(`  ! could not prune ${url} — ${e.message}`);
+            }
+        }
+        if (pruned) console.log(`[prerender] pruned ${pruned} stale snapshot(s)`);
+    }
+
     console.log(`[prerender] done — ${ok} ok, ${fail} failed`);
     process.exit(fail && !ok ? 1 : 0);
 })();
