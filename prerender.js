@@ -79,10 +79,41 @@ function cleanInPage() {
 
     for (const p of paths) {
         const page = await browser.newPage();
+        let settled = true;
         try {
             await page.setViewport({ width: 1280, height: 900 });
-            await page.goto(ORIGIN + p, { waitUntil: 'networkidle0', timeout: 45000 });
+
+            /* networkidle2, not networkidle0. networkidle0 demands ZERO requests
+               in flight for 500ms, so a single straggler — an analytics beacon, a
+               font, a connection the server holds open — keeps it unsatisfied for
+               the whole timeout even though the page finished rendering long ago.
+               networkidle2 allows two, which is what "settled" actually means in
+               practice. */
+            try {
+                await page.goto(ORIGIN + p, { waitUntil: 'networkidle2', timeout: 60000 });
+            } catch (e) {
+                if (e.name !== 'TimeoutError') throw e;
+                /* A navigation timeout does NOT mean the page failed to render —
+                   almost always it means one request never finished. Treating it
+                   as fatal is what left /blogs and two articles with no snapshot
+                   at all, and no snapshot is far worse than one captured a moment
+                   early: the crawler falls back to an empty client-rendered shell.
+                   Carry on and let the content check below be the real gate. */
+                settled = false;
+                console.warn(`  ! ${p}  —  did not settle in 60s, capturing anyway`);
+            }
+
             await new Promise(r => setTimeout(r, 2500));   // let client render + safety-reveal settle
+
+            /* The real test of a usable snapshot: did the client actually render
+               anything? This is what stops a genuinely broken page from silently
+               overwriting a good snapshot with an empty shell. */
+            const textLen = await page.evaluate(() => (document.body.innerText || '').trim().length);
+            if (textLen < 500) {
+                throw new Error(`rendered almost empty (${textLen} chars of text)` +
+                    (settled ? '' : ' after navigation timeout'));
+            }
+
             await page.evaluate(cleanInPage);
 
             let html = '<!DOCTYPE html>\n' + await page.evaluate(() => document.documentElement.outerHTML);
@@ -93,7 +124,8 @@ function cleanInPage() {
             const file = snapshotFile(p);
             fs.mkdirSync(path.dirname(file), { recursive: true });
             fs.writeFileSync(file, html, 'utf8');
-            console.log(`  ✓ ${p}  →  ${path.relative(publicPath, file).replace(/\\/g, '/')}  (${Math.round(html.length / 1024)} KB)`);
+            console.log(`  ${settled ? '✓' : '~'} ${p}  →  ${path.relative(publicPath, file).replace(/\\/g, '/')}` +
+                `  (${Math.round(html.length / 1024)} KB)${settled ? '' : '  [slow — captured after timeout]'}`);
             ok++;
         } catch (e) {
             console.error(`  ✗ ${p}  —  ${e.message}`);
