@@ -1471,10 +1471,13 @@ nav.scrolled {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 820px;
+    /* Card rows sit at percentages of this height, so shortening it closes the
+       vertical gaps too. Bottom margin follows it down, since the bottom pair
+       now hangs 160px below instead of 240px. */
+    height: 660px;
     width: 90%;
     max-width: 1300px;
-    margin: 40px auto 180px;
+    margin: 40px auto 100px;
     padding: 0;
 }
 
@@ -1553,19 +1556,25 @@ nav.scrolled {
     right: auto;
 }
 
+/* The percentage is what spreads the cards: it measures from the wrapper edge,
+   so each point of it is ~11px at a 1100px wrapper. Dropping the near ring from
+   60% to 56% and the far ring from 70% to 60% pulls the cards in toward the
+   phone (near edge ~177px from centre instead of 241px, far ~221px instead of
+   352px) while keeping a smaller stagger between the rows. The phone is only
+   ~110px half-width, so there is still clear space around it. */
 .fc-left.fc-top {
-    top: 3%;
-    right: calc(60% + 130px);
+    top: 5%;
+    right: calc(54% + 105px);
 }
 
 .fc-left.fc-mid {
-    top: 38%;
-    right: calc(70% + 130px);
+    top: 37%;
+    right: calc(57% + 105px);
 }
 
 .fc-left.fc-bot {
-    top: 71%;
-    right: calc(60% + 130px);
+    top: 66%;
+    right: calc(54% + 105px);
 }
 
 .fc-right {
@@ -1573,18 +1582,18 @@ nav.scrolled {
 }
 
 .fc-right.fc-top {
-    top: 3%;
-    left: calc(60% + 130px);
+    top: 5%;
+    left: calc(54% + 105px);
 }
 
 .fc-right.fc-mid {
-    top: 38%;
-    left: calc(70% + 130px);
+    top: 37%;
+    left: calc(57% + 105px);
 }
 
 .fc-right.fc-bot {
-    top: 71%;
-    left: calc(60% + 130px);
+    top: 66%;
+    left: calc(54% + 105px);
 }
 
 /* Bottom cards — centred symmetrically around phone */
@@ -1592,16 +1601,18 @@ nav.scrolled {
     bottom: -150px;
 }
 
+/* Raised from -240px: the side cards moved in and up, so hanging the bottom
+   pair this far below left an obvious gap between them and the rest. */
 .fc-btm-l {
     right: calc(50% + 12px);
     left: auto;
-    bottom: -240px;
+    bottom: -130px;
 }
 
 .fc-btm-r {
     left: calc(50% + 12px);
     right: auto;
-    bottom: -240px;
+    bottom: -130px;
 }
 
 /* Remove vestigial connector pseudo-elements */
