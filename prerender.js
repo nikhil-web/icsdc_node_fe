@@ -58,6 +58,12 @@ function cleanInPage() {
         else if (!src && /(gtm\.start|dataLayer|footer-year|googletagmanager)/i.test(s.textContent || '')) s.remove();
     });
     document.querySelectorAll('.chat-bubble,.chat-window').forEach(e => e.remove());
+    // Drop the server's no-JS blog fallback: this snapshot already holds the fully
+    // rendered article, so keeping it would duplicate the whole body text. (With JS
+    // on, a <noscript>'s contents are plain text, so match on the marker class.)
+    document.querySelectorAll('noscript').forEach(n => {
+        if (/blog-noscript/.test(n.textContent || '')) n.remove();
+    });
 }
 
 (async function main() {

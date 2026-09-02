@@ -408,6 +408,7 @@ app.post('/api/admin/builder/pages/:documentId/publish', requireAdminAuth, async
         }
 
         bustBuilderMetaCache();   // new/updated meta must show at top-level URL immediately
+        regenerateSitemapSoon('publish');   // a new post has to enter sitemap.xml now, not at next boot
 
         // Write a "published" snapshot
         writeVersionSnapshot({
@@ -430,6 +431,7 @@ app.delete('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req,
             method: 'DELETE',
         });
         bustBuilderMetaCache();   // top-level serving must reflect the delete immediately
+        regenerateSitemapSoon('delete');   // and the deleted URL must leave sitemap.xml
         if (r.status === 204) return res.status(204).end();
         const data = await r.json();
         res.status(r.status).json(data);
@@ -834,6 +836,17 @@ async function buildSitemapEntries(req) {
 // Called on server boot, after Page Registry toggles, and from the manual
 // "Regenerate" admin button. Express's static middleware then serves the
 // file with proper Last-Modified / ETag headers (SEO win — free 304s).
+/* Publishing or deleting a page changes what belongs in sitemap.xml, but nothing
+   rewrote the file on those events — only boot, a Page Registry toggle, and the
+   manual Admin → Regenerate button did. So a newly published blog post stayed out
+   of the sitemap until someone restarted the server. Fire-and-forget: the caller
+   has already answered the admin, and a sitemap write must never fail a publish. */
+function regenerateSitemapSoon(reason) {
+    writeSitemapFile(null).catch(function (e) {
+        console.warn(`[sitemap] post-${reason} regen failed:`, e.message);
+    });
+}
+
 async function writeSitemapFile(req) {
     try {
         const entries = await buildSitemapEntries(req);
@@ -907,8 +920,13 @@ app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
 app.get('/api/admin/prerender', requireAdminAuth, async function (req, res) {
     try {
         const entries = await buildSitemapEntries(req);
+        /* Every sitemap entry, with no type filter. Builder pages used to be
+           excluded here as "out of scope", but a build takes its page list from
+           sitemap.xml — which contains them — so `Build all` has always built
+           them. Filtering them out of this table only made the "X of Y built"
+           count disagree with what the build actually does, and left those pages
+           with no per-row Rebuild button. */
         const pages = entries
-            .filter(function (e) { return e.type !== 'builder'; })   // builder pages out of scope
             .map(function (e) {
                 let p; try { p = new URL(e.loc).pathname; } catch (_) { p = e.loc; }
                 const file = snapshotFileForPath(p);
@@ -1204,7 +1222,10 @@ function seoCanonical(cleanPath, seo) {
     return SEO_SITE_URL + (cleanPath === '/' ? '/' : cleanPath);
 }
 
-function seoJsonLd(canonical, title, description) {
+// `article` is optional and only ever set for blog posts (see blogSeoFor). Its
+// nodes are APPENDED, so the graph every other page emits is byte-for-byte what
+// it was before blog support was added.
+function seoJsonLd(canonical, title, description, article) {
     const graph = [
         {
             '@type': 'Organization', '@id': SEO_SITE_URL + '/#organization',
@@ -1222,6 +1243,37 @@ function seoJsonLd(canonical, title, description) {
             isPartOf: { '@id': SEO_SITE_URL + '/#website' }, inLanguage: 'en',
         },
     ];
+
+    if (article) {
+        // BlogPosting (not WebPage) is what makes an article eligible for Google's
+        // article treatment — headline, date and author are the required fields.
+        const posting = {
+            '@type': 'BlogPosting', '@id': canonical + '#article',
+            headline: title || SEO_ORG_NAME,
+            description: description || '',
+            url: canonical,
+            mainEntityOfPage: { '@id': canonical + '#webpage' },
+            author: { '@type': 'Person', name: article.author || SEO_ORG_NAME },
+            publisher: { '@id': SEO_SITE_URL + '/#organization' },
+            isPartOf: { '@id': SEO_SITE_URL + '/#website' },
+            inLanguage: 'en',
+        };
+        if (article.image) posting.image = [article.image];
+        if (article.publishedTime) posting.datePublished = article.publishedTime;
+        if (article.modifiedTime) posting.dateModified = article.modifiedTime;
+        if (article.section) posting.articleSection = article.section;
+        graph.push(posting);
+
+        graph.push({
+            '@type': 'BreadcrumbList', '@id': canonical + '#breadcrumb',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: SEO_SITE_URL + '/' },
+                { '@type': 'ListItem', position: 2, name: 'Blog', item: SEO_SITE_URL + '/blogs' },
+                { '@type': 'ListItem', position: 3, name: title || SEO_ORG_NAME, item: canonical },
+            ],
+        });
+    }
+
     return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
 }
 
@@ -1234,7 +1286,15 @@ const BUILDER_META_TTL = 2 * 60 * 1000;
 
 // Called by the builder publish/delete admin routes so top-level /<slug>
 // serving reflects changes immediately (defined here; hoisted for earlier use).
-function bustBuilderMetaCache() { builderMetaCache.clear(); }
+function bustBuilderMetaCache() {
+    builderMetaCache.clear();
+    /* The blog listing is derived from the same builder-pages data, and it drives
+       routing (isBlogSlug), the sitemap's /blogs/<slug> vs /<slug> split, and the
+       index page. Leaving it on its own 2-minute TTL meant a just-published post
+       404'd at /blogs/<slug> and was omitted from any sitemap regenerated inside
+       that window — a 404 is something search engines will drop a URL over. */
+    blogPostsCache = null;
+}
 
 async function fetchBuilderPageMeta(slug) {
     const hit = builderMetaCache.get(slug);
@@ -1286,6 +1346,7 @@ async function fetchBlogPosts() {
                     const header = (d.sections || []).find((s) => s.type === 'blogHeader');
                     if (!header || !d.slug) return null;
                     const p = header.props || {};
+                    const bodySec = (d.sections || []).find((s) => s.type === 'blogBody');
                     return {
                         slug: d.slug,
                         title: p.title || d.title || d.slug,
@@ -1304,6 +1365,15 @@ async function fetchBlogPosts() {
                         publishDate: p.publishDate || '',
                         readTime: p.readTime || '',
                         sortDate: d.publishedAt || d.updatedAt || null,
+                        // ── Server-side only, never sent to the browser ──────
+                        // `sections` is already on this response, so pulling the
+                        // article HTML out costs no extra Strapi round-trip. It
+                        // powers the <noscript> fallback that gives crawlers the
+                        // real article when no prerendered snapshot exists.
+                        // The public /api/blog-posts route strips both of these
+                        // (see below) so that payload stays listing-sized.
+                        bodyHtml: (bodySec && bodySec.props && bodySec.props.body) || '',
+                        modifiedDate: d.updatedAt || d.publishedAt || null,
                     };
                 })
                 .filter(Boolean)
@@ -1335,13 +1405,123 @@ async function isBlogSlug(slug) {
     return posts.some((p) => p.slug === slug);
 }
 
+/* Strip the server-only fields fetchBlogPosts() carries (see there) so this
+   endpoint keeps returning exactly the listing shape blogs.js has always seen —
+   article bodies would balloon it as posts are added. */
+function blogListingShape(post) {
+    const { bodyHtml, modifiedDate, ...listing } = post;
+    return listing;
+}
+
 app.get('/api/blog-posts', async (req, res) => {
     try {
-        res.json({ posts: await fetchBlogPosts() });
+        const posts = await fetchBlogPosts();
+        res.json({ posts: posts.map(blogListingShape) });
     } catch (err) {
         res.status(502).json({ posts: [], error: 'Failed to load blog posts' });
     }
 });
+
+// ── Blog SEO: crawler parity with the static pages ──────────
+// A static page ships real copy inside its own .html file, so a crawler that gets
+// no prerendered snapshot still finds content. Blog posts render from
+// builder-template.html — an EMPTY shell — so with no snapshot a bot received a
+// title and nothing else. That is why they were crawled but not indexed. The
+// helpers below give every blog URL the three things a static page already has:
+// a real description, a real og:image, and body copy present in the raw HTML.
+
+// Absolutise a media URL for og:/JSON-LD use. Cover images chosen in the admin are
+// already absolute (the media proxy does it); template defaults are same-origin
+// paths — fine in an <img src>, useless in a meta tag a scraper reads out of context.
+function seoAbsUrl(u) {
+    if (!u) return '';
+    if (/^https?:\/\//i.test(u)) return u;
+    return SEO_SITE_URL + (u.charAt(0) === '/' ? '' : '/') + u;
+}
+
+/* CMS rich text is trusted — it is the same HTML the client renders into the page.
+   But here it lands inside <noscript>, where a literal "</noscript>" would close
+   the block early and spill raw markup into the document. Neutralise that one
+   sequence; drop <script>/<iframe>, which have no purpose in a no-JS fallback. */
+function seoNoscriptSafe(html) {
+    return String(html || '')
+        .replace(/<\/\s*noscript/gi, '&lt;/noscript')
+        .replace(/<script\b[\s\S]*?<\/script>/gi, '')
+        .replace(/<iframe\b[\s\S]*?<\/iframe>/gi, '');
+}
+
+// Plain-text excerpt from article HTML — the last-resort description when the
+// editor left both metaDescription and the header excerpt empty.
+function seoTextExcerpt(html, max) {
+    const text = String(html || '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    if (!text) return '';
+    if (text.length <= max) return text;
+    const cut = text.slice(0, max);
+    const lastSpace = cut.lastIndexOf(' ');
+    return (lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).trim() + '…';
+}
+
+// The article itself, in the raw HTML. Invisible to anyone with JS (the client
+// renders the real thing over it); the entire content of the page to a crawler
+// that has no snapshot. Same content either way, so this is not cloaking.
+function blogArticleNoscript(post) {
+    const parts = ['<article class="blog-noscript">'];
+    parts.push('<h1>' + seoEsc(post.title) + '</h1>');
+    if (post.excerpt) parts.push('<p>' + seoEsc(post.excerpt) + '</p>');
+    if (post.authorName) {
+        parts.push('<p>By ' + seoEsc(post.authorName) +
+            (post.publishDate ? ' &middot; ' + seoEsc(post.publishDate) : '') + '</p>');
+    }
+    if (post.coverImage) {
+        parts.push('<img src="' + seoEsc(seoAbsUrl(post.coverImage)) +
+            '" alt="' + seoEsc(post.coverAlt || post.title) + '">');
+    }
+    if (post.bodyHtml) parts.push(seoNoscriptSafe(post.bodyHtml));
+    parts.push('<p><a href="/blogs">All articles</a></p>');
+    parts.push('</article>');
+    return '<noscript>' + parts.join('\n') + '</noscript>';
+}
+
+// Same idea for the index. Without it a crawler with no snapshot found zero links
+// to any article, leaving sitemap.xml as the only discovery path.
+function blogIndexNoscript(posts) {
+    if (!posts || !posts.length) return '';
+    const items = posts.map(function (p) {
+        return '<li><a href="/blogs/' + seoEsc(p.slug) + '">' + seoEsc(p.title) + '</a>' +
+            (p.excerpt ? ' — ' + seoEsc(p.excerpt) : '') + '</li>';
+    }).join('\n');
+    return '<noscript><section class="blog-noscript"><h2>All articles</h2>\n<ul>' +
+        items + '</ul></section></noscript>';
+}
+
+/* SEO override for one blog post. Precedence: the editor's explicit
+   metaTitle/metaDescription on the builder page always wins, then the blogHeader
+   fields the listing already exposes, then text pulled from the article body. */
+async function blogSeoFor(slug) {
+    const [meta, posts] = await Promise.all([fetchBuilderPageMeta(slug), fetchBlogPosts()]);
+    const post = posts.find((p) => p.slug === slug);
+    if (!post) return meta;   // not actually a blog post — behaviour unchanged
+
+    const image = seoAbsUrl(post.coverImage) || SEO_OG_IMAGE;
+    return {
+        title: (meta && meta.title) || post.title,
+        description: (meta && meta.description) || post.excerpt ||
+            seoTextExcerpt(post.bodyHtml, 155),
+        ogImage: image,
+        article: {
+            publishedTime: post.sortDate || null,
+            modifiedTime: post.modifiedDate || post.sortDate || null,
+            author: post.authorName || SEO_ORG_NAME,
+            section: post.category || '',
+            image,
+        },
+        noscriptHtml: blogArticleNoscript(post),
+    };
+}
 
 async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride) {
     let html;
@@ -1366,6 +1546,11 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     const description = (seo && seo.description) || (curDescM && seoUnesc(curDescM[1].trim())) || '';
     const canonical = seoCanonical(cleanPath, seo);
 
+    /* Both optional and only ever set for blog posts (blogSeoFor). Absent → the
+       site-wide logo and og:type=website, exactly as every page behaved before. */
+    const ogImage = (seo && seo.ogImage) || SEO_OG_IMAGE;
+    const article = (seo && seo.article) || null;
+
     const headTags = [
         // Preload first: it's only useful if the browser sees it early.
         // `media` matters: style.css hides .hero-right below 1366px, so on phones
@@ -1378,17 +1563,27 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
             ? [`<link rel="preload" as="image" fetchpriority="high" media="(min-width: 1366px)" href="${seoEsc(seo.heroImageUrl)}">`]
             : []),
         `<link rel="canonical" href="${seoEsc(canonical)}">`,
-        `<meta property="og:type" content="website">`,
+        `<meta property="og:type" content="${article ? 'article' : 'website'}">`,
         `<meta property="og:site_name" content="${SEO_ORG_NAME}">`,
         `<meta property="og:title" content="${seoEsc(title)}">`,
         `<meta property="og:description" content="${seoEsc(description)}">`,
         `<meta property="og:url" content="${seoEsc(canonical)}">`,
-        `<meta property="og:image" content="${seoEsc(SEO_OG_IMAGE)}">`,
+        `<meta property="og:image" content="${seoEsc(ogImage)}">`,
+        ...(article ? [
+            ...(article.publishedTime
+                ? [`<meta property="article:published_time" content="${seoEsc(article.publishedTime)}">`] : []),
+            ...(article.modifiedTime
+                ? [`<meta property="article:modified_time" content="${seoEsc(article.modifiedTime)}">`] : []),
+            ...(article.author
+                ? [`<meta property="article:author" content="${seoEsc(article.author)}">`] : []),
+            ...(article.section
+                ? [`<meta property="article:section" content="${seoEsc(article.section)}">`] : []),
+        ] : []),
         `<meta name="twitter:card" content="summary_large_image">`,
         `<meta name="twitter:title" content="${seoEsc(title)}">`,
         `<meta name="twitter:description" content="${seoEsc(description)}">`,
-        `<meta name="twitter:image" content="${seoEsc(SEO_OG_IMAGE)}">`,
-        `<script type="application/ld+json">${seoJsonLd(canonical, title, description)}</script>`,
+        `<meta name="twitter:image" content="${seoEsc(ogImage)}">`,
+        `<script type="application/ld+json">${seoJsonLd(canonical, title, description, article)}</script>`,
     ].join('\n    ');
 
     // Replace <title>
@@ -1405,6 +1600,16 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     // Write the hero copy into the body so the LCP text exists in the initial
     // HTML and the page does not reflow when the client hydrates.
     if (seo && seo.heroText) html = injectHeroText(html, seo.heroText);
+
+    /* No-JS content fallback (blog pages only — see blogSeoFor / blogIndexNoscript).
+       Appended just before </body> so it cannot disturb the shell's own markup, and
+       wrapped in <noscript>, so for every real visitor it is inert: the browser does
+       not parse it, does not fetch its images, and renders nothing. It exists purely
+       so a crawler arriving before the snapshots are rebuilt still gets the article
+       text and links instead of an empty page. */
+    if (seo && seo.noscriptHtml) {
+        html = html.replace(/<\/body>/i, `${seo.noscriptHtml}\n</body>`);
+    }
 
     res.set('Content-Type', 'text/html; charset=utf-8');
     // Explicit, because "no Cache-Control" is not the same as "don't cache":
@@ -1519,6 +1724,24 @@ app.get('/legal/:page', (req, res) => {
 // /blog is a common thing to type by hand — send it to the real index.
 app.get('/blog', (req, res) => res.redirect(301, '/blogs'));
 
+/* The blog index. This would fall through to /:page and be served as a plain
+   static page, which is what it was — and a crawler with no snapshot then found
+   ZERO links to any article, leaving sitemap.xml as the only discovery path.
+   Same registry gate and same SEO lookup as before; the only addition is the
+   <noscript> article list. */
+app.get('/blogs', async (req, res) => {
+    if (pageCache.has('blogs') && !pageCache.get('blogs')) {
+        return res.status(404).sendFile(sitePage('404.html'));
+    }
+    let noscriptHtml = '';
+    try {
+        noscriptHtml = blogIndexNoscript(await fetchBlogPosts());
+    } catch (_) { /* Strapi down — serve the page without the fallback list */ }
+    const seo = await fetchSeo('blogs');
+    sendPageWithSeo(req, res, sitePage('blogs.html'), 'blogs', '/blogs',
+        Object.assign({}, seo, { noscriptHtml }));
+});
+
 // Blog posts — /blogs/<slug>. They're builder pages under the hood, so this
 // serves the same builder-template shell as /<slug> does, just at a nested URL.
 // Anything that isn't actually a blog post 404s here rather than falling through,
@@ -1531,7 +1754,10 @@ app.get('/blogs/:slug', async (req, res) => {
     if (pageCache.has(slug) && !pageCache.get(slug)) {
         return res.status(404).sendFile(sitePage('404.html'));
     }
-    const bp = await fetchBuilderPageMeta(slug);
+    // blogSeoFor > fetchBuilderPageMeta: same title, plus the description,
+    // og:image, BlogPosting JSON-LD and no-JS article body a post needs to be
+    // indexable. Falls back to the plain builder meta if the post can't be read.
+    const bp = (await blogSeoFor(slug)) || (await fetchBuilderPageMeta(slug));
     sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/blogs/${slug}`, bp);
 });
 
@@ -2110,5 +2336,27 @@ setInterval(function () {
         refreshPageCache()
             .then(function () { return writeSitemapFile(null); })
             .catch(function (e) { console.warn('[sitemap] boot write failed:', e.message); });
+        reportSnapshotCoverage();
     });
 }());
+
+/* Snapshots are generated files (git-ignored since 2026-08-19) and the bot
+   middleware falls through SILENTLY when one is missing — which is exactly how
+   every snapshot went missing after a deploy without anyone noticing. Say so at
+   boot instead: crawlers still get the SEO <head> and the no-JS fallbacks, but
+   they are seeing less than they should until this is rebuilt. */
+function reportSnapshotCoverage() {
+    fs.promises.readdir(prerenderDir, { recursive: true })
+        .then(function (files) {
+            const n = files.filter(function (f) { return String(f).endsWith('.html'); }).length;
+            if (n === 0) throw new Error('directory is empty');
+            console.log(`[prerender] ${n} crawler snapshot(s) on disk`);
+        })
+        .catch(function () {
+            console.warn(
+                '[prerender] NO crawler snapshots on disk — bots fall back to the ' +
+                'live page. Rebuild with `npm run prerender` (or Admin → Prerender → ' +
+                'Build all), and install scripts/prerender-daily.sh in cron to keep them fresh.'
+            );
+        });
+}
