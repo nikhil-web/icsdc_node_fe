@@ -1500,7 +1500,12 @@ nav.scrolled {
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     flex-direction: column;
-    align-items: flex-start;
+    /* .section .container sets text-align:center, so the paragraph was already
+       centred -- but align-items:flex-start shrink-wrapped the <h3> and pinned
+       it left, so heading and body copy disagreed. Centre the cross axis and
+       state the text alignment here rather than inheriting it. */
+    align-items: center;
+    text-align: center;
 }
 
 .floating-card:hover {
@@ -1557,11 +1562,11 @@ nav.scrolled {
 }
 
 /* The percentage is what spreads the cards: it measures from the wrapper edge,
-   so each point of it is ~11px at a 1100px wrapper. Dropping the near ring from
-   60% to 56% and the far ring from 70% to 60% pulls the cards in toward the
-   phone (near edge ~177px from centre instead of 241px, far ~221px instead of
-   352px) while keeping a smaller stagger between the rows. The phone is only
-   ~110px half-width, so there is still clear space around it. */
+   so each point of it is worth ~11px at a 1100px wrapper. Was 60% on the near
+   ring and 70% on the far one, which left the group reading as scattered.
+   Near ring 54%, far ring 60% — the middle pair stays wider than the corner
+   cards on purpose, since it sits level with the phone and needs the clearance
+   (phone is ~110px half-width; near gap lands ~40px, far ~106px). */
 .fc-left.fc-top {
     top: 5%;
     right: calc(54% + 105px);
@@ -1569,7 +1574,7 @@ nav.scrolled {
 
 .fc-left.fc-mid {
     top: 37%;
-    right: calc(57% + 105px);
+    right: calc(60% + 105px);
 }
 
 .fc-left.fc-bot {
@@ -1588,7 +1593,7 @@ nav.scrolled {
 
 .fc-right.fc-mid {
     top: 37%;
-    left: calc(57% + 105px);
+    left: calc(60% + 105px);
 }
 
 .fc-right.fc-bot {
@@ -2097,52 +2102,8 @@ nav.scrolled {
         font-size: 11.5px;
     }
 
-    .fc-left.fc-top {
-        top: 3%;
-        right: calc(50% + 115px);
-    }
-
-    .fc-left.fc-mid {
-        top: 38%;
-        right: calc(50% + 115px);
-    }
-
-    .fc-left.fc-bot {
-        top: 71%;
-        right: calc(50% + 115px);
-    }
-
-    .fc-right.fc-top {
-        top: 3%;
-        left: calc(50% + 115px);
-    }
-
-    .fc-right.fc-mid {
-        top: 38%;
-        left: calc(50% + 115px);
-    }
-
-    .fc-right.fc-bot {
-        top: 71%;
-        left: calc(50% + 115px);
-    }
-
-    .fc-btm-l {
-        right: calc(50% + 12px);
-        left: auto;
-        bottom: -258px;
-    }
-
-    .fc-btm-r {
-        left: calc(50% + 12px);
-        right: auto;
-        bottom: -260px;
-    }
-
     .phone-mockup-wrapper {
         width: 94%;
-        height: 640px;
-        margin-bottom: 170px;
     }
 
     .floating-card {
@@ -2170,44 +2131,48 @@ nav.scrolled {
         height: 15px;
     }
 
-    /* Hide middle cards — too crowded at this width */
-    .fc-left.fc-mid,
-    .fc-right.fc-mid {
+    /* ── 768–1365px: two columns instead of an orbit ───────────────
+       The ring needs more room than the phone leaves at this width, and the
+       previous answer was `display: none` on the two middle cards -- so the
+       tablet breakpoint silently dropped VPS Hosting and Domain Security
+       entirely. Lay the cards out in a grid beside the phone instead: all
+       eight survive, and nothing has to be hidden to make room.
+
+       Declaring grid-template-rows matters. `grid-row: 1 / -1` resolves
+       against the EXPLICIT grid, so with rows left implicit the phone would
+       span one row rather than the full height of the card column.
+
+       Comes last in this media query on purpose: it has to outrank the
+       width/height set on .floating-card and .phone-mockup-wrapper above.
+       Below 768px the next block takes over, hides the phone and switches
+       the wrapper back to flex — grid properties go inert there. */
+    .phone-mockup-wrapper {
+        height: auto;
+        margin-bottom: 60px;
+        display: grid;
+        grid-template-columns: 1fr 1fr minmax(190px, 240px);
+        grid-template-rows: repeat(4, auto);
+        gap: 14px;
+        align-items: stretch;
+    }
+
+    /* Out of the orbit and into the grid. Every absolute offset above stops
+       applying the moment the cards are static, so none are left here. */
+    .floating-card {
+        position: static;
+        width: auto;
+        animation: none;
+    }
+
+    .image-wrapper {
+        grid-column: 3;
+        grid-row: 1 / -1;
+        align-self: center;
+    }
+
+    /* Centred on the wrapper, which is no longer where the phone is. */
+    .ripple-wrap {
         display: none;
-    }
-
-    .fc-left.fc-top {
-        top: 12%;
-        right: calc(50% + 105px);
-    }
-
-    .fc-left.fc-bot {
-        top: 58%;
-        right: calc(50% + 105px);
-    }
-
-    .fc-right.fc-top {
-        top: 12%;
-        left: calc(50% + 105px);
-    }
-
-    .fc-right.fc-bot {
-        top: 58%;
-        left: calc(50% + 105px);
-    }
-
-    .fc-btm {
-        bottom: -140px;
-    }
-
-    .fc-btm-l {
-        right: calc(50% + 10px);
-        left: auto;
-    }
-
-    .fc-btm-r {
-        left: calc(50% + 10px);
-        right: auto;
     }
 
     .industry-validated .blue-container-left {
