@@ -68,6 +68,54 @@ export const BUILDER_TEMPLATES = [
         ],
     },
     {
+        id: 'help-center',
+        label: 'Help Center',
+        description: 'Support landing page: hero with a direct link to chat/contact, a live grid of Knowledge Base articles, and an FAQ.',
+        icon: 'fa-life-ring',
+        sections: [
+            {
+                type: 'hero',
+                props: {
+                    eyebrow: 'Help Center',
+                    title: 'How can we help?',
+                    subtitle: 'Search our Knowledge Base, browse FAQs, or talk to our team.',
+                    description: 'Find guides and answers below, or reach out directly — our team is here to help.',
+                    // No hero image: a support landing page reads better as a plain,
+                    // fast-loading header than a product illustration.
+                    imageUrl: '',
+                    imageAlt: '',
+                    imageSide: 'left',
+                    // 'contact-popup' opens the SAME contact modal every CTA on the
+                    // site already uses (wired globally in main.js) — this is the
+                    // "reuse the existing chat/support functionality" requirement,
+                    // not a new integration.
+                    ctaPrimary: { text: 'Contact Support', link: 'contact-popup' },
+                    ctaSecondary: { text: '', link: '' },
+                },
+            },
+            // No props override: kbIndexGrid's own defaults ("Knowledge Base" /
+            // a short subtitle / "coming soon" empty state) are a reasonable
+            // starting point, and it needs none of blogBody's props-omission
+            // trap above — it isn't rendering CMS-authored content that could
+            // silently disappear, it fetches its own data at render time.
+            { type: 'kbIndexGrid' },
+            { type: 'faq' },
+            // Every other multi-section template (blog-post, landing, service)
+            // closes on a ctaBand — matching that here rather than leaving Help
+            // Center the one page that ends on an accordion.
+            {
+                type: 'ctaBand',
+                props: {
+                    variant: 'dark',
+                    title: 'Still stuck?',
+                    description: 'Chat with us now or send a message — our team responds fast.',
+                    ctaPrimary: { text: 'Chat with Support', link: 'contact-popup' },
+                    ctaSecondary: { text: '', link: '' },
+                },
+            },
+        ],
+    },
+    {
         id: 'landing',
         label: 'Landing page',
         description: 'Hero, trust pillars, features, pricing and an FAQ — a full offer page.',
