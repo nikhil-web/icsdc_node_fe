@@ -470,6 +470,25 @@ async function openEditor(documentId) {
             '</div>' +
         '</div>';
 
+    /* Attach the canvas bridge NOW — before the awaited page fetch below.
+
+       The iframe starts loading the instant that innerHTML lands, and posts
+       bld:ready as soon as canvas-mode.js finishes (measured ~76ms locally).
+       initCanvas() used to run only AFTER `await BuilderAPI.getPage()`, so any
+       Strapi round-trip slower than the iframe — routinely the case against a
+       local `strapi develop` — meant bld:ready was posted with no listener
+       attached yet and was lost outright. The bridge then never flipped to
+       ready, the queued render never sent, and the canvas sat blank until the
+       12s watchdog fired. Reloading the canvas appeared to "fix" it only
+       because by then the listener existed.
+
+       Running it here closes the window completely rather than narrowing it:
+       innerHTML → addEventListener is one synchronous run, so the iframe
+       cannot finish loading in between. render()/highlight() are NOT called
+       here — they need page data — but the bridge queues both internally
+       until ready, so pushing them later (see pushCanvasState below) is safe. */
+    initCanvas();
+
     // Load page data
     try {
         const res = await BuilderAPI.getPage(documentId);
@@ -522,7 +541,8 @@ async function openEditor(documentId) {
     if (!state.selectedSectionId && state.page.sections.length) {
         state.selectedSectionId = state.page.sections[0].id;
     }
-    initCanvas();
+    // Bridge was created before the page fetch above — hand it the sections now.
+    pushCanvasState();
     initViewportToggle();
     initPanelResize();
     renderProperties();
@@ -572,9 +592,16 @@ function initCanvas() {
             else if (action === 'del') deleteSection(id);
         },
     });
+}
+
+/* Push the loaded page into the canvas. Split out of initCanvas() because the
+   bridge is now created BEFORE page data is fetched (see openEditor), so
+   initCanvas() can no longer assume state.page exists. Both calls queue
+   internally until the iframe reports ready, so this is safe whether the
+   canvas finishes loading before or after the page fetch resolves. */
+function pushCanvasState() {
+    if (!canvasBridge || !state.page) return;
     canvasBridge.render(state.page.sections);
-    // Mirror the editor's selection into the canvas. The bridge queues this
-    // until the iframe reports ready, so it is safe to call immediately.
     if (state.selectedSectionId) canvasBridge.highlight(state.selectedSectionId);
 }
 
@@ -600,7 +627,10 @@ function showCanvasError() {
         box.remove();
         const f = document.getElementById('bld-canvas-frame');
         if (f) f.src = '/builder/__canvas?canvas=1&v=' + Date.now();
+        // Rebuild the bridge first, then push state — initCanvas() no longer
+        // renders on its own (see pushCanvasState).
         initCanvas();
+        pushCanvasState();
     });
 }
 
