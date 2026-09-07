@@ -29,6 +29,10 @@ import { BUILDER_TEMPLATES, getTemplate } from '/assets/js/builder/templates.js'
 const state = {
     mode: 'list',
     pages: [],
+    // Slugs the server won't delete, fetched with the page list. Defaults to
+    // empty: if the fetch fails the list still renders and the server still
+    // enforces — see openList().
+    protectedSlugs: [],
     page: null,
     selectedSectionId: null,
     dirty: false,
@@ -127,13 +131,32 @@ async function openList() {
     document.getElementById('bld-new-page-btn').addEventListener('click', onNewPageClick);
 
     try {
-        const res = await BuilderAPI.listPages();
+        /* Both in parallel — the protected list is tiny and the page list is
+           the slow one, so waiting for them in series would just add latency.
+           A failure to read the protected slugs must NOT take the page list
+           down with it: the list still renders, every row simply shows its
+           delete button, and the server still refuses the protected ones with
+           a 403. Degrading to "UI doesn't know, server still enforces" is the
+           right direction; degrading to "no page list at all" is not. */
+        const [res, prot] = await Promise.all([
+            BuilderAPI.listPages(),
+            BuilderAPI.protectedSlugs().catch(() => ({ slugs: [] })),
+        ]);
         state.pages = res?.data || [];
+        state.protectedSlugs = (prot && prot.slugs) || [];
         renderListBody();
     } catch (err) {
         document.getElementById('bld-list-body').innerHTML =
             '<tr><td colspan="5" class="admin-loading-cell">Failed: ' + esc(err.message) + '</td></tr>';
     }
+}
+
+// Mirrors isProtectedBuilderSlug() in server.js, but is only ever a UI hint —
+// state.protectedSlugs comes FROM the server, and the delete route re-checks
+// regardless, so a stale or empty list here cannot let a protected page through.
+function isProtectedPage(page) {
+    const slugs = state.protectedSlugs || [];
+    return slugs.includes(String(page.slug || '').toLowerCase());
 }
 
 function renderListBody() {
@@ -162,7 +185,13 @@ function renderListBody() {
                 (published
                     ? '<a class="admin-toggle-btn bld-list-view" href="' + esc(livePath) + '" target="_blank" rel="noopener" title="Open the live page"><i class="fa-solid fa-arrow-up-right-from-square"></i></a> '
                     : '') +
-                '<button class="admin-toggle-btn btn-hide bld-list-delete" data-id="' + esc(id) + '" data-title="' + esc(p.title) + '"><i class="fa-solid fa-trash"></i></button>' +
+                (isProtectedPage(p)
+                    // Fixed page — editable, never deletable. Server enforces
+                    // this too (403); this only keeps the button out of reach
+                    // so nobody discovers the rule by having it refused.
+                    ? '<span class="bld-list-locked" title="This is a fixed page and cannot be deleted. You can still edit its content.">' +
+                          '<i class="fa-solid fa-lock" aria-hidden="true"></i></span>'
+                    : '<button class="admin-toggle-btn btn-hide bld-list-delete" data-id="' + esc(id) + '" data-title="' + esc(p.title) + '"><i class="fa-solid fa-trash"></i></button>') +
             '</td>' +
         '</tr>';
     }).join('');

@@ -359,6 +359,19 @@ body.bld-resizing iframe { pointer-events: none; }
     vertical-align: middle;
 }
 
+/* Sits where the delete button would be on a fixed page, so the row's action
+   column keeps its shape instead of the Edit button jumping right. */
+.bld-list-locked {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    width: 34px;
+    height: 34px;
+    color: var(--muted, #94a3b8);
+    cursor: help;
+}
+
 .bld-zoom-badge {
     align-self: center;
     font-size: 0.68rem;

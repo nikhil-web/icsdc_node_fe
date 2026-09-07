@@ -442,9 +442,53 @@ app.post('/api/admin/builder/pages/:documentId/publish', requireAdminAuth, async
     }
 });
 
+/* Builder pages that exist as a fixture of the site, not as content someone
+   happens to have made: editable in the builder like any other page, but never
+   deletable and never renameable. The Help Center is one — it is the single
+   landing page every Knowledge Base article and FAQ hangs off, and the KB grid,
+   the /knowledge-base articles and any nav link all assume it stays put at a
+   known slug. Losing it to a stray click in the page list would quietly break
+   all of them, and "recreate it and remember to use the same slug" is not a
+   recovery plan.
+
+   Enforced server-side because that is the only place it can actually be
+   enforced — the admin UI hides the delete button too (see builder-editor.js),
+   but that is a courtesy, not the guarantee. */
+const PROTECTED_BUILDER_SLUGS = ['help-center'];
+
+function isProtectedBuilderSlug(slug) {
+    return PROTECTED_BUILDER_SLUGS.includes(String(slug || '').toLowerCase());
+}
+
+// Expose the list so the admin UI marks the same pages this route refuses to
+// delete, instead of keeping its own copy that can drift out of step.
+app.get('/api/admin/builder/protected-slugs', requireAdminAuth, (req, res) => {
+    res.json({ slugs: PROTECTED_BUILDER_SLUGS });
+});
+
 // ── Builder: delete page ─────────────────────────────────
 app.delete('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req, res) => {
     try {
+        /* Resolve the slug before deleting — the route only receives a
+           documentId, so there is no way to know what is about to be destroyed
+           without asking first. A read failure here is deliberately fatal to
+           the delete: if we cannot confirm the page is NOT protected, refusing
+           is the safe direction. */
+        let slug = null;
+        try {
+            const cur = await strapi(`/api/builder-pages/${req.params.documentId}?status=draft`);
+            const curJson = await cur.json();
+            slug = curJson?.data?.slug || null;
+        } catch (_) {
+            return res.status(502).json({ error: 'Could not verify the page before deleting it. Nothing was deleted.' });
+        }
+
+        if (isProtectedBuilderSlug(slug)) {
+            return res.status(403).json({
+                error: `"${slug}" is a protected page and cannot be deleted. You can still edit its content in the builder.`,
+            });
+        }
+
         const r = await strapi(`/api/builder-pages/${req.params.documentId}`, {
             method: 'DELETE',
         });

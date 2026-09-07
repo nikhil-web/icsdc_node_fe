@@ -36,6 +36,13 @@ export const BuilderAPI = {
         const r = await fetch('/api/admin/builder/pages', { headers: authHeaders() });
         return jsonOrThrow(r);
     },
+    // Slugs the server refuses to delete (PROTECTED_BUILDER_SLUGS in server.js).
+    // Read from the server rather than duplicated here, so the list's lock icon
+    // and the delete route's 403 can never drift apart.
+    protectedSlugs: async () => {
+        const r = await fetch('/api/admin/builder/protected-slugs', { headers: authHeaders() });
+        return jsonOrThrow(r);
+    },
     getPage: async (documentId) => {
         const r = await fetch('/api/admin/builder/pages/' + documentId, { headers: authHeaders() });
         return jsonOrThrow(r);
