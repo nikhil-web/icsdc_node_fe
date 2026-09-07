@@ -977,6 +977,16 @@ code {
     color: #c4b5fd;
 }
 
+.sitemap-type-kb {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+[data-theme="dark"] .sitemap-type-kb {
+    background: rgba(4, 120, 87, 0.22);
+    color: #6ee7b7;
+}
+
 /* ── Copy toast ── */
 .sitemap-toast {
     position: fixed;

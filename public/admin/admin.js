@@ -695,6 +695,7 @@
             document.getElementById('stat-static').textContent = data.counts.static;
             document.getElementById('stat-builder').textContent = data.counts.builder;
             document.getElementById('stat-blog').textContent = data.counts.blog;
+            document.getElementById('stat-kb').textContent = data.counts.kb;
             document.getElementById('stat-generated').textContent =
                 data.generatedAt
                     ? new Date(data.generatedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
@@ -727,10 +728,11 @@
         }
 
         tbody.innerHTML = filtered.map(function (e) {
-            // Three types, not two. Blog posts previously fell into the else
-            // branch and were mislabelled "Static".
-            const badgeLabel = { builder: 'Builder', blog: 'Blog' }[e.type] || 'Static';
-            const badgeClass = { builder: 'sitemap-type-builder', blog: 'sitemap-type-blog' }[e.type]
+            // Four types, not two. Blog posts previously fell into the else
+            // branch and were mislabelled "Static" (fixed 2026-09-02) — kb
+            // added the same way when Knowledge Base pages arrived.
+            const badgeLabel = { builder: 'Builder', blog: 'Blog', kb: 'Knowledge Base' }[e.type] || 'Static';
+            const badgeClass = { builder: 'sitemap-type-builder', blog: 'sitemap-type-blog', kb: 'sitemap-type-kb' }[e.type]
                 || 'sitemap-type-static';
             const typeBadge = '<span class="sitemap-type-badge ' + badgeClass + '">' + badgeLabel + '</span>';
             const path = e.loc.replace(/^https?:\/\/[^/]+/, '');

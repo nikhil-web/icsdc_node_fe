@@ -2074,10 +2074,118 @@ function buildBlogToc(container) {
     }
 }
 
+/* ════ KB HEADER — Knowledge Base article hero ════════════════
+   Deliberately NOT blogHeader with an if-branch: blogHeader's fields (cover
+   image, author byline, read time) are specific to a blog post and would
+   just sit empty on a documentation article. This mirrors /legal/*.html's
+   own hero instead — eyebrow, title, "Last updated" line, nothing else —
+   using the SAME .legal-* classes (legal.css is loaded on every builder page
+   for exactly this) so a KB article's header is pixel-consistent with Legal
+   Pages, which is what "visually similar to Legal Pages" means most where a
+   reader first lands.
+
+   The body below it reuses blogBody as-is (see the template in templates.js)
+   rather than a forked component: its rich-text + auto-generated TOC engine
+   already does the documentation-page job, and forking it into a second
+   near-identical component to also reskin its `.blogb-*` classes as `.legal-*`
+   would be the exact duplication this feature is supposed to avoid. The
+   trade-off is disclosed, not accidental: the body area keeps blogBody's own
+   card-based visual style rather than pixel-matching `.legal-content`'s plain
+   prose column. */
+const kbHeader = {
+    label: 'Knowledge Base Header',
+    icon: 'info',
+    description: 'Article header for a Knowledge Base page: category, title and a "Last updated" line — styled like the Legal Pages hero.',
+    schema: [
+        { key: 'category', label: 'Category (eyebrow label)', type: 'text' },
+        { key: 'title', label: 'Article Title', type: 'text', required: true },
+        { key: 'lastUpdated', label: 'Last Updated (free text, e.g. "5 September 2026")', type: 'text' },
+        {
+            key: 'excerpt', label: 'Excerpt (SEO description fallback — not shown on the page)',
+            type: 'textarea',
+        },
+    ],
+    defaultProps: {
+        category: 'Knowledge Base',
+        title: 'Getting Started with ICSDC',
+        lastUpdated: '',
+        excerpt: '',
+    },
+    renderer(container, p) {
+        container.innerHTML =
+            '<section class="legal-hero">' +
+            '<div class="legal-hero-inner">' +
+            '<div class="legal-eyebrow"><i class="fa-solid fa-book" aria-hidden="true"></i> ' +
+                esc(p.category || 'Knowledge Base') + '</div>' +
+            '<h1 class="legal-title">' + esc(p.title || '') + '</h1>' +
+            (p.lastUpdated ? '<p class="legal-meta">Last updated: ' + esc(p.lastUpdated) + '</p>' : '') +
+            '</div>' +
+            '</section>';
+    },
+};
+
+/* ════ KB INDEX GRID — lists published Knowledge Base articles ════
+   The Help Center's way of surfacing Knowledge Base content: fetches
+   /api/kb-pages (added alongside kbHeader/fetchKbPages() in server.js) and
+   renders a card per article, linking to /knowledge-base/<slug>.
+
+   Cards reuse .veeam-related-card/.veeam-related-grid/.veeam-related-btn —
+   the existing "title + text + button" card pattern (from
+   homepage-extras.css, already loaded on every builder page) — rather than
+   .blog-card, which needs a cover image (mediaHTML always renders
+   something) that a kbHeader article deliberately doesn't have.
+
+   Static shell first, fetch second — same "never a blank box" rule
+   fillBlogHelp()/fillBlogSocial() already follow above: the empty-state
+   copy renders synchronously so there is always something readable, and the
+   async fetch only ever replaces it with real cards, never clears it back
+   to nothing on a slow or unreachable API. */
+const kbIndexGrid = {
+    label: 'Knowledge Base Grid',
+    icon: 'grid',
+    description: 'Lists published Knowledge Base articles as cards, linking to /knowledge-base/<slug>. Reads live from the API — nothing here is hand-authored per article.',
+    schema: [
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        { key: 'emptyText', label: 'Text shown when no articles are published yet', type: 'text' },
+    ],
+    defaultProps: {
+        title: 'Knowledge Base',
+        subtitle: 'Guides and answers to get the most out of ICSDC.',
+        emptyText: 'Articles are coming soon — check back shortly.',
+    },
+    renderer(container, p) {
+        const emptyText = p.emptyText || 'Articles are coming soon — check back shortly.';
+        container.innerHTML =
+            '<section class="section"><div class="container">' +
+            (p.title ? '<h2 class="title">' + esc(p.title) + '</h2>' : '') +
+            (p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '') +
+            '<div class="veeam-related-grid" data-kbg-grid>' +
+                '<p class="kbg-empty" data-kbg-empty>' + esc(emptyText) + '</p>' +
+            '</div>' +
+            '</div></section>';
+
+        cmsGet('/api/kb-pages').then((json) => {
+            const grid = container.querySelector('[data-kbg-grid]');
+            const pages = json && json.pages;
+            if (!grid || !pages || !pages.length) return;   // keep the empty-state copy
+            grid.innerHTML = pages.map((kb) =>
+                '<a class="veeam-related-card" href="/knowledge-base/' + esc(kb.slug) + '">' +
+                (kb.category ? '<span class="blog-card-cat">' + esc(kb.category) + '</span>' : '') +
+                '<h3>' + esc(kb.title) + '</h3>' +
+                (kb.excerpt ? '<p>' + esc(kb.excerpt) + '</p>' : '') +
+                '<span class="veeam-related-btn">Read article</span>' +
+                '</a>').join('');
+        }).catch(() => { /* keep the empty-state copy, same as fillBlogHelp() */ });
+    },
+};
+
 /* ════ EXPORT ════════════════════════════════════════════════ */
 export const COMPONENT_REGISTRY = {
     hero,
     blogHeader,
+    kbHeader,
+    kbIndexGrid,
     blogBody,
     pillars,
     iconCards,
@@ -2115,6 +2223,8 @@ export const COMPONENT_ORDER = [
     'hero',
     'blogHeader',
     'blogBody',
+    'kbHeader',
+    'kbIndexGrid',
     'pillars',
     'iconCards',
     'imageText',
@@ -2157,5 +2267,9 @@ export const COMPONENT_CATEGORIES = [
     { label: 'Social Proof', types: ['testimonials', 'logoCloud'] },
     { label: 'Conversion', types: ['ctaBand', 'pricing', 'contactForm', 'contactInfo', 'faq'] },
     { label: 'Blog', types: ['blogHeader', 'blogBody'] },
+    // blogBody listed here too, deliberately: it's the same content engine a
+    // Knowledge Base article body uses (see kbHeader's comment above) — this
+    // is a second entry in the palette's grouping, not a second component.
+    { label: 'Knowledge Base', types: ['kbHeader', 'blogBody', 'kbIndexGrid'] },
     { label: 'Media & Layout', types: ['mapEmbed', 'videoEmbed', 'spacer'] },
 ];

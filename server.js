@@ -292,8 +292,13 @@ app.get('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req, re
 function isReservedBuilderSlug(slug) {
     const s = String(slug || '').toLowerCase().replace(/^\/+|\/+$/g, '');
     if (!s || !/^[a-z0-9-]+$/.test(s)) return true;                 // invalid chars → reject
+    // 'blogs' and 'knowledge-base' guard the nested /blogs/<slug> and
+    // /knowledge-base/<slug> routes below — a top-level builder page at either
+    // exact slug would otherwise be permanently unreachable (shadowed by the
+    // explicit route, which Express matches first) rather than erroring at
+    // creation time. 'blogs' was a pre-existing gap in this list, not new.
     const RESERVED = ['legal', 'admin', 'api', 'assets', 'builder', 'prerendered',
-        'sitemap', 'robots', 'socket.io', 'index', 'home', '404'];
+        'sitemap', 'robots', 'socket.io', 'index', 'home', '404', 'blogs', 'knowledge-base'];
     if (RESERVED.includes(s)) return true;
     try {
         if (fs.existsSync(path.join(publicPath, s + '.html'))) return true;   // static page exists
@@ -822,21 +827,30 @@ async function buildSitemapEntries(req) {
         );
         if (r.ok) {
             const { data } = await r.json();
-            // Blog posts serve at /blogs/<slug>, other builder pages at /<slug> —
-            // the sitemap must list the URL that actually 200s, not the one that
+            // Blog posts serve at /blogs/<slug>, Knowledge Base articles at
+            // /knowledge-base/<slug>, every other builder page at /<slug> — the
+            // sitemap must list the URL that actually 200s, not the one that
             // 301s, so resolve the split from the same source the routes use.
-            const blogSlugs = new Set((await fetchBlogPosts()).map((p) => p.slug));
+            // The two sets are mutually exclusive by construction: fetchKbPages()
+            // drops any page that also has a blogHeader, so a page carrying both
+            // can't land in kbSlugs and be listed at two URLs from here.
+            const [blogSlugs, kbSlugs] = await Promise.all([
+                fetchBlogPosts().then((posts) => new Set(posts.map((p) => p.slug))),
+                fetchKbPages().then((pages) => new Set(pages.map((p) => p.slug))),
+            ]);
             (data || []).forEach(function (item) {
                 const d = item.attributes || item;
                 if (!d.slug) return;
                 if (!isPageLive(d.slug)) return;        // honour Page Registry hidden state
                 const isBlog = blogSlugs.has(d.slug);
+                const isKb = kbSlugs.has(d.slug);
+                const prefix = isBlog ? '/blogs/' : isKb ? '/knowledge-base/' : '/';
                 entries.push({
-                    loc:        baseUrl + (isBlog ? '/blogs/' : '/') + d.slug,
+                    loc:        baseUrl + prefix + d.slug,
                     lastmod:    d.updatedAt ? d.updatedAt.split('T')[0] : today,
                     changefreq: 'daily',
                     priority:   0.7,
-                    type:       isBlog ? 'blog' : 'builder',
+                    type:       isBlog ? 'blog' : (isKb ? 'kb' : 'builder'),
                 });
             });
         }
@@ -933,6 +947,7 @@ app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
                 static:  entries.filter(function (e) { return e.type === 'static';  }).length,
                 builder: entries.filter(function (e) { return e.type === 'builder'; }).length,
                 blog:    entries.filter(function (e) { return e.type === 'blog';    }).length,
+                kb:      entries.filter(function (e) { return e.type === 'kb';      }).length,
             },
         });
     } catch (err) {
@@ -1321,6 +1336,7 @@ function bustBuilderMetaCache() {
        404'd at /blogs/<slug> and was omitted from any sitemap regenerated inside
        that window — a 404 is something search engines will drop a URL over. */
     blogPostsCache = null;
+    kbPagesCache = null;   // same reasoning, for /knowledge-base/<slug>
 }
 
 async function fetchBuilderPageMeta(slug) {
@@ -1449,6 +1465,120 @@ app.get('/api/blog-posts', async (req, res) => {
     }
 });
 
+// ── Knowledge Base listing (public, no auth) ──────────────────
+// Deliberately its own fetch + cache, not fetchBlogPosts() parameterised by
+// header type: this touches nothing about the working blog code path, at the
+// cost of the two functions looking alike. A shared "fetch pages with header
+// type X" helper would be less code, but also more risk to refactor a path
+// that already works and ships to production — not worth it for one more
+// content kind. Same structure as fetchBlogPosts() on purpose, so the two stay
+// easy to compare and either can be understood by reading the other.
+//
+// A Knowledge Base page is a builder-page whose sections contain a kbHeader —
+// same "type it by section content" pattern blogs use, not a real Strapi
+// content type (see kbHeader in componentRegistry.js). No article body field
+// is pulled out here for the same reason fetchBlogPosts() doesn't either —
+// see kbArticleNoscript() below, which reads it lazily from the same row.
+let kbPagesCache = null;   // { ts, val }
+const KB_PAGES_TTL = 2 * 60 * 1000;
+
+async function fetchKbPages() {
+    if (kbPagesCache && Date.now() - kbPagesCache.ts < KB_PAGES_TTL) return kbPagesCache.val;
+    let pages = [];
+    let ok = false;
+    try {
+        const r = await fetch(
+            `${STRAPI_URL}/api/builder-pages?publicationState=live` +
+            `&fields[0]=slug&fields[1]=title&fields[2]=sections&fields[3]=publishedAt&fields[4]=updatedAt` +
+            `&pagination[pageSize]=200`,
+            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+        );
+        if (r.ok) {
+            const json = await r.json();
+            pages = (json.data || [])
+                .map((row) => {
+                    const d = row.attributes || row;
+                    const sections = d.sections || [];
+                    const header = sections.find((s) => s.type === 'kbHeader');
+                    if (!header || !d.slug) return null;
+
+                    /* A blog post wins when a page carries both headers. Nothing
+                       stops an editor dropping a Knowledge Base Header onto a
+                       blog post — the palette offers every component on every
+                       page — and without this that page would serve at BOTH
+                       /blogs/<slug> and /knowledge-base/<slug>, each declaring
+                       ITSELF canonical, while the sitemap listed only the blog
+                       URL. Excluding it here makes the split mutually exclusive
+                       at the source, so routing, the sitemap, the canonical tag
+                       and the /:page redirect agree by construction instead of
+                       by four independent checks happening to pick the same
+                       winner. Matches pathPrefixForSections()'s precedence in
+                       builder-editor.js, which also puts blogHeader first. */
+                    if (sections.some((s) => s.type === 'blogHeader')) return null;
+
+                    const p = header.props || {};
+                    /* Body text for the crawler fallback. blogBody is what the
+                       kb-article template seeds, but richText is a legitimate
+                       way to write an article and uses the same `body` prop key,
+                       so take every body-bearing section — otherwise a KB page
+                       written with richText silently gets an empty <noscript>
+                       and an empty meta description. */
+                    const bodyHtml = sections
+                        .filter((s) => s.type === 'blogBody' || s.type === 'richText')
+                        .map((s) => (s.props && s.props.body) || '')
+                        .filter(Boolean)
+                        .join('\n');
+                    return {
+                        slug: d.slug,
+                        title: p.title || d.title || d.slug,
+                        excerpt: p.excerpt || '',
+                        category: p.category || '',
+                        lastUpdated: p.lastUpdated || '',
+                        sortDate: d.publishedAt || d.updatedAt || null,
+                        // Server-side only — stripped by kbListingShape() below,
+                        // same reasoning as fetchBlogPosts()'s bodyHtml.
+                        bodyHtml,
+                        modifiedDate: d.updatedAt || d.publishedAt || null,
+                    };
+                })
+                .filter(Boolean)
+                .sort((a, b) => new Date(b.sortDate || 0) - new Date(a.sortDate || 0));
+            ok = true;
+        }
+    } catch (_) { /* Strapi unreachable — handled below */ }
+
+    if (ok) {
+        kbPagesCache = { ts: Date.now(), val: pages };
+        return pages;
+    }
+    // Only successes are cached — same reasoning as fetchBlogPosts(): a cached
+    // failure would pin isKbSlug() to "not found" for real published articles
+    // through a transient Strapi blip, 404ing them until the TTL expired.
+    if (kbPagesCache) return kbPagesCache.val;
+    return [];
+}
+
+// Knowledge Base articles live at /knowledge-base/<slug>; every other builder
+// page (including blog posts, checked separately) stays at its own URL.
+async function isKbSlug(slug) {
+    const pages = await fetchKbPages();
+    return pages.some((p) => p.slug === slug);
+}
+
+function kbListingShape(page) {
+    const { bodyHtml, modifiedDate, ...listing } = page;
+    return listing;
+}
+
+app.get('/api/kb-pages', async (req, res) => {
+    try {
+        const pages = await fetchKbPages();
+        res.json({ pages: pages.map(kbListingShape) });
+    } catch (err) {
+        res.status(502).json({ pages: [], error: 'Failed to load Knowledge Base pages' });
+    }
+});
+
 // ── Blog SEO: crawler parity with the static pages ──────────
 // A static page ships real copy inside its own .html file, so a crawler that gets
 // no prerendered snapshot still finds content. Blog posts render from
@@ -1547,6 +1677,44 @@ async function blogSeoFor(slug) {
             image,
         },
         noscriptHtml: blogArticleNoscript(post),
+    };
+}
+
+// Same purpose as blogArticleNoscript() — real body text in the raw HTML for a
+// crawler that arrives before a snapshot exists — trimmed to what a Knowledge
+// Base page actually has: no cover image, no author byline.
+function kbArticleNoscript(page) {
+    const parts = ['<article class="blog-noscript">'];
+    parts.push('<h1>' + seoEsc(page.title) + '</h1>');
+    if (page.excerpt) parts.push('<p>' + seoEsc(page.excerpt) + '</p>');
+    if (page.bodyHtml) parts.push(seoNoscriptSafe(page.bodyHtml));
+    parts.push('</article>');
+    return '<noscript>' + parts.join('\n') + '</noscript>';
+}
+
+/* SEO override for one Knowledge Base article. Same fallback shape as
+   blogSeoFor(): explicit metaTitle/metaDescription first, then the kbHeader
+   excerpt, then text pulled from the article body.
+
+   No `article` object, deliberately: seoJsonLd()'s article branch emits
+   schema.org BlogPosting + a breadcrumb through "Blog" — correct for a blog
+   post, not accurate structured data for a documentation page. Leaving it
+   unset here means a KB article gets the same plain WebPage JSON-LD any
+   builder page gets, which is honest even though it is less rich than what
+   blog posts show in search results. A schema.org type suited to
+   documentation (TechArticle, HowTo, or a real breadcrumb once a Knowledge
+   Base index page exists) is a reasonable follow-up, not required for the
+   page to be indexable. */
+async function kbSeoFor(slug) {
+    const [meta, pages] = await Promise.all([fetchBuilderPageMeta(slug), fetchKbPages()]);
+    const page = pages.find((p) => p.slug === slug);
+    if (!page) return meta;   // not actually a KB article — behaviour unchanged
+
+    return {
+        title: (meta && meta.title) || page.title,
+        description: (meta && meta.description) || page.excerpt ||
+            seoTextExcerpt(page.bodyHtml, 155),
+        noscriptHtml: kbArticleNoscript(page),
     };
 }
 
@@ -1798,6 +1966,28 @@ app.get('/blogs/:slug', async (req, res) => {
     sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/blogs/${slug}`, bp);
 });
 
+// Knowledge Base articles — /knowledge-base/<slug>. Same shape as /blogs/:slug
+// immediately above (registered before the generic /:page catch-all, same
+// registry gate, same "isn't actually one of these → 404 here rather than
+// falling through" rule so a builder page keeps exactly one canonical URL).
+//
+// There is no bare `/knowledge-base` index route yet — that is the Help Center
+// page's job (a later, separate feature), so a Knowledge Base article is only
+// reachable today by its direct URL or via sitemap.xml. That mirrors exactly
+// how blog posts were discoverable before /blogs got its own <noscript> link
+// list: not a bug, a disclosed gap that closes when the index page exists.
+app.get('/knowledge-base/:slug', async (req, res) => {
+    const slug = req.params.slug;
+    if (!(await isKbSlug(slug))) {
+        return res.status(404).sendFile(sitePage('404.html'));
+    }
+    if (pageCache.has(slug) && !pageCache.get(slug)) {
+        return res.status(404).sendFile(sitePage('404.html'));
+    }
+    const bp = (await kbSeoFor(slug)) || (await fetchBuilderPageMeta(slug));
+    sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/knowledge-base/${slug}`, bp);
+});
+
 // Dynamic routes — gate on page registry cache (SEO-injected)
 app.get('/:page', async (req, res) => {
     const slug = req.params.page;
@@ -1813,7 +2003,11 @@ app.get('/:page', async (req, res) => {
     if (!fs.existsSync(filePath)) {
         // Blog posts moved under /blogs/ — 301 the legacy top-level URL so any
         // existing link or index entry follows to the one canonical location.
+        // Same for Knowledge Base articles under /knowledge-base/. Order is
+        // safe: fetchKbPages() excludes anything with a blogHeader, so a page
+        // carrying both headers is only ever a blog post to isKbSlug().
         if (await isBlogSlug(slug)) return res.redirect(301, `/blogs/${slug}`);
+        if (await isKbSlug(slug)) return res.redirect(301, `/knowledge-base/${slug}`);
 
         const bp = await fetchBuilderPageMeta(slug);
         if (bp) {

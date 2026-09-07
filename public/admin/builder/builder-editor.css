@@ -1081,6 +1081,16 @@ body.bld-resizing iframe { pointer-events: none; }
     margin: 0 0 14px;
 }
 
+/* Character-count hint under an SEO field — right-aligned, muted, turns
+   warm near the schema's maxLength so an editor sees a cut-off coming. */
+.bld-field-hint {
+    align-self: flex-end;
+    font-size: 0.75rem;
+    color: var(--muted, #64748b);
+}
+.bld-field-hint.is-near-limit { color: #b45309; }
+[data-theme="dark"] .bld-field-hint.is-near-limit { color: #fbbf24; }
+
 /* Template cards */
 .bld-tpl-grid {
     display: grid;

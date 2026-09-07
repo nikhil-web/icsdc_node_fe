@@ -775,3 +775,16 @@ body:has(.builder-preview-banner) nav {
 [data-theme="dark"] .blogb-promo h3 {
     color: #e8eefc;
 }
+
+/* ══════════════════════════════════════════════════════════
+   KB INDEX GRID — empty state (no published Knowledge Base
+   articles yet). The card grid itself reuses .veeam-related-*
+   from veeam-backup.css, already loaded here — this is the one
+   new rule the component needs, for the placeholder copy only.
+══════════════════════════════════════════════════════════ */
+.kbg-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--muted, #64748b);
+    padding: 24px 0;
+}
