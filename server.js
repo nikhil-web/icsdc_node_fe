@@ -1689,6 +1689,15 @@ async function fetchKbPages() {
                         title: p.title || d.title || d.slug,
                         excerpt: p.excerpt || '',
                         category: p.category || '',
+                        // Split here rather than in the browser so every consumer
+                        // (Help Center chips, search, any future listing) gets the
+                        // same normalised array instead of re-parsing the raw
+                        // comma/newline string its own way.
+                        tags: String(p.tags || '')
+                            .split(/[\n,]/)
+                            .map((t) => t.trim())
+                            .filter(Boolean)
+                            .slice(0, 20),
                         lastUpdated: p.lastUpdated || '',
                         sortDate: d.publishedAt || d.updatedAt || null,
                         /* Reading time has to be computed HERE, before

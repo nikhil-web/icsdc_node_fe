@@ -790,6 +790,23 @@ body:has(.builder-preview-banner) nav {
 }
 
 /* ══════════════════════════════════════════════════════════
+   FAQ on builder pages
+   components.css sets .faq-grid to `grid-template-columns: 1fr 1fr`, because
+   the hand-built pages put an <aside class="faq-aside"> illustration in the
+   second column. The builder's faq component emits the accordions ALONE, so
+   that second track stayed empty and squeezed every question into half the
+   container — narrow panels, answers wrapping over far more lines, and an
+   expand/collapse that reads as janky next to the roomy original even though
+   the transition is literally the same 0.32s rule.
+
+   Scoped to :only-child so it can only ever apply where there is no aside —
+   the hand-built pages keep their two-column layout untouched.
+══════════════════════════════════════════════════════════ */
+.faq-grid > .faq-accordions:only-child {
+    grid-column: 1 / -1;
+}
+
+/* ══════════════════════════════════════════════════════════
    HELP CENTER (helpCenter + supportChannels components)
    Built on the site's existing tokens — --blue, --text-dark,
    --muted, --border, --shadow-card — so it inherits dark mode
@@ -1140,4 +1157,11 @@ body:has(.builder-preview-banner) nav {
     .hc-article-grid { grid-template-columns: 1fr; }
     .hc-topic-grid { grid-template-columns: 1fr; }
     .hc-search-input { padding: 14px 16px 14px 46px; }
+}
+/* Wrapper the chip row lives in, so hcRenderChips can swap the whole set of
+   chips for real article tags without disturbing the "Popular:" label beside
+   them. display:contents keeps it out of the flex layout entirely — the chips
+   stay direct flex children of .hc-popular and wrap exactly as before. */
+.hc-chip-row {
+    display: contents;
 }

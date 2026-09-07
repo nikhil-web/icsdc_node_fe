@@ -2104,12 +2104,23 @@ const kbHeader = {
             key: 'excerpt', label: 'Excerpt (SEO description fallback — not shown on the page)',
             type: 'textarea',
         },
+        /* Tags drive the Help Center's popular-search chips and widen what its
+           search matches. Comma or newline separated rather than a repeater:
+           they are single words, and a repeater would cost a row of UI each for
+           no gain. Not rendered in the hero — the Legal-Pages layout this
+           mirrors has nowhere for them, and their job is discovery, not
+           decoration. */
+        {
+            key: 'tags', label: 'Tags (comma or line separated — power the Help Center chips)',
+            type: 'textarea',
+        },
     ],
     defaultProps: {
         category: 'Knowledge Base',
         title: 'Getting Started with ICSDC',
         lastUpdated: '',
         excerpt: '',
+        tags: '',
     },
     renderer(container, p) {
         container.innerHTML =
@@ -2283,11 +2294,12 @@ const helpCenter = {
                         ' placeholder="' + esc(p.searchPlaceholder || 'Search articles') + '"' +
                         ' aria-label="Search help articles">' +
                 '</div>' +
-                (chips
-                    ? '<div class="hc-popular">' +
-                          (p.popularLabel ? '<span class="hc-popular-label">' + esc(p.popularLabel) + '</span>' : '') +
-                          chips + '</div>'
-                    : '') +
+                '<div class="hc-popular">' +
+                    (p.popularLabel ? '<span class="hc-popular-label">' + esc(p.popularLabel) + '</span>' : '') +
+                    // Replaced by real article tags when any exist (hcRenderChips);
+                    // these hand-typed ones are the fallback until then.
+                    '<span class="hc-chip-row" data-hc-chips>' + chips + '</span>' +
+                '</div>' +
             '</div></section>' +
 
             '<section class="section hc-articles"><div class="container">' +
@@ -2317,6 +2329,7 @@ function hcLoad(container, p) {
         const pages = (json && json.pages) || [];
         hcRenderArticles(container, pages);
         hcRenderTopics(container, pages);
+        hcRenderChips(container, p, pages);
         hcFillCounts(container, p, pages);
         hcWireSearch(container);
     }).catch(() => {
@@ -2335,7 +2348,10 @@ function hcRenderArticles(container, pages) {
             kb.category ? '<span class="hc-card-cat">' + esc(kb.category) + '</span>' : '',
             kb.readMinutes ? '<span class="hc-card-read">' + esc(kb.readMinutes) + ' min read</span>' : '',
         ].filter(Boolean).join('');
-        const haystack = ((kb.title || '') + ' ' + (kb.excerpt || '') + ' ' + (kb.category || '')).toLowerCase();
+        // Tags are part of the haystack so a chip click actually finds its
+        // article even when the word appears nowhere in the title or excerpt.
+        const haystack = ((kb.title || '') + ' ' + (kb.excerpt || '') + ' ' +
+            (kb.category || '') + ' ' + ((kb.tags || []).join(' '))).toLowerCase();
         return '<a class="hc-card" href="/knowledge-base/' + esc(kb.slug) + '"' +
             ' data-hc-card data-hc-text="' + esc(haystack) + '">' +
             '<span class="hc-card-num">' + num + '</span>' +
@@ -2344,6 +2360,32 @@ function hcRenderArticles(container, pages) {
                 (meta ? '<span class="hc-card-meta">' + meta + '</span>' : '') +
             '</span></a>';
     }).join('');
+}
+
+/* Chips come from the articles' own tags wherever any exist, ranked by how many
+   articles carry each — so the "popular" row is genuinely the site's own
+   vocabulary and every chip is guaranteed to return results when clicked. The
+   hand-typed `popular` list stays as the fallback for a Knowledge Base that has
+   no tags yet, which is otherwise the state where this row would vanish and
+   take the hero's visual balance with it. */
+function hcRenderChips(container, p, pages) {
+    const row = container.querySelector('[data-hc-chips]');
+    if (!row) return;
+
+    const counts = new Map();
+    pages.forEach((kb) => {
+        (kb.tags || []).forEach((t) => {
+            const key = t.trim();
+            if (key) counts.set(key, (counts.get(key) || 0) + 1);
+        });
+    });
+    if (!counts.size) return;                 // keep the manual fallback chips
+
+    row.innerHTML = [...counts.entries()]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, 8)                          // a chip row, not a tag cloud
+        .map(([tag]) => '<button type="button" class="hc-chip" data-hc-chip>' + esc(tag) + '</button>')
+        .join('');
 }
 
 /* Topic tiles are derived from the articles' own categories, never a hand-kept
