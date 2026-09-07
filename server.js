@@ -831,9 +831,9 @@ async function buildSitemapEntries(req) {
             // /knowledge-base/<slug>, every other builder page at /<slug> — the
             // sitemap must list the URL that actually 200s, not the one that
             // 301s, so resolve the split from the same source the routes use.
-            // A page can't be both (blogHeader and kbHeader are different
-            // templates); isBlog is checked first only to match the existing
-            // tie-break order, not because it takes priority over anything.
+            // The two sets are mutually exclusive by construction: fetchKbPages()
+            // drops any page that also has a blogHeader, so a page carrying both
+            // can't land in kbSlugs and be listed at two URLs from here.
             const [blogSlugs, kbSlugs] = await Promise.all([
                 fetchBlogPosts().then((posts) => new Set(posts.map((p) => p.slug))),
                 fetchKbPages().then((pages) => new Set(pages.map((p) => p.slug))),
@@ -843,7 +843,7 @@ async function buildSitemapEntries(req) {
                 if (!d.slug) return;
                 if (!isPageLive(d.slug)) return;        // honour Page Registry hidden state
                 const isBlog = blogSlugs.has(d.slug);
-                const isKb = !isBlog && kbSlugs.has(d.slug);
+                const isKb = kbSlugs.has(d.slug);
                 const prefix = isBlog ? '/blogs/' : isKb ? '/knowledge-base/' : '/';
                 entries.push({
                     loc:        baseUrl + prefix + d.slug,
@@ -1498,10 +1498,36 @@ async function fetchKbPages() {
             pages = (json.data || [])
                 .map((row) => {
                     const d = row.attributes || row;
-                    const header = (d.sections || []).find((s) => s.type === 'kbHeader');
+                    const sections = d.sections || [];
+                    const header = sections.find((s) => s.type === 'kbHeader');
                     if (!header || !d.slug) return null;
+
+                    /* A blog post wins when a page carries both headers. Nothing
+                       stops an editor dropping a Knowledge Base Header onto a
+                       blog post — the palette offers every component on every
+                       page — and without this that page would serve at BOTH
+                       /blogs/<slug> and /knowledge-base/<slug>, each declaring
+                       ITSELF canonical, while the sitemap listed only the blog
+                       URL. Excluding it here makes the split mutually exclusive
+                       at the source, so routing, the sitemap, the canonical tag
+                       and the /:page redirect agree by construction instead of
+                       by four independent checks happening to pick the same
+                       winner. Matches pathPrefixForSections()'s precedence in
+                       builder-editor.js, which also puts blogHeader first. */
+                    if (sections.some((s) => s.type === 'blogHeader')) return null;
+
                     const p = header.props || {};
-                    const bodySec = (d.sections || []).find((s) => s.type === 'blogBody');
+                    /* Body text for the crawler fallback. blogBody is what the
+                       kb-article template seeds, but richText is a legitimate
+                       way to write an article and uses the same `body` prop key,
+                       so take every body-bearing section — otherwise a KB page
+                       written with richText silently gets an empty <noscript>
+                       and an empty meta description. */
+                    const bodyHtml = sections
+                        .filter((s) => s.type === 'blogBody' || s.type === 'richText')
+                        .map((s) => (s.props && s.props.body) || '')
+                        .filter(Boolean)
+                        .join('\n');
                     return {
                         slug: d.slug,
                         title: p.title || d.title || d.slug,
@@ -1511,7 +1537,7 @@ async function fetchKbPages() {
                         sortDate: d.publishedAt || d.updatedAt || null,
                         // Server-side only — stripped by kbListingShape() below,
                         // same reasoning as fetchBlogPosts()'s bodyHtml.
-                        bodyHtml: (bodySec && bodySec.props && bodySec.props.body) || '',
+                        bodyHtml,
                         modifiedDate: d.updatedAt || d.publishedAt || null,
                     };
                 })
@@ -1977,8 +2003,9 @@ app.get('/:page', async (req, res) => {
     if (!fs.existsSync(filePath)) {
         // Blog posts moved under /blogs/ — 301 the legacy top-level URL so any
         // existing link or index entry follows to the one canonical location.
-        // Same for Knowledge Base articles under /knowledge-base/. A page can't
-        // be both, so checking one after the other can't misroute either.
+        // Same for Knowledge Base articles under /knowledge-base/. Order is
+        // safe: fetchKbPages() excludes anything with a blogHeader, so a page
+        // carrying both headers is only ever a blog post to isKbSlug().
         if (await isBlogSlug(slug)) return res.redirect(301, `/blogs/${slug}`);
         if (await isKbSlug(slug)) return res.redirect(301, `/knowledge-base/${slug}`);
 
