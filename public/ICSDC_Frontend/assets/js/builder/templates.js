@@ -72,6 +72,16 @@ export const BUILDER_TEMPLATES = [
         label: 'Help Center',
         description: 'Support landing page: searchable Knowledge Base hero, article list, topic tiles, FAQ and contact channels.',
         icon: 'fa-life-ring',
+        /* Kept out of the New Page picker: the Help Center is a single fixed
+           page (server.js PROTECTED_BUILDER_SLUGS), so offering the template
+           only invites a second one at some other slug — a duplicate the KB
+           grid, the article links and any nav entry would then disagree about.
+
+           Deliberately hidden rather than deleted. This entry is still the
+           canonical record of what the page is composed of, which is what
+           getTemplate('help-center') reads to re-seed it — delete it and that
+           knowledge is gone with it. */
+        hidden: true,
         sections: [
             /* helpCenter owns the hero, the search box, the article list and the
                topic tiles as one section — the search has to filter all of them,

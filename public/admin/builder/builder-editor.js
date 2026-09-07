@@ -230,7 +230,13 @@ function onNewPageClick() {
     const existing = document.getElementById('bld-newpage');
     if (existing) existing.remove();
 
-    const cards = BUILDER_TEMPLATES.map((t, i) =>
+    /* Templates for one-off fixed pages mark themselves hidden (see the Help
+       Center in templates.js) — they exist so the page can be re-seeded, not so
+       a second copy can be made. Filter BEFORE mapping so the index-based
+       "first card is preselected" logic lands on the first VISIBLE template
+       rather than preselecting a card that was filtered out. */
+    const pickable = BUILDER_TEMPLATES.filter((t) => !t.hidden);
+    const cards = pickable.map((t, i) =>
         '<label class="bld-tpl' + (i === 0 ? ' is-selected' : '') + '">' +
         '<input type="radio" name="bld-tpl" value="' + t.id + '"' + (i === 0 ? ' checked' : '') + '>' +
         '<i class="fa-solid ' + t.icon + '" aria-hidden="true"></i>' +
