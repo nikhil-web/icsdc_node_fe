@@ -306,6 +306,93 @@ async function onDeleteClick(documentId, title) {
     }
 }
 
+/* SEO fields modal — Meta Title / Meta Description on state.page.
+   Mirrors onNewPageClick()'s modal shell. Both fields already round-trip
+   through the save/publish payloads (see onSaveDraft/onPublish below) and
+   already drive the server-side <head> injection and its title/excerpt/body
+   fallback chain (server.js blogSeoFor / fetchBuilderPageMeta) — this dialog
+   only adds the missing piece: somewhere in the editor to actually type them
+   in. It edits state.page in memory and does not call the API itself; Save
+   Draft / Publish send whatever is in state.page, same as the title field. */
+const SEO_TITLE_MAX = 255;   // mirrors builder-page schema: metaTitle maxLength
+const SEO_DESC_MAX = 500;    // mirrors builder-page schema: metaDescription maxLength
+
+function onSeoClick() {
+    const existing = document.getElementById('bld-seo-modal');
+    if (existing) existing.remove();
+
+    const wrap = document.createElement('div');
+    wrap.id = 'bld-seo-modal';
+    wrap.className = 'bld-modal-backdrop';
+    wrap.innerHTML =
+        '<div class="bld-modal" role="dialog" aria-modal="true" aria-labelledby="bld-seo-title">' +
+        '<div class="bld-modal-head">' +
+            '<h3 id="bld-seo-title">SEO</h3>' +
+            '<button type="button" class="bld-modal-x" id="bld-seo-cancel" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>' +
+        '</div>' +
+        '<div class="bld-modal-body">' +
+            '<p class="bld-np-preview">Shown in search results and social shares. Leave a field ' +
+            'blank to fall back to the page title' + (isCurrentPageBlogPost() ?
+                ' / excerpt / article text' : '') + ' automatically — this page is not required to set either.</p>' +
+            '<label class="bld-field">' +
+                '<span class="bld-field-label">Meta title</span>' +
+                '<input type="text" class="bld-input" id="bld-seo-title-input" maxlength="' + SEO_TITLE_MAX + '" ' +
+                    'placeholder="' + esc(state.page.title || 'Defaults to the page title') + '" autocomplete="off">' +
+                '<span class="bld-field-hint" id="bld-seo-title-count"></span>' +
+            '</label>' +
+            '<label class="bld-field">' +
+                '<span class="bld-field-label">Meta description</span>' +
+                '<textarea class="bld-input bld-textarea" id="bld-seo-desc-input" maxlength="' + SEO_DESC_MAX + '" ' +
+                    'rows="3" placeholder="Defaults to the article excerpt or body text" autocomplete="off"></textarea>' +
+                '<span class="bld-field-hint" id="bld-seo-desc-count"></span>' +
+            '</label>' +
+        '</div>' +
+        '<div class="bld-modal-foot">' +
+            '<button type="button" class="admin-toggle-btn" id="bld-seo-cancel2">Cancel</button>' +
+            '<button type="button" class="admin-login-btn" id="bld-seo-save"><i class="fa-solid fa-check"></i> Save</button>' +
+        '</div>' +
+        '</div>';
+    document.body.appendChild(wrap);
+
+    const titleEl = document.getElementById('bld-seo-title-input');
+    const descEl = document.getElementById('bld-seo-desc-input');
+    const titleCount = document.getElementById('bld-seo-title-count');
+    const descCount = document.getElementById('bld-seo-desc-count');
+    titleEl.value = state.page.metaTitle || '';
+    descEl.value = state.page.metaDescription || '';
+
+    function updateCount(el, countEl, max) {
+        countEl.textContent = el.value.length + ' / ' + max;
+        countEl.classList.toggle('is-near-limit', el.value.length > max * 0.9);
+    }
+    updateCount(titleEl, titleCount, SEO_TITLE_MAX);
+    updateCount(descEl, descCount, SEO_DESC_MAX);
+    titleEl.addEventListener('input', () => updateCount(titleEl, titleCount, SEO_TITLE_MAX));
+    descEl.addEventListener('input', () => updateCount(descEl, descCount, SEO_DESC_MAX));
+
+    function close() { wrap.remove(); document.removeEventListener('keydown', onKey); }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    document.addEventListener('keydown', onKey);
+    wrap.addEventListener('mousedown', (e) => { if (e.target === wrap) close(); });
+    document.getElementById('bld-seo-cancel').addEventListener('click', close);
+    document.getElementById('bld-seo-cancel2').addEventListener('click', close);
+
+    document.getElementById('bld-seo-save').addEventListener('click', () => {
+        state.page.metaTitle = titleEl.value.trim();
+        state.page.metaDescription = descEl.value.trim();
+        markDirty();
+        close();
+    });
+
+    titleEl.focus();
+}
+
+// Same detection server.js/isBlogPost use elsewhere in this file (sniffing
+// sections for a blogHeader) — only affects the modal's helper copy.
+function isCurrentPageBlogPost() {
+    return (state.page.sections || []).some((s) => s.type === 'blogHeader');
+}
+
 /* ══════ EDITOR VIEW ═════════════════════════════════════ */
 async function openEditor(documentId) {
     state.mode = 'edit';
@@ -328,6 +415,7 @@ async function openEditor(documentId) {
                         '<button data-vw="mobile" title="Mobile (390px)"><i class="fa-solid fa-mobile-screen"></i></button>' +
                     '</div>' +
                     '<span class="bld-zoom-badge" id="bld-zoom-badge" title="Canvas render width · zoom"></span>' +
+                    '<button id="bld-seo-btn"     class="admin-toggle-btn"><i class="fa-solid fa-magnifying-glass-chart"></i> SEO</button>' +
                     '<button id="bld-history-btn" class="admin-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> History</button>' +
                     '<button id="bld-save-btn"    class="admin-toggle-btn btn-show"><i class="fa-solid fa-floppy-disk"></i> Save Draft</button>' +
                     '<button id="bld-preview-btn" class="admin-toggle-btn btn-show"><i class="fa-solid fa-eye"></i> Preview</button>' +
@@ -404,6 +492,7 @@ async function openEditor(documentId) {
     document.getElementById('bld-save-btn').addEventListener('click', onSaveDraft);
     document.getElementById('bld-preview-btn').addEventListener('click', onPreview);
     document.getElementById('bld-publish-btn').addEventListener('click', onPublish);
+    document.getElementById('bld-seo-btn').addEventListener('click', onSeoClick);
     document.getElementById('bld-history-btn').addEventListener('click', () => {
         openVersionHistory(state.page.documentId, () => openEditor(state.page.documentId));
     });
