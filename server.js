@@ -1383,6 +1383,90 @@ function bustBuilderMetaCache() {
     kbPagesCache = null;   // same reasoning, for /knowledge-base/<slug>
 }
 
+/* Prose-bearing prop keys, in the order they make a good description. Curated
+   rather than "walk every string": section props also hold URLs, icon names,
+   CSS variants and button labels, and a description built from those reads
+   like debug output. */
+const BUILDER_TEXT_KEYS = ['description', 'subtitle', 'excerpt', 'body', 'desc', 'answer', 'text'];
+const BUILDER_HEADING_KEYS = ['title', 'name', 'question', 'heading'];
+
+/* Pull headings and prose out of a builder page's sections, walking into
+   repeater arrays (FAQ items, support channels, cards) so their questions and
+   descriptions count as page content too. Depth- and size-capped: this feeds a
+   <noscript> block, not an export, and a pathological page shouldn't be able
+   to make a response enormous. */
+function builderTextParts(sections) {
+    const headings = [];
+    const paragraphs = [];
+    let budget = 120;                                  // total fields collected
+
+    const walk = (obj, depth) => {
+        if (!obj || typeof obj !== 'object' || depth > 4 || budget <= 0) return;
+        if (Array.isArray(obj)) { obj.forEach((v) => walk(v, depth + 1)); return; }
+        BUILDER_HEADING_KEYS.forEach((k) => {
+            if (typeof obj[k] === 'string' && obj[k].trim() && budget-- > 0) headings.push(obj[k].trim());
+        });
+        BUILDER_TEXT_KEYS.forEach((k) => {
+            if (typeof obj[k] === 'string' && obj[k].trim() && budget-- > 0) paragraphs.push(obj[k].trim());
+        });
+        Object.keys(obj).forEach((k) => {
+            if (obj[k] && typeof obj[k] === 'object') walk(obj[k], depth + 1);
+        });
+    };
+    (sections || []).forEach((s) => { if (s && s.visible !== false) walk(s.props || {}, 1); });
+    return { headings, paragraphs };
+}
+
+/* Components may hold client-resolved placeholders in their copy — helpCenter's
+   subtitle is literally "Search {count} guide{s} on hosting…", filled in by the
+   browser once the article count is known. The server has no such number, and
+   shipping the raw token into a meta description puts "Search {count} guide{s}"
+   in a search result. Drop the tokens instead: {s} becomes a regular plural,
+   anything else in braces disappears, and the leftover double space closes up.
+   A curly-brace token is never meaningful prose, so this is safe generally
+   rather than special-cased to one component. */
+function stripPlaceholders(text) {
+    return String(text || '')
+        .replace(/\{s\}/gi, 's')
+        .replace(/\{[a-z0-9_]+\}/gi, '')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+}
+
+/* Description of last resort for a builder page whose editor left
+   metaDescription empty. Takes the first prose block long enough to actually
+   read as a sentence — a 3-word button label technically matches a text key
+   but makes a useless description. */
+function builderDerivedDescription(parts) {
+    for (const p of parts.paragraphs) {
+        const text = stripPlaceholders(seoTextExcerpt(p, 170));
+        if (text.length >= 40) return text.length > 155 ? seoTextExcerpt(text, 155) : text;
+    }
+    return '';
+}
+
+/* The page's own words in the raw HTML, for a crawler that arrives before a
+   prerendered snapshot exists. Blog posts and KB articles already had this;
+   every other builder page — the Help Center included — was serving bots a
+   ~30-character shell reading "Loading… Login", which is not indexable
+   content by any measure. Same <noscript> mechanism, same "invisible to
+   anyone with JS, and identical content either way, so not cloaking" rule. */
+function builderNoscript(title, parts) {
+    if (!parts.headings.length && !parts.paragraphs.length) return '';
+    const out = ['<article class="blog-noscript">'];
+    if (title) out.push('<h1>' + seoEsc(title) + '</h1>');
+    parts.headings.slice(0, 30).forEach((h) => {
+        const t = stripPlaceholders(h);
+        if (t) out.push('<h2>' + seoEsc(t) + '</h2>');
+    });
+    parts.paragraphs.slice(0, 40).forEach((p) => {
+        const t = stripPlaceholders(seoTextExcerpt(p, 400));
+        if (t) out.push('<p>' + seoEsc(t) + '</p>');
+    });
+    out.push('</article>');
+    return '<noscript>' + out.join('\n') + '</noscript>';
+}
+
 async function fetchBuilderPageMeta(slug) {
     const hit = builderMetaCache.get(slug);
     if (hit && Date.now() - hit.ts < BUILDER_META_TTL) return hit.val;
@@ -1390,13 +1474,27 @@ async function fetchBuilderPageMeta(slug) {
     try {
         const r = await fetch(
             `${STRAPI_URL}/api/builder-pages?filters[slug][$eq]=${encodeURIComponent(slug)}` +
-            `&fields[0]=title&fields[1]=metaTitle&fields[2]=metaDescription&pagination[pageSize]=1`,
+            `&fields[0]=title&fields[1]=metaTitle&fields[2]=metaDescription&fields[3]=sections&pagination[pageSize]=1`,
             { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
         );
         if (r.ok) {
             const json = await r.json();
             const d = (json.data && json.data[0]) || null;
-            if (d) val = { title: d.metaTitle || d.title || slug, description: d.metaDescription || '' };
+            if (d) {
+                const parts = builderTextParts(d.sections);
+                val = {
+                    title: d.metaTitle || d.title || slug,
+                    /* Explicit metaDescription ONLY. blogSeoFor()/kbSeoFor() read
+                       this field and fall back to their own excerpt before their
+                       body text — folding the derived text in here would
+                       out-rank a blog's hand-written excerpt with generic page
+                       prose. The derived value is a separate field the generic
+                       /:page branch opts into instead. */
+                    description: d.metaDescription || '',
+                    derivedDescription: builderDerivedDescription(parts),
+                    noscriptHtml: builderNoscript(d.metaTitle || d.title || slug, parts),
+                };
+            }
         }
     } catch (_) { /* Strapi down → treat as no builder page */ }
     builderMetaCache.set(slug, { ts: Date.now(), val });
@@ -2074,7 +2172,16 @@ app.get('/:page', async (req, res) => {
 
         const bp = await fetchBuilderPageMeta(slug);
         if (bp) {
-            return sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/${slug}`, bp);
+            /* Fall back to the page's own words when the editor left
+               metaDescription empty, and hand the crawler the <noscript> copy
+               of the page. Composed here rather than inside
+               fetchBuilderPageMeta so blogSeoFor()/kbSeoFor(), which read that
+               function's `description` directly, keep their own excerpt
+               precedence untouched. */
+            const seo = Object.assign({}, bp, {
+                description: bp.description || bp.derivedDescription || '',
+            });
+            return sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/${slug}`, seo);
         }
     }
 
