@@ -788,3 +788,356 @@ body:has(.builder-preview-banner) nav {
     color: var(--muted, #64748b);
     padding: 24px 0;
 }
+
+/* ══════════════════════════════════════════════════════════
+   HELP CENTER (helpCenter + supportChannels components)
+   Built on the site's existing tokens — --blue, --text-dark,
+   --muted, --border, --shadow-card — so it inherits dark mode
+   and the type scale rather than restating a second palette.
+══════════════════════════════════════════════════════════ */
+.hc-hero { padding-bottom: 24px; }
+
+.hc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--blue-light, #ebf2fc);
+    color: var(--blue, #1a56db);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.hc-badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #16a34a;
+}
+
+/* .title is --blue site-wide; the heading takes the darker ink and the accent
+   span stays blue, which is what makes the two-tone headline without inventing
+   a second heading style.
+
+   Scoped as `.hc-hero .hc-title` deliberately: style.css's `.section .title`
+   is specificity 0,2,0, so a bare `.hc-title` (0,1,0) loses to it and BOTH
+   halves of the headline render blue. Matching its specificity and relying on
+   builder-page.css loading after style.css is what makes the accent visible. */
+.hc-hero .hc-title {
+    margin: 18px 0 12px;
+    color: var(--text-dark, #0a1f44);
+}
+
+.hc-hero .hc-accent { color: var(--blue, #1a56db); }
+
+.hc-sub {
+    max-width: 640px;
+    margin: 0 auto 28px;
+}
+
+.hc-search {
+    position: relative;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+.hc-search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted, #64748b);
+    pointer-events: none;
+}
+
+.hc-search-input {
+    width: 100%;
+    padding: 16px 20px 16px 50px;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--text, #1e293b);
+    background: var(--white, #fff);
+    border: 1.5px solid var(--border, #e2e8f0);
+    border-radius: 14px;
+    box-shadow: var(--shadow-card, 0 4px 24px rgba(26, 86, 219, .07));
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.hc-search-input:focus {
+    outline: none;
+    border-color: var(--blue, #1a56db);
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.12);
+}
+
+.hc-popular {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.hc-popular-label {
+    font-size: 0.85rem;
+    color: var(--muted, #64748b);
+}
+
+.hc-chip {
+    padding: 7px 14px;
+    font: inherit;
+    font-size: 0.82rem;
+    color: var(--text-mid, #4a5568);
+    background: var(--white, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+
+.hc-chip:hover {
+    color: var(--blue, #1a56db);
+    border-color: var(--blue, #1a56db);
+    background: var(--blue-hover-bg, #eff6ff);
+}
+
+/* ── Article cards ── */
+.hc-article-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+    text-align: left;
+}
+
+.hc-card {
+    display: flex;
+    gap: 14px;
+    padding: 18px 20px;
+    background: var(--white, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 14px;
+    text-decoration: none;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.hc-card:hover {
+    border-color: rgba(26, 86, 219, 0.35);
+    box-shadow: var(--shadow-card, 0 4px 24px rgba(26, 86, 219, .07));
+    transform: translateY(-2px);
+}
+
+.hc-card-num {
+    flex-shrink: 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted, #94a3b8);
+    padding-top: 2px;
+}
+
+.hc-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.hc-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-dark, #0a1f44);
+    line-height: 1.4;
+}
+
+.hc-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.78rem;
+}
+
+.hc-card-cat {
+    color: var(--blue, #1a56db);
+    font-weight: 600;
+}
+
+.hc-card-read { color: var(--muted, #64748b); }
+
+.hc-note {
+    color: var(--muted, #64748b);
+    padding: 20px 0;
+}
+
+/* ── Topic tiles ── */
+.hc-topic-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+    text-align: left;
+}
+
+.hc-topic {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 22px 20px;
+    font: inherit;
+    text-align: left;
+    background: var(--white, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.hc-topic:hover {
+    border-color: rgba(26, 86, 219, 0.35);
+    box-shadow: var(--shadow-card, 0 4px 24px rgba(26, 86, 219, .07));
+    transform: translateY(-2px);
+}
+
+.hc-topic-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--blue-light, #ebf2fc);
+    color: var(--blue, #1a56db);
+}
+
+.hc-topic-name {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--text-dark, #0a1f44);
+}
+
+.hc-topic-count {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted, #64748b);
+}
+
+/* ── Support channel cards ── */
+.hc-ch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 32px;
+    text-align: left;
+}
+
+.hc-ch {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+    background: var(--white, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card, 0 4px 24px rgba(26, 86, 219, .07));
+}
+
+.hc-ch-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hc-ch-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--blue-light, #ebf2fc);
+    color: var(--blue, #1a56db);
+    flex-shrink: 0;
+}
+
+.hc-ch-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark, #0a1f44);
+    margin: 0;
+}
+
+.hc-ch-status {
+    margin-left: auto;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.hc-ch-desc {
+    color: var(--text-mid, #4a5568);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.hc-ch-meta {
+    color: var(--muted, #64748b);
+    font-size: 0.84rem;
+    margin: 0;
+}
+
+.hc-ch-btn {
+    margin-top: auto;
+    align-self: stretch;
+    text-align: center;
+}
+
+/* ── Dark mode: only the surfaces the shared tokens don't already cover ── */
+[data-theme="dark"] .hc-search-input,
+[data-theme="dark"] .hc-chip,
+[data-theme="dark"] .hc-card,
+[data-theme="dark"] .hc-topic,
+[data-theme="dark"] .hc-ch {
+    background: #16233d;
+    border-color: #24334d;
+}
+
+[data-theme="dark"] .hc-search-input { color: #e8eefc; }
+
+/* .hc-hero .hc-title above is 0,2,0 — match it here or the dark heading keeps
+   the light theme's navy ink and disappears into the dark ground. */
+[data-theme="dark"] .hc-hero .hc-title,
+[data-theme="dark"] .hc-card-title,
+[data-theme="dark"] .hc-topic-name,
+[data-theme="dark"] .hc-ch-name {
+    color: #e8eefc;
+}
+
+[data-theme="dark"] .hc-badge,
+[data-theme="dark"] .hc-topic-icon,
+[data-theme="dark"] .hc-ch-icon {
+    background: rgba(26, 86, 219, 0.18);
+}
+
+[data-theme="dark"] .hc-ch-status {
+    background: rgba(21, 128, 61, 0.22);
+    color: #86efac;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+    .hc-article-grid { grid-template-columns: repeat(2, 1fr); }
+    .hc-topic-grid { grid-template-columns: repeat(2, 1fr); }
+    .hc-ch-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+    .hc-article-grid { grid-template-columns: 1fr; }
+    .hc-topic-grid { grid-template-columns: 1fr; }
+    .hc-search-input { padding: 14px 16px 14px 46px; }
+}

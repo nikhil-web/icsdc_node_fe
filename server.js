@@ -1526,6 +1526,20 @@ app.get('/api/blog-posts', async (req, res) => {
 let kbPagesCache = null;   // { ts, val }
 const KB_PAGES_TTL = 2 * 60 * 1000;
 
+/* Rough reading time for a Knowledge Base article, in whole minutes. 200 wpm is
+   the standard prose estimate; the floor of 1 keeps a two-line article reading
+   "1 min" rather than "0 min". Deliberately approximate — it is a reading cue,
+   not a measurement. */
+function readingMinutes(html) {
+    const words = String(html || '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/&nbsp;/gi, ' ')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean).length;
+    return Math.max(1, Math.round(words / 200));
+}
+
 async function fetchKbPages() {
     if (kbPagesCache && Date.now() - kbPagesCache.ts < KB_PAGES_TTL) return kbPagesCache.val;
     let pages = [];
@@ -1579,6 +1593,11 @@ async function fetchKbPages() {
                         category: p.category || '',
                         lastUpdated: p.lastUpdated || '',
                         sortDate: d.publishedAt || d.updatedAt || null,
+                        /* Reading time has to be computed HERE, before
+                           kbListingShape() strips bodyHtml — the Help Center
+                           shows it per article and the browser never receives
+                           the body to work it out for itself. */
+                        readMinutes: readingMinutes(bodyHtml),
                         // Server-side only — stripped by kbListingShape() below,
                         // same reasoning as fetchBlogPosts()'s bodyHtml.
                         bodyHtml,

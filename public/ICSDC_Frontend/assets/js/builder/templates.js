@@ -70,39 +70,23 @@ export const BUILDER_TEMPLATES = [
     {
         id: 'help-center',
         label: 'Help Center',
-        description: 'Support landing page: hero with a direct link to chat/contact, a live grid of Knowledge Base articles, and an FAQ.',
+        description: 'Support landing page: searchable Knowledge Base hero, article list, topic tiles, FAQ and contact channels.',
         icon: 'fa-life-ring',
         sections: [
-            {
-                type: 'hero',
-                props: {
-                    eyebrow: 'Help Center',
-                    title: 'How can we help?',
-                    subtitle: 'Search our Knowledge Base, browse FAQs, or talk to our team.',
-                    description: 'Find guides and answers below, or reach out directly — our team is here to help.',
-                    // No hero image: a support landing page reads better as a plain,
-                    // fast-loading header than a product illustration.
-                    imageUrl: '',
-                    imageAlt: '',
-                    imageSide: 'left',
-                    // 'contact-popup' opens the SAME contact modal every CTA on the
-                    // site already uses (wired globally in main.js) — this is the
-                    // "reuse the existing chat/support functionality" requirement,
-                    // not a new integration.
-                    ctaPrimary: { text: 'Contact Support', link: 'contact-popup' },
-                    ctaSecondary: { text: '', link: '' },
-                },
-            },
-            // No props override: kbIndexGrid's own defaults ("Knowledge Base" /
-            // a short subtitle / "coming soon" empty state) are a reasonable
-            // starting point, and it needs none of blogBody's props-omission
-            // trap above — it isn't rendering CMS-authored content that could
-            // silently disappear, it fetches its own data at render time.
-            { type: 'kbIndexGrid' },
+            /* helpCenter owns the hero, the search box, the article list and the
+               topic tiles as one section — the search has to filter all of them,
+               and splitting it up would mean cross-section wiring the canvas
+               re-render keeps tearing down. Its defaults are the finished copy,
+               so no props override here. */
+            { type: 'helpCenter' },
+            /* The existing FAQ component, reused untouched. helpCenter's search
+               filters it by reading its rendered .faq-item DOM, so questions
+               narrow with the articles from the one search box. */
             { type: 'faq' },
+            { type: 'supportChannels' },
             // Every other multi-section template (blog-post, landing, service)
             // closes on a ctaBand — matching that here rather than leaving Help
-            // Center the one page that ends on an accordion.
+            // Center the one page that ends on a card row.
             {
                 type: 'ctaBand',
                 props: {

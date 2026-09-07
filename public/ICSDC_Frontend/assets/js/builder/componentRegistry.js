@@ -2180,11 +2180,346 @@ const kbIndexGrid = {
     },
 };
 
+/* ════ HELP CENTER — hero + search + articles + topics ════════
+   One composite component rather than four separate ones, for a specific
+   reason: the search box has to filter the article cards AND the topic tiles
+   AND the FAQ, and wiring that across independently-rendered builder sections
+   would mean cross-section messaging the canvas re-render keeps tearing down.
+   Owning the parts it filters keeps the search self-contained.
+
+   FAQ is the exception — it stays the existing `faq` component, reused
+   untouched on the same page, and this filters it by reading the DOM its
+   shared initFAQ() helper produces (.faq-item). That is deliberately
+   one-directional and defensive: no FAQ on the page, no-op. The alternative
+   was editing `faq` itself — used across the whole site — to serve one page.
+
+   Everything visual comes from the site's own tokens and section conventions
+   (.section/.container/.title/.subtitle, --blue, --text-dark, --shadow-card),
+   so it inherits the real nav, footer, dark mode and type scale rather than
+   restating a second design language beside them. */
+const HC_CATEGORY_ICONS = {
+    'hosting': 'fa-server', 'hosting & servers': 'fa-server', 'servers': 'fa-server',
+    'domains': 'fa-globe', 'domains & dns': 'fa-globe', 'dns': 'fa-globe',
+    'cloud': 'fa-cloud', 'cloud & vps': 'fa-cloud', 'vps': 'fa-cloud',
+    'security': 'fa-shield-halved', 'security & ssl': 'fa-shield-halved', 'ssl': 'fa-shield-halved',
+    'email': 'fa-envelope', 'email services': 'fa-envelope',
+    'billing': 'fa-credit-card', 'billing & invoices': 'fa-credit-card', 'invoices': 'fa-credit-card',
+    'developer': 'fa-code', 'developer & api': 'fa-code', 'api': 'fa-code',
+    'getting started': 'fa-rocket', 'account': 'fa-user', 'backup': 'fa-database',
+};
+function hcIcon(cat) {
+    return HC_CATEGORY_ICONS[String(cat || '').toLowerCase().trim()] || 'fa-book';
+}
+
+// Split a newline/comma list into trimmed entries (the popular-search chips).
+function hcList(raw) {
+    return String(raw || '').split(/[\n,]/).map((s) => s.trim()).filter(Boolean);
+}
+
+const helpCenter = {
+    label: 'Help Center',
+    icon: 'question',
+    description: 'Support landing: hero with live search over Knowledge Base articles, popular chips, article list and topic tiles. Reads articles from the API — nothing is hand-listed.',
+    schema: [
+        { key: 'badge', label: 'Badge text (above the heading)', type: 'text' },
+        { key: 'title', label: 'Heading', type: 'text', required: true },
+        { key: 'accentWord', label: 'Word in the heading to colour blue', type: 'text' },
+        { key: 'subtitle', label: 'Sub-heading ({count} = article count, {s} = plural "s")', type: 'textarea' },
+        { key: 'searchPlaceholder', label: 'Search box placeholder', type: 'text' },
+        { key: 'popularLabel', label: 'Popular-searches label', type: 'text' },
+        { key: 'popular', label: 'Popular searches (one per line)', type: 'textarea' },
+        { key: 'articlesTitle', label: 'Articles section title', type: 'text' },
+        { key: 'articlesSubtitle', label: 'Articles section subtitle', type: 'text' },
+        { key: 'topicsTitle', label: 'Topics section title', type: 'text' },
+        { key: 'topicsSubtitle', label: 'Topics subtitle ({count} = topic count, {s} = plural "s")', type: 'text' },
+        { key: 'emptyText', label: 'Text when no articles are published yet', type: 'text' },
+        { key: 'noResultsText', label: 'Text when a search matches nothing', type: 'text' },
+    ],
+    defaultProps: {
+        badge: 'Support',
+        title: 'How can we help you today?',
+        accentWord: 'help',
+        /* {count} rather than a baked-in number: the blueprint's "Search 180+
+           guides" is a claim the site can't back, and would rot the day an
+           article is added or removed. */
+        subtitle: 'Search {count} guide{s} on hosting, domains, cloud and billing — or reach a specialist directly.',
+        searchPlaceholder: 'Search articles, e.g. “transfer a domain”',
+        popularLabel: 'Popular:',
+        popular: 'DNS records\nSSL certificate\nInvoice\nMigrate site\nReset password',
+        /* Not the blueprint's "Most read this week": there is no analytics
+           behind this list, it is newest-first. Naming it after data we do not
+           have would put a lie on the page. Rename it in the builder if real
+           popularity data ever exists. */
+        articlesTitle: 'Latest guides',
+        articlesSubtitle: 'Written and kept current by the team that runs the platform.',
+        topicsTitle: 'Browse by topic',
+        topicsSubtitle: '{count} collection{s}, drawn from the articles themselves.',
+        emptyText: 'Articles are coming soon — check back shortly.',
+        noResultsText: 'No articles match that search. Try a different term, or ask the team below.',
+    },
+    renderer(container, p) {
+        const accent = String(p.accentWord || '').trim();
+        const titleRaw = String(p.title || '');
+        // Wrap the first whole-word occurrence only, and only if it is really
+        // in the heading — a mistyped accent word just renders plain.
+        let titleHtml = esc(titleRaw);
+        if (accent) {
+            const re = new RegExp('(^|\\s)(' + accent.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(\\s|$)', 'i');
+            titleHtml = esc(titleRaw).replace(re, (m, a, w, b) => a + '<span class="hc-accent">' + w + '</span>' + b);
+        }
+
+        const chips = hcList(p.popular)
+            .map((t) => '<button type="button" class="hc-chip" data-hc-chip>' + esc(t) + '</button>')
+            .join('');
+
+        container.innerHTML =
+            '<section class="section hc-hero"><div class="container">' +
+                (p.badge ? '<span class="hc-badge"><span class="hc-badge-dot"></span>' + esc(p.badge) + '</span>' : '') +
+                '<h1 class="title hc-title">' + titleHtml + '</h1>' +
+                (p.subtitle ? '<p class="subtitle hc-sub" data-hc-sub>' + esc(p.subtitle) + '</p>' : '') +
+                '<div class="hc-search">' +
+                    '<i class="fa-solid fa-magnifying-glass hc-search-icon" aria-hidden="true"></i>' +
+                    '<input type="search" class="hc-search-input" data-hc-input' +
+                        ' placeholder="' + esc(p.searchPlaceholder || 'Search articles') + '"' +
+                        ' aria-label="Search help articles">' +
+                '</div>' +
+                (chips
+                    ? '<div class="hc-popular">' +
+                          (p.popularLabel ? '<span class="hc-popular-label">' + esc(p.popularLabel) + '</span>' : '') +
+                          chips + '</div>'
+                    : '') +
+            '</div></section>' +
+
+            '<section class="section hc-articles"><div class="container">' +
+                (p.articlesTitle ? '<h2 class="title">' + esc(p.articlesTitle) + '</h2>' : '') +
+                (p.articlesSubtitle ? '<p class="subtitle">' + esc(p.articlesSubtitle) + '</p>' : '') +
+                '<div class="hc-article-grid" data-hc-articles>' +
+                    '<p class="hc-note" data-hc-empty>' + esc(p.emptyText || '') + '</p>' +
+                '</div>' +
+                '<p class="hc-note" data-hc-noresults hidden>' + esc(p.noResultsText || '') + '</p>' +
+            '</div></section>' +
+
+            '<section class="section hc-topics" data-hc-topics-section hidden><div class="container">' +
+                (p.topicsTitle ? '<h2 class="title">' + esc(p.topicsTitle) + '</h2>' : '') +
+                (p.topicsSubtitle ? '<p class="subtitle" data-hc-topics-sub>' + esc(p.topicsSubtitle) + '</p>' : '') +
+                '<div class="hc-topic-grid" data-hc-topics></div>' +
+            '</div></section>';
+
+        hcLoad(container, p);
+    },
+};
+
+/* Fetch once, render articles + topics, then wire the search. The static shell
+   is already on screen, so a slow or dead API leaves readable copy rather than
+   a blank band — the same rule fillBlogHelp() follows above. */
+function hcLoad(container, p) {
+    cmsGet('/api/kb-pages').then((json) => {
+        const pages = (json && json.pages) || [];
+        hcRenderArticles(container, pages);
+        hcRenderTopics(container, pages);
+        hcFillCounts(container, p, pages);
+        hcWireSearch(container);
+    }).catch(() => {
+        // Keep the empty-state copy, but still wire search so the FAQ below
+        // stays filterable even when the article API is unreachable.
+        hcWireSearch(container);
+    });
+}
+
+function hcRenderArticles(container, pages) {
+    const grid = container.querySelector('[data-hc-articles]');
+    if (!grid || !pages.length) return;      // no articles → keep the empty-state copy
+    grid.innerHTML = pages.map((kb, i) => {
+        const num = String(i + 1).padStart(2, '0');
+        const meta = [
+            kb.category ? '<span class="hc-card-cat">' + esc(kb.category) + '</span>' : '',
+            kb.readMinutes ? '<span class="hc-card-read">' + esc(kb.readMinutes) + ' min read</span>' : '',
+        ].filter(Boolean).join('');
+        const haystack = ((kb.title || '') + ' ' + (kb.excerpt || '') + ' ' + (kb.category || '')).toLowerCase();
+        return '<a class="hc-card" href="/knowledge-base/' + esc(kb.slug) + '"' +
+            ' data-hc-card data-hc-text="' + esc(haystack) + '">' +
+            '<span class="hc-card-num">' + num + '</span>' +
+            '<span class="hc-card-body">' +
+                '<span class="hc-card-title">' + esc(kb.title) + '</span>' +
+                (meta ? '<span class="hc-card-meta">' + meta + '</span>' : '') +
+            '</span></a>';
+    }).join('');
+}
+
+/* Topic tiles are derived from the articles' own categories, never a hand-kept
+   list — a count cannot disagree with what is actually published, and a new
+   category appears the moment an article uses it. */
+function hcRenderTopics(container, pages) {
+    const grid = container.querySelector('[data-hc-topics]');
+    const section = container.querySelector('[data-hc-topics-section]');
+    if (!grid || !section) return;
+
+    const counts = new Map();
+    pages.forEach((kb) => {
+        const cat = (kb.category || '').trim();
+        if (!cat) return;                     // uncategorised articles get no tile
+        counts.set(cat, (counts.get(cat) || 0) + 1);
+    });
+    if (!counts.size) return;                 // section stays hidden
+
+    grid.innerHTML = [...counts.entries()]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .map(([cat, n]) =>
+            '<button type="button" class="hc-topic" data-hc-topic="' + esc(cat.toLowerCase()) + '">' +
+            '<span class="hc-topic-icon"><i class="fa-solid ' + hcIcon(cat) + '" aria-hidden="true"></i></span>' +
+            '<span class="hc-topic-name">' + esc(cat) + '</span>' +
+            '<span class="hc-topic-count">' + n + (n === 1 ? ' article' : ' articles') + '</span>' +
+            '</button>').join('');
+    section.hidden = false;
+    section.dataset.hcTopicCount = String(counts.size);
+}
+
+/* Swap {count} for the real number, and {s} for the plural suffix — without
+   the latter a single published article renders "Search 1 guides", which is
+   exactly the kind of wrong-looking copy a placeholder is supposed to avoid.
+   {s} is simple enough to be obvious in the editor and covers regular English
+   plurals, which is all this copy uses. */
+function hcCount(text, n) {
+    return String(text || '')
+        .replace(/\{count\}/g, String(n))
+        .replace(/\{s\}/g, n === 1 ? '' : 's');
+}
+
+function hcFillCounts(container, p, pages) {
+    const sub = container.querySelector('[data-hc-sub]');
+    if (sub && /\{count\}|\{s\}/.test(p.subtitle || '')) {
+        sub.textContent = hcCount(p.subtitle, pages.length);
+    }
+    const tsub = container.querySelector('[data-hc-topics-sub]');
+    const section = container.querySelector('[data-hc-topics-section]');
+    if (tsub && section && /\{count\}|\{s\}/.test(p.topicsSubtitle || '')) {
+        tsub.textContent = hcCount(p.topicsSubtitle, Number(section.dataset.hcTopicCount || 0));
+    }
+}
+
+/* One search box, three targets: the article cards, the topic tiles, and the
+   FAQ accordion rendered by the separate `faq` component elsewhere on the page.
+   The FAQ half reads that component's rendered DOM rather than its props — it
+   is a different section with its own lifecycle, so querying the result keeps
+   this working whichever order the two happen to render in. */
+function hcWireSearch(container) {
+    const input = container.querySelector('[data-hc-input]');
+    if (!input) return;
+
+    const apply = (raw) => {
+        const q = String(raw || '').trim().toLowerCase();
+        const cards = [...container.querySelectorAll('[data-hc-card]')];
+        let shown = 0;
+        cards.forEach((c) => {
+            const hit = !q || (c.dataset.hcText || '').includes(q);
+            c.hidden = !hit;
+            if (hit) shown++;
+        });
+
+        // Tiles filter on their own name, so searching "billing" narrows the
+        // row rather than leaving tiles that contradict the results below.
+        container.querySelectorAll('[data-hc-topic]').forEach((t) => {
+            t.hidden = !!q && !(t.dataset.hcTopic || '').includes(q);
+        });
+
+        const empty = container.querySelector('[data-hc-empty]');
+        const none = container.querySelector('[data-hc-noresults]');
+        if (none) none.hidden = !(q && cards.length && shown === 0);
+        // "Coming soon" belongs to the no-articles-at-all case only — hide it
+        // once cards exist so it can never read as a search result.
+        if (empty && cards.length) empty.hidden = true;
+
+        // FAQ: hide non-matching questions. Guarded, so a page without the faq
+        // component simply does nothing here.
+        document.querySelectorAll('.faq-item').forEach((item) => {
+            const text = (item.textContent || '').toLowerCase();
+            item.hidden = !!q && !text.includes(q);
+        });
+    };
+
+    input.addEventListener('input', () => apply(input.value));
+    container.querySelectorAll('[data-hc-chip]').forEach((chip) => {
+        chip.addEventListener('click', () => {
+            input.value = chip.textContent || '';
+            apply(input.value);
+            input.focus();
+        });
+    });
+    container.querySelectorAll('[data-hc-topic]').forEach((tile) => {
+        tile.addEventListener('click', () => {
+            const name = tile.querySelector('.hc-topic-name');
+            input.value = name ? name.textContent : '';
+            apply(input.value);
+            const grid = container.querySelector('[data-hc-articles]');
+            if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+}
+
+/* ════ SUPPORT CHANNELS — "still need a person?" cards ════════
+   The contact half of the blueprint. Each button goes through ctaButtonHtml()
+   with the 'contact-popup' href convention main.js already wires globally, so
+   "Start a chat" opens the SAME contact modal every other CTA on the site
+   opens rather than introducing a second, parallel support path. */
+const supportChannels = {
+    label: 'Support Channels',
+    icon: 'question',
+    description: 'Row of contact channel cards (chat, email, phone) with availability and a CTA each.',
+    schema: [
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'channels', label: 'Channels', type: 'repeater',
+            itemSchema: [
+                { key: 'icon', label: 'Icon (fa-* name)', type: 'text' },
+                { key: 'name', label: 'Channel Name', type: 'text' },
+                { key: 'status', label: 'Status pill (e.g. Online)', type: 'text' },
+                { key: 'desc', label: 'Description', type: 'textarea' },
+                { key: 'metaA', label: 'Detail line 1', type: 'text' },
+                { key: 'metaB', label: 'Detail line 2', type: 'text' },
+                { key: 'btnLabel', label: 'Button Label', type: 'text' },
+                { key: 'btnUrl', label: 'Button URL', type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        title: 'Still need a person?',
+        subtitle: 'Our support team is in-house. Pick the channel that suits the problem.',
+        channels: [
+            { icon: 'fa-comments', name: 'Live chat', status: 'Online', desc: 'Best for urgent issues — outages, locked accounts, deployment failures.', metaA: 'Typical wait under 2 minutes', metaB: 'Available 24/7', btnLabel: 'Start a chat', btnUrl: 'contact-popup' },
+            { icon: 'fa-envelope', name: 'Email a ticket', status: 'Open', desc: 'Best for detailed cases where logs, screenshots or invoices help.', metaA: 'First reply within 4 hours', metaB: 'support@icsdc.com', btnLabel: 'Open a ticket', btnUrl: 'contact-popup' },
+            { icon: 'fa-phone', name: 'Phone', status: 'Mon–Sat', desc: 'Best for account verification, migrations and enterprise onboarding.', metaA: '09:00–18:00 (GMT+3)', metaB: '', btnLabel: 'Request a callback', btnUrl: 'contact-popup' },
+        ],
+    },
+    renderer(container, p) {
+        const cards = (p.channels || []).map((c) =>
+            '<div class="hc-ch">' +
+            '<div class="hc-ch-head">' +
+                '<span class="hc-ch-icon"><i class="fa-solid ' + esc(c.icon || 'fa-circle-question') + '" aria-hidden="true"></i></span>' +
+                '<h3 class="hc-ch-name">' + esc(c.name || '') + '</h3>' +
+                (c.status ? '<span class="hc-ch-status">' + esc(c.status) + '</span>' : '') +
+            '</div>' +
+            (c.desc ? '<p class="hc-ch-desc">' + inlineRichText(c.desc) + '</p>' : '') +
+            (c.metaA ? '<p class="hc-ch-meta">' + inlineRichText(c.metaA) + '</p>' : '') +
+            (c.metaB ? '<p class="hc-ch-meta">' + inlineRichText(c.metaB) + '</p>' : '') +
+            ctaButtonHtml({ text: c.btnLabel, link: c.btnUrl }, 'btn-primary hc-ch-btn') +
+            '</div>').join('');
+        container.innerHTML =
+            '<section class="section hc-channels"><div class="container">' +
+            (p.title ? '<h2 class="title">' + esc(p.title) + '</h2>' : '') +
+            (p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '') +
+            '<div class="hc-ch-grid">' + cards + '</div>' +
+            '</div></section>';
+    },
+};
+
 /* ════ EXPORT ════════════════════════════════════════════════ */
 export const COMPONENT_REGISTRY = {
     hero,
     blogHeader,
     kbHeader,
+    helpCenter,
+    supportChannels,
     kbIndexGrid,
     blogBody,
     pillars,
@@ -2225,6 +2560,8 @@ export const COMPONENT_ORDER = [
     'blogBody',
     'kbHeader',
     'kbIndexGrid',
+    'helpCenter',
+    'supportChannels',
     'pillars',
     'iconCards',
     'imageText',
@@ -2271,5 +2608,6 @@ export const COMPONENT_CATEGORIES = [
     // Knowledge Base article body uses (see kbHeader's comment above) — this
     // is a second entry in the palette's grouping, not a second component.
     { label: 'Knowledge Base', types: ['kbHeader', 'blogBody', 'kbIndexGrid'] },
+    { label: 'Help Center', types: ['helpCenter', 'supportChannels', 'faq'] },
     { label: 'Media & Layout', types: ['mapEmbed', 'videoEmbed', 'spacer'] },
 ];
