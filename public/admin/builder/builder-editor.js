@@ -34,12 +34,21 @@ const state = {
     dirty: false,
 };
 
-// Blog posts (built from the blog-post template) serve at /blogs/<slug>, not
-// top-level /<slug> — same "has a blogHeader section" check server.js's
-// isBlogSlug() uses, so the URL shown here can't drift from what's really live.
+// Blog posts (built from the blog-post template) serve at /blogs/<slug>, and
+// Knowledge Base articles at /knowledge-base/<slug> — not top-level /<slug>.
+// Same "has a blogHeader/kbHeader section" check server.js's isBlogSlug()/
+// isKbSlug() use, so the URL shown here can't drift from what's really live.
+// Shared by livePathFor() and onPublish() below — those two computed this
+// identically but separately before Knowledge Base added a third case.
+function pathPrefixForSections(sections) {
+    const types = new Set((sections || []).map((s) => s.type));
+    if (types.has('blogHeader')) return '/blogs/';
+    if (types.has('kbHeader')) return '/knowledge-base/';
+    return '/';
+}
+
 function livePathFor(page) {
-    const isBlogPost = (page.sections || []).some((s) => s.type === 'blogHeader');
-    return (isBlogPost ? '/blogs/' : '/') + page.slug;
+    return pathPrefixForSections(page.sections) + page.slug;
 }
 
 function esc(s) {
@@ -237,10 +246,15 @@ function onNewPageClick() {
     const createBtn = document.getElementById('bld-np-create');
     let slugTouched = false;
 
+    // Keyed by template id, not sections — the page doesn't exist yet during
+    // creation, so there is nothing to sniff. Mirrors pathPrefixForSections()'s
+    // outcome for a page just created from each template (blog-post always
+    // seeds a blogHeader, kb-article always seeds a kbHeader — see templates.js).
+    const TEMPLATE_PATH_PREFIX = { 'blog-post': '/blogs/', 'kb-article': '/knowledge-base/' };
     function syncUrl() {
         const s = slugify(slugEl.value || titleEl.value);
         const tplId = (wrap.querySelector('.bld-tpl input:checked') || {}).value || 'blank';
-        const prefix = tplId === 'blog-post' ? '/blogs/' : '/';
+        const prefix = TEMPLATE_PATH_PREFIX[tplId] || '/';
         urlEl.textContent = 'icsdc.com' + prefix + (s || '…');
     }
     titleEl.addEventListener('input', () => {
@@ -332,7 +346,7 @@ function onSeoClick() {
         '</div>' +
         '<div class="bld-modal-body">' +
             '<p class="bld-np-preview">Shown in search results and social shares. Leave a field ' +
-            'blank to fall back to the page title' + (isCurrentPageBlogPost() ?
+            'blank to fall back to the page title' + (pageHasContentFallback() ?
                 ' / excerpt / article text' : '') + ' automatically — this page is not required to set either.</p>' +
             '<label class="bld-field">' +
                 '<span class="bld-field-label">Meta title</span>' +
@@ -387,10 +401,15 @@ function onSeoClick() {
     titleEl.focus();
 }
 
-// Same detection server.js/isBlogPost use elsewhere in this file (sniffing
-// sections for a blogHeader) — only affects the modal's helper copy.
-function isCurrentPageBlogPost() {
-    return (state.page.sections || []).some((s) => s.type === 'blogHeader');
+// True for a blog post OR a Knowledge Base article — the two page kinds whose
+// server-side SEO (blogSeoFor / kbSeoFor) falls all the way through to text
+// pulled from the article body when both fields are left blank here. A plain
+// builder page's fallback stops at its own title (fetchBuilderPageMeta), so
+// only these two get the extra "/ excerpt / article text" wording in the
+// modal's hint above.
+function pageHasContentFallback() {
+    const types = new Set((state.page.sections || []).map((s) => s.type));
+    return types.has('blogHeader') || types.has('kbHeader');
 }
 
 /* ══════ EDITOR VIEW ═════════════════════════════════════ */
@@ -861,12 +880,7 @@ async function onPublish() {
 /* Post-publish confirmation: live URL + one-click crawler-snapshot rebuild
    (crawlers get the prerendered snapshot; it must be regenerated after publish). */
 function showPublishSuccess() {
-    // Blog posts (a page built from the blog-post template) serve at
-    // /blogs/<slug>, not top-level /<slug> — same "has a blogHeader section"
-    // check server.js's isBlogSlug() uses, so this can't drift out of sync
-    // with what the server actually serves at.
-    const isBlogPost = (state.page.sections || []).some((s) => s.type === 'blogHeader');
-    const path = (isBlogPost ? '/blogs/' : '/') + state.page.slug;
+    const path = pathPrefixForSections(state.page.sections) + state.page.slug;
     const existing = document.getElementById('bld-publish-toast');
     if (existing) existing.remove();
     const toast = document.createElement('div');

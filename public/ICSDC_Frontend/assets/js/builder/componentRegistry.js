@@ -2074,10 +2074,61 @@ function buildBlogToc(container) {
     }
 }
 
+/* ════ KB HEADER — Knowledge Base article hero ════════════════
+   Deliberately NOT blogHeader with an if-branch: blogHeader's fields (cover
+   image, author byline, read time) are specific to a blog post and would
+   just sit empty on a documentation article. This mirrors /legal/*.html's
+   own hero instead — eyebrow, title, "Last updated" line, nothing else —
+   using the SAME .legal-* classes (legal.css is loaded on every builder page
+   for exactly this) so a KB article's header is pixel-consistent with Legal
+   Pages, which is what "visually similar to Legal Pages" means most where a
+   reader first lands.
+
+   The body below it reuses blogBody as-is (see the template in templates.js)
+   rather than a forked component: its rich-text + auto-generated TOC engine
+   already does the documentation-page job, and forking it into a second
+   near-identical component to also reskin its `.blogb-*` classes as `.legal-*`
+   would be the exact duplication this feature is supposed to avoid. The
+   trade-off is disclosed, not accidental: the body area keeps blogBody's own
+   card-based visual style rather than pixel-matching `.legal-content`'s plain
+   prose column. */
+const kbHeader = {
+    label: 'Knowledge Base Header',
+    icon: 'info',
+    description: 'Article header for a Knowledge Base page: category, title and a "Last updated" line — styled like the Legal Pages hero.',
+    schema: [
+        { key: 'category', label: 'Category (eyebrow label)', type: 'text' },
+        { key: 'title', label: 'Article Title', type: 'text', required: true },
+        { key: 'lastUpdated', label: 'Last Updated (free text, e.g. "5 September 2026")', type: 'text' },
+        {
+            key: 'excerpt', label: 'Excerpt (SEO description fallback — not shown on the page)',
+            type: 'textarea',
+        },
+    ],
+    defaultProps: {
+        category: 'Knowledge Base',
+        title: 'Getting Started with ICSDC',
+        lastUpdated: '',
+        excerpt: '',
+    },
+    renderer(container, p) {
+        container.innerHTML =
+            '<section class="legal-hero">' +
+            '<div class="legal-hero-inner">' +
+            '<div class="legal-eyebrow"><i class="fa-solid fa-book" aria-hidden="true"></i> ' +
+                esc(p.category || 'Knowledge Base') + '</div>' +
+            '<h1 class="legal-title">' + esc(p.title || '') + '</h1>' +
+            (p.lastUpdated ? '<p class="legal-meta">Last updated: ' + esc(p.lastUpdated) + '</p>' : '') +
+            '</div>' +
+            '</section>';
+    },
+};
+
 /* ════ EXPORT ════════════════════════════════════════════════ */
 export const COMPONENT_REGISTRY = {
     hero,
     blogHeader,
+    kbHeader,
     blogBody,
     pillars,
     iconCards,
@@ -2115,6 +2166,7 @@ export const COMPONENT_ORDER = [
     'hero',
     'blogHeader',
     'blogBody',
+    'kbHeader',
     'pillars',
     'iconCards',
     'imageText',
@@ -2157,5 +2209,9 @@ export const COMPONENT_CATEGORIES = [
     { label: 'Social Proof', types: ['testimonials', 'logoCloud'] },
     { label: 'Conversion', types: ['ctaBand', 'pricing', 'contactForm', 'contactInfo', 'faq'] },
     { label: 'Blog', types: ['blogHeader', 'blogBody'] },
+    // blogBody listed here too, deliberately: it's the same content engine a
+    // Knowledge Base article body uses (see kbHeader's comment above) — this
+    // is a second entry in the palette's grouping, not a second component.
+    { label: 'Knowledge Base', types: ['kbHeader', 'blogBody'] },
     { label: 'Media & Layout', types: ['mapEmbed', 'videoEmbed', 'spacer'] },
 ];
