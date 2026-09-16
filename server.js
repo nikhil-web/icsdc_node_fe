@@ -488,8 +488,13 @@ app.post('/api/admin/builder/pages/:documentId/publish', requireAdminAuth, async
    field is being moved to. This list only protects whatever slug is actually
    stored there, so until that field is changed in Strapi the page still lives
    at /help-center and is, in the meantime, no longer protected under that old
-   slug — move the Strapi slug promptly to close that window. */
-const PROTECTED_BUILDER_SLUGS = ['knowledgebase'];
+   slug — move the Strapi slug promptly to close that window.
+
+   Named rather than inlined so the bare-/knowledge-base redirect below can
+   reference the exact same value — the two would silently disagree the next
+   time this slug changes if each spelled it out separately. */
+const HELP_CENTER_SLUG = 'knowledgebase';
+const PROTECTED_BUILDER_SLUGS = [HELP_CENTER_SLUG];
 
 function isProtectedBuilderSlug(slug) {
     return PROTECTED_BUILDER_SLUGS.includes(String(slug || '').toLowerCase());
@@ -2181,16 +2186,21 @@ app.get('/blogs/:slug', async (req, res) => {
     sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/blogs/${slug}`, bp);
 });
 
+// Bare /knowledge-base — the browse/search entry point a visitor naturally
+// expects at the prefix's own root, one level up from any individual article.
+// That's the Help Center page (HELP_CENTER_SLUG): redirected rather than
+// rendered a second time at this URL, so there is exactly one canonical
+// address for it — the same "one real location, everything else forwards to
+// it" rule already used for the legacy top-level blog/KB redirects in
+// /:page below. A GET here never collides with /knowledge-base/:slug right
+// below: Express's :slug requires at least one character after the second
+// slash, which a bare "/knowledge-base" request simply doesn't have.
+app.get('/knowledge-base', (req, res) => res.redirect(301, `/${HELP_CENTER_SLUG}`));
+
 // Knowledge Base articles — /knowledge-base/<slug>. Same shape as /blogs/:slug
-// immediately above (registered before the generic /:page catch-all, same
-// registry gate, same "isn't actually one of these → 404 here rather than
-// falling through" rule so a builder page keeps exactly one canonical URL).
-//
-// There is no bare `/knowledge-base` index route yet — that is the Help Center
-// page's job (a later, separate feature), so a Knowledge Base article is only
-// reachable today by its direct URL or via sitemap.xml. That mirrors exactly
-// how blog posts were discoverable before /blogs got its own <noscript> link
-// list: not a bug, a disclosed gap that closes when the index page exists.
+// above (registered before the generic /:page catch-all, same registry gate,
+// same "isn't actually one of these → 404 here rather than falling through"
+// rule so a builder page keeps exactly one canonical URL).
 app.get('/knowledge-base/:slug', async (req, res) => {
     const slug = req.params.slug;
     if (!(await isKbSlug(slug))) {
