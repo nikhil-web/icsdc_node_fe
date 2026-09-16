@@ -197,16 +197,7 @@ async function fetchPage(slug, previewToken) {
     let slug;
     const previewToken = params.get('token');
 
-    /* The server resolved this page already and, when the slug it used wasn't
-       simply the URL path, passed it down here. Trusting that beats re-deriving
-       it: the two only ever disagree when a page is deliberately served at a
-       path that differs from its Strapi slug, and in exactly that case guessing
-       from the URL is what produces a "Page unavailable" on a live URL. Absent
-       (every ordinary page), fall through to the path rules below unchanged. */
-    const serverSlug = document.querySelector('meta[name="builder-slug"]')?.content?.trim();
-    if (serverSlug) {
-        slug = serverSlug;
-    } else if (parts[0] === 'builder' && parts[1] === 'preview' && parts[2]) {
+    if (parts[0] === 'builder' && parts[1] === 'preview' && parts[2]) {
         slug = parts[2];
     } else if (parts[0] === 'builder' && parts[1]) {
         slug = parts[1];
