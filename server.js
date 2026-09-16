@@ -59,6 +59,34 @@ const STRAPI_TOKEN = process.env.STRAPI_TOKEN || '';
 // falls back to STRAPI_URL for pure-local dev where they're the same host.
 const STRAPI_PUBLIC_URL = process.env.STRAPI_PUBLIC_URL || STRAPI_URL;
 
+/* Per-request fallback for the line above. STRAPI_PUBLIC_URL fixed the media
+   picker/property-panel image URLs for anyone who set the env var (see
+   a596f11 "Fix builder media URLs leaking the server's internal Strapi
+   origin") — but that fix still DEPENDED on an operator remembering to set
+   STRAPI_PUBLIC_URL in production's .env, and evidently nobody has: the
+   picker on the live site is still building <img src="http://localhost:1337/...">,
+   which resolves to the visiting ADMIN's own machine, not the server, so
+   every thumbnail 404s there while working fine for whoever tested it
+   locally (where localhost:1337 genuinely is reachable).
+
+   This mirrors config.js's own hostname -> Strapi-host table — the one the
+   PUBLIC site already trusts to pick the right Strapi origin per domain —
+   using the incoming request's Host header as the equivalent of
+   window.location.hostname server-side. An explicit STRAPI_PUBLIC_URL env
+   var always wins over this guess: an operator who set it deliberately knows
+   their deployment better than a hostname table can. Anything not in the
+   table (localhost, an internal IP, a host we don't recognise) falls through
+   to STRAPI_PUBLIC_URL exactly as before this function existed — zero change
+   for local dev or any environment that already works today. */
+function strapiPublicUrlForRequest(req) {
+    if (process.env.STRAPI_PUBLIC_URL) return STRAPI_PUBLIC_URL;
+    const host = String((req && req.hostname) || '').toLowerCase();
+    if (host === 'icsdc.com' || host === 'www.icsdc.com' || host === 'dev.icsdc.com') {
+        return 'https://admin.icsdc.com';
+    }
+    return STRAPI_PUBLIC_URL;
+}
+
 // ── Crawler prerendering (dynamic rendering) ──────────────
 // Fully-rendered static snapshots (built by prerender.js) live in /prerendered and
 // are served to known crawlers so non-JS bots get real content. Humans get the SPA.
@@ -453,8 +481,20 @@ app.post('/api/admin/builder/pages/:documentId/publish', requireAdminAuth, async
 
    Enforced server-side because that is the only place it can actually be
    enforced — the admin UI hides the delete button too (see builder-editor.js),
-   but that is a courtesy, not the guarantee. */
-const PROTECTED_BUILDER_SLUGS = ['help-center'];
+   but that is a courtesy, not the guarantee.
+
+   'knowledgebase' (one word — distinct from the hyphenated /knowledge-base/
+   article prefix, which stays as-is) is where the Strapi page's own `slug`
+   field is being moved to. This list only protects whatever slug is actually
+   stored there, so until that field is changed in Strapi the page still lives
+   at /help-center and is, in the meantime, no longer protected under that old
+   slug — move the Strapi slug promptly to close that window.
+
+   Named rather than inlined so the bare-/knowledge-base redirect below can
+   reference the exact same value — the two would silently disagree the next
+   time this slug changes if each spelled it out separately. */
+const HELP_CENTER_SLUG = 'knowledgebase';
+const PROTECTED_BUILDER_SLUGS = [HELP_CENTER_SLUG];
 
 function isProtectedBuilderSlug(slug) {
     return PROTECTED_BUILDER_SLUGS.includes(String(slug || '').toLowerCase());
@@ -577,16 +617,22 @@ function cleanupExpiredTokens() {
 // ── Admin: media library (Strapi upload proxy) ───────────────────────
 // Builds URLs that go straight into a browser <img src> and can also be saved
 // permanently into builder-page props (shared across every environment reading
-// that content) — must use STRAPI_PUBLIC_URL, never the server-internal STRAPI_URL.
-function absolutifyMediaUrls(file) {
+// that content) — must use STRAPI_PUBLIC_URL (or the per-request resolution
+// above), never the server-internal STRAPI_URL.
+//
+// publicUrl defaults to the global STRAPI_PUBLIC_URL so any caller that isn't
+// updated to pass the per-request value keeps today's exact behaviour —
+// nothing regresses just because this function gained a parameter.
+function absolutifyMediaUrls(file, publicUrl = STRAPI_PUBLIC_URL) {
     if (!file || typeof file !== 'object') return file;
     // Strapi 5 sometimes wraps responses as { id, attributes: {...} }
     const target = file.attributes && typeof file.attributes === 'object' ? file.attributes : file;
-    if (target.url && !/^https?:/i.test(target.url)) target.url = STRAPI_PUBLIC_URL.replace(/\/$/, '') + target.url;
+    const base = publicUrl.replace(/\/$/, '');
+    if (target.url && !/^https?:/i.test(target.url)) target.url = base + target.url;
     if (target.formats && typeof target.formats === 'object') {
         Object.keys(target.formats).forEach((k) => {
             const f = target.formats[k];
-            if (f && f.url && !/^https?:/i.test(f.url)) f.url = STRAPI_PUBLIC_URL.replace(/\/$/, '') + f.url;
+            if (f && f.url && !/^https?:/i.test(f.url)) f.url = base + f.url;
         });
     }
     return file;
@@ -602,9 +648,10 @@ app.get('/api/admin/builder/media', requireAdminAuth, async (req, res) => {
             headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
         });
         const data = await r.json();
+        const publicUrl = strapiPublicUrlForRequest(req);
         // Strapi /upload/files returns either an array or a paginated object
-        if (Array.isArray(data)) data.forEach(absolutifyMediaUrls);
-        else if (data && Array.isArray(data.results)) data.results.forEach(absolutifyMediaUrls);
+        if (Array.isArray(data)) data.forEach((f) => absolutifyMediaUrls(f, publicUrl));
+        else if (data && Array.isArray(data.results)) data.results.forEach((f) => absolutifyMediaUrls(f, publicUrl));
         res.status(r.status).json(data);
     } catch (err) {
         res.status(502).json({ error: 'Media list failed', detail: err.message });
@@ -631,7 +678,10 @@ app.post('/api/admin/builder/media', requireAdminAuth, uploadMW.single('file'), 
         const text = await r.text();
         let data;
         try { data = JSON.parse(text); } catch { data = { raw: text }; }
-        if (Array.isArray(data)) data.forEach(absolutifyMediaUrls);
+        if (Array.isArray(data)) {
+            const publicUrl = strapiPublicUrlForRequest(req);
+            data.forEach((f) => absolutifyMediaUrls(f, publicUrl));
+        }
         res.status(r.status).json(data);
     } catch (err) {
         res.status(502).json({ error: 'Upload failed', detail: err.message });
@@ -2136,16 +2186,21 @@ app.get('/blogs/:slug', async (req, res) => {
     sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/blogs/${slug}`, bp);
 });
 
+// Bare /knowledge-base — the browse/search entry point a visitor naturally
+// expects at the prefix's own root, one level up from any individual article.
+// That's the Help Center page (HELP_CENTER_SLUG): redirected rather than
+// rendered a second time at this URL, so there is exactly one canonical
+// address for it — the same "one real location, everything else forwards to
+// it" rule already used for the legacy top-level blog/KB redirects in
+// /:page below. A GET here never collides with /knowledge-base/:slug right
+// below: Express's :slug requires at least one character after the second
+// slash, which a bare "/knowledge-base" request simply doesn't have.
+app.get('/knowledge-base', (req, res) => res.redirect(301, `/${HELP_CENTER_SLUG}`));
+
 // Knowledge Base articles — /knowledge-base/<slug>. Same shape as /blogs/:slug
-// immediately above (registered before the generic /:page catch-all, same
-// registry gate, same "isn't actually one of these → 404 here rather than
-// falling through" rule so a builder page keeps exactly one canonical URL).
-//
-// There is no bare `/knowledge-base` index route yet — that is the Help Center
-// page's job (a later, separate feature), so a Knowledge Base article is only
-// reachable today by its direct URL or via sitemap.xml. That mirrors exactly
-// how blog posts were discoverable before /blogs got its own <noscript> link
-// list: not a bug, a disclosed gap that closes when the index page exists.
+// above (registered before the generic /:page catch-all, same registry gate,
+// same "isn't actually one of these → 404 here rather than falling through"
+// rule so a builder page keeps exactly one canonical URL).
 app.get('/knowledge-base/:slug', async (req, res) => {
     const slug = req.params.slug;
     if (!(await isKbSlug(slug))) {

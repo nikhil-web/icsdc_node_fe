@@ -68,7 +68,13 @@ export const BUILDER_TEMPLATES = [
         ],
     },
     {
-        id: 'help-center',
+        // Template id, not the page's URL slug -- those are independent (the id
+        // is only ever looked up by getTemplate() to re-seed the page's section
+        // list; the actual live path comes from whatever slug is set in
+        // Strapi). Kept matching the slug anyway, purely so a reader isn't left
+        // wondering why a template called "help-center" builds the page that
+        // lives at /knowledgebase.
+        id: 'knowledgebase',
         label: 'Help Center',
         description: 'Support landing page: searchable Knowledge Base hero, article list, topic tiles, FAQ and contact channels.',
         icon: 'fa-life-ring',
@@ -79,8 +85,8 @@ export const BUILDER_TEMPLATES = [
 
            Deliberately hidden rather than deleted. This entry is still the
            canonical record of what the page is composed of, which is what
-           getTemplate('help-center') reads to re-seed it — delete it and that
-           knowledge is gone with it. */
+           getTemplate('knowledgebase') reads to re-seed it — delete it and
+           that knowledge is gone with it. */
         hidden: true,
         sections: [
             /* helpCenter owns the hero, the search box, the article list and the
