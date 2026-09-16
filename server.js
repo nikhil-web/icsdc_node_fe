@@ -481,8 +481,15 @@ app.post('/api/admin/builder/pages/:documentId/publish', requireAdminAuth, async
 
    Enforced server-side because that is the only place it can actually be
    enforced — the admin UI hides the delete button too (see builder-editor.js),
-   but that is a courtesy, not the guarantee. */
-const PROTECTED_BUILDER_SLUGS = ['help-center'];
+   but that is a courtesy, not the guarantee.
+
+   'knowledgebase' (one word — distinct from the hyphenated /knowledge-base/
+   article prefix, which stays as-is) is where the Strapi page's own `slug`
+   field is being moved to. This list only protects whatever slug is actually
+   stored there, so until that field is changed in Strapi the page still lives
+   at /help-center and is, in the meantime, no longer protected under that old
+   slug — move the Strapi slug promptly to close that window. */
+const PROTECTED_BUILDER_SLUGS = ['knowledgebase'];
 
 function isProtectedBuilderSlug(slug) {
     return PROTECTED_BUILDER_SLUGS.includes(String(slug || '').toLowerCase());
