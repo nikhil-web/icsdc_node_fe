@@ -484,17 +484,22 @@ app.post('/api/admin/builder/pages/:documentId/publish', requireAdminAuth, async
    but that is a courtesy, not the guarantee.
 
    'knowledgebase' (one word — distinct from the hyphenated /knowledge-base/
-   article prefix, which stays as-is) is where the Strapi page's own `slug`
-   field is being moved to. This list only protects whatever slug is actually
-   stored there, so until that field is changed in Strapi the page still lives
-   at /help-center and is, in the meantime, no longer protected under that old
-   slug — move the Strapi slug promptly to close that window.
+   article prefix, which stays as-is) is the slug this page is moving TO.
+   'help-center' is the slug it is moving FROM, and is still what the Strapi
+   record actually holds until someone edits that field by hand.
 
-   Named rather than inlined so the bare-/knowledge-base redirect below can
-   reference the exact same value — the two would silently disagree the next
-   time this slug changes if each spelled it out separately. */
+   Both are listed deliberately. The page must not become deletable in the
+   window between the code shipping and the Strapi field being edited — and
+   since only one of the two is ever the real slug at any moment, protecting
+   both costs nothing and removes the need to time the two changes together.
+   Drop HELP_CENTER_LEGACY_SLUG once the Strapi slug has moved.
+
+   Named rather than inlined so the redirects and the /knowledgebase route
+   below all read the same values — they would silently disagree the next time
+   this slug changes if each spelled it out separately. */
 const HELP_CENTER_SLUG = 'knowledgebase';
-const PROTECTED_BUILDER_SLUGS = [HELP_CENTER_SLUG];
+const HELP_CENTER_LEGACY_SLUG = 'help-center';
+const PROTECTED_BUILDER_SLUGS = [HELP_CENTER_SLUG, HELP_CENTER_LEGACY_SLUG];
 
 function isProtectedBuilderSlug(slug) {
     return PROTECTED_BUILDER_SLUGS.includes(String(slug || '').toLowerCase());
@@ -2012,6 +2017,19 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     // Inject canonical + OG/Twitter + JSON-LD before </head>
     html = html.replace(/<\/head>/i, `    ${headTags}\n</head>`);
 
+    /* page-renderer.js re-derives the slug from the URL to fetch the body, which
+       silently breaks whenever the path a page is SERVED at isn't identical to
+       its Strapi slug — the shell renders, then the client 404s on top of it.
+       When this server resolved the page by something other than the path, it
+       says so here so the client can use the slug that actually worked instead
+       of guessing again from the URL. */
+    if (seo && seo.builderSlug) {
+        html = html.replace(
+            /<\/head>/i,
+            `    <meta name="builder-slug" content="${seoEsc(seo.builderSlug)}">\n</head>`,
+        );
+    }
+
     // Write the hero copy into the body so the LCP text exists in the initial
     // HTML and the page does not reflow when the client hydrates.
     if (seo && seo.heroText) html = injectHeroText(html, seo.heroText);
@@ -2196,6 +2214,49 @@ app.get('/blogs/:slug', async (req, res) => {
 // below: Express's :slug requires at least one character after the second
 // slash, which a bare "/knowledge-base" request simply doesn't have.
 app.get('/knowledge-base', (req, res) => res.redirect(301, `/${HELP_CENTER_SLUG}`));
+
+/* /help-center is where this page lived before its slug moved to
+   HELP_CENTER_SLUG. That URL is in sitemap.xml and has a prerendered snapshot,
+   i.e. Google has been told it exists — so it must forward rather than 404, or
+   an indexed page turns into a dead link and takes its ranking with it.
+   Registered before /:page so it wins even while the Strapi record still holds
+   the old slug (which would otherwise render the page here as well, leaving the
+   same content live at two URLs). */
+app.get('/help-center', (req, res) => res.redirect(301, `/${HELP_CENTER_SLUG}`));
+
+/* The Help Center itself. This is normally just a builder page and /:page
+   below would serve it — except /:page resolves strictly by slug, and the
+   Strapi record still says 'help-center' until that field is edited by hand.
+   Rather than make the URL wait on a manual content edit (and 404 until it
+   happens), resolve the new slug first and fall back to the legacy one, so
+   /knowledgebase serves the page under either. Whichever slug answers, the
+   canonical URL emitted is /knowledgebase — there is still exactly one real
+   address for this page.
+
+   Once the Strapi slug has moved, the fallback stops being reachable and this
+   whole route can go: /:page will resolve /knowledgebase on its own. */
+app.get(`/${HELP_CENTER_SLUG}`, async (req, res) => {
+    let slug = HELP_CENTER_SLUG;
+    let bp = await fetchBuilderPageMeta(slug);
+    if (!bp) {
+        slug = HELP_CENTER_LEGACY_SLUG;
+        bp = await fetchBuilderPageMeta(slug);
+    }
+    if (!bp) return res.status(404).sendFile(sitePage('404.html'));
+    /* Same description fallback /:page applies, so an empty metaDescription
+       still yields a crawlable summary rather than nothing. builderSlug tells
+       page-renderer.js which slug actually resolved — without it the client
+       re-derives 'knowledgebase' from the path, finds no such page in Strapi
+       while the record still says 'help-center', and 404s over a shell the
+       server just served successfully. */
+    const seo = Object.assign({}, bp, {
+        description: bp.description || bp.derivedDescription || '',
+        builderSlug: slug,
+    });
+    return sendPageWithSeo(
+        req, res, sitePage('builder-template.html'), slug, `/${HELP_CENTER_SLUG}`, seo,
+    );
+});
 
 // Knowledge Base articles — /knowledge-base/<slug>. Same shape as /blogs/:slug
 // above (registered before the generic /:page catch-all, same registry gate,
