@@ -11,7 +11,8 @@ import {
     initFAQ,
     setText,
     setHTML,
-    resolveIcon
+    resolveIcon,
+    populatePillarsHeader
 } from './utils/cms-helpers.js';
 import { getWindowsVpsHostingPage } from './services/contentService.js';
 
@@ -94,6 +95,7 @@ import { getWindowsVpsHostingPage } from './services/contentService.js';
             });
 
             // 4 Pillars
+            populatePillarsHeader('.why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-grid', page.pillars, 'why-card');
 
             // Plans

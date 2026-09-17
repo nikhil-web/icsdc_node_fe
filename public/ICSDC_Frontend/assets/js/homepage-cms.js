@@ -122,7 +122,12 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
 
     // why chooose us
     /** 3. Pillars (4 icon cards in .why-us .why-grid) */
-    function populateWhyChooseUs(pillars) {
+    function populateWhyChooseUs(pillars, title, subtitle) {
+        // Headings before the early return: they are independent of the cards,
+        // and setText() no-ops on an empty value, so the hardcoded copy in
+        // index.html stays as the fallback until Strapi has its own.
+        setText('[data-strapi="whyChooseUsTitle"]', title);
+        setText('[data-strapi="whyChooseUsSubtitle"]', subtitle);
         if (!pillars || !pillars.length) return;
         populateIconCards('.why-us .why-grid', pillars, 'why-card');
     }
@@ -598,7 +603,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
             populateSEO(page.SEO);
             populateHeroSection(page);
             populateHeroCTAs(page.CallToActionPrimary, page.callToActionSecondary);
-            populateWhyChooseUs(page.whyChooseUs);
+            populateWhyChooseUs(page.whyChooseUs, page.whyChooseUsTitle, page.whyChooseUsSubtitle);
             populateWhyCloud(page.whyBusinessNeedsCloud);
             populateWhoWeAre(page.whoWeAre);
             populateLessComplexity(page.LessCloudComplexity);

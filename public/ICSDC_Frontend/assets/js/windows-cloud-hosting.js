@@ -1,4 +1,4 @@
-import { populateSEO, populateHero, populateIconCards, populateSectionHeader, populateCtaBand, populatePricingPlans, hidePageLoader, markActiveNavLink, initTestimonials, initFAQ, setText } from './utils/cms-helpers.js';
+import { populateSEO, populateHero, populateIconCards, populateSectionHeader, populateCtaBand, populatePricingPlans, hidePageLoader, markActiveNavLink, initTestimonials, initFAQ, setText, populatePillarsHeader } from './utils/cms-helpers.js';
 import { inlineRichText } from './utils/cms-helpers.js';
 import { getWindowsCloudHostingPage } from './services/contentService.js';
 
@@ -21,6 +21,7 @@ import { getWindowsCloudHostingPage } from './services/contentService.js';
             heroImage: page.heroImage
         });
 
+        populatePillarsHeader('.why-grid', page.pillarsTitle, page.pillarsSubtitle);
         populateIconCards('.why-grid', page.pillars, 'why-card');
 
         // Plans / pricing

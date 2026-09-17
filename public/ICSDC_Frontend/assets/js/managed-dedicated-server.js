@@ -16,7 +16,8 @@ import {
     setHTML,
     initFAQ,
     initTestimonials,
-    wireCtaLink
+    wireCtaLink,
+    populatePillarsHeader
 } from './utils/cms-helpers.js';
 
 (function () {
@@ -163,6 +164,7 @@ import {
             applyCtaButton(document.getElementById('mds-cta-secondary'), page.heroCtaSecondary);
 
             // ── Pillars (4 why-us cards) ──
+            populatePillarsHeader('#mds-pillars-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('#mds-pillars-grid', page.pillars, 'why-card');
 
             // ── Plans / Pricing section ──

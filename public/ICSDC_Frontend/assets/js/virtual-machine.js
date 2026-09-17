@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getVirtualMachinePage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -138,6 +138,7 @@ import { uploadURL } from './services/strapiClient.js';
             if (page.heroStatusSubtitle) setText(document, '.vm-bs', page.heroStatusSubtitle);
 
             // Pillars (4 cards)
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // VM Plans Table

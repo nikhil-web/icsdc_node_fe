@@ -3,7 +3,7 @@
 //  Fetches CMS data from Strapi and populates all sections.
 // ══════════════════════════════════════════════════════════
 
-import { wireCtaLink } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
 import { getPamMfaPage } from './services/contentService.js';
 import { inlineRichText } from './utils/cms-helpers.js';
 import {
@@ -116,6 +116,7 @@ import {
             }
 
             // Pillars (4 cards)
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // Why PAM section (6 cards)

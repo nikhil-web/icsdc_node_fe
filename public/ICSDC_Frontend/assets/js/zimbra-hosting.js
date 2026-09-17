@@ -1,5 +1,5 @@
 import { getZimbraHostingPage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import { uploadURL } from './services/strapiClient.js';
 import {
     populateSEO,
@@ -149,6 +149,7 @@ import {
             if (page.heroStatusTitle) setText(document, '.zimbra-bt', page.heroStatusTitle);
             if (page.heroStatusSubtitle) setText(document, '.zimbra-bs', page.heroStatusSubtitle);
 
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // Plans
