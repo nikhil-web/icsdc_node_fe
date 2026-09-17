@@ -108,7 +108,7 @@
 }
 
 /* ─── Tablet / mobile ─── */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .builder-hero {
         min-height: auto;
     }
@@ -181,7 +181,7 @@
    elements, so their 60px-bottom + 60px-top stack into a flat 120px gap right
    after the cover image. Same raw gap on every screen size, so it reads as far
    more disproportionate on a narrow phone than on desktop. */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     /* Retune the one token rather than re-declaring padding — the rules above
        pick this up automatically. */
     #builder-page-root {
@@ -447,7 +447,7 @@ body:has(.builder-preview-banner) nav {
 }
 
 /* ── Responsive: shed the rails before the article gets cramped ── */
-@media (max-width: 1280px) {
+@media (max-width: 1439px) {
 
     /* Promo goes first — the contents rail is the more useful of the two.
        The header must narrow WITH the body here: losing the promo column
@@ -467,7 +467,7 @@ body:has(.builder-preview-banner) nav {
     }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
 
     /* Below the rails breakpoint the article is full-width anyway, so pull the
        header back to the same measure — a header wider than its own body reads
@@ -676,7 +676,7 @@ body:has(.builder-preview-banner) nav {
    the text again, so it needs its gap back. This MUST come after the base
    `.blogh-cover { margin: 0 }` above — same specificity, so source order decides,
    and declaring it up with the other 1024px rules silently lost the tie. */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .blogh-cover {
         margin-top: 28px;
     }
@@ -1276,13 +1276,13 @@ body:has(.builder-preview-banner) nav {
 }
 
 /* ── Responsive ── */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .hc-article-grid { grid-template-columns: repeat(2, 1fr); }
     .hc-topic-grid { grid-template-columns: repeat(2, 1fr); }
     .hc-ch-grid { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 639px) {
     .hc-article-grid { grid-template-columns: 1fr; }
     .hc-topic-grid { grid-template-columns: 1fr; }
     .hc-search-input { padding: 14px 16px 14px 46px; }

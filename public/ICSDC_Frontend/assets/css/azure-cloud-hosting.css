@@ -986,7 +986,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE BREAKPOINTS
 ══════════════════════════════════════ */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .azure-who-inner {
         grid-template-columns: 1fr;
     }
@@ -1028,7 +1028,7 @@
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .azure-advantages-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1068,7 +1068,7 @@
     }
 }
 
-@media (max-width: 479px) {
+@media (max-width: 639px) {
     .azure-advantages-grid {
         grid-template-columns: 1fr;
     }

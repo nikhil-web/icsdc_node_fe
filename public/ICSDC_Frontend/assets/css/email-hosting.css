@@ -727,7 +727,7 @@ html[data-theme="dark"] .eh-realtime-card h3 {
 
 
 /* ── Responsive ── */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .email-solutions-grid {
         grid-template-columns: 1fr;
     }
@@ -772,7 +772,7 @@ html[data-theme="dark"] .eh-realtime-card h3 {
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
 
     .eh-handshake-card {
         flex-direction: column;

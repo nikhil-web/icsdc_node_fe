@@ -529,7 +529,7 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
 
     .dom-why-inner,
     .dom-privacy-inner {
@@ -538,13 +538,13 @@
     }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .dom-tld-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .dom-search-bar {
         flex-direction: column;
         padding: 12px;

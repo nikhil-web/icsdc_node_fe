@@ -373,7 +373,7 @@ html[data-theme="dark"] .chat-chip:hover { background: #1d4ed8; color: #fff; bor
 .chat-bubble--hidden { display: none !important; }
 
 /* ── Mobile — fullscreen chat ─────────────────────────────── */
-@media (max-width: 640px) {
+@media (max-width: 639px) {
     .chat-bubble {
         bottom: 16px;
         left: 16px;

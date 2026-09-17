@@ -90,7 +90,7 @@
       margin-top: 32px;
     }
 
-    @media (max-width: 1365px) {
+    @media (max-width: 1023px) {
       .zimbra-features-grid {
         grid-template-columns: repeat(2, 1fr);
         text-align: left;
@@ -106,7 +106,7 @@
 
     }
 
-    @media (max-width: 767px) {
+    @media (max-width: 639px) {
       .zimbra-features-grid {
         grid-template-columns: 1fr;
       }
@@ -356,14 +356,14 @@
       max-width: calc(25% - 15px);
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 1439px) {
       #why-us .cloud-power-card {
         flex: 1 1 calc(33.333% - 14px);
         max-width: calc(33.333% - 14px);
       }
     }
 
-    @media (max-width: 860px) {
+    @media (max-width: 1023px) {
       .zim-collab-grid {
         grid-template-columns: 1fr;
       }
@@ -374,7 +374,7 @@
       }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 639px) {
       #why-us .cloud-power-card {
         flex: 1 1 100%;
         max-width: 100%;

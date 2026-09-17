@@ -162,6 +162,15 @@
     align-items: stretch;
 }
 
+/* Tablet (640–1023px). There was no tablet rule: these three plan cards only
+   ever rendered from 768px up, where they had room. From 640px they need to
+   wrap — two across on a small tablet, three once there's space. */
+@media (min-width: 640px) and (max-width: 1023px) {
+    .ssl-pricing-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+}
+
 .ssl-pricing-coming {
     background: var(--white);
     border: 1.5px solid var(--border);
@@ -367,7 +376,7 @@
 ══════════════════════════════════════ */
 
 /* 1280px */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .ssl-power-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -392,7 +401,7 @@
 /* 1024px */
 
 /* 640px */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .ssl-offers-grid {
         grid-template-columns: 1fr;
     }

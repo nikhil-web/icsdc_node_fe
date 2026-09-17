@@ -928,7 +928,7 @@ nav.scrolled {
    fix is a downscaled mobile derivative, which needs a webp encoder this
    machine does not have (no cwebp / Pillow, and sips cannot write webp).
    Desktop and tablet are untouched. */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .hero::before {
         display: none;
     }
@@ -1907,31 +1907,69 @@ nav.scrolled {
 }
 
 /* ══════════════════════════════════════
-   RESPONSIVE — SMALL LAPTOP (1024–1280px)
-   Compress nav items to prevent overflow
-   on ~1280/1366px screens before hamburger
+   RESPONSIVE — DESKTOP TIER (1024–1439px)
+   The full desktop nav on laptop widths.
+
+   Laptops narrower than 1366px used to get the hamburger menu — including a
+   1920×1080 panel at 150% Windows scaling, which reports a 1280px viewport.
+   At large-screen spacing the nav needs ~1,410px (measured), so on this tier
+   it tightens instead of collapsing: side padding, link padding and link size
+   scale with the viewport (tight at 1024px, back to full size by 1440px), and
+   Login / WhatsApp go icon-only with their labels kept for screen readers.
+
+   Fluid values rather than extra breakpoints, so the site stays on its four
+   standard tiers (assets/js/utils/breakpoints.js).
+
+   These were once four fixed rules headed "SMALL LAPTOP (1024–1280px)" inside
+   the tablet block below — where the same block hid the nav they styled, so
+   they never took effect. Scoped under .nav-inner because whatsapp-widget.css
+   is injected after this file and would otherwise win on .btn-wa-nav.
 ══════════════════════════════════════ */
-@media (max-width: 1365px) {
+@media (min-width: 1024px) and (max-width: 1439px) {
     .nav-inner {
-        gap: 4px;
+        gap: 6px;
+        padding: 0 clamp(16px, calc(16px + (100vw - 1024px) * 0.1), 64px);
     }
 
-    .nav-link {
-        padding: 8px 8px;
-        font-size: 13px;
+    .nav-links {
+        gap: 0;
     }
 
-    .btn-login {
+    .nav-inner .nav-link {
+        padding: 8px clamp(6px, calc(6px + (100vw - 1024px) * 0.02), 14px);
+        font-size: clamp(13px, calc(13px + (100vw - 1024px) * 0.0024), 14px);
+    }
+
+    .nav-inner .btn-login,
+    .nav-inner .btn-wa-nav {
         padding: 9px 11px;
-        font-size: 13px;
     }
 
-    .btn-cta-nav {
+    .nav-inner .btn-cta-nav {
         padding: 8px 11px;
         font-size: 13px;
         gap: 5px;
     }
 
+    .nav-inner .btn-login span,
+    .nav-inner .btn-wa-nav span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
+    }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — TABLET AND BELOW (≤1023px)
+   Hamburger menu, single-column hero.
+══════════════════════════════════════ */
+@media (max-width: 1023px) {
     .nav-links,
     .desktop-login-btn {
         display: none;
@@ -2194,7 +2232,7 @@ nav.scrolled {
    RESPONSIVE — TABLET SMALL (≤ 768px)
    Switch to grid: phone on top, cards below in 3-column grid
 ══════════════════════════════════════ */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .phone-mockup-wrapper {
         height: auto;
         width: 96%;
@@ -2302,7 +2340,7 @@ nav.scrolled {
 /* ══════════════════════════════════════
    RESPONSIVE — MOBILE (≤ 480px)
 ══════════════════════════════════════ */
-@media (max-width: 479px) {
+@media (max-width: 639px) {
     :root {
         --nav-height: 64px;
         --nav-offset: 67px;

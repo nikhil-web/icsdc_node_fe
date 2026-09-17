@@ -90,7 +90,7 @@
   margin-top: 32px;
 }
 
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
   .wincloud-apps-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -117,7 +117,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
   .wincloud-apps-grid {
     grid-template-columns: 1fr;
   }
@@ -240,6 +240,15 @@
   align-items: stretch;
 }
 
+/* ≤1023px: single column, as intended. The identical rule near the top of this
+   file sits before this base rule, so repeat(3, 1fr) always won and tablets got
+   three plan cards squeezed into a 480px box. */
+@media (max-width: 1023px) {
+  .wincloud-pricing-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ══════════════════════════════════════
    WHO WE ARE
 ══════════════════════════════════════ */
@@ -252,6 +261,16 @@
   grid-template-columns: 1.1fr 0.9fr;
   gap: 48px;
   align-items: center;
+}
+
+/* ≤1023px: stack, as intended. The same rule near the top of this file sits
+   before this base rule and never won, so small tablets kept two columns that
+   can't fit (the visual card won't shrink below ~283px; measured at 640px). */
+@media (max-width: 1023px) {
+  .wincloud-about-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
 }
 
 .wincloud-about-text .title {

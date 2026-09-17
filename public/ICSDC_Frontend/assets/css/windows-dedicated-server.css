@@ -1347,7 +1347,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (≤ 1024px)
 ══════════════════════════════════════ */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .ds-pricing-grid {
         grid-template-columns: 1fr;
         max-width: 480px;
@@ -1394,7 +1394,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — MOBILE (≤ 640px)
 ══════════════════════════════════════ */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .ds-pillar-grid {
         grid-template-columns: 1fr;
     }
@@ -1449,7 +1449,7 @@
     }
 }
 
-@media (max-width: 479px) {
+@media (max-width: 639px) {
     .ds-use-grid {
         grid-template-columns: 1fr;
     }

@@ -373,7 +373,7 @@
 ══════════════════════════════════════ */
 
 /* 1280px — step grid 3→2 */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .vapt-cards-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -409,7 +409,7 @@
 /* 1024px — 2 columns for most grids */
 
 /* 640px — single column */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .vapt-when-grid {
         grid-template-columns: 1fr;
     }

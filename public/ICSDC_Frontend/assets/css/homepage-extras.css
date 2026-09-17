@@ -209,6 +209,16 @@
     justify-content: space-evenly;
 }
 
+/* Desktop tier (1024–1439px): five logos per row. The ten-across base layout
+   needs ~1,000px of grid and ran the last logo past the right edge at 1024px
+   (measured). Five is what these widths showed before the breakpoints were
+   standardised — the old ≤1365px rule — and gives two even rows. */
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .hp-logo-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
 .hp-logo-box {
     display: flex;
     flex-direction: column;
@@ -272,7 +282,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════ */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .hp-logo-grid {
         grid-template-columns: repeat(5, 1fr);
     }
@@ -290,7 +300,7 @@
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .hp-global-section {
         padding: 56px 0 48px;
     }
@@ -323,7 +333,7 @@
     }
 }
 
-@media (max-width: 479px) {
+@media (max-width: 639px) {
     .hp-map-wrap {
         max-height: 180px;
     }
@@ -882,14 +892,14 @@
 /* ══════════════════════════════════════
    RESPONSIVE — new sections
 ══════════════════════════════════════ */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .hp-industry-features,
     .hp-security-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
 
     .hp-partner-section,
     .hp-industry-section,

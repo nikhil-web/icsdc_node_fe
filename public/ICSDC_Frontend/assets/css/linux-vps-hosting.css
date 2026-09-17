@@ -311,7 +311,7 @@
     flex-shrink: 0;
 }
 
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .lvps-checklist-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -329,7 +329,7 @@
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .lvps-checklist-grid {
         grid-template-columns: 1fr;
         gap: 14px;

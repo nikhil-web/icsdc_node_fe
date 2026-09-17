@@ -1677,7 +1677,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (≤ 1024px)
 ══════════════════════════════════════ */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .cloud-pricing-grid {
         grid-template-columns: 1fr;
         max-width: 480px;
@@ -1754,7 +1754,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — MOBILE (≤ 640px)
 ══════════════════════════════════════ */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
 
     .cloud-use-grid {
         grid-template-columns: 1fr;
@@ -1820,7 +1820,7 @@
     }
 }
 
-@media (max-width: 479px) {
+@media (max-width: 639px) {
     .cloud-why-inner .cloud-why-grid {
         grid-template-columns: 1fr;
     }

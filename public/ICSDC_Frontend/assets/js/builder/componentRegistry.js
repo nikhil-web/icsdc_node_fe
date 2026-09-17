@@ -17,6 +17,7 @@
  */
 
 import { esc, resolveFaIcon, ctaButtonHtml } from './builder-utils.js';
+import { MEDIA } from '../utils/breakpoints.js';
 import {
     populateHero,
     populateIconCards,
@@ -2064,7 +2065,7 @@ function buildBlogToc(container) {
             setOpenGroup(a.closest('.blogb-toc-group'));
             // Collapse the accordion again on mobile, where it sits above the article.
             const details = a.closest('details.blogb-toc-collapsed');
-            if (details && window.innerWidth < 1025) details.open = false;
+            if (details && window.matchMedia(MEDIA.tabletDown).matches) details.open = false;
         });
     });
 
