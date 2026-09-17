@@ -161,8 +161,17 @@
    (--nav-height: 72px) — the eyebrow/title rendered underneath it. The site's
    real .hero already solves this the same way (style.css: padding: calc(
    var(--nav-height) + 24px) ...); blogh-section just needed the same treatment,
-   since it goes through the generic .section rule instead. */
-#builder-page-root .blogh-section {
+   since it goes through the generic .section rule instead.
+
+   .hc-hero is the Help Center's first section and had exactly the same bug for
+   exactly the same reason: it only ever set padding-bottom, so it inherited the
+   generic 60px top padding while the nav occupies 75px (72px + its 3px orange
+   border), leaving the SUPPORT badge 15px underneath it. Listed here rather
+   than given its own rule so the two heroes can't drift apart — the clearance
+   is one number in one place. Note kbHeader does NOT belong here: it renders as
+   .legal-hero, which brings its own 90px and already clears. */
+#builder-page-root .blogh-section,
+#builder-page-root .hc-hero {
     padding-top: calc(var(--nav-height, 72px) + 32px);
 }
 
@@ -179,7 +188,11 @@
         --bld-section-gap: 40px;
     }
 
-    #builder-page-root .blogh-section {
+    /* Same clearance pair as above. Mobile matters MORE here, not less: the
+       token above drops to 40px on phones, so without this the hero would sit
+       even further under the nav than it does on desktop. */
+    #builder-page-root .blogh-section,
+    #builder-page-root .hc-hero {
         padding-top: calc(var(--nav-height, 72px) + 20px);
     }
 }
