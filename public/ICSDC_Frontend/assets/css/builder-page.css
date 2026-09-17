@@ -825,6 +825,21 @@ body:has(.builder-preview-banner) nav {
    --muted, --border, --shadow-card — so it inherits dark mode
    and the type scale rather than restating a second palette.
 ══════════════════════════════════════════════════════════ */
+
+/* hcWireSearch() (componentRegistry.js) filters by setting the `hidden`
+   attribute on non-matching cards/tiles — relying on the browser default
+   `[hidden] { display: none }`. But .hc-card and .hc-topic below both set
+   `display: flex` at equal (0,1,0) specificity, and an author rule always
+   beats that UA default regardless of source order, so the browser kept
+   rendering every card even once JS had correctly marked it hidden: typing
+   in the search box visibly did nothing. `[hidden]` here is stated on the
+   selector itself, at higher specificity than `.hc-card`/`.hc-topic` alone,
+   so it wins outright rather than depending on being declared after them. */
+.hc-card[hidden],
+.hc-topic[hidden] {
+    display: none;
+}
+
 .hc-hero { padding-bottom: 24px; }
 
 .hc-badge {
