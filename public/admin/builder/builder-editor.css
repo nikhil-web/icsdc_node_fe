@@ -1217,6 +1217,18 @@ body.bld-resizing iframe { pointer-events: none; }
 .bld-rich-area a { color: var(--blue, #1a56db); text-decoration: underline; }
 .bld-rich-area img { max-width: 100%; height: auto; border-radius: 8px; margin: 8px 0; }
 
+/* Pasted tables and code need visible structure while editing — without cell
+   borders an author can't see where one cell ends and the next begins. */
+.bld-rich-area table { width: 100%; border-collapse: collapse; margin: 10px 0 14px; font-size: 0.92em; }
+.bld-rich-area th, .bld-rich-area td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: left; vertical-align: top; }
+.bld-rich-area thead th { background: #eef4fd; font-weight: 700; }
+[data-theme="dark"] .bld-rich-area th, [data-theme="dark"] .bld-rich-area td { border-color: #334155; }
+[data-theme="dark"] .bld-rich-area thead th { background: #1e293b; }
+.bld-rich-area pre { background: #0f172a; color: #e2e8f0; padding: 10px 12px; border-radius: 8px; overflow-x: auto; margin: 8px 0 12px; font-size: 0.85em; }
+.bld-rich-area pre code { background: none; color: inherit; padding: 0; }
+.bld-rich-area code { background: #f1f5f9; padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+[data-theme="dark"] .bld-rich-area code { background: #1e293b; }
+
 /* A pasted image still uploading: its src is a 1px placeholder, so give it a
    visible, pulsing slot where the image will appear. */
 .bld-rich-area img[data-bld-paste] {
