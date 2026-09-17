@@ -12,6 +12,7 @@
 
 import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js';
 import { pickMedia } from './media-picker.js';
+import { BuilderAPI } from './builder-api.js';
 
 let activeSection = null;
 let onChangeCallback = null;
@@ -282,7 +283,145 @@ const PASTE_ALLOWED_TAGS = {
 
 // Only these attributes survive; everything else (style/class/id/dir/lang, and
 // crucially every on* handler) is dropped.
-const PASTE_ALLOWED_ATTRS = { A: ['href', 'title'], IMG: ['src', 'alt'] };
+// data-bld-paste marks an image still being copied into the media library
+// (see "Pasted images" below); it is removed once the upload lands.
+const PASTE_ALLOWED_ATTRS = { A: ['href', 'title'], IMG: ['src', 'alt', 'data-bld-paste'] };
+
+/* ── Pasted images ─────────────────────────────────────────────
+   An article pasted from Word or Google Docs carries its images, but never
+   in a form that can simply be saved:
+     - Word puts each image in the HTML as a data: URI — a DOWNSCALED, JPEG
+       re-encoded copy (measured: a 320x200 PNG arrives as a 288x180 JPEG) —
+       and the untouched original in the RTF flavour as a \pngblip/\jpegblip
+       (measured: byte-identical to the source file). Older Word builds put a
+       file:/// path in the HTML instead, which a page can't read at all, so
+       the RTF is the only source there.
+     - Google Docs and web pages reference images by URL. Google Docs' image
+       links are temporary, so hotlinking them breaks the published article
+       later, and the browser can't download them itself (no CORS headers).
+   Embedding the bytes isn't an option either: page saves are capped at 2MB of
+   JSON. So every pasted image is uploaded to the media library and the article
+   references that copy — the same place the toolbar's image button uses.
+
+   The text lands immediately; each image is a marker (data-bld-paste + a
+   transparent placeholder) until its upload finishes. Markers are saved into
+   the section's HTML so an upload can still land if the author moves to
+   another section meanwhile, and Save/Publish refuse to run while any are
+   pending, so a marker never reaches a published page. */
+const PASTE_MARK = 'data-bld-paste';
+const PASTE_PLACEHOLDER_SRC = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+const PASTE_UPLOAD_CONCURRENCY = 3;
+let pasteSeq = 0;
+const pendingPasteImages = new Set();
+
+/** How many pasted images are still uploading — Save/Publish wait for zero. */
+export function pendingPasteImageCount() {
+    return pendingPasteImages.size;
+}
+
+function nextPasteToken() {
+    pasteSeq += 1;
+    return 'p' + Date.now().toString(36) + '-' + pasteSeq;
+}
+
+// Identify real image bytes by signature; the declared type can't be trusted
+// (Word labels its re-encoded JPEGs image/png).
+function sniffImageBytes(b) {
+    if (!b || b.length < 12) return null;
+    if (b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47) return { mime: 'image/png', ext: 'png' };
+    if (b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return { mime: 'image/jpeg', ext: 'jpg' };
+    if (b[0] === 0x47 && b[1] === 0x49 && b[2] === 0x46 && b[3] === 0x38) return { mime: 'image/gif', ext: 'gif' };
+    if (b[0] === 0x52 && b[1] === 0x49 && b[2] === 0x46 && b[3] === 0x46 &&
+        b[8] === 0x57 && b[9] === 0x45 && b[10] === 0x42 && b[11] === 0x50) return { mime: 'image/webp', ext: 'webp' };
+    return null;
+}
+
+function dataUriToBytes(src) {
+    const m = /^data:[^;,]*;base64,(.*)$/is.exec(src || '');
+    if (!m) return null;
+    try {
+        const bin = atob(m[1].replace(/\s+/g, ''));
+        const out = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+        return out;
+    } catch { return null; }
+}
+
+function isHexOrSpace(c) {
+    return (c >= 48 && c <= 57) || (c >= 65 && c <= 70) || (c >= 97 && c <= 102) || c === 32 || c === 9 || c === 10 || c === 13;
+}
+
+function hexRunToBytes(s, from, to) {
+    const out = new Uint8Array(Math.floor((to - from) / 2));
+    let n = 0, hi = -1;
+    for (let i = from; i < to; i++) {
+        const c = s.charCodeAt(i);
+        let v;
+        if (c >= 48 && c <= 57) v = c - 48;
+        else if (c >= 97 && c <= 102) v = c - 87;
+        else if (c >= 65 && c <= 70) v = c - 55;
+        else continue;                          // line breaks inside the hex
+        if (hi < 0) hi = v; else { out[n++] = (hi << 4) | v; hi = -1; }
+    }
+    return out.subarray(0, n);
+}
+
+/* The pictures in Word's RTF, in document order, one per <img> in its HTML.
+   Word writes every picture twice: \shppict holds the real PNG/JPEG, and
+   \nonshppict a WMF copy for old readers — skipped, or the count would double
+   and nothing would line up. A picture with no PNG/JPEG form (EMF charts,
+   SmartArt) keeps its slot with bytes:null so the order still holds. Scanned
+   with indexOf/charCode rather than regexes: this string runs to megabytes
+   for an image-heavy document. */
+function rtfPictures(rtf) {
+    if (!rtf || rtf.indexOf('\\pict') === -1) return [];
+    function groupEnd(s, i) {
+        let depth = 0;
+        for (let j = i; j < s.length; j++) {
+            const c = s.charCodeAt(j);
+            if (c === 92) { j++; continue; }    // \{ \} \\ are escapes, not braces
+            if (c === 123) depth++;
+            else if (c === 125 && --depth === 0) return j;
+        }
+        return -1;
+    }
+    const skip = [];
+    for (let at = rtf.indexOf('\\nonshppict'); at !== -1; at = rtf.indexOf('\\nonshppict', at + 1)) {
+        const open = rtf.lastIndexOf('{', at);
+        const end = groupEnd(rtf, open);
+        if (end < 0) break;
+        skip.push([open, end]);
+        at = end;
+    }
+    const pictures = [];
+    for (let at = rtf.indexOf('{\\pict'); at !== -1; at = rtf.indexOf('{\\pict', at + 1)) {
+        const end = groupEnd(rtf, at);
+        if (end < 0) break;
+        if (!skip.some((r) => at > r[0] && at < r[1])) {
+            const group = rtf.slice(at, end);
+            const png = group.indexOf('\\pngblip') !== -1;
+            const jpeg = !png && group.indexOf('\\jpegblip') !== -1;
+            let bytes = null;
+            if (png || jpeg) {
+                // The picture data is the hex run that closes the group.
+                let k = end - 1;
+                while (k > at && isHexOrSpace(rtf.charCodeAt(k))) k--;
+                let start = k + 1;
+                // Unless the data follows a closing brace, the backwards scan
+                // has swallowed the tail of the control word before it — a
+                // numeric parameter (\bliptag12345) or letters that happen to
+                // be hex (\picscaled). RTF always ends a control word with a
+                // delimiting space, so skip to that space.
+                if (rtf[k] !== '}') while (start < end && rtf.charCodeAt(start) !== 32 && rtf.charCodeAt(start) !== 10 && rtf.charCodeAt(start) !== 13) start++;
+                bytes = hexRunToBytes(rtf, start, end);
+                if (!sniffImageBytes(bytes)) bytes = null;   // not what it claims → fall back to the HTML copy
+            }
+            pictures.push({ bytes });
+        }
+        at = end;
+    }
+    return pictures;
+}
 
 /* Docs and Word express bold/italic as inline STYLE on a <span>, not as
    <strong>/<em>. Unwrapping the span would therefore lose the emphasis, so
@@ -318,6 +457,9 @@ function unwrapInto(el, wrapTags) {
     el.remove();
 }
 
+/* Returns { html, images }: the cleaned HTML, where every image has become a
+   pending marker, and one { token, src, alt } per marker in document order —
+   the order Word's RTF pictures pair up with. */
 function sanitizePastedHtml(html) {
     const tpl = document.createElement('template');
     tpl.innerHTML = html;
@@ -326,11 +468,29 @@ function sanitizePastedHtml(html) {
     // Drop these outright — content inside them is never body copy.
     root.querySelectorAll('script,style,meta,link,title,head,noscript,iframe,object,embed').forEach((n) => n.remove());
 
-    // Strip comments (Word emits huge conditional-comment blocks).
+    // Strip comments (Word emits huge conditional-comment blocks — including
+    // the VML <v:imagedata> duplicate of each picture, so each image is counted
+    // once, as its <img>).
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_COMMENT, null);
     const comments = [];
     while (walker.nextNode()) comments.push(walker.currentNode);
     comments.forEach((c) => c.remove());
+
+    // Turn every image into a pending marker before the attribute strip below,
+    // which keeps only src/alt/data-bld-paste.
+    const images = [];
+    Array.from(root.querySelectorAll('img')).forEach((img) => {
+        // A copy of an image that is itself still uploading (copied back out
+        // of this editor) — the original will resolve; don't upload a 1px GIF.
+        if (img.hasAttribute(PASTE_MARK) || img.getAttribute('src') === PASTE_PLACEHOLDER_SRC) {
+            img.remove();
+            return;
+        }
+        const token = nextPasteToken();
+        images.push({ token, src: (img.getAttribute('src') || '').trim(), alt: img.getAttribute('alt') || '' });
+        img.setAttribute('src', PASTE_PLACEHOLDER_SRC);
+        img.setAttribute(PASTE_MARK, token);
+    });
 
     // Deepest-first so unwrapping a parent can't skip children still to visit.
     const els = Array.from(root.querySelectorAll('*')).reverse();
@@ -364,12 +524,9 @@ function sanitizePastedHtml(html) {
             const href = el.getAttribute('href').trim();
             if (/^(javascript|data|vbscript):/i.test(href)) el.removeAttribute('href');
         }
-        if (tag === 'IMG' && el.getAttribute('src')) {
-            const src = el.getAttribute('src').trim();
-            // Docs pastes images as base64 data: URLs — they'd bloat the saved
-            // JSON enormously, so drop them and let the author use the image button.
-            if (!/^https?:\/\//i.test(src)) el.remove();
-        }
+        // Images need no URL check here: every one is already a marker whose
+        // src is the placeholder, and the real source is only ever uploaded,
+        // never written into the article (see "Pasted images").
     });
 
     // Collapse empties left behind by stripped wrappers (but keep void tags).
@@ -383,7 +540,10 @@ function sanitizePastedHtml(html) {
     root.querySelectorAll('h1 strong, h1 b, h2 strong, h2 b, h3 strong, h3 b, h4 strong, h4 b, h5 strong, h5 b, h6 strong, h6 b')
         .forEach((el) => unwrapInto(el, []));
 
-    return tpl.innerHTML.replace(/\s+/g, ' ').trim();
+    // An image dropped by the cleanup above (e.g. inside a stripped <object>)
+    // has no marker left to fill.
+    const kept = images.filter((i) => root.querySelector('img[' + PASTE_MARK + '="' + i.token + '"]'));
+    return { html: tpl.innerHTML.replace(/\s+/g, ' ').trim(), images: kept };
 }
 
 /* ── Rich-text (WYSIWYG) binding ──────────────────────────────
@@ -399,28 +559,174 @@ function bindRichText(wrap) {
     if (!area || !toolbar) return;
     const path = wrap.dataset.richPath.split('.').map((p) => /^\d+$/.test(p) ? Number(p) : p);
 
+    /* Bound to the section this editor was built for, not the module-global
+       activeSection. Identical while the panel is open; the difference is an
+       image upload that finishes after the author has selected another
+       section — writing through activeSection then would put this article's
+       HTML into THAT section's props. */
+    const section = activeSection;
+    const notify = onChangeCallback;
+
     function commit() {
-        const html = area.innerHTML.trim();
-        emitChange(setByPath(activeSection.props || {}, path, html));
+        if (!section) return;
+        section.props = setByPath(section.props || {}, path, area.innerHTML.trim());
+        if (notify) notify(section);
     }
 
     // Typing → live update (the canvas re-render is already debounced upstream)
     area.addEventListener('input', commit);
     area.addEventListener('blur', commit);
 
+    // Upload progress for this editor's pasted images, shown in its toolbar.
+    const mine = new Set();
+    let failed = 0;        // no usable source at all → removed
+    let stillLinked = 0;   // import failed → kept its original (possibly temporary) URL
+    let statusTimer = null;
+    function showPasteStatus() {
+        let el = toolbar.querySelector('.bld-rich-status');
+        if (!el) {
+            el = document.createElement('span');
+            el.className = 'bld-rich-status';
+            el.setAttribute('role', 'status');
+            toolbar.appendChild(el);
+        }
+        clearTimeout(statusTimer);
+        if (mine.size) {
+            el.textContent = 'Uploading ' + mine.size + ' image' + (mine.size === 1 ? '' : 's') + '…';
+            el.classList.remove('is-warn');
+        } else if (failed || stillLinked) {
+            const parts = [];
+            if (failed) parts.push(failed + ' image' + (failed === 1 ? '' : 's') + " couldn't be pasted");
+            // Worth saying: a Google Docs image link expires, so this one will
+            // eventually break on the published page unless it is re-added.
+            if (stillLinked) parts.push(stillLinked + ' image' + (stillLinked === 1 ? '' : 's') + ' still linked to the original site');
+            el.textContent = parts.join(' · ');
+            el.classList.add('is-warn');
+            statusTimer = setTimeout(() => { el.remove(); failed = 0; stillLinked = 0; }, 10000);
+        } else {
+            el.remove();
+        }
+    }
+
+    /* Swap a marker for its uploaded image (src) — or, with no src, remove it.
+       Looked up in the live document rather than through `area`: if the author
+       left and came back, this section's panel was rebuilt and the marker now
+       lives in a new editor, which commits through its own input handler. Only
+       if no editor holds it any more is the section's saved HTML patched
+       directly, so the image still lands. */
+    function finalizePastedImage(token, src, alt) {
+        const sel = 'img[' + PASTE_MARK + '="' + token + '"]';
+        const live = Array.from(document.querySelectorAll('.bld-rich-area ' + sel));
+        if (live.length) {
+            // Resolve each image's editor BEFORE removing anything: a removed
+            // node has no ancestors, so closest() would return null and the
+            // removal would never be committed.
+            const editors = new Set(live.map((img) => img.closest('.bld-rich-area')));
+            live.forEach((img) => {
+                if (src) {
+                    img.setAttribute('src', src);
+                    img.removeAttribute(PASTE_MARK);
+                } else {
+                    // Don't leave an empty paragraph where the image stood.
+                    const parent = img.parentElement;
+                    img.remove();
+                    if (parent && parent.tagName === 'P' && !parent.textContent.trim() && !parent.children.length) parent.remove();
+                }
+            });
+            editors.forEach((a) => a && a.dispatchEvent(new Event('input', { bubbles: true })));
+            return;
+        }
+        if (!section) return;
+        const current = getByPath(section.props || {}, path);
+        if (typeof current !== 'string' || current.indexOf(token) === -1) return;
+        const tag = src ? '<img src="' + esc(src) + '" alt="' + esc(alt || '') + '">' : '';
+        section.props = setByPath(section.props || {}, path,
+            current.replace(new RegExp('<img\\b[^>]*' + PASTE_MARK + '="' + token + '"[^>]*>', 'gi'), tag));
+        if (notify) notify(section);
+    }
+
+    /* Each image, best source first: a file pasted on its own, then Word's
+       original from the RTF, then the data: copy in the HTML, then — for an
+       image referenced by URL — a server-side import. A URL that can't be
+       imported keeps its original address (what pasting did before), so a
+       failure is never worse than the old behaviour; an image with no usable
+       source at all is removed and counted in the toolbar notice. */
+    async function uploadPastedImages(images, rtf) {
+        const fromWord = images.filter((i) => !i.file && !/^https?:\/\//i.test(i.src));
+        const pictures = rtfPictures(rtf);
+        // Pair by order only when the counts agree; otherwise the order can't
+        // be trusted and each image falls back to its HTML copy.
+        if (pictures.length && pictures.length === fromWord.length) {
+            fromWord.forEach((img, i) => { img.original = pictures[i].bytes; });
+        }
+
+        images.forEach((i) => { mine.add(i.token); pendingPasteImages.add(i.token); });
+        showPasteStatus();
+
+        let next = 0;
+        async function worker() {
+            while (next < images.length) {
+                const img = images[next++];
+                let src = null;
+                try {
+                    let file = img.file || null;
+                    if (!file) {
+                        const bytes = img.original || dataUriToBytes(img.src);
+                        const type = sniffImageBytes(bytes);
+                        if (type) file = new File([bytes], 'pasted-image.' + type.ext, { type: type.mime });
+                    }
+                    let res = null;
+                    if (file) {
+                        res = await BuilderAPI.uploadMedia(file);
+                    } else if (/^https?:\/\//i.test(img.src)) {
+                        res = await BuilderAPI.importMediaUrl(img.src);
+                        if (res && res.skipped) src = res.url;
+                    }
+                    if (res && !src) {
+                        let f = Array.isArray(res) ? res[0] : res;
+                        if (f && f.attributes) f = f.attributes;
+                        // Strapi's 1000px "large" rendition when it made one — an
+                        // article column never needs a 4000px original.
+                        src = (f && f.formats && f.formats.large && f.formats.large.url) || (f && f.url) || null;
+                    }
+                } catch (err) {
+                    console.warn('[builder] pasted image upload failed:', err && err.message);
+                }
+                if (!src && /^https?:\/\//i.test(img.src)) { src = img.src; stillLinked++; }
+                if (!src) failed++;
+                finalizePastedImage(img.token, src, img.alt);
+                mine.delete(img.token);
+                pendingPasteImages.delete(img.token);
+                showPasteStatus();
+            }
+        }
+        await Promise.all(Array.from({ length: Math.min(PASTE_UPLOAD_CONCURRENCY, images.length) }, worker));
+    }
+
     // Paste from Google Docs / Word keeps its STRUCTURE (headings, bold, lists,
     // links, tables) but is stripped of all presentation. Pasting the raw HTML
     // would drag in inline font/colour styles, Word's mso-* junk and an XSS
-    // surface — see sanitizePastedHtml.
+    // surface — see sanitizePastedHtml. Images are copied into the media
+    // library — see "Pasted images".
     area.addEventListener('paste', (e) => {
         const cb = e.clipboardData || window.clipboardData;
         if (!cb) return;
         const html = cb.getData('text/html');
+        const files = Array.from(cb.files || []).filter((f) => /^image\//.test(f.type));
         e.preventDefault();
         if (html) {
-            const clean = sanitizePastedHtml(html);
+            const { html: clean, images } = sanitizePastedHtml(html);
             // insertHTML keeps the caret/undo stack behaving like a normal paste
             document.execCommand('insertHTML', false, clean);
+            commit();
+            if (images.length) uploadPastedImages(images, cb.getData('text/rtf'));
+        } else if (files.length) {
+            // An image on its own (a screenshot, "Copy image"): no HTML to keep.
+            const images = files.map((file) => ({ token: nextPasteToken(), src: '', alt: '', file }));
+            document.execCommand('insertHTML', false, images.map((i) =>
+                '<img src="' + PASTE_PLACEHOLDER_SRC + '" ' + PASTE_MARK + '="' + i.token + '" alt="">').join(''));
+            commit();
+            uploadPastedImages(images, '');
         } else {
             document.execCommand('insertText', false, cb.getData('text/plain'));
         }

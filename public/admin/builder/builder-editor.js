@@ -21,7 +21,7 @@ import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js';
 import { generateSectionId } from '/assets/js/builder/builder-utils.js';
 import { BuilderAPI } from './builder-api.js';
 import { renderComponentLibrary } from './component-library.js';
-import { renderPropertyEditor } from './property-editor.js';
+import { renderPropertyEditor, pendingPasteImageCount } from './property-editor.js';
 import { openVersionHistory } from './version-history.js';
 import { createCanvasBridge } from './canvas-bridge.js';
 import { BUILDER_TEMPLATES, getTemplate } from '/assets/js/builder/templates.js';
@@ -871,7 +871,18 @@ function deleteSection(id) {
 }
 
 /* ── Save / Preview / Publish ────────────────────────────── */
+/* Pasted images are placeholders in the article until their upload lands (see
+   "Pasted images" in property-editor.js). Saving before then would store a
+   placeholder instead of the image, so both save paths wait for zero. */
+function blockedByPendingImageUploads() {
+    const n = pendingPasteImageCount();
+    if (!n) return false;
+    setStatus('Wait — ' + n + ' pasted image' + (n === 1 ? ' is' : 's are') + ' still uploading');
+    return true;
+}
+
 async function onSaveDraft() {
+    if (blockedByPendingImageUploads()) return;
     const btn = document.getElementById('bld-save-btn');
     btn.disabled = true;
     setStatus('Saving…');
@@ -916,6 +927,7 @@ async function onPreview() {
 }
 
 async function onPublish() {
+    if (blockedByPendingImageUploads()) return;
     if (!confirm('Publish this page? It will be live at /' + state.page.slug)) return;
     const btn = document.getElementById('bld-publish-btn');
     btn.disabled = true;
