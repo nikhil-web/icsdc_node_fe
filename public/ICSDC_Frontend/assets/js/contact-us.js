@@ -50,6 +50,8 @@ import {
         if (!payload.name)    return 'Please enter your name.';
         if (!payload.email)   return 'Please enter your email address.';
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return 'Please enter a valid email address.';
+        if (!payload.phone) return 'Please enter your phone number.';
+        if (!/^\d{7,15}$/.test(payload.phone.replace(/\D/g, ''))) return 'Please enter a valid phone number.';
         if (!payload.subject) return 'Please select a subject.';
         if (!payload.message) return 'Please enter your message.';
         return null;
