@@ -902,8 +902,8 @@ const contactForm = {
             '<input type="email" name="email" class="cu-input" placeholder="john@company.com" required></div>' +
             '</div>' +
             '<div class="cu-form-row">' +
-            '<div class="cu-field"><label class="cu-label">Phone Number</label>' +
-            '<input type="tel" name="phone" class="cu-input" placeholder="+91 98765 43210"></div>' +
+            '<div class="cu-field"><label class="cu-label">Phone Number <span class="cu-required">*</span></label>' +
+            '<input type="tel" name="phone" class="cu-input" placeholder="+91 98765 43210" required></div>' +
             '<div class="cu-field"><label class="cu-label">Company / Organization</label>' +
             '<input type="text" name="company" class="cu-input" placeholder="Your Company Ltd."></div>' +
             '</div>' +
@@ -930,6 +930,24 @@ const contactForm = {
         if (form && success) {
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                /* Phone is mandatory on every contact form. This form is
+                   `novalidate`, so the `required` on the input is a hint only —
+                   the browser won't enforce it — hence the explicit check. Same
+                   rule, messages and error styling as the popup, the contact
+                   page and the hero forms (cms-helpers initHeroContactForm). */
+                form.querySelectorAll('.cu-form-error').forEach((el) => el.remove());
+                const phone = String(new FormData(form).get('phone') || '').trim();
+                const phoneError = !phone ? 'Please enter your phone number.'
+                    : !/^\d{7,15}$/.test(phone.replace(/\D/g, '')) ? 'Please enter a valid phone number.'
+                        : null;
+                if (phoneError) {
+                    const errEl = document.createElement('p');
+                    errEl.className = 'cu-form-error';
+                    errEl.style.cssText = 'color:#e53e3e;margin-top:0.75rem;font-size:0.9rem;';
+                    errEl.textContent = phoneError;
+                    form.querySelector('.cu-submit-btn').insertAdjacentElement('beforebegin', errEl);
+                    return;
+                }
                 const submitBtn = form.querySelector('.cu-submit-btn');
                 const orig = submitBtn.innerHTML;
                 submitBtn.disabled = true;

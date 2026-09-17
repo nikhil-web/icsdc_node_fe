@@ -1025,6 +1025,8 @@ export function initHeroContactForm(formId, successId) {
         if (!p.name) return 'Please enter your name.';
         if (!p.email) return 'Please enter your email address.';
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)) return 'Please enter a valid email address.';
+        if (!p.phone) return 'Please enter your phone number.';
+        if (!/^\d{7,15}$/.test(p.phone.replace(/\D/g, ''))) return 'Please enter a valid phone number.';
         if (!p.subject) return 'Please select a subject.';
         if (!p.message) return 'Please enter your message.';
         return null;
