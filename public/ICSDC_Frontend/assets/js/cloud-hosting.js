@@ -85,6 +85,7 @@ import { getCloudHostingPage } from './services/contentService.js';
             }
         }
 
+        if (page.faqTitle) setText(document, '.faq-title', page.faqTitle);
         initFAQ(page.faq);
     } catch (err) {
         console.error('[cloud-hosting] CMS load failed:', err);
