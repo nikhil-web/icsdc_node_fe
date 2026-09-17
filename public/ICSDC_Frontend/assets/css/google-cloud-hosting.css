@@ -556,7 +556,7 @@ html[data-theme="dark"] .gch-compare-table tbody tr:nth-child(even) {
 /* ══════════════════════════════════════
    RESPONSIVE — 1280px breakpoint
 ══════════════════════════════════════ */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .gch-why-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -593,7 +593,7 @@ html[data-theme="dark"] .gch-compare-table tbody tr:nth-child(even) {
 /* ══════════════════════════════════════
    RESPONSIVE — 768px breakpoint
 ══════════════════════════════════════ */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .gch-why-grid {
         grid-template-columns: 1fr;
     }

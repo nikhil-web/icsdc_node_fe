@@ -108,7 +108,7 @@
 }
 
 /* Desktop: force open, hide summary */
-@media (min-width: 1366px) {
+@media (min-width: 1024px) {
     .legal-toc-collapsed {
         display: block !important;
     }
@@ -462,7 +462,7 @@ html[data-theme="dark"] .legal-section-num {
 }
 
 /* ── Mobile (≤900px) ─────────────────────────────────────── */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .legal-layout {
         grid-template-columns: 1fr;
         gap: 20px;

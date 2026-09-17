@@ -6,6 +6,7 @@
 import { getNavigation, getFooter } from "./services/contentService.js";
 import { resolveIcon, inlineRichText } from "./utils/cms-helpers.js";
 import { getFooterHTML } from "./footer-template.js";
+import { MEDIA } from "./utils/breakpoints.js";
 
 // ══════════════════════════════════════════════════════════
 //  DEFERRED WIDGET STYLES
@@ -253,7 +254,9 @@ function initHamburger() {
         }
     });
     document.addEventListener("keydown", e => { if (e.key === "Escape") closeMobileMenu(); });
-    window.addEventListener("resize", () => { if (window.innerWidth > 1024) closeMobileMenu(); });
+    // The hamburger menu only exists below the desktop tier — close it once the
+    // window is wide enough for the desktop nav (same breakpoint the CSS uses).
+    window.addEventListener("resize", () => { if (window.matchMedia(MEDIA.desktopUp).matches) closeMobileMenu(); });
 }
 
 

@@ -96,7 +96,7 @@
 }
 
 /* Phones: full-width rows read better than narrow centred tiles. */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     #acr-why .cloud-use-card {
         flex: 1 1 100%;
         max-width: none;

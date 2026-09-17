@@ -616,7 +616,7 @@
 ══════════════════════════════════════ */
 
 /* Mobile */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .cu-textarea {
         height: 88px;
     }
@@ -719,7 +719,7 @@
 }
 
 /* Tablet (768px – 1365px) */
-@media (min-width: 768px) and (max-width: 1365px) {
+@media (min-width: 640px) and (max-width: 1023px) {
     .cu-textarea {
         height: 96px;
     }

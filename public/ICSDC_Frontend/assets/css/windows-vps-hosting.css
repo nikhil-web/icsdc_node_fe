@@ -272,7 +272,7 @@
     }
 
     /* Responsive */
-    @media (max-width: 767px) {
+    @media (max-width: 639px) {
       .wvps-stack-items {
         grid-template-columns: 1fr;
       }
@@ -308,7 +308,7 @@
       margin-top: 40px;
     }
 
-    @media (max-width: 1365px) {
+    @media (max-width: 1023px) {
       .win-stack-grid {
         grid-template-columns: 1fr 1fr;
       }

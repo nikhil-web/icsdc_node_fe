@@ -79,7 +79,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
         if (params.heroImage && params.heroImage.image) {
             const heroRight = document.querySelector('.hero-right');
             const img = heroRight && heroRight.querySelector('.hero-right-image');
-            // style.css hides .hero-right below 1366px. Assigning .src there still
+            // style.css hides .hero-right below the desktop tier (1024px). Assigning .src there still
             // downloads and decodes the image — a 771 KB PNG fetched to be invisible
             // on every phone and tablet. Skip it when the container isn't rendered;
             // the server-side preload (heroPreloadUrl) is gated on the same breakpoint.

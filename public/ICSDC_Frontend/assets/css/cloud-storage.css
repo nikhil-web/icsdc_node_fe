@@ -548,7 +548,7 @@ html[data-theme="dark"] .cs-related-desc {
 ══════════════════════════════════════ */
 
 /* Tablet — 2-col grids */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .cs-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -566,7 +566,7 @@ html[data-theme="dark"] .cs-related-desc {
 }
 
 /* Mobile — single column */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .cs-plans-grid {
         grid-template-columns: 1fr;
     }

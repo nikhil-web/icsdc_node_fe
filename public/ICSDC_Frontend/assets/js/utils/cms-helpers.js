@@ -446,7 +446,7 @@ export function populateHero(section, data) {
     if (data.heroImage && data.heroImage.image) {
         var heroRight = section.querySelector('.hero-right');
         var heroImg = heroRight && heroRight.querySelector('.hero-right-image');
-        // Below 1366px style.css sets .hero-right { display: none }, but assigning
+        // Below the desktop tier (1024px) style.css sets .hero-right { display: none }, but assigning
         // .src still downloads and decodes the image. On the homepage that is a
         // 771 KB PNG fetched purely to be invisible. Skip the assignment when the
         // container isn't rendered; the server-side preload is gated on the same

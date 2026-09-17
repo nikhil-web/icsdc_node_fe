@@ -757,7 +757,7 @@
 ══════════════════════════════════════ */
 
 /* 1024px */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .au-specs-grid {
         grid-template-columns: 1fr;
     }
@@ -785,7 +785,7 @@
 }
 
 /* 768px */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .au-who-section {
         padding: 72px 0;
     }

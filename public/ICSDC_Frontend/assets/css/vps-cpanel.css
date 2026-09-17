@@ -416,7 +416,7 @@ html[data-theme="dark"] .vpc-table-wrap {
 ══════════════════════════════════════ */
 
 /* 1280px — 4-col advantages → 3 */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .vpc-advantages-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -440,7 +440,7 @@ html[data-theme="dark"] .vpc-table-wrap {
 /* 1024px — 2 columns for most grids; plan cards stack */
 
 /* 640px — single column */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .vpc-advantages-grid {
         grid-template-columns: 1fr;
     }

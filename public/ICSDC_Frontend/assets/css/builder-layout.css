@@ -118,7 +118,7 @@
     grid-template-columns: repeat(var(--bsec-cols), 1fr) !important;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
     .bsec[style*="--bsec-cols"] .why-grid,
     .bsec[style*="--bsec-cols"] .cloud-power-grid,
     .bsec[style*="--bsec-cols"] .cloud-use-grid,

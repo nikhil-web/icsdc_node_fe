@@ -1341,7 +1341,7 @@ html[data-theme="dark"] .pr-sc-btn-featured:hover {
 /* ══════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════ */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
   .pr-sidebar-wrap {
     display: none;
   }
@@ -1368,7 +1368,7 @@ html[data-theme="dark"] .pr-sc-btn-featured:hover {
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   .pr-hero {
     padding: 110px 0 48px;
   }

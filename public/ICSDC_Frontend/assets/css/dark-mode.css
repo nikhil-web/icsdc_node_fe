@@ -194,7 +194,7 @@ html[data-theme="dark"] #theme-toggle:hover {
 }
 
 /* On mobile, hide the nav-bar toggle — it lives in the hamburger menu */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     #theme-toggle {
         display: none !important;
     }
