@@ -333,6 +333,7 @@ import { uploadURL } from './services/strapiClient.js';
                 }
             }
 
+            if (page.faqTitle) setText(document, '.faq-title', page.faqTitle);
             initFAQ(page.faq);
         } catch (err) {
             console.error('[azure-cloud-hosting] CMS load failed:', err);

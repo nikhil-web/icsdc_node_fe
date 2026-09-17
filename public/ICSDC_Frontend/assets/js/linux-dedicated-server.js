@@ -134,7 +134,7 @@ import { getLinuxDedicatedServerPage } from './services/contentService.js';
         });
 
         // ── FAQ ───────────────────────────────────────────────────────────────────
-        if (page.faqTitle) setText(document, '#lds-faq .faq-title', page.faqTitle);
+        if (page.faqTitle) setText(document, '#lvps-faq-heading', page.faqTitle);   // the section's ids came over from the Linux VPS page; #lds-faq never existed
         initFAQ(page.faq);
 
         // ── FINAL CTA BAND ────────────────────────────────────────────────────────

@@ -618,6 +618,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
             populateLogoGrid('hp-tech-grid', page.techPartnersTitle, page.techPartners, '#hp-tech-title');
             populateLogoGrid('hp-trusted-grid', page.trustedTitle, page.trustedPartners, '#hp-trusted-title');
             populateContactSection(page);
+            setText('#faq-heading', page.faqTitle);   // no-op when empty: the HTML heading stays
             populateFAQ(page.faq);
 
 

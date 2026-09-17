@@ -162,6 +162,7 @@ import { uploadURL } from './services/strapiClient.js';
         initTestimonials(page.testimonials);
 
         /* 10. FAQ */
+        if (page.faqTitle) setText(document, '#sh-faq-heading', page.faqTitle);
         initFAQ(page.faq);
 
         /* 11. CTA Band #2 */
