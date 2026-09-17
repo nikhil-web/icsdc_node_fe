@@ -115,6 +115,17 @@ export const BuilderAPI = {
         const r = await fetch('/api/admin/builder/media' + qs, { headers: authHeaders() });
         return jsonOrThrow(r);
     },
+    // Copies a remote image (by URL) into the media library server-side.
+    // Same response shape as uploadMedia; { skipped: true, url } when the URL
+    // is already one of ours.
+    importMediaUrl: async (url) => {
+        const r = await fetch('/api/admin/builder/media/import-url', {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ url }),
+        });
+        return jsonOrThrow(r);
+    },
     uploadMedia: async (file) => {
         const jwt = sessionStorage.getItem(JWT_KEY);
         const fd = new FormData();

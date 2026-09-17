@@ -686,6 +686,52 @@ app.post('/api/admin/builder/media', requireAdminAuth, uploadMW.single('file'), 
     }
 });
 
+/* Import a remote image into the Media Library by URL — the paste flow's path
+   for images an article references by address (Google Docs, web pages), which
+   the browser can't download itself across origins. Hotlinking them instead
+   would break published articles later: Google Docs' image links are
+   temporary. All of the download safety (SSRF, size, type) lives in
+   lib/image-import.js; this route only adds auth, skips images that are already
+   ours, and hands the bytes to Strapi exactly as the upload route above does.
+   Responds with the same shape as that route, so the client treats both alike. */
+const { fetchRemoteImage } = require('./lib/image-import');
+
+app.post('/api/admin/builder/media/import-url', requireAdminAuth, async (req, res) => {
+    const url = String((req.body && req.body.url) || '').trim();
+    if (!url || url.length > 2048) return res.status(400).json({ error: 'url is required' });
+
+    // Already in our own media library → nothing to copy.
+    const ownOrigins = [strapiPublicUrlForRequest(req), STRAPI_PUBLIC_URL, STRAPI_URL].map((u) => {
+        try { return new URL(u).origin; } catch { return null; }
+    });
+    try {
+        if (ownOrigins.includes(new URL(url).origin)) return res.json({ skipped: true, url });
+    } catch {
+        return res.status(400).json({ error: 'Not a valid URL' });
+    }
+
+    try {
+        const img = await fetchRemoteImage(url);
+        const fd = new FormData();
+        fd.append('files', new Blob([img.buffer], { type: img.mime }), 'pasted-image.' + img.ext);
+        const r = await fetch(`${STRAPI_URL}/api/upload`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
+            body: fd,
+        });
+        const text = await r.text();
+        let data;
+        try { data = JSON.parse(text); } catch { data = { raw: text }; }
+        if (Array.isArray(data)) {
+            const publicUrl = strapiPublicUrlForRequest(req);
+            data.forEach((f) => absolutifyMediaUrls(f, publicUrl));
+        }
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(err.status || 502).json({ error: 'Image import failed', detail: err.message });
+    }
+});
+
 // Delete media file
 app.delete('/api/admin/builder/media/:id', requireAdminAuth, async (req, res) => {
     try {
