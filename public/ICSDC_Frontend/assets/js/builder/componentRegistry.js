@@ -1927,6 +1927,19 @@ const blogBody = {
             '</div>' +
             '</section>';
 
+        /* A table can't scroll sideways on its own without breaking its layout,
+           and a 3-column table squeezed into a phone's width is unreadable. Wrap
+           each one in a scroll container here, at render, rather than saving the
+           wrapper into the article — so it covers every table, including ones
+           typed by hand or saved before this existed. */
+        container.querySelectorAll('.blogb-body table').forEach((table) => {
+            if (table.parentElement && table.parentElement.classList.contains('blogb-table-wrap')) return;
+            const wrap = document.createElement('div');
+            wrap.className = 'blogb-table-wrap';
+            table.parentNode.insertBefore(wrap, table);
+            wrap.appendChild(table);
+        });
+
         if (showToc) buildBlogToc(container);
         if (showHelp) fillBlogHelp(container);
     },

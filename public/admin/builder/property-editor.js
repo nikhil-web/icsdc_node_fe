@@ -278,14 +278,228 @@ const PASTE_ALLOWED_TAGS = {
     P: 1, BR: 1, H1: 1, H2: 1, H3: 1, H4: 1, H5: 1, H6: 1,
     STRONG: 1, B: 1, EM: 1, I: 1, U: 1, S: 1, STRIKE: 1, DEL: 1,
     UL: 1, OL: 1, LI: 1, A: 1, BLOCKQUOTE: 1, CODE: 1, PRE: 1,
-    IMG: 1, HR: 1, TABLE: 1, THEAD: 1, TBODY: 1, TR: 1, TH: 1, TD: 1, SUP: 1, SUB: 1,
+    IMG: 1, HR: 1, TABLE: 1, THEAD: 1, TBODY: 1, TFOOT: 1, TR: 1, TH: 1, TD: 1,
+    CAPTION: 1, SUP: 1, SUB: 1,
 };
 
 // Only these attributes survive; everything else (style/class/id/dir/lang, and
 // crucially every on* handler) is dropped.
 // data-bld-paste marks an image still being copied into the media library
 // (see "Pasted images" below); it is removed once the upload lands.
-const PASTE_ALLOWED_ATTRS = { A: ['href', 'title'], IMG: ['src', 'alt', 'data-bld-paste'] };
+// colspan/rowspan are what make a merged-cell table a table; start keeps a
+// numbered list that resumes after an interruption counting from the right
+// number. All three are validated as small integers in sanitizePastedHtml.
+const PASTE_ALLOWED_ATTRS = {
+    A: ['href', 'title'],
+    IMG: ['src', 'alt', 'data-bld-paste'],
+    TD: ['colspan', 'rowspan'],
+    TH: ['colspan', 'rowspan'],
+    OL: ['start'],
+};
+const PASTE_INT_ATTRS = { colspan: 1, rowspan: 1, start: 1 };
+
+const MONOSPACE_FONT_RE = /\b(courier|consolas|menlo|monaco|lucida console|monospace|source code|fira (code|mono)|roboto mono|dejavu sans mono|liberation mono|cascadia|jetbrains mono|ubuntu mono|sf mono)\b/i;
+const INLINE_TAGS = { B: 1, STRONG: 1, EM: 1, I: 1, U: 1, S: 1, STRIKE: 1, DEL: 1, SPAN: 1, A: 1, CODE: 1, SUP: 1, SUB: 1, FONT: 1 };
+
+/* ── Word lists ────────────────────────────────────────────────
+   Word does not paste <ul>/<ol>. Each item is a <p> tagged in its raw style
+   attribute with `mso-list:l7 level1 lfo2` (list id, nesting level), and its
+   marker — "1.", "●", "o", "" — is literal text inside a
+   <span style="mso-list:Ignore">. Left alone that arrives as a paragraph that
+   starts with "1.&nbsp;&nbsp;&nbsp;": no list semantics, no hanging indent,
+   and numbering that is just text. (Measured on a real Word paste: 47 items
+   across 9 lists, zero list elements.)
+
+   Rebuilt into real lists here, BEFORE attributes are stripped — mso-list isn't
+   a CSS property, so it only exists in the raw style attribute. The marker
+   decides ordered vs bulleted; consecutive items with the same list id and
+   level form one list; a deeper level nests inside the previous item; a
+   numbered list that doesn't start at 1 keeps its number via `start`. Only
+   <p> items are converted — Word also numbers headings this way, and turning a
+   heading into a list item would lose the heading. Google Docs already pastes
+   real lists, so none of this applies to it. */
+function wordListInfo(p) {
+    const m = /mso-list:\s*l(\d+)\s+level(\d+)/i.exec(p.getAttribute('style') || '');
+    if (!m) return null;
+    const marker = Array.from(p.querySelectorAll('span'))
+        .find((s) => /mso-list:\s*ignore/i.test(s.getAttribute('style') || ''));
+    const text = marker ? marker.textContent.replace(/ /g, ' ').trim() : '';
+    if (marker) marker.remove();
+    const ordered = /^\(?([0-9]+|[a-z]|[ivxlcdm]+)[.)]$/i.test(text);
+    const num = /^\(?(\d+)[.)]$/.exec(text);
+    return { id: m[1], level: Number(m[2]) || 1, ordered, start: num ? Number(num[1]) : 1 };
+}
+
+function previousMeaningfulSibling(node) {
+    let n = node.previousSibling;
+    while (n && n.nodeType === 3 && !n.textContent.trim()) n = n.previousSibling;
+    return n;
+}
+
+function rebuildWordLists(root) {
+    const items = Array.from(root.querySelectorAll('p')).filter((p) => /mso-list:\s*l\d+\s+level\d+/i.test(p.getAttribute('style') || ''));
+    let run = null;   // { anchor: top-level list element, stack: [{ level, id, ordered, list, li }] }
+    items.forEach((p) => {
+        const info = wordListInfo(p);
+        if (!info) return;
+        if (!run || previousMeaningfulSibling(p) !== run.anchor) run = { anchor: null, stack: [] };
+        const stack = run.stack;
+        while (stack.length && stack[stack.length - 1].level > info.level) stack.pop();
+        let top = stack[stack.length - 1];
+        // Same level but a different list (other id, or bullets → numbers): close it.
+        if (top && top.level === info.level && (top.id !== info.id || top.ordered !== info.ordered)) {
+            stack.pop();
+            top = stack[stack.length - 1];
+        }
+        if (!top || top.level < info.level) {
+            const list = document.createElement(info.ordered ? 'ol' : 'ul');
+            if (info.ordered && info.start > 1) list.setAttribute('start', String(info.start));
+            if (top && top.li) {
+                top.li.appendChild(list);                 // nested under the previous item
+            } else {
+                p.parentNode.insertBefore(list, p);        // a new top-level list
+                run.anchor = list;
+                stack.length = 0;
+            }
+            top = { level: info.level, id: info.id, ordered: info.ordered, list, li: null };
+            stack.push(top);
+        }
+        const li = document.createElement('li');
+        while (p.firstChild) li.appendChild(p.firstChild);
+        top.list.appendChild(li);
+        top.li = li;
+        p.remove();
+    });
+}
+
+/* Word ends and starts blocks with stray <br>s — "<b><br> Note:</b>" opens a
+   paragraph with an empty line, and a screenshot in a numbered step is
+   followed by up to six of them (measured), leaving a large gap. Remove breaks
+   at the very start and end of a block, looking through inline wrappers; breaks
+   between content are real line breaks and stay. */
+function trimEdgeBreaks(block) {
+    ['firstChild', 'lastChild'].forEach((edge) => {
+        for (let guard = 0; guard < 50; guard++) {
+            let node = block;
+            let child = node[edge];
+            for (;;) {
+                while (child && child.nodeType === 3 && !child.textContent.trim()) {
+                    child = edge === 'firstChild' ? child.nextSibling : child.previousSibling;
+                }
+                if (child && child.nodeType === 1 && INLINE_TAGS[child.tagName]) {
+                    node = child;
+                    child = node[edge];
+                    continue;
+                }
+                break;
+            }
+            if (child && child.nodeType === 1 && child.tagName === 'BR') child.remove();
+            else break;
+        }
+    });
+}
+
+/* Tables arrive from Word as <td><p class=MsoNormal>…</p></td> with every
+   presentational attribute inline, and from Google Docs with a bold first row
+   instead of a header. Normalise to plain semantic tables the site's own CSS
+   styles: header cells as <th> (Word's <thead>, or a first row that is bold
+   in every cell), no redundant bold inside them, and cell paragraphs flattened
+   to <br>-separated lines so a cell doesn't carry a paragraph's margins. */
+function normaliseTable(table) {
+    const toTh = (cell) => {
+        if (cell.tagName !== 'TD') return cell;
+        const th = document.createElement('th');
+        Array.from(cell.attributes).forEach((a) => th.setAttribute(a.name, a.value));
+        while (cell.firstChild) th.appendChild(cell.firstChild);
+        cell.replaceWith(th);
+        return th;
+    };
+    let thead = table.querySelector(':scope > thead');
+    if (!thead) {
+        const first = table.querySelector(':scope > tbody > tr, :scope > tr');
+        const cells = first ? Array.from(first.children) : [];
+        const allBold = cells.length > 1 && cells.every((c) => {
+            const text = c.textContent.trim();
+            if (!text) return false;
+            const boldText = Array.from(c.querySelectorAll('strong,b')).map((b) => b.textContent).join('').trim();
+            return boldText === text;
+        });
+        if (allBold) {
+            thead = document.createElement('thead');
+            table.insertBefore(thead, table.firstChild);
+            thead.appendChild(first);
+        }
+    }
+    if (thead) {
+        Array.from(thead.querySelectorAll('td,th')).forEach((c) => {
+            const th = toTh(c);
+            th.querySelectorAll('strong,b').forEach((b) => unwrapInto(b, []));
+        });
+    }
+    Array.from(table.querySelectorAll('td,th')).forEach((cell) => {
+        const paras = Array.from(cell.children).filter((c) => c.tagName === 'P');
+        paras.forEach((p, i) => {
+            if (i > 0) cell.insertBefore(document.createElement('br'), p);
+            unwrapInto(p, []);
+        });
+    });
+}
+
+/* A paragraph that is nothing but monospace text is a command or a code
+   sample, not prose: render it as a code block, and merge consecutive ones
+   into a single block so a multi-line snippet stays together. */
+function codeOnlyParagraph(p) {
+    const meaningful = Array.from(p.childNodes).filter((n) => !(n.nodeType === 3 && !n.textContent.trim()));
+    return meaningful.length > 0 && meaningful.every((n) => n.nodeType === 1 && (n.tagName === 'CODE' || n.tagName === 'BR'));
+}
+
+function paragraphsToCodeBlocks(root) {
+    Array.from(root.querySelectorAll('p')).forEach((p) => {
+        // parentNode, not isConnected: this runs inside a <template> fragment,
+        // where NOTHING is connected to a document — isConnected is false for
+        // every node, which silently skipped every paragraph. A paragraph
+        // already merged into an earlier block has had its parent cleared.
+        if (!p.parentNode || !codeOnlyParagraph(p)) return;
+        const lines = [];
+        let cur = p;
+        const group = [];
+        while (cur && cur.nodeType === 1 && cur.tagName === 'P' && codeOnlyParagraph(cur)) {
+            group.push(cur);
+            // Outside <pre>, a newline in the HTML SOURCE is just a space — and
+            // Word hard-wraps its HTML at ~76 columns, so copying textContent
+            // verbatim split one command across two lines (measured:
+            // "ssh -i /path/to/private_key\nusername@…"). Only <br> is a real
+            // break; &nbsp; is kept, since that is how indentation arrives.
+            let text = '';
+            cur.childNodes.forEach((n) => {
+                text += n.nodeType === 1 && n.tagName === 'BR' ? '\n' : n.textContent.replace(/[ \t\r\n\f]+/g, ' ');
+            });
+            lines.push(text.replace(/ /g, ' ').replace(/[ ]+$/gm, '').replace(/^ (?=\S)/, ''));
+            let next = cur.nextSibling;
+            while (next && next.nodeType === 3 && !next.textContent.trim()) next = next.nextSibling;
+            cur = next;
+        }
+        const pre = document.createElement('pre');
+        const code = document.createElement('code');
+        code.textContent = lines.join('\n');
+        pre.appendChild(code);
+        group[0].parentNode.insertBefore(pre, group[0]);
+        group.forEach((g) => g.remove());
+    });
+}
+
+/* Collapse whitespace the way the old whole-string regex did — but in text
+   nodes only, and never inside <pre>, where line breaks and indentation ARE
+   the content (a regex over the serialised HTML flattened code to one line). */
+function collapseWhitespace(root) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach((t) => {
+        if (t.parentElement && t.parentElement.closest('pre')) return;
+        t.textContent = t.textContent.replace(/[ \t\r\n\f]+/g, ' ');
+    });
+}
 
 /* ── Pasted images ─────────────────────────────────────────────
    An article pasted from Word or Google Docs carries its images, but never
@@ -436,6 +650,9 @@ function semanticTagsFromStyle(el) {
     const td = String(s.textDecoration || s.textDecorationLine || '').toLowerCase();
     if (td.indexOf('underline') !== -1) tags.push('u');
     if (td.indexOf('line-through') !== -1) tags.push('s');
+    // Word (Courier, Consolas) and Docs (Courier New, Roboto Mono) mark commands
+    // and code only by font — keep that as <code> instead of losing it.
+    if (MONOSPACE_FONT_RE.test(String(s.fontFamily || ''))) tags.push('code');
     return tags;
 }
 
@@ -475,6 +692,10 @@ function sanitizePastedHtml(html) {
     const comments = [];
     while (walker.nextNode()) comments.push(walker.currentNode);
     comments.forEach((c) => c.remove());
+
+    // Before anything strips style attributes: Word's list items are only
+    // identifiable by them (see "Word lists").
+    rebuildWordLists(root);
 
     // Turn every image into a pending marker before the attribute strip below,
     // which keeps only src/alt/data-bld-paste.
@@ -516,7 +737,16 @@ function sanitizePastedHtml(html) {
         // Keep the tag, bin every attribute except the few that carry meaning.
         const keep = PASTE_ALLOWED_ATTRS[tag] || [];
         Array.from(el.attributes).forEach((attr) => {
-            if (keep.indexOf(attr.name.toLowerCase()) === -1) el.removeAttribute(attr.name);
+            const name = attr.name.toLowerCase();
+            if (keep.indexOf(name) === -1) {
+                el.removeAttribute(attr.name);
+            } else if (PASTE_INT_ATTRS[name]) {
+                // colspan/rowspan/start: a small positive integer, and only when it
+                // changes something (1 is the default).
+                const n = parseInt(attr.value, 10);
+                if (!(n > 1 && n <= 1000)) el.removeAttribute(attr.name);
+                else el.setAttribute(attr.name, String(n));
+            }
         });
 
         // Neutralise javascript:/data: URLs — this HTML ends up on public pages.
@@ -528,6 +758,17 @@ function sanitizePastedHtml(html) {
         // src is the placeholder, and the real source is only ever uploaded,
         // never written into the article (see "Pasted images").
     });
+
+    // Structure fixes that need the markup already cleaned of attributes.
+    root.querySelectorAll('table').forEach(normaliseTable);
+    // Google Docs wraps each list item's text in a <p>; a lone one only adds
+    // paragraph margins inside the bullet.
+    root.querySelectorAll('li').forEach((li) => {
+        const blocks = Array.from(li.children).filter((c) => /^(P|UL|OL|TABLE|PRE|BLOCKQUOTE|H[1-6])$/.test(c.tagName));
+        if (blocks.length === 1 && blocks[0].tagName === 'P') unwrapInto(blocks[0], []);
+    });
+    paragraphsToCodeBlocks(root);
+    root.querySelectorAll('p,li,h1,h2,h3,h4,h5,h6,td,th,blockquote,caption').forEach(trimEdgeBreaks);
 
     // Collapse empties left behind by stripped wrappers (but keep void tags).
     Array.from(root.querySelectorAll('p,span,div,strong,b,em,i,u,s')).forEach((el) => {
@@ -543,7 +784,8 @@ function sanitizePastedHtml(html) {
     // An image dropped by the cleanup above (e.g. inside a stripped <object>)
     // has no marker left to fill.
     const kept = images.filter((i) => root.querySelector('img[' + PASTE_MARK + '="' + i.token + '"]'));
-    return { html: tpl.innerHTML.replace(/\s+/g, ' ').trim(), images: kept };
+    collapseWhitespace(root);
+    return { html: tpl.innerHTML.trim(), images: kept };
 }
 
 /* ── Rich-text (WYSIWYG) binding ──────────────────────────────

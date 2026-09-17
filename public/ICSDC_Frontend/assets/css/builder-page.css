@@ -751,6 +751,87 @@ body:has(.builder-preview-banner) nav {
     font-size: 0.9em;
 }
 
+/* Code blocks — pasted commands and snippets (a paragraph that was entirely
+   monospace in Word/Docs becomes <pre><code>). Scrolls sideways rather than
+   wrapping, because a wrapped command is a wrong command when copied. */
+.blogb-body pre {
+    margin: 12px 0 24px;
+    padding: 16px 18px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+.blogb-body pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+    white-space: pre;
+}
+
+/* Tables. There were no table rules at all, so a pasted table rendered as
+   borderless floating text. The wrapper (added by blogBody's renderer) owns the
+   border, the rounding and the sideways scroll; cells get a minimum width so a
+   many-column table scrolls on a phone instead of crushing to one word per line. */
+.blogb-body .blogb-table-wrap {
+    margin: 20px 0 28px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 12px;
+}
+
+.blogb-body table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+    line-height: 1.55;
+}
+
+.blogb-body th,
+.blogb-body td {
+    min-width: 140px;
+    padding: 12px 16px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+.blogb-body th + th,
+.blogb-body td + td,
+.blogb-body th + td,
+.blogb-body td + th {
+    border-left: 1px solid var(--border, #e2e8f0);
+}
+
+.blogb-body thead th {
+    background: var(--blue-light, #ebf2fc);
+    color: var(--c-text-dark, #0f1c2e);
+    font-weight: 700;
+}
+
+.blogb-body tbody tr:last-child > * {
+    border-bottom: 0;
+}
+
+.blogb-body td > img,
+.blogb-body th > img {
+    margin: 6px 0;
+}
+
+.blogb-body caption {
+    caption-side: bottom;
+    padding: 10px 16px;
+    font-size: 0.85em;
+    color: var(--muted, #64748b);
+    text-align: left;
+}
+
 [data-theme="dark"] .blogh-title,
 [data-theme="dark"] .blogh-author,
 [data-theme="dark"] .blogb-body {
@@ -759,6 +840,26 @@ body:has(.builder-preview-banner) nav {
 
 [data-theme="dark"] .blogb-body code {
     background: #1e293b;
+}
+
+[data-theme="dark"] .blogb-body pre {
+    background: #0b1220;
+    border: 1px solid #24334d;
+}
+
+[data-theme="dark"] .blogb-body pre code {
+    background: none;
+}
+
+[data-theme="dark"] .blogb-body .blogb-table-wrap,
+[data-theme="dark"] .blogb-body th,
+[data-theme="dark"] .blogb-body td {
+    border-color: #24334d;
+}
+
+[data-theme="dark"] .blogb-body thead th {
+    background: #16233a;
+    color: #e8eefc;
 }
 
 [data-theme="dark"] .blogh-byline {
