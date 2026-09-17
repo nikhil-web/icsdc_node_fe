@@ -31,7 +31,8 @@ import {
     getInitials,
     starSVG,
     initTestimonials,
-    initFAQ
+    initFAQ,
+    populatePillarsHeader
 } from './utils/cms-helpers.js';
 
 import { getSharedHostingPage } from './services/contentService.js';
@@ -63,6 +64,7 @@ import { uploadURL } from './services/strapiClient.js';
         });
 
         /* 3. Pillars (4 icon cards) */
+        populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
         populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
         /* 4. Who We Are (about section) */

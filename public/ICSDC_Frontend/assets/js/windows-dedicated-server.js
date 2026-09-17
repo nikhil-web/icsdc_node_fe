@@ -1,4 +1,4 @@
-import { populateSEO, populateHero, populateIconCards, populateSectionHeader, populateCtaBand, populateComparisonTable, populatePricingPlansCloud, wireCtaLink, hidePageLoader, markActiveNavLink, setText, setHTML, initTestimonials, initFAQ } from './utils/cms-helpers.js';
+import { populateSEO, populateHero, populateIconCards, populateSectionHeader, populateCtaBand, populateComparisonTable, populatePricingPlansCloud, wireCtaLink, hidePageLoader, markActiveNavLink, setText, setHTML, initTestimonials, initFAQ, populatePillarsHeader } from './utils/cms-helpers.js';
 import { getWindowsDedicatedServerPage } from './services/contentService.js';
 
 // Comparison-table CTAs. These are <button>s, so the destination must go through
@@ -39,6 +39,7 @@ function populateCompareButtons(primary, secondary) {
             heroImage: page.heroImage
         });
 
+        populatePillarsHeader('.why-grid', page.pillarsTitle, page.pillarsSubtitle);
         populateIconCards('.why-grid', page.pillars, 'why-card');
 
         // Pricing — header + plan cards. populatePricingPlansCloud() wires each

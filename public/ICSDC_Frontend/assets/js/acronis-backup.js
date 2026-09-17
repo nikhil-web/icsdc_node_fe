@@ -22,7 +22,7 @@
  * heroEyebrow/pricingLabel/featuresLabel/whyLabel were dropped from the schema.
  */
 
-import { wireCtaLink } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
 import { getAcronisBackupPage } from './services/contentService.js';
 
 import {
@@ -161,6 +161,7 @@ import {
             populateHero('.hero-section', { heroImage: page.heroImage });
 
             // 3. Pillars
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populatePillars(page.pillars);
 
             // 4. Pricing

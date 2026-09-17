@@ -1,4 +1,4 @@
-import { wireCtaLink } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
 import { populateSEO, populateHero, hidePageLoader, markActiveNavLink, setText, setHTML, initTestimonials, initFAQ } from './utils/cms-helpers.js';
 import { getLinuxDedicatedServerPage } from './services/contentService.js';
 
@@ -32,6 +32,7 @@ import { getLinuxDedicatedServerPage } from './services/contentService.js';
 
         // ── SECTION 2: FOUR PILLAR CARDS ─────────────────────────────────────────
         // desc is null in Strapi — update only h3 titles to preserve static descriptions
+        populatePillarsHeader('.why-grid .why-card', page.pillarsTitle, page.pillarsSubtitle);
         ldsUpdateCardTitles('.why-grid .why-card', page.pillars);
 
         // ── SECTION 3: PRICING ───────────────────────────────────────────────────

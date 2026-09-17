@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getDomainTransferPage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -93,6 +93,7 @@ import {
             if (page.heroStatusSubtitle) setText(document, '.dt-bs', page.heroStatusSubtitle);
 
             // 4 Pillars
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // Who We Are

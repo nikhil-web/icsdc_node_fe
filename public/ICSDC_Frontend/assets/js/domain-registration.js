@@ -20,7 +20,7 @@
  *   13. FAQ
  */
 
-import { wireCtaLink } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
 import { getDomainRegistrationPage } from './services/contentService.js';
 import {
     populateSEO,
@@ -242,6 +242,7 @@ import {
             populateHero('.hero-section', { heroImage: page.heroImage });
 
             // 3. Pillars
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populatePillars(page.pillars);
 
             // 4. Features

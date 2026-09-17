@@ -1,4 +1,4 @@
-import { wireCtaLink } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -218,6 +218,7 @@ import { uploadURL } from './services/strapiClient.js';
             });
             if (heroFormOn) initHeroContactForm('hf-form', 'hf-success');
 
+            populatePillarsHeader('#azure-features .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             renderAzureCards('#azure-features .why-grid', page.pillars, 'why-card', 'why-icon');
 
             setSectionHeader('azure-who', page.aboutLabel, page.aboutTitle, null, {

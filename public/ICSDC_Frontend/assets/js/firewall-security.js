@@ -17,7 +17,8 @@ import {
     setHTML,
     initFAQ,
     initTestimonials,
-    initHeroContactForm
+    initHeroContactForm,
+    populatePillarsHeader
 } from './utils/cms-helpers.js';
 
 (function () {
@@ -48,6 +49,7 @@ import {
             if (page.heroFormEnabled) initHeroContactForm('hf-form', 'hf-success');
 
             // Pillars (4 cards)
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // How ICSDC Strengthens Your Network (8 cards)
