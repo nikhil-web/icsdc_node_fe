@@ -25,7 +25,7 @@
  */
 
 import { getDedicatedServerPage } from './services/contentService.js';
-import { initFAQ, initTestimonials, populateSEO, inlineRichText, wireCtaLink } from './utils/cms-helpers.js';
+import { initFAQ, initTestimonials, populateSEO, inlineRichText, wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
 
 (function () {
     'use strict';
@@ -803,6 +803,7 @@ import { initFAQ, initTestimonials, populateSEO, inlineRichText, wireCtaLink } f
             }
 
             // 3. Feature Highlights
+            populatePillarsHeader('#ds-features .why-grid', page.featureHighlightsTitle, page.featureHighlightsSubtitle);
             populateFeatureHighlights(page.featureHighlights);
 
             // 4. Pricing

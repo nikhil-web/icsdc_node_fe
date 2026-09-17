@@ -1005,6 +1005,10 @@ const pillars = {
     icon: 'star',
     description: 'The 3–4 pillar badges strip that sits under the hero on every hosting page (why-card style).',
     schema: [
+        // Optional, like the pillarsTitle/pillarsSubtitle fields on the legacy
+        // Strapi pages: left empty, the strip renders exactly as it always has.
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
         {
             key: 'items', label: 'Pillars', type: 'repeater',
             itemSchema: [
@@ -1015,6 +1019,8 @@ const pillars = {
         },
     ],
     defaultProps: {
+        title: '',
+        subtitle: '',
         items: [
             { icon: 'gauge-high', title: '99.9% Uptime', desc: 'Guaranteed availability backed by SLA.' },
             { icon: 'shield-halved', title: 'Enterprise Security', desc: 'Protected at every layer, always.' },
@@ -1024,8 +1030,11 @@ const pillars = {
     },
     renderer(container, p) {
         const gridId = bldId('bld-pillars');
+        const title = p.title ? '<h2 class="title">' + esc(p.title) + '</h2>' : '';
+        const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
         container.innerHTML =
             '<section class="section"><div class="container">' +
+            title + sub +
             '<div id="' + gridId + '" class="why-grid"></div>' +
             '</div></section>';
         populateIconCards('#' + gridId, p.items || [], 'why-card');
