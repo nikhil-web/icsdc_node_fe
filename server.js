@@ -1068,6 +1068,15 @@ app.post('/api/admin/sitemap/regenerate', requireAdminAuth, async function (req,
     }
 });
 
+/* Admin: drop the cached per-page JSON-LD so a Strapi edit shows immediately.
+   Schema is edited in Strapi, not here, so there is no publish hook to piggyback
+   on — without this an editor waits out the 10-minute TTL before they can check
+   their markup in View Source or Google's Rich Results Test. */
+app.post('/api/admin/schema/refresh', requireAdminAuth, function (req, res) {
+    invalidatePageSchemaCache();
+    res.json({ ok: true, refreshedAt: new Date().toISOString() });
+});
+
 // Admin: return sitemap data as JSON
 app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
     try {
@@ -1330,6 +1339,140 @@ async function fetchSeo(slug) {
     return value;
 }
 
+/* ── Per-page JSON-LD schema (Strapi "Page Schema (JSON-LD)") ──────────
+   Editors add extra schema.org blocks for a page in Strapi; these are merged
+   into the @graph this server already emits (Organization + WebSite + WebPage,
+   plus BlogPosting on blog posts). Keyed by URL PATH, not slug: legacy pages,
+   builder pages, blog posts and KB articles all reach sendPageWithSeo with a
+   clean path, so one entry format covers every kind of page.
+
+   Entries are read in ONE request for the whole site and cached, so a page with
+   schema costs no extra round-trip. Everything fails soft — Strapi down, a
+   malformed entry, an entry for a page that no longer exists — all end up as
+   "no extra blocks", never as a broken page. */
+const SCHEMA_TTL = 10 * 60 * 1000;         // same refresh window as seoCache
+const SCHEMA_MAX_BYTES = 50 * 1024;        // per page, serialized
+let schemaCache = { map: null, expires: 0 };
+
+/* Paths are compared normalised: leading slash, no trailing slash, lowercase.
+   '/Cloud-Hosting/' and '/cloud-hosting' are the same page to an editor. */
+function schemaNormalisePath(p) {
+    let s = String(p == null ? '' : p).trim().toLowerCase();
+    if (!s) return '/';
+    s = s.replace(/^https?:\/\/[^/]+/, '');        // tolerate a full URL being pasted
+    s = s.replace(/[?#].*$/, '');                  // drop query / hash
+    if (s.charAt(0) !== '/') s = '/' + s;
+    if (s.length > 1) s = s.replace(/\/+$/, '');
+    return s || '/';
+}
+
+async function fetchAllPageSchemas() {
+    if (schemaCache.map && schemaCache.expires > Date.now()) return schemaCache.map;
+    const map = new Map();
+    try {
+        const r = await fetch(
+            `${STRAPI_URL}/api/page-schemas?populate=blocks&pagination[pageSize]=500`, {
+            headers: STRAPI_TOKEN ? { Authorization: `Bearer ${STRAPI_TOKEN}` } : {},
+        });
+        if (r.ok) {
+            const json = await r.json();
+            const rows = (json && Array.isArray(json.data)) ? json.data : [];
+            for (const row of rows) {
+                if (!row || !row.path) continue;
+                map.set(schemaNormalisePath(row.path), Array.isArray(row.blocks) ? row.blocks : []);
+            }
+        } else if (r.status !== 404) {
+            // 404 = content type not deployed yet, which is a valid state here.
+            console.warn('[schema] Strapi returned', r.status, 'for page-schemas');
+        }
+    } catch (e) {
+        console.warn('[schema] could not load page schemas:', e.message);
+    }
+    schemaCache = { map, expires: Date.now() + SCHEMA_TTL };
+    return map;
+}
+
+// Lets an editor's save show up without waiting out the TTL.
+function invalidatePageSchemaCache() { schemaCache = { map: null, expires: 0 }; }
+
+/* The @ids this server emits itself. A pasted block redefining one of them would
+   contradict the generated node rather than add to it, so those are dropped and
+   the baseline graph stays authoritative. */
+function schemaReservedIds(canonical) {
+    return new Set([
+        SEO_SITE_URL + '/#organization',
+        SEO_SITE_URL + '/#website',
+        canonical + '#webpage',
+        canonical + '#article',
+        canonical + '#breadcrumb',
+    ]);
+}
+
+/* Turn stored entries into graph nodes, discarding anything unusable. This is
+   the only thing between a CMS field and the page's <head>, so it is strict,
+   logs what it drops, and never throws. */
+function sanitizeSchemaBlocks(blocks, canonical, pathForLog) {
+    if (!Array.isArray(blocks) || !blocks.length) return [];
+    const reserved = schemaReservedIds(canonical);
+    const out = [];
+    let bytes = 0;
+
+    for (const block of blocks) {
+        if (!block || block.enabled === false) continue;
+        const label = block.note || block.schemaType || '?';
+
+        let parsed = block.jsonLd;
+        if (typeof parsed === 'string') {
+            if (!parsed.trim()) continue;
+            try { parsed = JSON.parse(parsed); }
+            catch (e) {
+                console.warn(`[schema] ${pathForLog}: block "${label}" is not valid JSON — skipped`);
+                continue;
+            }
+        }
+        if (!parsed) continue;
+
+        // One entry may hold a single node or an array of them.
+        for (const node of (Array.isArray(parsed) ? parsed : [parsed])) {
+            if (!node || typeof node !== 'object' || Array.isArray(node)) {
+                console.warn(`[schema] ${pathForLog}: block "${label}" is not a schema object — skipped`);
+                continue;
+            }
+            if (!node['@type']) {
+                console.warn(`[schema] ${pathForLog}: block "${label}" has no @type — skipped`);
+                continue;
+            }
+            const copy = Object.assign({}, node);
+            delete copy['@context'];               // emitted once, for the whole graph
+            if (copy['@id'] && reserved.has(copy['@id'])) {
+                console.warn(`[schema] ${pathForLog}: block "${label}" redefines reserved @id ${copy['@id']} — skipped`);
+                continue;
+            }
+            const size = JSON.stringify(copy).length;
+            if (bytes + size > SCHEMA_MAX_BYTES) {
+                console.warn(`[schema] ${pathForLog}: over ${SCHEMA_MAX_BYTES} bytes — remaining blocks skipped`);
+                return out;
+            }
+            bytes += size;
+            out.push(copy);
+        }
+    }
+    return out;
+}
+
+async function pageSchemaBlocks(cleanPath, canonical) {
+    try {
+        const map = await fetchAllPageSchemas();
+        const key = schemaNormalisePath(cleanPath);
+        const blocks = map.get(key);
+        if (!blocks || !blocks.length) return [];
+        return sanitizeSchemaBlocks(blocks, canonical, key);
+    } catch (e) {
+        console.warn('[schema] skipped for', cleanPath, '-', e.message);
+        return [];
+    }
+}
+
 function seoEsc(s) {
     return String(s == null ? '' : s)
         .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
@@ -1405,7 +1548,9 @@ function seoCanonical(cleanPath, seo) {
 // `article` is optional and only ever set for blog posts (see blogSeoFor). Its
 // nodes are APPENDED, so the graph every other page emits is byte-for-byte what
 // it was before blog support was added.
-function seoJsonLd(canonical, title, description, article) {
+// `extraBlocks` are the CMS-managed blocks for this page (pageSchemaBlocks),
+// already sanitized; appended last for the same reason.
+function seoJsonLd(canonical, title, description, article, extraBlocks) {
     const graph = [
         {
             '@type': 'Organization', '@id': SEO_SITE_URL + '/#organization',
@@ -1454,7 +1599,13 @@ function seoJsonLd(canonical, title, description, article) {
         });
     }
 
-    return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+    if (Array.isArray(extraBlocks) && extraBlocks.length) graph.push(...extraBlocks);
+
+    /* `<` is escaped to its JSON < form so no stored value can close this
+       <script> tag early — the one way CMS-authored JSON could inject markup.
+       The escape is invisible to any JSON parser, including Google's. */
+    return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })
+        .replace(/</g, '\\u003c');
 }
 
 // Read a page HTML file, inject SEO <head>, and send it.
@@ -2010,6 +2161,11 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     const ogImage = (seo && seo.ogImage) || SEO_OG_IMAGE;
     const article = (seo && seo.article) || null;
 
+    /* CMS-managed schema for this page, matched on the clean path. Empty for
+       every page that has no entry, so those pages emit exactly what they did
+       before this existed. */
+    const schemaBlocks = await pageSchemaBlocks(cleanPath, canonical);
+
     const headTags = [
         // Preload first: it's only useful if the browser sees it early.
         // `media` matters: style.css hides .hero-right below the desktop tier (1024px), so on phones
@@ -2042,7 +2198,7 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
         `<meta name="twitter:title" content="${seoEsc(title)}">`,
         `<meta name="twitter:description" content="${seoEsc(description)}">`,
         `<meta name="twitter:image" content="${seoEsc(ogImage)}">`,
-        `<script type="application/ld+json">${seoJsonLd(canonical, title, description, article)}</script>`,
+        `<script type="application/ld+json">${seoJsonLd(canonical, title, description, article, schemaBlocks)}</script>`,
     ].join('\n    ');
 
     // Replace <title>
