@@ -27,7 +27,10 @@ const IS_CANVAS = new URLSearchParams(window.location.search).get('canvas') === 
 
 (function loadDeferredWidgetStyles() {
     if (IS_CANVAS) return;
-    ['chat-widget', 'whatsapp-widget', 'contact-modal'].forEach(function (name) {
+    /* 'chat-widget' removed from this list while live chat runs on Tawk.to
+       (see the loader at the bottom of this file). Put it back to re-enable
+       our own widget. */
+    ['whatsapp-widget', 'contact-modal'].forEach(function (name) {
         var href = '/assets/css/' + name + '.css';
         if (document.querySelector('link[href="' + href + '"]')) return;
         var l = document.createElement('link');
@@ -656,12 +659,33 @@ async function init() {
 
 init();
 
-// Load chat widget after main init (dynamic import keeps main.js lean).
-// Never in the editor canvas — a live-chat bubble inside the page builder is
-// noise, and it opens a socket.io connection per canvas mount.
+// ══════════════════════════════════════════════════════
+//  LIVE CHAT — Tawk.to
+//  Replaces our own chat widget (bot + admin takeover over socket.io).
+//  Nothing server-side changed: the socket.io handlers, the /api/chat routes
+//  and the app_chat_sessions table are all still there, just idle. To switch
+//  back, comment out the Tawk block below, uncomment the ICSDC block under it,
+//  and add 'chat-widget' back to the deferred-styles list near the top.
+//  Never in the editor canvas — a chat bubble inside the page builder is noise.
+// ══════════════════════════════════════════════════════
+if (!IS_CANVAS) {
+    window.Tawk_API = window.Tawk_API || {};
+    window.Tawk_LoadStart = new Date();
+    (function () {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://embed.tawk.to/6ab4ca1ef636e0343dadc653/1k393b1ts';
+        s.charset = 'UTF-8';
+        s.setAttribute('crossorigin', '*');
+        document.head.appendChild(s);
+    })();
+}
+
+/* ── ICSDC live chat (disabled — see Tawk.to block above) ──────────────
 if (!IS_CANVAS) {
     import('./chat-widget.js').then(function (m) { m.initChatWidget(); }).catch(function () {});
 }
+──────────────────────────────────────────────────────────────────────── */
 
 // ══════════════════════════════════════════════════════
 //  THEME TOGGLE
