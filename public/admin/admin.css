@@ -1578,7 +1578,7 @@ code {
 
 .lead-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
     margin-bottom: 1.5rem;
     padding: 1.5rem 1.5rem 0;
@@ -1615,11 +1615,6 @@ code {
 .lead-stat-card--contact .lead-stat-icon {
     background: #dbeafe;
     color: #1a56db;
-}
-
-.lead-stat-card--whatsapp .lead-stat-icon {
-    background: #dcfce7;
-    color: #15803d;
 }
 
 .lead-stat-card--chat .lead-stat-icon {
@@ -1680,11 +1675,6 @@ code {
 .lead-badge--contact {
     background: #dbeafe;
     color: #1e40af;
-}
-
-.lead-badge--whatsapp {
-    background: #dcfce7;
-    color: #15803d;
 }
 
 .lead-badge--chat {
@@ -1752,11 +1742,6 @@ code {
 .lead-action:hover {
     background: #e2e8f0;
     color: #0f172a;
-}
-
-.lead-action--wa:hover {
-    background: #dcfce7;
-    color: #15803d;
 }
 
 .lead-action--chat:hover {

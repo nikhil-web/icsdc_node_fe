@@ -143,8 +143,54 @@ async function refreshPageCache() {
     }
 }
 
-// Proxy: /api/strapi/* → Strapi (token stays server-side)
+/* Proxy: /api/strapi/* → Strapi (token stays server-side).
+   This route is PUBLIC and attaches the server's full-access token, so it must
+   only do what the public site itself needs — otherwise anyone can use it as an
+   authenticated Strapi client. Previously it forwarded every method and path:
+   contact submissions and the users list were readable, and any collection
+   (including page-schemas, which is injected into <head>) was writable.
+
+   - Writes: only POST /api/contact-submissions (contact-us, contact popup,
+     hero form, builder contact form — all via postAPI or a direct fetch).
+   - Reads: GET/HEAD, except collections holding private data or server-only
+     config. The admin panel reads those through its own authed /api/admin/*
+     routes and server.js reads Strapi directly, so neither uses this proxy.
+   - Drafts: the public site only ever renders published content; draft reads
+     (builder preview, admin) go through server-side routes. */
+const PROXY_WRITE_ALLOW = [
+    { method: 'POST', re: /^\/api\/contact-submissions\/?$/ },
+];
+const PROXY_READ_DENY = [
+    /^\/api\/contact-submissions(\/|$)/,
+    /^\/api\/whatsapp-leads(\/|$)/,
+    /^\/api\/chat-sessions(\/|$)/,
+    /^\/api\/page-registries(\/|$)/,
+    /^\/api\/page-schemas(\/|$)/,       // server.js injects it; editors' notes stay private
+    /^\/api\/users(\/|$)/,
+    /^\/api\/users-permissions(\/|$)/,
+    /^\/api\/auth(\/|$)/,
+    /^\/api\/connect(\/|$)/,
+];
+const PROXY_DRAFT_RE = /(^|&)(status=draft|publicationState=preview)(&|$)/i;
+
+function proxyRequestAllowed(req) {
+    let p = req.path;
+    try { p = decodeURIComponent(p); } catch { return false; }
+    p = p.replace(/\/{2,}/g, '/').toLowerCase();
+    if (p.includes('..')) return false;
+    if (req.method === 'GET' || req.method === 'HEAD') {
+        if (PROXY_READ_DENY.some((re) => re.test(p))) return false;
+        let q = req.url.includes('?') ? req.url.slice(req.url.indexOf('?') + 1) : '';
+        try { q = decodeURIComponent(q); } catch { return false; }
+        return !PROXY_DRAFT_RE.test(q);
+    }
+    return PROXY_WRITE_ALLOW.some((r) => r.method === req.method && r.re.test(p));
+}
+
 app.use('/api/strapi', async (req, res) => {
+    if (!proxyRequestAllowed(req)) {
+        return res.status(403).json({ data: null, error: { status: 403, name: 'ForbiddenError', message: 'Forbidden' } });
+    }
     const target = `${STRAPI_URL}${req.url}`;
     try {
         const opts = {
@@ -1072,9 +1118,9 @@ app.post('/api/admin/sitemap/regenerate', requireAdminAuth, async function (req,
    Schema is edited in Strapi, not here, so there is no publish hook to piggyback
    on — without this an editor waits out the 10-minute TTL before they can check
    their markup in View Source or Google's Rich Results Test. */
-app.post('/api/admin/schema/refresh', requireAdminAuth, function (req, res) {
-    invalidatePageSchemaCache();
-    res.json({ ok: true, refreshedAt: new Date().toISOString() });
+app.post('/api/admin/schema/refresh', requireAdminAuth, async function (req, res) {
+    const pages = await invalidatePageSchemaCache();
+    res.json({ ok: true, pages, refreshedAt: new Date().toISOString() });
 });
 
 // Admin: return sitemap data as JSON
@@ -1340,80 +1386,167 @@ async function fetchSeo(slug) {
 }
 
 /* ── Per-page JSON-LD schema (Strapi "Page Schema (JSON-LD)") ──────────
-   Editors add extra schema.org blocks for a page in Strapi; these are merged
-   into the @graph this server already emits (Organization + WebSite + WebPage,
-   plus BlogPosting on blog posts). Keyed by URL PATH, not slug: legacy pages,
-   builder pages, blog posts and KB articles all reach sendPageWithSeo with a
-   clean path, so one entry format covers every kind of page.
+   Editors add extra schema.org blocks for a page in Strapi. They are emitted in
+   their OWN <script type="application/ld+json" data-cms-schema> tag, next to the
+   site's generated graph (Organization + WebSite + WebPage, plus BlogPosting on
+   blog posts), rather than merged into it. Keyed by URL PATH, not slug: legacy
+   pages, builder pages, blog posts and KB articles all reach sendPageWithSeo
+   with a clean path, so one entry format covers every kind of page.
 
-   Entries are read in ONE request for the whole site and cached, so a page with
-   schema costs no extra round-trip. Everything fails soft — Strapi down, a
-   malformed entry, an entry for a page that no longer exists — all end up as
-   "no extra blocks", never as a broken page. */
+   Why a separate tag: crawlers are served prerendered snapshots, which are
+   frozen at build time. A separate, marked tag can be swapped for the current
+   CMS markup when a snapshot is served (see the bot middleware), so an editor's
+   change reaches Google without rebuilding the snapshot. Merged into the
+   generated graph, it could not be told apart from the generated nodes.
+
+   Entries are read for the whole site in one paginated pass and cached. A page
+   never blocks on Strapi once the cache is warm: an expired cache is served as
+   is while a refresh runs in the background, and a failed refresh keeps the
+   last good copy (retrying in SCHEMA_RETRY_MS) instead of caching "nothing" —
+   a Strapi blip must not strip every page's schema, or get frozen into
+   snapshots built during the outage. */
 const SCHEMA_TTL = 10 * 60 * 1000;         // same refresh window as seoCache
-const SCHEMA_MAX_BYTES = 50 * 1024;        // per page, serialized
-let schemaCache = { map: null, expires: 0 };
+const SCHEMA_RETRY_MS = 30 * 1000;         // after a failed refresh
+const SCHEMA_FETCH_TIMEOUT_MS = 5000;      // per Strapi request
+const SCHEMA_PAGE_SIZE = 100;              // Strapi's rest.maxLimit (config/api.ts)
+const SCHEMA_MAX_BYTES = 50 * 1024;        // per page, UTF-8 bytes
+const SCHEMA_EMPTY = new Map();
+let schemaCache = { map: null, nextRefresh: 0 };
+let schemaInflight = null;
 
 /* Paths are compared normalised: leading slash, no trailing slash, lowercase.
-   '/Cloud-Hosting/' and '/cloud-hosting' are the same page to an editor. */
+   '/Cloud-Hosting/' and '/cloud-hosting' are the same page to an editor.
+   MUST match normalisePath() in the Strapi page-schema lifecycles, which
+   normalises on save so the unique constraint sees the same value. */
 function schemaNormalisePath(p) {
     let s = String(p == null ? '' : p).trim().toLowerCase();
     if (!s) return '/';
     s = s.replace(/^https?:\/\/[^/]+/, '');        // tolerate a full URL being pasted
     s = s.replace(/[?#].*$/, '');                  // drop query / hash
     if (s.charAt(0) !== '/') s = '/' + s;
+    s = s.replace(/\/{2,}/g, '/');
     if (s.length > 1) s = s.replace(/\/+$/, '');
     return s || '/';
 }
 
-async function fetchAllPageSchemas() {
-    if (schemaCache.map && schemaCache.expires > Date.now()) return schemaCache.map;
+/* One full read of the collection. Throws on any failure so the caller can
+   keep the previous map; a 404 means the content type isn't deployed, which is
+   a valid, empty state rather than an error. */
+async function loadAllPageSchemas() {
     const map = new Map();
-    try {
+    for (let page = 1; ; page++) {
         const r = await fetch(
-            `${STRAPI_URL}/api/page-schemas?populate=blocks&pagination[pageSize]=500`, {
+            `${STRAPI_URL}/api/page-schemas?populate=blocks` +
+            `&pagination[page]=${page}&pagination[pageSize]=${SCHEMA_PAGE_SIZE}&sort=id:asc`, {
             headers: STRAPI_TOKEN ? { Authorization: `Bearer ${STRAPI_TOKEN}` } : {},
+            signal: AbortSignal.timeout(SCHEMA_FETCH_TIMEOUT_MS),
         });
-        if (r.ok) {
-            const json = await r.json();
-            const rows = (json && Array.isArray(json.data)) ? json.data : [];
-            for (const row of rows) {
-                if (!row || !row.path) continue;
-                map.set(schemaNormalisePath(row.path), Array.isArray(row.blocks) ? row.blocks : []);
+        if (r.status === 404) return map;
+        if (!r.ok) throw new Error(`Strapi returned ${r.status}`);
+        const json = await r.json();
+        const rows = (json && Array.isArray(json.data)) ? json.data : [];
+        for (const row of rows) {
+            if (!row || !row.path) continue;
+            const key = schemaNormalisePath(row.path);
+            const blocks = Array.isArray(row.blocks) ? row.blocks : [];
+            // Entries saved before Strapi normalised paths can collide here.
+            // Keep both rather than letting one silently replace the other.
+            if (map.has(key)) {
+                console.warn(`[schema] two entries resolve to ${key} — their blocks are combined; merge them in Strapi`);
+                map.set(key, map.get(key).concat(blocks));
+            } else {
+                map.set(key, blocks);
             }
-        } else if (r.status !== 404) {
-            // 404 = content type not deployed yet, which is a valid state here.
-            console.warn('[schema] Strapi returned', r.status, 'for page-schemas');
         }
-    } catch (e) {
-        console.warn('[schema] could not load page schemas:', e.message);
+        const pageCount = (json && json.meta && json.meta.pagination && json.meta.pagination.pageCount) || 1;
+        if (page >= pageCount || !rows.length) return map;
     }
-    schemaCache = { map, expires: Date.now() + SCHEMA_TTL };
-    return map;
 }
 
-// Lets an editor's save show up without waiting out the TTL.
-function invalidatePageSchemaCache() { schemaCache = { map: null, expires: 0 }; }
+// Single-flight refresh: concurrent callers share one request.
+function refreshPageSchemas() {
+    if (!schemaInflight) {
+        schemaInflight = loadAllPageSchemas()
+            .then((map) => {
+                schemaCache = { map, nextRefresh: Date.now() + SCHEMA_TTL };
+                return map;
+            })
+            .catch((e) => {
+                console.warn('[schema] could not load page schemas:', e.message,
+                    schemaCache.map ? '— keeping the last good copy' : '');
+                schemaCache = { map: schemaCache.map, nextRefresh: Date.now() + SCHEMA_RETRY_MS };
+                return schemaCache.map;
+            })
+            .finally(() => { schemaInflight = null; });
+    }
+    return schemaInflight;
+}
 
-/* The @ids this server emits itself. A pasted block redefining one of them would
-   contradict the generated node rather than add to it, so those are dropped and
-   the baseline graph stays authoritative. */
-function schemaReservedIds(canonical) {
-    return new Set([
+async function fetchAllPageSchemas() {
+    if (schemaCache.map) {
+        // Stale-while-revalidate: never make a visitor wait on Strapi.
+        if (Date.now() >= schemaCache.nextRefresh) refreshPageSchemas();
+        return schemaCache.map;
+    }
+    // Nothing loaded yet (boot, or Strapi down since boot). Wait — bounded by the
+    // fetch timeout — unless a recent attempt already failed.
+    if (Date.now() < schemaCache.nextRefresh) return SCHEMA_EMPTY;
+    return (await refreshPageSchemas()) || SCHEMA_EMPTY;
+}
+
+/* Lets an editor's save show up without waiting out the TTL. Refetches
+   immediately and keeps the old copy if Strapi can't be reached. */
+async function invalidatePageSchemaCache() {
+    schemaCache = { map: schemaCache.map, nextRefresh: 0 };
+    const map = await refreshPageSchemas();
+    return map ? map.size : 0;
+}
+
+/* Comparable form of an @id: resolved against the page URL (so "#organization"
+   counts), scheme and leading "www." dropped, no trailing slash before the
+   fragment. Pasted markup rarely matches the generated @ids byte for byte. */
+function schemaIdKey(id, canonical) {
+    if (typeof id !== 'string' || !id.trim()) return '';
+    let u;
+    try { u = new URL(id.trim(), canonical); } catch { return id.trim().toLowerCase(); }
+    const host = u.host.toLowerCase().replace(/^www\./, '');
+    const pathname = u.pathname.length > 1 ? u.pathname.replace(/\/+$/, '') : '';
+    return host + pathname + u.search + u.hash.toLowerCase();
+}
+
+function schemaTypes(node) {
+    const t = node['@type'];
+    return (Array.isArray(t) ? t : [t]).filter((x) => typeof x === 'string');
+}
+
+/* The site emits these nodes itself. A pasted one — with a matching @id, a
+   slightly different @id, or none at all — would be a second, conflicting
+   entity (exactly what GTM's injected "Corporation" block did), so they are
+   dropped and the generated graph stays authoritative. Nested values (e.g. an
+   Organization as a Review's author) are untouched; only top-level nodes count. */
+function schemaReserved(canonical, isArticle) {
+    const ids = [
         SEO_SITE_URL + '/#organization',
         SEO_SITE_URL + '/#website',
         canonical + '#webpage',
-        canonical + '#article',
-        canonical + '#breadcrumb',
-    ]);
+    ];
+    const types = ['Organization', 'Corporation', 'WebSite', 'WebPage'];
+    if (isArticle) {
+        ids.push(canonical + '#article', canonical + '#breadcrumb');
+        types.push('BlogPosting', 'Article', 'BreadcrumbList');
+    }
+    return {
+        ids: new Set(ids.map((id) => schemaIdKey(id, canonical))),
+        types: new Set(types),
+    };
 }
 
 /* Turn stored entries into graph nodes, discarding anything unusable. This is
    the only thing between a CMS field and the page's <head>, so it is strict,
    logs what it drops, and never throws. */
-function sanitizeSchemaBlocks(blocks, canonical, pathForLog) {
+function sanitizeSchemaBlocks(blocks, canonical, pathForLog, isArticle) {
     if (!Array.isArray(blocks) || !blocks.length) return [];
-    const reserved = schemaReservedIds(canonical);
+    const reserved = schemaReserved(canonical, isArticle);
     const out = [];
     let bytes = 0;
 
@@ -1432,23 +1565,36 @@ function sanitizeSchemaBlocks(blocks, canonical, pathForLog) {
         }
         if (!parsed) continue;
 
-        // One entry may hold a single node or an array of them.
-        for (const node of (Array.isArray(parsed) ? parsed : [parsed])) {
+        // One entry may hold a single node, an array of them, or a pasted
+        // {"@context":…, "@graph":[…]} wrapper.
+        let nodes = Array.isArray(parsed) ? parsed : [parsed];
+        if (nodes.length === 1 && nodes[0] && Array.isArray(nodes[0]['@graph'])) nodes = nodes[0]['@graph'];
+
+        for (const node of nodes) {
             if (!node || typeof node !== 'object' || Array.isArray(node)) {
                 console.warn(`[schema] ${pathForLog}: block "${label}" is not a schema object — skipped`);
                 continue;
             }
-            if (!node['@type']) {
+            const types = schemaTypes(node);
+            if (!types.length) {
                 console.warn(`[schema] ${pathForLog}: block "${label}" has no @type — skipped`);
                 continue;
             }
             const copy = Object.assign({}, node);
-            delete copy['@context'];               // emitted once, for the whole graph
-            if (copy['@id'] && reserved.has(copy['@id'])) {
-                console.warn(`[schema] ${pathForLog}: block "${label}" redefines reserved @id ${copy['@id']} — skipped`);
+            delete copy['@context'];               // emitted once, for the whole tag
+            const idKey = schemaIdKey(copy['@id'], canonical);
+            // "#organization" / "#website" name the site-wide nodes whatever page
+            // they're resolved against, so match those on the fragment alone.
+            if (idKey && (reserved.ids.has(idKey) || /#(organization|website)$/.test(idKey))) {
+                console.warn(`[schema] ${pathForLog}: block "${label}" redefines the site's own @id ${copy['@id']} — skipped`);
                 continue;
             }
-            const size = JSON.stringify(copy).length;
+            const owned = types.find((t) => reserved.types.has(t));
+            if (owned) {
+                console.warn(`[schema] ${pathForLog}: block "${label}" adds a second ${owned}, which the site already emits — skipped`);
+                continue;
+            }
+            const size = Buffer.byteLength(JSON.stringify(copy), 'utf8');
             if (bytes + size > SCHEMA_MAX_BYTES) {
                 console.warn(`[schema] ${pathForLog}: over ${SCHEMA_MAX_BYTES} bytes — remaining blocks skipped`);
                 return out;
@@ -1460,17 +1606,58 @@ function sanitizeSchemaBlocks(blocks, canonical, pathForLog) {
     return out;
 }
 
-async function pageSchemaBlocks(cleanPath, canonical) {
+/* Sanitised output is memoised per loaded `blocks` array, which is replaced on
+   every refresh. So each block is checked — and a rejected block logged — once
+   per load, not on every page view (a busy page with one bad block would
+   otherwise repeat the same warning for every visitor and crawler). */
+const schemaSanitizedCache = new WeakMap();
+
+async function pageSchemaBlocks(cleanPath, canonical, isArticle) {
     try {
         const map = await fetchAllPageSchemas();
         const key = schemaNormalisePath(cleanPath);
         const blocks = map.get(key);
         if (!blocks || !blocks.length) return [];
-        return sanitizeSchemaBlocks(blocks, canonical, key);
+        let perBlocks = schemaSanitizedCache.get(blocks);
+        if (!perBlocks) { perBlocks = new Map(); schemaSanitizedCache.set(blocks, perBlocks); }
+        const memoKey = canonical + '|' + (isArticle ? 1 : 0);
+        if (!perBlocks.has(memoKey)) perBlocks.set(memoKey, sanitizeSchemaBlocks(blocks, canonical, key, !!isArticle));
+        return perBlocks.get(memoKey);
     } catch (e) {
         console.warn('[schema] skipped for', cleanPath, '-', e.message);
         return [];
     }
+}
+
+/* `<` is escaped to its JSON < form so no stored value can close the
+   <script> tag early — the one way CMS-authored JSON could inject markup. The
+   escape is invisible to any JSON parser, including Google's. */
+function jsonLdScriptBody(obj) {
+    return JSON.stringify(obj).replace(/</g, '\\u003c');
+}
+
+// The CMS tag, or '' when the page has no extra blocks (so such pages emit
+// exactly what they did before this feature existed).
+function cmsSchemaTag(blocks) {
+    if (!Array.isArray(blocks) || !blocks.length) return '';
+    return `<script type="application/ld+json" data-cms-schema>` +
+        jsonLdScriptBody({ '@context': 'https://schema.org', '@graph': blocks }) + `</script>`;
+}
+
+/* Snapshots are frozen at build time; this swaps whatever CMS schema they were
+   built with for the current one. canonical / og:type are read back out of the
+   snapshot's own <head>, which sendPageWithSeo wrote, so the reserved-@id check
+   uses exactly the URL the page declares. */
+// Tolerates the attribute as written here and as a browser serialises it
+// (data-cms-schema=""), in case a snapshot ever keeps one.
+const CMS_SCHEMA_TAG_RE = /<script\s+type=["']application\/ld\+json["']\s+data-cms-schema(?:=["']{2})?\s*>[\s\S]*?<\/script>\s*/gi;
+async function refreshSnapshotSchema(html, cleanPath) {
+    const stripped = html.replace(CMS_SCHEMA_TAG_RE, '');
+    const canonM = stripped.match(/<link\s+rel=["']canonical["']\s+href=["']([^"']+)["']/i);
+    const canonical = canonM ? seoUnesc(canonM[1]) : seoCanonical(cleanPath, null);
+    const isArticle = /<meta\s+property=["']og:type["']\s+content=["']article["']/i.test(stripped);
+    const tag = cmsSchemaTag(await pageSchemaBlocks(cleanPath, canonical, isArticle));
+    return tag ? stripped.replace(/<\/head>/i, `    ${tag}\n</head>`) : stripped;
 }
 
 function seoEsc(s) {
@@ -1548,9 +1735,8 @@ function seoCanonical(cleanPath, seo) {
 // `article` is optional and only ever set for blog posts (see blogSeoFor). Its
 // nodes are APPENDED, so the graph every other page emits is byte-for-byte what
 // it was before blog support was added.
-// `extraBlocks` are the CMS-managed blocks for this page (pageSchemaBlocks),
-// already sanitized; appended last for the same reason.
-function seoJsonLd(canonical, title, description, article, extraBlocks) {
+// CMS-managed blocks are NOT part of this graph — see cmsSchemaTag().
+function seoJsonLd(canonical, title, description, article) {
     const graph = [
         {
             '@type': 'Organization', '@id': SEO_SITE_URL + '/#organization',
@@ -1599,13 +1785,7 @@ function seoJsonLd(canonical, title, description, article, extraBlocks) {
         });
     }
 
-    if (Array.isArray(extraBlocks) && extraBlocks.length) graph.push(...extraBlocks);
-
-    /* `<` is escaped to its JSON < form so no stored value can close this
-       <script> tag early — the one way CMS-authored JSON could inject markup.
-       The escape is invisible to any JSON parser, including Google's. */
-    return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })
-        .replace(/</g, '\\u003c');
+    return jsonLdScriptBody({ '@context': 'https://schema.org', '@graph': graph });
 }
 
 // Read a page HTML file, inject SEO <head>, and send it.
@@ -2162,9 +2342,8 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     const article = (seo && seo.article) || null;
 
     /* CMS-managed schema for this page, matched on the clean path. Empty for
-       every page that has no entry, so those pages emit exactly what they did
-       before this existed. */
-    const schemaBlocks = await pageSchemaBlocks(cleanPath, canonical);
+       every page that has no entry, so those pages emit no extra tag. */
+    const schemaTag = cmsSchemaTag(await pageSchemaBlocks(cleanPath, canonical, !!article));
 
     const headTags = [
         // Preload first: it's only useful if the browser sees it early.
@@ -2198,7 +2377,10 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
         `<meta name="twitter:title" content="${seoEsc(title)}">`,
         `<meta name="twitter:description" content="${seoEsc(description)}">`,
         `<meta name="twitter:image" content="${seoEsc(ogImage)}">`,
-        `<script type="application/ld+json">${seoJsonLd(canonical, title, description, article, schemaBlocks)}</script>`,
+        // data-site-schema marks the generated graph so prerender.js can tell
+        // it apart from JSON-LD injected at runtime by third parties (GTM).
+        `<script type="application/ld+json" data-site-schema>${seoJsonLd(canonical, title, description, article)}</script>`,
+        ...(schemaTag ? [schemaTag] : []),
     ].join('\n    ');
 
     // Replace <title>
@@ -2262,12 +2444,19 @@ app.use((req, res, next) => {
     const cleanPath = req.path.replace(/\/$/, '') || '/';
     if (livePaths.size && !livePaths.has(cleanPath)) return next();
 
+    /* Read rather than res.sendFile, so the snapshot's frozen CMS schema can be
+       swapped for the current one (refreshSnapshotSchema). Without this, a
+       schema edit never reached a crawler until that page's snapshot was rebuilt
+       — and Google's own testing tools are crawlers too. */
     const file = snapshotFileForPath(req.path);
-    fs.access(file, fs.constants.F_OK, (err) => {
-        if (err) return next();                                       // no snapshot → normal SSR path
+    fs.promises.readFile(file, 'utf8').then(async (html) => {
+        html = await refreshSnapshotSchema(html, cleanPath);
         res.set('X-Prerendered', '1');
-        res.sendFile(file);
-    });
+        res.set('Content-Type', 'text/html; charset=utf-8');
+        res.set('Cache-Control', 'public, max-age=0, must-revalidate');
+        res.send(html);
+    }, () => next())                                                  // no snapshot → normal SSR path
+        .catch(next);
 });
 
 // ── Static asset caching ──────────────────────────────────
@@ -2851,24 +3040,13 @@ function initSocketIO(io) {
     });
 }
 
-// ── Admin: WhatsApp leads (Strapi proxy) ──────────────────
-app.get('/api/admin/whatsapp-leads', requireAdminAuth, async (req, res) => {
-    try {
-        const r = await fetch(
-            `${STRAPI_URL}/api/whatsapp-leads?sort=createdAt:desc&pagination[pageSize]=100`,
-            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-        );
-        const data = await r.json();
-        res.status(r.status).json(data);
-    } catch (err) {
-        res.status(502).json({ error: 'Failed to fetch WhatsApp leads', detail: err.message });
-    }
-});
-
 // ── Admin: unified leads aggregator ───────────────────────
-// Merges contact submissions + WhatsApp leads + chat sessions into one stream
-// sorted by createdAt desc. Each item carries a `source` discriminator so the
-// admin UI can render a per-source badge and per-source action buttons.
+// Merges contact submissions + chat sessions into one stream sorted by
+// createdAt desc. (WhatsApp is not a source: the navbar widget only opens a
+// wa.me chat and stores nothing — the old lead-capture form was removed
+// 2026-05-25, and the empty `whatsapp-lead` Strapi collection is unused.)
+// Each item carries a `source` discriminator so the admin UI can render a
+// per-source badge and per-source action buttons.
 app.get('/api/admin/leads', requireAdminAuth, async (req, res) => {
     const headers = { Authorization: `Bearer ${STRAPI_TOKEN}` };
 
@@ -2881,10 +3059,8 @@ app.get('/api/admin/leads', requireAdminAuth, async (req, res) => {
     }
 
     try {
-        const [submissionsResp, whatsappResp] = await Promise.all([
-            safeJson(`${STRAPI_URL}/api/contact-submissions?sort=createdAt:desc&pagination[pageSize]=100`),
-            safeJson(`${STRAPI_URL}/api/whatsapp-leads?sort=createdAt:desc&pagination[pageSize]=100`),
-        ]);
+        const submissionsResp = await safeJson(
+            `${STRAPI_URL}/api/contact-submissions?sort=createdAt:desc&pagination[pageSize]=100`);
 
         const contactRows = (submissionsResp.data || []).map((it) => {
             const d = it.attributes || it;
@@ -2898,24 +3074,6 @@ app.get('/api/admin/leads', requireAdminAuth, async (req, res) => {
                 subject:   d.subject || null,
                 message:   d.message || '',
                 status:    'new',
-                createdAt: d.createdAt || new Date().toISOString(),
-                raw:       d,
-            };
-        });
-
-        const waRows = (whatsappResp.data || []).map((it) => {
-            const d = it.attributes || it;
-            return {
-                id:        'whatsapp-' + (it.id || d.id || ''),
-                source:    'whatsapp',
-                name:      d.name || '',
-                email:     null,
-                phone:     d.phone || null,
-                company:   null,
-                subject:   null,
-                message:   d.message || '',
-                status:    d.status || 'new',
-                sourceUrl: d.sourceUrl || null,
                 createdAt: d.createdAt || new Date().toISOString(),
                 raw:       d,
             };
@@ -2939,12 +3097,11 @@ app.get('/api/admin/leads', requireAdminAuth, async (req, res) => {
             };
         });
 
-        const all = contactRows.concat(waRows).concat(chatRows)
+        const all = contactRows.concat(chatRows)
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         const counts = {
             contact:  contactRows.length,
-            whatsapp: waRows.length,
             chat:     chatRows.length,
             total:    all.length,
         };
@@ -2954,7 +3111,6 @@ app.get('/api/admin/leads', requireAdminAuth, async (req, res) => {
         const inWeek = (r) => new Date(r.createdAt).getTime() > weekAgo;
         const weekCounts = {
             contact:  contactRows.filter(inWeek).length,
-            whatsapp: waRows.filter(inWeek).length,
             chat:     chatRows.filter(inWeek).length,
         };
 
