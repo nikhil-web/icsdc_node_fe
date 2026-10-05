@@ -94,7 +94,7 @@ import {
             populateSectionHeader('#ssl-why', page.whyLabel, page.whyTitle, null);
             if (page.whyDesc) {
                 var whyDescEl = document.querySelector('.ssl-why-desc');
-                if (whyDescEl) whyDescEl.textContent = page.whyDesc;
+                if (whyDescEl) whyDescEl.innerHTML = inlineRichText(page.whyDesc);
             }
             populateIconCards('#ssl-why-grid', page.whyCards, 'cloud-power-card');
 

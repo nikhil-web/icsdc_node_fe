@@ -256,7 +256,7 @@ import { uploadURL } from './services/strapiClient.js';
                 var qb = page.ctaBand2;
                 if (qb.title) setText(document, '#azure-quote-cta-title', qb.title);
                 var qDesc = document.getElementById('azure-quote-cta-desc');
-                if (qDesc && qb.description) { qDesc.textContent = qb.description; qDesc.hidden = false; }
+                if (qDesc && qb.description) { qDesc.innerHTML = inlineRichText(qb.description); qDesc.hidden = false; }
                 var qBtn = document.getElementById('azure-quote-cta-btn');
                 if (qBtn && qb.ctaPrimary) {
                     if (qb.ctaPrimary.text) qBtn.innerHTML = qb.ctaPrimary.text + ' ';

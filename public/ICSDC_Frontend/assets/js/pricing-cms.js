@@ -368,7 +368,7 @@ import { populateSEO, inlineRichText } from './utils/cms-helpers.js';
                 ? '<span class="pr-section-tag">' + esc(sec.sectionTag) + '</span>'
                 : '';
             var descHTML = sec.description
-                ? '<p class="pr-section-desc">' + esc(sec.description) + '</p>'
+                ? '<p class="pr-section-desc">' + inlineRichText(sec.description) + '</p>'
                 : '';
 
             var secHTML =

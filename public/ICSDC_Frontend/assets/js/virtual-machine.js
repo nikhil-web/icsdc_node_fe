@@ -156,7 +156,7 @@ import { uploadURL } from './services/strapiClient.js';
                 var b1h2 = ctaBand1.querySelector('h2');
                 var b1p = ctaBand1.querySelector('p');
                 if (b1h2 && page.ctaBand1.title) b1h2.textContent = page.ctaBand1.title;
-                if (b1p && page.ctaBand1.description) b1p.textContent = page.ctaBand1.description;
+                if (b1p && page.ctaBand1.description) b1p.innerHTML = inlineRichText(page.ctaBand1.description);
             }
 
             // Why Choose ICSDC (4 cards)
@@ -199,7 +199,7 @@ import { uploadURL } from './services/strapiClient.js';
             var whyOverTitleEl = document.getElementById('vm-whyover-title');
             if (whyOverTitleEl && page.whyOverTitle) whyOverTitleEl.textContent = page.whyOverTitle;
             var whyOverDescEl = document.getElementById('vm-whyover-desc');
-            if (whyOverDescEl && page.whyOverDesc) whyOverDescEl.textContent = page.whyOverDesc;
+            if (whyOverDescEl && page.whyOverDesc) whyOverDescEl.innerHTML = inlineRichText(page.whyOverDesc);
             var whyOverLabelEl = document.getElementById('vm-whyover-points-label');
             if (whyOverLabelEl && page.whyOverPointsLabel) whyOverLabelEl.textContent = page.whyOverPointsLabel;
             if (page.whyOverPoints && page.whyOverPoints.length) {
@@ -232,7 +232,7 @@ import { uploadURL } from './services/strapiClient.js';
                 var b2h2 = ctaBand2.querySelector('h2');
                 var b2p = ctaBand2.querySelector('p');
                 if (b2h2 && page.ctaBand2.title) b2h2.textContent = page.ctaBand2.title;
-                if (b2p && page.ctaBand2.description) b2p.textContent = page.ctaBand2.description;
+                if (b2p && page.ctaBand2.description) b2p.innerHTML = inlineRichText(page.ctaBand2.description);
             }
 
         } catch (err) {

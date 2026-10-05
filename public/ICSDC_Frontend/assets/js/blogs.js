@@ -8,7 +8,7 @@
 //  article itself (the legacy top-level /<slug> 301s there).
 // ══════════════════════════════════════════════════════════
 
-import { hidePageLoader, markActiveNavLink, populateSEO } from './utils/cms-helpers.js';
+import { hidePageLoader, markActiveNavLink, populateSEO, inlineRichText } from './utils/cms-helpers.js';
 import { getBlogIndexPage } from './services/contentService.js';
 
 (function () {
@@ -223,7 +223,7 @@ import { getBlogIndexPage } from './services/contentService.js';
             return '<a class="blog-cat-card" href="' + esc(c.link || '#') + '">' +
                 '<i class="fa-solid ' + esc(c.icon || 'fa-circle') + '" aria-hidden="true"></i>' +
                 '<h3>' + esc(c.title) + '</h3>' +
-                '<p>' + esc(c.desc || '') + '</p></a>';
+                '<p>' + inlineRichText(c.desc || '') + '</p></a>';
         }).join('');
     }
 
@@ -234,7 +234,7 @@ import { getBlogIndexPage } from './services/contentService.js';
     function renderCtaBand(ctaBand) {
         if (!ctaBand) return;
         if (ctaBand.title) document.getElementById('blog-cta-title').textContent = ctaBand.title;
-        if (ctaBand.description) document.getElementById('blog-cta-desc').textContent = ctaBand.description;
+        if (ctaBand.description) document.getElementById('blog-cta-desc').innerHTML = inlineRichText(ctaBand.description);
         var btn = document.getElementById('blog-cta-btn');
         if (ctaBand.ctaPrimary && ctaBand.ctaPrimary.text) btn.textContent = ctaBand.ctaPrimary.text;
         if (ctaBand.ctaPrimary && ctaBand.ctaPrimary.link) btn.setAttribute('href', ctaBand.ctaPrimary.link);

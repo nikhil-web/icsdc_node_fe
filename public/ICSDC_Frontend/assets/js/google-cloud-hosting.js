@@ -114,7 +114,7 @@ import { uploadURL } from './services/strapiClient.js';
             var aboutTitleEl = document.getElementById('gch-about-title');
             if (aboutTitleEl && page.aboutTitle) aboutTitleEl.textContent = page.aboutTitle;
             var aboutDescEl = document.getElementById('gch-about-desc');
-            if (aboutDescEl && page.aboutDesc) aboutDescEl.textContent = page.aboutDesc;
+            if (aboutDescEl && page.aboutDesc) aboutDescEl.innerHTML = inlineRichText(page.aboutDesc);
             if (page.aboutImage && page.aboutImage.image) {
                 var aboutImg = document.getElementById('gch-about-img');
                 if (aboutImg) {
