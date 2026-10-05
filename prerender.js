@@ -78,6 +78,15 @@ function cleanInPage() {
         if (/config\.js|\/main\.js|homepage-cms\.js|components\.js|nav-search\.js|socket\.io|polish\.js|theme-init\.js|googletagmanager|gtm\.js/i.test(src)) s.remove();
         else if (!src && /(gtm\.start|dataLayer|footer-year|googletagmanager)/i.test(s.textContent || '')) s.remove();
     });
+    /* Keep only the server's generated graph (data-site-schema). Drop:
+       - JSON-LD injected at runtime by third parties — GTM adds a "Corporation"
+         block that contradicts the site's Organization node, and stripping the
+         GTM <script> above does not remove what it already injected;
+       - the CMS schema tag (data-cms-schema), which the server injects fresh
+         every time it serves a snapshot, so a copy frozen here would only go stale. */
+    document.querySelectorAll('script[type="application/ld+json"]').forEach(s => {
+        if (!s.hasAttribute('data-site-schema')) s.remove();
+    });
     document.querySelectorAll('.chat-bubble,.chat-window').forEach(e => e.remove());
     // Drop the server's no-JS blog fallback: this snapshot already holds the fully
     // rendered article, so keeping it would duplicate the whole body text. (With JS

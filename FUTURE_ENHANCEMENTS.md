@@ -105,8 +105,7 @@ Notes:
 
 ## 2. Restrict the /api/strapi proxy (SECURITY)
 
-**Status:** Acknowledged, deferred by user (2026-07-03).
-The proxy (`server.js` ~line 61) forwards **all** HTTP methods with the server-side admin token — anyone on the internet can write to Strapi through it. Restrict to GET + the specific POSTs the public forms need (`contact-submission`, `whatsapp-lead`, `chat-session` create/update). See Known Issues in CLAUDE.md.
+**Status:** DONE 2026-10-05 (branch `fix/jsonld-schema-hardening`) — see "Strapi Proxy" in CLAUDE.md. Only GET/HEAD plus `POST /api/contact-submissions` pass; private collections and draft reads are 403. (The WhatsApp widget and chat no longer write to Strapi, so they needed no allowance.)
 
 ---
 
