@@ -26,6 +26,7 @@
 
 import { getDedicatedServerPage } from './services/contentService.js';
 import { initFAQ, initTestimonials, populateSEO, inlineRichText, wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
+import { pinPosition, placeName, buildMapPin, wireMapInteractions } from './utils/geo-map.js';
 
 (function () {
     'use strict';
@@ -504,21 +505,19 @@ import { initFAQ, initTestimonials, populateSEO, inlineRichText, wireCtaLink, po
         if (title) setText(section, '#ds-locations-title', title);
         if (desc) setText(section, '.subtitle', desc);
 
-        // Map pins — use top/left percentages stored in CMS (locationPins schema)
+        // Map pins — placed from each pin's Place (a city or country picked in
+        // Strapi; geo-map.js). A pin with no Place is skipped.
         var mapWrap = document.getElementById('ds-map-wrap');
         if (mapWrap && pins && pins.length) {
             mapWrap.querySelectorAll('.hp-pin').forEach(function (el) { el.remove(); });
             pins.forEach(function (pin, idx) {
-                var el = document.createElement('div');
-                el.className = 'hp-pin';
-                el.style.cssText = 'left:' + (pin.left || '50%') + ';top:' + (pin.top || '50%') + ';--pin-c:#1a56db';
-                el.setAttribute('aria-label', pin.label || '');
-                el.innerHTML =
-                    '<div class="hp-pin-head"><span class="hp-pin-num">' +
-                    String(idx + 1).padStart(2, '0') +
-                    '</span></div><div class="hp-pin-tail"></div>';
-                mapWrap.appendChild(el);
+                var pos = pinPosition(pin);
+                if (!pos) return;
+                var name = (pin.place && pin.place.name) || pin.label || placeName(pin);
+                mapWrap.appendChild(buildMapPin(pos, 'loc-' + (idx + 1), '#1a56db',
+                    name, pin.label, placeName(pin), ''));
             });
+            wireMapInteractions(mapWrap, null);
         }
 
         // Legend — emoji + text chips below the map

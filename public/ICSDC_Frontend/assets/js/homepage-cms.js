@@ -25,6 +25,7 @@
 
 import { getHomepagePage } from "./services/contentService.js";
 import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRichText } from "./utils/cms-helpers.js";
+import { pinPosition, placeName, buildMapPin, escapeHtml, wireMapInteractions } from "./utils/geo-map.js";
 
 (function () {
 
@@ -434,83 +435,55 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
     // ═══════════════════════════════════════════════════════════
     //  FAQ ACCORDION
     // ═══════════════════════════════════════════════════════════
-    // ── Global Presence: CMS-driven pin placement + legend ────────────────────
+    // ── Global Presence: CMS-driven pins + legend ──────────────────────────
     //
-    //  MAP_COORDS keys must match the `countryKey` field stored in Strapi.
-    //  Values are percentages of the SVG viewBox (2000 × 857) — they stay
-    //  accurate at every screen size because .hp-map-wrap uses aspect-ratio.
-    //  Matching invisible <circle data-country="..."> anchors are embedded in
-    //  world-map.svg as the geographic source of truth for these coordinates.
-    //
-    // Coordinates calibrated against actual SVG path data:
-    //   UK  southern coast: SVG (992, 182)   → 0°,   51°N
-    //   Germany north:      SVG (1053.9,159) → 13°E, 54°N
-    //   India NE coast:     SVG (1427.6,308) → 88°E, 22°N  ← key anchor
-    //   Angola NW coast:    SVG (1121.2,572) → 12°E,  5°S
-    // x-scale (eastern): +4.95 px/° from London baseline (x=992 at 0°)
-    // y-scale (tropical/subtropical): 9.78 px/° · temperate: 4.34–7.7 px/°
-    var MAP_COORDS = {
-        'usa': { x: 22.0, y: 24.0 },  // Washington DC  (77°W, 39°N)
-        'uk': { x: 49, y: 2 },  // London         ( 0°,  51.5°N)
-        'germany': { x: 52, y: 5 },  // Berlin         (13.4°E, 52.5°N)
-        'russia': { x: 58.9, y: 16.9 },  // Moscow         (37.6°E, 55.8°N)
-        'india': { x: 71, y: 36 },  // Noida/Delhi    (77.2°E, 28.6°N)
-        'russia': { x: 58.9, y: 16.9 },  // Moscow         (37.6°E, 55.8°N)
-        'future-expansion': { x: 74.5, y: 45.3 },  // Bangkok/SE Asia(100.5°E, 13.8°N)
-    };
-
+    //  Each location has a Place picked in Strapi (Country + City dropdowns);
+    //  geo-map.js projects its lat/lng onto world-map.svg exactly (the map is
+    //  generated in the same projection). Each pin shows the
+    //  location's title; pins and legend items are linked — hover/focus/tap
+    //  either one and both highlight (the legend holds the description).
     function renderMapSection(title, subtitle, locations) {
         if (title) setText('#hp-global-title', title);
         if (subtitle) setText('#hp-global-sub', subtitle);
         if (!locations || !locations.length) return;
 
-        var mapWrap = document.querySelector('.hp-map-wrap');
+        var mapWrap = document.querySelector('#hp-global .hp-map-wrap');
         var legend = document.getElementById('hp-legend');
-
-        // Clear any existing dynamically-added pins
-        if (mapWrap) {
-            mapWrap.querySelectorAll('.hp-pin').forEach(function (el) { el.remove(); });
-        }
+        if (mapWrap) mapWrap.querySelectorAll('.hp-pin').forEach(function (el) { el.remove(); });
         if (legend) legend.innerHTML = '';
 
-        // Sort by order field
         var sorted = locations.slice().sort(function (a, b) {
             return (a.order || 0) - (b.order || 0);
         });
 
         sorted.forEach(function (loc, idx) {
-            var key = (loc.countryKey || '').toLowerCase().trim();
-            var coords = MAP_COORDS[key];
-            var num = String(idx + 1).padStart(2, '0');
-            var color = loc.pinColor || (coords ? '#1a56db' : '#1a56db');
+            var id = 'loc-' + (idx + 1);
+            var color = '#1a56db'; // brand blue for every pin (no per-pin colour)
+            var place = placeName(loc);
+            var desc = inlineRichText(loc.description || '');
 
-            // ── Render pin on map ─────────────────────────────────────────
-            if (coords && mapWrap) {
-                var pin = document.createElement('div');
-                pin.className = 'hp-pin';
-                pin.style.cssText = 'left:' + coords.x + '%;top:' + coords.y + '%;--pin-c:' + color;
-                pin.setAttribute('aria-label', loc.title || key);
-                pin.setAttribute('data-country', key);
-                pin.innerHTML =
-                    '<div class="hp-pin-head"><span class="hp-pin-num">' + num + '</span></div>' +
-                    '<div class="hp-pin-tail"></div>';
-                mapWrap.appendChild(pin);
-            }
+            var pos = pinPosition(loc);
+            // Pin label = the location's name (picked city, or country); the
+            // hover card repeats the legend card: title, full place, description.
+            var name = (loc.place && loc.place.name) || loc.title || place;
+            if (pos && mapWrap) mapWrap.appendChild(buildMapPin(pos, id, color, name, loc.title, place, desc));
 
-            // ── Render legend item ────────────────────────────────────────
             if (legend) {
                 var item = document.createElement('div');
                 item.className = 'hp-legend-item';
-                item.setAttribute('data-country', key);
+                item.dataset.pin = id;
+                item.tabIndex = 0;
                 item.innerHTML =
                     '<div class="hp-legend-dot-row">' +
                     '<span class="hp-legend-dot" style="background:' + color + '"></span>' +
-                    '<strong class="hp-legend-title" style="color:' + color + '">' + (loc.title || '') + '</strong>' +
+                    '<strong class="hp-legend-title" style="color:' + color + '">' + escapeHtml(loc.title || place) + '</strong>' +
                     '</div>' +
-                    '<p class="hp-legend-desc">' + inlineRichText(loc.description || '') + '</p>';
+                    (place && place !== loc.title ? '<p class="hp-legend-place">' + escapeHtml(place) + '</p>' : '') +
+                    '<p class="hp-legend-desc">' + desc + '</p>';
                 legend.appendChild(item);
             }
         });
+        wireMapInteractions(mapWrap, legend);
     }
 
     // ── Technology Partners: populate logo grid (ds.partner-logo[]) ──

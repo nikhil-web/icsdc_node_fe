@@ -342,8 +342,33 @@ html[data-theme="dark"] .hp-map-img {
     filter: invert(1) hue-rotate(180deg) brightness(0.85) !important;
 }
 
-html[data-theme="dark"] .hp-pin-head {
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5) !important;
+html[data-theme="dark"] .hp-pin-label {
+    background: #1e293b;
+    border-color: #334155;
+    color: var(--text);
+}
+
+html[data-theme="dark"] .hp-pin-dot {
+    border-color: #0f172a;
+}
+
+html[data-theme="dark"] .hp-pin-card {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="dark"] .hp-pin-card-place {
+    color: var(--text);
+}
+
+html[data-theme="dark"] .hp-legend-place {
+    color: var(--text);
+}
+
+html[data-theme="dark"] .hp-legend-item.is-active,
+html[data-theme="dark"] .hp-legend-item:focus-visible {
+    background: rgba(26, 86, 219, 0.14);
 }
 
 /* Tech partners section */
