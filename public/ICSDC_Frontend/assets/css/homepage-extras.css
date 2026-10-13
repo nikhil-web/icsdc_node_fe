@@ -45,14 +45,18 @@
     justify-content: center;
 }
 
+/* The box keeps the map's exact aspect ratio (world-map.svg viewBox
+   2000 × 887) and is never cropped: pins are placed as % of this box, so it
+   must be the same shape as the image or they drift. Height is capped by
+   capping WIDTH (520px tall ⇔ 1172px wide), never with max-height, which
+   would squash the box and crop the map. */
 .hp-map-wrap {
     position: relative;
     width: 100%;
-    /* force 2000:857 aspect ratio */
-    aspect-ratio: 2000 / 857;
-    max-height: 520px;
+    aspect-ratio: 2000 / 887;
+    max-width: min(1800px, calc(520px * 2000 / 887));
+    margin: 0 auto;
     overflow: visible;
-    max-width: 1800px;
 }
 
 .hp-map-img {
@@ -60,7 +64,7 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
 }
 
@@ -74,53 +78,203 @@
     overflow: visible;
 }
 
-/* ── Pin markers ── */
+/* ── Pin markers: a dot exactly on the place + the location's title ──
+   The button itself is 0×0 at the exact point; the dot is centred on it and
+   the label sits beside it on whichever side geo-map.js layoutPinLabels()
+   picks so neighbouring labels don't collide. */
 .hp-pin {
     position: absolute;
+    width: 0;
+    height: 0;
+    z-index: 4;
+    cursor: pointer;
+    /* <button> reset */
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+}
+
+.hp-pin-dot,
+.hp-pin-pulse {
+    position: absolute;
+    left: -7px;
+    top: -7px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--pin-c, #1a56db);
+}
+
+.hp-pin-dot {
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(15, 28, 46, 0.35);
+    transition: transform 0.2s ease;
+}
+
+.hp-pin-pulse {
+    opacity: 0;
+    pointer-events: none;
+    animation: hp-pin-pulse 2.6s ease-out infinite;
+}
+
+@keyframes hp-pin-pulse {
+    0% { transform: scale(1); opacity: 0.45; }
+    100% { transform: scale(3.4); opacity: 0; }
+}
+
+.hp-pin-label {
+    position: absolute;
+    top: 0;
+    left: 14px;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: var(--white, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    color: var(--text-dark, #0a1f44);
+    font-size: 12.5px;
+    font-weight: 700;
+    line-height: 1.2;
+    box-shadow: 0 4px 14px rgba(15, 28, 46, 0.16);
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+        box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.hp-pin--label-left .hp-pin-label { left: auto; right: 14px; }
+.hp-pin--label-top .hp-pin-label { left: 0; top: auto; bottom: 14px; transform: translateX(-50%); }
+.hp-pin--label-bottom .hp-pin-label { left: 0; top: 14px; transform: translateX(-50%); }
+
+/* Hover / keyboard focus / highlighted from the legend: the dot grows, the
+   pulse quickens, the label lifts and fills with the pin colour. */
+.hp-pin:hover,
+.hp-pin:focus-visible,
+.hp-pin.is-active {
+    z-index: 6;
+}
+
+.hp-pin:hover .hp-pin-dot,
+.hp-pin:focus-visible .hp-pin-dot,
+.hp-pin.is-active .hp-pin-dot {
+    transform: scale(1.4);
+}
+
+.hp-pin:hover .hp-pin-pulse,
+.hp-pin:focus-visible .hp-pin-pulse,
+.hp-pin.is-active .hp-pin-pulse {
+    animation-duration: 1.2s;
+}
+
+.hp-pin:hover .hp-pin-label,
+.hp-pin:focus-visible .hp-pin-label,
+.hp-pin.is-active .hp-pin-label {
+    background: var(--pin-c, #1a56db);
+    border-color: var(--pin-c, #1a56db);
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(26, 86, 219, 0.35);
+}
+
+.hp-pin:hover:not(.hp-pin--label-top):not(.hp-pin--label-bottom) .hp-pin-label,
+.hp-pin:focus-visible:not(.hp-pin--label-top):not(.hp-pin--label-bottom) .hp-pin-label,
+.hp-pin.is-active:not(.hp-pin--label-top):not(.hp-pin--label-bottom) .hp-pin-label {
+    transform: translateY(calc(-50% - 2px));
+}
+
+.hp-pin--label-top:hover .hp-pin-label,
+.hp-pin--label-top:focus-visible .hp-pin-label,
+.hp-pin--label-top.is-active .hp-pin-label,
+.hp-pin--label-bottom:hover .hp-pin-label,
+.hp-pin--label-bottom:focus-visible .hp-pin-label,
+.hp-pin--label-bottom.is-active .hp-pin-label {
+    transform: translate(-50%, -2px);
+}
+
+.hp-pin:focus-visible {
+    outline: none;
+}
+
+.hp-pin:focus-visible .hp-pin-label {
+    outline: 2px solid var(--pin-c, #1a56db);
+    outline-offset: 2px;
+}
+
+/* ── Details card: the legend card's content (title, full place,
+   description), opened by hover / keyboard focus / its legend item.
+   Opens above the dot (below near the top of the map) and toward the
+   map's middle, so it is never clipped. */
+.hp-pin-card {
+    position: absolute;
+    bottom: 18px;
+    left: 0;
+    transform: translate(-50%, 6px);
+    width: 250px;
+    padding: 12px 14px;
+    background: var(--white, #fff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 12px;
+    box-shadow: 0 14px 34px rgba(15, 28, 46, 0.22);
+    text-align: left;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    transform: translate(-50%, -100%);
-    cursor: default;
-    z-index: 4;
+    gap: 4px;
+    z-index: 2;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
 }
 
-.hp-pin-head {
-    position: relative;
-    width: 38px;
-    height: 38px;
-    border-radius: 50% 50% 50% 0;
-    background: var(--pin-c, #1a56db);
-    transform: rotate(-45deg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+.hp-pin--card-below .hp-pin-card { bottom: auto; top: 18px; transform: translate(-50%, -6px); }
+.hp-pin--card-left .hp-pin-card { left: auto; right: -28px; transform: translate(0, 6px); }
+.hp-pin--card-right .hp-pin-card { left: -28px; transform: translate(0, 6px); }
+.hp-pin--card-left.hp-pin--card-below .hp-pin-card,
+.hp-pin--card-right.hp-pin--card-below .hp-pin-card { transform: translate(0, -6px); }
+
+.hp-pin:hover .hp-pin-card,
+.hp-pin:focus-visible .hp-pin-card,
+.hp-pin.is-active .hp-pin-card {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
 }
 
-.hp-pin:hover .hp-pin-head {
-    transform: rotate(-45deg) scale(1.15);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+.hp-pin--card-left:hover .hp-pin-card,
+.hp-pin--card-left:focus-visible .hp-pin-card,
+.hp-pin--card-left.is-active .hp-pin-card,
+.hp-pin--card-right:hover .hp-pin-card,
+.hp-pin--card-right:focus-visible .hp-pin-card,
+.hp-pin--card-right.is-active .hp-pin-card {
+    transform: translate(0, 0);
 }
 
-.hp-pin-num {
-    transform: rotate(45deg);
-    color: #ffffff;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    line-height: 1;
-    font-family: inherit;
+.hp-pin-card-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--pin-c, #1a56db);
 }
 
-.hp-pin-tail {
-    width: 2px;
-    height: 6px;
-    background: var(--pin-c, #1a56db);
-    border-radius: 0 0 2px 2px;
-    margin-top: -1px;
-    opacity: 0.6;
+.hp-pin-card-place {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark, #0a1f44);
+}
+
+.hp-pin-card-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted, #64748b);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hp-pin-pulse { display: none; }
+    .hp-pin-dot,
+    .hp-pin-label,
+    .hp-pin-card { transition: none; }
 }
 
 /* ── Map legend (6-column grid below map) ── */
@@ -132,8 +286,10 @@
 
 .hp-legend {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 24px 20px;
+    /* centred columns, as many as fit — no empty half-row when there are few locations */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 260px));
+    justify-content: center;
+    gap: 24px 32px;
     border-top: 1px solid var(--border);
     padding-top: 32px;
     margin-top: 8px;
@@ -143,6 +299,17 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    cursor: pointer;
+    padding: 10px 12px;
+    margin: -10px -12px;
+    border-radius: 10px;
+    transition: background 0.15s ease;
+}
+
+.hp-legend-item.is-active,
+.hp-legend-item:focus-visible {
+    background: var(--blue-hover, #eff6ff);
+    outline: none;
 }
 
 .hp-legend-dot-row {
@@ -157,6 +324,13 @@
     height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
+}
+
+.hp-legend-place {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark, #0a1f44);
+    margin: 0;
 }
 
 .hp-legend-title {
@@ -287,14 +461,6 @@
         grid-template-columns: repeat(5, 1fr);
     }
 
-    .hp-map-wrap {
-        max-height: 380px;
-    }
-
-    .hp-legend {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
     .hp-logo-grid {
         grid-template-columns: repeat(4, 1fr);
     }
@@ -305,22 +471,36 @@
         padding: 56px 0 48px;
     }
 
-    .hp-map-wrap {
-        max-height: 260px;
-    }
-
-    .hp-pin-head {
-        width: 26px;
-        height: 26px;
-    }
-
-    .hp-pin-num {
-        font-size: 8px;
-    }
-
     .hp-legend {
-        grid-template-columns: repeat(2, 1fr);
         gap: 20px 16px;
+    }
+
+    .hp-pin-dot,
+    .hp-pin-pulse {
+        left: -5px;
+        top: -5px;
+        width: 10px;
+        height: 10px;
+    }
+
+    .hp-pin-label {
+        left: 9px;
+        padding: 2px 7px;
+        font-size: 10px;
+    }
+
+    .hp-pin--label-left .hp-pin-label { right: 9px; }
+    .hp-pin--label-top .hp-pin-label { bottom: 9px; }
+    .hp-pin--label-bottom .hp-pin-label { top: 9px; }
+
+    /* Too small for a floating card: a tap highlights the pin and scrolls to
+       its legend card instead (geo-map.js wireMapInteractions). */
+    .hp-map-wrap.has-legend .hp-pin-card {
+        display: none;
+    }
+
+    .hp-pin-card {
+        width: 200px;
     }
 
     .hp-logo-grid {
@@ -334,21 +514,8 @@
 }
 
 @media (max-width: 639px) {
-    .hp-map-wrap {
-        max-height: 180px;
-    }
-
-    .hp-pin-head {
-        width: 20px;
-        height: 20px;
-    }
-
-    .hp-pin-num {
-        font-size: 7px;
-    }
-
     .hp-legend {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: 1fr;
     }
 
     .hp-logo-grid {
