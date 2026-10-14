@@ -1444,3 +1444,49 @@ html[data-theme="dark"] :is(.bms-config-table, .bms-compare-table) tbody tr:hove
 html[data-theme="dark"] .bms-config-name {
     color: #f59e0b;
 }
+
+/* ══════════════════════════════════════════════════════
+   PLAN CARD TEXT CONTRAST (2026-10-14)
+   Plan names and prices are brand blue (#1a56db, 2.4:1 on a dark card);
+   prices on the filled "featured" card used var(--white) → dark slate on blue.
+══════════════════════════════════════════════════════ */
+
+/* Names + prices on ordinary (dark) plan cards → dark-mode text blue */
+html[data-theme="dark"] .ds-plan-card:not(.ds-featured) .ds-plan-tier,
+html[data-theme="dark"] .cloud-plan-card:not(.cloud-featured) .cloud-plan-tier,
+html[data-theme="dark"] .vps-plan-card:not(.vps-featured) .vps-plan-tier,
+html[data-theme="dark"] :is(.cp-plan-name, .cp-plan-price, .rh-plan-name, .rh-plan-price, .wp-plan-price,
+    .lvps-plan-name, .lvps-plan-price, .lds-plan-tier, .gds-plan-name, .gds-plan-price,
+    .mch-plan-name, .mch-plan-price, .gpu-plan-name, .gpu-plan-price, .aws-plan-name, .aws-plan-price,
+    .azure-plan-name, .azure-plan-price, .m365-plan-name, .m365-plan-price) {
+    color: var(--blue-text);
+}
+
+/* Cloud Storage keeps its sky accent, lightened (#0369a1 → #38bdf8) */
+html[data-theme="dark"] :is(.cs-plan-name, .cs-plan-price) {
+    color: #38bdf8;
+}
+
+/* NVMe keeps its amber accent, lightened (#b45309 → #f59e0b) */
+html[data-theme="dark"] .nds-plan-card:not(.nds-plan-featured) .nds-plan-tier {
+    color: #f59e0b;
+}
+
+/* Price + currency on the filled featured card → white */
+html[data-theme="dark"] .ds-plan-card.ds-featured :is(.ds-plan-price, .ds-plan-currency),
+html[data-theme="dark"] .cloud-plan-card.cloud-featured :is(.cloud-plan-price, .cloud-plan-currency),
+html[data-theme="dark"] .vps-plan-card.vps-featured :is(.vps-plan-price, .vps-plan-currency),
+html[data-theme="dark"] .nds-plan-featured :is(.nds-plan-price, .nds-plan-currency) {
+    color: #ffffff;
+}
+
+/* Hero price (₹… /mo) is brand blue on the dark hero → dark-mode text blue */
+html[data-theme="dark"] .hero-price {
+    color: var(--blue-text);
+}
+
+/* Domain Registration TLD cards hard-code a white background, so in dark mode
+   they stayed white while their text turned light (prices were 1.1:1). */
+html[data-theme="dark"] .dom-tld-card {
+    background: var(--white);
+}

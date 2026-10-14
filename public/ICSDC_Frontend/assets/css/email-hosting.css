@@ -330,7 +330,8 @@
     gap: 8px;
     align-self: flex-start;
     padding: 13px 28px;
-    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    /* Sky 700 → 800: white text needs ≥ 4.5:1 (the old #0ea5e9 start was 2.8:1). */
+    background: linear-gradient(135deg, #0369a1, #075985);
     color: #fff;
     border-radius: var(--radius-sm);
     font-size: 14px;
@@ -341,7 +342,7 @@
 
 .eh-about-cta:hover {
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.32);
+    box-shadow: 0 8px 24px rgba(3, 105, 161, 0.32);
 }
 
 /* ══════════════════════════════════════
