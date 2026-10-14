@@ -28,7 +28,8 @@ import { uploadURL } from './services/strapiClient.js';
     // page it silently did nothing, so the hardcoded phone button stayed forever.
     // A button left empty in the CMS is removed.
     function populateAzureCtaBand(cta) {
-        var inner = document.querySelector('.azure-cta-band .azure-cta-inner');
+        // Two bands share .azure-cta-band; the mid-page #azure-quote-cta is ctaBand2.
+        var inner = document.querySelector('.azure-cta-band:not(#azure-quote-cta) .azure-cta-inner');
         if (!cta || !inner) return;
         setHTML(inner, 'h2', cta.title);
         setHTML(inner, 'p', cta.description);

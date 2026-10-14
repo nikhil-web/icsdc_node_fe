@@ -317,13 +317,17 @@ function ldsPopulateCtaBand(cta) {
     if (btns) {
         var primaryBtn = btns.querySelector('.lds-cta-btn-primary');
         var outlineBtn = btns.querySelector('.lds-cta-btn-outline');
-        if (primaryBtn && cta.ctaPrimary) {
-            primaryBtn.innerHTML = cta.ctaPrimary.text || '';
-            wireCtaLink(primaryBtn, cta.ctaPrimary.link);
-        }
-        if (outlineBtn && cta.ctaSecondary) {
-            outlineBtn.innerHTML = cta.ctaSecondary.text || '';
-            wireCtaLink(outlineBtn, cta.ctaSecondary.link);
-        }
+        // A button shows only when the CMS has both its text and link; otherwise
+        // it's removed (it used to keep the hardcoded HTML button).
+        [[primaryBtn, cta.ctaPrimary], [outlineBtn, cta.ctaSecondary]].forEach(function (pair) {
+            var btn = pair[0], data = pair[1];
+            if (!btn) return;
+            if (data && data.text && data.link) {
+                btn.innerHTML = data.text;
+                wireCtaLink(btn, data.link);
+            } else {
+                btn.remove();
+            }
+        });
     }
 }
