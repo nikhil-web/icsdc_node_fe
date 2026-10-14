@@ -966,6 +966,7 @@ export function getMicrosoft365Page() {
     return fetchAPI(
         "/api/microsoft-365-page?" +
         "populate[seo]=*" +
+        "&populate[whenPoints]=*" +
         "&populate[relatedCards]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +

@@ -62,10 +62,13 @@ import {
 
     function populateWhenList(points) {
         if (!points || !points.length) return;
+        points = points.filter(function (p) { return p && p.label; });
+        if (!points.length) return;
         var list = document.getElementById('m365-when-list');
         if (!list) return;
         list.innerHTML = points.map(function (p) {
-            return '<li>' + (p.text || p.label || p) + '</li>';
+            // whenPoints: ds.plan-feature list — one point per item (label).
+            return '<li>' + (p.label || '') + '</li>';
         }).join('');
     }
 
