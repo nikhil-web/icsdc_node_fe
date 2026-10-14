@@ -7,7 +7,6 @@ import {
     setText,
     setHTML,
     resolveIcon,
-    populateCtaBand,
     populateTechBadges,
     initTestimonials,
     initFAQ,
@@ -22,6 +21,27 @@ import { uploadURL } from './services/strapiClient.js';
 
     function sortByOrder(items) {
         return (items || []).slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+    }
+
+    // Final CTA band. Same rules as the shared populateCtaBand(), which can't be
+    // used here because it only finds .cloud-cta-* / .ds-cta-* markup — on this
+    // page it silently did nothing, so the hardcoded phone button stayed forever.
+    // A button left empty in the CMS is removed.
+    function populateAzureCtaBand(cta) {
+        var inner = document.querySelector('.azure-cta-band .azure-cta-inner');
+        if (!cta || !inner) return;
+        setHTML(inner, 'h2', cta.title);
+        setHTML(inner, 'p', cta.description);
+        [['.azure-cta-btn-primary', cta.ctaPrimary], ['.azure-cta-btn-outline', cta.ctaSecondary]].forEach(function (pair) {
+            var btn = inner.querySelector(pair[0]);
+            if (!btn) return;
+            if (pair[1] && pair[1].text) {
+                btn.innerHTML = pair[1].text + ' ';
+                wireCtaLink(btn, pair[1].link);
+            } else {
+                btn.remove();
+            }
+        });
     }
 
     function renderAzureCards(gridSelector, cards, cardClass, iconClass) {
@@ -319,7 +339,7 @@ import { uploadURL } from './services/strapiClient.js';
             if (page.pricingNote) setText(document, '#azure-pricing-info .azure-pricing-note', page.pricingNote);
             renderAzurePricingPoints(page.pricingPoints);
 
-            populateCtaBand('.azure-cta-band', page.ctaBand1);
+            populateAzureCtaBand(page.ctaBand1);
 
 
 

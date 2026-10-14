@@ -115,6 +115,17 @@ import { getLinuxDedicatedServerPage } from './services/contentService.js';
         // ── SECTION 8: SUPPORT ───────────────────────────────────────────────────
         ldsPopulateSectionHeader('lds-support', page.supportLabel, page.supportTitle, page.supportSubtitle);
         ldsUpdateCardTitles('.lds-support-grid .lds-support-card', page.supportCards);
+        // The CMS list decides which support cards exist: the HTML has a third,
+        // hardcoded "Call Us" card that could never be removed. Cards beyond the
+        // CMS list are dropped, and each card's button follows its CMS link.
+        if (page.supportCards && page.supportCards.length) {
+            var supportSorted = page.supportCards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+            document.querySelectorAll('.lds-support-grid .lds-support-card').forEach(function (card, i) {
+                if (!supportSorted[i]) { card.remove(); return; }
+                var cta = card.querySelector('.lds-support-cta');
+                if (cta && supportSorted[i].link) wireCtaLink(cta, supportSorted[i].link);
+            });
+        }
 
         // ── SECTION 9: AI/ML INNOVATION ──────────────────────────────────────────
         ldsPopulateSectionHeader('lds-innovation', page.innovationLabel, page.innovationTitle, page.innovationSubtitle);
