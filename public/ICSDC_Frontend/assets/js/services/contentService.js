@@ -1383,6 +1383,8 @@ export function getContactUsPage() {
     return fetchAPI(
         "/api/contact-us-page?" +
         "populate[seo]=*" +
+        "&populate[heroCtaPrimary]=*" +
+        "&populate[heroCtaSecondary]=*" +
         "&populate[helpCards]=*" +
         "&populate[steps]=*"
     );

@@ -3,7 +3,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getContactUsPage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, wireCtaLink } from './utils/cms-helpers.js';
 import { postAPI } from './services/strapiClient.js';
 import {
     populateSEO,
@@ -119,6 +119,19 @@ import {
             if (page.heroTitle)       setText(document, '#cu-hero-title', page.heroTitle);
             if (page.heroSubtitle)    setText(document, '#cu-hero-sub', page.heroSubtitle);
             if (page.heroDescription) setText(document, '#cu-hero-desc', page.heroDescription);
+
+            // Hero buttons: a button shows only when the CMS has both its text
+            // and link; otherwise it's removed.
+            [['.hero-btns .btn-primary', page.heroCtaPrimary], ['.hero-btns .btn-outline', page.heroCtaSecondary]].forEach(function (pair) {
+                var btn = document.querySelector(pair[0]);
+                if (!btn) return;
+                if (pair[1] && pair[1].text && pair[1].link) {
+                    btn.textContent = pair[1].text;
+                    wireCtaLink(btn, pair[1].link);
+                } else {
+                    btn.remove();
+                }
+            });
 
             // Help section
             if (page.helpTitle)       setText(document, '#cu-help-title', page.helpTitle);
