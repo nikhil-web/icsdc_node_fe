@@ -181,7 +181,7 @@ import { uploadURL } from './services/strapiClient.js';
             populateAudience(page.audienceGroups);
 
             // Related Services
-            populateSectionHeader('#cs-related', page.relatedLabel, page.relatedTitle, null);
+            populateSectionHeader('#cs-related', page.relatedLabel, page.relatedTitle, page.relatedSubtitle);
             populateRelated(page.relatedCards);
 
             // CTA Band 1

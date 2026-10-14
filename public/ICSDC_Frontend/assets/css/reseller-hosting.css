@@ -387,6 +387,16 @@
     margin-bottom: 36px;
 }
 
+/* Optional subtitle (relatedSubtitle) — same look as .section .subtitle */
+.rh-related-inner .rh-related-subtitle {
+    max-width: 1000px;
+    margin: -20px auto 36px;
+    text-align: center;
+    color: var(--muted-alt);
+    font-size: clamp(15px, 1.5vw, 17px);
+    line-height: 1.65;
+}
+
 .rh-related-strip {
     display: flex;
     gap: 18px;

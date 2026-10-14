@@ -80,6 +80,7 @@ import { getWindowsCloudHostingPage } from './services/contentService.js';
         });
 
         // Related services cards
+        if (page.relatedTitle) setText(document, '#wincloud-related .title', page.relatedTitle);
         if (page.relatedCards && page.relatedCards.length) {
             var relatedGrid = document.getElementById('wincloud-related-grid');
             if (relatedGrid) {

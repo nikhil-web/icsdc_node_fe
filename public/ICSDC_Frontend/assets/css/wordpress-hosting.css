@@ -384,7 +384,7 @@
     padding: 36px 32px;
     display: flex;
     flex-direction: column;
-    text-align: left;
+    text-align: center;
     transition: transform 0.22s var(--ease-out-expo, ease),
                 box-shadow 0.22s ease,
                 border-color 0.22s ease;
@@ -428,7 +428,7 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    align-self: flex-start;
+    align-self: center;
     padding: 11px 22px;
     border: 1.5px solid var(--blue);
     border-radius: var(--radius-md, 8px);

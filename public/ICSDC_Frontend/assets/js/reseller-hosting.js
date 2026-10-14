@@ -172,6 +172,10 @@ import {
 
             // Related Hosting Services
             if (page.relatedTitle) setText(document, '#rh-related .title', page.relatedTitle);
+            if (page.relatedSubtitle) {
+                setText(document, '#rh-related .rh-related-subtitle', page.relatedSubtitle);
+                document.querySelector('#rh-related .rh-related-subtitle').hidden = false;
+            }
             populateRelatedStrip(page.relatedCards);
 
             // Testimonials

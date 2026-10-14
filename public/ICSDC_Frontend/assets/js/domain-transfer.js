@@ -62,7 +62,9 @@ import {
             return '<div class="dt-related-card" data-animate="fade-up">' +
                 '<h3>' + (card.title || '') + '</h3>' +
                 '<p>' + inlineRichText(card.description || card.desc || '') + '</p>' +
-                '<a href="' + (card.btnUrl || '#') + '" class="dt-related-btn">' + (card.btnLabel || 'Learn More') + ' </a>' +
+                ((card.btnLabel && card.btnUrl)
+                    ? '<a href="' + card.btnUrl + '" class="dt-related-btn">' + card.btnLabel + ' </a>'
+                    : '') +
                 '</div>';
         }).join('');
     }
