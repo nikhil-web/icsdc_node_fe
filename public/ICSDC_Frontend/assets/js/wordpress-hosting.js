@@ -60,18 +60,19 @@ import {
             return (a.order || 0) - (b.order || 0);
         });
 
+        // relatedCards: ds.related-card (title, tagline, description, btnLabel, btnUrl).
+        // The link shows only when its text and URL are both set.
         grid.innerHTML = sorted.map(function (card) {
-            var parts = inlineRichText(card.desc || '').split('||');
-            var tagline = parts[0] ? parts[0].trim() : '';
-            var description = parts[1] ? parts[1].trim() : '';
-            var ctaText = 'Explore ' + (card.title || 'More');
-            var ctaHref = (card.link || '#').trim();
+            var tagline = (card.tagline || '').trim();
+            var description = inlineRichText(card.description || '').trim();
 
             return '<div class="wp-related-card">' +
                 '<h3 class="wp-related-card-title">' + (card.title || '') + '</h3>' +
                 (tagline ? '<p class="wp-related-tagline">' + tagline + '</p>' : '') +
                 (description ? '<p class="wp-related-desc">' + description + '</p>' : '') +
-                '<a href="' + ctaHref + '" class="wp-related-cta">' + ctaText + ' </a>' +
+                ((card.btnLabel && card.btnUrl)
+                    ? '<a href="' + card.btnUrl.trim() + '" class="wp-related-cta">' + card.btnLabel + ' </a>'
+                    : '') +
                 '</div>';
         }).join('');
     }
