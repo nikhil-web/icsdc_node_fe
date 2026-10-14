@@ -73,12 +73,14 @@ import {
         if (!cards || !cards.length) return;
         var grid = document.getElementById('m365-related-grid');
         if (!grid) return;
-        grid.innerHTML = cards.map(function (c) {
+        // relatedCards: ds.related-card — link shows only when its text and URL are set.
+        grid.innerHTML = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); }).map(function (c) {
             return '<div class="m365-related-card">' +
                 '<h3>' + (c.title || '') + '</h3>' +
-                '<p>' + inlineRichText(c.desc || c.description || '') + '</p>' +
-                '<a href="' + (c.ctaLink || c.link || '/contact-us') + '" class="m365-related-link">' +
-                (c.ctaText || c.ctaLabel || 'Learn More') + ' </a>' +
+                '<p>' + inlineRichText(c.description || '') + '</p>' +
+                ((c.btnLabel && c.btnUrl)
+                    ? '<a href="' + c.btnUrl + '" class="m365-related-link">' + c.btnLabel + ' </a>'
+                    : '') +
                 '</div>';
         }).join('');
     }

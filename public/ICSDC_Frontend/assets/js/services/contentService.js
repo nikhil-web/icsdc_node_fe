@@ -432,6 +432,7 @@ export function getWindowsCloudHostingPage() {
     return fetchAPI(
         "/api/windows-cloud-hosting-page" +
         "?populate[seo]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
@@ -698,6 +699,7 @@ export function getLinuxCloudHostingPage() {
     return fetchAPI(
         "/api/linux-cloud-hosting-page" +
         "?populate[seo]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
@@ -881,6 +883,7 @@ export function getGpuCloudHostingPage() {
     return fetchAPI(
         "/api/gpu-cloud-hosting-page?" +
         "populate[seo]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
@@ -963,6 +966,7 @@ export function getMicrosoft365Page() {
     return fetchAPI(
         "/api/microsoft-365-page?" +
         "populate[seo]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
@@ -1013,6 +1017,7 @@ export function getCloudStoragePage() {
     return fetchAPI(
         "/api/cloud-storage-page?" +
         "populate[seo]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +

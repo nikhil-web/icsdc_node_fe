@@ -108,13 +108,14 @@ import { uploadURL } from './services/strapiClient.js';
         if (!cards || !cards.length) return;
         var grid = document.getElementById('cs-related-grid');
         if (!grid) return;
-        grid.innerHTML = cards.map(function (c) {
-            var cta = c.ctaText
-                ? '<a href="' + (c.ctaLink || '#') + '" class="cs-related-cta">' + c.ctaText + ' </a>'
+        // relatedCards: ds.related-card — link shows only when its text and URL are set.
+        grid.innerHTML = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); }).map(function (c) {
+            var cta = (c.btnLabel && c.btnUrl)
+                ? '<a href="' + c.btnUrl + '" class="cs-related-cta">' + c.btnLabel + ' </a>'
                 : '';
             return '<div class="cs-related-card">' +
                 '<h3 class="cs-related-title">' + (c.title || '') + '</h3>' +
-                '<p class="cs-related-desc">' + inlineRichText(c.desc || c.description || '') + '</p>' +
+                '<p class="cs-related-desc">' + inlineRichText(c.description || '') + '</p>' +
                 cta +
                 '</div>';
         }).join('');
