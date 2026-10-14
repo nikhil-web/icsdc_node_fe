@@ -1,4 +1,4 @@
-import { populateSEO, populateHero, populateIconCards, populateSectionHeader, populateCtaBand, populatePricingPlans, hidePageLoader, markActiveNavLink, initTestimonials, initFAQ, setText } from './utils/cms-helpers.js';
+import { populateSEO, populateHero, populateIconCards, populateSectionHeader, populateCtaBand, populatePricingPlans, hidePageLoader, markActiveNavLink, initTestimonials, initFAQ, setText, populatePillarsHeader } from './utils/cms-helpers.js';
 import { inlineRichText } from './utils/cms-helpers.js';
 import { getWindowsCloudHostingPage } from './services/contentService.js';
 
@@ -21,6 +21,7 @@ import { getWindowsCloudHostingPage } from './services/contentService.js';
             heroImage: page.heroImage
         });
 
+        populatePillarsHeader('.why-grid', page.pillarsTitle, page.pillarsSubtitle);
         populateIconCards('.why-grid', page.pillars, 'why-card');
 
         // Plans / pricing
@@ -79,17 +80,20 @@ import { getWindowsCloudHostingPage } from './services/contentService.js';
         });
 
         // Related services cards
+        if (page.relatedTitle) setText(document, '#wincloud-related .title', page.relatedTitle);
         if (page.relatedCards && page.relatedCards.length) {
             var relatedGrid = document.getElementById('wincloud-related-grid');
             if (relatedGrid) {
                 var arrowSVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
-                relatedGrid.innerHTML = page.relatedCards.map(function (card) {
+                // relatedCards: ds.related-card — link shows only when its text and URL are set.
+                relatedGrid.innerHTML = page.relatedCards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); }).map(function (card) {
                     var iconClass = card.icon ? 'fa-solid fa-' + card.icon : 'fa-solid fa-server';
                     return '<div class="wincloud-related-card">' +
                         '<div class="wincloud-related-icon"><i class="' + iconClass + '" aria-hidden="true"></i></div>' +
-                        '<p class="wincloud-related-desc">' + inlineRichText(card.desc || '') + '</p>' +
-                        '<a href="' + (card.ctaLink || '#') + '" class="wincloud-related-btn">' +
-                        (card.ctaText || '') + ' ' + arrowSVG + '</a>' +
+                        '<p class="wincloud-related-desc">' + inlineRichText(card.description || '') + '</p>' +
+                        ((card.btnLabel && card.btnUrl)
+                            ? '<a href="' + card.btnUrl + '" class="wincloud-related-btn">' + card.btnLabel + ' ' + arrowSVG + '</a>'
+                            : '') +
                         '</div>';
                 }).join('');
             }

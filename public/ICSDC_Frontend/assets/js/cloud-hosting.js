@@ -13,7 +13,8 @@ import {
     setText,
     setHTML,
     initTestimonials,
-    initFAQ
+    initFAQ,
+    populatePillarsHeader
 } from './utils/cms-helpers.js';
 import { getCloudHostingPage } from './services/contentService.js';
 
@@ -38,6 +39,7 @@ import { getCloudHostingPage } from './services/contentService.js';
             heroImage: page.heroImage
         });
 
+        populatePillarsHeader('.why-grid', page.pillarsTitle, page.pillarsSubtitle);
         populateIconCards('.why-grid', page.pillars, 'why-card');
 
         populateSectionHeader('#cloud-pricing', page.pricingLabel, page.pricingTitle, page.pricingSubtitle);
@@ -83,6 +85,7 @@ import { getCloudHostingPage } from './services/contentService.js';
             }
         }
 
+        if (page.faqTitle) setText(document, '.faq-title', page.faqTitle);
         initFAQ(page.faq);
     } catch (err) {
         console.error('[cloud-hosting] CMS load failed:', err);

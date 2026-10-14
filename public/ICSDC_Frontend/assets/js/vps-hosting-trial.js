@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getVpsHostingTrialPage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -146,6 +146,7 @@ import {
             if (page.heroStatusSubtitle) setText(document, '.vht-bs', page.heroStatusSubtitle);
 
             // Why Us — 4 pillars
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // Plans

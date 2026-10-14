@@ -49,6 +49,27 @@ function getPaths() {
     return [...new Set(paths)];
 }
 
+// Every .html under dir. Written out by hand rather than using
+// readdirSync(dir, { recursive: true }) so this does not require Node 20.1+.
+function walkHtml(dir) {
+    const out = [];
+    let entries;
+    try { entries = fs.readdirSync(dir, { withFileTypes: true }); }
+    catch { return out; }                                  // directory not built yet
+    for (const e of entries) {
+        const full = path.join(dir, e.name);
+        if (e.isDirectory()) out.push(...walkHtml(full));
+        else if (e.name.endsWith('.html')) out.push(full);
+    }
+    return out;
+}
+
+// Inverse of snapshotFile(): prerendered/blogs/x.html → /blogs/x, home.html → /
+function pathForSnapshot(file) {
+    const rel = path.relative(outDir, file).replace(/\\/g, '/').replace(/\.html$/, '');
+    return rel === 'home' ? '/' : '/' + rel;
+}
+
 // Runs IN the page: reveal scroll-animation content, strip dynamic scripts, drop chat widget.
 function cleanInPage() {
     document.querySelectorAll('[data-animate],[data-stagger]').forEach(e => e.classList.add('is-visible'));
@@ -57,7 +78,22 @@ function cleanInPage() {
         if (/config\.js|\/main\.js|homepage-cms\.js|components\.js|nav-search\.js|socket\.io|polish\.js|theme-init\.js|googletagmanager|gtm\.js/i.test(src)) s.remove();
         else if (!src && /(gtm\.start|dataLayer|footer-year|googletagmanager)/i.test(s.textContent || '')) s.remove();
     });
+    /* Keep only the server's generated graph (data-site-schema). Drop:
+       - JSON-LD injected at runtime by third parties — GTM adds a "Corporation"
+         block that contradicts the site's Organization node, and stripping the
+         GTM <script> above does not remove what it already injected;
+       - the CMS schema tag (data-cms-schema), which the server injects fresh
+         every time it serves a snapshot, so a copy frozen here would only go stale. */
+    document.querySelectorAll('script[type="application/ld+json"]').forEach(s => {
+        if (!s.hasAttribute('data-site-schema')) s.remove();
+    });
     document.querySelectorAll('.chat-bubble,.chat-window').forEach(e => e.remove());
+    // Drop the server's no-JS blog fallback: this snapshot already holds the fully
+    // rendered article, so keeping it would duplicate the whole body text. (With JS
+    // on, a <noscript>'s contents are plain text, so match on the marker class.)
+    document.querySelectorAll('noscript').forEach(n => {
+        if (/blog-noscript/.test(n.textContent || '')) n.remove();
+    });
 }
 
 (async function main() {
@@ -73,10 +109,41 @@ function cleanInPage() {
 
     for (const p of paths) {
         const page = await browser.newPage();
+        let settled = true;
         try {
             await page.setViewport({ width: 1280, height: 900 });
-            await page.goto(ORIGIN + p, { waitUntil: 'networkidle0', timeout: 45000 });
+
+            /* networkidle2, not networkidle0. networkidle0 demands ZERO requests
+               in flight for 500ms, so a single straggler — an analytics beacon, a
+               font, a connection the server holds open — keeps it unsatisfied for
+               the whole timeout even though the page finished rendering long ago.
+               networkidle2 allows two, which is what "settled" actually means in
+               practice. */
+            try {
+                await page.goto(ORIGIN + p, { waitUntil: 'networkidle2', timeout: 60000 });
+            } catch (e) {
+                if (e.name !== 'TimeoutError') throw e;
+                /* A navigation timeout does NOT mean the page failed to render —
+                   almost always it means one request never finished. Treating it
+                   as fatal is what left /blogs and two articles with no snapshot
+                   at all, and no snapshot is far worse than one captured a moment
+                   early: the crawler falls back to an empty client-rendered shell.
+                   Carry on and let the content check below be the real gate. */
+                settled = false;
+                console.warn(`  ! ${p}  —  did not settle in 60s, capturing anyway`);
+            }
+
             await new Promise(r => setTimeout(r, 2500));   // let client render + safety-reveal settle
+
+            /* The real test of a usable snapshot: did the client actually render
+               anything? This is what stops a genuinely broken page from silently
+               overwriting a good snapshot with an empty shell. */
+            const textLen = await page.evaluate(() => (document.body.innerText || '').trim().length);
+            if (textLen < 500) {
+                throw new Error(`rendered almost empty (${textLen} chars of text)` +
+                    (settled ? '' : ' after navigation timeout'));
+            }
+
             await page.evaluate(cleanInPage);
 
             let html = '<!DOCTYPE html>\n' + await page.evaluate(() => document.documentElement.outerHTML);
@@ -87,7 +154,8 @@ function cleanInPage() {
             const file = snapshotFile(p);
             fs.mkdirSync(path.dirname(file), { recursive: true });
             fs.writeFileSync(file, html, 'utf8');
-            console.log(`  ✓ ${p}  →  ${path.relative(publicPath, file).replace(/\\/g, '/')}  (${Math.round(html.length / 1024)} KB)`);
+            console.log(`  ${settled ? '✓' : '~'} ${p}  →  ${path.relative(publicPath, file).replace(/\\/g, '/')}` +
+                `  (${Math.round(html.length / 1024)} KB)${settled ? '' : '  [slow — captured after timeout]'}`);
             ok++;
         } catch (e) {
             console.error(`  ✗ ${p}  —  ${e.message}`);
@@ -98,6 +166,39 @@ function cleanInPage() {
     }
 
     await browser.close();
+
+    /* Prune snapshots whose URL has left the sitemap — a deleted post, a page
+       hidden in the Page Registry, a renamed slug. Nothing else on the system
+       ever deletes one of these files, so without this they sit on disk being
+       served to crawlers indefinitely.
+
+       AFTER the build, deliberately, never a wipe beforehand. Clearing the
+       directory up front would leave EVERY page snapshot-less for the length of
+       the run — minutes during which any crawler gets the empty client-rendered
+       shell — and would turn a partial failure into data loss. Here, a page that
+       failed this run keeps its previous snapshot, because the test is "still in
+       the sitemap", not "rebuilt successfully just now".
+
+       Skipped for single-path runs, which know nothing about the full live set,
+       and when nothing built at all, which usually means the app was unreachable
+       and the sitemap should not be trusted as a delete list. */
+    if (!process.argv[2] && ok > 0) {
+        const live = new Set(paths.map(p => p.replace(/\/$/, '') || '/'));
+        let pruned = 0;
+        for (const file of walkHtml(outDir)) {
+            const url = pathForSnapshot(file);
+            if (live.has(url)) continue;
+            try {
+                fs.unlinkSync(file);
+                console.log(`  - pruned ${path.relative(publicPath, file).replace(/\\/g, '/')}  (${url} left the sitemap)`);
+                pruned++;
+            } catch (e) {
+                console.warn(`  ! could not prune ${url} — ${e.message}`);
+            }
+        }
+        if (pruned) console.log(`[prerender] pruned ${pruned} stale snapshot(s)`);
+    }
+
     console.log(`[prerender] done — ${ok} ok, ${fail} failed`);
     process.exit(fail && !ok ? 1 : 0);
 })();

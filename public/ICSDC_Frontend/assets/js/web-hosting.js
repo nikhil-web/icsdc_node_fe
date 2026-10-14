@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getWebHostingPage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -94,6 +94,7 @@ import {
             });
 
             // Pillars (4 cards)
+            populatePillarsHeader('#webh-pillars-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('#webh-pillars-grid', page.pillars, 'why-card');
 
             // Plans section

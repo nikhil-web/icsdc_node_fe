@@ -583,7 +583,7 @@ html[data-theme="dark"] .vm-plan-btn:hover {
 /* ══════════════════════════════════════
    RESPONSIVE BREAKPOINTS
 ══════════════════════════════════════ */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .vm-features-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -606,7 +606,7 @@ html[data-theme="dark"] .vm-plan-btn:hover {
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .vm-features-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -616,7 +616,7 @@ html[data-theme="dark"] .vm-plan-btn:hover {
     }
 }
 
-@media (max-width: 479px) {
+@media (max-width: 639px) {
     .vm-features-grid {
         grid-template-columns: 1fr;
     }

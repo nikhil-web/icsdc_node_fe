@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getGpuCloudHostingPage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -115,15 +115,16 @@ import {
         if (!grid || !page.relatedCards || !page.relatedCards.length) return;
 
         var arrowSVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
-        grid.innerHTML = page.relatedCards.map(function (card) {
+        // relatedCards: ds.related-card — link shows only when its text and URL are set.
+        grid.innerHTML = page.relatedCards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); }).map(function (card) {
             var iconClass = card.icon ? 'fa-solid fa-' + card.icon : 'fa-solid fa-server';
             return '<div class="gpu-related-card">' +
                 '<div class="gpu-related-icon"><i class="' + iconClass + '" aria-hidden="true"></i></div>' +
                 '<h3 class="gpu-related-title-card">' + (card.title || '') + '</h3>' +
-                '<p class="gpu-related-desc">' + inlineRichText(card.desc || '') + '</p>' +
-                '<a href="' + (card.ctaLink || '#') + '" class="gpu-related-btn">' +
-                (card.ctaText || 'Learn More') + ' ' + arrowSVG +
-                '</a>' +
+                '<p class="gpu-related-desc">' + inlineRichText(card.description || '') + '</p>' +
+                ((card.btnLabel && card.btnUrl)
+                    ? '<a href="' + card.btnUrl + '" class="gpu-related-btn">' + card.btnLabel + ' ' + arrowSVG + '</a>'
+                    : '') +
                 '</div>';
         }).join('');
     }
@@ -155,6 +156,7 @@ import {
             if (page.heroStatusSubtitle) setText(document, '.gpu-bs', page.heroStatusSubtitle);
 
             // Why Us — 4 pillars
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // Plans

@@ -359,7 +359,7 @@
     text-align: center;
 }
 
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .gpu-portfolio-intro {
         grid-template-columns: 1fr;
         gap: 32px;
@@ -623,7 +623,7 @@
 /* 1024px — 2 columns for most grids */
 
 /* 640px — single column */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .gpu-plans-grid {
         grid-template-columns: 1fr;
     }

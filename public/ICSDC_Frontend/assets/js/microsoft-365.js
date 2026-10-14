@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getMicrosoft365Page } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -62,10 +62,13 @@ import {
 
     function populateWhenList(points) {
         if (!points || !points.length) return;
+        points = points.filter(function (p) { return p && p.label; });
+        if (!points.length) return;
         var list = document.getElementById('m365-when-list');
         if (!list) return;
         list.innerHTML = points.map(function (p) {
-            return '<li>' + (p.text || p.label || p) + '</li>';
+            // whenPoints: ds.plan-feature list — one point per item (label).
+            return '<li>' + (p.label || '') + '</li>';
         }).join('');
     }
 
@@ -73,12 +76,14 @@ import {
         if (!cards || !cards.length) return;
         var grid = document.getElementById('m365-related-grid');
         if (!grid) return;
-        grid.innerHTML = cards.map(function (c) {
+        // relatedCards: ds.related-card — link shows only when its text and URL are set.
+        grid.innerHTML = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); }).map(function (c) {
             return '<div class="m365-related-card">' +
                 '<h3>' + (c.title || '') + '</h3>' +
-                '<p>' + inlineRichText(c.desc || c.description || '') + '</p>' +
-                '<a href="' + (c.ctaLink || c.link || '/contact-us') + '" class="m365-related-link">' +
-                (c.ctaText || c.ctaLabel || 'Learn More') + ' </a>' +
+                '<p>' + inlineRichText(c.description || '') + '</p>' +
+                ((c.btnLabel && c.btnUrl)
+                    ? '<a href="' + c.btnUrl + '" class="m365-related-link">' + c.btnLabel + ' </a>'
+                    : '') +
                 '</div>';
         }).join('');
     }
@@ -161,6 +166,7 @@ import {
             if (page.heroStatusSubtitle) setText(document, '.m365-bs', page.heroStatusSubtitle);
 
             // Why Us — 4 pillars
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // Plans

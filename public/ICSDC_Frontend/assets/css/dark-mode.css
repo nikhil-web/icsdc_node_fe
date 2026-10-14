@@ -194,7 +194,7 @@ html[data-theme="dark"] #theme-toggle:hover {
 }
 
 /* On mobile, hide the nav-bar toggle — it lives in the hamburger menu */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     #theme-toggle {
         display: none !important;
     }
@@ -342,8 +342,33 @@ html[data-theme="dark"] .hp-map-img {
     filter: invert(1) hue-rotate(180deg) brightness(0.85) !important;
 }
 
-html[data-theme="dark"] .hp-pin-head {
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5) !important;
+html[data-theme="dark"] .hp-pin-label {
+    background: #1e293b;
+    border-color: #334155;
+    color: var(--text);
+}
+
+html[data-theme="dark"] .hp-pin-dot {
+    border-color: #0f172a;
+}
+
+html[data-theme="dark"] .hp-pin-card {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="dark"] .hp-pin-card-place {
+    color: var(--text);
+}
+
+html[data-theme="dark"] .hp-legend-place {
+    color: var(--text);
+}
+
+html[data-theme="dark"] .hp-legend-item.is-active,
+html[data-theme="dark"] .hp-legend-item:focus-visible {
+    background: rgba(26, 86, 219, 0.14);
 }
 
 /* Tech partners section */
@@ -441,6 +466,13 @@ html[data-theme="dark"] .cloud-power-card {
 
 html[data-theme="dark"] .cloud-power-icon {
     background: var(--blue-light);
+}
+
+/* Acronis "Why Choose ICSDC" tiles — --blue (#1a56db) on the dark
+   --blue-light badge (#1e3a5f) is only ~1.9:1. Lift to the same blue
+   used elsewhere in dark mode for ~4.5:1. */
+html[data-theme="dark"] #acr-why .cloud-use-icon i {
+    color: #60a5fa;
 }
 
 /* ds-plan-card / lds-plan-card */
@@ -1320,4 +1352,141 @@ html[data-theme="dark"] .faq-title {
    the unreadable brand blue. */
 html[data-theme="dark"] .faq-item[open] .faq-num {
     color: var(--blue-text);
+}
+
+/* ══════════════════════════════════════════════════════
+   BUTTON CONTRAST (2026-10-14)
+   A contrast sweep of every page in dark mode found 142 unreadable buttons,
+   from three causes. Light mode is untouched.
+══════════════════════════════════════════════════════ */
+
+/* 1. Filled buttons whose text is var(--white) — that token is dark slate in
+      dark mode, so the label turned dark-on-blue. Force white text. */
+html[data-theme="dark"] .cloud-why-cta-btn,
+html[data-theme="dark"] .cloud-wl-cta-btn,
+html[data-theme="dark"] .cp-plan-btn-primary,
+html[data-theme="dark"] .rh-plan-btn-featured,
+html[data-theme="dark"] .lvps-plan-btn-featured,
+html[data-theme="dark"] .gds-plan-btn-featured,
+html[data-theme="dark"] .mch-plan-btn-featured,
+html[data-theme="dark"] .gpu-plan-btn-featured,
+html[data-theme="dark"] .cs-plan-btn-featured,
+html[data-theme="dark"] .m365-plan-btn-featured,
+html[data-theme="dark"] .ds-cta-btn-outline,
+html[data-theme="dark"] .lds-cta-btn-primary,
+html[data-theme="dark"] .bms-manage-btn-primary,
+html[data-theme="dark"] .webh-promo-btn,
+html[data-theme="dark"] .solution-cta-outline,
+html[data-theme="dark"] .cs-related-cta,
+html[data-theme="dark"] .mds-promo-btn,
+html[data-theme="dark"] .bms-config-quote-btn:hover {
+    color: #ffffff !important;
+}
+
+/* 2. Brand-blue text on dark cards (#1a56db on #1e293b is 2.4:1). Use the
+      dark-mode text blue (--blue-text, 4.9:1+); white on hover, which reads on
+      both the dark card and the filled-blue hover state. */
+html[data-theme="dark"] :is(.cloud-power-link, .cloud-use-link, .aws-block-cta, .vht-service-cta,
+    .cp-plan-btn-outline, .rh-plan-btn, .lvps-plan-btn, .gds-plan-btn, .mch-plan-btn, .gpu-plan-btn,
+    .aws-plan-btn, .azure-plan-btn, .cs-plan-btn, .m365-plan-btn, .mch-service-btn, .lds-support-cta,
+    .wp-related-cta, .lch-related-btn, .wincloud-related-btn, .gpu-related-btn, .m365-related-link,
+    .veeam-related-btn, .ssl-type-cta):not([class*="-featured"]):not(.cp-plan-btn-primary) {
+    color: var(--blue-text);
+    border-color: var(--blue-text);
+}
+
+html[data-theme="dark"] :is(.cloud-power-link, .cloud-use-link, .aws-block-cta, .vht-service-cta,
+    .cp-plan-btn-outline, .rh-plan-btn, .lvps-plan-btn, .gds-plan-btn, .mch-plan-btn, .gpu-plan-btn,
+    .aws-plan-btn, .azure-plan-btn, .cs-plan-btn, .m365-plan-btn, .mch-service-btn, .lds-support-cta,
+    .wp-related-cta, .lch-related-btn, .wincloud-related-btn, .gpu-related-btn, .m365-related-link,
+    .veeam-related-btn, .ssl-type-cta):not([class*="-featured"]):not(.cp-plan-btn-primary):hover {
+    color: #ffffff;
+}
+
+/* 3. "White" buttons inside the blue CTA bands. Their background is
+      var(--white) too, so in dark mode they became dark pills with blue text.
+      Keep them white, as in light mode. Same for the heading and text on the
+      blue (non-dark) band, which also used var(--white). */
+html[data-theme="dark"] .cloud-cta-btn-primary,
+html[data-theme="dark"] .ds-cta-btn-primary,
+html[data-theme="dark"] .azure-cta-btn-primary,
+html[data-theme="dark"] .nds-plan-btn-primary {
+    background: #ffffff;
+}
+
+html[data-theme="dark"] .cloud-cta-btn-primary:hover,
+html[data-theme="dark"] .ds-cta-btn-primary:hover,
+html[data-theme="dark"] .azure-cta-btn-primary:hover {
+    background: #e8effd;
+}
+
+html[data-theme="dark"] .cloud-cta-band:not(.cloud-cta-dark) .cloud-cta-inner h2,
+html[data-theme="dark"] .cloud-cta-band:not(.cloud-cta-dark) .cloud-cta-inner p {
+    color: #ffffff;
+}
+
+/* Bare Metal "Get a Quote": amber outline on a dark table row (#b45309 is 2.9:1). */
+html[data-theme="dark"] .bms-config-quote-btn:not(:hover) {
+    color: #f59e0b;
+    border-color: #f59e0b;
+}
+
+/* Bare Metal tables: alternate rows stayed cream (#fffbeb) in dark mode while
+   the cell text turned light, so whole rows were unreadable. Tint them dark. */
+html[data-theme="dark"] :is(.bms-config-table, .bms-compare-table) tbody tr:nth-child(even) {
+    background: rgba(180, 83, 9, 0.10);
+}
+
+html[data-theme="dark"] :is(.bms-config-table, .bms-compare-table) tbody tr:hover {
+    background: rgba(180, 83, 9, 0.18);
+}
+
+html[data-theme="dark"] .bms-config-name {
+    color: #f59e0b;
+}
+
+/* ══════════════════════════════════════════════════════
+   PLAN CARD TEXT CONTRAST (2026-10-14)
+   Plan names and prices are brand blue (#1a56db, 2.4:1 on a dark card);
+   prices on the filled "featured" card used var(--white) → dark slate on blue.
+══════════════════════════════════════════════════════ */
+
+/* Names + prices on ordinary (dark) plan cards → dark-mode text blue */
+html[data-theme="dark"] .ds-plan-card:not(.ds-featured) .ds-plan-tier,
+html[data-theme="dark"] .cloud-plan-card:not(.cloud-featured) .cloud-plan-tier,
+html[data-theme="dark"] .vps-plan-card:not(.vps-featured) .vps-plan-tier,
+html[data-theme="dark"] :is(.cp-plan-name, .cp-plan-price, .rh-plan-name, .rh-plan-price, .wp-plan-price,
+    .lvps-plan-name, .lvps-plan-price, .lds-plan-tier, .gds-plan-name, .gds-plan-price,
+    .mch-plan-name, .mch-plan-price, .gpu-plan-name, .gpu-plan-price, .aws-plan-name, .aws-plan-price,
+    .azure-plan-name, .azure-plan-price, .m365-plan-name, .m365-plan-price) {
+    color: var(--blue-text);
+}
+
+/* Cloud Storage keeps its sky accent, lightened (#0369a1 → #38bdf8) */
+html[data-theme="dark"] :is(.cs-plan-name, .cs-plan-price) {
+    color: #38bdf8;
+}
+
+/* NVMe keeps its amber accent, lightened (#b45309 → #f59e0b) */
+html[data-theme="dark"] .nds-plan-card:not(.nds-plan-featured) .nds-plan-tier {
+    color: #f59e0b;
+}
+
+/* Price + currency on the filled featured card → white */
+html[data-theme="dark"] .ds-plan-card.ds-featured :is(.ds-plan-price, .ds-plan-currency),
+html[data-theme="dark"] .cloud-plan-card.cloud-featured :is(.cloud-plan-price, .cloud-plan-currency),
+html[data-theme="dark"] .vps-plan-card.vps-featured :is(.vps-plan-price, .vps-plan-currency),
+html[data-theme="dark"] .nds-plan-featured :is(.nds-plan-price, .nds-plan-currency) {
+    color: #ffffff;
+}
+
+/* Hero price (₹… /mo) is brand blue on the dark hero → dark-mode text blue */
+html[data-theme="dark"] .hero-price {
+    color: var(--blue-text);
+}
+
+/* Domain Registration TLD cards hard-code a white background, so in dark mode
+   they stayed white while their text turned light (prices were 1.1:1). */
+html[data-theme="dark"] .dom-tld-card {
+    background: var(--white);
 }

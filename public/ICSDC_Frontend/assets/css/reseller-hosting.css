@@ -316,7 +316,7 @@
 ══════════════════════════════════════ */
 
 /* 1280px — 2-col plans */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .rh-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -346,7 +346,7 @@
 /* 1024px — 2 columns for most grids */
 
 /* 640px — single column */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .rh-plans-grid {
         grid-template-columns: 1fr;
     }
@@ -385,6 +385,16 @@
 .rh-related-inner .title {
     text-align: center;
     margin-bottom: 36px;
+}
+
+/* Optional subtitle (relatedSubtitle) — same look as .section .subtitle */
+.rh-related-inner .rh-related-subtitle {
+    max-width: 1000px;
+    margin: -20px auto 36px;
+    text-align: center;
+    color: var(--muted-alt);
+    font-size: clamp(15px, 1.5vw, 17px);
+    line-height: 1.65;
 }
 
 .rh-related-strip {
@@ -481,7 +491,7 @@
     color: var(--blue);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 639px) {
     .rh-related-strip { flex-direction: column; align-items: stretch; }
     .rh-related-link  { width: 100%; max-width: 100%; flex: none; }
 

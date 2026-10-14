@@ -527,14 +527,11 @@
             if (el) el.textContent = val || 0;
         };
         set('stat-contact-total', counts.contact);
-        set('stat-whatsapp-total', counts.whatsapp);
         set('stat-chat-total', counts.chat);
         set('stat-contact-week', weekCounts.contact);
-        set('stat-whatsapp-week', weekCounts.whatsapp);
         set('stat-chat-week', weekCounts.chat);
         set('lead-count-all', counts.total);
         set('lead-count-contact', counts.contact);
-        set('lead-count-whatsapp', counts.whatsapp);
         set('lead-count-chat', counts.chat);
     }
 
@@ -551,7 +548,6 @@
     function leadBadge(source) {
         const map = {
             contact: { cls: 'contact', icon: 'fa-solid fa-envelope', label: 'Contact' },
-            whatsapp: { cls: 'whatsapp', icon: 'fa-brands fa-whatsapp', label: 'WhatsApp' },
             chat: { cls: 'chat', icon: 'fa-solid fa-comments', label: 'Chat' },
         };
         const m = map[source] || { cls: 'chat', icon: 'fa-solid fa-circle', label: source };
@@ -564,12 +560,6 @@
         if (l.source === 'contact') {
             if (l.email) out.push('<a class="lead-action" title="Email" href="mailto:' + esc(l.email) + '"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>');
             if (l.phone) out.push('<a class="lead-action" title="Call"  href="tel:' + esc(l.phone) + '"><i class="fa-solid fa-phone" aria-hidden="true"></i></a>');
-        } else if (l.source === 'whatsapp') {
-            if (l.phone) {
-                const clean = String(l.phone).replace(/[^0-9]/g, '');
-                out.push('<a class="lead-action lead-action--wa" title="Open WhatsApp" target="_blank" rel="noopener" href="https://wa.me/' + clean + '"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>');
-                out.push('<a class="lead-action" title="Call" href="tel:' + esc(l.phone) + '"><i class="fa-solid fa-phone" aria-hidden="true"></i></a>');
-            }
         } else if (l.source === 'chat') {
             out.push('<a class="lead-action lead-action--chat" title="Open in Live Chat" href="/admin/chat"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>');
             if (l.phone) out.push('<a class="lead-action" title="Call" href="tel:' + esc(l.phone) + '"><i class="fa-solid fa-phone" aria-hidden="true"></i></a>');
@@ -597,8 +587,6 @@
         if (l.company) rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Company</span><span>' + esc(l.company) + '</span></div>');
         if (l.email) rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Email</span><a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a></div>');
         if (l.phone) rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Phone</span><span>' + esc(l.phone) + '</span></div>');
-        if (l.source === 'whatsapp' && l.raw && l.raw.sourceUrl)
-            rows.push('<div class="sub-detail-row"><span class="sub-detail-label">Page</span><a href="' + esc(l.raw.sourceUrl) + '" target="_blank" rel="noopener">' + esc(l.raw.sourceUrl) + '</a></div>');
         if (l.source === 'chat' && l.raw && Array.isArray(l.raw.messages) && l.raw.messages.length) {
             const last = l.raw.messages.slice(-3)
                 .map(function (m) { return '<div><strong>' + esc(m.role) + ':</strong> ' + esc(m.text) + '</div>'; })
@@ -694,6 +682,8 @@
             document.getElementById('stat-total').textContent = data.counts.total;
             document.getElementById('stat-static').textContent = data.counts.static;
             document.getElementById('stat-builder').textContent = data.counts.builder;
+            document.getElementById('stat-blog').textContent = data.counts.blog;
+            document.getElementById('stat-kb').textContent = data.counts.kb;
             document.getElementById('stat-generated').textContent =
                 data.generatedAt
                     ? new Date(data.generatedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
@@ -711,9 +701,11 @@
         const query = (document.getElementById('sitemap-search').value || '').toLowerCase();
         const tbody = document.getElementById('sitemap-body');
 
+        // Filter on the entry's own type. The old pair of checks knew only
+        // 'static' and 'builder', so blog posts (type 'blog') were excluded by
+        // BOTH buttons and were visible only under "All".
         const filtered = allSitemapEntries.filter(function (e) {
-            if (sitemapActiveFilter === 'static' && e.type !== 'static') return false;
-            if (sitemapActiveFilter === 'builder' && e.type !== 'builder') return false;
+            if (sitemapActiveFilter !== 'all' && e.type !== sitemapActiveFilter) return false;
             if (query) return e.loc.toLowerCase().includes(query);
             return true;
         });
@@ -724,9 +716,13 @@
         }
 
         tbody.innerHTML = filtered.map(function (e) {
-            const typeBadge = e.type === 'builder'
-                ? '<span class="sitemap-type-badge sitemap-type-builder">Builder</span>'
-                : '<span class="sitemap-type-badge sitemap-type-static">Static</span>';
+            // Four types, not two. Blog posts previously fell into the else
+            // branch and were mislabelled "Static" (fixed 2026-09-02) — kb
+            // added the same way when Knowledge Base pages arrived.
+            const badgeLabel = { builder: 'Builder', blog: 'Blog', kb: 'Knowledge Base' }[e.type] || 'Static';
+            const badgeClass = { builder: 'sitemap-type-builder', blog: 'sitemap-type-blog', kb: 'sitemap-type-kb' }[e.type]
+                || 'sitemap-type-static';
+            const typeBadge = '<span class="sitemap-type-badge ' + badgeClass + '">' + badgeLabel + '</span>';
             const path = e.loc.replace(/^https?:\/\/[^/]+/, '');
             return `<tr>
                 <td class="sitemap-url-cell">
@@ -787,6 +783,32 @@
                 } finally {
                     regenBtn.innerHTML = original;
                     regenBtn.disabled = false;
+                }
+            });
+        }
+
+        // Refresh Schema — drops the server's cached Page Schema (JSON-LD) entries
+        // so a Strapi edit is live for visitors and crawlers right away.
+        const schemaBtn = document.getElementById('schema-refresh-btn');
+        if (schemaBtn) {
+            schemaBtn.addEventListener('click', async function () {
+                schemaBtn.disabled = true;
+                const original = schemaBtn.innerHTML;
+                schemaBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Refreshing…';
+                try {
+                    const res = await apiFetch('/api/admin/schema/refresh', { method: 'POST' });
+                    if (!res.ok) throw new Error('Refresh failed');
+                    const data = await res.json();
+                    schemaBtn.innerHTML = '<i class="fa-solid fa-check"></i> ' +
+                        data.pages + (data.pages === 1 ? ' page' : ' pages') + ' with schema';
+                    await new Promise(function (r) { setTimeout(r, 2500); });
+                } catch (err) {
+                    if (err.message !== 'Session expired') {
+                        alert('Could not refresh schema. See server logs.');
+                    }
+                } finally {
+                    schemaBtn.innerHTML = original;
+                    schemaBtn.disabled = false;
                 }
             });
         }

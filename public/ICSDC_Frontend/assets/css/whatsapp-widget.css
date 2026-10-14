@@ -58,7 +58,7 @@
 }
 
 /* On small navbars hide the text label, show icon only */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .btn-wa-nav:not(.btn-wa-nav--mobile) span { display: none; }
     .btn-wa-nav:not(.btn-wa-nav--mobile) { padding: 9px 12px; }
 
@@ -339,7 +339,7 @@ html[data-theme="dark"] .wa-pop-success-text { color: #f1f5f9; }
 html[data-theme="dark"] .wa-popover::before  { background: var(--wa-green); } /* caret stays green in dark mode */
 
 /* ── Mobile ───────────────────────────────────────────────── */
-@media (max-width: 480px) {
+@media (max-width: 639px) {
     /* Popover spans most of the screen width; JS still sets top/right */
     .wa-popover {
         width: calc(100vw - 24px);

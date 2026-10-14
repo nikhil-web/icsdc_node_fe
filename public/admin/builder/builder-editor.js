@@ -21,7 +21,7 @@ import { COMPONENT_REGISTRY } from '/assets/js/builder/componentRegistry.js';
 import { generateSectionId } from '/assets/js/builder/builder-utils.js';
 import { BuilderAPI } from './builder-api.js';
 import { renderComponentLibrary } from './component-library.js';
-import { renderPropertyEditor } from './property-editor.js';
+import { renderPropertyEditor, pendingPasteImageCount } from './property-editor.js';
 import { openVersionHistory } from './version-history.js';
 import { createCanvasBridge } from './canvas-bridge.js';
 import { BUILDER_TEMPLATES, getTemplate } from '/assets/js/builder/templates.js';
@@ -29,17 +29,30 @@ import { BUILDER_TEMPLATES, getTemplate } from '/assets/js/builder/templates.js'
 const state = {
     mode: 'list',
     pages: [],
+    // Slugs the server won't delete, fetched with the page list. Defaults to
+    // empty: if the fetch fails the list still renders and the server still
+    // enforces — see openList().
+    protectedSlugs: [],
     page: null,
     selectedSectionId: null,
     dirty: false,
 };
 
-// Blog posts (built from the blog-post template) serve at /blogs/<slug>, not
-// top-level /<slug> — same "has a blogHeader section" check server.js's
-// isBlogSlug() uses, so the URL shown here can't drift from what's really live.
+// Blog posts (built from the blog-post template) serve at /blogs/<slug>, and
+// Knowledge Base articles at /knowledge-base/<slug> — not top-level /<slug>.
+// Same "has a blogHeader/kbHeader section" check server.js's isBlogSlug()/
+// isKbSlug() use, so the URL shown here can't drift from what's really live.
+// Shared by livePathFor() and onPublish() below — those two computed this
+// identically but separately before Knowledge Base added a third case.
+function pathPrefixForSections(sections) {
+    const types = new Set((sections || []).map((s) => s.type));
+    if (types.has('blogHeader')) return '/blogs/';
+    if (types.has('kbHeader')) return '/knowledge-base/';
+    return '/';
+}
+
 function livePathFor(page) {
-    const isBlogPost = (page.sections || []).some((s) => s.type === 'blogHeader');
-    return (isBlogPost ? '/blogs/' : '/') + page.slug;
+    return pathPrefixForSections(page.sections) + page.slug;
 }
 
 function esc(s) {
@@ -118,13 +131,32 @@ async function openList() {
     document.getElementById('bld-new-page-btn').addEventListener('click', onNewPageClick);
 
     try {
-        const res = await BuilderAPI.listPages();
+        /* Both in parallel — the protected list is tiny and the page list is
+           the slow one, so waiting for them in series would just add latency.
+           A failure to read the protected slugs must NOT take the page list
+           down with it: the list still renders, every row simply shows its
+           delete button, and the server still refuses the protected ones with
+           a 403. Degrading to "UI doesn't know, server still enforces" is the
+           right direction; degrading to "no page list at all" is not. */
+        const [res, prot] = await Promise.all([
+            BuilderAPI.listPages(),
+            BuilderAPI.protectedSlugs().catch(() => ({ slugs: [] })),
+        ]);
         state.pages = res?.data || [];
+        state.protectedSlugs = (prot && prot.slugs) || [];
         renderListBody();
     } catch (err) {
         document.getElementById('bld-list-body').innerHTML =
             '<tr><td colspan="5" class="admin-loading-cell">Failed: ' + esc(err.message) + '</td></tr>';
     }
+}
+
+// Mirrors isProtectedBuilderSlug() in server.js, but is only ever a UI hint —
+// state.protectedSlugs comes FROM the server, and the delete route re-checks
+// regardless, so a stale or empty list here cannot let a protected page through.
+function isProtectedPage(page) {
+    const slugs = state.protectedSlugs || [];
+    return slugs.includes(String(page.slug || '').toLowerCase());
 }
 
 function renderListBody() {
@@ -153,7 +185,13 @@ function renderListBody() {
                 (published
                     ? '<a class="admin-toggle-btn bld-list-view" href="' + esc(livePath) + '" target="_blank" rel="noopener" title="Open the live page"><i class="fa-solid fa-arrow-up-right-from-square"></i></a> '
                     : '') +
-                '<button class="admin-toggle-btn btn-hide bld-list-delete" data-id="' + esc(id) + '" data-title="' + esc(p.title) + '"><i class="fa-solid fa-trash"></i></button>' +
+                (isProtectedPage(p)
+                    // Fixed page — editable, never deletable. Server enforces
+                    // this too (403); this only keeps the button out of reach
+                    // so nobody discovers the rule by having it refused.
+                    ? '<span class="bld-list-locked" title="This is a fixed page and cannot be deleted. You can still edit its content.">' +
+                          '<i class="fa-solid fa-lock" aria-hidden="true"></i></span>'
+                    : '<button class="admin-toggle-btn btn-hide bld-list-delete" data-id="' + esc(id) + '" data-title="' + esc(p.title) + '"><i class="fa-solid fa-trash"></i></button>') +
             '</td>' +
         '</tr>';
     }).join('');
@@ -192,7 +230,13 @@ function onNewPageClick() {
     const existing = document.getElementById('bld-newpage');
     if (existing) existing.remove();
 
-    const cards = BUILDER_TEMPLATES.map((t, i) =>
+    /* Templates for one-off fixed pages mark themselves hidden (see the Help
+       Center in templates.js) — they exist so the page can be re-seeded, not so
+       a second copy can be made. Filter BEFORE mapping so the index-based
+       "first card is preselected" logic lands on the first VISIBLE template
+       rather than preselecting a card that was filtered out. */
+    const pickable = BUILDER_TEMPLATES.filter((t) => !t.hidden);
+    const cards = pickable.map((t, i) =>
         '<label class="bld-tpl' + (i === 0 ? ' is-selected' : '') + '">' +
         '<input type="radio" name="bld-tpl" value="' + t.id + '"' + (i === 0 ? ' checked' : '') + '>' +
         '<i class="fa-solid ' + t.icon + '" aria-hidden="true"></i>' +
@@ -237,10 +281,15 @@ function onNewPageClick() {
     const createBtn = document.getElementById('bld-np-create');
     let slugTouched = false;
 
+    // Keyed by template id, not sections — the page doesn't exist yet during
+    // creation, so there is nothing to sniff. Mirrors pathPrefixForSections()'s
+    // outcome for a page just created from each template (blog-post always
+    // seeds a blogHeader, kb-article always seeds a kbHeader — see templates.js).
+    const TEMPLATE_PATH_PREFIX = { 'blog-post': '/blogs/', 'kb-article': '/knowledge-base/' };
     function syncUrl() {
         const s = slugify(slugEl.value || titleEl.value);
         const tplId = (wrap.querySelector('.bld-tpl input:checked') || {}).value || 'blank';
-        const prefix = tplId === 'blog-post' ? '/blogs/' : '/';
+        const prefix = TEMPLATE_PATH_PREFIX[tplId] || '/';
         urlEl.textContent = 'icsdc.com' + prefix + (s || '…');
     }
     titleEl.addEventListener('input', () => {
@@ -306,6 +355,98 @@ async function onDeleteClick(documentId, title) {
     }
 }
 
+/* SEO fields modal — Meta Title / Meta Description on state.page.
+   Mirrors onNewPageClick()'s modal shell. Both fields already round-trip
+   through the save/publish payloads (see onSaveDraft/onPublish below) and
+   already drive the server-side <head> injection and its title/excerpt/body
+   fallback chain (server.js blogSeoFor / fetchBuilderPageMeta) — this dialog
+   only adds the missing piece: somewhere in the editor to actually type them
+   in. It edits state.page in memory and does not call the API itself; Save
+   Draft / Publish send whatever is in state.page, same as the title field. */
+const SEO_TITLE_MAX = 255;   // mirrors builder-page schema: metaTitle maxLength
+const SEO_DESC_MAX = 500;    // mirrors builder-page schema: metaDescription maxLength
+
+function onSeoClick() {
+    const existing = document.getElementById('bld-seo-modal');
+    if (existing) existing.remove();
+
+    const wrap = document.createElement('div');
+    wrap.id = 'bld-seo-modal';
+    wrap.className = 'bld-modal-backdrop';
+    wrap.innerHTML =
+        '<div class="bld-modal" role="dialog" aria-modal="true" aria-labelledby="bld-seo-title">' +
+        '<div class="bld-modal-head">' +
+            '<h3 id="bld-seo-title">SEO</h3>' +
+            '<button type="button" class="bld-modal-x" id="bld-seo-cancel" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>' +
+        '</div>' +
+        '<div class="bld-modal-body">' +
+            '<p class="bld-np-preview">Shown in search results and social shares. Leave a field ' +
+            'blank to fall back to the page title' + (pageHasContentFallback() ?
+                ' / excerpt / article text' : '') + ' automatically — this page is not required to set either.</p>' +
+            '<label class="bld-field">' +
+                '<span class="bld-field-label">Meta title</span>' +
+                '<input type="text" class="bld-input" id="bld-seo-title-input" maxlength="' + SEO_TITLE_MAX + '" ' +
+                    'placeholder="' + esc(state.page.title || 'Defaults to the page title') + '" autocomplete="off">' +
+                '<span class="bld-field-hint" id="bld-seo-title-count"></span>' +
+            '</label>' +
+            '<label class="bld-field">' +
+                '<span class="bld-field-label">Meta description</span>' +
+                '<textarea class="bld-input bld-textarea" id="bld-seo-desc-input" maxlength="' + SEO_DESC_MAX + '" ' +
+                    'rows="3" placeholder="Defaults to the article excerpt or body text" autocomplete="off"></textarea>' +
+                '<span class="bld-field-hint" id="bld-seo-desc-count"></span>' +
+            '</label>' +
+        '</div>' +
+        '<div class="bld-modal-foot">' +
+            '<button type="button" class="admin-toggle-btn" id="bld-seo-cancel2">Cancel</button>' +
+            '<button type="button" class="admin-login-btn" id="bld-seo-save"><i class="fa-solid fa-check"></i> Save</button>' +
+        '</div>' +
+        '</div>';
+    document.body.appendChild(wrap);
+
+    const titleEl = document.getElementById('bld-seo-title-input');
+    const descEl = document.getElementById('bld-seo-desc-input');
+    const titleCount = document.getElementById('bld-seo-title-count');
+    const descCount = document.getElementById('bld-seo-desc-count');
+    titleEl.value = state.page.metaTitle || '';
+    descEl.value = state.page.metaDescription || '';
+
+    function updateCount(el, countEl, max) {
+        countEl.textContent = el.value.length + ' / ' + max;
+        countEl.classList.toggle('is-near-limit', el.value.length > max * 0.9);
+    }
+    updateCount(titleEl, titleCount, SEO_TITLE_MAX);
+    updateCount(descEl, descCount, SEO_DESC_MAX);
+    titleEl.addEventListener('input', () => updateCount(titleEl, titleCount, SEO_TITLE_MAX));
+    descEl.addEventListener('input', () => updateCount(descEl, descCount, SEO_DESC_MAX));
+
+    function close() { wrap.remove(); document.removeEventListener('keydown', onKey); }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    document.addEventListener('keydown', onKey);
+    wrap.addEventListener('mousedown', (e) => { if (e.target === wrap) close(); });
+    document.getElementById('bld-seo-cancel').addEventListener('click', close);
+    document.getElementById('bld-seo-cancel2').addEventListener('click', close);
+
+    document.getElementById('bld-seo-save').addEventListener('click', () => {
+        state.page.metaTitle = titleEl.value.trim();
+        state.page.metaDescription = descEl.value.trim();
+        markDirty();
+        close();
+    });
+
+    titleEl.focus();
+}
+
+// True for a blog post OR a Knowledge Base article — the two page kinds whose
+// server-side SEO (blogSeoFor / kbSeoFor) falls all the way through to text
+// pulled from the article body when both fields are left blank here. A plain
+// builder page's fallback stops at its own title (fetchBuilderPageMeta), so
+// only these two get the extra "/ excerpt / article text" wording in the
+// modal's hint above.
+function pageHasContentFallback() {
+    const types = new Set((state.page.sections || []).map((s) => s.type));
+    return types.has('blogHeader') || types.has('kbHeader');
+}
+
 /* ══════ EDITOR VIEW ═════════════════════════════════════ */
 async function openEditor(documentId) {
     state.mode = 'edit';
@@ -328,6 +469,7 @@ async function openEditor(documentId) {
                         '<button data-vw="mobile" title="Mobile (390px)"><i class="fa-solid fa-mobile-screen"></i></button>' +
                     '</div>' +
                     '<span class="bld-zoom-badge" id="bld-zoom-badge" title="Canvas render width · zoom"></span>' +
+                    '<button id="bld-seo-btn"     class="admin-toggle-btn"><i class="fa-solid fa-magnifying-glass-chart"></i> SEO</button>' +
                     '<button id="bld-history-btn" class="admin-toggle-btn"><i class="fa-solid fa-clock-rotate-left"></i> History</button>' +
                     '<button id="bld-save-btn"    class="admin-toggle-btn btn-show"><i class="fa-solid fa-floppy-disk"></i> Save Draft</button>' +
                     '<button id="bld-preview-btn" class="admin-toggle-btn btn-show"><i class="fa-solid fa-eye"></i> Preview</button>' +
@@ -362,6 +504,25 @@ async function openEditor(documentId) {
                 '<span id="bld-status" class="bld-status">Loading…</span>' +
             '</div>' +
         '</div>';
+
+    /* Attach the canvas bridge NOW — before the awaited page fetch below.
+
+       The iframe starts loading the instant that innerHTML lands, and posts
+       bld:ready as soon as canvas-mode.js finishes (measured ~76ms locally).
+       initCanvas() used to run only AFTER `await BuilderAPI.getPage()`, so any
+       Strapi round-trip slower than the iframe — routinely the case against a
+       local `strapi develop` — meant bld:ready was posted with no listener
+       attached yet and was lost outright. The bridge then never flipped to
+       ready, the queued render never sent, and the canvas sat blank until the
+       12s watchdog fired. Reloading the canvas appeared to "fix" it only
+       because by then the listener existed.
+
+       Running it here closes the window completely rather than narrowing it:
+       innerHTML → addEventListener is one synchronous run, so the iframe
+       cannot finish loading in between. render()/highlight() are NOT called
+       here — they need page data — but the bridge queues both internally
+       until ready, so pushing them later (see pushCanvasState below) is safe. */
+    initCanvas();
 
     // Load page data
     try {
@@ -404,6 +565,7 @@ async function openEditor(documentId) {
     document.getElementById('bld-save-btn').addEventListener('click', onSaveDraft);
     document.getElementById('bld-preview-btn').addEventListener('click', onPreview);
     document.getElementById('bld-publish-btn').addEventListener('click', onPublish);
+    document.getElementById('bld-seo-btn').addEventListener('click', onSeoClick);
     document.getElementById('bld-history-btn').addEventListener('click', () => {
         openVersionHistory(state.page.documentId, () => openEditor(state.page.documentId));
     });
@@ -414,7 +576,8 @@ async function openEditor(documentId) {
     if (!state.selectedSectionId && state.page.sections.length) {
         state.selectedSectionId = state.page.sections[0].id;
     }
-    initCanvas();
+    // Bridge was created before the page fetch above — hand it the sections now.
+    pushCanvasState();
     initViewportToggle();
     initPanelResize();
     renderProperties();
@@ -464,9 +627,16 @@ function initCanvas() {
             else if (action === 'del') deleteSection(id);
         },
     });
+}
+
+/* Push the loaded page into the canvas. Split out of initCanvas() because the
+   bridge is now created BEFORE page data is fetched (see openEditor), so
+   initCanvas() can no longer assume state.page exists. Both calls queue
+   internally until the iframe reports ready, so this is safe whether the
+   canvas finishes loading before or after the page fetch resolves. */
+function pushCanvasState() {
+    if (!canvasBridge || !state.page) return;
     canvasBridge.render(state.page.sections);
-    // Mirror the editor's selection into the canvas. The bridge queues this
-    // until the iframe reports ready, so it is safe to call immediately.
     if (state.selectedSectionId) canvasBridge.highlight(state.selectedSectionId);
 }
 
@@ -492,7 +662,10 @@ function showCanvasError() {
         box.remove();
         const f = document.getElementById('bld-canvas-frame');
         if (f) f.src = '/builder/__canvas?canvas=1&v=' + Date.now();
+        // Rebuild the bridge first, then push state — initCanvas() no longer
+        // renders on its own (see pushCanvasState).
         initCanvas();
+        pushCanvasState();
     });
 }
 
@@ -698,7 +871,18 @@ function deleteSection(id) {
 }
 
 /* ── Save / Preview / Publish ────────────────────────────── */
+/* Pasted images are placeholders in the article until their upload lands (see
+   "Pasted images" in property-editor.js). Saving before then would store a
+   placeholder instead of the image, so both save paths wait for zero. */
+function blockedByPendingImageUploads() {
+    const n = pendingPasteImageCount();
+    if (!n) return false;
+    setStatus('Wait — ' + n + ' pasted image' + (n === 1 ? ' is' : 's are') + ' still uploading');
+    return true;
+}
+
 async function onSaveDraft() {
+    if (blockedByPendingImageUploads()) return;
     const btn = document.getElementById('bld-save-btn');
     btn.disabled = true;
     setStatus('Saving…');
@@ -743,6 +927,7 @@ async function onPreview() {
 }
 
 async function onPublish() {
+    if (blockedByPendingImageUploads()) return;
     if (!confirm('Publish this page? It will be live at /' + state.page.slug)) return;
     const btn = document.getElementById('bld-publish-btn');
     btn.disabled = true;
@@ -772,12 +957,7 @@ async function onPublish() {
 /* Post-publish confirmation: live URL + one-click crawler-snapshot rebuild
    (crawlers get the prerendered snapshot; it must be regenerated after publish). */
 function showPublishSuccess() {
-    // Blog posts (a page built from the blog-post template) serve at
-    // /blogs/<slug>, not top-level /<slug> — same "has a blogHeader section"
-    // check server.js's isBlogSlug() uses, so this can't drift out of sync
-    // with what the server actually serves at.
-    const isBlogPost = (state.page.sections || []).some((s) => s.type === 'blogHeader');
-    const path = (isBlogPost ? '/blogs/' : '/') + state.page.slug;
+    const path = pathPrefixForSections(state.page.sections) + state.page.slug;
     const existing = document.getElementById('bld-publish-toast');
     if (existing) existing.remove();
     const toast = document.createElement('div');

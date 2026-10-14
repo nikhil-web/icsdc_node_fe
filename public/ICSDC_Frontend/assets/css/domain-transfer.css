@@ -301,7 +301,7 @@
 /* ══════════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════════ */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
   .dt-tips-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -312,7 +312,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
   .dt-tips-grid {
     grid-template-columns: 1fr;
   }
@@ -376,7 +376,7 @@
   margin-inline: auto;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
   .dt-about-section .dt-about-inner {
     grid-template-columns: 1fr;
     gap: 36px;
@@ -389,7 +389,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
   #what-you-get .cloud-use-grid {
     grid-template-columns: 1fr;
   }

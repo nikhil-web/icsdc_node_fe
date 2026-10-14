@@ -8,7 +8,7 @@
 //  article itself (the legacy top-level /<slug> 301s there).
 // ══════════════════════════════════════════════════════════
 
-import { hidePageLoader, markActiveNavLink } from './utils/cms-helpers.js';
+import { hidePageLoader, markActiveNavLink, populateSEO, inlineRichText } from './utils/cms-helpers.js';
 import { getBlogIndexPage } from './services/contentService.js';
 
 (function () {
@@ -81,7 +81,10 @@ import { getBlogIndexPage } from './services/contentService.js';
 
     function renderFeatured(post) {
         var wrap = document.getElementById('blog-featured-wrap');
-        if (!wrap || !post) return;
+        if (!wrap) return;
+        // No post for the current filter — hide the slot rather than leave the
+        // previous article sitting there as a stale result.
+        if (!post) { wrap.hidden = true; return; }
 
         document.getElementById('blog-featured-card').href = '/blogs/' + post.slug;
         document.getElementById('blog-featured-title').textContent = post.title || '';
@@ -127,14 +130,26 @@ import { getBlogIndexPage } from './services/contentService.js';
                 activeCategory = btn.dataset.cat || '';
                 activePage = 1;
                 renderChips();
-                renderArchive();
+                renderResults();
             });
         });
     }
 
-    // The archive list (all posts, filterable + paginated) is the "real"
-    // browsable index — the featured slot and recent grid above it are just a
-    // highlight reel and stay fixed regardless of filter/search/page state.
+    /* Re-render EVERY post-bearing section from the current filter.
+       This used to call renderArchive() alone, so the featured article and the
+       recent grid — the two things actually on screen when you click a chip —
+       never changed. Filtering looked completely dead, and a search with no
+       matches showed both articles above a "No articles match" message.
+       The reel is a view of the result set, not a fixed highlight. */
+    function renderResults() {
+        var list = filteredPosts();
+        renderFeatured(list[0] || null);
+        renderRecent(list.slice(1, 5));
+        renderArchive();
+    }
+
+    // The single source of truth for what is on screen. Featured slot, recent
+    // grid and archive list are all views of this — see renderResults().
     function filteredPosts() {
         return posts.filter(function (p) {
             if (activeCategory && p.category !== activeCategory) return false;
@@ -208,7 +223,7 @@ import { getBlogIndexPage } from './services/contentService.js';
             return '<a class="blog-cat-card" href="' + esc(c.link || '#') + '">' +
                 '<i class="fa-solid ' + esc(c.icon || 'fa-circle') + '" aria-hidden="true"></i>' +
                 '<h3>' + esc(c.title) + '</h3>' +
-                '<p>' + esc(c.desc || '') + '</p></a>';
+                '<p>' + inlineRichText(c.desc || '') + '</p></a>';
         }).join('');
     }
 
@@ -219,7 +234,7 @@ import { getBlogIndexPage } from './services/contentService.js';
     function renderCtaBand(ctaBand) {
         if (!ctaBand) return;
         if (ctaBand.title) document.getElementById('blog-cta-title').textContent = ctaBand.title;
-        if (ctaBand.description) document.getElementById('blog-cta-desc').textContent = ctaBand.description;
+        if (ctaBand.description) document.getElementById('blog-cta-desc').innerHTML = inlineRichText(ctaBand.description);
         var btn = document.getElementById('blog-cta-btn');
         if (ctaBand.ctaPrimary && ctaBand.ctaPrimary.text) btn.textContent = ctaBand.ctaPrimary.text;
         if (ctaBand.ctaPrimary && ctaBand.ctaPrimary.link) btn.setAttribute('href', ctaBand.ctaPrimary.link);
@@ -234,12 +249,36 @@ import { getBlogIndexPage } from './services/contentService.js';
             timer = setTimeout(function () {
                 activeSearch = value.trim().toLowerCase();
                 activePage = 1;
-                renderArchive();
+                renderResults();
             }, 200);
         });
     }
 
     function byOrder(a, b) { return (a.order || 0) - (b.order || 0); }
+
+    /* Section headings and the page's fixed labels.
+       blogs.html carries the same copy as static markup, so ONLY overwrite when
+       Strapi actually has a value — a blank CMS field must never wipe real copy
+       off the page, and the page has to read correctly before it's ever seeded.
+       Same rule renderCtaBand() follows. */
+    function setIfPresent(id, value, attr) {
+        if (!value) return;
+        var el = document.getElementById(id);
+        if (!el) return;
+        if (attr) el.setAttribute(attr, value);
+        else el.textContent = value;
+    }
+
+    function renderChrome(cfg) {
+        if (!cfg) return;
+        setIfPresent('blog-featured-label', cfg.featuredLabel);
+        setIfPresent('blog-archive-heading', cfg.archiveTitle);
+        setIfPresent('blog-categories-title', cfg.categoriesTitle);
+        setIfPresent('blog-help-title', cfg.helpTitle);
+        setIfPresent('blog-empty-title', cfg.emptyTitle);
+        setIfPresent('blog-empty-text', cfg.emptyText);
+        setIfPresent('blog-search-input', cfg.searchPlaceholder, 'placeholder');
+    }
 
     async function init() {
         markActiveNavLink();
@@ -252,7 +291,11 @@ import { getBlogIndexPage } from './services/contentService.js';
             var cfg = cfgRes && cfgRes.data;
             renderHelp(cfg && cfg.helpLinks && cfg.helpLinks.length ? cfg.helpLinks.slice().sort(byOrder) : FALLBACK_HELP_LINKS);
             renderCategories(cfg && cfg.categories && cfg.categories.length ? cfg.categories.slice().sort(byOrder) : FALLBACK_CATEGORIES);
-            if (cfg) renderCtaBand(cfg.ctaBand);
+            if (cfg) {
+                renderChrome(cfg);
+                renderCtaBand(cfg.ctaBand);
+                populateSEO(cfg.seo);
+            }
         } catch (err) {
             console.error('[blogs] failed to load blog-index-page config, using fallbacks:', err);
             renderHelp(FALLBACK_HELP_LINKS);
@@ -267,10 +310,8 @@ import { getBlogIndexPage } from './services/contentService.js';
             if (!posts.length) {
                 document.getElementById('blog-empty').hidden = false;
             } else {
-                renderFeatured(posts[0]);
-                renderRecent(posts.slice(1, 5));
                 renderChips();
-                renderArchive();
+                renderResults();
                 initSearch();
             }
         } catch (err) {

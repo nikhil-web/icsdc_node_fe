@@ -31,7 +31,9 @@
                 history.replaceState(null, '', href);
                 // Close mobile TOC accordion after click
                 var details = a.closest('details.legal-toc-collapsed');
-                if (details && window.innerWidth < 901) details.open = false;
+                // Classic script, so it can't import utils/breakpoints.js — same query as
+                // MEDIA.tabletDown, where legal.css collapses the contents into this accordion.
+                if (details && window.matchMedia('(max-width: 1023px)').matches) details.open = false;
             });
         });
 

@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getSslCertificatePage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -66,6 +66,7 @@ import {
             });
 
             // Pillars (4 why-us cards)
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // Pricing section
@@ -93,7 +94,7 @@ import {
             populateSectionHeader('#ssl-why', page.whyLabel, page.whyTitle, null);
             if (page.whyDesc) {
                 var whyDescEl = document.querySelector('.ssl-why-desc');
-                if (whyDescEl) whyDescEl.textContent = page.whyDesc;
+                if (whyDescEl) whyDescEl.innerHTML = inlineRichText(page.whyDesc);
             }
             populateIconCards('#ssl-why-grid', page.whyCards, 'cloud-power-card');
 

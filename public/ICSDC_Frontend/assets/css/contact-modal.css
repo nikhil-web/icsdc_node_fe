@@ -262,7 +262,7 @@ html[data-theme="dark"] .cmp-card .cu-form-success h3 { color: #f1f5f9; }
 html[data-theme="dark"] .cmp-card .cu-form-success p { color: #94a3b8; }
 
 /* ── Tablet + mobile — stack into single column ──────────── */
-@media (max-width: 760px) {
+@media (max-width: 639px) {
     .cmp-grid { grid-template-columns: 1fr; }
     .cmp-side {
         padding: 22px 24px 20px;
@@ -277,7 +277,7 @@ html[data-theme="dark"] .cmp-card .cu-form-success p { color: #94a3b8; }
     .cmp-main { padding: 22px 22px 22px; }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 639px) {
     .cmp-card { border-radius: 12px; }
     .cmp-card .cu-form-row { grid-template-columns: 1fr; gap: 14px; }
     .cmp-card .cu-input { font-size: 16px; }  /* prevent iOS zoom on focus */

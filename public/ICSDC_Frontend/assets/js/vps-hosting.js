@@ -23,7 +23,7 @@
  *   16. CTA Band #2 (final CTA)
  */
 
-import { wireCtaLink } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -80,6 +80,7 @@ import { inlineRichText } from './utils/cms-helpers.js';
         }
 
         /* ── 3. Why-Us Pillars (4 cards) ────────────────────── */
+        populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
         populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
         /* ── 4. Infrastructure Section (14 cards) ───────────── */

@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getTallyOnCloudPage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -56,7 +56,7 @@ import { uploadURL } from './services/strapiClient.js';
             var aboutTitleEl = document.getElementById('toc-about-title');
             if (aboutTitleEl) aboutTitleEl.textContent = page.aboutTitle || '';
             var aboutDescEl = document.getElementById('toc-about-desc');
-            if (aboutDescEl) aboutDescEl.textContent = page.aboutDesc || '';
+            if (aboutDescEl) aboutDescEl.innerHTML = inlineRichText(page.aboutDesc || '');
             if (page.aboutImage && page.aboutImage.image) {
                 var aboutImg = document.getElementById('toc-about-img');
                 if (aboutImg) {
@@ -78,6 +78,7 @@ import { uploadURL } from './services/strapiClient.js';
             if (page.heroStatusSubtitle) setText(document, '.toc-bs', page.heroStatusSubtitle);
 
             // Pillars
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // Improvements (12 cards)
@@ -121,7 +122,7 @@ import { uploadURL } from './services/strapiClient.js';
             }
             if (page.whoCanDesc) {
                 var wd = document.querySelector('#toc-who .subtitle');
-                if (wd) wd.textContent = page.whoCanDesc;
+                if (wd) wd.innerHTML = inlineRichText(page.whoCanDesc);
             }
             populateIconCards('#toc-who-grid', page.whoCanCards, 'cloud-use-card');
 

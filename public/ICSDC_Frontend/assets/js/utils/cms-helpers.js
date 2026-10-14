@@ -446,7 +446,7 @@ export function populateHero(section, data) {
     if (data.heroImage && data.heroImage.image) {
         var heroRight = section.querySelector('.hero-right');
         var heroImg = heroRight && heroRight.querySelector('.hero-right-image');
-        // Below 1366px style.css sets .hero-right { display: none }, but assigning
+        // Below the desktop tier (1024px) style.css sets .hero-right { display: none }, but assigning
         // .src still downloads and decodes the image. On the homepage that is a
         // 771 KB PNG fetched purely to be invisible. Skip the assignment when the
         // container isn't rendered; the server-side preload is gated on the same
@@ -527,6 +527,49 @@ export function populateSectionHeader(sectionSelector, label, title, subtitle) {
     }
     if (title) setText(section, '.title', title);
     if (subtitle) setHTML(section, '.subtitle', inlineRichText(subtitle));
+}
+
+/* Heading + subheading for the pillars strip under the hero (section.why-us).
+   It was the one section on the service pages with no heading, so the HTML has
+   no .title/.subtitle for populateSectionHeader() to write into — this creates
+   them on demand, and ONLY when Strapi has copy. An empty field renders nothing,
+   so a page looks exactly as it did until someone fills the heading in.
+
+   Takes the same selector the page already passes for its pillars cards and
+   resolves the section from that, so the heading can only land in the section
+   the cards land in (the homepage, for one, has two .why-us sections). An
+   existing .title/.subtitle is reused rather than duplicated.
+
+   Deliberately no data-animate on what it creates: that attribute starts at
+   opacity:0 and is revealed by an observer that has already scanned the page by
+   the time the API answers, so a heading added afterwards would stay invisible.
+
+   Text handling is identical to populateSectionHeader(): the title goes through
+   setText and the subtitle through setHTML(inlineRichText()). */
+export function populatePillarsHeader(gridSelector, title, subtitle) {
+    if (!title && !subtitle) return;
+    var anchor = document.querySelector(gridSelector);
+    var section = anchor && anchor.closest('section');
+    if (!section) return;
+    var container = section.querySelector('.container') || section;
+
+    function ensure(cls, tag, before) {
+        var el = container.querySelector(':scope > .' + cls);
+        if (!el) {
+            el = document.createElement(tag);
+            el.className = cls;
+            container.insertBefore(el, before || container.firstChild);
+        }
+        return el;
+    }
+
+    var titleEl = title ? ensure('title', 'h2') : container.querySelector(':scope > .title');
+    if (title) setText(container, ':scope > .title', title);
+    if (subtitle) {
+        // After the title when there is one, otherwise first in the container.
+        ensure('subtitle', 'p', titleEl ? titleEl.nextSibling : null);
+        setHTML(container, ':scope > .subtitle', inlineRichText(subtitle));
+    }
 }
 
 export function populateCtaBand(selector, cta) {
@@ -982,6 +1025,8 @@ export function initHeroContactForm(formId, successId) {
         if (!p.name) return 'Please enter your name.';
         if (!p.email) return 'Please enter your email address.';
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)) return 'Please enter a valid email address.';
+        if (!p.phone) return 'Please enter your phone number.';
+        if (!/^\d{7,15}$/.test(p.phone.replace(/\D/g, ''))) return 'Please enter a valid phone number.';
         if (!p.subject) return 'Please select a subject.';
         if (!p.message) return 'Please enter your message.';
         return null;

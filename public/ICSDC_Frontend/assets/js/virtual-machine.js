@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getVirtualMachinePage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -138,6 +138,7 @@ import { uploadURL } from './services/strapiClient.js';
             if (page.heroStatusSubtitle) setText(document, '.vm-bs', page.heroStatusSubtitle);
 
             // Pillars (4 cards)
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // VM Plans Table
@@ -148,15 +149,10 @@ import { uploadURL } from './services/strapiClient.js';
             populateSectionHeader('#vm-features', page.featuresLabel, page.featuresTitle, page.featuresSubtitle);
             populateIconCards('#vm-features .vm-features-grid', page.features, 'cloud-power-card');
 
-            // CTA Band 1 (inline — no dedicated ID)
-            // The CTA band is static; update text only if provided
-            var ctaBand1 = document.querySelector('.cloud-cta-band:not(.cloud-cta-dark)');
-            if (ctaBand1 && page.ctaBand1) {
-                var b1h2 = ctaBand1.querySelector('h2');
-                var b1p = ctaBand1.querySelector('p');
-                if (b1h2 && page.ctaBand1.title) b1h2.textContent = page.ctaBand1.title;
-                if (b1p && page.ctaBand1.description) b1p.textContent = page.ctaBand1.description;
-            }
+            // CTA Band 1 — title, text AND buttons from Strapi via the shared helper.
+            // A button left empty in the CMS is removed (it used to update the text
+            // only, so the hardcoded "Call +91…" button could never be removed).
+            populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
 
             // Why Choose ICSDC (4 cards)
             populateSectionHeader('#vm-why', page.whyLabel, page.whyTitle, page.whySubtitle);
@@ -198,7 +194,7 @@ import { uploadURL } from './services/strapiClient.js';
             var whyOverTitleEl = document.getElementById('vm-whyover-title');
             if (whyOverTitleEl && page.whyOverTitle) whyOverTitleEl.textContent = page.whyOverTitle;
             var whyOverDescEl = document.getElementById('vm-whyover-desc');
-            if (whyOverDescEl && page.whyOverDesc) whyOverDescEl.textContent = page.whyOverDesc;
+            if (whyOverDescEl && page.whyOverDesc) whyOverDescEl.innerHTML = inlineRichText(page.whyOverDesc);
             var whyOverLabelEl = document.getElementById('vm-whyover-points-label');
             if (whyOverLabelEl && page.whyOverPointsLabel) whyOverLabelEl.textContent = page.whyOverPointsLabel;
             if (page.whyOverPoints && page.whyOverPoints.length) {
@@ -225,14 +221,8 @@ import { uploadURL } from './services/strapiClient.js';
             if (page.faqTitle) setText(document, '#vm-faq-heading', page.faqTitle);
             initFAQ(page.faq);
 
-            // CTA Band 2 (dark)
-            var ctaBand2 = document.querySelector('.cloud-cta-dark');
-            if (ctaBand2 && page.ctaBand2) {
-                var b2h2 = ctaBand2.querySelector('h2');
-                var b2p = ctaBand2.querySelector('p');
-                if (b2h2 && page.ctaBand2.title) b2h2.textContent = page.ctaBand2.title;
-                if (b2p && page.ctaBand2.description) b2p.textContent = page.ctaBand2.description;
-            }
+            // CTA Band 2 (dark) — same: buttons follow the CMS too.
+            populateCtaBand('.cloud-cta-dark', page.ctaBand2);
 
         } catch (err) {
             console.error('[virtual-machine] CMS load failed:', err);

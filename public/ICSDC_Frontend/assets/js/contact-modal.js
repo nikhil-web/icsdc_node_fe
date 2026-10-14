@@ -47,8 +47,8 @@ function buildModal() {
         '</div>' +
         '<div class="cu-form-row">' +
         '<div class="cu-field">' +
-        '<label for="cmp-phone" class="cu-label">Phone Number</label>' +
-        '<input type="tel" id="cmp-phone" name="phone" class="cu-input" placeholder="+91 98765 43210">' +
+        '<label for="cmp-phone" class="cu-label">Phone Number <span class="cu-required">*</span></label>' +
+        '<input type="tel" id="cmp-phone" name="phone" class="cu-input" placeholder="+91 98765 43210" required>' +
         '</div>' +
         '<div class="cu-field">' +
         '<label for="cmp-company" class="cu-label">Company / Organization</label>' +
@@ -120,6 +120,8 @@ function validateForm(payload) {
     if (!payload.name) return 'Please enter your name.';
     if (!payload.email) return 'Please enter your email address.';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return 'Please enter a valid email address.';
+    if (!payload.phone) return 'Please enter your phone number.';
+    if (!/^\d{7,15}$/.test(payload.phone.replace(/\D/g, ''))) return 'Please enter a valid phone number.';
     if (!payload.subject) return 'Please select a subject.';
     if (!payload.message) return 'Please enter your message.';
     return null;

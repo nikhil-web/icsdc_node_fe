@@ -608,7 +608,7 @@
 ══════════════════════════════════════ */
 
 /* 1024px — 2 columns for most grids */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
 
     .mch-plans-grid,
     .mch-features-grid,
@@ -634,7 +634,7 @@
 }
 
 /* 640px — single column */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
 
     .mch-plans-grid,
     .mch-features-grid,

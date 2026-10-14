@@ -1,5 +1,5 @@
 import { getAwsCloudHostingPage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 
 import {
     populateSEO,
@@ -135,6 +135,7 @@ import {
             });
 
             // 4 pillars
+            populatePillarsHeader('.why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-grid', page.pillars, 'why-card');
 
             // Pricing

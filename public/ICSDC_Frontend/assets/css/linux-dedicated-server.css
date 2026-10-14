@@ -940,7 +940,7 @@
 ══════════════════════════════════════ */
 
 /* 1280px: Innovation 4→3 columns */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .lds-innovation-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -989,7 +989,7 @@
 /* 1024px: most grids go 2-column */
 
 /* 768px: support 3→1, innovation 2→2 */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .lds-support-grid {
         grid-template-columns: 1fr;
     }

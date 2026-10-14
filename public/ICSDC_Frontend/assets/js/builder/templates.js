@@ -15,6 +15,9 @@
  * Section ids/order are assigned at creation time by the editor.
  */
 
+// Only used for kb-article's blogBody props below — see the comment there.
+import { COMPONENT_REGISTRY } from './componentRegistry.js';
+
 export const BUILDER_TEMPLATES = [
     {
         id: 'blank',
@@ -40,6 +43,74 @@ export const BUILDER_TEMPLATES = [
                     description: 'Talk to our team — we will help you pick the right setup.',
                     ctaPrimary: { text: 'Talk to an Expert', link: 'contact-popup' },
                     ctaSecondary: { text: 'See Pricing', link: '/pricing' },
+                },
+            },
+        ],
+    },
+    {
+        id: 'kb-article',
+        label: 'Knowledge Base article',
+        description: 'Legal-Pages-style header (category, title, last updated) plus a full rich-text article with an auto-generated "on this page" rail.',
+        icon: 'fa-book',
+        sections: [
+            { type: 'kbHeader' },
+            /* Providing `props` here means sectionsFromTemplate() uses EXACTLY this
+               object instead of blogBody's defaultProps — it is `s.props ||
+               defaultProps`, not a merge (see builder-editor.js sectionsFromTemplate).
+               So this spreads blogBody's own defaultProps and overrides only
+               showSidebar, rather than restating them by hand (which would fork the
+               placeholder article body text into a second copy that silently drifts
+               from the real one). showSidebar off: blogBody's sidebar defaults to a
+               product-push promo ("View Plans") that fits a marketing article, not
+               documentation. showHelp stays on — the "I need help with" links are
+               still relevant context on a support/how-to article. */
+            { type: 'blogBody', props: { ...COMPONENT_REGISTRY.blogBody.defaultProps, showSidebar: false } },
+        ],
+    },
+    {
+        // Template id, not the page's URL slug -- those are independent (the id
+        // is only ever looked up by getTemplate() to re-seed the page's section
+        // list; the actual live path comes from whatever slug is set in
+        // Strapi). Kept matching the slug anyway, purely so a reader isn't left
+        // wondering why a template called "help-center" builds the page that
+        // lives at /knowledgebase.
+        id: 'knowledgebase',
+        label: 'Help Center',
+        description: 'Support landing page: searchable Knowledge Base hero, article list, topic tiles, FAQ and contact channels.',
+        icon: 'fa-life-ring',
+        /* Kept out of the New Page picker: the Help Center is a single fixed
+           page (server.js PROTECTED_BUILDER_SLUGS), so offering the template
+           only invites a second one at some other slug — a duplicate the KB
+           grid, the article links and any nav entry would then disagree about.
+
+           Deliberately hidden rather than deleted. This entry is still the
+           canonical record of what the page is composed of, which is what
+           getTemplate('knowledgebase') reads to re-seed it — delete it and
+           that knowledge is gone with it. */
+        hidden: true,
+        sections: [
+            /* helpCenter owns the hero, the search box, the article list and the
+               topic tiles as one section — the search has to filter all of them,
+               and splitting it up would mean cross-section wiring the canvas
+               re-render keeps tearing down. Its defaults are the finished copy,
+               so no props override here. */
+            { type: 'helpCenter' },
+            /* The existing FAQ component, reused untouched. helpCenter's search
+               filters it by reading its rendered .faq-item DOM, so questions
+               narrow with the articles from the one search box. */
+            { type: 'faq' },
+            { type: 'supportChannels' },
+            // Every other multi-section template (blog-post, landing, service)
+            // closes on a ctaBand — matching that here rather than leaving Help
+            // Center the one page that ends on a card row.
+            {
+                type: 'ctaBand',
+                props: {
+                    variant: 'dark',
+                    title: 'Still stuck?',
+                    description: 'Chat with us now or send a message — our team responds fast.',
+                    ctaPrimary: { text: 'Chat with Support', link: 'contact-popup' },
+                    ctaSecondary: { text: '', link: '' },
                 },
             },
         ],

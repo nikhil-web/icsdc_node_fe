@@ -708,7 +708,7 @@
 ══════════════════════════════════════ */
 
 /* 1280px */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .mds-cards-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -755,7 +755,7 @@
 /* 1024px */
 
 /* 768px */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .mds-why-list {
         grid-template-columns: 1fr;
     }

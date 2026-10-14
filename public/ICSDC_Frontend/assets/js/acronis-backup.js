@@ -6,18 +6,23 @@
  *
  * Sections handled:
  *   1.  SEO meta tags
- *   2.  Hero (eyebrow + shield visual + stat cards + status badge)
+ *   2.  Hero (title/sub/description + CTAs + image)
  *   3.  4 Pillars (icon cards)
- *   4.  Pricing (section header + placeholder message + CTA)
- *   5.  Features (section header + 12 icon cards)
- *   6.  CTA Band #1
- *   7.  Why Choose ICSDC (section header + 6 icon cards)
- *   8.  Testimonials
- *   9.  FAQ
- *   10. CTA Band #2
+ *   4.  Pricing (section header + plan cards)
+ *   5.  Who We Are (title, description, points, feature blocks)
+ *   6.  Features (section header + 12 icon cards)
+ *   7.  CTA Band #1
+ *   8.  Why Choose ICSDC (section header + icon cards + image)
+ *   9.  Testimonials
+ *   10. FAQ
+ *   11. CTA Band #2
+ *
+ * Section eyebrows/labels are deliberately NOT CMS-driven on this page — the
+ * source document defines none and the house preference is to omit them, so
+ * heroEyebrow/pricingLabel/featuresLabel/whyLabel were dropped from the schema.
  */
 
-import { wireCtaLink } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
 import { getAcronisBackupPage } from './services/contentService.js';
 
 import {
@@ -26,8 +31,7 @@ import {
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
-    populateTldCards,
-    populateStats,
+    populatePricingPlansCloud,
     hidePageLoader,
     markActiveNavLink,
     setText,
@@ -40,21 +44,6 @@ import {
     'use strict';
 
     /* ─────────────────────────────────────────────────────────
-       LOCAL HELPERS
-    ───────────────────────────────────────────────────────── */
-
-    function getInitials(name) {
-        if (!name) return '';
-        return name.split(' ').map(function (n) { return n[0]; }).join('').toUpperCase().slice(0, 2);
-    }
-
-    function starSVG() {
-        return '<svg class="testi-star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">' +
-            '<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>' +
-            '</svg>';
-    }
-
-    /* ─────────────────────────────────────────────────────────
        SECTION POPULATORS
     ───────────────────────────────────────────────────────── */
 
@@ -62,17 +51,6 @@ import {
     function populateAcrHero(page) {
         var section = document.querySelector('.hero-section');
         if (!section) return;
-
-        // Eyebrow
-        if (page.heroEyebrow) {
-            var eyebrow = section.querySelector('.acr-eyebrow');
-            if (eyebrow) {
-                var dot = eyebrow.querySelector('.acr-eyebrow-dot');
-                eyebrow.textContent = '';
-                if (dot) eyebrow.appendChild(dot);
-                eyebrow.appendChild(document.createTextNode(' ' + page.heroEyebrow));
-            }
-        }
 
         if (page.heroTitle) setText(section, '.hero-title', page.heroTitle);
         if (page.heroSubtitle) setText(section, '.hero-sub', page.heroSubtitle);
@@ -88,20 +66,6 @@ import {
             btns[1].textContent = page.heroCtaSecondary.text || '';
             wireCtaLink(btns[1], page.heroCtaSecondary.link);
         }
-
-        // Hero stat cards
-        if (page.heroStats && page.heroStats.length) {
-            var stat1 = section.querySelector('.acr-stat-1');
-            var stat2 = section.querySelector('.acr-stat-2');
-            if (stat1 && page.heroStats[0]) {
-                setText(stat1, '.acr-stat-val', page.heroStats[0].value);
-                setText(stat1, '.acr-stat-label', page.heroStats[0].label);
-            }
-            if (stat2 && page.heroStats[1]) {
-                setText(stat2, '.acr-stat-val', page.heroStats[1].value);
-                setText(stat2, '.acr-stat-label', page.heroStats[1].label);
-            }
-        }
     }
 
     /** 3. Pillars (4 icon cards in .why-us .why-grid) */
@@ -110,45 +74,52 @@ import {
         populateIconCards('.why-us .why-grid', pillars, 'why-card');
     }
 
-    /** 4. Pricing Section (header + placeholder message + CTA) */
+    /** 4. Pricing Section (header + plan cards)
+     *  `null` label — this page has no section eyebrows (see file header). The
+     *  grid stays empty until real plan tiers are added in the CMS; the source
+     *  document supplies no prices, so none are invented here. */
     function populatePricing(page) {
-        populateSectionHeader('#acr-pricing', page.pricingLabel, page.pricingTitle, page.pricingSubtitle);
-
-        // Pricing placeholder message
-        if (page.pricingMessage) {
-            var placeholder = document.querySelector('#acr-pricing .acr-pricing-placeholder');
-            if (placeholder) {
-                var msgP = placeholder.querySelector('p');
-                if (msgP) msgP.textContent = page.pricingMessage;
-            }
-        }
-
-        // Pricing CTA buttons
-        var pricingBtns = document.querySelectorAll('#acr-pricing .hero-btns button');
-        if (pricingBtns.length >= 1 && page.pricingCtaPrimary) {
-            pricingBtns[0].innerHTML = page.pricingCtaPrimary.text || '';
-            wireCtaLink(pricingBtns[0], page.pricingCtaPrimary.link);
-        }
-        if (pricingBtns.length >= 2 && page.pricingCtaSecondary) {
-            pricingBtns[1].textContent = page.pricingCtaSecondary.text || '';
-            wireCtaLink(pricingBtns[1], page.pricingCtaSecondary.link);
-        }
+        populateSectionHeader('#acr-pricing', null, page.pricingTitle, page.pricingSubtitle);
+        populatePricingPlansCloud('#acr-pricing .cloud-pricing-grid', page.plans);
     }
 
-    /** 5. Features (12 icon cards in #acr-features .cloud-power-grid) */
-    function populateFeatures(label, title, subtitle, features) {
-        populateSectionHeader('#acr-features', label, title, subtitle);
+    /** 6. Features (12 icon cards in #acr-features .cloud-power-grid) */
+    function populateFeatures(title, subtitle, features) {
+        populateSectionHeader('#acr-features', null, title, subtitle);
         if (features && features.length) {
             populateIconCards('#acr-features .cloud-power-grid', features, 'cloud-power-card');
         }
     }
 
-    /** 7. Why Choose ICSDC (icon cards in #acr-why .cloud-use-grid) */
-    function populateWhyCards(label, title, subtitle, cards) {
-        populateSectionHeader('#acr-why', label, title, subtitle);
+    /** 8. Why Choose ICSDC (icon cards in #acr-why .cloud-use-grid) */
+    function populateWhyCards(title, subtitle, cards) {
+        populateSectionHeader('#acr-why', null, title, subtitle);
         if (cards && cards.length) {
             populateIconCards('#acr-why .cloud-use-grid', cards, 'cloud-use-card');
         }
+    }
+
+    /** 7b. Why section image (optional — set in Strapi via whyImage) */
+    function populateWhyImage(whyImage) {
+        var wrap = document.getElementById('acr-why-image');
+        if (!wrap) return;
+        var media = whyImage && whyImage.image;
+        if (!media) return;
+
+        var img = wrap.querySelector('img');
+        if (!img) return;
+
+        var base = (typeof STRAPI_URL !== 'undefined' ? STRAPI_URL : 'http://localhost:1337');
+        var picked = (media.formats && (media.formats.large || media.formats.medium || media.formats.small)) || media;
+        var url = picked.url || '';
+        if (url && !url.startsWith('http')) url = base + url;
+        if (!url) return;
+
+        img.src = url;
+        img.alt = media.alternativeText || '';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        wrap.style.display = '';
     }
 
     /** 4b. Who We Are (about section) */
@@ -190,6 +161,7 @@ import {
             populateHero('.hero-section', { heroImage: page.heroImage });
 
             // 3. Pillars
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populatePillars(page.pillars);
 
             // 4. Pricing
@@ -198,16 +170,17 @@ import {
             // 4b. Who We Are
             populateAbout(page);
 
-            // 5. Features
-            populateFeatures(page.featuresLabel, page.featuresTitle, page.featuresSubtitle, page.features);
+            // 6. Features
+            populateFeatures(page.featuresTitle, page.featuresSubtitle, page.features);
 
-            // 6. CTA Band #1
+            // 7. CTA Band #1
             populateCtaBand('.cloud-cta-band:not(.cloud-cta-dark)', page.ctaBand1);
 
-            // 7. Why Choose ICSDC
-            populateWhyCards(page.whyLabel, page.whyTitle, page.whySubtitle, page.whyCards);
+            // 8. Why Choose ICSDC
+            populateWhyCards(page.whyTitle, page.whySubtitle, page.whyCards);
+            populateWhyImage(page.whyImage);
 
-            // 8. Testimonials
+            // 9. Testimonials
             if (page.testimonialTitle) {
                 setText(document, '#testi-heading', page.testimonialTitle);
             }
@@ -218,14 +191,15 @@ import {
                 if (testiSection) testiSection.style.display = 'none';
             }
 
-            // 9. FAQ
+            // 10. FAQ
             if (page.faqTitle) {
                 setText(document, '#acr-faq-heading', page.faqTitle);
             }
             initFAQ(page.faq);
 
-            // 10. CTA Band #2
-            populateCtaBand('.cloud-cta-dark', page.ctaBand2);
+            // 11. CTA Band #2 — the source document specifies a second CTA
+            // ("Talk to Our Backup Experts from ICSDC") after the FAQ.
+            populateCtaBand('.cloud-cta-band.cloud-cta-dark', page.ctaBand2);
 
         } catch (err) {
             console.error('[acronis-backup] Failed to load CMS data:', err);

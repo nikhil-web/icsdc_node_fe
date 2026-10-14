@@ -59,6 +59,34 @@ const STRAPI_TOKEN = process.env.STRAPI_TOKEN || '';
 // falls back to STRAPI_URL for pure-local dev where they're the same host.
 const STRAPI_PUBLIC_URL = process.env.STRAPI_PUBLIC_URL || STRAPI_URL;
 
+/* Per-request fallback for the line above. STRAPI_PUBLIC_URL fixed the media
+   picker/property-panel image URLs for anyone who set the env var (see
+   a596f11 "Fix builder media URLs leaking the server's internal Strapi
+   origin") — but that fix still DEPENDED on an operator remembering to set
+   STRAPI_PUBLIC_URL in production's .env, and evidently nobody has: the
+   picker on the live site is still building <img src="http://localhost:1337/...">,
+   which resolves to the visiting ADMIN's own machine, not the server, so
+   every thumbnail 404s there while working fine for whoever tested it
+   locally (where localhost:1337 genuinely is reachable).
+
+   This mirrors config.js's own hostname -> Strapi-host table — the one the
+   PUBLIC site already trusts to pick the right Strapi origin per domain —
+   using the incoming request's Host header as the equivalent of
+   window.location.hostname server-side. An explicit STRAPI_PUBLIC_URL env
+   var always wins over this guess: an operator who set it deliberately knows
+   their deployment better than a hostname table can. Anything not in the
+   table (localhost, an internal IP, a host we don't recognise) falls through
+   to STRAPI_PUBLIC_URL exactly as before this function existed — zero change
+   for local dev or any environment that already works today. */
+function strapiPublicUrlForRequest(req) {
+    if (process.env.STRAPI_PUBLIC_URL) return STRAPI_PUBLIC_URL;
+    const host = String((req && req.hostname) || '').toLowerCase();
+    if (host === 'icsdc.com' || host === 'www.icsdc.com' || host === 'dev.icsdc.com') {
+        return 'https://admin.icsdc.com';
+    }
+    return STRAPI_PUBLIC_URL;
+}
+
 // ── Crawler prerendering (dynamic rendering) ──────────────
 // Fully-rendered static snapshots (built by prerender.js) live in /prerendered and
 // are served to known crawlers so non-JS bots get real content. Humans get the SPA.
@@ -72,6 +100,19 @@ function snapshotFileForPath(p) {
     if (p.startsWith('/legal/')) return path.join(prerenderDir, 'legal', p.slice('/legal/'.length) + '.html');
     return path.join(prerenderDir, p.replace(/^\//, '') + '.html');
 }
+
+/* Paths that are currently live, mirroring sitemap.xml. Kept in memory by
+   writeSitemapFile(), which already runs on boot, publish, delete and Page
+   Registry toggle.
+
+   The crawler middleware needs this because it runs BEFORE the page routes, and
+   used to serve any snapshot whose file existed. Nothing ever deletes a snapshot
+   file, so deleting a blog post left crawlers being served the full article with
+   a 200 while humans got a 404 — and a search engine only drops a URL when IT
+   sees the 404, so the dead page stayed indexed indefinitely. Same for a hidden
+   page, a renamed slug, or a delete made straight from Strapi's own admin, which
+   never touches this app at all. */
+const livePaths = new Set();
 
 // Tracks an in-progress admin-triggered prerender build.
 const prerenderState = { running: false, startedAt: null, finishedAt: null, exitCode: null, log: '' };
@@ -102,8 +143,54 @@ async function refreshPageCache() {
     }
 }
 
-// Proxy: /api/strapi/* → Strapi (token stays server-side)
+/* Proxy: /api/strapi/* → Strapi (token stays server-side).
+   This route is PUBLIC and attaches the server's full-access token, so it must
+   only do what the public site itself needs — otherwise anyone can use it as an
+   authenticated Strapi client. Previously it forwarded every method and path:
+   contact submissions and the users list were readable, and any collection
+   (including page-schemas, which is injected into <head>) was writable.
+
+   - Writes: only POST /api/contact-submissions (contact-us, contact popup,
+     hero form, builder contact form — all via postAPI or a direct fetch).
+   - Reads: GET/HEAD, except collections holding private data or server-only
+     config. The admin panel reads those through its own authed /api/admin/*
+     routes and server.js reads Strapi directly, so neither uses this proxy.
+   - Drafts: the public site only ever renders published content; draft reads
+     (builder preview, admin) go through server-side routes. */
+const PROXY_WRITE_ALLOW = [
+    { method: 'POST', re: /^\/api\/contact-submissions\/?$/ },
+];
+const PROXY_READ_DENY = [
+    /^\/api\/contact-submissions(\/|$)/,
+    /^\/api\/whatsapp-leads(\/|$)/,
+    /^\/api\/chat-sessions(\/|$)/,
+    /^\/api\/page-registries(\/|$)/,
+    /^\/api\/page-schemas(\/|$)/,       // server.js injects it; editors' notes stay private
+    /^\/api\/users(\/|$)/,
+    /^\/api\/users-permissions(\/|$)/,
+    /^\/api\/auth(\/|$)/,
+    /^\/api\/connect(\/|$)/,
+];
+const PROXY_DRAFT_RE = /(^|&)(status=draft|publicationState=preview)(&|$)/i;
+
+function proxyRequestAllowed(req) {
+    let p = req.path;
+    try { p = decodeURIComponent(p); } catch { return false; }
+    p = p.replace(/\/{2,}/g, '/').toLowerCase();
+    if (p.includes('..')) return false;
+    if (req.method === 'GET' || req.method === 'HEAD') {
+        if (PROXY_READ_DENY.some((re) => re.test(p))) return false;
+        let q = req.url.includes('?') ? req.url.slice(req.url.indexOf('?') + 1) : '';
+        try { q = decodeURIComponent(q); } catch { return false; }
+        return !PROXY_DRAFT_RE.test(q);
+    }
+    return PROXY_WRITE_ALLOW.some((r) => r.method === req.method && r.re.test(p));
+}
+
 app.use('/api/strapi', async (req, res) => {
+    if (!proxyRequestAllowed(req)) {
+        return res.status(403).json({ data: null, error: { status: 403, name: 'ForbiddenError', message: 'Forbidden' } });
+    }
     const target = `${STRAPI_URL}${req.url}`;
     try {
         const opts = {
@@ -279,8 +366,13 @@ app.get('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req, re
 function isReservedBuilderSlug(slug) {
     const s = String(slug || '').toLowerCase().replace(/^\/+|\/+$/g, '');
     if (!s || !/^[a-z0-9-]+$/.test(s)) return true;                 // invalid chars → reject
+    // 'blogs' and 'knowledge-base' guard the nested /blogs/<slug> and
+    // /knowledge-base/<slug> routes below — a top-level builder page at either
+    // exact slug would otherwise be permanently unreachable (shadowed by the
+    // explicit route, which Express matches first) rather than erroring at
+    // creation time. 'blogs' was a pre-existing gap in this list, not new.
     const RESERVED = ['legal', 'admin', 'api', 'assets', 'builder', 'prerendered',
-        'sitemap', 'robots', 'socket.io', 'index', 'home', '404'];
+        'sitemap', 'robots', 'socket.io', 'index', 'home', '404', 'blogs', 'knowledge-base'];
     if (RESERVED.includes(s)) return true;
     try {
         if (fs.existsSync(path.join(publicPath, s + '.html'))) return true;   // static page exists
@@ -408,6 +500,7 @@ app.post('/api/admin/builder/pages/:documentId/publish', requireAdminAuth, async
         }
 
         bustBuilderMetaCache();   // new/updated meta must show at top-level URL immediately
+        regenerateSitemapSoon('publish');   // a new post has to enter sitemap.xml now, not at next boot
 
         // Write a "published" snapshot
         writeVersionSnapshot({
@@ -423,13 +516,68 @@ app.post('/api/admin/builder/pages/:documentId/publish', requireAdminAuth, async
     }
 });
 
+/* Builder pages that exist as a fixture of the site, not as content someone
+   happens to have made: editable in the builder like any other page, but never
+   deletable and never renameable. The Help Center is one — it is the single
+   landing page every Knowledge Base article and FAQ hangs off, and the KB grid,
+   the /knowledge-base articles and any nav link all assume it stays put at a
+   known slug. Losing it to a stray click in the page list would quietly break
+   all of them, and "recreate it and remember to use the same slug" is not a
+   recovery plan.
+
+   Enforced server-side because that is the only place it can actually be
+   enforced — the admin UI hides the delete button too (see builder-editor.js),
+   but that is a courtesy, not the guarantee.
+
+   'knowledgebase' (one word — distinct from the hyphenated /knowledge-base/
+   article prefix, which is the ARTICLE route and stays as-is) is the slug the
+   Strapi record now holds, so this page is an ordinary builder page served by
+   /:page like any other — no special-case route needed to reach it.
+
+   Named rather than inlined so the /help-center redirect below reads the same
+   value — the two would silently disagree the next time this slug changes if
+   each spelled it out separately. */
+const HELP_CENTER_SLUG = 'knowledgebase';
+const PROTECTED_BUILDER_SLUGS = [HELP_CENTER_SLUG];
+
+function isProtectedBuilderSlug(slug) {
+    return PROTECTED_BUILDER_SLUGS.includes(String(slug || '').toLowerCase());
+}
+
+// Expose the list so the admin UI marks the same pages this route refuses to
+// delete, instead of keeping its own copy that can drift out of step.
+app.get('/api/admin/builder/protected-slugs', requireAdminAuth, (req, res) => {
+    res.json({ slugs: PROTECTED_BUILDER_SLUGS });
+});
+
 // ── Builder: delete page ─────────────────────────────────
 app.delete('/api/admin/builder/pages/:documentId', requireAdminAuth, async (req, res) => {
     try {
+        /* Resolve the slug before deleting — the route only receives a
+           documentId, so there is no way to know what is about to be destroyed
+           without asking first. A read failure here is deliberately fatal to
+           the delete: if we cannot confirm the page is NOT protected, refusing
+           is the safe direction. */
+        let slug = null;
+        try {
+            const cur = await strapi(`/api/builder-pages/${req.params.documentId}?status=draft`);
+            const curJson = await cur.json();
+            slug = curJson?.data?.slug || null;
+        } catch (_) {
+            return res.status(502).json({ error: 'Could not verify the page before deleting it. Nothing was deleted.' });
+        }
+
+        if (isProtectedBuilderSlug(slug)) {
+            return res.status(403).json({
+                error: `"${slug}" is a protected page and cannot be deleted. You can still edit its content in the builder.`,
+            });
+        }
+
         const r = await strapi(`/api/builder-pages/${req.params.documentId}`, {
             method: 'DELETE',
         });
         bustBuilderMetaCache();   // top-level serving must reflect the delete immediately
+        regenerateSitemapSoon('delete');   // and the deleted URL must leave sitemap.xml
         if (r.status === 204) return res.status(204).end();
         const data = await r.json();
         res.status(r.status).json(data);
@@ -513,16 +661,22 @@ function cleanupExpiredTokens() {
 // ── Admin: media library (Strapi upload proxy) ───────────────────────
 // Builds URLs that go straight into a browser <img src> and can also be saved
 // permanently into builder-page props (shared across every environment reading
-// that content) — must use STRAPI_PUBLIC_URL, never the server-internal STRAPI_URL.
-function absolutifyMediaUrls(file) {
+// that content) — must use STRAPI_PUBLIC_URL (or the per-request resolution
+// above), never the server-internal STRAPI_URL.
+//
+// publicUrl defaults to the global STRAPI_PUBLIC_URL so any caller that isn't
+// updated to pass the per-request value keeps today's exact behaviour —
+// nothing regresses just because this function gained a parameter.
+function absolutifyMediaUrls(file, publicUrl = STRAPI_PUBLIC_URL) {
     if (!file || typeof file !== 'object') return file;
     // Strapi 5 sometimes wraps responses as { id, attributes: {...} }
     const target = file.attributes && typeof file.attributes === 'object' ? file.attributes : file;
-    if (target.url && !/^https?:/i.test(target.url)) target.url = STRAPI_PUBLIC_URL.replace(/\/$/, '') + target.url;
+    const base = publicUrl.replace(/\/$/, '');
+    if (target.url && !/^https?:/i.test(target.url)) target.url = base + target.url;
     if (target.formats && typeof target.formats === 'object') {
         Object.keys(target.formats).forEach((k) => {
             const f = target.formats[k];
-            if (f && f.url && !/^https?:/i.test(f.url)) f.url = STRAPI_PUBLIC_URL.replace(/\/$/, '') + f.url;
+            if (f && f.url && !/^https?:/i.test(f.url)) f.url = base + f.url;
         });
     }
     return file;
@@ -538,9 +692,10 @@ app.get('/api/admin/builder/media', requireAdminAuth, async (req, res) => {
             headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
         });
         const data = await r.json();
+        const publicUrl = strapiPublicUrlForRequest(req);
         // Strapi /upload/files returns either an array or a paginated object
-        if (Array.isArray(data)) data.forEach(absolutifyMediaUrls);
-        else if (data && Array.isArray(data.results)) data.results.forEach(absolutifyMediaUrls);
+        if (Array.isArray(data)) data.forEach((f) => absolutifyMediaUrls(f, publicUrl));
+        else if (data && Array.isArray(data.results)) data.results.forEach((f) => absolutifyMediaUrls(f, publicUrl));
         res.status(r.status).json(data);
     } catch (err) {
         res.status(502).json({ error: 'Media list failed', detail: err.message });
@@ -567,10 +722,59 @@ app.post('/api/admin/builder/media', requireAdminAuth, uploadMW.single('file'), 
         const text = await r.text();
         let data;
         try { data = JSON.parse(text); } catch { data = { raw: text }; }
-        if (Array.isArray(data)) data.forEach(absolutifyMediaUrls);
+        if (Array.isArray(data)) {
+            const publicUrl = strapiPublicUrlForRequest(req);
+            data.forEach((f) => absolutifyMediaUrls(f, publicUrl));
+        }
         res.status(r.status).json(data);
     } catch (err) {
         res.status(502).json({ error: 'Upload failed', detail: err.message });
+    }
+});
+
+/* Import a remote image into the Media Library by URL — the paste flow's path
+   for images an article references by address (Google Docs, web pages), which
+   the browser can't download itself across origins. Hotlinking them instead
+   would break published articles later: Google Docs' image links are
+   temporary. All of the download safety (SSRF, size, type) lives in
+   lib/image-import.js; this route only adds auth, skips images that are already
+   ours, and hands the bytes to Strapi exactly as the upload route above does.
+   Responds with the same shape as that route, so the client treats both alike. */
+const { fetchRemoteImage } = require('./lib/image-import');
+
+app.post('/api/admin/builder/media/import-url', requireAdminAuth, async (req, res) => {
+    const url = String((req.body && req.body.url) || '').trim();
+    if (!url || url.length > 2048) return res.status(400).json({ error: 'url is required' });
+
+    // Already in our own media library → nothing to copy.
+    const ownOrigins = [strapiPublicUrlForRequest(req), STRAPI_PUBLIC_URL, STRAPI_URL].map((u) => {
+        try { return new URL(u).origin; } catch { return null; }
+    });
+    try {
+        if (ownOrigins.includes(new URL(url).origin)) return res.json({ skipped: true, url });
+    } catch {
+        return res.status(400).json({ error: 'Not a valid URL' });
+    }
+
+    try {
+        const img = await fetchRemoteImage(url);
+        const fd = new FormData();
+        fd.append('files', new Blob([img.buffer], { type: img.mime }), 'pasted-image.' + img.ext);
+        const r = await fetch(`${STRAPI_URL}/api/upload`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
+            body: fd,
+        });
+        const text = await r.text();
+        let data;
+        try { data = JSON.parse(text); } catch { data = { raw: text }; }
+        if (Array.isArray(data)) {
+            const publicUrl = strapiPublicUrlForRequest(req);
+            data.forEach((f) => absolutifyMediaUrls(f, publicUrl));
+        }
+        res.status(r.status).json(data);
+    } catch (err) {
+        res.status(err.status || 502).json({ error: 'Image import failed', detail: err.message });
     }
 });
 
@@ -807,21 +1011,30 @@ async function buildSitemapEntries(req) {
         );
         if (r.ok) {
             const { data } = await r.json();
-            // Blog posts serve at /blogs/<slug>, other builder pages at /<slug> —
-            // the sitemap must list the URL that actually 200s, not the one that
+            // Blog posts serve at /blogs/<slug>, Knowledge Base articles at
+            // /knowledge-base/<slug>, every other builder page at /<slug> — the
+            // sitemap must list the URL that actually 200s, not the one that
             // 301s, so resolve the split from the same source the routes use.
-            const blogSlugs = new Set((await fetchBlogPosts()).map((p) => p.slug));
+            // The two sets are mutually exclusive by construction: fetchKbPages()
+            // drops any page that also has a blogHeader, so a page carrying both
+            // can't land in kbSlugs and be listed at two URLs from here.
+            const [blogSlugs, kbSlugs] = await Promise.all([
+                fetchBlogPosts().then((posts) => new Set(posts.map((p) => p.slug))),
+                fetchKbPages().then((pages) => new Set(pages.map((p) => p.slug))),
+            ]);
             (data || []).forEach(function (item) {
                 const d = item.attributes || item;
                 if (!d.slug) return;
                 if (!isPageLive(d.slug)) return;        // honour Page Registry hidden state
                 const isBlog = blogSlugs.has(d.slug);
+                const isKb = kbSlugs.has(d.slug);
+                const prefix = isBlog ? '/blogs/' : isKb ? '/knowledge-base/' : '/';
                 entries.push({
-                    loc:        baseUrl + (isBlog ? '/blogs/' : '/') + d.slug,
+                    loc:        baseUrl + prefix + d.slug,
                     lastmod:    d.updatedAt ? d.updatedAt.split('T')[0] : today,
                     changefreq: 'daily',
                     priority:   0.7,
-                    type:       isBlog ? 'blog' : 'builder',
+                    type:       isBlog ? 'blog' : (isKb ? 'kb' : 'builder'),
                 });
             });
         }
@@ -834,9 +1047,30 @@ async function buildSitemapEntries(req) {
 // Called on server boot, after Page Registry toggles, and from the manual
 // "Regenerate" admin button. Express's static middleware then serves the
 // file with proper Last-Modified / ETag headers (SEO win — free 304s).
+/* Publishing or deleting a page changes what belongs in sitemap.xml, but nothing
+   rewrote the file on those events — only boot, a Page Registry toggle, and the
+   manual Admin → Regenerate button did. So a newly published blog post stayed out
+   of the sitemap until someone restarted the server. Fire-and-forget: the caller
+   has already answered the admin, and a sitemap write must never fail a publish. */
+function regenerateSitemapSoon(reason) {
+    writeSitemapFile(null).catch(function (e) {
+        console.warn(`[sitemap] post-${reason} regen failed:`, e.message);
+    });
+}
+
 async function writeSitemapFile(req) {
     try {
         const entries = await buildSitemapEntries(req);
+
+        /* Same list, kept in memory for the crawler middleware (see livePaths).
+           Rebuilt here because this already runs on boot, on publish, on delete
+           and on a Page Registry toggle — every moment the live set can change. */
+        livePaths.clear();
+        entries.forEach(function (e) {
+            try { livePaths.add(new URL(e.loc).pathname.replace(/\/$/, '') || '/'); }
+            catch (_) { /* malformed loc — just leave it out of the live set */ }
+        });
+
         const rows = entries.map(function (e) {
             return `  <url>\n    <loc>${e.loc}</loc>\n    <lastmod>${e.lastmod}</lastmod>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority.toFixed(1)}</priority>\n  </url>`;
         }).join('\n');
@@ -880,6 +1114,15 @@ app.post('/api/admin/sitemap/regenerate', requireAdminAuth, async function (req,
     }
 });
 
+/* Admin: drop the cached per-page JSON-LD so a Strapi edit shows immediately.
+   Schema is edited in Strapi, not here, so there is no publish hook to piggyback
+   on — without this an editor waits out the 10-minute TTL before they can check
+   their markup in View Source or Google's Rich Results Test. */
+app.post('/api/admin/schema/refresh', requireAdminAuth, async function (req, res) {
+    const pages = await invalidatePageSchemaCache();
+    res.json({ ok: true, pages, refreshedAt: new Date().toISOString() });
+});
+
 // Admin: return sitemap data as JSON
 app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
     try {
@@ -889,10 +1132,15 @@ app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
             entries,
             sitemapUrl,
             generatedAt: new Date().toISOString(),
+            /* All three types, so static + builder + blog === total. Blog posts
+               were counted in neither bucket, which made the admin stat cards
+               silently under-report (54 of 57 on the current data). */
             counts: {
                 total:   entries.length,
                 static:  entries.filter(function (e) { return e.type === 'static';  }).length,
                 builder: entries.filter(function (e) { return e.type === 'builder'; }).length,
+                blog:    entries.filter(function (e) { return e.type === 'blog';    }).length,
+                kb:      entries.filter(function (e) { return e.type === 'kb';      }).length,
             },
         });
     } catch (err) {
@@ -907,8 +1155,13 @@ app.get('/api/admin/sitemap', requireAdminAuth, async function (req, res) {
 app.get('/api/admin/prerender', requireAdminAuth, async function (req, res) {
     try {
         const entries = await buildSitemapEntries(req);
+        /* Every sitemap entry, with no type filter. Builder pages used to be
+           excluded here as "out of scope", but a build takes its page list from
+           sitemap.xml — which contains them — so `Build all` has always built
+           them. Filtering them out of this table only made the "X of Y built"
+           count disagree with what the build actually does, and left those pages
+           with no per-row Rebuild button. */
         const pages = entries
-            .filter(function (e) { return e.type !== 'builder'; })   // builder pages out of scope
             .map(function (e) {
                 let p; try { p = new URL(e.loc).pathname; } catch (_) { p = e.loc; }
                 const file = snapshotFileForPath(p);
@@ -1132,6 +1385,281 @@ async function fetchSeo(slug) {
     return value;
 }
 
+/* ── Per-page JSON-LD schema (Strapi "Page Schema (JSON-LD)") ──────────
+   Editors add extra schema.org blocks for a page in Strapi. They are emitted in
+   their OWN <script type="application/ld+json" data-cms-schema> tag, next to the
+   site's generated graph (Organization + WebSite + WebPage, plus BlogPosting on
+   blog posts), rather than merged into it. Keyed by URL PATH, not slug: legacy
+   pages, builder pages, blog posts and KB articles all reach sendPageWithSeo
+   with a clean path, so one entry format covers every kind of page.
+
+   Why a separate tag: crawlers are served prerendered snapshots, which are
+   frozen at build time. A separate, marked tag can be swapped for the current
+   CMS markup when a snapshot is served (see the bot middleware), so an editor's
+   change reaches Google without rebuilding the snapshot. Merged into the
+   generated graph, it could not be told apart from the generated nodes.
+
+   Entries are read for the whole site in one paginated pass and cached. A page
+   never blocks on Strapi once the cache is warm: an expired cache is served as
+   is while a refresh runs in the background, and a failed refresh keeps the
+   last good copy (retrying in SCHEMA_RETRY_MS) instead of caching "nothing" —
+   a Strapi blip must not strip every page's schema, or get frozen into
+   snapshots built during the outage. */
+const SCHEMA_TTL = 10 * 60 * 1000;         // same refresh window as seoCache
+const SCHEMA_RETRY_MS = 30 * 1000;         // after a failed refresh
+const SCHEMA_FETCH_TIMEOUT_MS = 5000;      // per Strapi request
+const SCHEMA_PAGE_SIZE = 100;              // Strapi's rest.maxLimit (config/api.ts)
+const SCHEMA_MAX_BYTES = 50 * 1024;        // per page, UTF-8 bytes
+const SCHEMA_EMPTY = new Map();
+let schemaCache = { map: null, nextRefresh: 0 };
+let schemaInflight = null;
+
+/* Paths are compared normalised: leading slash, no trailing slash, lowercase.
+   '/Cloud-Hosting/' and '/cloud-hosting' are the same page to an editor.
+   MUST match normalisePath() in the Strapi page-schema lifecycles, which
+   normalises on save so the unique constraint sees the same value. */
+function schemaNormalisePath(p) {
+    let s = String(p == null ? '' : p).trim().toLowerCase();
+    if (!s) return '/';
+    s = s.replace(/^https?:\/\/[^/]+/, '');        // tolerate a full URL being pasted
+    s = s.replace(/[?#].*$/, '');                  // drop query / hash
+    if (s.charAt(0) !== '/') s = '/' + s;
+    s = s.replace(/\/{2,}/g, '/');
+    if (s.length > 1) s = s.replace(/\/+$/, '');
+    return s || '/';
+}
+
+/* One full read of the collection. Throws on any failure so the caller can
+   keep the previous map; a 404 means the content type isn't deployed, which is
+   a valid, empty state rather than an error. */
+async function loadAllPageSchemas() {
+    const map = new Map();
+    for (let page = 1; ; page++) {
+        const r = await fetch(
+            `${STRAPI_URL}/api/page-schemas?populate=blocks` +
+            `&pagination[page]=${page}&pagination[pageSize]=${SCHEMA_PAGE_SIZE}&sort=id:asc`, {
+            headers: STRAPI_TOKEN ? { Authorization: `Bearer ${STRAPI_TOKEN}` } : {},
+            signal: AbortSignal.timeout(SCHEMA_FETCH_TIMEOUT_MS),
+        });
+        if (r.status === 404) return map;
+        if (!r.ok) throw new Error(`Strapi returned ${r.status}`);
+        const json = await r.json();
+        const rows = (json && Array.isArray(json.data)) ? json.data : [];
+        for (const row of rows) {
+            if (!row || !row.path) continue;
+            const key = schemaNormalisePath(row.path);
+            const blocks = Array.isArray(row.blocks) ? row.blocks : [];
+            // Entries saved before Strapi normalised paths can collide here.
+            // Keep both rather than letting one silently replace the other.
+            if (map.has(key)) {
+                console.warn(`[schema] two entries resolve to ${key} — their blocks are combined; merge them in Strapi`);
+                map.set(key, map.get(key).concat(blocks));
+            } else {
+                map.set(key, blocks);
+            }
+        }
+        const pageCount = (json && json.meta && json.meta.pagination && json.meta.pagination.pageCount) || 1;
+        if (page >= pageCount || !rows.length) return map;
+    }
+}
+
+// Single-flight refresh: concurrent callers share one request.
+function refreshPageSchemas() {
+    if (!schemaInflight) {
+        schemaInflight = loadAllPageSchemas()
+            .then((map) => {
+                schemaCache = { map, nextRefresh: Date.now() + SCHEMA_TTL };
+                return map;
+            })
+            .catch((e) => {
+                console.warn('[schema] could not load page schemas:', e.message,
+                    schemaCache.map ? '— keeping the last good copy' : '');
+                schemaCache = { map: schemaCache.map, nextRefresh: Date.now() + SCHEMA_RETRY_MS };
+                return schemaCache.map;
+            })
+            .finally(() => { schemaInflight = null; });
+    }
+    return schemaInflight;
+}
+
+async function fetchAllPageSchemas() {
+    if (schemaCache.map) {
+        // Stale-while-revalidate: never make a visitor wait on Strapi.
+        if (Date.now() >= schemaCache.nextRefresh) refreshPageSchemas();
+        return schemaCache.map;
+    }
+    // Nothing loaded yet (boot, or Strapi down since boot). Wait — bounded by the
+    // fetch timeout — unless a recent attempt already failed.
+    if (Date.now() < schemaCache.nextRefresh) return SCHEMA_EMPTY;
+    return (await refreshPageSchemas()) || SCHEMA_EMPTY;
+}
+
+/* Lets an editor's save show up without waiting out the TTL. Refetches
+   immediately and keeps the old copy if Strapi can't be reached. */
+async function invalidatePageSchemaCache() {
+    schemaCache = { map: schemaCache.map, nextRefresh: 0 };
+    const map = await refreshPageSchemas();
+    return map ? map.size : 0;
+}
+
+/* Comparable form of an @id: resolved against the page URL (so "#organization"
+   counts), scheme and leading "www." dropped, no trailing slash before the
+   fragment. Pasted markup rarely matches the generated @ids byte for byte. */
+function schemaIdKey(id, canonical) {
+    if (typeof id !== 'string' || !id.trim()) return '';
+    let u;
+    try { u = new URL(id.trim(), canonical); } catch { return id.trim().toLowerCase(); }
+    const host = u.host.toLowerCase().replace(/^www\./, '');
+    const pathname = u.pathname.length > 1 ? u.pathname.replace(/\/+$/, '') : '';
+    return host + pathname + u.search + u.hash.toLowerCase();
+}
+
+function schemaTypes(node) {
+    const t = node['@type'];
+    return (Array.isArray(t) ? t : [t]).filter((x) => typeof x === 'string');
+}
+
+/* The site emits these nodes itself. A pasted one — with a matching @id, a
+   slightly different @id, or none at all — would be a second, conflicting
+   entity (exactly what GTM's injected "Corporation" block did), so they are
+   dropped and the generated graph stays authoritative. Nested values (e.g. an
+   Organization as a Review's author) are untouched; only top-level nodes count. */
+function schemaReserved(canonical, isArticle) {
+    const ids = [
+        SEO_SITE_URL + '/#organization',
+        SEO_SITE_URL + '/#website',
+        canonical + '#webpage',
+    ];
+    const types = ['Organization', 'Corporation', 'WebSite', 'WebPage'];
+    if (isArticle) {
+        ids.push(canonical + '#article', canonical + '#breadcrumb');
+        types.push('BlogPosting', 'Article', 'BreadcrumbList');
+    }
+    return {
+        ids: new Set(ids.map((id) => schemaIdKey(id, canonical))),
+        types: new Set(types),
+    };
+}
+
+/* Turn stored entries into graph nodes, discarding anything unusable. This is
+   the only thing between a CMS field and the page's <head>, so it is strict,
+   logs what it drops, and never throws. */
+function sanitizeSchemaBlocks(blocks, canonical, pathForLog, isArticle) {
+    if (!Array.isArray(blocks) || !blocks.length) return [];
+    const reserved = schemaReserved(canonical, isArticle);
+    const out = [];
+    let bytes = 0;
+
+    for (const block of blocks) {
+        if (!block || block.enabled === false) continue;
+        const label = block.note || block.schemaType || '?';
+
+        let parsed = block.jsonLd;
+        if (typeof parsed === 'string') {
+            if (!parsed.trim()) continue;
+            try { parsed = JSON.parse(parsed); }
+            catch (e) {
+                console.warn(`[schema] ${pathForLog}: block "${label}" is not valid JSON — skipped`);
+                continue;
+            }
+        }
+        if (!parsed) continue;
+
+        // One entry may hold a single node, an array of them, or a pasted
+        // {"@context":…, "@graph":[…]} wrapper.
+        let nodes = Array.isArray(parsed) ? parsed : [parsed];
+        if (nodes.length === 1 && nodes[0] && Array.isArray(nodes[0]['@graph'])) nodes = nodes[0]['@graph'];
+
+        for (const node of nodes) {
+            if (!node || typeof node !== 'object' || Array.isArray(node)) {
+                console.warn(`[schema] ${pathForLog}: block "${label}" is not a schema object — skipped`);
+                continue;
+            }
+            const types = schemaTypes(node);
+            if (!types.length) {
+                console.warn(`[schema] ${pathForLog}: block "${label}" has no @type — skipped`);
+                continue;
+            }
+            const copy = Object.assign({}, node);
+            delete copy['@context'];               // emitted once, for the whole tag
+            const idKey = schemaIdKey(copy['@id'], canonical);
+            // "#organization" / "#website" name the site-wide nodes whatever page
+            // they're resolved against, so match those on the fragment alone.
+            if (idKey && (reserved.ids.has(idKey) || /#(organization|website)$/.test(idKey))) {
+                console.warn(`[schema] ${pathForLog}: block "${label}" redefines the site's own @id ${copy['@id']} — skipped`);
+                continue;
+            }
+            const owned = types.find((t) => reserved.types.has(t));
+            if (owned) {
+                console.warn(`[schema] ${pathForLog}: block "${label}" adds a second ${owned}, which the site already emits — skipped`);
+                continue;
+            }
+            const size = Buffer.byteLength(JSON.stringify(copy), 'utf8');
+            if (bytes + size > SCHEMA_MAX_BYTES) {
+                console.warn(`[schema] ${pathForLog}: over ${SCHEMA_MAX_BYTES} bytes — remaining blocks skipped`);
+                return out;
+            }
+            bytes += size;
+            out.push(copy);
+        }
+    }
+    return out;
+}
+
+/* Sanitised output is memoised per loaded `blocks` array, which is replaced on
+   every refresh. So each block is checked — and a rejected block logged — once
+   per load, not on every page view (a busy page with one bad block would
+   otherwise repeat the same warning for every visitor and crawler). */
+const schemaSanitizedCache = new WeakMap();
+
+async function pageSchemaBlocks(cleanPath, canonical, isArticle) {
+    try {
+        const map = await fetchAllPageSchemas();
+        const key = schemaNormalisePath(cleanPath);
+        const blocks = map.get(key);
+        if (!blocks || !blocks.length) return [];
+        let perBlocks = schemaSanitizedCache.get(blocks);
+        if (!perBlocks) { perBlocks = new Map(); schemaSanitizedCache.set(blocks, perBlocks); }
+        const memoKey = canonical + '|' + (isArticle ? 1 : 0);
+        if (!perBlocks.has(memoKey)) perBlocks.set(memoKey, sanitizeSchemaBlocks(blocks, canonical, key, !!isArticle));
+        return perBlocks.get(memoKey);
+    } catch (e) {
+        console.warn('[schema] skipped for', cleanPath, '-', e.message);
+        return [];
+    }
+}
+
+/* `<` is escaped to its JSON < form so no stored value can close the
+   <script> tag early — the one way CMS-authored JSON could inject markup. The
+   escape is invisible to any JSON parser, including Google's. */
+function jsonLdScriptBody(obj) {
+    return JSON.stringify(obj).replace(/</g, '\\u003c');
+}
+
+// The CMS tag, or '' when the page has no extra blocks (so such pages emit
+// exactly what they did before this feature existed).
+function cmsSchemaTag(blocks) {
+    if (!Array.isArray(blocks) || !blocks.length) return '';
+    return `<script type="application/ld+json" data-cms-schema>` +
+        jsonLdScriptBody({ '@context': 'https://schema.org', '@graph': blocks }) + `</script>`;
+}
+
+/* Snapshots are frozen at build time; this swaps whatever CMS schema they were
+   built with for the current one. canonical / og:type are read back out of the
+   snapshot's own <head>, which sendPageWithSeo wrote, so the reserved-@id check
+   uses exactly the URL the page declares. */
+// Tolerates the attribute as written here and as a browser serialises it
+// (data-cms-schema=""), in case a snapshot ever keeps one.
+const CMS_SCHEMA_TAG_RE = /<script\s+type=["']application\/ld\+json["']\s+data-cms-schema(?:=["']{2})?\s*>[\s\S]*?<\/script>\s*/gi;
+async function refreshSnapshotSchema(html, cleanPath) {
+    const stripped = html.replace(CMS_SCHEMA_TAG_RE, '');
+    const canonM = stripped.match(/<link\s+rel=["']canonical["']\s+href=["']([^"']+)["']/i);
+    const canonical = canonM ? seoUnesc(canonM[1]) : seoCanonical(cleanPath, null);
+    const isArticle = /<meta\s+property=["']og:type["']\s+content=["']article["']/i.test(stripped);
+    const tag = cmsSchemaTag(await pageSchemaBlocks(cleanPath, canonical, isArticle));
+    return tag ? stripped.replace(/<\/head>/i, `    ${tag}\n</head>`) : stripped;
+}
+
 function seoEsc(s) {
     return String(s == null ? '' : s)
         .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
@@ -1204,7 +1732,11 @@ function seoCanonical(cleanPath, seo) {
     return SEO_SITE_URL + (cleanPath === '/' ? '/' : cleanPath);
 }
 
-function seoJsonLd(canonical, title, description) {
+// `article` is optional and only ever set for blog posts (see blogSeoFor). Its
+// nodes are APPENDED, so the graph every other page emits is byte-for-byte what
+// it was before blog support was added.
+// CMS-managed blocks are NOT part of this graph — see cmsSchemaTag().
+function seoJsonLd(canonical, title, description, article) {
     const graph = [
         {
             '@type': 'Organization', '@id': SEO_SITE_URL + '/#organization',
@@ -1222,7 +1754,38 @@ function seoJsonLd(canonical, title, description) {
             isPartOf: { '@id': SEO_SITE_URL + '/#website' }, inLanguage: 'en',
         },
     ];
-    return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+
+    if (article) {
+        // BlogPosting (not WebPage) is what makes an article eligible for Google's
+        // article treatment — headline, date and author are the required fields.
+        const posting = {
+            '@type': 'BlogPosting', '@id': canonical + '#article',
+            headline: title || SEO_ORG_NAME,
+            description: description || '',
+            url: canonical,
+            mainEntityOfPage: { '@id': canonical + '#webpage' },
+            author: { '@type': 'Person', name: article.author || SEO_ORG_NAME },
+            publisher: { '@id': SEO_SITE_URL + '/#organization' },
+            isPartOf: { '@id': SEO_SITE_URL + '/#website' },
+            inLanguage: 'en',
+        };
+        if (article.image) posting.image = [article.image];
+        if (article.publishedTime) posting.datePublished = article.publishedTime;
+        if (article.modifiedTime) posting.dateModified = article.modifiedTime;
+        if (article.section) posting.articleSection = article.section;
+        graph.push(posting);
+
+        graph.push({
+            '@type': 'BreadcrumbList', '@id': canonical + '#breadcrumb',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: SEO_SITE_URL + '/' },
+                { '@type': 'ListItem', position: 2, name: 'Blog', item: SEO_SITE_URL + '/blogs' },
+                { '@type': 'ListItem', position: 3, name: title || SEO_ORG_NAME, item: canonical },
+            ],
+        });
+    }
+
+    return jsonLdScriptBody({ '@context': 'https://schema.org', '@graph': graph });
 }
 
 // Read a page HTML file, inject SEO <head>, and send it.
@@ -1234,7 +1797,100 @@ const BUILDER_META_TTL = 2 * 60 * 1000;
 
 // Called by the builder publish/delete admin routes so top-level /<slug>
 // serving reflects changes immediately (defined here; hoisted for earlier use).
-function bustBuilderMetaCache() { builderMetaCache.clear(); }
+function bustBuilderMetaCache() {
+    builderMetaCache.clear();
+    /* The blog listing is derived from the same builder-pages data, and it drives
+       routing (isBlogSlug), the sitemap's /blogs/<slug> vs /<slug> split, and the
+       index page. Leaving it on its own 2-minute TTL meant a just-published post
+       404'd at /blogs/<slug> and was omitted from any sitemap regenerated inside
+       that window — a 404 is something search engines will drop a URL over. */
+    blogPostsCache = null;
+    kbPagesCache = null;   // same reasoning, for /knowledge-base/<slug>
+}
+
+/* Prose-bearing prop keys, in the order they make a good description. Curated
+   rather than "walk every string": section props also hold URLs, icon names,
+   CSS variants and button labels, and a description built from those reads
+   like debug output. */
+const BUILDER_TEXT_KEYS = ['description', 'subtitle', 'excerpt', 'body', 'desc', 'answer', 'text'];
+const BUILDER_HEADING_KEYS = ['title', 'name', 'question', 'heading'];
+
+/* Pull headings and prose out of a builder page's sections, walking into
+   repeater arrays (FAQ items, support channels, cards) so their questions and
+   descriptions count as page content too. Depth- and size-capped: this feeds a
+   <noscript> block, not an export, and a pathological page shouldn't be able
+   to make a response enormous. */
+function builderTextParts(sections) {
+    const headings = [];
+    const paragraphs = [];
+    let budget = 120;                                  // total fields collected
+
+    const walk = (obj, depth) => {
+        if (!obj || typeof obj !== 'object' || depth > 4 || budget <= 0) return;
+        if (Array.isArray(obj)) { obj.forEach((v) => walk(v, depth + 1)); return; }
+        BUILDER_HEADING_KEYS.forEach((k) => {
+            if (typeof obj[k] === 'string' && obj[k].trim() && budget-- > 0) headings.push(obj[k].trim());
+        });
+        BUILDER_TEXT_KEYS.forEach((k) => {
+            if (typeof obj[k] === 'string' && obj[k].trim() && budget-- > 0) paragraphs.push(obj[k].trim());
+        });
+        Object.keys(obj).forEach((k) => {
+            if (obj[k] && typeof obj[k] === 'object') walk(obj[k], depth + 1);
+        });
+    };
+    (sections || []).forEach((s) => { if (s && s.visible !== false) walk(s.props || {}, 1); });
+    return { headings, paragraphs };
+}
+
+/* Components may hold client-resolved placeholders in their copy — helpCenter's
+   subtitle is literally "Search {count} guide{s} on hosting…", filled in by the
+   browser once the article count is known. The server has no such number, and
+   shipping the raw token into a meta description puts "Search {count} guide{s}"
+   in a search result. Drop the tokens instead: {s} becomes a regular plural,
+   anything else in braces disappears, and the leftover double space closes up.
+   A curly-brace token is never meaningful prose, so this is safe generally
+   rather than special-cased to one component. */
+function stripPlaceholders(text) {
+    return String(text || '')
+        .replace(/\{s\}/gi, 's')
+        .replace(/\{[a-z0-9_]+\}/gi, '')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+}
+
+/* Description of last resort for a builder page whose editor left
+   metaDescription empty. Takes the first prose block long enough to actually
+   read as a sentence — a 3-word button label technically matches a text key
+   but makes a useless description. */
+function builderDerivedDescription(parts) {
+    for (const p of parts.paragraphs) {
+        const text = stripPlaceholders(seoTextExcerpt(p, 170));
+        if (text.length >= 40) return text.length > 155 ? seoTextExcerpt(text, 155) : text;
+    }
+    return '';
+}
+
+/* The page's own words in the raw HTML, for a crawler that arrives before a
+   prerendered snapshot exists. Blog posts and KB articles already had this;
+   every other builder page — the Help Center included — was serving bots a
+   ~30-character shell reading "Loading… Login", which is not indexable
+   content by any measure. Same <noscript> mechanism, same "invisible to
+   anyone with JS, and identical content either way, so not cloaking" rule. */
+function builderNoscript(title, parts) {
+    if (!parts.headings.length && !parts.paragraphs.length) return '';
+    const out = ['<article class="blog-noscript">'];
+    if (title) out.push('<h1>' + seoEsc(title) + '</h1>');
+    parts.headings.slice(0, 30).forEach((h) => {
+        const t = stripPlaceholders(h);
+        if (t) out.push('<h2>' + seoEsc(t) + '</h2>');
+    });
+    parts.paragraphs.slice(0, 40).forEach((p) => {
+        const t = stripPlaceholders(seoTextExcerpt(p, 400));
+        if (t) out.push('<p>' + seoEsc(t) + '</p>');
+    });
+    out.push('</article>');
+    return '<noscript>' + out.join('\n') + '</noscript>';
+}
 
 async function fetchBuilderPageMeta(slug) {
     const hit = builderMetaCache.get(slug);
@@ -1243,13 +1899,27 @@ async function fetchBuilderPageMeta(slug) {
     try {
         const r = await fetch(
             `${STRAPI_URL}/api/builder-pages?filters[slug][$eq]=${encodeURIComponent(slug)}` +
-            `&fields[0]=title&fields[1]=metaTitle&fields[2]=metaDescription&pagination[pageSize]=1`,
+            `&fields[0]=title&fields[1]=metaTitle&fields[2]=metaDescription&fields[3]=sections&pagination[pageSize]=1`,
             { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
         );
         if (r.ok) {
             const json = await r.json();
             const d = (json.data && json.data[0]) || null;
-            if (d) val = { title: d.metaTitle || d.title || slug, description: d.metaDescription || '' };
+            if (d) {
+                const parts = builderTextParts(d.sections);
+                val = {
+                    title: d.metaTitle || d.title || slug,
+                    /* Explicit metaDescription ONLY. blogSeoFor()/kbSeoFor() read
+                       this field and fall back to their own excerpt before their
+                       body text — folding the derived text in here would
+                       out-rank a blog's hand-written excerpt with generic page
+                       prose. The derived value is a separate field the generic
+                       /:page branch opts into instead. */
+                    description: d.metaDescription || '',
+                    derivedDescription: builderDerivedDescription(parts),
+                    noscriptHtml: builderNoscript(d.metaTitle || d.title || slug, parts),
+                };
+            }
         }
     } catch (_) { /* Strapi down → treat as no builder page */ }
     builderMetaCache.set(slug, { ts: Date.now(), val });
@@ -1286,6 +1956,7 @@ async function fetchBlogPosts() {
                     const header = (d.sections || []).find((s) => s.type === 'blogHeader');
                     if (!header || !d.slug) return null;
                     const p = header.props || {};
+                    const bodySec = (d.sections || []).find((s) => s.type === 'blogBody');
                     return {
                         slug: d.slug,
                         title: p.title || d.title || d.slug,
@@ -1304,6 +1975,15 @@ async function fetchBlogPosts() {
                         publishDate: p.publishDate || '',
                         readTime: p.readTime || '',
                         sortDate: d.publishedAt || d.updatedAt || null,
+                        // ── Server-side only, never sent to the browser ──────
+                        // `sections` is already on this response, so pulling the
+                        // article HTML out costs no extra Strapi round-trip. It
+                        // powers the <noscript> fallback that gives crawlers the
+                        // real article when no prerendered snapshot exists.
+                        // The public /api/blog-posts route strips both of these
+                        // (see below) so that payload stays listing-sized.
+                        bodyHtml: (bodySec && bodySec.props && bodySec.props.body) || '',
+                        modifiedDate: d.updatedAt || d.publishedAt || null,
                     };
                 })
                 .filter(Boolean)
@@ -1335,13 +2015,303 @@ async function isBlogSlug(slug) {
     return posts.some((p) => p.slug === slug);
 }
 
+/* Strip the server-only fields fetchBlogPosts() carries (see there) so this
+   endpoint keeps returning exactly the listing shape blogs.js has always seen —
+   article bodies would balloon it as posts are added. */
+function blogListingShape(post) {
+    const { bodyHtml, modifiedDate, ...listing } = post;
+    return listing;
+}
+
 app.get('/api/blog-posts', async (req, res) => {
     try {
-        res.json({ posts: await fetchBlogPosts() });
+        const posts = await fetchBlogPosts();
+        res.json({ posts: posts.map(blogListingShape) });
     } catch (err) {
         res.status(502).json({ posts: [], error: 'Failed to load blog posts' });
     }
 });
+
+// ── Knowledge Base listing (public, no auth) ──────────────────
+// Deliberately its own fetch + cache, not fetchBlogPosts() parameterised by
+// header type: this touches nothing about the working blog code path, at the
+// cost of the two functions looking alike. A shared "fetch pages with header
+// type X" helper would be less code, but also more risk to refactor a path
+// that already works and ships to production — not worth it for one more
+// content kind. Same structure as fetchBlogPosts() on purpose, so the two stay
+// easy to compare and either can be understood by reading the other.
+//
+// A Knowledge Base page is a builder-page whose sections contain a kbHeader —
+// same "type it by section content" pattern blogs use, not a real Strapi
+// content type (see kbHeader in componentRegistry.js). No article body field
+// is pulled out here for the same reason fetchBlogPosts() doesn't either —
+// see kbArticleNoscript() below, which reads it lazily from the same row.
+let kbPagesCache = null;   // { ts, val }
+const KB_PAGES_TTL = 2 * 60 * 1000;
+
+/* Rough reading time for a Knowledge Base article, in whole minutes. 200 wpm is
+   the standard prose estimate; the floor of 1 keeps a two-line article reading
+   "1 min" rather than "0 min". Deliberately approximate — it is a reading cue,
+   not a measurement. */
+function readingMinutes(html) {
+    const words = String(html || '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/&nbsp;/gi, ' ')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean).length;
+    return Math.max(1, Math.round(words / 200));
+}
+
+async function fetchKbPages() {
+    if (kbPagesCache && Date.now() - kbPagesCache.ts < KB_PAGES_TTL) return kbPagesCache.val;
+    let pages = [];
+    let ok = false;
+    try {
+        const r = await fetch(
+            `${STRAPI_URL}/api/builder-pages?publicationState=live` +
+            `&fields[0]=slug&fields[1]=title&fields[2]=sections&fields[3]=publishedAt&fields[4]=updatedAt` +
+            `&pagination[pageSize]=200`,
+            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+        );
+        if (r.ok) {
+            const json = await r.json();
+            pages = (json.data || [])
+                .map((row) => {
+                    const d = row.attributes || row;
+                    const sections = d.sections || [];
+                    const header = sections.find((s) => s.type === 'kbHeader');
+                    if (!header || !d.slug) return null;
+
+                    /* A blog post wins when a page carries both headers. Nothing
+                       stops an editor dropping a Knowledge Base Header onto a
+                       blog post — the palette offers every component on every
+                       page — and without this that page would serve at BOTH
+                       /blogs/<slug> and /knowledge-base/<slug>, each declaring
+                       ITSELF canonical, while the sitemap listed only the blog
+                       URL. Excluding it here makes the split mutually exclusive
+                       at the source, so routing, the sitemap, the canonical tag
+                       and the /:page redirect agree by construction instead of
+                       by four independent checks happening to pick the same
+                       winner. Matches pathPrefixForSections()'s precedence in
+                       builder-editor.js, which also puts blogHeader first. */
+                    if (sections.some((s) => s.type === 'blogHeader')) return null;
+
+                    const p = header.props || {};
+                    /* Body text for the crawler fallback. blogBody is what the
+                       kb-article template seeds, but richText is a legitimate
+                       way to write an article and uses the same `body` prop key,
+                       so take every body-bearing section — otherwise a KB page
+                       written with richText silently gets an empty <noscript>
+                       and an empty meta description. */
+                    const bodyHtml = sections
+                        .filter((s) => s.type === 'blogBody' || s.type === 'richText')
+                        .map((s) => (s.props && s.props.body) || '')
+                        .filter(Boolean)
+                        .join('\n');
+                    return {
+                        slug: d.slug,
+                        title: p.title || d.title || d.slug,
+                        excerpt: p.excerpt || '',
+                        category: p.category || '',
+                        // Split here rather than in the browser so every consumer
+                        // (Help Center chips, search, any future listing) gets the
+                        // same normalised array instead of re-parsing the raw
+                        // comma/newline string its own way.
+                        tags: String(p.tags || '')
+                            .split(/[\n,]/)
+                            .map((t) => t.trim())
+                            .filter(Boolean)
+                            .slice(0, 20),
+                        lastUpdated: p.lastUpdated || '',
+                        sortDate: d.publishedAt || d.updatedAt || null,
+                        /* Reading time has to be computed HERE, before
+                           kbListingShape() strips bodyHtml — the Help Center
+                           shows it per article and the browser never receives
+                           the body to work it out for itself. */
+                        readMinutes: readingMinutes(bodyHtml),
+                        // Server-side only — stripped by kbListingShape() below,
+                        // same reasoning as fetchBlogPosts()'s bodyHtml.
+                        bodyHtml,
+                        modifiedDate: d.updatedAt || d.publishedAt || null,
+                    };
+                })
+                .filter(Boolean)
+                .sort((a, b) => new Date(b.sortDate || 0) - new Date(a.sortDate || 0));
+            ok = true;
+        }
+    } catch (_) { /* Strapi unreachable — handled below */ }
+
+    if (ok) {
+        kbPagesCache = { ts: Date.now(), val: pages };
+        return pages;
+    }
+    // Only successes are cached — same reasoning as fetchBlogPosts(): a cached
+    // failure would pin isKbSlug() to "not found" for real published articles
+    // through a transient Strapi blip, 404ing them until the TTL expired.
+    if (kbPagesCache) return kbPagesCache.val;
+    return [];
+}
+
+// Knowledge Base articles live at /knowledge-base/<slug>; every other builder
+// page (including blog posts, checked separately) stays at its own URL.
+async function isKbSlug(slug) {
+    const pages = await fetchKbPages();
+    return pages.some((p) => p.slug === slug);
+}
+
+function kbListingShape(page) {
+    const { bodyHtml, modifiedDate, ...listing } = page;
+    return listing;
+}
+
+app.get('/api/kb-pages', async (req, res) => {
+    try {
+        const pages = await fetchKbPages();
+        res.json({ pages: pages.map(kbListingShape) });
+    } catch (err) {
+        res.status(502).json({ pages: [], error: 'Failed to load Knowledge Base pages' });
+    }
+});
+
+// ── Blog SEO: crawler parity with the static pages ──────────
+// A static page ships real copy inside its own .html file, so a crawler that gets
+// no prerendered snapshot still finds content. Blog posts render from
+// builder-template.html — an EMPTY shell — so with no snapshot a bot received a
+// title and nothing else. That is why they were crawled but not indexed. The
+// helpers below give every blog URL the three things a static page already has:
+// a real description, a real og:image, and body copy present in the raw HTML.
+
+// Absolutise a media URL for og:/JSON-LD use. Cover images chosen in the admin are
+// already absolute (the media proxy does it); template defaults are same-origin
+// paths — fine in an <img src>, useless in a meta tag a scraper reads out of context.
+function seoAbsUrl(u) {
+    if (!u) return '';
+    if (/^https?:\/\//i.test(u)) return u;
+    return SEO_SITE_URL + (u.charAt(0) === '/' ? '' : '/') + u;
+}
+
+/* CMS rich text is trusted — it is the same HTML the client renders into the page.
+   But here it lands inside <noscript>, where a literal "</noscript>" would close
+   the block early and spill raw markup into the document. Neutralise that one
+   sequence; drop <script>/<iframe>, which have no purpose in a no-JS fallback. */
+function seoNoscriptSafe(html) {
+    return String(html || '')
+        .replace(/<\/\s*noscript/gi, '&lt;/noscript')
+        .replace(/<script\b[\s\S]*?<\/script>/gi, '')
+        .replace(/<iframe\b[\s\S]*?<\/iframe>/gi, '');
+}
+
+// Plain-text excerpt from article HTML — the last-resort description when the
+// editor left both metaDescription and the header excerpt empty.
+function seoTextExcerpt(html, max) {
+    const text = String(html || '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    if (!text) return '';
+    if (text.length <= max) return text;
+    const cut = text.slice(0, max);
+    const lastSpace = cut.lastIndexOf(' ');
+    return (lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).trim() + '…';
+}
+
+// The article itself, in the raw HTML. Invisible to anyone with JS (the client
+// renders the real thing over it); the entire content of the page to a crawler
+// that has no snapshot. Same content either way, so this is not cloaking.
+function blogArticleNoscript(post) {
+    const parts = ['<article class="blog-noscript">'];
+    parts.push('<h1>' + seoEsc(post.title) + '</h1>');
+    if (post.excerpt) parts.push('<p>' + seoEsc(post.excerpt) + '</p>');
+    if (post.authorName) {
+        parts.push('<p>By ' + seoEsc(post.authorName) +
+            (post.publishDate ? ' &middot; ' + seoEsc(post.publishDate) : '') + '</p>');
+    }
+    if (post.coverImage) {
+        parts.push('<img src="' + seoEsc(seoAbsUrl(post.coverImage)) +
+            '" alt="' + seoEsc(post.coverAlt || post.title) + '">');
+    }
+    if (post.bodyHtml) parts.push(seoNoscriptSafe(post.bodyHtml));
+    parts.push('<p><a href="/blogs">All articles</a></p>');
+    parts.push('</article>');
+    return '<noscript>' + parts.join('\n') + '</noscript>';
+}
+
+// Same idea for the index. Without it a crawler with no snapshot found zero links
+// to any article, leaving sitemap.xml as the only discovery path.
+function blogIndexNoscript(posts) {
+    if (!posts || !posts.length) return '';
+    const items = posts.map(function (p) {
+        return '<li><a href="/blogs/' + seoEsc(p.slug) + '">' + seoEsc(p.title) + '</a>' +
+            (p.excerpt ? ' — ' + seoEsc(p.excerpt) : '') + '</li>';
+    }).join('\n');
+    return '<noscript><section class="blog-noscript"><h2>All articles</h2>\n<ul>' +
+        items + '</ul></section></noscript>';
+}
+
+/* SEO override for one blog post. Precedence: the editor's explicit
+   metaTitle/metaDescription on the builder page always wins, then the blogHeader
+   fields the listing already exposes, then text pulled from the article body. */
+async function blogSeoFor(slug) {
+    const [meta, posts] = await Promise.all([fetchBuilderPageMeta(slug), fetchBlogPosts()]);
+    const post = posts.find((p) => p.slug === slug);
+    if (!post) return meta;   // not actually a blog post — behaviour unchanged
+
+    const image = seoAbsUrl(post.coverImage) || SEO_OG_IMAGE;
+    return {
+        title: (meta && meta.title) || post.title,
+        description: (meta && meta.description) || post.excerpt ||
+            seoTextExcerpt(post.bodyHtml, 155),
+        ogImage: image,
+        article: {
+            publishedTime: post.sortDate || null,
+            modifiedTime: post.modifiedDate || post.sortDate || null,
+            author: post.authorName || SEO_ORG_NAME,
+            section: post.category || '',
+            image,
+        },
+        noscriptHtml: blogArticleNoscript(post),
+    };
+}
+
+// Same purpose as blogArticleNoscript() — real body text in the raw HTML for a
+// crawler that arrives before a snapshot exists — trimmed to what a Knowledge
+// Base page actually has: no cover image, no author byline.
+function kbArticleNoscript(page) {
+    const parts = ['<article class="blog-noscript">'];
+    parts.push('<h1>' + seoEsc(page.title) + '</h1>');
+    if (page.excerpt) parts.push('<p>' + seoEsc(page.excerpt) + '</p>');
+    if (page.bodyHtml) parts.push(seoNoscriptSafe(page.bodyHtml));
+    parts.push('</article>');
+    return '<noscript>' + parts.join('\n') + '</noscript>';
+}
+
+/* SEO override for one Knowledge Base article. Same fallback shape as
+   blogSeoFor(): explicit metaTitle/metaDescription first, then the kbHeader
+   excerpt, then text pulled from the article body.
+
+   No `article` object, deliberately: seoJsonLd()'s article branch emits
+   schema.org BlogPosting + a breadcrumb through "Blog" — correct for a blog
+   post, not accurate structured data for a documentation page. Leaving it
+   unset here means a KB article gets the same plain WebPage JSON-LD any
+   builder page gets, which is honest even though it is less rich than what
+   blog posts show in search results. A schema.org type suited to
+   documentation (TechArticle, HowTo, or a real breadcrumb once a Knowledge
+   Base index page exists) is a reasonable follow-up, not required for the
+   page to be indexable. */
+async function kbSeoFor(slug) {
+    const [meta, pages] = await Promise.all([fetchBuilderPageMeta(slug), fetchKbPages()]);
+    const page = pages.find((p) => p.slug === slug);
+    if (!page) return meta;   // not actually a KB article — behaviour unchanged
+
+    return {
+        title: (meta && meta.title) || page.title,
+        description: (meta && meta.description) || page.excerpt ||
+            seoTextExcerpt(page.bodyHtml, 155),
+        noscriptHtml: kbArticleNoscript(page),
+    };
+}
 
 async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride) {
     let html;
@@ -1366,29 +2336,51 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     const description = (seo && seo.description) || (curDescM && seoUnesc(curDescM[1].trim())) || '';
     const canonical = seoCanonical(cleanPath, seo);
 
+    /* Both optional and only ever set for blog posts (blogSeoFor). Absent → the
+       site-wide logo and og:type=website, exactly as every page behaved before. */
+    const ogImage = (seo && seo.ogImage) || SEO_OG_IMAGE;
+    const article = (seo && seo.article) || null;
+
+    /* CMS-managed schema for this page, matched on the clean path. Empty for
+       every page that has no entry, so those pages emit no extra tag. */
+    const schemaTag = cmsSchemaTag(await pageSchemaBlocks(cleanPath, canonical, !!article));
+
     const headTags = [
         // Preload first: it's only useful if the browser sees it early.
-        // `media` matters: style.css hides .hero-right below 1366px, so on phones
+        // `media` matters: style.css hides .hero-right below the desktop tier (1024px), so on phones
         // and tablets this image is never painted. An unconditional preload still
         // downloads it at high priority there (measured: a 771 KB PNG fetched and
         // decoded while display:none), stealing bandwidth from the real mobile LCP.
         // Gating on the same breakpoint keeps the desktop LCP win without the
         // mobile cost. Keep this query in sync with the .hero-right rule in style.css.
         ...(seo && seo.heroImageUrl
-            ? [`<link rel="preload" as="image" fetchpriority="high" media="(min-width: 1366px)" href="${seoEsc(seo.heroImageUrl)}">`]
+            ? [`<link rel="preload" as="image" fetchpriority="high" media="(min-width: 1024px)" href="${seoEsc(seo.heroImageUrl)}">`]
             : []),
         `<link rel="canonical" href="${seoEsc(canonical)}">`,
-        `<meta property="og:type" content="website">`,
+        `<meta property="og:type" content="${article ? 'article' : 'website'}">`,
         `<meta property="og:site_name" content="${SEO_ORG_NAME}">`,
         `<meta property="og:title" content="${seoEsc(title)}">`,
         `<meta property="og:description" content="${seoEsc(description)}">`,
         `<meta property="og:url" content="${seoEsc(canonical)}">`,
-        `<meta property="og:image" content="${seoEsc(SEO_OG_IMAGE)}">`,
+        `<meta property="og:image" content="${seoEsc(ogImage)}">`,
+        ...(article ? [
+            ...(article.publishedTime
+                ? [`<meta property="article:published_time" content="${seoEsc(article.publishedTime)}">`] : []),
+            ...(article.modifiedTime
+                ? [`<meta property="article:modified_time" content="${seoEsc(article.modifiedTime)}">`] : []),
+            ...(article.author
+                ? [`<meta property="article:author" content="${seoEsc(article.author)}">`] : []),
+            ...(article.section
+                ? [`<meta property="article:section" content="${seoEsc(article.section)}">`] : []),
+        ] : []),
         `<meta name="twitter:card" content="summary_large_image">`,
         `<meta name="twitter:title" content="${seoEsc(title)}">`,
         `<meta name="twitter:description" content="${seoEsc(description)}">`,
-        `<meta name="twitter:image" content="${seoEsc(SEO_OG_IMAGE)}">`,
-        `<script type="application/ld+json">${seoJsonLd(canonical, title, description)}</script>`,
+        `<meta name="twitter:image" content="${seoEsc(ogImage)}">`,
+        // data-site-schema marks the generated graph so prerender.js can tell
+        // it apart from JSON-LD injected at runtime by third parties (GTM).
+        `<script type="application/ld+json" data-site-schema>${seoJsonLd(canonical, title, description, article)}</script>`,
+        ...(schemaTag ? [schemaTag] : []),
     ].join('\n    ');
 
     // Replace <title>
@@ -1402,9 +2394,20 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     // Inject canonical + OG/Twitter + JSON-LD before </head>
     html = html.replace(/<\/head>/i, `    ${headTags}\n</head>`);
 
+
     // Write the hero copy into the body so the LCP text exists in the initial
     // HTML and the page does not reflow when the client hydrates.
     if (seo && seo.heroText) html = injectHeroText(html, seo.heroText);
+
+    /* No-JS content fallback (blog pages only — see blogSeoFor / blogIndexNoscript).
+       Appended just before </body> so it cannot disturb the shell's own markup, and
+       wrapped in <noscript>, so for every real visitor it is inert: the browser does
+       not parse it, does not fetch its images, and renders nothing. It exists purely
+       so a crawler arriving before the snapshots are rebuilt still gets the article
+       text and links instead of an empty page. */
+    if (seo && seo.noscriptHtml) {
+        html = html.replace(/<\/body>/i, `${seo.noscriptHtml}\n</body>`);
+    }
 
     res.set('Content-Type', 'text/html; charset=utf-8');
     // Explicit, because "no Cache-Control" is not the same as "don't cache":
@@ -1431,12 +2434,29 @@ app.use((req, res, next) => {
     if (req.path.includes('.')) return next();                       // assets/files → let static handle
     res.set('Vary', 'User-Agent');                                   // response differs by UA → keep caches honest
     if (!BOT_UA_RE.test(req.headers['user-agent'] || '')) return next();
+
+    /* Never serve a snapshot for a URL that is no longer live, however long the
+       file lingers on disk. Falling through here means the crawler gets the same
+       404 a human gets, which is the only thing that makes a search engine drop
+       the URL. livePaths is empty until the first sitemap write finishes on boot
+       — treat that as "not known yet" and keep the old behaviour rather than
+       withholding every snapshot during startup. */
+    const cleanPath = req.path.replace(/\/$/, '') || '/';
+    if (livePaths.size && !livePaths.has(cleanPath)) return next();
+
+    /* Read rather than res.sendFile, so the snapshot's frozen CMS schema can be
+       swapped for the current one (refreshSnapshotSchema). Without this, a
+       schema edit never reached a crawler until that page's snapshot was rebuilt
+       — and Google's own testing tools are crawlers too. */
     const file = snapshotFileForPath(req.path);
-    fs.access(file, fs.constants.F_OK, (err) => {
-        if (err) return next();                                       // no snapshot → normal SSR path
+    fs.promises.readFile(file, 'utf8').then(async (html) => {
+        html = await refreshSnapshotSchema(html, cleanPath);
         res.set('X-Prerendered', '1');
-        res.sendFile(file);
-    });
+        res.set('Content-Type', 'text/html; charset=utf-8');
+        res.set('Cache-Control', 'public, max-age=0, must-revalidate');
+        res.send(html);
+    }, () => next())                                                  // no snapshot → normal SSR path
+        .catch(next);
 });
 
 // ── Static asset caching ──────────────────────────────────
@@ -1519,6 +2539,24 @@ app.get('/legal/:page', (req, res) => {
 // /blog is a common thing to type by hand — send it to the real index.
 app.get('/blog', (req, res) => res.redirect(301, '/blogs'));
 
+/* The blog index. This would fall through to /:page and be served as a plain
+   static page, which is what it was — and a crawler with no snapshot then found
+   ZERO links to any article, leaving sitemap.xml as the only discovery path.
+   Same registry gate and same SEO lookup as before; the only addition is the
+   <noscript> article list. */
+app.get('/blogs', async (req, res) => {
+    if (pageCache.has('blogs') && !pageCache.get('blogs')) {
+        return res.status(404).sendFile(sitePage('404.html'));
+    }
+    let noscriptHtml = '';
+    try {
+        noscriptHtml = blogIndexNoscript(await fetchBlogPosts());
+    } catch (_) { /* Strapi down — serve the page without the fallback list */ }
+    const seo = await fetchSeo('blogs');
+    sendPageWithSeo(req, res, sitePage('blogs.html'), 'blogs', '/blogs',
+        Object.assign({}, seo, { noscriptHtml }));
+});
+
 // Blog posts — /blogs/<slug>. They're builder pages under the hood, so this
 // serves the same builder-template shell as /<slug> does, just at a nested URL.
 // Anything that isn't actually a blog post 404s here rather than falling through,
@@ -1531,8 +2569,47 @@ app.get('/blogs/:slug', async (req, res) => {
     if (pageCache.has(slug) && !pageCache.get(slug)) {
         return res.status(404).sendFile(sitePage('404.html'));
     }
-    const bp = await fetchBuilderPageMeta(slug);
+    // blogSeoFor > fetchBuilderPageMeta: same title, plus the description,
+    // og:image, BlogPosting JSON-LD and no-JS article body a post needs to be
+    // indexable. Falls back to the plain builder meta if the post can't be read.
+    const bp = (await blogSeoFor(slug)) || (await fetchBuilderPageMeta(slug));
     sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/blogs/${slug}`, bp);
+});
+
+// Bare /knowledge-base — the browse/search entry point a visitor naturally
+// expects at the prefix's own root, one level up from any individual article.
+// That's the Help Center page (HELP_CENTER_SLUG): redirected rather than
+// rendered a second time at this URL, so there is exactly one canonical
+// address for it — the same "one real location, everything else forwards to
+// it" rule already used for the legacy top-level blog/KB redirects in
+// /:page below. A GET here never collides with /knowledge-base/:slug right
+// below: Express's :slug requires at least one character after the second
+// slash, which a bare "/knowledge-base" request simply doesn't have.
+app.get('/knowledge-base', (req, res) => res.redirect(301, `/${HELP_CENTER_SLUG}`));
+
+/* /help-center is where this page lived before its slug moved to
+   HELP_CENTER_SLUG. That URL is in sitemap.xml and has a prerendered snapshot,
+   i.e. Google has been told it exists — so it must forward rather than 404, or
+   an indexed page turns into a dead link and takes its ranking with it.
+   Registered before /:page so it wins even while the Strapi record still holds
+   the old slug (which would otherwise render the page here as well, leaving the
+   same content live at two URLs). */
+app.get('/help-center', (req, res) => res.redirect(301, `/${HELP_CENTER_SLUG}`));
+
+// Knowledge Base articles — /knowledge-base/<slug>. Same shape as /blogs/:slug
+// above (registered before the generic /:page catch-all, same registry gate,
+// same "isn't actually one of these → 404 here rather than falling through"
+// rule so a builder page keeps exactly one canonical URL).
+app.get('/knowledge-base/:slug', async (req, res) => {
+    const slug = req.params.slug;
+    if (!(await isKbSlug(slug))) {
+        return res.status(404).sendFile(sitePage('404.html'));
+    }
+    if (pageCache.has(slug) && !pageCache.get(slug)) {
+        return res.status(404).sendFile(sitePage('404.html'));
+    }
+    const bp = (await kbSeoFor(slug)) || (await fetchBuilderPageMeta(slug));
+    sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/knowledge-base/${slug}`, bp);
 });
 
 // Dynamic routes — gate on page registry cache (SEO-injected)
@@ -1550,11 +2627,24 @@ app.get('/:page', async (req, res) => {
     if (!fs.existsSync(filePath)) {
         // Blog posts moved under /blogs/ — 301 the legacy top-level URL so any
         // existing link or index entry follows to the one canonical location.
+        // Same for Knowledge Base articles under /knowledge-base/. Order is
+        // safe: fetchKbPages() excludes anything with a blogHeader, so a page
+        // carrying both headers is only ever a blog post to isKbSlug().
         if (await isBlogSlug(slug)) return res.redirect(301, `/blogs/${slug}`);
+        if (await isKbSlug(slug)) return res.redirect(301, `/knowledge-base/${slug}`);
 
         const bp = await fetchBuilderPageMeta(slug);
         if (bp) {
-            return sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/${slug}`, bp);
+            /* Fall back to the page's own words when the editor left
+               metaDescription empty, and hand the crawler the <noscript> copy
+               of the page. Composed here rather than inside
+               fetchBuilderPageMeta so blogSeoFor()/kbSeoFor(), which read that
+               function's `description` directly, keep their own excerpt
+               precedence untouched. */
+            const seo = Object.assign({}, bp, {
+                description: bp.description || bp.derivedDescription || '',
+            });
+            return sendPageWithSeo(req, res, sitePage('builder-template.html'), slug, `/${slug}`, seo);
         }
     }
 
@@ -1950,24 +3040,13 @@ function initSocketIO(io) {
     });
 }
 
-// ── Admin: WhatsApp leads (Strapi proxy) ──────────────────
-app.get('/api/admin/whatsapp-leads', requireAdminAuth, async (req, res) => {
-    try {
-        const r = await fetch(
-            `${STRAPI_URL}/api/whatsapp-leads?sort=createdAt:desc&pagination[pageSize]=100`,
-            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-        );
-        const data = await r.json();
-        res.status(r.status).json(data);
-    } catch (err) {
-        res.status(502).json({ error: 'Failed to fetch WhatsApp leads', detail: err.message });
-    }
-});
-
 // ── Admin: unified leads aggregator ───────────────────────
-// Merges contact submissions + WhatsApp leads + chat sessions into one stream
-// sorted by createdAt desc. Each item carries a `source` discriminator so the
-// admin UI can render a per-source badge and per-source action buttons.
+// Merges contact submissions + chat sessions into one stream sorted by
+// createdAt desc. (WhatsApp is not a source: the navbar widget only opens a
+// wa.me chat and stores nothing — the old lead-capture form was removed
+// 2026-05-25, and the empty `whatsapp-lead` Strapi collection is unused.)
+// Each item carries a `source` discriminator so the admin UI can render a
+// per-source badge and per-source action buttons.
 app.get('/api/admin/leads', requireAdminAuth, async (req, res) => {
     const headers = { Authorization: `Bearer ${STRAPI_TOKEN}` };
 
@@ -1980,10 +3059,8 @@ app.get('/api/admin/leads', requireAdminAuth, async (req, res) => {
     }
 
     try {
-        const [submissionsResp, whatsappResp] = await Promise.all([
-            safeJson(`${STRAPI_URL}/api/contact-submissions?sort=createdAt:desc&pagination[pageSize]=100`),
-            safeJson(`${STRAPI_URL}/api/whatsapp-leads?sort=createdAt:desc&pagination[pageSize]=100`),
-        ]);
+        const submissionsResp = await safeJson(
+            `${STRAPI_URL}/api/contact-submissions?sort=createdAt:desc&pagination[pageSize]=100`);
 
         const contactRows = (submissionsResp.data || []).map((it) => {
             const d = it.attributes || it;
@@ -1997,24 +3074,6 @@ app.get('/api/admin/leads', requireAdminAuth, async (req, res) => {
                 subject:   d.subject || null,
                 message:   d.message || '',
                 status:    'new',
-                createdAt: d.createdAt || new Date().toISOString(),
-                raw:       d,
-            };
-        });
-
-        const waRows = (whatsappResp.data || []).map((it) => {
-            const d = it.attributes || it;
-            return {
-                id:        'whatsapp-' + (it.id || d.id || ''),
-                source:    'whatsapp',
-                name:      d.name || '',
-                email:     null,
-                phone:     d.phone || null,
-                company:   null,
-                subject:   null,
-                message:   d.message || '',
-                status:    d.status || 'new',
-                sourceUrl: d.sourceUrl || null,
                 createdAt: d.createdAt || new Date().toISOString(),
                 raw:       d,
             };
@@ -2038,12 +3097,11 @@ app.get('/api/admin/leads', requireAdminAuth, async (req, res) => {
             };
         });
 
-        const all = contactRows.concat(waRows).concat(chatRows)
+        const all = contactRows.concat(chatRows)
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         const counts = {
             contact:  contactRows.length,
-            whatsapp: waRows.length,
             chat:     chatRows.length,
             total:    all.length,
         };
@@ -2053,7 +3111,6 @@ app.get('/api/admin/leads', requireAdminAuth, async (req, res) => {
         const inWeek = (r) => new Date(r.createdAt).getTime() > weekAgo;
         const weekCounts = {
             contact:  contactRows.filter(inWeek).length,
-            whatsapp: waRows.filter(inWeek).length,
             chat:     chatRows.filter(inWeek).length,
         };
 
@@ -2110,5 +3167,27 @@ setInterval(function () {
         refreshPageCache()
             .then(function () { return writeSitemapFile(null); })
             .catch(function (e) { console.warn('[sitemap] boot write failed:', e.message); });
+        reportSnapshotCoverage();
     });
 }());
+
+/* Snapshots are generated files (git-ignored since 2026-08-19) and the bot
+   middleware falls through SILENTLY when one is missing — which is exactly how
+   every snapshot went missing after a deploy without anyone noticing. Say so at
+   boot instead: crawlers still get the SEO <head> and the no-JS fallbacks, but
+   they are seeing less than they should until this is rebuilt. */
+function reportSnapshotCoverage() {
+    fs.promises.readdir(prerenderDir, { recursive: true })
+        .then(function (files) {
+            const n = files.filter(function (f) { return String(f).endsWith('.html'); }).length;
+            if (n === 0) throw new Error('directory is empty');
+            console.log(`[prerender] ${n} crawler snapshot(s) on disk`);
+        })
+        .catch(function () {
+            console.warn(
+                '[prerender] NO crawler snapshots on disk — bots fall back to the ' +
+                'live page. Rebuild with `npm run prerender` (or Admin → Prerender → ' +
+                'Build all), and install scripts/prerender-daily.sh in cron to keep them fresh.'
+            );
+        });
+}

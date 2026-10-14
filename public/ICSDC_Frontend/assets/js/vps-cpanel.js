@@ -16,7 +16,8 @@ import {
     setText,
     setHTML,
     initFAQ,
-    initTestimonials
+    initTestimonials,
+    populatePillarsHeader
 } from './utils/cms-helpers.js';
 
 (function () {
@@ -120,6 +121,7 @@ import {
             if (page.heroStatusSubtitle) setText(document, '.vpc-bs', page.heroStatusSubtitle);
 
             // ── Pillars (4 cards) ──────────────────────────────────
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // ── Plans & Pricing ────────────────────────────────────

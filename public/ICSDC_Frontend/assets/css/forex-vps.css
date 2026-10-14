@@ -149,7 +149,7 @@
 ══════════════════════════════════════ */
 
 /* 1024px — 2 columns for most grids */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .fvps-features-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -169,7 +169,7 @@
 }
 
 /* 640px — single column */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .fvps-features-grid {
         grid-template-columns: 1fr;
     }
@@ -285,7 +285,7 @@
     align-items: center;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 639px) {
     .fvps-steps-grid {
         grid-template-columns: 1fr;
     }

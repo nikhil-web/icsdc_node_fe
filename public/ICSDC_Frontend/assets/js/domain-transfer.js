@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getDomainTransferPage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -62,7 +62,9 @@ import {
             return '<div class="dt-related-card" data-animate="fade-up">' +
                 '<h3>' + (card.title || '') + '</h3>' +
                 '<p>' + inlineRichText(card.description || card.desc || '') + '</p>' +
-                '<a href="' + (card.btnUrl || '#') + '" class="dt-related-btn">' + (card.btnLabel || 'Learn More') + ' </a>' +
+                ((card.btnLabel && card.btnUrl)
+                    ? '<a href="' + card.btnUrl + '" class="dt-related-btn">' + card.btnLabel + ' </a>'
+                    : '') +
                 '</div>';
         }).join('');
     }
@@ -93,6 +95,7 @@ import {
             if (page.heroStatusSubtitle) setText(document, '.dt-bs', page.heroStatusSubtitle);
 
             // 4 Pillars
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // Who We Are

@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getBareMetalServerPage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -122,6 +122,7 @@ import {
             if (page.heroStatusSubtitle) setText(document, '.bms-bs', page.heroStatusSubtitle);
 
             // Pillars — 4 cards
+            populatePillarsHeader('#bms-pillars-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('#bms-pillars-grid', page.pillars, 'why-card');
 
             // Strategic Choice — 12 cards

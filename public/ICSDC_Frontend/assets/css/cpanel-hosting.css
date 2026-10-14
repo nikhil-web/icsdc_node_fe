@@ -405,7 +405,7 @@
     gap: 12px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 639px) {
     .cp-support-features {
         grid-template-columns: 1fr;
     }
@@ -518,7 +518,7 @@
 ══════════════════════════════════════ */
 
 /* 1024px — 2 columns for most grids */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .cp-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -554,7 +554,7 @@
 }
 
 /* 640px — single column */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .cp-plans-grid {
         grid-template-columns: 1fr;
     }

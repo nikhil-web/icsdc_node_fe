@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getCloudStoragePage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -108,13 +108,14 @@ import { uploadURL } from './services/strapiClient.js';
         if (!cards || !cards.length) return;
         var grid = document.getElementById('cs-related-grid');
         if (!grid) return;
-        grid.innerHTML = cards.map(function (c) {
-            var cta = c.ctaText
-                ? '<a href="' + (c.ctaLink || '#') + '" class="cs-related-cta">' + c.ctaText + ' </a>'
+        // relatedCards: ds.related-card — link shows only when its text and URL are set.
+        grid.innerHTML = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); }).map(function (c) {
+            var cta = (c.btnLabel && c.btnUrl)
+                ? '<a href="' + c.btnUrl + '" class="cs-related-cta">' + c.btnLabel + ' </a>'
                 : '';
             return '<div class="cs-related-card">' +
                 '<h3 class="cs-related-title">' + (c.title || '') + '</h3>' +
-                '<p class="cs-related-desc">' + inlineRichText(c.desc || c.description || '') + '</p>' +
+                '<p class="cs-related-desc">' + inlineRichText(c.description || '') + '</p>' +
                 cta +
                 '</div>';
         }).join('');
@@ -147,6 +148,7 @@ import { uploadURL } from './services/strapiClient.js';
             if (page.heroStatusSubtitle) setText(document, '.cs-bs', page.heroStatusSubtitle);
 
             // Why Us — 4 pillars
+            populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // Plans
@@ -157,7 +159,7 @@ import { uploadURL } from './services/strapiClient.js';
             var aboutTitleEl = document.getElementById('cs-about-title');
             if (aboutTitleEl && page.aboutTitle) aboutTitleEl.textContent = page.aboutTitle;
             var aboutDescEl = document.getElementById('cs-about-desc');
-            if (aboutDescEl && page.aboutDesc) aboutDescEl.textContent = page.aboutDesc;
+            if (aboutDescEl && page.aboutDesc) aboutDescEl.innerHTML = inlineRichText(page.aboutDesc);
             if (page.aboutImage && page.aboutImage.image) {
                 var aboutImg = document.getElementById('cs-about-img');
                 if (aboutImg) {
@@ -179,7 +181,7 @@ import { uploadURL } from './services/strapiClient.js';
             populateAudience(page.audienceGroups);
 
             // Related Services
-            populateSectionHeader('#cs-related', page.relatedLabel, page.relatedTitle, null);
+            populateSectionHeader('#cs-related', page.relatedLabel, page.relatedTitle, page.relatedSubtitle);
             populateRelated(page.relatedCards);
 
             // CTA Band 1

@@ -500,7 +500,7 @@
 }
 
 /* ── Responsive ────────────────────────────────────── */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .blog-archive-wrap {
         grid-template-columns: 1fr;
     }
@@ -514,7 +514,7 @@
     }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1023px) {
     .blog-featured {
         grid-template-columns: 1fr;
         gap: 20px;
@@ -530,7 +530,7 @@
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 639px) {
     .blog-catbar {
         padding-top: 76px;
     }

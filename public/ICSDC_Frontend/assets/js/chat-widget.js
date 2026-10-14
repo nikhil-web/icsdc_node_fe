@@ -6,6 +6,8 @@
  * Requires: /socket.io/socket.io.js served by the Node server automatically.
  */
 
+import { MEDIA } from './utils/breakpoints.js';
+
 let socket = null;
 let sessionId = null;
 let isOpen = false;
@@ -105,7 +107,7 @@ function openChat() {
     chatWindow.classList.add('is-open');
     bubble.setAttribute('aria-label', 'Close chat');
     // On mobile: hide bubble so it doesn't overlap the fullscreen chat
-    if (window.innerWidth <= 640) bubble.classList.add('chat-bubble--hidden');
+    if (window.matchMedia(MEDIA.mobile).matches) bubble.classList.add('chat-bubble--hidden');
     clearUnread();
     scrollToBottom();
     // Delay focus so animation completes

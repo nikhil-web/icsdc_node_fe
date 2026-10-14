@@ -332,10 +332,8 @@ export function getAcronisBackupPage() {
         "?populate[seo]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
-        "&populate[heroStats]=*" +
         "&populate[pillars]=*" +
-        "&populate[pricingCtaPrimary]=*" +
-        "&populate[pricingCtaSecondary]=*" +
+        "&populate[plans][populate][features]=*" +
         "&populate[features]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
@@ -344,6 +342,7 @@ export function getAcronisBackupPage() {
         "&populate[ctaBand2][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
         "&populate[heroImage][populate][image]=true" +
+        "&populate[whyImage][populate][image]=true" +
         "&populate[testimonials][populate]=*" +
         "&populate[aboutPoints]=*" +
         "&populate[aboutFeatures]=*"
@@ -433,6 +432,7 @@ export function getWindowsCloudHostingPage() {
     return fetchAPI(
         "/api/windows-cloud-hosting-page" +
         "?populate[seo]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
@@ -469,11 +469,14 @@ export function getWindowsDedicatedServerPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
+        "&populate[plans][populate][features]=*" +
         "&populate[pricingCtaPrimary]=*" +
         "&populate[pricingCtaSecondary]=*" +
         "&populate[aboutItems]=*" +
         "&populate[features]=*" +
         "&populate[comparisonRows]=*" +
+        "&populate[comparisonCtaPrimary]=*" +
+        "&populate[comparisonCtaSecondary]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[whyCards]=*" +
@@ -504,7 +507,7 @@ export function getWindowsVpsHostingPage() {
         "&populate[heroCtaSecondary]=*" +
         "&populate[heroImage][populate][image]=true" +
         "&populate[pillars]=*" +
-        "&populate[plans]=*" +
+        "&populate[plans][populate][features]=*" +
         "&populate[aboutImage][populate][image]=true" +
         "&populate[features]=*" +
         "&populate[securityCards]=*" +
@@ -696,6 +699,7 @@ export function getLinuxCloudHostingPage() {
     return fetchAPI(
         "/api/linux-cloud-hosting-page" +
         "?populate[seo]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars]=*" +
@@ -879,6 +883,7 @@ export function getGpuCloudHostingPage() {
     return fetchAPI(
         "/api/gpu-cloud-hosting-page?" +
         "populate[seo]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
@@ -918,7 +923,7 @@ export function getResellerHostingPage() {
         "&populate[whyCards][populate]=*" +
         "&populate[toolsCards][populate]=*" +
         "&populate[supportCards][populate]=*" +
-        "&populate[relatedCards][populate]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
@@ -961,6 +966,8 @@ export function getMicrosoft365Page() {
     return fetchAPI(
         "/api/microsoft-365-page?" +
         "populate[seo]=*" +
+        "&populate[whenPoints]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
@@ -1011,6 +1018,7 @@ export function getCloudStoragePage() {
     return fetchAPI(
         "/api/cloud-storage-page?" +
         "populate[seo]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
@@ -1061,6 +1069,7 @@ export function getVeeamBackupPage() {
         "/api/veeam-backup-page?" +
         "populate[plans][populate][features]=*" +
         "&populate[proactiveCards][populate]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[proactiveImage][populate][image]=true&" +
         "populate[seo]=*" +
         "&populate[heroCtaPrimary]=*" +
@@ -1381,6 +1390,8 @@ export function getContactUsPage() {
     return fetchAPI(
         "/api/contact-us-page?" +
         "populate[seo]=*" +
+        "&populate[heroCtaPrimary]=*" +
+        "&populate[heroCtaSecondary]=*" +
         "&populate[helpCards]=*" +
         "&populate[steps]=*"
     );
@@ -1410,15 +1421,20 @@ export function getPricingPage() {
 }
 
 /**
- * Fetches the /blogs index page's editable chrome: masthead copy, category
- * cards, the "I need help with" sidebar links, and the CTA band. The post
- * list itself is NOT here — that comes from GET /api/blog-posts (server.js),
- * which aggregates published builder-pages, not this single-type.
+ * Fetches the /blogs index page's editable chrome: SEO meta, the section
+ * headings, category cards, the "I need help with" sidebar links, and the CTA
+ * band. The post list itself is NOT here — that comes from GET /api/blog-posts
+ * (server.js), which aggregates published builder-pages, not this single-type.
+ *
+ * The heading fields (featuredLabel/archiveTitle/categoriesTitle/helpTitle/
+ * searchPlaceholder/emptyTitle/emptyText) are plain scalars, so Strapi returns
+ * them automatically — only components need an explicit populate.
  */
 export function getBlogIndexPage() {
     return fetchAPI(
         "/api/blog-index-page" +
-        "?populate[categories]=*" +
+        "?populate[seo]=*" +
+        "&populate[categories]=*" +
         "&populate[helpLinks]=*" +
         "&populate[ctaBand][populate][ctaPrimary]=*" +
         "&populate[ctaBand][populate][ctaSecondary]=*"

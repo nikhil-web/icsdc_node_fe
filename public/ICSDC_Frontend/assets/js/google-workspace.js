@@ -1,5 +1,5 @@
 import { getGoogleWorkspacePage } from './services/contentService.js';
-import { inlineRichText } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
 import { uploadURL } from './services/strapiClient.js';
 import {
     populateSEO,
@@ -228,6 +228,7 @@ import {
 
             // 4 Pillars (why-us)
             if (page.pillars) {
+                populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
                 populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
             }
 

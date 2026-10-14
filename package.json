@@ -9,6 +9,7 @@
     "build:clean": "node scripts/build.js --clean",
     "build:force": "node scripts/build.js --force",
     "check:imports": "node scripts/check-import-graph.js",
+    "check:breakpoints": "node scripts/check-breakpoints.js",
     "prestart": "node scripts/build.js",
     "start": "node server.js",
     "dev": "nodemon dev.js",

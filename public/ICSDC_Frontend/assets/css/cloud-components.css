@@ -609,7 +609,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — TABLET (≤ 1024px)
 ══════════════════════════════════════ */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .cloud-power-grid > * {
         flex-basis: calc(50% - 10px);
     }
@@ -633,7 +633,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — MOBILE (≤ 767px)
 ══════════════════════════════════════ */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
 
     .cloud-use-grid {
         grid-template-columns: 1fr;
@@ -685,7 +685,7 @@
 /* ══════════════════════════════════════
    RESPONSIVE — SMALL MOBILE (≤ 479px)
 ══════════════════════════════════════ */
-@media (max-width: 479px) {
+@media (max-width: 639px) {
     .cloud-frameworks-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;

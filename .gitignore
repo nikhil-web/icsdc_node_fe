@@ -15,3 +15,9 @@ public/ICSDC_Frontend/sitemap.xml
 # Minified output from scripts/build.js — generated, never committed.
 # Absent build/ just means the server serves unminified sources.
 build/
+
+# Crawler snapshots from prerender.js — generated, never committed.
+# Rebuild on the server with `npm run prerender`, or from the admin
+# Prerender tab (Build all). Until they exist, bots fall through to the
+# normal page, which still carries the server-injected SEO <head>.
+public/ICSDC_Frontend/prerendered/

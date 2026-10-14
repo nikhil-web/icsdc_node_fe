@@ -297,7 +297,7 @@
 ══════════════════════════════════════ */
 
 /* 1024px — 2 columns */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .mvps-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -308,7 +308,7 @@
 }
 
 /* 640px — single column */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .mvps-plans-grid {
         grid-template-columns: 1fr;
     }

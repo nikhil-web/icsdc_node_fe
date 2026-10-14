@@ -107,6 +107,17 @@
     align-items: center;
 }
 
+/* Desktop tier (1024–1439px). The 420/520px column floors above assumed this
+   layout never rendered below 1366px; at 1024px they plus the gap and side
+   padding need ~1,103px and pushed the copy past the right edge (measured).
+   Same proportions, no floors, a tighter gap — ≥1440px is unchanged. */
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .business-needs-cloud-inner {
+        grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+        gap: clamp(32px, 4vw, 64px);
+    }
+}
+
 .business-needs-visual {
     /* display: grid; */
     grid-template-columns: minmax(120px, 190px) minmax(260px, 1fr);
@@ -610,7 +621,7 @@
     align-items: start;
 }
 
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .faq-grid {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -951,7 +962,7 @@ summary.faq-q::marker {
     padding-bottom: 24px;
 }
 
-@media (max-width: 560px) {
+@media (max-width: 639px) {
     .faq-q {
         padding: 16px 18px;
         font-size: 14.5px;
@@ -1478,7 +1489,7 @@ summary.faq-q::marker {
 
 /* ── Responsive ── */
 
-@media (max-width: 600px) {
+@media (max-width: 639px) {
     .footer-links-section {
         padding: 40px var(--c-px) 32px;
     }
@@ -1900,6 +1911,18 @@ summary.faq-q::marker {
     text-align: left;
 }
 
+/* Tablet (640–1023px). A (max-width: 1023px) repeat(3, 1fr) rule earlier in
+   this file sits BEFORE this base rule, so it never won and tablets got all
+   five columns. The old 767px phone rule hid that at 640–767px; with 640px now
+   the tablet edge it showed as overflow (measured on shared-hosting, where the
+   grid sits in a ~314px box). Fluid columns instead of a fixed count, so it
+   fits whatever box it's in. Phones keep their 2-column rule below. */
+@media (min-width: 640px) and (max-width: 1023px) {
+    .cloud-why-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+}
+
 .cloud-why-item {
     background: var(--white);
     border: 1px solid rgba(26, 86, 219, 0.10);
@@ -2132,7 +2155,7 @@ summary.faq-q::marker {
 
 /* ── Shared Cloud Responsive ── */
 
-@media (max-width: 479px) {
+@media (max-width: 639px) {
     .footer-container {
         grid-template-columns: 1fr;
     }
@@ -2142,7 +2165,7 @@ summary.faq-q::marker {
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .best-cloud-services-title {
         font-size: 28px;
     }
@@ -2379,7 +2402,7 @@ summary.faq-q::marker {
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-@media (min-width: 1366px) {
+@media (min-width: 1024px) {
     .nav-search-trigger {
         display: inline-flex;
     }

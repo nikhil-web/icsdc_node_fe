@@ -1,4 +1,4 @@
-import { wireCtaLink } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
 import { populateSEO, populateHero, hidePageLoader, markActiveNavLink, setText, setHTML, initTestimonials, initFAQ } from './utils/cms-helpers.js';
 import { getLinuxDedicatedServerPage } from './services/contentService.js';
 
@@ -32,6 +32,7 @@ import { getLinuxDedicatedServerPage } from './services/contentService.js';
 
         // ── SECTION 2: FOUR PILLAR CARDS ─────────────────────────────────────────
         // desc is null in Strapi — update only h3 titles to preserve static descriptions
+        populatePillarsHeader('.why-grid .why-card', page.pillarsTitle, page.pillarsSubtitle);
         ldsUpdateCardTitles('.why-grid .why-card', page.pillars);
 
         // ── SECTION 3: PRICING ───────────────────────────────────────────────────
@@ -114,6 +115,17 @@ import { getLinuxDedicatedServerPage } from './services/contentService.js';
         // ── SECTION 8: SUPPORT ───────────────────────────────────────────────────
         ldsPopulateSectionHeader('lds-support', page.supportLabel, page.supportTitle, page.supportSubtitle);
         ldsUpdateCardTitles('.lds-support-grid .lds-support-card', page.supportCards);
+        // The CMS list decides which support cards exist: the HTML has a third,
+        // hardcoded "Call Us" card that could never be removed. Cards beyond the
+        // CMS list are dropped, and each card's button follows its CMS link.
+        if (page.supportCards && page.supportCards.length) {
+            var supportSorted = page.supportCards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+            document.querySelectorAll('.lds-support-grid .lds-support-card').forEach(function (card, i) {
+                if (!supportSorted[i]) { card.remove(); return; }
+                var cta = card.querySelector('.lds-support-cta');
+                if (cta && supportSorted[i].link) wireCtaLink(cta, supportSorted[i].link);
+            });
+        }
 
         // ── SECTION 9: AI/ML INNOVATION ──────────────────────────────────────────
         ldsPopulateSectionHeader('lds-innovation', page.innovationLabel, page.innovationTitle, page.innovationSubtitle);
@@ -133,7 +145,7 @@ import { getLinuxDedicatedServerPage } from './services/contentService.js';
         });
 
         // ── FAQ ───────────────────────────────────────────────────────────────────
-        if (page.faqTitle) setText(document, '#lds-faq .faq-title', page.faqTitle);
+        if (page.faqTitle) setText(document, '#lvps-faq-heading', page.faqTitle);   // the section's ids came over from the Linux VPS page; #lds-faq never existed
         initFAQ(page.faq);
 
         // ── FINAL CTA BAND ────────────────────────────────────────────────────────
@@ -305,13 +317,17 @@ function ldsPopulateCtaBand(cta) {
     if (btns) {
         var primaryBtn = btns.querySelector('.lds-cta-btn-primary');
         var outlineBtn = btns.querySelector('.lds-cta-btn-outline');
-        if (primaryBtn && cta.ctaPrimary) {
-            primaryBtn.innerHTML = cta.ctaPrimary.text || '';
-            wireCtaLink(primaryBtn, cta.ctaPrimary.link);
-        }
-        if (outlineBtn && cta.ctaSecondary) {
-            outlineBtn.innerHTML = cta.ctaSecondary.text || '';
-            wireCtaLink(outlineBtn, cta.ctaSecondary.link);
-        }
+        // A button shows only when the CMS has both its text and link; otherwise
+        // it's removed (it used to keep the hardcoded HTML button).
+        [[primaryBtn, cta.ctaPrimary], [outlineBtn, cta.ctaSecondary]].forEach(function (pair) {
+            var btn = pair[0], data = pair[1];
+            if (!btn) return;
+            if (data && data.text && data.link) {
+                btn.innerHTML = data.text;
+                wireCtaLink(btn, data.link);
+            } else {
+                btn.remove();
+            }
+        });
     }
 }

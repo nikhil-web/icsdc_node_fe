@@ -16,7 +16,9 @@ import {
     setHTML,
     initFAQ,
     initTestimonials,
-    wireCtaLink
+    wireCtaLink,
+    populatePillarsHeader,
+    inlineRichText,
 } from './utils/cms-helpers.js';
 
 (function () {
@@ -157,12 +159,13 @@ import {
             if (heroSub && page.heroSubtitle) heroSub.textContent = page.heroSubtitle;
 
             var heroDesc = document.getElementById('mds-hero-desc');
-            if (heroDesc && page.heroDescription) heroDesc.textContent = page.heroDescription;
+            if (heroDesc && page.heroDescription) heroDesc.innerHTML = inlineRichText(page.heroDescription);
 
             applyCtaButton(document.getElementById('mds-cta-primary'), page.heroCtaPrimary);
             applyCtaButton(document.getElementById('mds-cta-secondary'), page.heroCtaSecondary);
 
             // ── Pillars (4 why-us cards) ──
+            populatePillarsHeader('#mds-pillars-grid', page.pillarsTitle, page.pillarsSubtitle);
             populateIconCards('#mds-pillars-grid', page.pillars, 'why-card');
 
             // ── Plans / Pricing section ──

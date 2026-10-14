@@ -17,6 +17,7 @@
  */
 
 import { esc, resolveFaIcon, ctaButtonHtml } from './builder-utils.js';
+import { MEDIA } from '../utils/breakpoints.js';
 import {
     populateHero,
     populateIconCards,
@@ -26,6 +27,7 @@ import {
     initFAQ as sharedInitFAQ,
     initTestimonials as sharedInitTestimonials,
     inlineRichText,
+    resolveIcon,
 } from '../utils/cms-helpers.js';
 
 // Each builder section gets a unique id so multiple instances of the same
@@ -901,8 +903,8 @@ const contactForm = {
             '<input type="email" name="email" class="cu-input" placeholder="john@company.com" required></div>' +
             '</div>' +
             '<div class="cu-form-row">' +
-            '<div class="cu-field"><label class="cu-label">Phone Number</label>' +
-            '<input type="tel" name="phone" class="cu-input" placeholder="+91 98765 43210"></div>' +
+            '<div class="cu-field"><label class="cu-label">Phone Number <span class="cu-required">*</span></label>' +
+            '<input type="tel" name="phone" class="cu-input" placeholder="+91 98765 43210" required></div>' +
             '<div class="cu-field"><label class="cu-label">Company / Organization</label>' +
             '<input type="text" name="company" class="cu-input" placeholder="Your Company Ltd."></div>' +
             '</div>' +
@@ -929,6 +931,24 @@ const contactForm = {
         if (form && success) {
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                /* Phone is mandatory on every contact form. This form is
+                   `novalidate`, so the `required` on the input is a hint only —
+                   the browser won't enforce it — hence the explicit check. Same
+                   rule, messages and error styling as the popup, the contact
+                   page and the hero forms (cms-helpers initHeroContactForm). */
+                form.querySelectorAll('.cu-form-error').forEach((el) => el.remove());
+                const phone = String(new FormData(form).get('phone') || '').trim();
+                const phoneError = !phone ? 'Please enter your phone number.'
+                    : !/^\d{7,15}$/.test(phone.replace(/\D/g, '')) ? 'Please enter a valid phone number.'
+                        : null;
+                if (phoneError) {
+                    const errEl = document.createElement('p');
+                    errEl.className = 'cu-form-error';
+                    errEl.style.cssText = 'color:#e53e3e;margin-top:0.75rem;font-size:0.9rem;';
+                    errEl.textContent = phoneError;
+                    form.querySelector('.cu-submit-btn').insertAdjacentElement('beforebegin', errEl);
+                    return;
+                }
                 const submitBtn = form.querySelector('.cu-submit-btn');
                 const orig = submitBtn.innerHTML;
                 submitBtn.disabled = true;
@@ -1004,6 +1024,10 @@ const pillars = {
     icon: 'star',
     description: 'The 3–4 pillar badges strip that sits under the hero on every hosting page (why-card style).',
     schema: [
+        // Optional, like the pillarsTitle/pillarsSubtitle fields on the legacy
+        // Strapi pages: left empty, the strip renders exactly as it always has.
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
         {
             key: 'items', label: 'Pillars', type: 'repeater',
             itemSchema: [
@@ -1014,6 +1038,8 @@ const pillars = {
         },
     ],
     defaultProps: {
+        title: '',
+        subtitle: '',
         items: [
             { icon: 'gauge-high', title: '99.9% Uptime', desc: 'Guaranteed availability backed by SLA.' },
             { icon: 'shield-halved', title: 'Enterprise Security', desc: 'Protected at every layer, always.' },
@@ -1023,8 +1049,11 @@ const pillars = {
     },
     renderer(container, p) {
         const gridId = bldId('bld-pillars');
+        const title = p.title ? '<h2 class="title">' + esc(p.title) + '</h2>' : '';
+        const sub = p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '';
         container.innerHTML =
             '<section class="section"><div class="container">' +
+            title + sub +
             '<div id="' + gridId + '" class="why-grid"></div>' +
             '</div></section>';
         populateIconCards('#' + gridId, p.items || [], 'why-card');
@@ -1678,6 +1707,7 @@ const blogHeader = {
         { key: 'authorAvatar', label: 'Author Photo', type: 'image' },
         { key: 'publishDate', label: 'Publish Date', type: 'text' },
         { key: 'readTime', label: 'Read Time', type: 'text' },
+        { key: 'showSocial', label: 'Show social links (from site footer)', type: 'toggle', default: true },
     ],
     defaultProps: {
         coverImage: '/assets/images/Home page images_s.webp',
@@ -1690,8 +1720,12 @@ const blogHeader = {
         authorAvatar: '',
         publishDate: '',
         readTime: '5 min read',
+        showSocial: true,
     },
     renderer(container, p) {
+        // `!== false` so posts saved before this field existed still get the row
+        // — defaultProps only seed NEWLY created sections.
+        const showSocial = p.showSocial !== false;
         const initials = String(p.authorName || 'I').trim().split(/\s+/)
             .map((w) => w[0]).join('').toUpperCase().slice(0, 2);
         const avatar = p.authorAvatar
@@ -1700,9 +1734,6 @@ const blogHeader = {
         const meta = [p.publishDate, p.readTime].filter(Boolean)
             .map((m) => '<span>' + esc(m) + '</span>').join('<span class="blogh-dot">·</span>');
 
-        // Byline sits AFTER the cover image: kicker → title → excerpt → cover →
-        // author/date. Keeping the headline and its standfirst together, then
-        // letting the image land, reads better than splitting them with a byline.
         const byline =
             '<div class="blogh-byline">' +
             avatar +
@@ -1713,20 +1744,89 @@ const blogHeader = {
             (meta ? '<div class="blogh-meta">' + meta + '</div>' : '') +
             '</div>';
 
+        /* Two columns: all the text on the left, cover image on the right.
+           The cover used to be a full-bleed band under the headline, which at the
+           header's 1560px measure rendered enormous — it dominated the screen and
+           pushed the article itself below the fold. Side by side, the image is
+           roughly half the width and the headline keeps the top of the page.
+
+           `.blogh-text` wraps every text element so it is ONE grid item; without
+           it each of kicker/title/excerpt/byline would take its own cell and the
+           layout would fall apart. Text comes first in source order so that the
+           ≤1024px `display:block` rule (which the header already shares with the
+           body) stacks headline-then-image with no extra work — and so the h1 is
+           still the first thing in the document. */
         container.innerHTML =
             '<section class="section blogh-section">' +
             '<div class="container blogh-inner">' +
+            '<div class="blogh-text">' +
             (p.category ? '<span class="blogh-kicker">' + esc(p.category) + '</span>' : '') +
             '<h1 class="blogh-title">' + esc(p.title || '') + '</h1>' +
             (p.excerpt ? '<p class="blogh-excerpt">' + esc(p.excerpt) + '</p>' : '') +
+            byline +
+            (showSocial
+                ? '<div class="blogh-social" data-blogh-social aria-label="Follow ICSDC"></div>'
+                : '') +
+            '</div>' +
             (p.coverImage
                 ? '<figure class="blogh-cover"><img src="' + esc(p.coverImage) + '" alt="' + esc(p.coverAlt || '') + '"></figure>'
                 : '') +
-            byline +
             '</div>' +
             '</section>';
+
+        if (showSocial) fillBlogSocial(container);
     },
 };
+
+/* Social icons under the byline, reusing the FOOTER's links so there is one
+   source of truth: same Strapi `footer.commonFooter.socialLinks`, same
+   resolveIcon() call, same order. Edit them once in the CMS and both update.
+
+   Styling is NOT reused: .footer-social-link is built for the dark footer
+   (translucent-white fill, white glyphs) and would be invisible on the header's
+   light background, so .blogh-social-link restates the same 36px circle in
+   theme tokens instead.
+
+   Fire-and-forget, like fillBlogHelp(): the row simply stays empty if Strapi is
+   unreachable rather than throwing and taking the rest of the header with it. */
+/* Memoised GET, keyed by URL, for CMS lookups made from inside renderers.
+   Renderers are NOT called once per page: the builder canvas re-runs every
+   renderer on each `bld:render` postMessage, which the editor sends debounced
+   on every property edit — so an un-cached fetch here fires again on each
+   keystroke batch while an author is typing. Caching the PROMISE (not the
+   result) also collapses concurrent callers into one request.
+   Page-lifetime only — a reload picks up CMS changes. */
+const _cmsGetCache = Object.create(null);
+function cmsGet(url) {
+    if (!_cmsGetCache[url]) {
+        _cmsGetCache[url] = fetch(url)
+            .then((r) => (r.ok ? r.json() : null))
+            .catch(() => null);
+    }
+    return _cmsGetCache[url];
+}
+
+function fillBlogSocial(container) {
+    const box = container.querySelector('[data-blogh-social]');
+    if (!box) return;
+    cmsGet('/api/strapi/api/footer?populate[commonFooter][populate][socialLinks]=*')
+        .then((json) => {
+            const cf = json && json.data && json.data.commonFooter;
+            const links = (cf && cf.socialLinks) || [];
+            const html = links
+                .filter((s) => s.url)
+                .map((s) =>
+                    '<a class="blogh-social-link" href="' + esc(s.url) + '"' +
+                    ' aria-label="' + esc(s.name || 'Social link') + '"' +
+                    ' target="_blank" rel="noopener noreferrer">' +
+                    resolveIcon(s.icon) + '</a>')
+                .join('');
+            // Leave the row absent rather than an empty bordered strip.
+            if (html) box.innerHTML = html;
+            else box.remove();
+        })
+        .catch(() => { if (box) box.remove(); });
+}
 
 /* ════ BLOG BODY — full article, WYSIWYG-edited ══════════════ */
 const blogBody = {
@@ -1737,6 +1837,7 @@ const blogBody = {
         { key: 'body', label: 'Article Content', type: 'richtext' },
         { key: 'showToc', label: 'Show "On this page" contents rail', type: 'toggle', default: true },
         { key: 'showSidebar', label: 'Show side promo card', type: 'toggle', default: true },
+        { key: 'showHelp', label: 'Show "I need help with" card', type: 'toggle', default: true },
         { key: 'sidebarTitle', label: 'Promo Title', type: 'text' },
         { key: 'sidebarText', label: 'Promo Text', type: 'textarea' },
         {
@@ -1755,6 +1856,7 @@ const blogBody = {
               '<blockquote>Pull out a quote when you want a line to land.</blockquote>',
         showToc: true,
         showSidebar: true,
+        showHelp: true,
         sidebarTitle: 'Need hosting that keeps up?',
         sidebarText: 'Talk to our team about a plan sized to your traffic, budget and growth.',
         sidebarCta: { text: 'View Plans', link: '/pricing' },
@@ -1787,13 +1889,31 @@ const blogBody = {
         const sideText = p.sidebarText || 'Talk to our team about a plan sized to your traffic, budget and growth.';
         const ctaText = (p.sidebarCta && p.sidebarCta.text) || 'View Plans';
         const ctaLink = (p.sidebarCta && p.sidebarCta.link) || '/pricing';
-        const sidebarHtml = showSidebar
-            ? '<aside class="blogb-side">' +
-              '<div class="blogb-promo">' +
-              '<h3>' + esc(sideTitle) + '</h3>' +
-              '<p>' + esc(sideText) + '</p>' +
-              '<a class="btn-primary blogb-promo-btn" href="' + esc(ctaLink) + '">' + esc(ctaText) + '</a>' +
+        const showHelp = p.showHelp !== false;
+
+        // Reuses the /blogs index's .blog-help markup and classes verbatim (its
+        // CSS is loaded by builder-template.html) so the two cannot drift apart.
+        // Rendered with the same defaults blogs.js falls back to, then filled from
+        // Strapi below — one edit in the CMS updates the index AND every article.
+        const helpHtml = showHelp
+            ? '<div class="blog-help blogb-help">' +
+              '<h3>I need help with</h3>' +
+              '<div class="blog-help-grid" data-blogb-help-grid>' +
+              BLOG_HELP_DEFAULTS.map(helpItemHtml).join('') +
               '</div>' +
+              '</div>'
+            : '';
+
+        const sidebarHtml = (showSidebar || showHelp)
+            ? '<aside class="blogb-side">' +
+              (showSidebar
+                  ? '<div class="blogb-promo">' +
+                    '<h3>' + esc(sideTitle) + '</h3>' +
+                    '<p>' + esc(sideText) + '</p>' +
+                    '<a class="btn-primary blogb-promo-btn" href="' + esc(ctaLink) + '">' + esc(ctaText) + '</a>' +
+                    '</div>'
+                  : '') +
+              helpHtml +
               '</aside>'
             : '';
 
@@ -1808,9 +1928,59 @@ const blogBody = {
             '</div>' +
             '</section>';
 
+        /* A table can't scroll sideways on its own without breaking its layout,
+           and a 3-column table squeezed into a phone's width is unreadable. Wrap
+           each one in a scroll container here, at render, rather than saving the
+           wrapper into the article — so it covers every table, including ones
+           typed by hand or saved before this existed. */
+        container.querySelectorAll('.blogb-body table').forEach((table) => {
+            if (table.parentElement && table.parentElement.classList.contains('blogb-table-wrap')) return;
+            const wrap = document.createElement('div');
+            wrap.className = 'blogb-table-wrap';
+            table.parentNode.insertBefore(wrap, table);
+            wrap.appendChild(table);
+        });
+
         if (showToc) buildBlogToc(container);
+        if (showHelp) fillBlogHelp(container);
     },
 };
+
+/* The "I need help with" links, shared with the /blogs index.
+   Kept in sync by SOURCE, not by copy: these are only the pre-fetch defaults
+   (identical to blogs.js's FALLBACK_HELP_LINKS), and fillBlogHelp() replaces
+   them with blog-index-page.helpLinks from Strapi when that is reachable. */
+const BLOG_HELP_DEFAULTS = [
+    { icon: 'fa-cloud', title: 'Cloud Hosting', link: '/cloud-hosting' },
+    { icon: 'fa-server', title: 'VPS Hosting', link: '/vps-hosting' },
+    { icon: 'fa-database', title: 'Dedicated Servers', link: '/dedicated-server' },
+    { icon: 'fa-globe', title: 'Web Hosting', link: '/web-hosting' },
+    { icon: 'fa-users', title: 'Reseller Hosting', link: '/reseller-hosting' },
+    { icon: 'fa-shield-halved', title: 'Backup & Security', link: '/cloud-storage' },
+];
+
+function helpItemHtml(h) {
+    return '<a class="blog-help-item" href="' + esc(h.link || '#') + '">' +
+        '<i class="fa-solid ' + esc(h.icon || 'fa-circle') + '" aria-hidden="true"></i>' +
+        '<span>' + esc(h.title) + '</span></a>';
+}
+
+/* Swap the baked-in defaults for the CMS list. Deliberately fire-and-forget:
+   the card is already rendered and readable, so a slow or dead Strapi costs
+   nothing but keeps the defaults — never a blank box, never a thrown error
+   that would take the rest of the renderer down with it. */
+function fillBlogHelp(container) {
+    const grid = container.querySelector('[data-blogb-help-grid]');
+    if (!grid) return;
+    cmsGet('/api/strapi/api/blog-index-page?populate[helpLinks]=*')
+        .then((json) => {
+            const links = json && json.data && json.data.helpLinks;
+            if (!links || !links.length) return;
+            const sorted = links.slice().sort((a, b) => (a.order || 0) - (b.order || 0));
+            grid.innerHTML = sorted.map(helpItemHtml).join('');
+        })
+        .catch(() => { /* keep defaults */ });
+}
 
 /* Builds the "On this page" rail from the article's own h2/h3 headings.
    Done here rather than in the editor because the body is free-form rich text —
@@ -1828,9 +1998,14 @@ function buildBlogToc(container) {
     if (headings.length < 2) return;
 
     const used = Object.create(null);
-    const links = headings.map((h) => {
+
+    // Assign ids first, then group: each h2 owns the h3s that follow it, so the
+    // rail can show only the current section's sub-headings instead of every
+    // h3 in the article at once.
+    const items = [];
+    headings.forEach((h) => {
         const text = (h.textContent || '').trim();
-        if (!text) return '';
+        if (!text) return;
         let id = h.id || text.toLowerCase()
             .replace(/[^\w\s-]/g, '')
             .trim().replace(/\s+/g, '-')
@@ -1839,11 +2014,43 @@ function buildBlogToc(container) {
         // Duplicate headings are common ("Overview" twice) — suffix so anchors stay unique.
         if (used[id]) { used[id] += 1; id = id + '-' + used[id]; } else { used[id] = 1; }
         h.id = id;
-        return '<li class="blogb-toc-' + h.tagName.toLowerCase() + '">' +
-               '<a class="blogb-toc-link" href="#' + id + '">' + esc(text) + '</a></li>';
-    }).join('');
+        items.push({ id: id, text: text, level: h.tagName.toLowerCase() });
+    });
 
-    list.innerHTML = links;
+    const linkHtml = (it) =>
+        '<a class="blogb-toc-link" href="#' + it.id + '">' + esc(it.text) + '</a>';
+
+    // Two separate flags on purpose: an h2 <li> is always opened, but its
+    // collapsible <ul> only exists if that h2 actually has sub-headings. Using
+    // one flag left an h2-with-no-children unclosed and produced nested <li>s.
+    let html = '';
+    let liOpen = false;    // an h2 <li> awaiting its </li>
+    let subOpen = false;   // that h2's <div><ul> awaiting its close
+
+    const closeGroup = () => {
+        if (subOpen) { html += '</ul></div>'; subOpen = false; }
+        if (liOpen) { html += '</li>'; liOpen = false; }
+    };
+
+    items.forEach((it) => {
+        if (it.level === 'h2') {
+            closeGroup();
+            html += '<li class="blogb-toc-h2 blogb-toc-group">' + linkHtml(it);
+            liOpen = true;
+        } else if (liOpen) {
+            // Wrapper opened lazily on the first child, so an h2 without
+            // sub-headings never renders an empty collapsible container.
+            if (!subOpen) { html += '<div class="blogb-toc-sub-wrap"><ul class="blogb-toc-sub">'; subOpen = true; }
+            html += '<li class="blogb-toc-h3">' + linkHtml(it) + '</li>';
+        } else {
+            // h3 before any h2 — no parent to nest under, so keep it top-level
+            // rather than dropping it from the rail entirely.
+            html += '<li class="blogb-toc-h3">' + linkHtml(it) + '</li>';
+        }
+    });
+    closeGroup();
+
+    list.innerHTML = html;
     aside.hidden = false;
 
     // Deliberately NO preventDefault/scrollTo here: style.css already sets
@@ -1853,11 +2060,20 @@ function buildBlogToc(container) {
     // path that can silently fail (and breaks middle-click / open-in-new-tab).
     list.querySelectorAll('.blogb-toc-link').forEach((a) => {
         a.addEventListener('click', () => {
+            // Expand straight away rather than waiting for the scroll observer
+            // to catch up — otherwise clicking an h2 looks like nothing happened.
+            setOpenGroup(a.closest('.blogb-toc-group'));
             // Collapse the accordion again on mobile, where it sits above the article.
             const details = a.closest('details.blogb-toc-collapsed');
-            if (details && window.innerWidth < 1025) details.open = false;
+            if (details && window.matchMedia(MEDIA.tabletDown).matches) details.open = false;
         });
     });
+
+    // Open the first group up front. Deliberately BEFORE the IntersectionObserver
+    // guard below: without it the rail renders fully collapsed until the reader
+    // scrolls far enough to trip the observer — and on a browser with no
+    // IntersectionObserver it would stay collapsed forever.
+    setOpenGroup(list.querySelector('.blogb-toc-group'));
 
     // Highlight the section you're currently reading.
     if (typeof IntersectionObserver !== 'function') return;
@@ -1882,14 +2098,512 @@ function buildBlogToc(container) {
         if (!a) return;
         list.querySelectorAll('.blogb-toc-active').forEach((el) => el.classList.remove('blogb-toc-active'));
         a.classList.add('blogb-toc-active');
+        setOpenGroup(a.closest('.blogb-toc-group'));
     }, { rootMargin: '-96px 0px -70% 0px' });
     headings.forEach((h) => { if (h.id) observer.observe(h); });
+
+    /* Only ONE group is expanded at a time: the section being read. Sub-headings
+       for every other h2 stay collapsed, so the rail shows where you are rather
+       than every h3 in the article at once. `.closest()` resolves an active h3
+       to its parent h2's group, so clicking/scrolling into a sub-heading keeps
+       its own group open instead of collapsing the list under the reader. */
+    function setOpenGroup(group) {
+        list.querySelectorAll('.blogb-toc-group.is-open').forEach((g) => {
+            if (g !== group) g.classList.remove('is-open');
+        });
+        if (group) group.classList.add('is-open');
+    }
 }
+
+/* ════ KB HEADER — Knowledge Base article hero ════════════════
+   Deliberately NOT blogHeader with an if-branch: blogHeader's fields (cover
+   image, author byline, read time) are specific to a blog post and would
+   just sit empty on a documentation article. This mirrors /legal/*.html's
+   own hero instead — eyebrow, title, "Last updated" line, nothing else —
+   using the SAME .legal-* classes (legal.css is loaded on every builder page
+   for exactly this) so a KB article's header is pixel-consistent with Legal
+   Pages, which is what "visually similar to Legal Pages" means most where a
+   reader first lands.
+
+   The body below it reuses blogBody as-is (see the template in templates.js)
+   rather than a forked component: its rich-text + auto-generated TOC engine
+   already does the documentation-page job, and forking it into a second
+   near-identical component to also reskin its `.blogb-*` classes as `.legal-*`
+   would be the exact duplication this feature is supposed to avoid. The
+   trade-off is disclosed, not accidental: the body area keeps blogBody's own
+   card-based visual style rather than pixel-matching `.legal-content`'s plain
+   prose column. */
+const kbHeader = {
+    label: 'Knowledge Base Header',
+    icon: 'info',
+    description: 'Article header for a Knowledge Base page: category, title and a "Last updated" line — styled like the Legal Pages hero.',
+    schema: [
+        { key: 'category', label: 'Category (eyebrow label)', type: 'text' },
+        { key: 'title', label: 'Article Title', type: 'text', required: true },
+        { key: 'lastUpdated', label: 'Last Updated (free text, e.g. "5 September 2026")', type: 'text' },
+        {
+            key: 'excerpt', label: 'Excerpt (SEO description fallback — not shown on the page)',
+            type: 'textarea',
+        },
+        /* Tags drive the Help Center's popular-search chips and widen what its
+           search matches. Comma or newline separated rather than a repeater:
+           they are single words, and a repeater would cost a row of UI each for
+           no gain. Not rendered in the hero — the Legal-Pages layout this
+           mirrors has nowhere for them, and their job is discovery, not
+           decoration. */
+        {
+            key: 'tags', label: 'Tags (comma or line separated — power the Help Center chips)',
+            type: 'textarea',
+        },
+    ],
+    defaultProps: {
+        category: 'Knowledge Base',
+        title: 'Getting Started with ICSDC',
+        lastUpdated: '',
+        excerpt: '',
+        tags: '',
+    },
+    renderer(container, p) {
+        container.innerHTML =
+            '<section class="legal-hero">' +
+            '<div class="legal-hero-inner">' +
+            '<div class="legal-eyebrow"><i class="fa-solid fa-book" aria-hidden="true"></i> ' +
+                esc(p.category || 'Knowledge Base') + '</div>' +
+            '<h1 class="legal-title">' + esc(p.title || '') + '</h1>' +
+            (p.lastUpdated ? '<p class="legal-meta">Last updated: ' + esc(p.lastUpdated) + '</p>' : '') +
+            '</div>' +
+            '</section>';
+    },
+};
+
+/* ════ KB INDEX GRID — lists published Knowledge Base articles ════
+   The Help Center's way of surfacing Knowledge Base content: fetches
+   /api/kb-pages (added alongside kbHeader/fetchKbPages() in server.js) and
+   renders a card per article, linking to /knowledge-base/<slug>.
+
+   Cards reuse .veeam-related-card/.veeam-related-grid/.veeam-related-btn —
+   the existing "title + text + button" card pattern (from
+   homepage-extras.css, already loaded on every builder page) — rather than
+   .blog-card, which needs a cover image (mediaHTML always renders
+   something) that a kbHeader article deliberately doesn't have.
+
+   Static shell first, fetch second — same "never a blank box" rule
+   fillBlogHelp()/fillBlogSocial() already follow above: the empty-state
+   copy renders synchronously so there is always something readable, and the
+   async fetch only ever replaces it with real cards, never clears it back
+   to nothing on a slow or unreachable API. */
+const kbIndexGrid = {
+    label: 'Knowledge Base Grid',
+    icon: 'grid',
+    description: 'Lists published Knowledge Base articles as cards, linking to /knowledge-base/<slug>. Reads live from the API — nothing here is hand-authored per article.',
+    schema: [
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        { key: 'emptyText', label: 'Text shown when no articles are published yet', type: 'text' },
+    ],
+    defaultProps: {
+        title: 'Knowledge Base',
+        subtitle: 'Guides and answers to get the most out of ICSDC.',
+        emptyText: 'Articles are coming soon — check back shortly.',
+    },
+    renderer(container, p) {
+        const emptyText = p.emptyText || 'Articles are coming soon — check back shortly.';
+        container.innerHTML =
+            '<section class="section"><div class="container">' +
+            (p.title ? '<h2 class="title">' + esc(p.title) + '</h2>' : '') +
+            (p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '') +
+            '<div class="veeam-related-grid" data-kbg-grid>' +
+                '<p class="kbg-empty" data-kbg-empty>' + esc(emptyText) + '</p>' +
+            '</div>' +
+            '</div></section>';
+
+        cmsGet('/api/kb-pages').then((json) => {
+            const grid = container.querySelector('[data-kbg-grid]');
+            const pages = json && json.pages;
+            if (!grid || !pages || !pages.length) return;   // keep the empty-state copy
+            grid.innerHTML = pages.map((kb) =>
+                '<a class="veeam-related-card" href="/knowledge-base/' + esc(kb.slug) + '">' +
+                (kb.category ? '<span class="blog-card-cat">' + esc(kb.category) + '</span>' : '') +
+                '<h3>' + esc(kb.title) + '</h3>' +
+                (kb.excerpt ? '<p>' + esc(kb.excerpt) + '</p>' : '') +
+                '<span class="veeam-related-btn">Read article</span>' +
+                '</a>').join('');
+        }).catch(() => { /* keep the empty-state copy, same as fillBlogHelp() */ });
+    },
+};
+
+/* ════ HELP CENTER — hero + search + articles + topics ════════
+   One composite component rather than four separate ones, for a specific
+   reason: the search box has to filter the article cards AND the topic tiles
+   AND the FAQ, and wiring that across independently-rendered builder sections
+   would mean cross-section messaging the canvas re-render keeps tearing down.
+   Owning the parts it filters keeps the search self-contained.
+
+   FAQ is the exception — it stays the existing `faq` component, reused
+   untouched on the same page, and this filters it by reading the DOM its
+   shared initFAQ() helper produces (.faq-item). That is deliberately
+   one-directional and defensive: no FAQ on the page, no-op. The alternative
+   was editing `faq` itself — used across the whole site — to serve one page.
+
+   Everything visual comes from the site's own tokens and section conventions
+   (.section/.container/.title/.subtitle, --blue, --text-dark, --shadow-card),
+   so it inherits the real nav, footer, dark mode and type scale rather than
+   restating a second design language beside them. */
+const HC_CATEGORY_ICONS = {
+    'hosting': 'fa-server', 'hosting & servers': 'fa-server', 'servers': 'fa-server',
+    'domains': 'fa-globe', 'domains & dns': 'fa-globe', 'dns': 'fa-globe',
+    'cloud': 'fa-cloud', 'cloud & vps': 'fa-cloud', 'vps': 'fa-cloud',
+    'security': 'fa-shield-halved', 'security & ssl': 'fa-shield-halved', 'ssl': 'fa-shield-halved',
+    'email': 'fa-envelope', 'email services': 'fa-envelope',
+    'billing': 'fa-credit-card', 'billing & invoices': 'fa-credit-card', 'invoices': 'fa-credit-card',
+    'developer': 'fa-code', 'developer & api': 'fa-code', 'api': 'fa-code',
+    'getting started': 'fa-rocket', 'account': 'fa-user', 'backup': 'fa-database',
+};
+function hcIcon(cat) {
+    return HC_CATEGORY_ICONS[String(cat || '').toLowerCase().trim()] || 'fa-book';
+}
+
+// Split a newline/comma list into trimmed entries (the popular-search chips).
+function hcList(raw) {
+    return String(raw || '').split(/[\n,]/).map((s) => s.trim()).filter(Boolean);
+}
+
+const helpCenter = {
+    label: 'Help Center',
+    icon: 'question',
+    description: 'Support landing: hero with live search over Knowledge Base articles, popular chips, article list and topic tiles. Reads articles from the API — nothing is hand-listed.',
+    schema: [
+        { key: 'badge', label: 'Badge text (above the heading)', type: 'text' },
+        { key: 'title', label: 'Heading', type: 'text', required: true },
+        { key: 'accentWord', label: 'Word in the heading to colour blue', type: 'text' },
+        { key: 'subtitle', label: 'Sub-heading ({count} = article count, {s} = plural "s")', type: 'textarea' },
+        { key: 'searchPlaceholder', label: 'Search box placeholder', type: 'text' },
+        { key: 'popularLabel', label: 'Popular-searches label', type: 'text' },
+        { key: 'popular', label: 'Popular searches (one per line)', type: 'textarea' },
+        { key: 'articlesTitle', label: 'Articles section title', type: 'text' },
+        { key: 'articlesSubtitle', label: 'Articles section subtitle', type: 'text' },
+        { key: 'topicsTitle', label: 'Topics section title', type: 'text' },
+        { key: 'topicsSubtitle', label: 'Topics subtitle ({count} = topic count, {s} = plural "s")', type: 'text' },
+        { key: 'emptyText', label: 'Text when no articles are published yet', type: 'text' },
+        { key: 'noResultsText', label: 'Text when a search matches nothing', type: 'text' },
+    ],
+    defaultProps: {
+        badge: 'Support',
+        title: 'How can we help you today?',
+        accentWord: 'help',
+        /* {count} rather than a baked-in number: the blueprint's "Search 180+
+           guides" is a claim the site can't back, and would rot the day an
+           article is added or removed. */
+        subtitle: 'Search {count} guide{s} on hosting, domains, cloud and billing — or reach a specialist directly.',
+        searchPlaceholder: 'Search articles, e.g. “transfer a domain”',
+        popularLabel: 'Popular:',
+        popular: 'DNS records\nSSL certificate\nInvoice\nMigrate site\nReset password',
+        /* Not the blueprint's "Most read this week": there is no analytics
+           behind this list, it is newest-first. Naming it after data we do not
+           have would put a lie on the page. Rename it in the builder if real
+           popularity data ever exists. */
+        articlesTitle: 'Latest guides',
+        articlesSubtitle: 'Written and kept current by the team that runs the platform.',
+        topicsTitle: 'Browse by topic',
+        topicsSubtitle: '{count} collection{s}, drawn from the articles themselves.',
+        emptyText: 'Articles are coming soon — check back shortly.',
+        noResultsText: 'No articles match that search. Try a different term, or ask the team below.',
+    },
+    renderer(container, p) {
+        const accent = String(p.accentWord || '').trim();
+        const titleRaw = String(p.title || '');
+        // Wrap the first whole-word occurrence only, and only if it is really
+        // in the heading — a mistyped accent word just renders plain.
+        let titleHtml = esc(titleRaw);
+        if (accent) {
+            const re = new RegExp('(^|\\s)(' + accent.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(\\s|$)', 'i');
+            titleHtml = esc(titleRaw).replace(re, (m, a, w, b) => a + '<span class="hc-accent">' + w + '</span>' + b);
+        }
+
+        const chips = hcList(p.popular)
+            .map((t) => '<button type="button" class="hc-chip" data-hc-chip>' + esc(t) + '</button>')
+            .join('');
+
+        container.innerHTML =
+            '<section class="section hc-hero"><div class="container">' +
+                (p.badge ? '<span class="hc-badge"><span class="hc-badge-dot"></span>' + esc(p.badge) + '</span>' : '') +
+                '<h1 class="title hc-title">' + titleHtml + '</h1>' +
+                (p.subtitle ? '<p class="subtitle hc-sub" data-hc-sub>' + esc(p.subtitle) + '</p>' : '') +
+                '<div class="hc-search">' +
+                    '<i class="fa-solid fa-magnifying-glass hc-search-icon" aria-hidden="true"></i>' +
+                    '<input type="search" class="hc-search-input" data-hc-input' +
+                        ' placeholder="' + esc(p.searchPlaceholder || 'Search articles') + '"' +
+                        ' aria-label="Search help articles">' +
+                '</div>' +
+                '<div class="hc-popular">' +
+                    (p.popularLabel ? '<span class="hc-popular-label">' + esc(p.popularLabel) + '</span>' : '') +
+                    // Replaced by real article tags when any exist (hcRenderChips);
+                    // these hand-typed ones are the fallback until then.
+                    '<span class="hc-chip-row" data-hc-chips>' + chips + '</span>' +
+                '</div>' +
+            '</div></section>' +
+
+            '<section class="section hc-articles"><div class="container">' +
+                (p.articlesTitle ? '<h2 class="title">' + esc(p.articlesTitle) + '</h2>' : '') +
+                (p.articlesSubtitle ? '<p class="subtitle">' + esc(p.articlesSubtitle) + '</p>' : '') +
+                '<div class="hc-article-grid" data-hc-articles>' +
+                    '<p class="hc-note" data-hc-empty>' + esc(p.emptyText || '') + '</p>' +
+                '</div>' +
+                '<p class="hc-note" data-hc-noresults hidden>' + esc(p.noResultsText || '') + '</p>' +
+            '</div></section>' +
+
+            '<section class="section hc-topics" data-hc-topics-section hidden><div class="container">' +
+                (p.topicsTitle ? '<h2 class="title">' + esc(p.topicsTitle) + '</h2>' : '') +
+                (p.topicsSubtitle ? '<p class="subtitle" data-hc-topics-sub>' + esc(p.topicsSubtitle) + '</p>' : '') +
+                '<div class="hc-topic-grid" data-hc-topics></div>' +
+            '</div></section>';
+
+        hcLoad(container, p);
+    },
+};
+
+/* Fetch once, render articles + topics, then wire the search. The static shell
+   is already on screen, so a slow or dead API leaves readable copy rather than
+   a blank band — the same rule fillBlogHelp() follows above. */
+function hcLoad(container, p) {
+    cmsGet('/api/kb-pages').then((json) => {
+        const pages = (json && json.pages) || [];
+        hcRenderArticles(container, pages);
+        hcRenderTopics(container, pages);
+        hcRenderChips(container, p, pages);
+        hcFillCounts(container, p, pages);
+        hcWireSearch(container);
+    }).catch(() => {
+        // Keep the empty-state copy, but still wire search so the FAQ below
+        // stays filterable even when the article API is unreachable.
+        hcWireSearch(container);
+    });
+}
+
+function hcRenderArticles(container, pages) {
+    const grid = container.querySelector('[data-hc-articles]');
+    if (!grid || !pages.length) return;      // no articles → keep the empty-state copy
+    grid.innerHTML = pages.map((kb, i) => {
+        const num = String(i + 1).padStart(2, '0');
+        const meta = [
+            kb.category ? '<span class="hc-card-cat">' + esc(kb.category) + '</span>' : '',
+            kb.readMinutes ? '<span class="hc-card-read">' + esc(kb.readMinutes) + ' min read</span>' : '',
+        ].filter(Boolean).join('');
+        // Tags are part of the haystack so a chip click actually finds its
+        // article even when the word appears nowhere in the title or excerpt.
+        const haystack = ((kb.title || '') + ' ' + (kb.excerpt || '') + ' ' +
+            (kb.category || '') + ' ' + ((kb.tags || []).join(' '))).toLowerCase();
+        return '<a class="hc-card" href="/knowledge-base/' + esc(kb.slug) + '"' +
+            ' data-hc-card data-hc-text="' + esc(haystack) + '">' +
+            '<span class="hc-card-num">' + num + '</span>' +
+            '<span class="hc-card-body">' +
+                '<span class="hc-card-title">' + esc(kb.title) + '</span>' +
+                (meta ? '<span class="hc-card-meta">' + meta + '</span>' : '') +
+            '</span></a>';
+    }).join('');
+}
+
+/* Chips come from the articles' own tags wherever any exist, ranked by how many
+   articles carry each — so the "popular" row is genuinely the site's own
+   vocabulary and every chip is guaranteed to return results when clicked. The
+   hand-typed `popular` list stays as the fallback for a Knowledge Base that has
+   no tags yet, which is otherwise the state where this row would vanish and
+   take the hero's visual balance with it. */
+function hcRenderChips(container, p, pages) {
+    const row = container.querySelector('[data-hc-chips]');
+    if (!row) return;
+
+    const counts = new Map();
+    pages.forEach((kb) => {
+        (kb.tags || []).forEach((t) => {
+            const key = t.trim();
+            if (key) counts.set(key, (counts.get(key) || 0) + 1);
+        });
+    });
+    if (!counts.size) return;                 // keep the manual fallback chips
+
+    row.innerHTML = [...counts.entries()]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, 8)                          // a chip row, not a tag cloud
+        .map(([tag]) => '<button type="button" class="hc-chip" data-hc-chip>' + esc(tag) + '</button>')
+        .join('');
+}
+
+/* Topic tiles are derived from the articles' own categories, never a hand-kept
+   list — a count cannot disagree with what is actually published, and a new
+   category appears the moment an article uses it. */
+function hcRenderTopics(container, pages) {
+    const grid = container.querySelector('[data-hc-topics]');
+    const section = container.querySelector('[data-hc-topics-section]');
+    if (!grid || !section) return;
+
+    const counts = new Map();
+    pages.forEach((kb) => {
+        const cat = (kb.category || '').trim();
+        if (!cat) return;                     // uncategorised articles get no tile
+        counts.set(cat, (counts.get(cat) || 0) + 1);
+    });
+    if (!counts.size) return;                 // section stays hidden
+
+    grid.innerHTML = [...counts.entries()]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .map(([cat, n]) =>
+            '<button type="button" class="hc-topic" data-hc-topic="' + esc(cat.toLowerCase()) + '">' +
+            '<span class="hc-topic-icon"><i class="fa-solid ' + hcIcon(cat) + '" aria-hidden="true"></i></span>' +
+            '<span class="hc-topic-name">' + esc(cat) + '</span>' +
+            '<span class="hc-topic-count">' + n + (n === 1 ? ' article' : ' articles') + '</span>' +
+            '</button>').join('');
+    section.hidden = false;
+    section.dataset.hcTopicCount = String(counts.size);
+}
+
+/* Swap {count} for the real number, and {s} for the plural suffix — without
+   the latter a single published article renders "Search 1 guides", which is
+   exactly the kind of wrong-looking copy a placeholder is supposed to avoid.
+   {s} is simple enough to be obvious in the editor and covers regular English
+   plurals, which is all this copy uses. */
+function hcCount(text, n) {
+    return String(text || '')
+        .replace(/\{count\}/g, String(n))
+        .replace(/\{s\}/g, n === 1 ? '' : 's');
+}
+
+function hcFillCounts(container, p, pages) {
+    const sub = container.querySelector('[data-hc-sub]');
+    if (sub && /\{count\}|\{s\}/.test(p.subtitle || '')) {
+        sub.textContent = hcCount(p.subtitle, pages.length);
+    }
+    const tsub = container.querySelector('[data-hc-topics-sub]');
+    const section = container.querySelector('[data-hc-topics-section]');
+    if (tsub && section && /\{count\}|\{s\}/.test(p.topicsSubtitle || '')) {
+        tsub.textContent = hcCount(p.topicsSubtitle, Number(section.dataset.hcTopicCount || 0));
+    }
+}
+
+/* One search box, three targets: the article cards, the topic tiles, and the
+   FAQ accordion rendered by the separate `faq` component elsewhere on the page.
+   The FAQ half reads that component's rendered DOM rather than its props — it
+   is a different section with its own lifecycle, so querying the result keeps
+   this working whichever order the two happen to render in. */
+function hcWireSearch(container) {
+    const input = container.querySelector('[data-hc-input]');
+    if (!input) return;
+
+    const apply = (raw) => {
+        const q = String(raw || '').trim().toLowerCase();
+        const cards = [...container.querySelectorAll('[data-hc-card]')];
+        let shown = 0;
+        cards.forEach((c) => {
+            const hit = !q || (c.dataset.hcText || '').includes(q);
+            c.hidden = !hit;
+            if (hit) shown++;
+        });
+
+        // Tiles filter on their own name, so searching "billing" narrows the
+        // row rather than leaving tiles that contradict the results below.
+        container.querySelectorAll('[data-hc-topic]').forEach((t) => {
+            t.hidden = !!q && !(t.dataset.hcTopic || '').includes(q);
+        });
+
+        const empty = container.querySelector('[data-hc-empty]');
+        const none = container.querySelector('[data-hc-noresults]');
+        if (none) none.hidden = !(q && cards.length && shown === 0);
+        // "Coming soon" belongs to the no-articles-at-all case only — hide it
+        // once cards exist so it can never read as a search result.
+        if (empty && cards.length) empty.hidden = true;
+
+        // FAQ: hide non-matching questions. Guarded, so a page without the faq
+        // component simply does nothing here.
+        document.querySelectorAll('.faq-item').forEach((item) => {
+            const text = (item.textContent || '').toLowerCase();
+            item.hidden = !!q && !text.includes(q);
+        });
+    };
+
+    input.addEventListener('input', () => apply(input.value));
+    container.querySelectorAll('[data-hc-chip]').forEach((chip) => {
+        chip.addEventListener('click', () => {
+            input.value = chip.textContent || '';
+            apply(input.value);
+            input.focus();
+        });
+    });
+    container.querySelectorAll('[data-hc-topic]').forEach((tile) => {
+        tile.addEventListener('click', () => {
+            const name = tile.querySelector('.hc-topic-name');
+            input.value = name ? name.textContent : '';
+            apply(input.value);
+            const grid = container.querySelector('[data-hc-articles]');
+            if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+}
+
+/* ════ SUPPORT CHANNELS — "still need a person?" cards ════════
+   The contact half of the blueprint. Each button goes through ctaButtonHtml()
+   with the 'contact-popup' href convention main.js already wires globally, so
+   "Start a chat" opens the SAME contact modal every other CTA on the site
+   opens rather than introducing a second, parallel support path. */
+const supportChannels = {
+    label: 'Support Channels',
+    icon: 'question',
+    description: 'Row of contact channel cards (chat, email, phone) with availability and a CTA each.',
+    schema: [
+        { key: 'title', label: 'Section Title', type: 'text' },
+        { key: 'subtitle', label: 'Section Subtitle', type: 'textarea' },
+        {
+            key: 'channels', label: 'Channels', type: 'repeater',
+            itemSchema: [
+                { key: 'icon', label: 'Icon (fa-* name)', type: 'text' },
+                { key: 'name', label: 'Channel Name', type: 'text' },
+                { key: 'status', label: 'Status pill (e.g. Online)', type: 'text' },
+                { key: 'desc', label: 'Description', type: 'textarea' },
+                { key: 'metaA', label: 'Detail line 1', type: 'text' },
+                { key: 'metaB', label: 'Detail line 2', type: 'text' },
+                { key: 'btnLabel', label: 'Button Label', type: 'text' },
+                { key: 'btnUrl', label: 'Button URL', type: 'text' },
+            ],
+        },
+    ],
+    defaultProps: {
+        title: 'Still need a person?',
+        subtitle: 'Our support team is in-house. Pick the channel that suits the problem.',
+        channels: [
+            { icon: 'fa-comments', name: 'Live chat', status: 'Online', desc: 'Best for urgent issues — outages, locked accounts, deployment failures.', metaA: 'Typical wait under 2 minutes', metaB: 'Available 24/7', btnLabel: 'Start a chat', btnUrl: 'contact-popup' },
+            { icon: 'fa-envelope', name: 'Email a ticket', status: 'Open', desc: 'Best for detailed cases where logs, screenshots or invoices help.', metaA: 'First reply within 4 hours', metaB: 'support@icsdc.com', btnLabel: 'Open a ticket', btnUrl: 'contact-popup' },
+            { icon: 'fa-phone', name: 'Phone', status: 'Mon–Sat', desc: 'Best for account verification, migrations and enterprise onboarding.', metaA: '09:00–18:00 (GMT+3)', metaB: '', btnLabel: 'Request a callback', btnUrl: 'contact-popup' },
+        ],
+    },
+    renderer(container, p) {
+        const cards = (p.channels || []).map((c) =>
+            '<div class="hc-ch">' +
+            '<div class="hc-ch-head">' +
+                '<span class="hc-ch-icon"><i class="fa-solid ' + esc(c.icon || 'fa-circle-question') + '" aria-hidden="true"></i></span>' +
+                '<h3 class="hc-ch-name">' + esc(c.name || '') + '</h3>' +
+                (c.status ? '<span class="hc-ch-status">' + esc(c.status) + '</span>' : '') +
+            '</div>' +
+            (c.desc ? '<p class="hc-ch-desc">' + inlineRichText(c.desc) + '</p>' : '') +
+            (c.metaA ? '<p class="hc-ch-meta">' + inlineRichText(c.metaA) + '</p>' : '') +
+            (c.metaB ? '<p class="hc-ch-meta">' + inlineRichText(c.metaB) + '</p>' : '') +
+            ctaButtonHtml({ text: c.btnLabel, link: c.btnUrl }, 'btn-primary hc-ch-btn') +
+            '</div>').join('');
+        container.innerHTML =
+            '<section class="section hc-channels"><div class="container">' +
+            (p.title ? '<h2 class="title">' + esc(p.title) + '</h2>' : '') +
+            (p.subtitle ? '<p class="subtitle">' + esc(p.subtitle) + '</p>' : '') +
+            '<div class="hc-ch-grid">' + cards + '</div>' +
+            '</div></section>';
+    },
+};
 
 /* ════ EXPORT ════════════════════════════════════════════════ */
 export const COMPONENT_REGISTRY = {
     hero,
     blogHeader,
+    kbHeader,
+    helpCenter,
+    supportChannels,
+    kbIndexGrid,
     blogBody,
     pillars,
     iconCards,
@@ -1927,6 +2641,10 @@ export const COMPONENT_ORDER = [
     'hero',
     'blogHeader',
     'blogBody',
+    'kbHeader',
+    'kbIndexGrid',
+    'helpCenter',
+    'supportChannels',
     'pillars',
     'iconCards',
     'imageText',
@@ -1969,5 +2687,10 @@ export const COMPONENT_CATEGORIES = [
     { label: 'Social Proof', types: ['testimonials', 'logoCloud'] },
     { label: 'Conversion', types: ['ctaBand', 'pricing', 'contactForm', 'contactInfo', 'faq'] },
     { label: 'Blog', types: ['blogHeader', 'blogBody'] },
+    // blogBody listed here too, deliberately: it's the same content engine a
+    // Knowledge Base article body uses (see kbHeader's comment above) — this
+    // is a second entry in the palette's grouping, not a second component.
+    { label: 'Knowledge Base', types: ['kbHeader', 'blogBody', 'kbIndexGrid'] },
+    { label: 'Help Center', types: ['helpCenter', 'supportChannels', 'faq'] },
     { label: 'Media & Layout', types: ['mapEmbed', 'videoEmbed', 'spacer'] },
 ];

@@ -317,7 +317,7 @@
 ══════════════════════════════════════ */
 
 /* 1280px — 2 columns for plans */
-@media (max-width: 1365px) {
+@media (max-width: 1023px) {
     .vht-plans-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -342,7 +342,7 @@
 /* 1024px — 2 columns for most grids */
 
 /* 640px — single column */
-@media (max-width: 767px) {
+@media (max-width: 639px) {
     .vht-plans-grid {
         grid-template-columns: 1fr;
     }

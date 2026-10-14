@@ -1,4 +1,4 @@
-import { wireCtaLink } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -7,7 +7,6 @@ import {
     setText,
     setHTML,
     resolveIcon,
-    populateCtaBand,
     populateTechBadges,
     initTestimonials,
     initFAQ,
@@ -22,6 +21,28 @@ import { uploadURL } from './services/strapiClient.js';
 
     function sortByOrder(items) {
         return (items || []).slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+    }
+
+    // Final CTA band. Same rules as the shared populateCtaBand(), which can't be
+    // used here because it only finds .cloud-cta-* / .ds-cta-* markup — on this
+    // page it silently did nothing, so the hardcoded phone button stayed forever.
+    // A button left empty in the CMS is removed.
+    function populateAzureCtaBand(cta) {
+        // Two bands share .azure-cta-band; the mid-page #azure-quote-cta is ctaBand2.
+        var inner = document.querySelector('.azure-cta-band:not(#azure-quote-cta) .azure-cta-inner');
+        if (!cta || !inner) return;
+        setHTML(inner, 'h2', cta.title);
+        setHTML(inner, 'p', cta.description);
+        [['.azure-cta-btn-primary', cta.ctaPrimary], ['.azure-cta-btn-outline', cta.ctaSecondary]].forEach(function (pair) {
+            var btn = inner.querySelector(pair[0]);
+            if (!btn) return;
+            if (pair[1] && pair[1].text) {
+                btn.innerHTML = pair[1].text + ' ';
+                wireCtaLink(btn, pair[1].link);
+            } else {
+                btn.remove();
+            }
+        });
     }
 
     function renderAzureCards(gridSelector, cards, cardClass, iconClass) {
@@ -218,6 +239,7 @@ import { uploadURL } from './services/strapiClient.js';
             });
             if (heroFormOn) initHeroContactForm('hf-form', 'hf-success');
 
+            populatePillarsHeader('#azure-features .why-grid', page.pillarsTitle, page.pillarsSubtitle);
             renderAzureCards('#azure-features .why-grid', page.pillars, 'why-card', 'why-icon');
 
             setSectionHeader('azure-who', page.aboutLabel, page.aboutTitle, null, {
@@ -255,7 +277,7 @@ import { uploadURL } from './services/strapiClient.js';
                 var qb = page.ctaBand2;
                 if (qb.title) setText(document, '#azure-quote-cta-title', qb.title);
                 var qDesc = document.getElementById('azure-quote-cta-desc');
-                if (qDesc && qb.description) { qDesc.textContent = qb.description; qDesc.hidden = false; }
+                if (qDesc && qb.description) { qDesc.innerHTML = inlineRichText(qb.description); qDesc.hidden = false; }
                 var qBtn = document.getElementById('azure-quote-cta-btn');
                 if (qBtn && qb.ctaPrimary) {
                     if (qb.ctaPrimary.text) qBtn.innerHTML = qb.ctaPrimary.text + ' ';
@@ -318,7 +340,7 @@ import { uploadURL } from './services/strapiClient.js';
             if (page.pricingNote) setText(document, '#azure-pricing-info .azure-pricing-note', page.pricingNote);
             renderAzurePricingPoints(page.pricingPoints);
 
-            populateCtaBand('.azure-cta-band', page.ctaBand1);
+            populateAzureCtaBand(page.ctaBand1);
 
 
 
@@ -332,6 +354,7 @@ import { uploadURL } from './services/strapiClient.js';
                 }
             }
 
+            if (page.faqTitle) setText(document, '.faq-title', page.faqTitle);
             initFAQ(page.faq);
         } catch (err) {
             console.error('[azure-cloud-hosting] CMS load failed:', err);

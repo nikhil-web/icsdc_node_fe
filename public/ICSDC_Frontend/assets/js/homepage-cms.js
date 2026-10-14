@@ -25,6 +25,7 @@
 
 import { getHomepagePage } from "./services/contentService.js";
 import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRichText } from "./utils/cms-helpers.js";
+import { pinPosition, placeName, buildMapPin, escapeHtml, wireMapInteractions } from "./utils/geo-map.js";
 
 (function () {
 
@@ -79,7 +80,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
         if (params.heroImage && params.heroImage.image) {
             const heroRight = document.querySelector('.hero-right');
             const img = heroRight && heroRight.querySelector('.hero-right-image');
-            // style.css hides .hero-right below 1366px. Assigning .src there still
+            // style.css hides .hero-right below the desktop tier (1024px). Assigning .src there still
             // downloads and decodes the image — a 771 KB PNG fetched to be invisible
             // on every phone and tablet. Skip it when the container isn't rendered;
             // the server-side preload (heroPreloadUrl) is gated on the same breakpoint.
@@ -122,7 +123,12 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
 
     // why chooose us
     /** 3. Pillars (4 icon cards in .why-us .why-grid) */
-    function populateWhyChooseUs(pillars) {
+    function populateWhyChooseUs(pillars, title, subtitle) {
+        // Headings before the early return: they are independent of the cards,
+        // and setText() no-ops on an empty value, so the hardcoded copy in
+        // index.html stays as the fallback until Strapi has its own.
+        setText('[data-strapi="whyChooseUsTitle"]', title);
+        setText('[data-strapi="whyChooseUsSubtitle"]', subtitle);
         if (!pillars || !pillars.length) return;
         populateIconCards('.why-us .why-grid', pillars, 'why-card');
     }
@@ -429,83 +435,55 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
     // ═══════════════════════════════════════════════════════════
     //  FAQ ACCORDION
     // ═══════════════════════════════════════════════════════════
-    // ── Global Presence: CMS-driven pin placement + legend ────────────────────
+    // ── Global Presence: CMS-driven pins + legend ──────────────────────────
     //
-    //  MAP_COORDS keys must match the `countryKey` field stored in Strapi.
-    //  Values are percentages of the SVG viewBox (2000 × 857) — they stay
-    //  accurate at every screen size because .hp-map-wrap uses aspect-ratio.
-    //  Matching invisible <circle data-country="..."> anchors are embedded in
-    //  world-map.svg as the geographic source of truth for these coordinates.
-    //
-    // Coordinates calibrated against actual SVG path data:
-    //   UK  southern coast: SVG (992, 182)   → 0°,   51°N
-    //   Germany north:      SVG (1053.9,159) → 13°E, 54°N
-    //   India NE coast:     SVG (1427.6,308) → 88°E, 22°N  ← key anchor
-    //   Angola NW coast:    SVG (1121.2,572) → 12°E,  5°S
-    // x-scale (eastern): +4.95 px/° from London baseline (x=992 at 0°)
-    // y-scale (tropical/subtropical): 9.78 px/° · temperate: 4.34–7.7 px/°
-    var MAP_COORDS = {
-        'usa': { x: 22.0, y: 24.0 },  // Washington DC  (77°W, 39°N)
-        'uk': { x: 49, y: 2 },  // London         ( 0°,  51.5°N)
-        'germany': { x: 52, y: 5 },  // Berlin         (13.4°E, 52.5°N)
-        'russia': { x: 58.9, y: 16.9 },  // Moscow         (37.6°E, 55.8°N)
-        'india': { x: 71, y: 36 },  // Noida/Delhi    (77.2°E, 28.6°N)
-        'russia': { x: 58.9, y: 16.9 },  // Moscow         (37.6°E, 55.8°N)
-        'future-expansion': { x: 74.5, y: 45.3 },  // Bangkok/SE Asia(100.5°E, 13.8°N)
-    };
-
+    //  Each location has a Place picked in Strapi (Country + City dropdowns);
+    //  geo-map.js projects its lat/lng onto world-map.svg exactly (the map is
+    //  generated in the same projection). Each pin shows the
+    //  location's title; pins and legend items are linked — hover/focus/tap
+    //  either one and both highlight (the legend holds the description).
     function renderMapSection(title, subtitle, locations) {
         if (title) setText('#hp-global-title', title);
         if (subtitle) setText('#hp-global-sub', subtitle);
         if (!locations || !locations.length) return;
 
-        var mapWrap = document.querySelector('.hp-map-wrap');
+        var mapWrap = document.querySelector('#hp-global .hp-map-wrap');
         var legend = document.getElementById('hp-legend');
-
-        // Clear any existing dynamically-added pins
-        if (mapWrap) {
-            mapWrap.querySelectorAll('.hp-pin').forEach(function (el) { el.remove(); });
-        }
+        if (mapWrap) mapWrap.querySelectorAll('.hp-pin').forEach(function (el) { el.remove(); });
         if (legend) legend.innerHTML = '';
 
-        // Sort by order field
         var sorted = locations.slice().sort(function (a, b) {
             return (a.order || 0) - (b.order || 0);
         });
 
         sorted.forEach(function (loc, idx) {
-            var key = (loc.countryKey || '').toLowerCase().trim();
-            var coords = MAP_COORDS[key];
-            var num = String(idx + 1).padStart(2, '0');
-            var color = loc.pinColor || (coords ? '#1a56db' : '#1a56db');
+            var id = 'loc-' + (idx + 1);
+            var color = '#1a56db'; // brand blue for every pin (no per-pin colour)
+            var place = placeName(loc);
+            var desc = inlineRichText(loc.description || '');
 
-            // ── Render pin on map ─────────────────────────────────────────
-            if (coords && mapWrap) {
-                var pin = document.createElement('div');
-                pin.className = 'hp-pin';
-                pin.style.cssText = 'left:' + coords.x + '%;top:' + coords.y + '%;--pin-c:' + color;
-                pin.setAttribute('aria-label', loc.title || key);
-                pin.setAttribute('data-country', key);
-                pin.innerHTML =
-                    '<div class="hp-pin-head"><span class="hp-pin-num">' + num + '</span></div>' +
-                    '<div class="hp-pin-tail"></div>';
-                mapWrap.appendChild(pin);
-            }
+            var pos = pinPosition(loc);
+            // Pin label = the location's name (picked city, or country); the
+            // hover card repeats the legend card: title, full place, description.
+            var name = (loc.place && loc.place.name) || loc.title || place;
+            if (pos && mapWrap) mapWrap.appendChild(buildMapPin(pos, id, color, name, loc.title, place, desc));
 
-            // ── Render legend item ────────────────────────────────────────
             if (legend) {
                 var item = document.createElement('div');
                 item.className = 'hp-legend-item';
-                item.setAttribute('data-country', key);
+                item.dataset.pin = id;
+                item.tabIndex = 0;
                 item.innerHTML =
                     '<div class="hp-legend-dot-row">' +
                     '<span class="hp-legend-dot" style="background:' + color + '"></span>' +
-                    '<strong class="hp-legend-title" style="color:' + color + '">' + (loc.title || '') + '</strong>' +
+                    '<strong class="hp-legend-title" style="color:' + color + '">' + escapeHtml(loc.title || place) + '</strong>' +
                     '</div>' +
-                    '<p class="hp-legend-desc">' + inlineRichText(loc.description || '') + '</p>';
+                    (place && place !== loc.title ? '<p class="hp-legend-place">' + escapeHtml(place) + '</p>' : '') +
+                    '<p class="hp-legend-desc">' + desc + '</p>';
                 legend.appendChild(item);
             }
         });
+        wireMapInteractions(mapWrap, legend);
     }
 
     // ── Technology Partners: populate logo grid (ds.partner-logo[]) ──
@@ -598,7 +576,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
             populateSEO(page.SEO);
             populateHeroSection(page);
             populateHeroCTAs(page.CallToActionPrimary, page.callToActionSecondary);
-            populateWhyChooseUs(page.whyChooseUs);
+            populateWhyChooseUs(page.whyChooseUs, page.whyChooseUsTitle, page.whyChooseUsSubtitle);
             populateWhyCloud(page.whyBusinessNeedsCloud);
             populateWhoWeAre(page.whoWeAre);
             populateLessComplexity(page.LessCloudComplexity);
@@ -613,6 +591,7 @@ import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRi
             populateLogoGrid('hp-tech-grid', page.techPartnersTitle, page.techPartners, '#hp-tech-title');
             populateLogoGrid('hp-trusted-grid', page.trustedTitle, page.trustedPartners, '#hp-trusted-title');
             populateContactSection(page);
+            setText('#faq-heading', page.faqTitle);   // no-op when empty: the HTML heading stays
             populateFAQ(page.faq);
 
 

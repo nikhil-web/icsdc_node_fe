@@ -15,7 +15,8 @@ import {
     markActiveNavLink,
     initTestimonials,
     initFAQ,
-    setText
+    setText,
+    populatePillarsHeader
 } from './utils/cms-helpers.js';
 import { getEmailHostingPage } from './services/contentService.js';
 import { inlineRichText } from './utils/cms-helpers.js';
@@ -93,6 +94,7 @@ import { uploadURL } from './services/strapiClient.js';
         });
 
         // Pillars (4)
+        populatePillarsHeader('.why-grid', page.pillarsTitle, page.pillarsSubtitle);
         populateIconCards('.why-grid', page.pillars, 'why-card');
 
         // Pricing

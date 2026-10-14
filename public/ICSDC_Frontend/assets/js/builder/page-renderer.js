@@ -29,6 +29,11 @@ function setMeta(name, value) {
     el.setAttribute('content', value);
 }
 
+/* Transient failures only — Strapi unreachable, a 5xx, a network drop. These
+   are NOT "this page doesn't exist", so they deliberately keep the inline
+   message and the original URL: telling someone a page is gone when the CMS
+   simply blipped would be wrong, and a 404 is what makes a search engine drop
+   a URL it should keep. Genuine misses go to showNotFound() instead. */
 function showError(message) {
     const root = document.getElementById('builder-page-root');
     if (root) {
@@ -39,6 +44,22 @@ function showError(message) {
             '</div></section>';
     }
     hidePageLoader();
+}
+
+/* The page genuinely isn't there — show the site's real 404 rather than a bare
+   "Page unavailable" panel that looks like a broken app.
+
+   No redirect loop: /404 resolves to the static 404.html file in the /:page
+   route, which is served directly and never mounts this renderer. replace()
+   rather than assign() so the dead URL doesn't land in history and the back
+   button returns where the visitor actually came from.
+
+   Reaching this at all is now rare — the server 404s unknown slugs itself for
+   /blogs/<slug>, /knowledge-base/<slug> and top-level /<slug> before ever
+   serving this shell. It's the safety net for the cache-skew window where the
+   server's 2-minute page cache still lists a page Strapi has already dropped. */
+function showNotFound() {
+    window.location.replace('/404');
 }
 
 /* ── Layout wrapper ─────────────────────────────────────────
@@ -159,11 +180,19 @@ async function fetchPage(slug, previewToken) {
         return;
     }
 
-    // URL forms:
-    //   /<slug>                      (top-level builder page)
-    //   /blogs/<slug>                (blog post — see server.js isBlogSlug())
-    //   /builder/<slug>              (legacy)
-    //   /builder/preview/<slug>?token=…
+    /* URL forms:
+         /<slug>                      (top-level builder page)
+         /blogs/<slug>                (blog post — see server.js isBlogSlug())
+         /knowledge-base/<slug>       (KB article — see server.js isKbSlug())
+         /builder/<slug>              (legacy)
+         /builder/preview/<slug>?token=…
+
+       Every nested prefix the server routes to builder-template.html must be
+       listed here too. The server serving the shell is only half the job: it
+       resolves the page and injects the SEO head, but the slug is re-derived
+       HERE to fetch the body, so a prefix the server knows and this does not
+       renders a "Page unavailable" shell on a URL that is genuinely live. */
+    const NESTED_PREFIXES = ['blogs', 'knowledge-base'];
     const parts = window.location.pathname.split('/').filter(Boolean);
     let slug;
     const previewToken = params.get('token');
@@ -172,12 +201,12 @@ async function fetchPage(slug, previewToken) {
         slug = parts[2];
     } else if (parts[0] === 'builder' && parts[1]) {
         slug = parts[1];
-    } else if (parts[0] === 'blogs' && parts[1]) {
-        slug = parts[1];                              // /blogs/<slug>
+    } else if (NESTED_PREFIXES.includes(parts[0]) && parts[1]) {
+        slug = parts[1];                              // /blogs/<slug>, /knowledge-base/<slug>
     } else if (parts.length === 1 && parts[0]) {
         slug = parts[0];                              // top-level /<slug>
     } else {
-        return showError('Invalid page URL.');
+        return showNotFound();
     }
 
     let page;
@@ -189,7 +218,7 @@ async function fetchPage(slug, previewToken) {
     }
 
     if (!page) {
-        return showError('This page does not exist or is not published yet.');
+        return showNotFound();
     }
 
     const title = page.title || 'Untitled';

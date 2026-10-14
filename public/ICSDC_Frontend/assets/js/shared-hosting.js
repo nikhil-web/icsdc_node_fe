@@ -31,7 +31,8 @@ import {
     getInitials,
     starSVG,
     initTestimonials,
-    initFAQ
+    initFAQ,
+    populatePillarsHeader
 } from './utils/cms-helpers.js';
 
 import { getSharedHostingPage } from './services/contentService.js';
@@ -63,6 +64,7 @@ import { uploadURL } from './services/strapiClient.js';
         });
 
         /* 3. Pillars (4 icon cards) */
+        populatePillarsHeader('.why-us .why-grid', page.pillarsTitle, page.pillarsSubtitle);
         populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
         /* 4. Who We Are (about section) */
@@ -160,6 +162,7 @@ import { uploadURL } from './services/strapiClient.js';
         initTestimonials(page.testimonials);
 
         /* 10. FAQ */
+        if (page.faqTitle) setText(document, '#sh-faq-heading', page.faqTitle);
         initFAQ(page.faq);
 
         /* 11. CTA Band #2 */
