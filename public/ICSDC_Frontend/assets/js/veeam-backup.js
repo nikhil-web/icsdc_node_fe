@@ -84,18 +84,21 @@ import {
 
     /**
      * Render the related-services cross-sell cards (Managed Cloud Hosting + DRaaS).
-     * relatedCards is a json array: [{ title, description, btnLabel, btnUrl }].
+     * relatedCards: [{ order, title, description, btnLabel, btnUrl }] (ds.related-card).
+     * The link shows only when the CMS has both its text and URL.
      */
     function populateRelated(cards) {
         if (!cards || !cards.length) return;
         var grid = document.getElementById('veeam-related-grid');
         if (!grid) return;
-        grid.innerHTML = cards.map(function (c) {
+        grid.innerHTML = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); }).map(function (c) {
+            var link = (c.btnLabel && c.btnUrl)
+                ? '<a href="' + c.btnUrl + '" class="veeam-related-btn">' + c.btnLabel + '</a>'
+                : '';
             return '<div class="veeam-related-card" data-animate="fade-up">' +
                 '<h3>' + (c.title || '') + '</h3>' +
-                '<p>' + inlineRichText(c.description || c.desc || '') + '</p>' +
-                '<a href="' + (c.btnUrl || '#') + '" class="btn-primary">' +
-                (c.btnLabel || 'Learn More') + '</a>' +
+                '<p>' + inlineRichText(c.description || '') + '</p>' +
+                link +
                 '</div>';
         }).join('');
     }

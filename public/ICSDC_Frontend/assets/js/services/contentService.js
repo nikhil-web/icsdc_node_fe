@@ -1063,6 +1063,7 @@ export function getVeeamBackupPage() {
         "/api/veeam-backup-page?" +
         "populate[plans][populate][features]=*" +
         "&populate[proactiveCards][populate]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[proactiveImage][populate][image]=true&" +
         "populate[seo]=*" +
         "&populate[heroCtaPrimary]=*" +
