@@ -118,6 +118,9 @@ import {
                 subtitle: page.heroSubtitle,
                 description: page.heroDescription,
                 ctaPrimary: page.heroCtaPrimary,
+                // Shown only when the CMS has both text and a link; otherwise hidden
+                // (a button with no link would do nothing when clicked).
+                ctaSecondary: (page.heroCtaSecondary && page.heroCtaSecondary.text && page.heroCtaSecondary.link) ? page.heroCtaSecondary : null,
                 heroImage: page.heroImage
             });
 
