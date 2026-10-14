@@ -33,10 +33,14 @@ import {
         var strip = document.querySelector('#rh-related .rh-related-strip');
         if (!strip) return;
         var sorted = cards.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
-        strip.innerHTML = sorted.map(function (card) {
-            var href = card.link || '#';
+        // relatedCards: ds.related-card. Each item is a link: its label is the
+        // Link text if set, else the title; items without a label or URL are skipped.
+        strip.innerHTML = sorted.filter(function (card) {
+            return (card.btnLabel || card.title) && card.btnUrl;
+        }).map(function (card) {
+            var href = card.btnUrl;
             var iconHtml = resolveIcon(card.icon || 'server');
-            var label = card.title || card.name || '';
+            var label = card.btnLabel || card.title;
             return '<a class="rh-related-link" href="' + href + '">' +
                 '<span class="rh-related-icon-wrap">' + iconHtml + '</span>' +
                 '<span class="rh-related-label">' + label + '</span>' +

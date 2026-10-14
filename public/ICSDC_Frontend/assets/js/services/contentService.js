@@ -923,7 +923,7 @@ export function getResellerHostingPage() {
         "&populate[whyCards][populate]=*" +
         "&populate[toolsCards][populate]=*" +
         "&populate[supportCards][populate]=*" +
-        "&populate[relatedCards][populate]=*" +
+        "&populate[relatedCards]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[faq][populate]=*" +
