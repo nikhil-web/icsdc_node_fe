@@ -1353,3 +1353,94 @@ html[data-theme="dark"] .faq-title {
 html[data-theme="dark"] .faq-item[open] .faq-num {
     color: var(--blue-text);
 }
+
+/* ══════════════════════════════════════════════════════
+   BUTTON CONTRAST (2026-10-14)
+   A contrast sweep of every page in dark mode found 142 unreadable buttons,
+   from three causes. Light mode is untouched.
+══════════════════════════════════════════════════════ */
+
+/* 1. Filled buttons whose text is var(--white) — that token is dark slate in
+      dark mode, so the label turned dark-on-blue. Force white text. */
+html[data-theme="dark"] .cloud-why-cta-btn,
+html[data-theme="dark"] .cloud-wl-cta-btn,
+html[data-theme="dark"] .cp-plan-btn-primary,
+html[data-theme="dark"] .rh-plan-btn-featured,
+html[data-theme="dark"] .lvps-plan-btn-featured,
+html[data-theme="dark"] .gds-plan-btn-featured,
+html[data-theme="dark"] .mch-plan-btn-featured,
+html[data-theme="dark"] .gpu-plan-btn-featured,
+html[data-theme="dark"] .cs-plan-btn-featured,
+html[data-theme="dark"] .m365-plan-btn-featured,
+html[data-theme="dark"] .ds-cta-btn-outline,
+html[data-theme="dark"] .lds-cta-btn-primary,
+html[data-theme="dark"] .bms-manage-btn-primary,
+html[data-theme="dark"] .webh-promo-btn,
+html[data-theme="dark"] .solution-cta-outline,
+html[data-theme="dark"] .cs-related-cta,
+html[data-theme="dark"] .mds-promo-btn,
+html[data-theme="dark"] .bms-config-quote-btn:hover {
+    color: #ffffff !important;
+}
+
+/* 2. Brand-blue text on dark cards (#1a56db on #1e293b is 2.4:1). Use the
+      dark-mode text blue (--blue-text, 4.9:1+); white on hover, which reads on
+      both the dark card and the filled-blue hover state. */
+html[data-theme="dark"] :is(.cloud-power-link, .cloud-use-link, .aws-block-cta, .vht-service-cta,
+    .cp-plan-btn-outline, .rh-plan-btn, .lvps-plan-btn, .gds-plan-btn, .mch-plan-btn, .gpu-plan-btn,
+    .aws-plan-btn, .azure-plan-btn, .cs-plan-btn, .m365-plan-btn, .mch-service-btn, .lds-support-cta,
+    .wp-related-cta, .lch-related-btn, .wincloud-related-btn, .gpu-related-btn, .m365-related-link,
+    .veeam-related-btn, .ssl-type-cta):not([class*="-featured"]):not(.cp-plan-btn-primary) {
+    color: var(--blue-text);
+    border-color: var(--blue-text);
+}
+
+html[data-theme="dark"] :is(.cloud-power-link, .cloud-use-link, .aws-block-cta, .vht-service-cta,
+    .cp-plan-btn-outline, .rh-plan-btn, .lvps-plan-btn, .gds-plan-btn, .mch-plan-btn, .gpu-plan-btn,
+    .aws-plan-btn, .azure-plan-btn, .cs-plan-btn, .m365-plan-btn, .mch-service-btn, .lds-support-cta,
+    .wp-related-cta, .lch-related-btn, .wincloud-related-btn, .gpu-related-btn, .m365-related-link,
+    .veeam-related-btn, .ssl-type-cta):not([class*="-featured"]):not(.cp-plan-btn-primary):hover {
+    color: #ffffff;
+}
+
+/* 3. "White" buttons inside the blue CTA bands. Their background is
+      var(--white) too, so in dark mode they became dark pills with blue text.
+      Keep them white, as in light mode. Same for the heading and text on the
+      blue (non-dark) band, which also used var(--white). */
+html[data-theme="dark"] .cloud-cta-btn-primary,
+html[data-theme="dark"] .ds-cta-btn-primary,
+html[data-theme="dark"] .azure-cta-btn-primary,
+html[data-theme="dark"] .nds-plan-btn-primary {
+    background: #ffffff;
+}
+
+html[data-theme="dark"] .cloud-cta-btn-primary:hover,
+html[data-theme="dark"] .ds-cta-btn-primary:hover,
+html[data-theme="dark"] .azure-cta-btn-primary:hover {
+    background: #e8effd;
+}
+
+html[data-theme="dark"] .cloud-cta-band:not(.cloud-cta-dark) .cloud-cta-inner h2,
+html[data-theme="dark"] .cloud-cta-band:not(.cloud-cta-dark) .cloud-cta-inner p {
+    color: #ffffff;
+}
+
+/* Bare Metal "Get a Quote": amber outline on a dark table row (#b45309 is 2.9:1). */
+html[data-theme="dark"] .bms-config-quote-btn:not(:hover) {
+    color: #f59e0b;
+    border-color: #f59e0b;
+}
+
+/* Bare Metal tables: alternate rows stayed cream (#fffbeb) in dark mode while
+   the cell text turned light, so whole rows were unreadable. Tint them dark. */
+html[data-theme="dark"] :is(.bms-config-table, .bms-compare-table) tbody tr:nth-child(even) {
+    background: rgba(180, 83, 9, 0.10);
+}
+
+html[data-theme="dark"] :is(.bms-config-table, .bms-compare-table) tbody tr:hover {
+    background: rgba(180, 83, 9, 0.18);
+}
+
+html[data-theme="dark"] .bms-config-name {
+    color: #f59e0b;
+}
