@@ -138,6 +138,9 @@ import {
 
             // Who We Are
             if (page.aboutTitle) setText(document, '#cp-about-title', page.aboutTitle);
+            // Eyebrow above the heading: shown only when Strapi has aboutLabel.
+            var aboutLabelEl = document.getElementById('cp-about-label');
+            if (aboutLabelEl && page.aboutLabel) { aboutLabelEl.textContent = page.aboutLabel; aboutLabelEl.style.display = ''; }
             if (page.aboutDesc) setHTML(document, '#cp-about-desc', page.aboutDesc);
             if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
                 var aboutImg = document.querySelector('#cp-about-img');

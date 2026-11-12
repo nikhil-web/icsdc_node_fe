@@ -25,7 +25,7 @@ import {
 
     /**
      * Render the cPanel features as a tabbed panel.
-     * cpanelFeaturesList: [{ category, subtitle, items[] }, ...]
+     * cpanelFeaturesList: ds.feature-group[] — [{ category, subtitle, items: [{ label }] }, ...]
      * Falls back to a single "All" tab for flat string arrays.
      * cta: cpanelFeaturesCta ({ text, link }) — the card's button; shown only
      * when both are set. With a single group the tab row is hidden, since its
@@ -43,9 +43,12 @@ import {
 
         function renderCard(group) {
             var items = (group.items || []).map(function (item) {
+                // Strapi ds.plan-feature gives { label }; plain strings still work.
+                var text = (item && typeof item === 'object') ? item.label : item;
+                if (!text) return '';
                 return '<div class="vpc-sw-item">' +
                     '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>' +
-                    '<span>' + item + '</span>' +
+                    '<span>' + text + '</span>' +
                     '</div>';
             }).join('');
             return '<div class="vpc-sw-card">' +
@@ -155,6 +158,9 @@ import {
 
             // ── About / Who We Are ─────────────────────────────────
             if (page.aboutTitle) setText(document, '#vpc-about-title', page.aboutTitle);
+            // Eyebrow above the heading: shown only when Strapi has aboutLabel.
+            var aboutLabelEl = document.getElementById('vpc-about-label');
+            if (aboutLabelEl && page.aboutLabel) { aboutLabelEl.textContent = page.aboutLabel; aboutLabelEl.style.display = ''; }
             if (page.aboutDesc) setHTML(document, '#vpc-about-desc', '<p>' + page.aboutDesc + '</p>');
             if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
                 var aboutImg = document.querySelector('#vpc-about-img');

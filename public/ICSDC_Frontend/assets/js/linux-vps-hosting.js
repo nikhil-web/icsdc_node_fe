@@ -155,6 +155,9 @@ import {
 
             // Who We Are
             if (page.aboutTitle) setText(document, '#lvps-about-title', page.aboutTitle);
+            // Eyebrow above the heading: shown only when Strapi has aboutLabel.
+            var aboutLabelEl = document.getElementById('lvps-about-label');
+            if (aboutLabelEl && page.aboutLabel) { aboutLabelEl.textContent = page.aboutLabel; aboutLabelEl.style.display = ''; }
             if (page.aboutDesc) setHTML(document, '#lvps-about-desc', '<p>' + page.aboutDesc + '</p>');
             if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
                 var aboutImg = document.querySelector('#lvps-about-img');

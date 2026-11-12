@@ -136,6 +136,9 @@ import {
 
             // What Is ICSDC Reseller Hosting
             if (page.aboutTitle) setText(document, '#rh-about-title', page.aboutTitle);
+            // Eyebrow above the heading: shown only when Strapi has aboutLabel.
+            var aboutLabelEl = document.getElementById('rh-about-label');
+            if (aboutLabelEl && page.aboutLabel) { aboutLabelEl.textContent = page.aboutLabel; aboutLabelEl.style.display = ''; }
             if (page.aboutDesc) setHTML(document, '#rh-about-desc', page.aboutDesc);
             if (page.aboutImage && page.aboutImage.image && page.aboutImage.image.url) {
                 var aboutImg = document.querySelector('#rh-about-img');
