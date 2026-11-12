@@ -1049,6 +1049,8 @@ export function getBareMetalServerPage() {
         "&populate[strategicCards][populate]=*" +
         "&populate[serverConfigs][populate]=*" +
         "&populate[managedFeatures][populate]=*" +
+        "&populate[compareCtaPrimary]=*" +
+        "&populate[compareCtaSecondary]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[whyCards][populate]=*" +

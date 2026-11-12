@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getBareMetalServerPage } from './services/contentService.js';
-import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader, wireCtaLink } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -137,6 +137,25 @@ import {
             // Managed vs Self comparison
             if (page.compareTitle) setText(document, '#bms-compare-title', page.compareTitle);
             populateCompareTable(page.managedFeatures);
+            // Buttons under the comparison table — each shown only when Strapi has text + link.
+            var compareBtns = [['bms-compare-cta1', page.compareCtaPrimary], ['bms-compare-cta2', page.compareCtaSecondary]];
+            var compareShown = 0;
+            compareBtns.forEach(function (pair) {
+                var btn = document.getElementById(pair[0]);
+                var cta = pair[1];
+                if (!btn) return;
+                if (cta && cta.text && cta.link) {
+                    btn.textContent = cta.text;
+                    var isPopup = cta.link === 'contact-popup' || cta.link === '#contact-popup';
+                    btn.setAttribute('href', isPopup ? '#' : cta.link);
+                    if (isPopup) wireCtaLink(btn, cta.link);
+                    compareShown++;
+                } else {
+                    btn.style.display = 'none';
+                }
+            });
+            var compareWrap = document.getElementById('bms-compare-ctas');
+            if (compareWrap && !compareShown) compareWrap.style.display = 'none';
 
             // CTA Band 1
             populateCtaBand('#bms-cta-band1', page.ctaBand1);
