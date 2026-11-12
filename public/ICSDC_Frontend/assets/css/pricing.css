@@ -992,11 +992,11 @@ html[data-theme="dark"] .pr-sidebar {
 }
 
 html[data-theme="dark"] .pr-sidebar-label {
-  color: #475569;
+  color: #94a3b8;
 }
 
 html[data-theme="dark"] .pr-sidebar-link {
-  color: #64748b;
+  color: #94a3b8;
 }
 
 html[data-theme="dark"] .pr-sidebar-link:hover {
@@ -1035,11 +1035,11 @@ html[data-theme="dark"] .pr-billing-row {
 }
 
 html[data-theme="dark"] .pr-billing-label {
-  color: #475569;
+  color: #94a3b8;
 }
 
 html[data-theme="dark"] .pr-bill-opt {
-  color: #475569;
+  color: #94a3b8;
 }
 
 html[data-theme="dark"] .pr-bill-opt.is-active {
@@ -1328,8 +1328,9 @@ html[data-theme="dark"] .pr-sc-btn:hover {
 }
 
 html[data-theme="dark"] .pr-sc-btn-featured {
-  background: #4f82e8;
-  border-color: #4f82e8;
+  /* #4f82e8 behind white text was 3.7:1 */
+  background: #1a56db;
+  border-color: #1a56db;
   color: #fff;
 }
 
