@@ -1512,3 +1512,40 @@ html[data-theme="dark"] .hero-price {
 html[data-theme="dark"] .dom-tld-card {
     background: var(--white);
 }
+
+/* ══════════════════════════════════════════════════════
+   TABLE HEADER CONTRAST (2026-11-12)
+   Header rows that kept a light-mode background while the text turned dark
+   (var(--white) is #1e293b here) or light (the generic compare-table th rule).
+══════════════════════════════════════════════════════ */
+/* Blue header rows: Dedicated Server + Web Hosting "Others" had navy text;
+   Web Hosting "Typical Providers" + Windows Dedicated had light grey (3.7–4.2:1). */
+html[data-theme="dark"] .ds-comparison-table th,
+html[data-theme="dark"] .webh-compare-table thead th,
+html[data-theme="dark"] .webh-compare2-table thead th,
+html[data-theme="dark"] .wds-compare-table thead th {
+    color: #ffffff;
+}
+
+/* Managed Dedicated: light text on #d97706 was 2.6:1 — darker amber, white text. */
+html[data-theme="dark"] .mds-compare-table thead tr {
+    background: #b45309;
+}
+
+html[data-theme="dark"] .mds-compare-table th {
+    color: #ffffff;
+}
+
+/* Virtual Machine: header row stayed light blue (#dbeafe) behind light text. */
+html[data-theme="dark"] .vm-compare-table thead tr {
+    background: rgba(26, 86, 219, 0.18);
+}
+
+/* Pricing spec table: muted slate headers were 2.4:1 on the dark card. */
+html[data-theme="dark"] table.pr-spec-table th.pr-sc-th {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] table.pr-spec-table th.pr-sc-th-price {
+    color: var(--blue-text, #6894ee);
+}
