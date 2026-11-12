@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getForexVpsPage } from './services/contentService.js';
-import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader, applyCtaLink } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -26,7 +26,15 @@ import {
      * Adapt forex-vps plan fields (vcpu/ram/storage/bandwidth/isPopular)
      * into the standard ds-plan-card format used by populatePricingPlans().
      */
-    function normalisePlans(plans) {
+    /* Section subtext from Strapi; hidden when the field is empty. */
+    function setSubtitle(selector, value) {
+        var el = document.querySelector(selector);
+        if (!el) return;
+        if (value) { el.innerHTML = inlineRichText(value); el.style.display = ''; }
+        else el.style.display = 'none';
+    }
+
+    function normalisePlans(plans, badgeText, periodText) {
         if (!plans || !plans.length) return [];
         return plans.map(function (plan) {
             // Strip currency symbol so ds-plan-currency renders it separately
@@ -43,12 +51,12 @@ import {
                 tier:       plan.name  || '',
                 currency:   '₹',
                 price:      rawPrice,
-                period:     '/mo',
+                period:     periodText || '',
                 tagline:    plan.priceNote || null,
                 isFeatured: !!plan.isPopular,
-                badge:      plan.isPopular ? 'Most Popular' : null,
-                ctaText:    plan.ctaText || 'Get Started',
-                ctaLink:    plan.ctaLink || '',   // shared renderer defaults empty → contact popup
+                badge:      plan.isPopular ? (badgeText || null) : null,
+                ctaText:    plan.ctaText || '',
+                ctaLink:    plan.ctaLink || '',
                 ctaStyle:   plan.isPopular ? 'primary' : 'outline',
                 features:   features
             };
@@ -106,7 +114,21 @@ import {
                 var plansSub = document.getElementById('fvps-plans-subtitle');
                 if (plansSub) plansSub.textContent = page.plansSubtitle;
             }
-            populatePricingPlans('#fvps-plans .ds-plan-grid', normalisePlans(page.plans));
+            var forexPlans = normalisePlans(page.plans, page.plansBadge, page.plansPeriod);
+            populatePricingPlans('#fvps-plans .ds-plan-grid', forexPlans);
+            // Plan buttons: no text → hidden; text but no link → plain button
+            // (the shared renderer would otherwise default to the contact popup).
+            var sortedPlans = forexPlans.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+            document.querySelectorAll('#fvps-plans .ds-plan-cta').forEach(function (btn, i) {
+                var plan = sortedPlans[i];
+                if (!plan || !plan.ctaText) { btn.style.display = 'none'; return; }
+                applyCtaLink(btn, plan.ctaLink);
+            });
+            // Price period ("/mo"): from Strapi plansPeriod; the shared renderer
+            // would print "/mo" when it's empty, so hide it instead.
+            if (!page.plansPeriod) {
+                document.querySelectorAll('#fvps-plans .ds-plan-period').forEach(function (el) { el.style.display = 'none'; });
+            }
 
             // Features section (9 cards)
             populateSectionHeader('#fvps-features', page.featuresLabel, page.featuresTitle, page.featuresSubtitle);
@@ -145,6 +167,17 @@ import {
             }
 
             // Trading Apps
+            setSubtitle('#fvps-apps .subtitle', page.tradingAppsSubtitle);
+            setSubtitle('#fvps-usecases .subtitle', page.useCasesSubtitle);
+            setSubtitle('#fvps-who .subtitle', page.whoSubtitle);
+
+            // Hero eyebrow pill: from Strapi, hidden when empty.
+            var fvpsEyebrow = document.querySelector('.fvps-eyebrow');
+            if (fvpsEyebrow) {
+                if (page.heroEyebrow) { fvpsEyebrow.textContent = page.heroEyebrow; fvpsEyebrow.style.display = ''; }
+                else fvpsEyebrow.style.display = 'none';
+            }
+
             if (page.tradingAppsTitle) {
                 var appsTitle = document.getElementById('fvps-apps-title');
                 if (appsTitle) appsTitle.textContent = page.tradingAppsTitle;
