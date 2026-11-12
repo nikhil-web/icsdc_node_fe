@@ -104,6 +104,9 @@ import { getWindowsVpsHostingPage } from './services/contentService.js';
 
             // Who We Are
             if (page.aboutTitle) setText(document, '#wvps-about-title', page.aboutTitle);
+            // Eyebrow above the heading: shown only when Strapi has aboutLabel.
+            var aboutLabelEl = document.getElementById('wvps-about-label');
+            if (aboutLabelEl && page.aboutLabel) { aboutLabelEl.textContent = page.aboutLabel; aboutLabelEl.style.display = ''; }
             if (page.aboutDesc) setHTML(document, '#wvps-about-desc', '<p>' + page.aboutDesc + '</p>');
 
             // Why Businesses Choose ICSDC — sub-section inside Who We Are
