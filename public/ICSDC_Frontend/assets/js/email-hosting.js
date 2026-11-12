@@ -16,7 +16,7 @@ import {
     initTestimonials,
     initFAQ,
     setText,
-    populatePillarsHeader
+    populatePillarsHeader, applyCtaLink
 } from './utils/cms-helpers.js';
 import { getEmailHostingPage } from './services/contentService.js';
 import { inlineRichText } from './utils/cms-helpers.js';
@@ -111,8 +111,12 @@ import { uploadURL } from './services/strapiClient.js';
         if (page.aboutCta) {
             var aboutCta = document.getElementById('eh-about-cta');
             if (aboutCta) {
-                if (page.aboutCta.text) aboutCta.innerHTML = page.aboutCta.text + ' ';
-                if (page.aboutCta.link) aboutCta.href = page.aboutCta.link;
+                if (page.aboutCta.text) {
+                    aboutCta.innerHTML = page.aboutCta.text + ' ';
+                    applyCtaLink(aboutCta, page.aboutCta.link);
+                } else {
+                    aboutCta.style.display = 'none';
+                }
             }
         }
         setImage('eh-about-img', page.aboutImage);

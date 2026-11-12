@@ -1,4 +1,4 @@
-import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader, applyCtaLink } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -38,7 +38,7 @@ import { uploadURL } from './services/strapiClient.js';
             if (!btn) return;
             if (pair[1] && pair[1].text) {
                 btn.innerHTML = pair[1].text + ' ';
-                wireCtaLink(btn, pair[1].link);
+                applyCtaLink(btn, pair[1].link);
             } else {
                 btn.remove();
             }
@@ -211,7 +211,7 @@ import { uploadURL } from './services/strapiClient.js';
                 if (primaryBtn) {
                     if (page.heroCtaPrimary && page.heroCtaPrimary.text) {
                         primaryBtn.textContent = page.heroCtaPrimary.text;
-                        if (page.heroCtaPrimary.link) primaryBtn.setAttribute('href', page.heroCtaPrimary.link);
+                        applyCtaLink(primaryBtn, page.heroCtaPrimary.link);
                         primaryBtn.style.display = '';
                     } else {
                         primaryBtn.style.display = 'none';
@@ -222,9 +222,7 @@ import { uploadURL } from './services/strapiClient.js';
                 if (secondaryBtn) {
                     if (page.heroCtaSecondary && page.heroCtaSecondary.text) {
                         secondaryBtn.textContent = page.heroCtaSecondary.text;
-                        if (page.heroCtaSecondary.link) {
-                            wireCtaLink(secondaryBtn, page.heroCtaSecondary.link);
-                        }
+                        applyCtaLink(secondaryBtn, page.heroCtaSecondary.link);
                         secondaryBtn.style.display = '';
                     } else {
                         secondaryBtn.style.display = 'none';
@@ -279,9 +277,13 @@ import { uploadURL } from './services/strapiClient.js';
                 var qDesc = document.getElementById('azure-quote-cta-desc');
                 if (qDesc && qb.description) { qDesc.innerHTML = inlineRichText(qb.description); qDesc.hidden = false; }
                 var qBtn = document.getElementById('azure-quote-cta-btn');
-                if (qBtn && qb.ctaPrimary) {
-                    if (qb.ctaPrimary.text) qBtn.innerHTML = qb.ctaPrimary.text + ' ';
-                    wireCtaLink(qBtn, qb.ctaPrimary.link);
+                if (qBtn) {
+                    if (qb.ctaPrimary && qb.ctaPrimary.text) {
+                        qBtn.innerHTML = qb.ctaPrimary.text + ' ';
+                        applyCtaLink(qBtn, qb.ctaPrimary.link);
+                    } else {
+                        qBtn.style.display = 'none';
+                    }
                 }
             }
 

@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getVirtualMachinePage } from './services/contentService.js';
-import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader, applyCtaLink } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -166,8 +166,12 @@ import { uploadURL } from './services/strapiClient.js';
             if (page.blockStorageCta) {
                 var bsCta = document.querySelector('.vm-bs-cta');
                 if (bsCta) {
-                    if (page.blockStorageCta.text) bsCta.innerHTML = page.blockStorageCta.text + ' ';
-                    if (page.blockStorageCta.link) bsCta.href = page.blockStorageCta.link;
+                    if (page.blockStorageCta.text) {
+                        bsCta.innerHTML = page.blockStorageCta.text + ' ';
+                        applyCtaLink(bsCta, page.blockStorageCta.link);
+                    } else {
+                        bsCta.style.display = 'none';
+                    }
                 }
             }
             if (page.blockStorageImage && page.blockStorageImage.image) {
