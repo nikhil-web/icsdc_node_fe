@@ -1230,6 +1230,7 @@ export function getVpsCpanelPage() {
         "/api/vps-cpanel-page?" +
         "populate[seo]=*" +
         "&populate[cpanelFeaturesCta]=*" +
+        "&populate[cpanelFeaturesList][populate]=*" +
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[heroImage][populate][image]=true" +

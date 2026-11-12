@@ -25,7 +25,7 @@ import {
 
     /**
      * Render the cPanel features as a tabbed panel.
-     * cpanelFeaturesList: [{ category, subtitle, items[] }, ...]
+     * cpanelFeaturesList: ds.feature-group[] — [{ category, subtitle, items: [{ label }] }, ...]
      * Falls back to a single "All" tab for flat string arrays.
      * cta: cpanelFeaturesCta ({ text, link }) — the card's button; shown only
      * when both are set. With a single group the tab row is hidden, since its
@@ -43,9 +43,12 @@ import {
 
         function renderCard(group) {
             var items = (group.items || []).map(function (item) {
+                // Strapi ds.plan-feature gives { label }; plain strings still work.
+                var text = (item && typeof item === 'object') ? item.label : item;
+                if (!text) return '';
                 return '<div class="vpc-sw-item">' +
                     '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>' +
-                    '<span>' + item + '</span>' +
+                    '<span>' + text + '</span>' +
                     '</div>';
             }).join('');
             return '<div class="vpc-sw-card">' +
