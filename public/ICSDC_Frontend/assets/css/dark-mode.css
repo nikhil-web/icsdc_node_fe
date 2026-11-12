@@ -1456,6 +1456,17 @@ html[data-theme="dark"] .bms-compare-table tbody tr.bms-both-row td:first-child 
     color: #f59e0b;
 }
 
+/* Bare Metal comparison header: the row stayed cream (#fef3c7) while the generic
+   dark compare-table rule turned the th text light, so the headings vanished. */
+html[data-theme="dark"] .bms-compare-table thead tr {
+    background: rgba(245, 158, 11, 0.18);
+}
+
+html[data-theme="dark"] .bms-compare-table th {
+    color: #fbbf24;
+    border-bottom-color: rgba(245, 158, 11, 0.30);
+}
+
 /* ══════════════════════════════════════════════════════
    PLAN CARD TEXT CONTRAST (2026-10-14)
    Plan names and prices are brand blue (#1a56db, 2.4:1 on a dark card);
