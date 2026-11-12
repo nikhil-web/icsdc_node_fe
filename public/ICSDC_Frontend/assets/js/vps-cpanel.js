@@ -27,8 +27,11 @@ import {
      * Render the cPanel features as a tabbed panel.
      * cpanelFeaturesList: [{ category, subtitle, items[] }, ...]
      * Falls back to a single "All" tab for flat string arrays.
+     * cta: cpanelFeaturesCta ({ text, link }) — the card's button; shown only
+     * when both are set. With a single group the tab row is hidden, since its
+     * one tab would just repeat the card title.
      */
-    function populateSoftwareTabs(data) {
+    function populateSoftwareTabs(data, cta) {
         if (!data || !data.length) return;
         var nav = document.getElementById('vpc-software-tab-nav');
         var content = document.getElementById('vpc-software-tab-content');
@@ -49,9 +52,9 @@ import {
                 '<div class="vpc-sw-card-title">' + (group.category || '') + '</div>' +
                 (group.subtitle ? '<div class="vpc-sw-card-sub">' + group.subtitle + '</div>' : '') +
                 '<div class="vpc-sw-items">' + items + '</div>' +
-                '<div class="vpc-sw-cta">' +
-                '<a href="/contact-us.html" class="vpc-sw-cta-btn">Get Started </a>' +
-                '</div>' +
+                ((cta && cta.text && cta.link)
+                    ? '<div class="vpc-sw-cta"><a href="' + cta.link + '" class="vpc-sw-cta-btn">' + cta.text + ' </a></div>'
+                    : '') +
                 '</div>';
         }
 
@@ -61,6 +64,8 @@ import {
         }).join('');
 
         content.innerHTML = renderCard(groups[0]);
+        // .vpc-software-tab-nav sets display:flex, which would override [hidden].
+        nav.style.display = groups.length < 2 ? 'none' : '';
 
         nav.addEventListener('click', function (e) {
             var btn = e.target.closest('.vpc-sw-tab-btn');
@@ -165,7 +170,7 @@ import {
             // ── Complex Software Features List ─────────────────────
             if (page.cpanelFeaturesTitle) setText(document, '#vpc-cpanel-features-title', page.cpanelFeaturesTitle);
             if (page.cpanelFeaturesDesc) setText(document, '#vpc-cpanel-features-desc', page.cpanelFeaturesDesc);
-            populateSoftwareTabs(page.cpanelFeaturesList);
+            populateSoftwareTabs(page.cpanelFeaturesList, page.cpanelFeaturesCta);
 
             // ── Why Choose ICSDC (8 cards) ─────────────────────────
             if (page.whyLabel) setText(document, '#vpc-why-label', page.whyLabel);
