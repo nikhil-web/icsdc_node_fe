@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════
 
 import { getManagedCloudHostingPage } from './services/contentService.js';
-import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader, applyCtaLink } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -117,14 +117,18 @@ import {
 
         var cta1 = document.getElementById('mch-migration-cta1');
         if (cta1 && b.ctaPrimary) {
-            if (b.ctaPrimary.text) cta1.innerHTML = b.ctaPrimary.text + ' ';
-            if (b.ctaPrimary.link) cta1.setAttribute('href', b.ctaPrimary.link);
+            if (b.ctaPrimary.text) {
+                cta1.innerHTML = b.ctaPrimary.text + ' ';
+                applyCtaLink(cta1, b.ctaPrimary.link);
+            } else {
+                cta1.style.display = 'none';
+            }
         }
         var cta2 = document.getElementById('mch-migration-cta2');
         if (cta2) {
             if (b.ctaSecondary && b.ctaSecondary.text) {
                 cta2.textContent = b.ctaSecondary.text;
-                if (b.ctaSecondary.link) cta2.setAttribute('href', b.ctaSecondary.link);
+                applyCtaLink(cta2, b.ctaSecondary.link);
             } else {
                 cta2.style.display = 'none';
             }

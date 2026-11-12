@@ -1,5 +1,5 @@
 import { getZimbraHostingPage } from './services/contentService.js';
-import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader, applyCtaLink } from './utils/cms-helpers.js';
 import { uploadURL } from './services/strapiClient.js';
 import {
     populateSEO,
@@ -115,13 +115,16 @@ import {
     }
 
     function populateCompareButtons(primary, secondary) {
-        if (primary && primary.text) {
-            var p = document.querySelector('#zim-compare-btns .zim-compare-btn-primary');
-            if (p) { p.textContent = primary.text; if (primary.link) p.setAttribute('href', primary.link); }
+        // Shown when Strapi has text (no text = hidden); no link = plain button.
+        var p = document.querySelector('#zim-compare-btns .zim-compare-btn-primary');
+        if (p) {
+            if (primary && primary.text) { p.textContent = primary.text; applyCtaLink(p, primary.link); }
+            else p.style.display = 'none';
         }
-        if (secondary && secondary.text) {
-            var s = document.querySelector('#zim-compare-btns .zim-compare-btn-outline');
-            if (s) { s.textContent = secondary.text; if (secondary.link) s.setAttribute('href', secondary.link); }
+        var s = document.querySelector('#zim-compare-btns .zim-compare-btn-outline');
+        if (s) {
+            if (secondary && secondary.text) { s.textContent = secondary.text; applyCtaLink(s, secondary.link); }
+            else s.style.display = 'none';
         }
     }
 

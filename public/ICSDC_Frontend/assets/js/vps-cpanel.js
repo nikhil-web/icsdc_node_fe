@@ -55,8 +55,9 @@ import {
                 '<div class="vpc-sw-card-title">' + (group.category || '') + '</div>' +
                 (group.subtitle ? '<div class="vpc-sw-card-sub">' + group.subtitle + '</div>' : '') +
                 '<div class="vpc-sw-items">' + items + '</div>' +
-                ((cta && cta.text && cta.link)
-                    ? '<div class="vpc-sw-cta"><a href="' + cta.link + '" class="vpc-sw-cta-btn">' + cta.text + ' </a></div>'
+                ((cta && cta.text)
+                    // No link in Strapi → plain button, no destination.
+                    ? '<div class="vpc-sw-cta"><a' + (cta.link ? ' href="' + cta.link + '"' : '') + ' class="vpc-sw-cta-btn' + (cta.link ? '' : ' cta-no-link') + '">' + cta.text + ' </a></div>'
                     : '') +
                 '</div>';
         }

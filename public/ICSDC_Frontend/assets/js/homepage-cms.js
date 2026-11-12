@@ -293,8 +293,9 @@ import { pinPosition, placeName, buildMapPin, escapeHtml, wireMapInteractions } 
     // ═══════════════════════════════════════════════════════════
     function ctaAnchor(cta, cls) {
         if (!cta || !cta.text) return '';
-        const link = cta.link || '#';
-        return `<a href="${link}" class="${cls}">${cta.text} ` +
+        // No link in Strapi → a plain button with no destination (no '#' fallback).
+        const href = cta.link ? ` href="${cta.link}"` : '';
+        return `<a${href} class="${cls}${cta.link ? '' : ' cta-no-link'}">${cta.text} ` +
             `<i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>`;
     }
 
@@ -360,7 +361,7 @@ import { pinPosition, placeName, buildMapPin, escapeHtml, wireMapInteractions } 
                 </div>`).join('');
 
             const ctaText = d.cta && d.cta.text ? d.cta.text : '';
-            const ctaLink = d.cta && d.cta.link ? d.cta.link : '#';
+            const ctaHref = d.cta && d.cta.link ? ` href="${d.cta.link}"` : '';
 
             panel.innerHTML = `
                 <div class="hp-industry-card-head">
@@ -371,7 +372,7 @@ import { pinPosition, placeName, buildMapPin, escapeHtml, wireMapInteractions } 
                 <div class="hp-industry-features">${features}</div>
                 <div class="hp-industry-card-foot">
                     <span class="hp-industry-usedby"><strong>Used by:</strong> ${d.usedBy || ''}</span>
-                    ${ctaText ? `<a href="${ctaLink}" class="hp-industry-cta">${ctaText} <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>` : ''}
+                    ${ctaText ? `<a${ctaHref} class="hp-industry-cta${ctaHref ? '' : ' cta-no-link'}">${ctaText} <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>` : ''}
                 </div>`;
         }
 

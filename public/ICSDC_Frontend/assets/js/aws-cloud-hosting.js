@@ -1,5 +1,5 @@
 import { getAwsCloudHostingPage } from './services/contentService.js';
-import { inlineRichText, populatePillarsHeader } from './utils/cms-helpers.js';
+import { inlineRichText, populatePillarsHeader, applyCtaLink } from './utils/cms-helpers.js';
 
 import {
     populateSEO,
@@ -147,8 +147,12 @@ import {
             if (page.aboutDescription) setText(document, '#aws-about-desc', page.aboutDescription);
             var aboutCta = document.getElementById('aws-about-cta');
             if (aboutCta && page.aboutLink) {
-                if (page.aboutLink.text) aboutCta.innerHTML = page.aboutLink.text + ' ';
-                if (page.aboutLink.link) aboutCta.setAttribute('href', page.aboutLink.link);
+                if (page.aboutLink.text) {
+                    aboutCta.innerHTML = page.aboutLink.text + ' ';
+                    applyCtaLink(aboutCta, page.aboutLink.link);
+                } else {
+                    aboutCta.style.display = 'none';
+                }
             }
             if (page.aboutItems && page.aboutItems.length) {
                 var aboutGrid = document.getElementById('aws-about-items');

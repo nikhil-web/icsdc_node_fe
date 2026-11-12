@@ -25,6 +25,36 @@ export function wireCtaLink(btn, link) {
     }
 }
 
+/**
+ * Point a CMS button at its link. With a link it behaves as usual (a page,
+ * #anchor, full URL, or 'contact-popup'). With NO link the button stays visible
+ * as a plain, non-linking button: the HTML's fallback href (often
+ * /contact-us.html) and any onclick are removed, so it never falls back to a
+ * default destination. Whether to show the button at all is the caller's call
+ * (by convention: only when the CMS has its text).
+ */
+export function applyCtaLink(btn, link) {
+    if (!btn) return;
+    link = (link || '').trim();
+    if (link) {
+        var isPopup = link === 'contact-popup' || link === '#contact-popup';
+        btn.classList.remove('cta-no-link');
+        if (btn.tagName === 'A' && !isPopup) {
+            // A real link: plain href, no click handler needed.
+            btn.setAttribute('href', link);
+            btn.removeAttribute('onclick');
+        } else {
+            if (btn.tagName === 'A') btn.setAttribute('href', '#');
+            wireCtaLink(btn, link);
+        }
+    } else {
+        btn.removeAttribute('href');
+        btn.removeAttribute('onclick');
+        btn.removeAttribute('target');
+        btn.classList.add('cta-no-link');
+    }
+}
+
 /* ═══════════════════════════════════════════════════════════════
    FA ICONS MAP  (key → fa icon name, all fa-solid)
    ═══════════════════════════════════════════════════════════════ */
@@ -428,7 +458,7 @@ export function populateHero(section, data) {
         var primaryBtn = btns[0];
         if (data.ctaPrimary && data.ctaPrimary.text) {
             primaryBtn.innerHTML = (data.ctaPrimary.text || '') + ' ';
-            wireCtaLink(primaryBtn, data.ctaPrimary.link);
+            applyCtaLink(primaryBtn, data.ctaPrimary.link);
         } else if (ctaPrimaryProvided) {
             primaryBtn.style.display = 'none';
         }
@@ -437,7 +467,7 @@ export function populateHero(section, data) {
         var secondaryBtn = btns[1];
         if (data.ctaSecondary && data.ctaSecondary.text) {
             secondaryBtn.textContent = data.ctaSecondary.text || '';
-            wireCtaLink(secondaryBtn, data.ctaSecondary.link);
+            applyCtaLink(secondaryBtn, data.ctaSecondary.link);
         } else if (ctaSecondaryProvided) {
             secondaryBtn.style.display = 'none';
         }
@@ -591,7 +621,7 @@ export function populateCtaBand(selector, cta) {
         if (primaryBtn) {
             if (cta.ctaPrimary && cta.ctaPrimary.text) {
                 primaryBtn.innerHTML = cta.ctaPrimary.text + ' ';
-                wireCtaLink(primaryBtn, cta.ctaPrimary.link);
+                applyCtaLink(primaryBtn, cta.ctaPrimary.link);
             } else {
                 primaryBtn.remove();
             }
@@ -599,7 +629,7 @@ export function populateCtaBand(selector, cta) {
         if (secondaryBtn) {
             if (cta.ctaSecondary && cta.ctaSecondary.text) {
                 secondaryBtn.textContent = cta.ctaSecondary.text;
-                wireCtaLink(secondaryBtn, cta.ctaSecondary.link);
+                applyCtaLink(secondaryBtn, cta.ctaSecondary.link);
             } else {
                 secondaryBtn.remove();
             }

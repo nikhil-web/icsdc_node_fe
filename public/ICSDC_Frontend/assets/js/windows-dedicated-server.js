@@ -1,4 +1,4 @@
-import { populateSEO, populateHero, populateIconCards, populateSectionHeader, populateCtaBand, populateComparisonTable, populatePricingPlansCloud, wireCtaLink, hidePageLoader, markActiveNavLink, setText, setHTML, initTestimonials, initFAQ, populatePillarsHeader } from './utils/cms-helpers.js';
+import { populateSEO, populateHero, populateIconCards, populateSectionHeader, populateCtaBand, populateComparisonTable, populatePricingPlansCloud, wireCtaLink, hidePageLoader, markActiveNavLink, setText, setHTML, initTestimonials, initFAQ, populatePillarsHeader, applyCtaLink } from './utils/cms-helpers.js';
 import { getWindowsDedicatedServerPage } from './services/contentService.js';
 
 // Comparison-table CTAs. These are <button>s, so the destination must go through
@@ -14,9 +14,10 @@ function populateCompareButtons(primary, secondary) {
     pairs.forEach(function (pair) {
         var cta = pair[0];
         var btn = document.querySelector(pair[1]);
-        if (!btn || !cta || !cta.text) return;
+        if (!btn) return;
+        if (!cta || !cta.text) { btn.style.display = 'none'; return; }
         btn.textContent = cta.text;
-        wireCtaLink(btn, cta.link);
+        applyCtaLink(btn, cta.link);
     });
 }
 

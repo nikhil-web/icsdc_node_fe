@@ -23,7 +23,7 @@
  *   16. CTA Band #2 (final CTA)
  */
 
-import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader, applyCtaLink } from './utils/cms-helpers.js';
 import {
     populateSEO,
     populateHero,
@@ -312,7 +312,7 @@ import { inlineRichText } from './utils/cms-helpers.js';
                 if (primaryBtn) {
                     if (page.globalCtaPrimary && page.globalCtaPrimary.text) {
                         primaryBtn.innerHTML = page.globalCtaPrimary.text || '';
-                        wireCtaLink(primaryBtn, page.globalCtaPrimary.link);
+                        applyCtaLink(primaryBtn, page.globalCtaPrimary.link);
                     } else if (primaryProvided) {
                         primaryBtn.style.display = 'none';
                     }
@@ -320,7 +320,7 @@ import { inlineRichText } from './utils/cms-helpers.js';
                 if (outlineBtn) {
                     if (page.globalCtaSecondary && page.globalCtaSecondary.text) {
                         outlineBtn.textContent = page.globalCtaSecondary.text || '';
-                        wireCtaLink(outlineBtn, page.globalCtaSecondary.link);
+                        applyCtaLink(outlineBtn, page.globalCtaSecondary.link);
                     } else if (secondaryProvided) {
                         outlineBtn.style.display = 'none';
                     }

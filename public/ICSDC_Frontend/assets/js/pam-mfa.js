@@ -3,7 +3,7 @@
 //  Fetches CMS data from Strapi and populates all sections.
 // ══════════════════════════════════════════════════════════
 
-import { wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
+import { wireCtaLink, populatePillarsHeader, applyCtaLink } from './utils/cms-helpers.js';
 import { getPamMfaPage } from './services/contentService.js';
 import { inlineRichText } from './utils/cms-helpers.js';
 import {
@@ -96,8 +96,12 @@ import {
             if (page.heroCtaPrimary) {
                 var primaryBtn = document.getElementById('pam-cta-primary');
                 if (primaryBtn) {
-                    primaryBtn.innerHTML = (page.heroCtaPrimary.text || '');
-                    wireCtaLink(primaryBtn, page.heroCtaPrimary.link);
+                    if (page.heroCtaPrimary.text) {
+                        primaryBtn.innerHTML = page.heroCtaPrimary.text;
+                        applyCtaLink(primaryBtn, page.heroCtaPrimary.link);
+                    } else {
+                        primaryBtn.style.display = 'none';
+                    }
                 }
             }
             if (page.heroCtaSecondary) {
@@ -106,7 +110,7 @@ import {
                     var secondaryBtn = document.getElementById('pam-cta-secondary');
                     if (secondaryBtn) {
                         secondaryBtn.textContent = page.heroCtaSecondary.text || '';
-                        wireCtaLink(secondaryBtn, page.heroCtaSecondary.link);
+                        applyCtaLink(secondaryBtn, page.heroCtaSecondary.link);
                     }
                 } else {
                     var secondaryBtn = document.getElementById('pam-cta-secondary');
