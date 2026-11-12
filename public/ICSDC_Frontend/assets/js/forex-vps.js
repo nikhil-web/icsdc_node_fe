@@ -109,7 +109,12 @@ import {
             populatePricingPlans('#fvps-plans .ds-plan-grid', normalisePlans(page.plans));
 
             // Features section (9 cards)
-            populateSectionHeader('#fvps-features', page.featuresLabel, page.featuresTitle, null);
+            populateSectionHeader('#fvps-features', page.featuresLabel, page.featuresTitle, page.featuresSubtitle);
+            // Subtext under the heading: hidden when the Strapi field is empty.
+            if (!page.featuresSubtitle) {
+                var featSub = document.querySelector('#fvps-features .subtitle');
+                if (featSub) featSub.style.display = 'none';
+            }
             populateIconCards('#fvps-features-grid', page.features, 'cloud-power-card');
 
             // Why Choose ICSDC
