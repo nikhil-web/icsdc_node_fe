@@ -1260,6 +1260,7 @@ export function getWebHostingPage() {
         "&populate[heroCtaPrimary]=*" +
         "&populate[heroCtaSecondary]=*" +
         "&populate[pillars][populate]=*" +
+        "&populate[plans][populate][features]=*" +
         "&populate[ctaBand1][populate][ctaPrimary]=*" +
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[featuresCards][populate]=*" +

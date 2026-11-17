@@ -11,6 +11,7 @@ import {
     populateIconCards,
     populateSectionHeader,
     populateCtaBand,
+    populatePricingPlansCloud,
     hidePageLoader,
     markActiveNavLink,
     setText,
@@ -46,7 +47,8 @@ import {
     /**
      * Render comparison table 2 rows from Strapi data (checkmark style).
      * compareRows2 is ds.icon-card[] where title = feature name,
-     * desc = "✔|✘" (pipe-separated checkmarks).
+     * desc = "✔" (anything after a "|" is ignored — the "Others"
+     * column was removed 2026-11-17).
      */
     function populateCompareTable2(rows) {
         if (!rows || !rows.length) return;
@@ -56,18 +58,13 @@ import {
         tbody.innerHTML = rows.map(function (row) {
             var parts = inlineRichText(row.desc || row.description || '').split('|');
             var icsdcVal = (parts[0] || '').trim();
-            var otherVal = (parts[1] || '').trim();
             // Render checkmark/cross based on content
             var icsdcCell = icsdcVal === '✔' || icsdcVal === '&#10004;'
                 ? '<span class="webh-yes">&#10004;</span>'
                 : icsdcVal;
-            var otherCell = otherVal === '✘' || otherVal === '&#10008;'
-                ? '<span class="webh-no">&#10008;</span>'
-                : otherVal;
             return '<tr>' +
                 '<td>' + (row.title || '') + '</td>' +
                 '<td class="webh-col-icsdc">' + icsdcCell + '</td>' +
-                '<td>' + otherCell + '</td>' +
                 '</tr>';
         }).join('');
     }
@@ -100,6 +97,8 @@ import {
             // Plans section
             if (page.plansTitle) setText(document, '#webh-plans-title', page.plansTitle);
             if (page.plansSubtitle) setText(document, '#webh-plans-subtitle', page.plansSubtitle);
+            // Plan cards (ds.pricing-plan). Button with no ctaLink opens the contact form.
+            populatePricingPlansCloud('#webh-plans .cloud-pricing-grid', page.plans);
 
             // CTA Band 1
             populateCtaBand('#webh-cta1', page.ctaBand1);
