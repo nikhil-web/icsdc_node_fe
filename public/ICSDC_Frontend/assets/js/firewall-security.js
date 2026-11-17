@@ -53,11 +53,21 @@ import {
             populateIconCards('.why-us .why-grid', page.pillars, 'why-card');
 
             // How ICSDC Strengthens Your Network (8 cards)
-            populateSectionHeader('#fw-features', page.strengthLabel, page.strengthTitle, null);
+            populateSectionHeader('#fw-features', page.strengthLabel, page.strengthTitle, page.strengthSubtitle);
+            // Subtext under the heading: hidden when the Strapi field is empty.
+            if (!page.strengthSubtitle) {
+                var strengthSub = document.querySelector('#fw-features .subtitle');
+                if (strengthSub) strengthSub.style.display = 'none';
+            }
             populateIconCards('#fw-features-grid', page.strengthCards, 'cloud-power-card');
 
             // Firewall Security That Adapts (8 cards)
-            populateSectionHeader('#fw-adapts', page.adaptsLabel, page.adaptsTitle, null);
+            populateSectionHeader('#fw-adapts', page.adaptsLabel, page.adaptsTitle, page.adaptsSubtitle);
+            // Subtext under the heading: hidden when the Strapi field is empty.
+            if (!page.adaptsSubtitle) {
+                var adaptsSub = document.querySelector('#fw-adapts .subtitle');
+                if (adaptsSub) adaptsSub.style.display = 'none';
+            }
             populateIconCards('#fw-adapts-grid', page.adaptsCards, 'cloud-power-card');
 
             // Threat Detection narrative
