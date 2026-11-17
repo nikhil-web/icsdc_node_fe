@@ -69,6 +69,11 @@ import {
         }).join('');
     }
 
+    function setHeaderCell(id, text) {
+        var cell = document.getElementById(id);
+        if (cell && text && text.trim()) cell.textContent = text.trim();
+    }
+
     async function init() {
         markActiveNavLink();
 
@@ -116,6 +121,10 @@ import {
             // Compare Table 1
             if (page.compareTitle) setText(document, '#webh-compare-title', page.compareTitle);
             populateCompareTable(page.compareRows);
+            // Column headers — an empty field keeps the default wording in the HTML.
+            setHeaderCell('webh-compare-head-feature', page.compareHeadFeature);
+            setHeaderCell('webh-compare-head-icsdc', page.compareHeadIcsdc);
+            setHeaderCell('webh-compare-head-others', page.compareHeadOthers);
 
             // Why Choose (6 cards)
             if (page.whyLabel) setText(document, '#webh-why-label', page.whyLabel);
@@ -134,6 +143,8 @@ import {
             // Compare Table 2 (checkmark style)
             if (page.compareTitle2) setText(document, '#webh-compare2-title', page.compareTitle2);
             populateCompareTable2(page.compareRows2);
+            setHeaderCell('webh-compare2-head-feature', page.compare2HeadFeature);
+            setHeaderCell('webh-compare2-head-icsdc', page.compare2HeadIcsdc);
 
             // PAM cross-sell
             if (page.pamPromoTitle) setText(document, '#webh-pam-title', page.pamPromoTitle);
