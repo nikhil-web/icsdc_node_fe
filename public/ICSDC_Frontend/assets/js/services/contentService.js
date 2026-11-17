@@ -1269,7 +1269,7 @@ export function getWebHostingPage() {
         "&populate[whyCards][populate]=*" +
         "&populate[succeedCards][populate]=*" +
         "&populate[helpCards][populate]=*" +
-        "&populate[compareRows2][populate]=*" +
+        "&populate[compareRows2]=true" +
         "&populate[pamPromoCta]=*" +
         "&populate[backupPromoCta]=*" +
         "&populate[heroImage][populate][image]=true" +
