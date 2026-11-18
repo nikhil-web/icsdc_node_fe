@@ -23,23 +23,23 @@ import {
     'use strict';
 
     /**
-     * Render comparison table 1 rows from Strapi data.
-     * compareRows is ds.icon-card[] where title = feature name,
-     * desc = "ICSDC value | Typical value" (pipe-separated).
+     * Render comparison table 1 from Strapi.
+     * compareRows is ds.text-compare-row[]: feature, icsdc, others —
+     * one plain text box per column. Rows without a feature are skipped.
      */
     function populateCompareTable(rows) {
         if (!rows || !rows.length) return;
         var tbody = document.getElementById('webh-compare-tbody');
         if (!tbody) return;
 
-        tbody.innerHTML = rows.map(function (row) {
-            var parts = inlineRichText(row.desc || row.description || '').split('|');
-            var icsdcVal = (parts[0] || '').trim();
-            var typicalVal = (parts[1] || '').trim();
+        tbody.innerHTML = rows.filter(function (row) {
+            return row && row.feature && row.feature.trim();
+        }).map(function (row) {
+            var icsdc = (row.icsdc || '').trim();
             return '<tr>' +
-                '<td>' + (row.title || '') + '</td>' +
-                '<td class="webh-col-icsdc"><span class="webh-check">&#10003;</span> ' + icsdcVal + '</td>' +
-                '<td>' + typicalVal + '</td>' +
+                '<td>' + row.feature + '</td>' +
+                '<td class="webh-col-icsdc">' + (icsdc ? '<span class="webh-check">&#10003;</span> ' + icsdc : '') + '</td>' +
+                '<td>' + (row.others || '').trim() + '</td>' +
                 '</tr>';
         }).join('');
     }
