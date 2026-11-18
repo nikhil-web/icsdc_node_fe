@@ -1265,11 +1265,11 @@ export function getWebHostingPage() {
         "&populate[ctaBand1][populate][ctaSecondary]=*" +
         "&populate[featuresCards][populate]=*" +
         "&populate[safetyCards][populate]=*" +
-        "&populate[compareRows][populate]=*" +
+        "&populate[compareRows]=true" +
         "&populate[whyCards][populate]=*" +
         "&populate[succeedCards][populate]=*" +
         "&populate[helpCards][populate]=*" +
-        "&populate[compareRows2][populate]=*" +
+        "&populate[compareRows2]=true" +
         "&populate[pamPromoCta]=*" +
         "&populate[backupPromoCta]=*" +
         "&populate[heroImage][populate][image]=true" +

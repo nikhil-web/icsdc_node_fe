@@ -23,48 +23,46 @@ import {
     'use strict';
 
     /**
-     * Render comparison table 1 rows from Strapi data.
-     * compareRows is ds.icon-card[] where title = feature name,
-     * desc = "ICSDC value | Typical value" (pipe-separated).
+     * Render comparison table 1 from Strapi.
+     * compareRows is ds.text-compare-row[]: feature, icsdc, others —
+     * one plain text box per column. Rows without a feature are skipped.
      */
     function populateCompareTable(rows) {
         if (!rows || !rows.length) return;
         var tbody = document.getElementById('webh-compare-tbody');
         if (!tbody) return;
 
-        tbody.innerHTML = rows.map(function (row) {
-            var parts = inlineRichText(row.desc || row.description || '').split('|');
-            var icsdcVal = (parts[0] || '').trim();
-            var typicalVal = (parts[1] || '').trim();
+        tbody.innerHTML = rows.filter(function (row) {
+            return row && row.feature && row.feature.trim();
+        }).map(function (row) {
+            var icsdc = (row.icsdc || '').trim();
             return '<tr>' +
-                '<td>' + (row.title || '') + '</td>' +
-                '<td class="webh-col-icsdc"><span class="webh-check">&#10003;</span> ' + icsdcVal + '</td>' +
-                '<td>' + typicalVal + '</td>' +
+                '<td>' + row.feature + '</td>' +
+                '<td class="webh-col-icsdc">' + (icsdc ? '<span class="webh-check">&#10003;</span> ' + icsdc : '') + '</td>' +
+                '<td>' + (row.others || '').trim() + '</td>' +
                 '</tr>';
         }).join('');
     }
 
     /**
-     * Render comparison table 2 rows from Strapi data (checkmark style).
-     * compareRows2 is ds.icon-card[] where title = feature name,
-     * desc = "✔" (anything after a "|" is ignored — the "Others"
-     * column was removed 2026-11-17).
+     * Render comparison table 2 ("What's included") from Strapi.
+     * compareRows2 is ds.check-row[]: feature = first-column text,
+     * included = true → tick, false → cross. Rows without text are skipped.
      */
     function populateCompareTable2(rows) {
         if (!rows || !rows.length) return;
         var tbody = document.getElementById('webh-compare2-tbody');
         if (!tbody) return;
 
-        tbody.innerHTML = rows.map(function (row) {
-            var parts = inlineRichText(row.desc || row.description || '').split('|');
-            var icsdcVal = (parts[0] || '').trim();
-            // Render checkmark/cross based on content
-            var icsdcCell = icsdcVal === '✔' || icsdcVal === '&#10004;'
-                ? '<span class="webh-yes">&#10004;</span>'
-                : icsdcVal;
+        tbody.innerHTML = rows.filter(function (row) {
+            return row && row.feature && row.feature.trim();
+        }).map(function (row) {
+            var cell = row.included === false
+                ? '<span class="webh-no">&#10008;</span>'
+                : '<span class="webh-yes">&#10004;</span>';
             return '<tr>' +
-                '<td>' + (row.title || '') + '</td>' +
-                '<td class="webh-col-icsdc">' + icsdcCell + '</td>' +
+                '<td>' + inlineRichText(row.feature) + '</td>' +
+                '<td class="webh-col-icsdc">' + cell + '</td>' +
                 '</tr>';
         }).join('');
     }
