@@ -25,7 +25,7 @@
  */
 
 import { getDedicatedServerPage } from './services/contentService.js';
-import { initFAQ, initTestimonials, populateSEO, inlineRichText, wireCtaLink, populatePillarsHeader } from './utils/cms-helpers.js';
+import { initFAQ, initTestimonials, populateSEO, inlineRichText, wireCtaLink, populatePillarsHeader, resolveIcon as resolveSharedIcon } from './utils/cms-helpers.js';
 import { pinPosition, placeName, buildMapPin, wireMapInteractions } from './utils/geo-map.js';
 
 (function () {
@@ -83,8 +83,12 @@ import { pinPosition, placeName, buildMapPin, wireMapInteractions } from './util
         return name.split(' ').map(function (n) { return n[0]; }).join('').toUpperCase().slice(0, 2);
     }
 
+    // Page-drawn SVGs first (security / use-case cards use these names);
+    // anything else (e.g. "microchip", "headset") is a Font Awesome name,
+    // resolved by the shared helper like on every other page.
     function resolveIcon(key) {
-        return (key && ICONS[key]) || defaultIconSVG();
+        if (key && ICONS[key]) return ICONS[key];
+        return key ? resolveSharedIcon(key) : defaultIconSVG();
     }
 
     function starSVG() {
