@@ -1202,6 +1202,14 @@ nav.scrolled {
     gap: 40px;
 }
 
+/* The card icons stick out 26px above each card (.why-icon top:-26px), so a
+   heading/subtitle's 30px bottom margin left only ~4px above them.
+   56px (collapses with that margin) keeps the icons 30px clear. */
+.title + .why-grid,
+.subtitle + .why-grid {
+    margin-top: 56px;
+}
+
 .why-card {
     position: relative;
     background:
