@@ -553,3 +553,8 @@
         grid-template-columns: 1fr;
     }
 }
+/* Pillars: the card icons stick out 26px above the cards (.why-icon top:-26px),
+   so the heading's 30px margin left only ~4px above them. 56px = 30px clear. */
+#webh-pillars-grid {
+    margin-top: 56px;
+}
