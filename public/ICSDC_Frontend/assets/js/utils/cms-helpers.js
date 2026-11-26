@@ -181,6 +181,8 @@ export var FA_ICONS = {
     azure: 'microsoft',
     // Control panels (no FA brand — map to solid icons)
     cpanel: 'sliders',
+    // Zimbra has no Font Awesome logo — show an email icon instead.
+    zimbra: 'envelope-open-text',
     solusvms: 'server',
     webmin: 'terminal',
     plesk: 'sliders',
