@@ -123,6 +123,7 @@ html.promo-on .hero-section--home {
 
 .bf-red {
     color: var(--bf-red);
+    white-space: nowrap;
 }
 
 /* ── Offer box ── */
@@ -271,7 +272,7 @@ html.promo-on .hero-section--home {
    window) the button and small print fell below the fold. Here every size
    is the smaller of its width-based value and a share of the visible height
    (--bf-u = 1% of the window height left under the navbar). */
-@media (min-width: 1024px) {
+@media (min-width: 1024px), (min-width: 640px) and (orientation: landscape) {
     .bf-hero {
         --bf-u: calc((100vh - var(--nav-height)) / 100);
     }
@@ -332,14 +333,57 @@ html.promo-on .hero-section--home {
 
     .bf-art img {
         width: auto;
+        max-width: min(100%, 640px);
         max-height: calc(var(--bf-u) * 92);
     }
 }
 
-/* ── Tablet / phone: stack, artwork under the text ── */
-@media (max-width: 1023px) {
+/* ── Very short windows (phones held sideways): allow smaller minimums so
+   everything down to the small print still fits on the first screen. ── */
+@media (min-width: 640px) and (orientation: landscape) and (max-height: 500px) {
     .bf-inner {
-        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .bf-title-top,
+    .bf-title-bottom {
+        font-size: clamp(28px, min(8.2vw, calc(var(--bf-u) * 13)), 136px);
+    }
+
+    .bf-title-script {
+        font-size: clamp(22px, min(6.4vw, calc(var(--bf-u) * 10)), 108px);
+    }
+
+    .bf-tagline {
+        font-size: clamp(14px, calc(var(--bf-u) * 4.4), 38px);
+    }
+
+    .bf-offer-main {
+        font-size: clamp(24px, calc(var(--bf-u) * 9), 84px);
+    }
+
+    .bf-offer-note,
+    .bf-desc {
+        font-size: clamp(11px, calc(var(--bf-u) * 2.8), 20px);
+        line-height: 1.4;
+    }
+
+    .bf-cta {
+        font-size: clamp(11px, calc(var(--bf-u) * 2.9), 19px);
+        padding: calc(var(--bf-u) * 2.2) 22px;
+    }
+
+    .bf-fine {
+        font-size: 11px;
+    }
+}
+
+/* ── Tablet / phone upright: stack, artwork under the text ──
+   (held sideways they keep the side-by-side, height-fitted layout above) */
+@media (max-width: 1023px) and (orientation: portrait), (max-width: 639px) {
+    .bf-inner {
+        /* minmax(0, …): a long button label must wrap, not widen the page */
+        grid-template-columns: minmax(0, 1fr);
         padding-bottom: 40px;
         gap: 8px;
     }
@@ -361,6 +405,9 @@ html.promo-on .hero-section--home {
     .bf-cta {
         padding: 14px 22px;
         gap: 10px;
+        max-width: 100%;
+        text-align: center;
+        line-height: 1.25;
     }
 
     .bf-fine {
