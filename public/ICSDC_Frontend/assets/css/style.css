@@ -2056,6 +2056,9 @@ nav.scrolled {
 
     .blue-container {
         width: 100%;
+        /* Stacked under the image here: drop the desktop 60% side-by-side cap,
+           or the text squeezes into a narrow column on tablets and phones. */
+        max-width: 100%;
         border-radius: 0;
         padding: 40px 32px;
     }
