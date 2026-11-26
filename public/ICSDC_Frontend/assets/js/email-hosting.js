@@ -99,10 +99,9 @@ import { uploadURL } from './services/strapiClient.js';
 
         // Pricing
         populateSectionHeader('#eh-plans', page.plansLabel, page.plansTitle, page.plansSubtitle);
+        // Plan buttons follow each plan's own link (empty = contact form) —
+        // populatePricingPlansCloud wires them; no page-level override here.
         populatePricingPlansCloud('#eh-plans .cloud-pricing-grid', page.plans);
-        document.querySelectorAll('#eh-plans .cloud-plan-cta').forEach(function (btn) {
-            btn.addEventListener('click', function () { window.location.href = '/contact-us'; });
-        });
 
         // Who We Are
         if (page.aboutTitle) setText(document, '#eh-about-title', page.aboutTitle);

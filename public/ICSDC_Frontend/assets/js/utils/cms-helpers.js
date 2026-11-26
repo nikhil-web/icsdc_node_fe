@@ -856,6 +856,14 @@ export function populateSolutionCards(gridSelector, cards, customIcons) {
             ctaHTML +
             '</div>';
     }).join('');
+
+    // Button link from the card's ctaLink: a page/URL navigates, contact-popup
+    // opens the form, empty = plain button (applyCtaLink).
+    var buttons = grid.querySelectorAll('.solution-card');
+    sorted.forEach(function (card, i) {
+        var btn = buttons[i] && buttons[i].querySelector('.solution-cta');
+        if (btn) applyCtaLink(btn, card.ctaLink);
+    });
 }
 
 export function populateTldCards(gridSelector, cards) {
