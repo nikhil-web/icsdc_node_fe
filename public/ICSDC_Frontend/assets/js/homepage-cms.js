@@ -24,7 +24,7 @@
  */
 
 import { getHomepagePage } from "./services/contentService.js";
-import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRichText } from "./utils/cms-helpers.js";
+import { populateIconCards, resolveIcon, initTestimonials, populateSEO, inlineRichText, applyCtaLink } from "./utils/cms-helpers.js";
 import { pinPosition, placeName, buildMapPin, escapeHtml, wireMapInteractions } from "./utils/geo-map.js";
 
 (function () {
@@ -562,6 +562,70 @@ import { pinPosition, placeName, buildMapPin, escapeHtml, wireMapInteractions } 
 
 
     // ═══════════════════════════════════════════════════════════
+    //  SALE BANNER (promoHero) — replaces the hero while enabled
+    // ═══════════════════════════════════════════════════════════
+    // The server already sets <html class="promo-on"> from the same data; this
+    // keeps it right if that copy is stale (server cache) and fills the text.
+    // Every empty field hides its element.
+    function populatePromoHero(promo) {
+        const root = document.documentElement;
+        if (!promo || !promo.enabled) { root.classList.remove('promo-on'); return; }
+        root.classList.add('promo-on');
+
+        const text = (id, value) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const v = (value || '').trim();
+            el.textContent = v;
+            el.hidden = !v;
+        };
+        text('bf-headline-top', promo.headlineTop);
+        text('bf-headline-script', promo.headlineScript);
+        text('bf-headline-bottom', promo.headlineBottom);
+        text('bf-tagline', promo.tagline);
+        text('bf-tagline-hl', promo.taglineHighlight);
+        text('bf-offer-hl', promo.offerHighlight);
+        text('bf-offer-text', promo.offerText);
+        text('bf-offer-note', promo.offerNote);
+
+        const offer = document.getElementById('bf-offer');
+        if (offer) offer.hidden = !(promo.offerHighlight || promo.offerText || promo.offerNote);
+
+        const desc = document.getElementById('bf-desc');
+        if (desc) {
+            desc.innerHTML = inlineRichText(promo.description || '');
+            desc.hidden = !(promo.description || '').trim();
+        }
+
+        const cta = document.getElementById('bf-cta');
+        if (cta) {
+            const label = ((promo.cta && promo.cta.text) || '').trim();
+            cta.hidden = !label;
+            text('bf-cta-text', label);
+            if (label) applyCtaLink(cta, promo.cta && promo.cta.link);
+        }
+
+        // Small print: "A | B" → separate parts with a divider between them.
+        const fine = document.getElementById('bf-fine');
+        if (fine) {
+            const parts = (promo.finePrint || '').split('|').map(x => x.trim()).filter(Boolean);
+            fine.replaceChildren(...parts.map(t => { const s = document.createElement('span'); s.textContent = t; return s; }));
+            fine.hidden = !parts.length;
+        }
+
+        if (promo.image) {
+            const img = document.getElementById('bf-img');
+            const url = mediaURL(promo.image, 'large');
+            if (img && url) {
+                img.src = url;
+                if (promo.image.width) img.width = promo.image.width;
+                if (promo.image.height) img.height = promo.image.height;
+                if (promo.image.alternativeText) img.alt = promo.image.alternativeText;
+            }
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════
     //  INIT
     // ═══════════════════════════════════════════════════════════
     (async function init() {
@@ -575,6 +639,7 @@ import { pinPosition, placeName, buildMapPin, escapeHtml, wireMapInteractions } 
             }
 
             populateSEO(page.SEO);
+            populatePromoHero(page.promoHero);
             populateHeroSection(page);
             populateHeroCTAs(page.CallToActionPrimary, page.callToActionSecondary);
             populateWhyChooseUs(page.whyChooseUs, page.whyChooseUsTitle, page.whyChooseUsSubtitle);

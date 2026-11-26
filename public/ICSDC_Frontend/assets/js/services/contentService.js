@@ -570,6 +570,7 @@ export function getHomepagePage() {
     return fetchAPI(
         "/api/home-page" +
         "?populate[SEO]=*" +
+        "&populate[promoHero][populate]=*" +
         "&populate[CallToActionPrimary]=*" +
         "&populate[callToActionSecondary]=*" +
         "&populate[whyChooseUs]=*" +

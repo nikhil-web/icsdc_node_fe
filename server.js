@@ -1328,6 +1328,9 @@ const SEO_TTL = 10 * 60 * 1000;          // 10 min
    large -> medium -> small; homepage-cms' mediaURL('large') goes large ->
    small), so the only pick guaranteed to match both is `large` itself. When
    there's no large derivative we simply skip the preload rather than gamble. */
+// Built-in artwork for the homepage sale banner (used when its image field is empty).
+const PROMO_DEFAULT_IMAGE = '/assets/images/black-friday-hero.webp';
+
 function heroPreloadUrl(data) {
     const media = data && data.heroImage && data.heroImage.image;
     if (!media) return null;
@@ -1349,8 +1352,11 @@ async function fetchSeo(slug) {
     try {
         const endpoint = seoEndpointForSlug(slug);
         const seoField = endpoint === 'home-page' ? 'SEO' : 'seo';
+        // Homepage only: the sale banner (sections.promo-hero). Other page types
+        // have no such field and Strapi would reject the populate with a 400.
+        const promoPopulate = endpoint === 'home-page' ? '&populate[promoHero][populate]=*' : '';
         const r = await fetch(
-            `${STRAPI_URL}/api/${endpoint}?populate[${seoField}]=*&populate[heroImage][populate][image]=true`, {
+            `${STRAPI_URL}/api/${endpoint}?populate[${seoField}]=*&populate[heroImage][populate][image]=true${promoPopulate}`, {
             headers: STRAPI_TOKEN ? { Authorization: `Bearer ${STRAPI_TOKEN}` } : {},
         });
         if (r.ok) {
@@ -1364,8 +1370,19 @@ async function fetchSeo(slug) {
                     canonicalUrl: seo.canonicalUrl || null,
                 };
             }
-            const heroUrl = heroPreloadUrl(data);
-            if (heroUrl) value = Object.assign(value || {}, { heroImageUrl: heroUrl });
+            // Sale banner switched on → the page is sent with <html class="promo-on">
+            // so the banner (not the normal hero) shows from the first paint, and
+            // its artwork is preloaded instead of the normal hero image.
+            const promo = data && data.promoHero;
+            if (promo && promo.enabled) {
+                value = Object.assign(value || {}, {
+                    promoOn: true,
+                    promoImageUrl: heroPreloadUrl({ heroImage: { image: promo.image } }) || PROMO_DEFAULT_IMAGE,
+                });
+            } else {
+                const heroUrl = heroPreloadUrl(data);
+                if (heroUrl) value = Object.assign(value || {}, { heroImageUrl: heroUrl });
+            }
 
             // Hero copy for server-side injection. These are plain scalar columns
             // on home-page, so they already arrive with the SEO request above — no
@@ -2356,6 +2373,10 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
         ...(seo && seo.heroImageUrl
             ? [`<link rel="preload" as="image" fetchpriority="high" media="(min-width: 1024px)" href="${seoEsc(seo.heroImageUrl)}">`]
             : []),
+        // Sale banner artwork is shown at every width (it stacks under the text on phones).
+        ...(seo && seo.promoOn && seo.promoImageUrl
+            ? [`<link rel="preload" as="image" fetchpriority="high" href="${seoEsc(seo.promoImageUrl)}">`]
+            : []),
         `<link rel="canonical" href="${seoEsc(canonical)}">`,
         `<meta property="og:type" content="${article ? 'article' : 'website'}">`,
         `<meta property="og:site_name" content="${SEO_ORG_NAME}">`,
@@ -2394,6 +2415,11 @@ async function sendPageWithSeo(req, res, filePath, slug, cleanPath, seoOverride)
     // Inject canonical + OG/Twitter + JSON-LD before </head>
     html = html.replace(/<\/head>/i, `    ${headTags}\n</head>`);
 
+
+    // Sale banner on: mark <html> so CSS shows the banner and hides the normal hero
+    // before any script runs (no flash of the old hero).
+    if (seo && seo.promoOn) html = html.replace(/<html\b([^>]*)>/i, (m, attrs) =>
+        /\bclass=/.test(attrs) ? m.replace(/class="/, 'class="promo-on ') : `<html${attrs} class="promo-on">`);
 
     // Write the hero copy into the body so the LCP text exists in the initial
     // HTML and the page does not reflow when the client hydrates.

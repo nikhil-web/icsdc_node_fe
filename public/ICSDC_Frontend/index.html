@@ -34,6 +34,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <!-- Sale banner script word ("Friday"). -->
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
     <!-- Font Awesome is icons only — nothing above the fold depends on it, so it
          must not block first paint (it was costing ~1.5s of the render-blocking
          budget). media="print" + onload keeps it off the critical path.
@@ -51,6 +53,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/homepage-extras.css">
+    <link rel="stylesheet" href="assets/css/promo-hero.css">
     <!-- NOTE: do NOT gate this file behind (prefers-color-scheme: dark).
          Despite its name, dark-mode.css is not purely dark overrides — it also
          carries the BASE styling for #theme-toggle, .mobile-theme-toggle and
@@ -120,6 +123,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </nav>
 
     <main id="main-content">
+
+    <!-- SALE BANNER — replaces the hero while Strapi promoHero.enabled is on.
+         Shown/hidden by <html class="promo-on"> (set by the server, kept in sync
+         by homepage-cms.js). Text below is the default; Strapi overwrites it. -->
+    <section class="bf-hero" aria-label="Black Friday Sale">
+        <div class="bf-inner">
+            <div class="bf-content">
+                <h2 class="bf-title">
+                    <span class="bf-title-top" id="bf-headline-top">BLACK</span>
+                    <span class="bf-title-script" id="bf-headline-script">Friday</span>
+                    <span class="bf-title-bottom" id="bf-headline-bottom">SALE</span>
+                </h2>
+                <p class="bf-tagline"><span id="bf-tagline">Power Your Business.</span> <span class="bf-red" id="bf-tagline-hl">Save 25%.</span></p>
+                <div class="bf-offer" id="bf-offer">
+                    <p class="bf-offer-main"><span class="bf-red" id="bf-offer-hl">25%</span> <span id="bf-offer-text">OFF</span></p>
+                    <p class="bf-offer-note"><span id="bf-offer-note">On New Orders &amp; Advance Annual Payments</span></p>
+                </div>
+                <p class="bf-desc" id="bf-desc">Upgrade your infrastructure with high-performance <strong>Cloud Hosting, VPS</strong> and <strong>Dedicated Servers</strong> at an exclusive Black Friday price.</p>
+                <a class="bf-cta" id="bf-cta" href="contact-popup">
+                    <i class="fa-solid fa-tag" aria-hidden="true"></i>
+                    <span id="bf-cta-text">Grab Your Black Friday Deal</span>
+                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
+                <p class="bf-fine" id="bf-fine"><span>Limited-Time Offer</span><span>Terms &amp; Conditions Apply</span></p>
+            </div>
+            <div class="bf-art">
+                <img id="bf-img" src="assets/images/black-friday-hero.webp" width="801" height="941"
+                    alt="Server racks with a glowing cloud and a 25% off tag">
+            </div>
+        </div>
+    </section>
 
     <!-- HERO -->
     <section class="hero-section hero-section--home">
