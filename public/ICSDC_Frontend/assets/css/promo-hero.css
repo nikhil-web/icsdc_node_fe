@@ -30,27 +30,31 @@ html.promo-on .hero-section--home {
     isolation: isolate;
 }
 
-/* Red diagonal bands, bottom-left (the artwork carries its own top-right bands). */
+/* Red diagonal stripes in the bottom-left corner, as in the client's banner:
+   both enter from the left edge and run off the bottom (the artwork carries
+   its own top-right stripes). Drawn as clipped shapes anchored to the corner. */
 .bf-hero::before,
 .bf-hero::after {
     content: "";
     position: absolute;
-    left: -40px;
-    bottom: -30px;
-    width: 64px;
-    height: 220px;
-    background: linear-gradient(180deg, var(--bf-red), var(--bf-red-dark));
-    transform: skewX(-38deg);
-    transform-origin: bottom left;
+    left: 0;
+    bottom: 0;
+    width: clamp(130px, 13vw, 230px);
+    aspect-ratio: 5 / 6;
     z-index: -1;
-    opacity: 0.9;
+    pointer-events: none;
 }
 
+/* Wide bright stripe. */
+.bf-hero::before {
+    background: linear-gradient(160deg, #ff2a33, var(--bf-red-dark));
+    clip-path: polygon(0 18%, 82% 100%, 52% 100%, 0 50%);
+}
+
+/* Narrow darker stripe running alongside it, nearer the corner. */
 .bf-hero::after {
-    left: 44px;
-    width: 18px;
-    height: 160px;
-    opacity: 0.55;
+    background: linear-gradient(160deg, var(--bf-red-dark), #6d0308);
+    clip-path: polygon(0 60%, 40% 100%, 28% 100%, 0 72%);
 }
 
 .bf-inner {
